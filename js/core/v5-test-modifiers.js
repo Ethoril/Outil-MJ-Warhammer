@@ -69,10 +69,10 @@
  */
 import { normalizeState } from './effects.js';
 import { previewV5Test } from './v5-roll.js';
-import { sourceActive } from './v5-talent-actions.js';
+import { sourceActive } from './v5-talent-source.js';
 import { withCompanionTalents } from './familiars.js';
 import { previewV5TalentTestModifiers } from './v5-talent-tests.js';
-import { magicTestModifiers, magicAdverseModifiers } from './v5-magic-talents.js';
+import { magicTestModifiers, magicAdverseModifiers } from './v5-magic-test-effects.js';
 import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows, CONDITION_QUESTIONS } from './condition-effects.js';
 import { sequelaTestRules, sequelaQuestionLabel } from './v5-sequela-effects.js';
 import { awakeningSpell, awakeningMessage } from './v5-spell-restrictions.js';

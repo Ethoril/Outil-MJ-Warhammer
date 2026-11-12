@@ -2,7 +2,7 @@
 // Module pur : le moteur ne suit pas l'engagement, le MJ coche les combattants engagés avec la cible de chaque côté ;
 // on en tire les poids, le rapport et le modificateur du seul Test d'attaque de mêlée (jamais celui de défense).
 import { planCreatureSize } from './creature-size.js';
-import { participantCamp } from './encounters.js';
+import { participantCamp } from './participant-camp.js';
 import { slModifierClause } from './effect-engine.js';
 import { availableV5TalentMeasures, previewV5TalentMeasure } from './v5-talent-measures.js';
 

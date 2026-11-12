@@ -6,7 +6,7 @@ import qualityRegistry from '../data/v5-quality-talent-contracts.json' with { ty
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { acquiredV5Talents, evaluateV5Talents, V5_TALENT_CONTRACTS } from './v5-talents.js';
 import { participantKeywords } from './creature-keywords.js';
-import { leadershipRallySlModifiers, MASTER_AND_COMMANDER_TALENT } from './v5-effects.js';
+import { leadershipRallySlModifiers, MASTER_AND_COMMANDER_TALENT } from './v5-leadership-rally.js';
 
 /** Compétence Commandement du catalogue : seul Test où Maître à bord (Sea of Claws p. 63) s'applique. */
 const LEADERSHIP_SKILL_ID = 'skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base';

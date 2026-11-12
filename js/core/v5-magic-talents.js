@@ -1,15 +1,12 @@
 /** Acquisitions résolues et descriptions publiques épinglées ; jamais d'activation par lecture de prose. */
-import pins from '../data/v5-magic-talent-sources.json' with { type: 'json' };
-import { acquiredV5Talents } from './v5-talents.js';
-import { getReferenceCatalogue } from './reference-catalog.js';
+import { magicTalentRank, fold, baseCharacteristicScore, effectiveSkillScore, activeMagicTalent, familiarSkillSupport } from './v5-magic-talent-rank.js';
+import { testKeyApplies } from './v5-magic-test-effects.js';
+export { layerTestEffects, collectTestEffects, magicTestModifiers, magicSkillModifiers, magicAdverseModifiers } from './v5-magic-test-effects.js';
+export { magicTalentRank, baseCharacteristicScore, effectiveSkillScore, activeMagicTalent, familiarSkillSupport } from './v5-magic-talent-rank.js';
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { getBurnoutStatus, consumeCadaiRune, prepareCadaiRerolls } from './v5-magic-high.js';
 import { applyPrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
 import { mishapSeverity, groundCastModifier, slannAboard } from './slann.js';
-// Cycle d'import connu (v5-magic-effects lit magicTalentRank) : seules des fonctions, appelées après le chargement.
-import { unsuppressedSpellEffects } from './v5-magic-effects.js';
-import { combineEffects, targetAppliesToTest } from './effect-engine.js';
-// Cycle d'import connu (v5-test-modifiers lit magicTestModifiers) : seules des fonctions, appelées après le chargement.
 import { resolveV5TestModifiers, finalizeV5TestModifiers, conditionLevels, previewV5SecondaryTest } from './v5-test-modifiers.js';
 
 const ruleError=message=>Object.assign(new Error(message),{userFacing:true});
@@ -23,15 +20,6 @@ const MAGIC_TESTS={
 };
 /** Variante de la clé `Dissipation` propre au mode (lue jusqu'ici en brut par v5-magic-dispel.js). */
 const DISPEL_MODE_KEYS={opposed:'Dissipation (Incantation opposée)',persistent:'Dissipation (Sort persistant étendu)'};
-export function magicTalentRank(actor, id, specialization = null) {
-  const key = id.startsWith('talent-') ? id : 'talent-'+id;
-  const lostIds = { 'sens de la magie': 'talent-magical-sense', 'perception de la magie': 'talent-magical-sense', 'magical sense': 'talent-magical-sense', 'seconde vue': 'talent-second-sight', 'second sight': 'talent-second-sight' };
-  if ((actor?.extensions?.v5?.miscastEffects || []).some(effect =>
-    [...(effect.talentsLost || []), effect.talentLost].filter(Boolean).some(name => (lostIds[fold(name).trim()] || name) === key))) return 0;
-  const source = getReferenceCatalogue().talents.find(t => t.id === key);
-  if (!source || source.description !== pins.sourceDescriptions[key]) return 0;
-  return Math.max(0, ...acquiredV5Talents(actor).filter(t => t.talentId === key && (!specialization || t.specialization === specialization)).map(t=>t.rank));
-}
 /**
  * Talent employé pour lancer un sort (V5 p. 239, Drain de puissance) : Magie des Arcanes du Domaine, Haute Magie ; null pour un sort
  * mineur ou un contexte sans sort. `lore` vaut null si le Domaine est ambigu (sort d'Arcane sans Domaine unique chez le lanceur).
@@ -154,102 +142,6 @@ export function applyMagicAttempt(actor, preview, options={}) {
   return next;
 }
 
-const fold=value=>String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-const characteristic=(values,key)=>values?.[Object.keys(values || {}).find(k=>k.toLowerCase()===String(key).toLowerCase())];
-export function baseCharacteristicScore(actor,carac){return Number(characteristic(actor?.extensions?.v5?.baseCaracs || actor?.baseCaracs,carac) ?? characteristic(actor?.caracs,carac) ?? 0);}
-export function effectiveSkillScore(actor,score,carac){
- const base=characteristic(actor?.extensions?.v5?.baseCaracs || actor?.baseCaracs,carac);
- return Math.max(0,Number(score) + (base!=null && Number.isFinite(Number(base)) ? Number(characteristic(actor?.caracs,carac) || 0)-Number(base) : 0));
-}
-export function activeMagicTalent(actor,id){return (actor?.extensions?.v5?.spellEffects || []).find(e=>e.magicTalentId==='talent-'+id);}
-/**
- * Une clé de Test d'effet magique vise-t-elle ce Test ? Table unique du moteur (`targetAppliesToTest`, effect-engine.js) :
- * compétence et spécialité repliées, clé sans spécialité = toutes les spécialités, « Tous les Tests » pour tous, `carac:x` pour
- * tout Test lié à la caractéristique, « … adverse » seulement sur le Test de l'opposant (`scope:'opponent'`).
- * Une clé vide ou illisible ne vise aucun Test.
- */
-function testKeyApplies(key,skill,context={},scope='self'){
- try{return targetAppliesToTest(key,{skill,carac:context?.carac,skillContext:context?.skillContext,scope});}catch{return false;}
-}
-const CARAC_LABELS={cc:'Capacité de Combat',ct:'Capacité de Tir',f:'Force',e:'Endurance',i:'Initiative',ag:'Agilité',dex:'Dextérité',int:'Intelligence',fm:'Force Mentale',soc:'Sociabilité'};
-const MAGIC_TEST_GROUP='magic-test';
-const hasTestLayer=v5=>[...(Array.isArray(v5?.spellEffects)?v5.spellEffects:[]),...(Array.isArray(v5?.divineEffects)?v5.divineEffects:[])].some(e=>e&&typeof e.testModifiers==='object'&&e.testModifiers);
-/**
- * U8 lot L3 · adaptateur couches → effets portés du moteur (`combineEffects`). Une couche de sort (`spellEffects`, sans les couches
- * supprimées) ou de prière (`divineEffects`) donne un effet `modifySL` par clé de `testModifiers` non nulle, porté par
- * `{ kind:'spell'|'prayer', sourceId, layerId }` : la couche est la source (Q13 du MJ, ses clés s'additionnent), le cumul dans une
- * famille suit `bestBonusWorstPenalty` (R3 p. 235 ; prières : Q10 du MJ), les familles se somment (Q2). `casterLileathRank` du
- * lanceur → `extraBonusSources` (HEPG p. 83, D-06) ; `stackable` / `isStackable` → exception cumulée. Le format stocké ne change pas.
- */
-export function layerTestEffects(v5={}){
- const entries=[];
- const read=(kind,layers)=>{for(const [index,layer] of layers.entries()){
-  if(!layer||typeof layer!=='object'||!layer.testModifiers||typeof layer.testModifiers!=='object')continue;
-  const layerId=`${kind}:${index}:${layer.id??''}`,rank=Math.max(0,Math.floor(Number(layer.casterLileathRank)||0));
-  const bearer={kind,sourceId:String(layer.spellId||layer.prayerId||layer.id||layerId),layerId,...(layer.casterId!=null&&layer.casterId!==''?{casterId:String(layer.casterId)}:{}),...(rank?{extraBonusSources:rank}:{})};
-  const stackable=layer.stackable===true||layer.isStackable===true;
-  for(const [key,raw] of Object.entries(layer.testModifiers)){
-   const amount=Number(raw);
-   if(!Number.isFinite(amount)||amount===0||typeof key!=='string'||!key.trim())continue;
-   entries.push({bearer,effect:{op:'modifySL',amount,target:key,stack:'bestBonusWorstPenalty',stackGroup:MAGIC_TEST_GROUP,...(stackable?{stackable:true}:{})},key});
-  }
- }};
- read('spell',unsuppressedSpellEffects(Array.isArray(v5?.spellEffects)?v5.spellEffects:[]));
- read('prayer',Array.isArray(v5?.divineEffects)?v5.divineEffects:[]);
- return entries;
-}
-/**
- * Effets de Test retenus pour UN Test résolu : couches (adaptateur ci-dessus) et, si fournies, lignes de talents déjà cumulées par
- * leur moteur (`talentRows`, schéma 2). Le tout passe par `combineEffects` et sa table entre familles (R1 talent + sort/prière).
- * `test = { skill, carac?, skillContext?, scope? }` ; `scope:'opponent'` lit les clés « … adverse » du porteur.
- * Retourne `{ layerRows:[{key,amount}], talentRows, signals, unresolved }` ; une paire de familles non arbitrée (CA5) n'est
- * jamais additionnée : ses montants sont retirés et un message `unresolved` la nomme.
- */
-export function collectTestEffects(actor,test={},{talentRows=[],applies=null}={}){
- const v5=actor?.extensions?.v5||{};
- // `applies(key)` : sélection des clés propre à l'appelant (table de clés d'un moteur qui n'est pas celle des compétences) ; les clés
- // retenues visent alors toutes le même Test et forment un seul groupe par famille.
- const layers=typeof applies==='function'?layerTestEffects(v5).filter(entry=>applies(entry.key)).map(({effect:{target,...effect},...entry})=>({...entry,effect})):layerTestEffects(v5);
- // Une ligne de talent sans montant chiffré n'entre pas dans le cumul : elle est rendue telle quelle, à sa place.
- const talents=talentRows.map((row,index)=>Number.isFinite(row?.amount)?{bearer:{kind:'talent',sourceId:String(row.id||'talent:'+index)},effect:{op:'modifySL',amount:row.amount,stack:'add',stackGroup:'talent:'+index},row}:{row,passThrough:true});
- const combined=combineEffects([...layers,...talents.filter(entry=>!entry.passThrough)],typeof applies==='function'?{}:{test});
- const applied=combined.groups.filter(group=>group.status==='applied');
- const totals=new Map();
- for(const group of applied.filter(group=>group.kind!=='talent'))for(const entry of group.kept)totals.set(entry.key,(totals.get(entry.key)||0)+entry.effect.amount);
- const keptTalents=new Set(applied.filter(group=>group.kind==='talent').flatMap(group=>group.kept));
- return {
-  layerRows:[...totals].filter(([,amount])=>amount!==0).map(([key,amount])=>({key,amount})),
-  talentRows:talents.filter(entry=>entry.passThrough||keptTalents.has(entry)).map(entry=>entry.row),
-  signals:combined.signals,
-  unresolved:combined.signals.map(signal=>`Cumul non arbitré entre ${signal.kinds.join(' et ')} (${signal.op}) : à trancher par le MJ avant le Test.`)
- };
-}
-/**
- * Modificateurs d'un Test réunis par le moteur (U8 L3, lu par `buildCombatTest`) : couches magiques (`magic`, cumul sur les clés qui
- * visent CE Test, incidents compris), lignes de talents (`talents` : `talentRows` passées par la table entre familles, R1) et
- * messages de cumul non arbitré (`unresolved`). Sans couche, les modificateurs par clé du porteur sont lus tels quels.
- */
-export function magicTestModifiers(actor,skill,context={},{talentRows=[],applies=null}={}){
- const name=fold(skill);const v5=actor?.extensions?.v5 || {};
- // `applies(key)` (Q6 T1) : table de clés propre au Test (Dissipation : compétence + clé `Dissipation`), couches et repli compris.
- const selector=typeof applies==='function'?applies:null;
- const collected=collectTestEffects(actor,{skill,carac:context?.carac,skillContext:context?.skillContext},{talentRows,applies:selector});
- const rows=hasTestLayer(v5)?collected.layerRows.map(row=>[row.key,row.amount]):Object.entries(v5.testModifiers || {}).filter(([key])=>selector?selector(key):testKeyApplies(key,skill,context));
- const magic=rows.map(([key,amount])=>({id:'spell-skill:'+key,label:'Effet magique : '+(/^carac:/i.test(key)?'Tests de '+(CARAC_LABELS[fold(key.slice(6))]||key.slice(6)):key),amount}));
- for(const [index,effect] of (v5.miscastEffects || []).entries())if(effect.type==='penalty' && [...(effect.targetSkills || []),effect.targetSkillCategory].filter(Boolean).some(s=>name.includes(fold(s)) || name.includes('langue')&&s==='Incantation'))magic.push({id:'miscast:'+index,label:effect.name,amount:effect.slModifier});
- return {magic,talents:collected.talentRows,unresolved:collected.unresolved};
-}
-/** Modificateurs magiques d'un Test (couches et incidents), voir `magicTestModifiers`. */
-export function magicSkillModifiers(actor,skill,context={}){return magicTestModifiers(actor,skill,context).magic;}
-/**
- * Clés « … adverse » du porteur d'un effet (Perception adverse…) : elles s'appliquent au Test de qui s'y oppose (« Mêlée adverse »
- * vise un Test de Corps à corps). Avec des couches, cumul par Test résolu comme les autres clés (R3 p. 235 ; Q10, Q13 du MJ).
- */
-export function magicAdverseModifiers(holder,skill){
- const v5=holder?.extensions?.v5||{};
- const rows=hasTestLayer(v5)?collectTestEffects(holder,{skill,scope:'opponent'}).layerRows.map(row=>[row.key,row.amount]):Object.entries(v5.testModifiers || {}).filter(([key])=>testKeyApplies(key,skill,{},'opponent'));
- return rows.map(([key,amount])=>({id:'spell-adverse:'+key,label:'Effet magique adverse : '+key,amount}));
-}
 export function previewMagicMeditation(actor,options={}){
  const id=options.talentId,rank=magicTalentRank(actor,id);
  if(!rank || !['talent-eye-of-the-storm','talent-sanctuary-of-the-mind','talent-mind-over-body','talent-cadai-meditation'].includes(id))throw ruleError('Talent de méditation validé requis.');
@@ -304,14 +196,6 @@ export function magicalSenseReceipts(caster,participants,options={}){
    const detected=Number.isFinite(fact?.distance) ? fact.distance>=0 && fact.distance<=range : null;
    return {observerId:observer.id,range,detected,direction:detected?fact.direction || 'direction approximative à préciser':null,summary:detected===null?observer.name+' : Perception de la Magie, lancement détectable à '+range+' mètres (distance à préciser).':detected?observer.name+' détecte un lancement ; '+(fact.direction || 'direction approximative à préciser')+' ; magie non identifiée.':observer.name+' : lancement hors portée de Perception de la Magie.'};
  });
-}
-export function familiarSkillSupport(actor,assistant,skill,context={}){
- const name=fold(skill),result={modifiers:[],advantages:[]};
- if(!assistant || context.magicAssistantLinked!==true || assistant.id===actor.id)return result;
- const basic=/focalisation|langue.*magick/.test(name);
- if(magicTalentRank(assistant,'magical-assistant')&&(basic||/savoir.*magie/.test(name)||/recherche/.test(name)&&context.magicalNature===true))result.modifiers.push({id:'magical-assistant',label:'Assistant magique',amount:2});
- else if(magicTalentRank(assistant,'animal-assistant')&&(basic||/survie/.test(name)||/perception/.test(name)&&context.magicalNature===true))result.advantages.push({id:'animal-assistant',label:'Assistant animal'});
- return result;
 }
 
 export function enforceMagicTestRestrictions(actor,test,{magical=true}={}){

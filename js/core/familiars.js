@@ -4,8 +4,8 @@
  * Le lien est durable côté maître (`extensions.v5.familiarLinks[]`) et côté familier (`extensions.v5.familiarOf`) ;
  * la portée de 4 m d'un animal est un booléen `inRange` posé par le MJ, jamais calculé.
  */
-import { familiarSkillSupport } from './v5-magic-talents.js';
-import { hasV5Talent } from './v5-talents.js';
+import { familiarSkillSupport } from './v5-magic-talent-rank.js';
+import { hasV5Talent } from './v5-talent-registry.js';
 import { keywordMatches, participantKeywords } from './creature-keywords.js';
 
 const fold = value => String(value || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();

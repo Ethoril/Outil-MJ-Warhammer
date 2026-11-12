@@ -13,7 +13,8 @@ import {outnumberTestRules,outnumberTestClauses,outnumberClauseLabels} from './o
 import {unavailableDisarmedWeapon} from './v5-talent-replacements.js';
 import {warLeaderSubstitution} from './v5-talent-situations.js';
 import {calculateV5ArmorPenalty,previewV5Parry} from './v5-weapon-qualities.js';
-import { pendingCrewSkill,sourceActive } from './v5-talent-actions.js';
+import { pendingCrewSkill } from './v5-talent-actions.js';
+import { sourceActive } from './v5-talent-source.js';
 import { previewV5Test,reverseV5Roll,refreshV5ResultTier }  from './v5-roll.js';
 import { previewV5PistolContact } from './v5-weapon-qualities.js';
 import { attackSlClauses, defenseQualityClauses } from './roll-qualities.js';
@@ -28,15 +29,9 @@ import { conditionLevels, resolveV5TestModifiers, finalizeV5TestModifiers } from
 import { awakeningSpell, awakeningMessage } from './v5-spell-restrictions.js';
 export { conditionLevels };
 import { weaponHandsForParticipant } from './equipment.js';
+import { hasMomentum, withMomentum } from './v5-momentum-state.js';
+export { hasMomentum, withMomentum } from './v5-momentum-state.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
-export const hasMomentum = actor => actor?.extensions?.v5?.hasMomentum === true;
-export const withMomentum = (actor, value) => {
-  const frenzy=(actor.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s));
-  // Livre de base V5 v3 p.183 : sous la Peur, l'Élan est perdu et ne se regagne pas.
-  const restricted=(actor.states||[]).some(s=>sourceActive(s)&&(s.restriction==='noMomentumOrAdvantage'||s.restriction==='cannotGainMomentum'&&!frenzy));
-  if(value&&restricted)return withMomentum(actor,false);
-  return !value&&actor.extensions?.v5?.hasMomentum===undefined?actor:({...actor,extensions:{...(actor.extensions||{}),v5:{...(actor.extensions?.v5||{}),hasMomentum:Boolean(value)}}});
-};
 /** Un participant qui vient d'acquérir une restriction de Peur perd l'Élan qu'il avait. */
 export const isFrightened = actor => !(actor.states||[]).some(s=>s.key==='frenzy'&&sourceActive(s))&&(actor.states||[]).some(s=>s.restriction==='cannotGainMomentum'&&sourceActive(s));
 export const loseMomentumUnderFear = actor => hasMomentum(actor)&&isFrightened(actor)?withMomentum(actor,false):actor;

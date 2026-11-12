@@ -1,20 +1,22 @@
-import {activeMagicTalent} from './v5-magic-talents.js';
-import {acquiredV5Talents} from './v5-talents.js';
+import { activeMagicTalent } from './v5-magic-talent-rank.js';
+import { needs } from './v5-leadership-rally.js';
+export { MASTER_AND_COMMANDER_TALENT, leadershipRallySlModifiers } from './v5-leadership-rally.js';
+import { acquiredV5Talents } from './v5-talent-registry.js';
 import {familiarIgnoresAblaze} from './familiars.js';
 /** Pure V5 Conditions and explicit combat clocks, core pp.184–187. No dice draw. */
 import { normalizeEffects, normalizeState } from './effects.js';
-import { withMomentum } from './v5-combat-rules.js';
+import { withMomentum } from './v5-momentum-state.js';
 import { armourProtection } from './equipment.js';
-import { isMiscastConditionLocked } from './v5-magic-miscasts.js';
+import { isMiscastConditionLocked } from './v5-miscast-locks.js';
 import { bestiaryProfileStateImmunity } from './creature-abilities.js';
+import { PHASES, clone, integer, createV5TimedEffect } from './v5-timed-effect.js';
+export { createV5TimedEffect } from './v5-timed-effect.js';
 export const V5_EFFECT_RULE_VERSION = 'v5-effects-2026-10-09.1';
 export const V5_CONDITION_KEYS = Object.freeze(['enflamme','souille','hemorragique','aveugle','brise','assourdi','enchevetre','extenue','empoisonne','a-terre','sonne','surpris','inconscient']);
 const UNIQUE = new Set(['souille','a-terre','surpris','inconscient']);
 const NAMES = {enflamme:'Enflammé',souille:'Souillé',hemorragique:'Hémorragique',aveugle:'Aveuglé',brise:'Brisé',assourdi:'Assourdi',enchevetre:'Enchevêtré',extenue:'Exténué',empoisonne:'Empoisonné','a-terre':'À Terre',sonne:'Sonné',surpris:'Surpris',inconscient:'Inconscient'};
 export const v5ConditionName = key => NAMES[key] || null;
 const ALIASES = {ablaze:'enflamme',besmirched:'souille',bleeding:'hemorragique',blinded:'aveugle',broken:'brise',deafened:'assourdi',entangled:'enchevetre',fatigued:'extenue',poisoned:'empoisonne',prone:'a-terre',stunned:'sonne',surprised:'surpris',unconscious:'inconscient'};
-const PHASES = new Set(['startOfTurn','endOfTurn','endOfRound','attackAttempt']);
-const clone = value => structuredClone(value);
 export const hasDivineWrathLock = state => Array.isArray(state?.divineWrathLocks)&&state.divineWrathLocks.length>0;
 const orderedWrathData=value=>Array.isArray(value)?value.map(orderedWrathData):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,orderedWrathData(value[key])])):value;
 function releaseWrathWoundLocks(states,removed=[]){
@@ -45,16 +47,11 @@ const keyOf = value => { const key=fold(typeof value==='string'?value:value?.key
 export const isV5ConditionImmune = (participant,condition) => (participant.extensions?.v5?.immunities?.conditions||[]).some(name=>keyOf(name)===keyOf(condition)) || bestiaryProfileStateImmunity(participant,keyOf(condition));
 const levelOf = state => Math.max(1, Number(state.level)||1);
 const levels = (states,key) => states.filter(state=>keyOf(state)===key).reduce((total,state)=>total+levelOf(state),0);
-const integer = (value,label,{minimum=0,maximum=Number.MAX_SAFE_INTEGER}={}) => {
-  if (!Number.isSafeInteger(value)||value<minimum||value>maximum) throw new TypeError(`${label} invalide`);
-  return value;
-};
 const testValue = test => {
   if (!test || typeof test.success!=='boolean' || !Number.isSafeInteger(test.sl)) throw new TypeError('Résultat de Test explicite requis');
   if (test.success && test.sl<0 || !test.success && test.sl>0) throw new TypeError('Réussite et DR incompatibles');
   return test;
 };
-const needs = (list,field,label) => { if (!list.some(item=>item.field===field)) list.push({field,label}); };
 const createReceipt = (before,participant,details={}) => ({ruleVersion:V5_EFFECT_RULE_VERSION,participant,hpDelta:(Number(participant.hp)||0)-(Number(before.hp)||0),acquiredInstances:0,removed:[],needsInput:[],reminders:[],criticalRequests:[],death:false,...details,ready:!(details.needsInput||[]).length});
 function newState(raw,states,context={}) {
   const key=keyOf(raw), state=normalizeState(typeof raw==='string'?{name:NAMES[key]||raw}:raw,states.length);
@@ -122,17 +119,6 @@ export function acquireV5Conditions(participant,acquisitions=[],context={}) {
   }
   if(acquiredInstances)Object.assign(next,withMomentum(next,false));
   return createReceipt(participant,next,{acquiredInstances,removed,needsInput,reminders});
-}
-/** A temporary effect keeps its author and target, with an absolute explicit expiry. */
-export function createV5TimedEffect(effect,{authorId,targetId,expiry}={}) {
-  if(!effect||typeof effect!=='object'||typeof authorId!=='string'||!authorId||typeof targetId!=='string'||!targetId||!expiry||!PHASES.has(expiry.phase))throw new TypeError('Contexte d’échéance incomplet');
-  integer(expiry.round,'Round d’échéance');
-  if(['startOfTurn','endOfTurn'].includes(expiry.phase)){
-    integer(expiry.turn,'Tour d’échéance');
-    if(typeof expiry.actorId!=='string'||!expiry.actorId)throw new TypeError('Acteur de l’échéance requis');
-  }
-  if(expiry.moment!==undefined&&!['beforeEffects','afterEffects'].includes(expiry.moment))throw new TypeError('Instant d’échéance invalide');
-  return {...clone(effect),v5Timing:{...(effect.v5Timing||{}),authorId,targetId,expiry:{...clone(expiry),moment:expiry.moment||'afterEffects'}}};
 }
 function due(expiry,transition) {
   if(!expiry||expiry.phase!==transition.phase||expiry.moment!==(transition.moment||'afterEffects'))return false;
@@ -268,20 +254,6 @@ export function recoverV5Condition(participant,condition,options={}) {
     }
   }
   return createReceipt(participant,next,{removed:removal.removed,acquiredInstances,needsInput,reminders});
-}
-/** Master and Commander (L25 p.63) : +1 DR par rang aux Tests de Commandement à bord ; le fait « à bord » reste une saisie MJ. */
-export const MASTER_AND_COMMANDER_TALENT=Object.freeze({id:'talent-master-and-commander',nom:'Maître à bord',englishName:'Master and Commander',source:'L25 p.63'});
-/** Rang du Talent : lignes résolues du catalogue (« Maître à bord » est au catalogue importé depuis le 23/10/2026). */
-function masterAndCommanderRank(participant){
-  return Math.max(0,...acquiredV5Talents(participant).filter(row=>row.talentId===MASTER_AND_COMMANDER_TALENT.id).map(row=>row.rank));
-}
-export function leadershipRallySlModifiers({participant,onBoardVessel}={}) {
-  const modifiers=[],needsInput=[],rank=masterAndCommanderRank(participant);
-  if(rank>0){
-    if(typeof onBoardVessel!=='boolean')needs(needsInput,'onBoardVessel','Confirmer si le Test de Commandement a lieu à bord');
-    else if(onBoardVessel)modifiers.push({id:'master-and-commander',label:'Master and Commander (+1 DR par rang)',amount:rank});
-  }
-  return {modifiers,needsInput};
 }
 /** Commandement (L06 p.169) : Action gratuite d'un meneur non Brisé ; budget 1 + (DR − 1) réparti explicitement entre alliés Brisés. */
 export function previewLeadershipRallyAllies({leader,allies,test,distribution}={}) {

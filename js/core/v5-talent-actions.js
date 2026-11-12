@@ -1,4 +1,5 @@
-import {magicTalentRank} from './v5-magic-talents.js';
+import {suffusedFrenzy,sourceActive} from './v5-talent-source.js';
+export {sourceActive} from './v5-talent-source.js';
 import{smallNoTest,terrorAction}from'./v5-talent-small.js';
 /** Explicit activations from the Test being resolved. No hidden dice or fictional predicates. */
 import {contactActions,contactNoTest} from './v5-talent-contact.js';
@@ -12,8 +13,6 @@ const skillGroup=id=>getReferenceCatalogue().skills.find(s=>s.id===id)?.groupId;
 const idOf=n=>getReferenceCatalogue().skills.find(s=>s.nom===n)?.id;
 const groupOf=n=>getReferenceCatalogue().skills.find(s=>s.nom===n||s.nom.startsWith(n+' ('))?.groupId;
 export const V5_ACTIVATED_TALENTS=Object.freeze({'talent-crew-commander':'Commandant d’Équipage','talent-distract':'Distraire','talent-frenzy':'Frénésie','talent-martial-arts':'Arts martiaux','talent-drilled':'Coude-à-coude','talent-combat-reflexes':'Combat instinctif','talent-blather':'Baratiner','talent-argumentative':'Ergoteur'});
-const suffusedFrenzy=actor=>magicTalentRank(actor,'suffuse-with','Aqshy')>0;
-export const sourceActive=effect=>effect?.source?.source?.effectHash&&currentV5TalentHashes()[effect.source.talentId]===effect.source.source.effectHash && (!effect.source.grantedBy || suffusedFrenzy({talents:[effect.source.grantedBy]}));
 export const MARTIAL_QUALITIES=Object.freeze(['devastatrice','defensive','perturbante','rapide','perforante','precise','assommante']);
 export function knownV5MartialQualities(subject){
  const row=(subject?.talents||[]).find(t=>t.id==='talent-martial-arts'&&t.status==='resolved');if(!row)return[];

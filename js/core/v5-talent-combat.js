@@ -9,7 +9,7 @@ import {previewForgeAura,previewCardsharp} from './v5-talent-replacements.js';
 import { evaluateV5Talents } from './v5-talents.js';
 import { creatureSizeOf } from './creature-size.js';
 import { normalizeState } from './effects.js';
-import { sourceActive } from './v5-talent-actions.js';
+import { sourceActive } from './v5-talent-source.js';
 const PENALTIES={offHand:['Main secondaire',2],mounted:['Esquive montée',2],confined:['Espace exigu',null],status:['Statut supérieur',null],proneAttack:['Attaque À terre',null],belowTarget:['Attaque sous la cible',null],cover:['Couvert',null],targetProne:['Tir sur une cible À terre',null],longRange:['Longue portée',null],extremeRange:['Portée extrême',null],critical:['Blessure critique',null],flying:['Tir sous Trait Vol',2],terrainMovement:['Terrain gênant le mouvement',null],amputation:['Amputation',null]};
 export const V5_TYPED_PENALTIES=Object.freeze(PENALTIES);
 const ATTACK_ONLY=new Set(['cover','targetProne','longRange','extremeRange','terrainMovement']);

@@ -15,7 +15,7 @@ import { resolveMiscast, applyMiscastToParticipant, explicitMagicDie, missingMag
 import { armorMaterial, unknownArmorMaterials } from './v5-armor-material.js';
 import { uid } from './models.js';
 import {endSpellEffectsOnEvent} from './v5-magic-turn.js';
-import { creatureCastingBases } from './creature-magic.js';
+import { creatureCastingBases } from './creature-magic-traits.js';
 
 export const V5_MAGIC_CHANNELLING_VERSION = 'v5-magic-channelling-2026-10-10.1';
 
