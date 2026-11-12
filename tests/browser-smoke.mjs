@@ -204,7 +204,7 @@ async function main() {
     await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouvelle rencontre', exact: true }).click();
     const prepareOverlay = page.getByRole('dialog');
     const profileSelect = prepareOverlay.getByRole('combobox', { name: 'Profil' });
-    const zoneSelect = prepareOverlay.locator('select').last();
+    const zoneSelect = prepareOverlay.locator('.encounter-add-entry select').last();
     await zoneSelect.selectOption('active');
     const profileOptions = await profileSelect.locator('option').evaluateAll(options => options
       .filter(option => option.value && option.textContent.includes('Aline modifiée'))

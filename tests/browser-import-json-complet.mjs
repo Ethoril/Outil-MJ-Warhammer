@@ -88,7 +88,7 @@ async function main() {
     await page.locator('#workspace-prepare').getByRole('button', { name: 'Nouvelle rencontre', exact: true }).click();
     const prepare = page.getByRole('dialog');
     await prepare.getByRole('combobox', { name: 'Profil' }).selectOption({ label: `${priest.nom} (PNJ)` });
-    await prepare.locator('select').last().selectOption('active');
+    await prepare.locator('.encounter-add-entry select').last().selectOption('active');
     await prepare.getByRole('button', { name: 'Ajouter' }).click();
     await expect(prepare.locator('.encounter-composition')).toContainText(`${priest.nom} ×1`);
     await prepare.getByRole('button', { name: 'Lancer la rencontre' }).last().click();

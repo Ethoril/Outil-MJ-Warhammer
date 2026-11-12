@@ -360,7 +360,7 @@ async function main() {
     const prepOverlay = realPage.getByRole('dialog');
     const profileSelect = prepOverlay.getByRole('combobox', { name: 'Profil' });
     const campSelect = prepOverlay.getByRole('combobox', { name: 'Camp' });
-    const zoneSelect = prepOverlay.locator('select').last();
+    const zoneSelect = prepOverlay.locator('.encounter-add-entry select').last();
 
     await profileSelect.selectOption({ label: 'Duelliste impérial (Créature)' });
     await campSelect.selectOption('pj');

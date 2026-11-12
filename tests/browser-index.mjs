@@ -183,7 +183,7 @@ async function main() {
     await prepareOverlay.getByRole('combobox', { name: 'Profil' }).selectOption({ label: 'Garde importé (Créature)' });
     await expect(campSelect).toHaveValue('ennemi');
     const profileSelect = prepareOverlay.getByRole('combobox', { name: 'Profil' });
-    const zoneSelect = prepareOverlay.locator('select').last();
+    const zoneSelect = prepareOverlay.locator('.encounter-add-entry select').last();
     await zoneSelect.selectOption('active');
     await profileSelect.selectOption({ label: 'Garde importé (Créature)' });
     await prepareOverlay.getByRole('button', { name: 'Ajouter' }).click();
@@ -346,7 +346,7 @@ async function main() {
     await galleryPrepare.getByRole('textbox', { name: 'Titre' }).fill('Galerie');
     await galleryPrepare.getByRole('textbox', { name: 'Titre' }).press('Tab');
     const gallerySelect = galleryPrepare.getByRole('combobox', { name: 'Profil' });
-    const galleryZone = galleryPrepare.locator('select').last();
+    const galleryZone = galleryPrepare.locator('.encounter-add-entry select').last();
     const existingEntries = galleryPrepare.locator('.encounter-composition > li');
     while (await existingEntries.count()) {
       await existingEntries.first().getByRole('button', { name: 'Retirer' }).click();
