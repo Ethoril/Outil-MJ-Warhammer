@@ -12,7 +12,6 @@ import { normalizeV5Roll } from './v5-roll.js';
 import { acquireV5Conditions } from './v5-effects.js';
 import { getV5Fortune, commitV5Resources } from './v5-resources.js';
 
-export const V5_MAGIC_MISCASTS_VERSION = 'v5-magic-miscasts-2026-10-10.1';
 
 /**
  * Normalisation de chaîne pour comparaison insensible à la casse et aux accents.

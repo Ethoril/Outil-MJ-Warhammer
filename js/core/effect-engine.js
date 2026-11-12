@@ -16,7 +16,6 @@
  */
 import { normalizeTestKey } from './v5-divine-effects-tests.js';
 
-export const EFFECT_ENGINE_VERSION = 'u8-effect-engine-2026-11-06.1';
 
 const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
 const fail = (message, field) => { const error = new TypeError(message); if (field) error.field = field; throw error; };

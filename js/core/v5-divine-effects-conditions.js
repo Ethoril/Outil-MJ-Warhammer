@@ -230,7 +230,6 @@ export function consumeFreeReroll(participant, { round, attack } = {}) {
   return true;
 }
 
-export const REVERSE_DICE_SOURCE = 'divine-reverse-dice';
 const reverseDice = {
   validate: () => null,
   buildLayer: () => ({ reverseDice: { remaining: 1 } })

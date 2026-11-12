@@ -258,13 +258,9 @@ export const SUPPLEMENT_ERRORS = SUPPLEMENTS.errors;
 if (SUPPLEMENT_ERRORS.length && typeof console !== 'undefined') for (const error of SUPPLEMENT_ERRORS) console.error(`[supplément] ${error.message}`);
 
 const byId = list => new Map(list.map(row => [row.id, row]));
-const SPELLS = byId(SUPPLEMENTS.spells), PRAYERS = byId(SUPPLEMENTS.prayers);
-export const supplementSpell = id => SPELLS.get(id) ?? null;
+const PRAYERS = byId(SUPPLEMENTS.prayers);
 /** Contrats de lancement des sorts et prières de supplément (ajoutés aux registres de v5-spell-contracts.js et du divin). */
 export const SUPPLEMENT_SPELL_CONTRACTS = Object.freeze(SUPPLEMENTS.spells.map(row => row.contract));
 export const SUPPLEMENT_DIVINE_CONTRACTS = Object.freeze(SUPPLEMENTS.prayers.map(row => row.contract));
 /** Un contrat divin est-il une prière de supplément chargée (source `supplement:<id>`) ? */
 export const isSupplementDivineContract = contract => Boolean(typeof contract?.source?.document === 'string' && contract.source.document.startsWith('supplement:') && PRAYERS.has(contract.id));
-export const supplementPrayer = id => PRAYERS.get(id) ?? null;
-export const listSupplementSpells = () => [...SUPPLEMENTS.spells];
-export const listSupplementPrayers = () => [...SUPPLEMENTS.prayers];

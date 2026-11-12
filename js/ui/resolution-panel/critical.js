@@ -50,7 +50,6 @@ export function rollField({ field, label, value, error, handlers, disabled, crit
   return wrapper;
 }
 
-export const zoneName = location => String(location.name).toLocaleLowerCase();
 
 export function criticalEffectLine(part) {
   const base = part.effectRollBase;

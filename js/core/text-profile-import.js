@@ -133,5 +133,3 @@ export function parseProfileText(text) {
   };
 }
 
-export const parseProfilesText = parseProfileText;
-export const previewTextImport = parseProfileText;

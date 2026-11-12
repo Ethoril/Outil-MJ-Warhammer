@@ -12,7 +12,6 @@ import { isTargetUndead, isTargetDaemon } from './v5-magic-target-nature.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { REIKLAND_BEASTS, KADON_MONSTERS } from '../data/v5-transformation-bestiary.js';
 
-export const V5_MAGIC_ARBITRATIONS_VERSION = 'v5-magic-arbitrations-2026-10-11.1';
 
 /** Bêtes du Reikland (Forme bestiale, Livre de base pp. 325-327) et monstres de Transformation de Kadon (pp. 328-335). */
 export const BEAST_PROFILES = REIKLAND_BEASTS;

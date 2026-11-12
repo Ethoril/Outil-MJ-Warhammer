@@ -9,7 +9,6 @@ import { normalizeV5Roll, selectV5Test } from './v5-roll.js';
 import { effectiveSkillScore, baseCharacteristicScore } from './v5-magic-talent-rank.js';
 import { previewV5SecondaryTest } from './v5-test-modifiers.js';
 
-export const V5_MAGIC_HIGH_VERSION = 'v5-magic-high-2026-10-10.1';
 
 /**
  * Calcule le risque d'épuisement magique (Magical Burnout) :

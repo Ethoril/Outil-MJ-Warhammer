@@ -772,17 +772,6 @@ function validateDurationDeadline(expiry, duration, currentRound, casterId) {
   return null;
 }
 
-/** Build a divine layer only after its source, target and expiry have been resolved. */
-export function createDivineEffectLayer(effect, context = {}) {
-  const { contract, actorId, targetId, executionId, expiry, clockAnchor } = context;
-  if (!contract?.source || !contract?.sourceReceipt || !actorId || !targetId || !executionId) throw new TypeError('Provenance et identifiants de couche divine requis.');
-  const error = validateExpiry(expiry);
-  if (error) throw new TypeError(error);
-  const missing = effectNeeds(effect);
-  if (missing.length) throw new TypeError(missing.map(item => item.label).join('; '));
-  return freeze(effectLayer(effect, { contract, actorId, targetId, executionId, expiry: { ...expiry, moment: expiry.moment || 'afterEffects' }, clockAnchor }));
-}
-
 /** Expire only divine layers whose explicit, absolute deadline has passed. */
 export function expireDivineEffects(participant, transition = {}) {
   const next = clone(participant);

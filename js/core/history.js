@@ -116,7 +116,6 @@ export function markExternalBoundary(history, details = {}) {
   };
 }
 
-export const closeForExternalUpdate = markExternalBoundary;
 
 export function historySnapshot(history) {
   return clone(canonicalHistory(history));

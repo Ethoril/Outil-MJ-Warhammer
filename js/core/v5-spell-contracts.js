@@ -109,7 +109,6 @@ import { previewV5SecondaryTest, secondaryTestDetail, resolveV5TestModifiers, co
 import { effectiveOrder } from './turn-order.js';
 import { AWAKENING_FLAG, awakeningLostTurnRound, awakeningLayer } from './v5-spell-restrictions.js';
 
-export const V5_SPELL_CONTRACTS_VERSION = 'v5-spell-contracts-2026-10-10.3';
 
 export const IMPLEMENTED_SPECIAL_HANDLERS = new Set([
   'abullas-snare', 'acceptance-of-fate', 'aethyric-arms', 'almanac', 'amaranth', 'amber-talons', 'amber-trance',
@@ -162,35 +161,6 @@ const fold = str => String(str || '')
 
 /** États négatifs : jamais infligés au lanceur par un sort de cible « Vous » sans clause `selfHarm`. */
 export const NEGATIVE_CONDITIONS = new Set(['aveugle', 'assourdi', 'sonne', 'extenue', 'enflamme', 'a terre', 'surpris', 'enchevetre', 'hemorragique', 'inconscient', 'distrait', 'brise', 'empoisonne', 'epuise']);
-
-/**
- * Calcule le total des Points d'Armure (PA) portés sur les 6 localisations V5
- * (Tête, Corps, Bras gauche, Bras droit, Jambe gauche, Jambe droite).
- */
-export function computeTotalWornApAllLocations(target, options = {}) {
-  if (Number.isFinite(Number(options.totalWornAp)) && Number(options.totalWornAp) >= 0) {
-    return Number(options.totalWornAp);
-  }
-  const ar = target?.armor ?? target?.armour ?? target?.protection;
-  if (typeof ar === 'number' && Number.isFinite(ar) && ar >= 0) {
-    return ar * 6;
-  }
-  if (ar && typeof ar === 'object' && !Array.isArray(ar)) {
-    const head = Math.max(0, Number(ar.head ?? ar.tete ?? 0) || 0);
-    const body = Math.max(0, Number(ar.body ?? ar.torso ?? ar.corps ?? 0) || 0);
-    const arms = (ar.leftArm !== undefined || ar.rightArm !== undefined)
-      ? Math.max(0, Number(ar.leftArm) || 0) + Math.max(0, Number(ar.rightArm) || 0)
-      : 2 * Math.max(0, Number(ar.arms ?? ar.bras ?? 0) || 0);
-    const legs = (ar.leftLeg !== undefined || ar.rightLeg !== undefined)
-      ? Math.max(0, Number(ar.leftLeg) || 0) + Math.max(0, Number(ar.rightLeg) || 0)
-      : 2 * Math.max(0, Number(ar.legs ?? ar.jambes ?? 0) || 0);
-    return head + body + arms + legs;
-  }
-  if (Number.isFinite(Number(target?.ap)) && Number(target.ap) > 0) {
-    return Number(target.ap) * 6;
-  }
-  return 0;
-}
 
 /**
  * Retourne la spécification explicite de test secondaire d'un contrat (si applicable).

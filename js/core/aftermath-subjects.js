@@ -90,7 +90,6 @@ export function followedCharacterConflicts(envelope) {
 export function aftermathSubjects(envelope) {
   return [...combatOf(envelope), ...followedCharacters(envelope).filter(row => row.where === 'suivi').map(row => row.subject)];
 }
-export const findAftermathSubject = (envelope, id) => aftermathSubjects(envelope).find(row => row.id === id) || null;
 
 /**
  * Sujet d'une ligne du registre : `combat` (participant présent), `suivi` (personnage suivi hors rencontre) ou

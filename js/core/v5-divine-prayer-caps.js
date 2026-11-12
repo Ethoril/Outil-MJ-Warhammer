@@ -173,7 +173,6 @@ export function getPrayerSLModifiers(actor,{sceneId,round}={}) {
   return {ok:true,status:modifiers.length?'active':'unchanged',modifiers,needsInput:[]};
 }
 
-export const prayerSLCapRuleId = ruleId;
 
 // B05 : données de calcul, liées à la table canonique L06 p.218.
 export const wrathRoundRules = Object.freeze({

@@ -57,7 +57,6 @@ export function normalizeQualities(qualities = [], { registry = ENGINES } = {}) 
   return out;
 }
 
-export const dedupeQualities = normalizeQualities;
 
 /** Qualité du registre des mots-clés ou dotée d'un moteur local ; sinon elle est signalée « inconnue » à l'import. */
 export function isKnownQuality(quality, registry = ENGINES) {

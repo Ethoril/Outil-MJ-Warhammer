@@ -6,7 +6,6 @@ const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u03
 const v5 = participant => participant?.extensions?.v5 || {};
 
 export const V5_RIDE_SKILL_ID = 'skill-43_68_65_76_61_75_63_68_65_72-base';
-export const V5_ROUGHRIDER_TALENT_ID = 'talent-roughrider';
 export const V5_TRICK_RIDER_TALENT_ID = 'talent-trick-rider';
 export const MOUNT_LINK_FIELD = 'mountId';
 
