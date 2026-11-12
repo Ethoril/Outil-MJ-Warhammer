@@ -35,6 +35,8 @@ const isPerceptionTest = label => /perception/.test(fold(label));
 /** Phase d'une séquelle au jour donné (le jour du calendrier de convalescence). */
 export function sequelaPhase(sequela, day) {
   if (sequela.status === 'needs-facts') return 'needs-facts';
+  // Suivi archivé (personnage non gardé, ancien suivi sans propriétaire) : plus de phase, plus de Test attendu.
+  if (sequela.status === 'archived') return 'archived';
   if (sequela.kind === 'broken-bone') {
     if (sequela.status === 'healed' || sequela.status === 'permanent') return sequela.status;
     return day < sequela.endDay ? 'healing' : 'awaiting-test';

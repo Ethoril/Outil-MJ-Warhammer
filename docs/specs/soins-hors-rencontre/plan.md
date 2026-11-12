@@ -24,7 +24,7 @@ Tous les champs sont facultatifs ; absents, ils se lisent comme vides (règle du
 | ligne du registre | `ownerLabel` | nom enregistré à l'ouverture (CA1) |
 | maladie, séquelle | statut `archived` | déjà présent pour les blessures ; étendu (CA8, CA35) |
 | personnage persistant | `extensions.v5.criticalAftermath`, `criticalWounds` | Blessures Critiques reportées à la fin du combat (CA6, CA17) |
-| reçu et traitement | `healerId` de forme `external:<opération>` + `healerName` | soigneur extérieur (CA22) ; `validHealer` exige déjà un identifiant |
+| reçu et traitement | `healerId` de forme `external:<nom en minuscules>` + `healerName` | soigneur extérieur (CA22) ; identifiant stable par nom, pour que « un soin par soigneur et par jour » et le refus du double envoi jouent aussi pour lui |
 
 `participantId` reste sur chaque ligne : il sert en rencontre et à la trace `ficheWriteback.owners`, toujours lue.
 

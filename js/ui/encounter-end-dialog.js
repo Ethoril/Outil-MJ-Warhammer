@@ -24,7 +24,7 @@ export function openEncounterEndDialog({ candidates = [], removal = false } = {}
     const boxes = candidates.map(candidate => {
       const label = el('label', null, 'encounter-end-choice');
       const box = el('input'); box.type = 'checkbox'; box.name = 'keep'; box.value = candidate.participantId;
-      const suffix = `${candidate.count} suivi${candidate.count > 1 ? 's' : ''} ouvert${candidate.count > 1 ? 's' : ''}${candidate.dead ? ' · mort' : ''}`;
+      const suffix = `${candidate.count} suivi${candidate.count > 1 ? 's' : ''} ouvert${candidate.count > 1 ? 's' : ''}${candidate.dead ? ' · mort' : ''}${candidate.conflict ? ' · fiche déjà portée par deux personnages suivis' : ''}`;
       label.append(box, document.createTextNode(` Garder « ${candidate.label || candidate.name} » (${suffix})`));
       list.append(label);
       return box;

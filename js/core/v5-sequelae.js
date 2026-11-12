@@ -488,6 +488,7 @@ export function previewSequelaeAdvance(state, days) {
 export function pendingSequelaDecisions(state) {
   const day = state.calendar.currentDay, out = [];
   for (const s of state.sequelae || []) {
+    if (s.status === 'archived') continue;
     if (s.status === 'needs-facts') out.push({ sequelaId: s.id, participantId: s.participantId, kind: 'needs-facts', label: s.label, missing: s.missing });
     else if (s.kind === 'broken-bone' && sequelaPhase(s, day) === 'awaiting-test') out.push({ sequelaId: s.id, participantId: s.participantId, kind: 'fracture-final-test', label: s.label });
     else if (s.kind === 'surgery-deadline' && s.status === 'open' && day > s.deadlineDay) out.push({ sequelaId: s.id, participantId: s.participantId, kind: 'surgery-deadline-missed', label: s.label });

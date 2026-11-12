@@ -37,10 +37,10 @@ test('CA22 — soigneur extérieur : nom, score et Bonus d’Intelligence saisis
   }
   const done = await store.treatAftermathWound({ operationId: 'w', incidentId, externalHealer: barber(), roll: 20, supplies: true });
   assert.deepEqual([done.receipt.status, done.receipt.score, done.receipt.sl, done.receipt.healed, done.receipt.healerName, done.receipt.healerExternal, done.receipt.healerId],
-    ['applied', 60, 4, 9, 'Barbier de Wurtbad', true, 'external:w']);
+    ['applied', 60, 4, 9, 'Barbier de Wurtbad', true, 'external:barbier de wurtbad']);
   assert.equal(store.listParticipants()[0].hp, 14);
   const state = store.getAftermathState();
-  assert.deepEqual([state.incidents[0].treatments[0].healerId, state.incidents[0].treatments[0].healerName], ['external:w', 'Barbier de Wurtbad']);
+  assert.deepEqual([state.incidents[0].treatments[0].healerId, state.incidents[0].treatments[0].healerName], ['external:barbier de wurtbad', 'Barbier de Wurtbad']);
   assert.deepEqual([state.receipts.at(-1).healerName, state.receipts.at(-1).healerExternal], ['Barbier de Wurtbad', true], 'le reçu enregistré porte la mention');
 });
 

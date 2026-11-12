@@ -1379,7 +1379,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     if (input.externalHealer) {
       const { name, score, intelligenceBonus, hasSurgeryTalent } = input.externalHealer;
       if (typeof name !== 'string' || !name.trim() || !Number.isSafeInteger(score) || score < 0 || !Number.isSafeInteger(intelligenceBonus) || intelligenceBonus < 0) return { ok: false, reason: 'external-healer-facts-required' };
-      return { ok: true, external: true, healer: { participantId: `external:${input.operationId}`, healerName: name.trim(), external: true, skill: purpose, skillId: null,
+      return { ok: true, external: true, healer: { participantId: `external:${name.trim().toLocaleLowerCase('fr')}`, healerName: name.trim(), external: true, skill: purpose, skillId: null,
         skillName: purpose === 'animal-care' ? 'Soins aux animaux' : 'Guérison', score, advances: 1, intelligenceBonus, hasSurgeryTalent: hasSurgeryTalent === true } };
     }
     const participant = aftermathSubjects(draft).find(row => row.id === input.healerId);
@@ -3458,9 +3458,12 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           if (!profile.extensions?.ficheId) return { ...profile, hp: participant.hp, maxHp: participant.maxHp };
           // Current health belongs to each explicitly linked persistent character.
           for (const copy of participants.filter(item => item.profileId === profile.id)) {
+            // CA26 : une copie sans lien ne représente pas un personnage déjà représenté par un autre exemplaire du combat.
+            const represented = id => participants.some(item => item.id !== copy.id && item.persistentCharacterId === id);
             const candidates = (draft.persistentCharacters || []).filter(character => copy.persistentCharacterId
               ? character.id === copy.persistentCharacterId
               : character.profileId === profile.id || character.extensions?.ficheId === profile.extensions.ficheId);
+            if (!copy.persistentCharacterId && candidates.length && candidates.every(character => represented(character.id))) continue;
             if (candidates.length !== 1) {
               missing.add(profile.name);
               continue;

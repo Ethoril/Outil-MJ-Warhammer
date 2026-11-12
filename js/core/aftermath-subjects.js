@@ -244,8 +244,8 @@ function reportOnCharacter(character, participant) {
   if (Object.keys(v5).length) extensions.v5 = v5; else delete extensions.v5;
   return { ...character, hp: Number(participant.hp) || 0, ...(participant.maxHp != null && character.maxHp !== null ? { maxHp: participant.maxHp } : {}), states: cloneValue(participant.states || []), extensions };
 }
-function characterFrom(participant, { id, name, profile }) {
-  const ficheId = ficheIdOf(participant);
+function characterFrom(participant, { id, name, profile, withFiche = true }) {
+  const ficheId = withFiche ? ficheIdOf(participant) : '';
   return reportOnCharacter({
     id, name, kind: participant.kind || 'PNJ', profileId: profile ? profile.id : null, hp: 0, maxHp: participant.maxHp ?? null, states: [],
     // Sans profil de réserve (improvisé), le personnage garde ses propres caractéristiques et compétences.
@@ -281,6 +281,9 @@ export function planEncounterEnd(envelope, { keepIds = [], participantIds = null
     if (linked) { follow(participant, linked, false); continue; }
     const profile = profiles.get(participant.profileId) || null;
     const ficheId = participant.kind === 'PJ' ? ficheIdOf(participant) : '';
+    // CA38 : fiche portée par plusieurs personnages suivis. L'outil ne choisit pas ; le PJ est proposé comme les autres
+    // et, gardé, ne devient pas un porteur de plus de la fiche.
+    let conflict = false;
     if (ficheId) {
       const candidates = characters.filter(row => ficheIdOf(row) === ficheId);
       if (candidates.length === 1 && !exemplarOf.has(candidates[0].id) && ![...mapping.values()].some(row => row.ownerId === candidates[0].id)) { follow(participant, candidates[0], false); continue; }
@@ -289,11 +292,12 @@ export function planEncounterEnd(envelope, { keepIds = [], participantIds = null
         if (live.length || hurt) follow(participant, characterFrom(participant, { id: idFactory(), name: text(participant.name) || 'Personnage sans nom', profile }), true);
         continue;
       }
+      conflict = candidates.length > 1;
     }
     if (!live.length) continue;
     const label = aftermathOwnerLabel(envelope, participant);
-    needsChoice.push({ participantId: participant.id, name: participant.name || '', label, kind: participant.kind || '', dead: participant.extensions?.v5?.dead === true, count: live.length });
-    if (keep.has(participant.id)) follow(participant, characterFrom(participant, { id: idFactory(), name: label, profile }), true);
+    needsChoice.push({ participantId: participant.id, name: participant.name || '', label, kind: participant.kind || '', dead: participant.extensions?.v5?.dead === true, count: live.length, ...(conflict ? { conflict: true } : {}) });
+    if (keep.has(participant.id)) follow(participant, characterFrom(participant, { id: idFactory(), name: label, profile, withFiche: !conflict }), true);
     else toArchive.push(participant.id);
   }
   register = rekeyAftermathRegister(register, mapping);
@@ -316,14 +320,14 @@ export function planFollowedCharacterRemoval(envelope, characterId) {
 
 /**
  * Après toute commande : les suivis rattachés portent l'identifiant du sujet actuel de leur personnage, et les
- * suivis vivants d'un participant qui vient de disparaître (ni en combat, ni en scène suspendue) sont archivés.
+ * suivis vivants d'un participant qui vient de disparaître (du combat ou d'une scène suspendue supprimée) sont archivés.
  */
 export function settleAftermathSubjects(before, next) {
   const out = reconcileAftermathOwners(next);
   const register = registerOf(out);
   if (!register) return out;
   const still = new Set([...combatOf(out), ...suspendedOf(out)].map(row => row.id));
-  const gone = combatOf(before).map(row => row.id).filter(id => !still.has(id));
+  const gone = [...combatOf(before), ...suspendedOf(before)].map(row => row.id).filter(id => !still.has(id));
   if (!gone.length) return out;
   const swept = archiveAftermathRows(register, gone);
   return swept.archived.length ? withRegister(out, swept.register) : out;
