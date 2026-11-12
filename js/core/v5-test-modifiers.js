@@ -75,6 +75,7 @@ import { previewV5TalentTestModifiers } from './v5-talent-tests.js';
 import { magicTestModifiers, magicAdverseModifiers } from './v5-magic-talents.js';
 import { conditionPenaltyEffects, conditionDisadvantageEffects, conditionTestRules, conditionDisadvantageRows, CONDITION_QUESTIONS } from './condition-effects.js';
 import { sequelaTestRules, sequelaQuestionLabel } from './v5-sequela-effects.js';
+import { awakeningSpell, awakeningMessage } from './v5-spell-restrictions.js';
 
 /** Niveaux d'États actifs du participant (clé sans espace ni tiret → niveau cumulé) ; marqueurs de talent exclus. */
 export const conditionLevels = actor => {
@@ -166,7 +167,9 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   // CA14 : Inconscient, aucun Test ; Surpris, aucun Test qui demande d'agir pendant ce Round.
   const levels = test.levels instanceof Map ? test.levels : conditionLevels(actor);
   const actorRestrictions = [...(levels.get('inconscient') && test.passive !== true ? ['Inconscient : aucun Test ne peut être tenté.'] : []),
-    ...(test.isAction === true && levels.get('surpris') ? ['Surpris : aucun Test qui demande d’agir pendant ce Round.'] : [])];
+    ...(test.isAction === true && levels.get('surpris') ? ['Surpris : aucun Test qui demande d’agir pendant ce Round.'] : []),
+    // REGLES-10 : Chant vivifiant, la créature qui s'éveille perd son prochain Tour (aucune Action).
+    ...(test.isAction === true && awakeningSpell(actor) ? [awakeningMessage(actor)] : [])];
   const conditions = { rules, penaltyEffects, penalty, appliedPenalty, mixed, mixedUnresolved, penaltyRows, disadvantageRows, droppedRows,
     penaltyStates: [...penaltyEffects.levels].filter(([, value]) => value).map(([key]) => key) };
 

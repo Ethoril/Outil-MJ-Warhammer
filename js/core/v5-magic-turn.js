@@ -1,5 +1,6 @@
 /** Effets magiques au changement de Tour : fonction pure partagée par Store et la commande end-turn-v5. */
 import { advanceMagicConsequences } from './v5-magic-time.js';
+import { awakeningLayerDone } from './v5-spell-restrictions.js';
 import { expireSpellEffects, endBeastForm, resolveSpellDamage,spellFormulaValue,applySpellEffects,unsuppressedSpellEffects,rebaseMagicLayers } from './v5-magic-effects.js';
 import { normalizeCamp } from './encounters.js';
 import { reverseV5Roll } from './v5-roll.js';
@@ -680,6 +681,8 @@ export function processCombatTurnSpells(participants, round, currentActorId, end
         const ids=(p.extensions.v5.spellEffects || []).filter(e=>e.expiresAtNextTurnOf===p.id).map(e=>e.id);
         for(const id of ids)p=expireSpellEffects(p,{effectId:id}).participant;
       }
+      // REGLES-10 : éveil de Chant vivifiant retiré à la fin du Tour perdu (ou une fois son Round dépassé).
+      for(const e of (p.extensions?.v5?.spellEffects || []).filter(e=>awakeningLayerDone(e,{round,endedTurn:ended})))p=expireSpellEffects(p,{effectId:e.id}).participant;
       const res = expireSpellEffects(p, { currentRound: round, endedTurn: ended });
       p = res.participant;
     }

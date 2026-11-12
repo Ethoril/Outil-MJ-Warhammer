@@ -5,6 +5,7 @@
 // déduit, et le MJ peut toujours forcer une autre valeur dans le contexte de l'action.
 import { outnumberSide, outnumberWeightOf } from './outnumbering.js';
 import { previewV5Test, resolveV5Opposition } from './v5-roll.js';
+import { awakeningMessage } from './v5-spell-restrictions.js';
 import { resolveV5TestModifiers, finalizeV5TestModifiers } from './v5-test-modifiers.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
@@ -229,6 +230,9 @@ export function previewDisengage({ combat, participants = [], actorId, input = {
   const opponentIds = engagedWith(combat, participants, actorId).filter(id => enemies(people.get(id), actor));
   if (!opponentIds.length) return { status: 'blocked', reason: `${actor.name} n’est engagé avec aucun adversaire.` };
   const opponents = opponentIds.map(id => people.get(id));
+  // REGLES-10 : Chant vivifiant, aucun Mouvement pendant l'éveil (le Désengagement est un déplacement).
+  const awakening = awakeningMessage(actor, 'move');
+  if (awakening) return { status: 'blocked', mode: 'awakening', opponentIds, reason: awakening };
   if (actor.extensions?.v5?.position?.surrounded === true && input.force !== true)
     return { status: 'blocked', mode: 'surrounded', opponentIds, reason: `${actor.name} est encerclé : se désengager est impossible ; il peut Fuir (p. 163).` };
   if (actor.extensions?.v5?.specialStates?.orderlyDisengage === true)

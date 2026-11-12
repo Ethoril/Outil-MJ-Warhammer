@@ -4,6 +4,7 @@
 import { meleeGroups, engagedWith, deriveEngagementContext } from '../../core/engagements.js';
 import { outnumberSide, planOutnumbering } from '../../core/outnumbering.js';
 import { inferV5Kind } from '../../core/v5-combat-rules.js';
+import { awakeningMessage, noFleeMessage } from '../../core/v5-spell-restrictions.js';
 import { CONDITION_QUESTIONS } from '../../core/condition-effects.js';
 import { MIXED_CONDITION_QUESTION, testQuestionLabel, answeredSequelaFields } from '../../core/v5-test-modifiers.js';
 import { renderObstinateChoice } from '../test-questions.js';
@@ -59,10 +60,13 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
     const plan = previewDisengage(actor.id);
     const consequence = plan.mode === 'surrounded' ? 'impossible : encerclé (Fuir reste possible)' : plan.mode === 'momentum' ? 'perd l’Élan, sans Test'
       : plan.mode === 'orderly' ? 'En Bon Ordre : sans Élan ni Test' : plan.mode === 'restricted' ? `impossible : ${plan.reason}` : `Test opposé contre ${active.find(row => row.id === plan.bestOpponentId)?.name || 'l’adversaire'}${plan.outnumbered ? ', Désavantage (infériorité)' : ''}`;
-    rows.push({ id: 'disengage', label: 'Se désengager', consequence, run: commands => commands.disengage() });
+    rows.push({ id: 'disengage', label: 'Se désengager', consequence: plan.mode === 'awakening' ? `impossible : ${plan.reason}` : consequence,
+      ...(plan.mode === 'awakening' ? { disabled: true } : {}), run: commands => commands.disengage() });
     const orderly = actor.extensions?.v5?.specialStates?.orderlyDisengage === true;
-    rows.push({ id: 'flee', label: 'Fuir', consequence: orderly ? `En Bon Ordre : pas d’Élan pour ${engagedFoes.map(foe => foe.name).join(', ')} ; Brisé dû`
-      : `Élan et attaque gratuite pour ${engagedFoes.map(foe => foe.name).join(', ')} ; +${engagedFoes.length} Brisé`, run: commands => commands.flee() });
+    // REGLES-10 : Acceptation du Destin interdit la fuite ; le moteur la refuse aussi.
+    const noFlee = noFleeMessage(actor);
+    rows.push({ id: 'flee', label: 'Fuir', consequence: noFlee ? `impossible : ${noFlee}` : orderly ? `En Bon Ordre : pas d’Élan pour ${engagedFoes.map(foe => foe.name).join(', ')} ; Brisé dû`
+      : `Élan et attaque gratuite pour ${engagedFoes.map(foe => foe.name).join(', ')} ; +${engagedFoes.length} Brisé`, ...(noFlee ? { disabled: true } : {}), run: commands => commands.flee() });
   }
   // Charge (p. 163) : seulement si non engagé ; engagé, la raison est annoncée et le clic vaut forçage par le MJ.
   for (const foe of freeFoes.filter(foe => !engagedIds.includes(foe.id)).slice(0, 4)) rows.push({ id: `charge-${foe.id}`, label: `Charger · ${foe.name}`,
@@ -100,6 +104,9 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
       run: commands => commands.select({ actionKey: actionKeys[fearIndex], targetId: 'none' }) });
   }
   rows.push({ id: 'other', label: 'Autres actions', consequence: 'magie, prière ou Test : panneau complet', run: commands => commands.focus('action') });
+  // REGLES-10 : Chant vivifiant, la créature qui s'éveille perd son Tour ; seul le panneau complet reste ouvert (le moteur refuse l'Action).
+  const awakening = awakeningMessage(actor);
+  if (awakening) return rows.map(row => row.id === 'other' ? row : { ...row, disabled: true, consequence: `impossible : ${awakening}` });
   return rows;
 }
 

@@ -106,6 +106,8 @@ import { resolveSpecificOvercast, specificOvercastReminder, raiseTraitRating, SP
 import { normalizeArcaneOptions, previewArcaneUnforgiving, applyArcaneArmorDamage } from './v5-magic-arcane-unforgiving.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { previewV5SecondaryTest, secondaryTestDetail, resolveV5TestModifiers, conditionLevels } from './v5-test-modifiers.js';
+import { effectiveOrder } from './turn-order.js';
+import { AWAKENING_FLAG, awakeningLostTurnRound, awakeningLayer } from './v5-spell-restrictions.js';
 
 export const V5_SPELL_CONTRACTS_VERSION = 'v5-spell-contracts-2026-10-10.3';
 
@@ -3728,12 +3730,21 @@ export function applySpellExecution(draft, contractOrId, input = {}) {
 
     // Effet temporaire
     if (tRes.temporaryEffect) {
-      const applied = applySpellEffects(target, tRes.temporaryEffect, {
+      // REGLES-10 : l'éveil (Chant vivifiant) quitte la couche du sort pour une couche dédiée, retirée à la fin du Tour perdu.
+      const awakening = tRes.temporaryEffect.specialState?.[AWAKENING_FLAG] === true;
+      const mainEffect = awakening ? { ...tRes.temporaryEffect, specialState: Object.fromEntries(Object.entries(tRes.temporaryEffect.specialState).filter(([key]) => key !== AWAKENING_FLAG)) } : tRes.temporaryEffect;
+      const applied = applySpellEffects(target, mainEffect, {
         round: currentRound,
         caster: actor,
         overcastDurationMultiplier: preview.overcast?.durationMultiplier
       });
       participants[pIdx] = applied.participant;
+      if (awakening) {
+        const order = effectiveOrder(participants, { mode: draft.combat?.orderMode, order: draft.combat?.order });
+        const lostTurnRound = awakeningLostTurnRound({ order, currentActorId: draft.combat?.currentActorId ?? actor.id, targetId: target.id, round: currentRound });
+        participants[pIdx] = applySpellEffects(participants[pIdx], awakeningLayer({ id: `${opKey}:awakening:${target.id}`, spellId: contract.id, spellName: contract.name,
+          castExecutionId: opKey, targetId: target.id, lostTurnRound, round: currentRound }), { round: currentRound, caster: actor }).participant;
+      }
       target = participants[pIdx];
       if (Array.isArray(tRes.temporaryEffect.removeConditions) && Array.isArray(target.states)) {
         const remSet = new Set(tRes.temporaryEffect.removeConditions.map(c => fold(c)));

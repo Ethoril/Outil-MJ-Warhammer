@@ -25,6 +25,7 @@ import { previewV5Test,selectV5Test, resolveV5Opposition, reverseV5Roll,refreshV
 import { buildV5RollDecision } from './v5-decision.js';
 import { previewMomentumEvents } from './v5-momentum.js';
 import { applyScytheOfShyishRules } from './v5-magic-arbitrations.js';
+import { awakeningSpell } from './v5-spell-restrictions.js';
 import { buildCombatTest, hasMomentum, withMomentum, loseMomentumUnderFear, isFrightened, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
 import { evaluateV5Talents, previewV5TalentConditions, currentV5TalentHashes, V5_TALENT_IDS } from './v5-talents.js';
 import { previewV5ActionQualities, v5ActionQualityContext, previewV5WeaponConditions, v5QualityMechanicalStatus } from './v5-talent-qualities.js';
@@ -465,7 +466,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   let targetLevels = conditionLevels(target);
   const unopposedExplosion=explosionAttack&&!explosionOpposed;
-  let cannotDefend = dischargeEffect || targetLevels.has('surpris') || targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true;
+  // REGLES-10 : la créature qui s'éveille (Chant vivifiant) n'a pas de défense active.
+  let cannotDefend = dischargeEffect || targetLevels.has('surpris') || targetLevels.has('inconscient') || Boolean(awakeningSpell(target)) || context.targetHelpless === true || context.targetCannotDefend === true;
   let helpless = (targetLevels.has('inconscient') || context.targetHelpless === true || context.targetCannotDefend === true)
     && (actorPlan.kind === 'melee' || (actorPlan.kind === 'ranged' && (context.pointBlank === true || context.shotRange==='point-blank')));
   let hit = helpless && !opposed ? true : opposed ? opposed.winner === 'attacker' : success;
