@@ -160,6 +160,7 @@ const ASSETS_TO_CACHE = [
   './js/core/v5-magic-attributes.js',
   './js/core/v5-magic-arbitrations.js',
   './js/core/v5-spell-contracts.js',
+  './js/core/v5-spell-restrictions.js',
   './js/core/v5-magic-arcane-unforgiving.js',
   './js/core/v5-magic-overcast-options.js',
   './js/core/v5-magic-reminder-flags.js',
