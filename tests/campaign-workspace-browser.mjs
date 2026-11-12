@@ -52,10 +52,10 @@ try {
   await expect(mount).toContainText('Coup de lance');
   await expect(mount).toContainText('Fièvre');
   await expect(mount).toContainText('Fracture');
-  const absent = mount.getByRole('button', { name: /Suivi hors rencontre 1/ });
+  const absent = mount.getByRole('button', { name: /Ancien suivi/ });
   await absent.click();
   await expect(mount.getByLabel('Détail du suivi')).toContainText('Chute');
-  await expect(mount.getByLabel('Détail du suivi')).toContainText('participant absent');
+  await expect(mount.getByLabel('Détail du suivi')).toContainText('Ancien suivi sans personnage');
   await mount.getByRole('button', { name: 'Avec suivi' }).click();
   await expect(mount.getByRole('button', { name: /Bertin/ })).toHaveCount(0);
   await expect(absent).toHaveAttribute('aria-pressed', 'true');
@@ -81,7 +81,7 @@ try {
     const Store = { getFullJSON: () => JSON.stringify({ extensions: { v5: {} } }), getAftermathState: () => createAftermathState(), listParticipants: () => [], listAftermathSequelae: () => ({ sequelae: [], pending: [] }), listAftermathProposals: () => [] };
     window.campaignTest.empty = mountCampaignWorkspace({ root: document.querySelector('#mount'), Store });
   }, { origin });
-  await expect(mount).toContainText('Aucun participant ni suivi actif');
+  await expect(mount).toContainText('Aucun participant ni personnage suivi');
   await expect(mount).toContainText('Aucun personnage sélectionné');
   await expect(mount).not.toContainText('Campagne indisponible');
   assert.deepEqual(errors, []);

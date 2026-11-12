@@ -1,4 +1,5 @@
 import { DOM, escapeHtml } from './dom.js';
+import { removeParticipantWithChoice } from './encounter-end-dialog.js';
 import { makeStateBadge } from '../core/sanitize.js';
 import { normalizeEffects, normalizeState } from '../core/effects.js';
 import { DiceLine } from '../core/models.js';
@@ -423,7 +424,8 @@ export function initCardUI(Store, Combat) {
 
     if (e.target.matches('.btn-remove')) {
       e.preventDefault();
-      observe(Store.removeParticipant(id), 'Retrait');
+      // CA10 : même question qu'à la fin du combat si ce participant a un suivi ouvert.
+      observe(removeParticipantWithChoice(Store, id), 'Retrait');
       if (typeof Store.executeCommand !== 'function') {
         Store.log({ kind: 'management', actorId: id, actorName: p.name, text: `Combat: retiré ${p.name}` });
       }

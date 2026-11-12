@@ -412,21 +412,21 @@ try {
   }
   const ghostDiseaseCard = globalDetails.locator('.workspace-aftermath-disease', { hasText: 'Maladie spectrale' });
   await expect(ghostDiseaseCard).toBeVisible();
-  await expect(ghostDiseaseCard).toContainText('Malade absent de la rencontre : soins de maladie non disponibles.');
+  await expect(ghostDiseaseCard).toContainText('Ancien suivi sans personnage : consultation seule.');
   await expect(ghostDiseaseCard.getByRole('button', { name: 'Enregistrer les soins du jour' })).toHaveCount(0);
 
   const ghostSequelaCard = globalDetails.locator('.workspace-aftermath-sequela', { hasText: 'Fracture spectrale' });
   await expect(ghostSequelaCard).toBeVisible();
-  await expect(ghostSequelaCard).toContainText('Patient absent de la rencontre : séquelle en consultation (soins et tests indisponibles).');
+  await expect(ghostSequelaCard).toContainText('Ancien suivi sans personnage : consultation seule.');
   await expect(ghostSequelaCard.locator('button')).toHaveCount(0);
 
   // Vérification dans la colonne de détail pour l'absent
   const absentBtn = campaignSection.locator('[data-campaign-person="ghost-participant"]');
   await expect(absentBtn).toBeVisible();
   await absentBtn.click();
-  await expect(detail).toContainText('PARTICIPANT ABSENT');
+  await expect(detail).toContainText('SUIVI EN CONSULTATION');
   await expect(detail).toContainText('Piège de fosse');
-  await expect(detail).toContainText('participant absent de la rencontre');
+  await expect(detail).toContainText('Ancien suivi sans personnage');
 
   // Cohérence de l'interface pour un absent :
   // Le bloc d'actions est intitulé 'Archivage du suivi' (et NON 'Soins et décisions disponibles')
@@ -472,7 +472,7 @@ try {
   // Dans Jouer, la séquelle de fracture n'est pas bridée en consultation seule
   const playGhostSequela = playAftermath.locator('.workspace-aftermath-sequela', { hasText: 'Fracture spectrale' });
   await expect(playGhostSequela).toBeVisible();
-  await expect(playGhostSequela).not.toContainText('Patient absent de la rencontre : séquelle en consultation');
+  await expect(playGhostSequela).not.toContainText('consultation seule');
   await expect(playGhostSequela.locator('details, button')).not.toHaveCount(0);
 
   // Retour à Campagne

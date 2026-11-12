@@ -194,10 +194,10 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     healerLabel.appendChild(healerInput);
     // CA22 : soigneur extérieur, dont le MJ saisit le nom, le score, le Bonus d'Intelligence et le talent Chirurgie.
     const externalBox = node('div', '', 'workspace-aftermath-external');
-    const extName = control('Nom du soigneur extérieur', `${prefix}-ext-name`, { type: 'text' });
-    const extScore = control(purpose === 'animal-care' ? 'Score de Soins aux animaux' : 'Score de Guérison', `${prefix}-ext-score`, { min: 0 });
-    const extBonus = control('Bonus d’Intelligence', `${prefix}-ext-bonus`, { min: 0 });
-    const extSurgery = checkbox('Possède le talent Chirurgie', `${prefix}-ext-surgery`);
+    const extName = control('Nom (extérieur)', `${prefix}-ext-name`, { type: 'text' });
+    const extScore = control(purpose === 'animal-care' ? 'Score de Soins aux animaux (extérieur)' : 'Score de Guérison (extérieur)', `${prefix}-ext-score`, { min: 0 });
+    const extBonus = control('Bonus d’Intelligence (extérieur)', `${prefix}-ext-bonus`, { min: 0 });
+    const extSurgery = checkbox('Talent Chirurgie (extérieur)', `${prefix}-ext-surgery`);
     externalBox.append(extName.label, extScore.label, extBonus.label, extSurgery.label);
 
     const skillLabel = node('label', 'Compétence', 'workspace-aftermath-field');

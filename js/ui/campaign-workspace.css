@@ -771,3 +771,16 @@
     padding: 16px;
   }
 }
+
+/* CAMP-10 : doublon de personnage suivi pour une même fiche, pastille « Hors rencontre », soigneur extérieur */
+.campaign-conflict {
+  padding: 12px 14px;
+  background: var(--cw-paper);
+  border-left: 3px solid var(--cw-red);
+  margin: 12px 0;
+}
+.campaign-conflict h3 { margin: 0 0 4px; font-size: 15px; }
+.campaign-conflict p { margin: 0 0 8px; font-size: 13px; line-height: 1.45; }
+.campaign-conflict-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+.workspace-aftermath-external { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
+.workspace-aftermath-external[hidden] { display: none; }

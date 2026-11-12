@@ -289,6 +289,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/v5-aftermath-panel.js',
   './js/ui/v5-corruption-panel.js',
   './js/ui/v5-fate-dialog.js',
+  './js/ui/encounter-end-dialog.js',
   './vendor/firebase/firebase-app.js',
   './vendor/firebase/firebase-auth.js',
   './vendor/firebase/firebase-database.js',
