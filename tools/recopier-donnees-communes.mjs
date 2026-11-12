@@ -18,7 +18,7 @@ export const DEPOTS_PAR_DEFAUT = Object.freeze({
 });
 /** Emplacement de la copie dans chaque dépôt cible. */
 export const COPIES = Object.freeze({
-  carte: 'js/shared/donnees-communes.js',
+  carte: 'js/core/donnees-communes.js',
   fiches: 'js/data/donnees-communes.js'
 });
 

@@ -4,12 +4,26 @@
 // (dépôt de l'outil MJ) ; `--check` échoue si une copie a dérivé. Ne modifiez jamais une copie : modifiez
 // la source, puis relancez le script. Module pur, sans import, lisible par le navigateur et par Node.
 
-/** Clé de comparaison d'un nom d'espèce : sans accents ni casse, tirets et soulignés lus comme des espaces. */
+/**
+ * Clé de comparaison d'un nom d'espèce : sans accents ni casse, tirets et soulignés lus comme des espaces.
+ * @param {unknown} valeur @returns {string}
+ */
 export function cleEspece(valeur) {
   return String(valeur ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()
     .replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
 }
 
+/**
+ * @typedef {{ id: string, nom: string, alias: readonly string[], taille: 'small'|'average'|'large', mouvement: number,
+ *   sansBonusForce: boolean, multiplicateurBlessures: number, mutationPhysiqueMax: number|null }} Espece
+ */
+
+/**
+ * @param {string} id @param {string} nom
+ * @param {{ alias?: string[], taille: Espece['taille'], mouvement: number, sansBonusForce?: boolean,
+ *   multiplicateurBlessures?: number, mutationPhysiqueMax?: number|null }} valeurs
+ * @returns {Readonly<Espece>}
+ */
 const espece = (id, nom, { alias = [], taille, mouvement, sansBonusForce = false, multiplicateurBlessures = 1, mutationPhysiqueMax = null }) =>
   Object.freeze({ id, nom, alias: Object.freeze(alias), taille, mouvement, sansBonusForce, multiplicateurBlessures, mutationPhysiqueMax });
 
@@ -40,7 +54,10 @@ export const ESPECES = Object.freeze([
 
 const PAR_CLE = new Map(ESPECES.flatMap(entree => [entree.id, ...entree.alias].map(nom => [cleEspece(nom), entree])));
 
-/** Espèce correspondant à un nom (clé de fiche, libellé, alias anglais) ; null si inconnue ou vide. */
+/**
+ * Espèce correspondant à un nom (clé de fiche, libellé, alias anglais) ; null si inconnue ou vide.
+ * @param {unknown} valeur @returns {Readonly<Espece>|null}
+ */
 export function especeDe(valeur) {
   return PAR_CLE.get(cleEspece(valeur)) ?? null;
 }
