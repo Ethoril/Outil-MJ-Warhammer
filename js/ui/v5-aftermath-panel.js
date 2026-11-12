@@ -10,14 +10,17 @@ const node = (tag, text = '', className = '') => {
   return element;
 };
 const opId = () => `aftermath-${uid()}`;
+const EXTERNAL = '__exterieur__';
 const REASONS = {
   'campaign-time-requires-input': 'Le temps de campagne demande une saisie (Tests quotidiens, Colère…) : avancez-le depuis le menu ⋯ › Temps de campagne.',
   'incident-source-required': 'Choisissez un critique à suivre ou une cause de Blessures perdues.',
   'critical-occurrence-not-found': 'Cette occurrence critique n’existe plus sur la fiche.',
   'no-wounds-lost': 'Ce personnage n’a perdu aucune Blessure.',
   'incident-for-source-already-exists': 'Cette occurrence a déjà un suivi.',
-  'unknown-subject': 'Participant introuvable.',
+  'unknown-subject': 'Personnage introuvable.',
+  'subject-unavailable': 'Suivi en consultation seule : son personnage n’est ni en rencontre ni suivi hors rencontre.',
   'healer-required': 'Choisissez le soigneur.',
+  'external-healer-facts-required': 'Soigneur extérieur : saisissez son nom, son score et son Bonus d’Intelligence.',
   'skill-missing': 'La fiche du soigneur n’a pas la compétence requise.',
   'skill-choice-required': 'Plusieurs compétences conviennent : choisissez-en une.',
   'healer-skill-required': 'Le soigneur doit porter une compétence valable sur sa fiche.',
@@ -68,7 +71,7 @@ const REASONS = {
   'duplicate-submission': 'Même soigneur et même d100 déjà enregistrés : enregistrement double refusé.',
   'familiar-healing': 'Un homoncule ne guérit que par guérison naturelle ou par magie.',
   'amputation-decision-pending': 'Décidez d’abord du choc d’amputation de ce critique.',
-  'subject-still-present': 'Le patient est toujours dans le combat : clôturez plutôt le suivi.',
+  'subject-still-present': 'Le patient est toujours suivi : clôturez plutôt le suivi.',
   'condition-input-required': 'Un État ou une séquelle du testeur exige une précision : répondez à la question ci-dessous, puis relancez l’opération.'
 };
 const receiptText = receipt => {
@@ -89,7 +92,8 @@ const receiptText = receipt => {
   const hurt = receipt.fumbleDamage ? ` · ${receipt.fumbleDamage} Blessure(s) perdue(s)` : '';
   const span = receipt.fromDay != null ? ` · jour ${receipt.fromDay} → ${receipt.toDay}` : '';
   const missing = receipt.missingDailyChecks?.length ? ` · à saisir : ${receipt.missingDailyChecks.map(row => `jour ${row.day}`).join(', ')}` : '';
-  return `${head} · ${why}${test}${testDetail}${wounds}${hurt}${span}${missing}`;
+  const healer = receipt.healerExternal ? ` · soigneur : ${receipt.healerName} (extérieur)` : '';
+  return `${head} · ${why}${healer}${test}${testDetail}${wounds}${hurt}${span}${missing}`;
 };
 
 export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
@@ -156,6 +160,24 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     const element = node('button', text, className); element.type = 'button'; element.addEventListener('click', handler); return element;
   };
 
+  /** Nom d'un sujet : celui de la liste, sinon le nom stable du suivi (jamais un rang d'affichage). */
+  const subjectName = (participants, id) => {
+    const listed = participants.find(row => row.id === id)?.name;
+    if (listed) return listed;
+    if (typeof id === 'string' && id.startsWith('external:')) return 'soigneur extérieur';
+    let row = null;
+    try { const state = Store.getAftermathState(); row = [...state.incidents, ...(state.diseases || []), ...(state.sequelae || [])].find(item => item.participantId === id) || null; } catch { row = null; }
+    return (row && typeof Store.getAftermathRowLabel === 'function' ? Store.getAftermathRowLabel(row) : null) || id;
+  };
+  /** Suivi sans sujet soignable dans cet écran : consultation seule, avec la raison (CA13). */
+  const consultationText = participantId => {
+    const place = typeof Store.getAftermathSubjectPlace === 'function' ? Store.getAftermathSubjectPlace(participantId) : 'aucun';
+    if (place === 'suspendue') return 'Scène suspendue : consultation seule. Reprenez la scène pour soigner.';
+    if (place === 'suivi') return 'Personnage suivi hors rencontre : soignez-le depuis Campagne.';
+    return 'Ancien suivi sans personnage : consultation seule.';
+  };
+  const canArchive = participantId => (typeof Store.getAftermathSubjectPlace === 'function' ? Store.getAftermathSubjectPlace(participantId) : 'aucun') === 'aucun';
+
   const SIDE_OPTIONS = [['', 'Choisir…'], ['left', 'Gauche'], ['right', 'Droit(e)']];
   const PHASE_TEXT = {
     'needs-facts': 'faits à saisir', healing: 'en guérison', 'awaiting-test': 'fin de guérison : Test à faire', healed: 'guérie', permanent: 'permanente',
@@ -166,10 +188,17 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   const healerFields = (prefix, purpose, participants = []) => {
     const healerLabel = node('label', 'Soigneur', 'workspace-aftermath-field');
     const healerInput = document.createElement('select'); healerInput.name = `${prefix}-healer`;
-    for (const [value, text] of [['', 'Choisir…'], ...participants.map(row => [row.id, row.name || row.id])]) {
+    for (const [value, text] of [['', 'Choisir…'], ...participants.map(row => [row.id, `${row.name || row.id}${row.offEncounter ? ' (hors rencontre)' : ''}`]), [EXTERNAL, 'Soigneur extérieur…']]) {
       const option = node('option', text); option.value = value; healerInput.appendChild(option);
     }
     healerLabel.appendChild(healerInput);
+    // CA22 : soigneur extérieur, dont le MJ saisit le nom, le score, le Bonus d'Intelligence et le talent Chirurgie.
+    const externalBox = node('div', '', 'workspace-aftermath-external');
+    const extName = control('Nom (extérieur)', `${prefix}-ext-name`, { type: 'text' });
+    const extScore = control(purpose === 'animal-care' ? 'Score de Soins aux animaux (extérieur)' : 'Score de Guérison (extérieur)', `${prefix}-ext-score`, { min: 0 });
+    const extBonus = control('Bonus d’Intelligence (extérieur)', `${prefix}-ext-bonus`, { min: 0 });
+    const extSurgery = checkbox('Talent Chirurgie (extérieur)', `${prefix}-ext-surgery`);
+    externalBox.append(extName.label, extScore.label, extBonus.label, extSurgery.label);
 
     const skillLabel = node('label', 'Compétence', 'workspace-aftermath-field');
     const skill = document.createElement('select'); skill.name = `${prefix}-skill`; skillLabel.appendChild(skill);
@@ -197,21 +226,25 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
       }
     };
 
+    const showExternal = () => { const external = healerInput.value === EXTERNAL; externalBox.hidden = !external; skillLabel.hidden = external; };
     healerInput.addEventListener('change', () => {
       delete ui.values[`${prefix}-skill`];
       syncAllSkills();
+      showExternal();
     });
 
     remember(healerInput, `${prefix}-healer`);
     populateSkillSelect(skill, healerInput.value);
+    showExternal();
 
     const roll = control('d100', `${prefix}-roll`, { min: 1, max: 100 });
     const d10 = control('1d10 de Blessures (maladresse seulement)', `${prefix}-d10`, { min: 1, max: 10 });
     return {
-      elements: [healerLabel, skillLabel, roll.label, d10.label],
+      elements: [healerLabel, skillLabel, externalBox, roll.label, d10.label],
       values: () => ({
-        healerId: healerInput.value || null,
-        skillId: skill.value || null,
+        ...(healerInput.value === EXTERNAL
+          ? { healerId: null, skillId: null, externalHealer: { name: extName.input.value, score: extScore.input.value === '' ? null : Number(extScore.input.value), intelligenceBonus: extBonus.input.value === '' ? null : Number(extBonus.input.value), hasSurgeryTalent: extSurgery.input.checked } }
+          : { healerId: healerInput.value || null, skillId: skill.value || null }),
         roll: roll.input.value === '' ? null : Number(roll.input.value),
         ...(d10.input.value === '' ? {} : { d10: Number(d10.input.value) })
       })
@@ -275,7 +308,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
       card.appendChild(node('p', `${PHASE_TEXT[sequela.phase] || sequela.phase}${timing}${sequela.count ? ` · ${sequela.count}` : ''}`));
       const isPresent = participants.some(row => row.id === sequela.participantId);
       if (!isPresent && !allowAbsentActions) {
-        card.appendChild(node('p', 'Patient absent de la rencontre : séquelle en consultation (soins et tests indisponibles).'));
+        card.appendChild(node('p', consultationText(sequela.participantId)));
         list.appendChild(card);
         continue;
       }
@@ -440,8 +473,8 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
         close.append(ended.label, statesOk.label, button('Clore', () => void run(`close-${incident.id}`, () => Store.closeAftermathIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id, temporaryEffectsEnded: ended.input.checked, statesConfirmed: statesOk.input.checked }))));
         card.appendChild(close);
       } else {
-        card.appendChild(node('p', 'Patient hors du combat : aucun Test attendu.'));
-        card.appendChild(button('Archiver ce suivi', () => void run(`archive-${incident.id}`, () => Store.archiveAftermathIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id }))));
+        card.appendChild(node('p', consultationText(incident.participantId)));
+        if (canArchive(incident.participantId)) card.appendChild(button('Archiver ce suivi', () => void run(`archive-${incident.id}`, () => Store.archiveAftermathIncident({ operationId: opId(), expectedRevision: state.revision, incidentId: incident.id }))));
       }
     }
     return card;
@@ -492,7 +525,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     diseases.append(sick.label, label.label, duration.label, button('Enregistrer la maladie', () => void run(`disease-${filterParticipantId || ''}`, () => Store.registerAftermathDisease({ operationId: opId(), expectedRevision: state.revision, participantId: sick.input.value, label: label.input.value, durationDays: Number(duration.input.value) }))));
     for (const disease of diseasesList) {
       const card = node('article'); card.className = 'card workspace-aftermath-disease';
-      card.appendChild(node('p', `${disease.label} · ${nameOf(disease.participantId)} · ${disease.status === 'active' ? `${disease.remainingDays} jour(s) restant(s)` : 'terminée'} · soins : ${disease.careLog.map(row => `jour ${row.day} (${nameOf(row.healerId)})`).join(', ') || 'aucun'}`));
+      card.appendChild(node('p', `${disease.label} · ${nameOf(disease.participantId)} · ${disease.status === 'active' ? `${disease.remainingDays} jour(s) restant(s)` : (disease.status === 'archived' ? 'archivée' : 'terminée')} · soins : ${disease.careLog.map(row => `jour ${row.day} (${nameOf(row.healerId)})`).join(', ') || 'aucun'}`));
       const isPresent = participants.some(row => row.id === disease.participantId);
       if (disease.status === 'active') {
         if (isPresent || allowAbsentActions) {
@@ -501,7 +534,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
           const rested = checkbox('Journée de repos sous ses soins', `care-${disease.id}-rested`, true);
           card.append(...fields.elements, difficulty.label, rested.label, button('Enregistrer les soins du jour', () => void run(`care-${disease.id}`, () => Store.careForAftermathDisease({ conditionContext: { ...ui.conditionContext }, operationId: opId(), expectedRevision: state.revision, diseaseId: disease.id, ...fields.values(), difficultyDR: Number(difficulty.input.value) || 0, rested: rested.input.checked }))));
         } else {
-          card.appendChild(node('p', 'Malade absent de la rencontre : soins de maladie non disponibles.'));
+          card.appendChild(node('p', consultationText(disease.participantId)));
         }
       }
       diseases.appendChild(card);
@@ -533,7 +566,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     if (ui.preview?.status === 'ready') {
       const checks = ui.preview.requiredDailyChecks;
       previewBox.appendChild(node('p', `Du jour ${ui.preview.fromDay} au jour ${ui.preview.toDay}. ${checks.length} Test(s) de Résistance +2 DR possible(s) à saisir, un d100 par jour et par blessure non traitée.`));
-      if (ui.preview.absentIncidents?.length) previewBox.appendChild(node('p', `Patient(s) hors du combat, aucun Test attendu : ${ui.preview.absentIncidents.map(row => `${nameOf(row.participantId)} (incident ${row.incidentId})`).join(', ')}. Archivez ces suivis ci-dessous.`));
+      if (ui.preview.absentIncidents?.length) previewBox.appendChild(node('p', `Suivi(s) sans patient présent (scène suspendue ou ancien suivi), aucun Test attendu : ${ui.preview.absentIncidents.map(row => `${nameOf(row.participantId)} (incident ${row.incidentId})`).join(', ')}.`));
       for (const event of ui.preview.sequelaEvents || []) previewBox.appendChild(node('p', `Jour ${event.day} · ${event.participantName || event.participantId} · ${event.label} : ${{ 'fracture-heals': event.testNeeded ? 'fin de guérison, Test d’Endurance à faire' : 'fin de guérison (restée attachée, aucun Test)', 'tear-eases': 'la pénalité diminue', 'tear-heals': 'guérison complète', 'surgery-deadline-passes': 'l’échéance de chirurgie passe', 'rebind-window-passes': 'le délai pour rattacher la fracture passe' }[event.kind] || event.kind}`));
       for (const check of checks) {
         const row = node('div'); row.className = 'workspace-aftermath-check';
@@ -588,14 +621,12 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
       return err;
     }
     const isPresent = participants.some(row => row.id === participantId);
-    const nameOf = id => participants.find(row => row.id === id)?.name || id;
+    const nameOf = id => subjectName(participants, id);
     const container = node('div');
     container.className = 'workspace-aftermath-participant-actions';
     container.dataset.aftermathScope = 'detail';
 
-    // Participant absent de la rencontre :
-    // Les soins, médicaments, chirurgies, formulaires de maladie et séquelles restent réservés aux participants présents.
-    // Seule l'action d'archivage des incidents ouverts hors rencontre est proposée.
+    // Suivi sans sujet soignable (scène suspendue, ancien suivi) : consultation, et archivage d'un ancien suivi.
     if (!isPresent) {
       const ownIncidents = (state.incidents || []).filter(row => row.participantId === participantId && row.status === 'open');
       if (ownIncidents.length) {
@@ -626,9 +657,9 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
 
     // 3. Diseases for this participant
     const ownDiseases = (state.diseases || []).filter(row => row.participantId === participantId && row.status === 'active');
-    if (ownDiseases.length) {
-      container.appendChild(renderDiseases(state, participants, nameOf, participantId, { allowAbsentActions: false }));
-    }
+    // Toujours affiché : c'est aussi là qu'une maladie s'ouvre pour ce personnage (CA32).
+    void ownDiseases;
+    container.appendChild(renderDiseases(state, participants, nameOf, participantId, { allowAbsentActions: false }));
 
     // 4. Sequelae for this participant
     const overview = typeof Store.listAftermathSequelae === 'function' ? Store.listAftermathSequelae() : { sequelae: [], pending: [], incidents: [], characteristics: {} };
@@ -655,7 +686,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
       const err = node('div', `Registre indisponible : ${cause?.message || cause}`);
       return err;
     }
-    const nameOf = id => participants.find(row => row.id === id)?.name || id;
+    const nameOf = id => subjectName(participants, id);
     const container = node('section');
     container.className = 'workspace-aftermath-global';
     container.dataset.aftermathScope = 'global';
@@ -681,7 +712,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
         const panel = node('section'); panel.className = 'workspace-card workspace-aftermath'; panel.setAttribute('aria-label', 'Suivi des séquelles');
         panel.append(node('h3', 'Suivi des séquelles'), node('p', `Registre indisponible : ${cause.message}`)); return panel;
       }
-      const nameOf = id => participants.find(row => row.id === id)?.name || id;
+      const nameOf = id => subjectName(participants, id);
       const panel = node('section'); panel.className = 'workspace-card workspace-aftermath'; panel.setAttribute('aria-label', 'Suivi des séquelles et convalescence');
       panel.appendChild(node('h3', 'Séquelles et convalescence'));
       panel.appendChild(renderReceiptStatus());

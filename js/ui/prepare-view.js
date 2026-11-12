@@ -43,6 +43,7 @@ export function initPrepareView({ mount, hosted = false, Store = null, encounter
     return lastSave;
   }
 
+  const followedCharacters = () => (typeof Store?.listPersistentCharacters === 'function' ? Store.listPersistentCharacters() : persistentCharacters) || [];
   function render() {
     mount.replaceChildren();
     const root = document.createElement('section'); root.className = 'prepare-view'; root.setAttribute('aria-label', 'Préparer une rencontre');
@@ -90,16 +91,27 @@ export function initPrepareView({ mount, hosted = false, Store = null, encounter
       const profile = profiles().find(candidate => candidate.id === entry.profileId);
       item.textContent = `${profile?.name || 'Profil supprimé'} ×${entry.quantity} · ${CAMP_LABELS[entry.camp] || CAMP_LABELS[normalizeCamp(entry.camp, profile?.kind)]} · ${entry.zone === 'active' ? 'actif' : 'en attente'}`;
       const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = 'Retirer'; remove.addEventListener('click', () => { state.draft = removeEncounterEntry(state.draft, entry.id); void emit(); render(); });
+      // CA25 : un personnage suivi (PNJ gardé, par exemple) n'entre dans la rencontre que si le MJ le choisit ici.
+      // Seul le premier exemplaire de la ligne le représente ; un PJ lié à une fiche est repris d'office.
+      const followed = followedCharacters().filter(character => !character.profileId || character.profileId === entry.profileId || character.id === entry.persistentCharacterId);
+      if (followed.length) {
+        const pick = document.createElement('select'); pick.className = 'encounter-entry-followed'; pick.setAttribute('aria-label', `Personnage suivi pour ${profile?.name || 'ce profil'}`);
+        pick.append(new Option('Nouveau (profil seul)', ''));
+        followed.forEach(character => pick.append(new Option(`Reprendre « ${character.name || character.id} » (${character.hp ?? 0} PV)`, character.id)));
+        pick.value = entry.persistentCharacterId || '';
+        pick.addEventListener('change', () => { state.draft = setEncounterEntry(state.draft, entry.profileId, { ...entry, persistentCharacterId: pick.value || null }); void emit(); render(); });
+        item.append(' ', pick);
+      }
       item.append(' ', remove); list.appendChild(item);
     });
     root.appendChild(list);
 
-    const characters = typeof Store?.listPersistentCharacters === 'function' ? Store.listPersistentCharacters() : persistentCharacters;
+    const characters = followedCharacters();
     const people = document.createElement('details'); people.className = 'prepare-persistent-characters';
     const peopleSummary = document.createElement('summary'); peopleSummary.textContent = `Personnages persistants (${characters.length})`; people.appendChild(peopleSummary);
     characters.forEach(character => {
       const row = document.createElement('div'); row.className = 'row';
-      row.append(document.createTextNode(`${character.name || character.id} · PV ${character.hp ?? 0}`));
+      row.append(document.createTextNode(`${character.name || character.id} · PV ${character.hp ?? 0}${character.maxHp != null ? ` / ${character.maxHp}` : ''}`));
       if (typeof callbacks.onDeletePersistentCharacter === 'function') { const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'danger ghost small'; remove.textContent = 'Supprimer'; remove.addEventListener('click', async () => { remove.disabled = true; try { await callbacks.onDeletePersistentCharacter(character.id); render(); } catch (cause) { fail(cause, 'Personnage non supprimé : réessayez.'); } }); row.appendChild(remove); }
       people.appendChild(row);
     });

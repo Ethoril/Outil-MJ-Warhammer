@@ -28,6 +28,7 @@ import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as 
 import { renderObstinateChoice } from './ui/test-questions.js';
 import { openV5FortuneDialog } from './ui/v5-fortune-dialog.js';
 import { openV5FateDialog } from './ui/v5-fate-dialog.js';
+import { openEncounterEndDialog, removeParticipantWithChoice, confirmInTool } from './ui/encounter-end-dialog.js';
 import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
@@ -814,7 +815,14 @@ function openPrepareView(encounterId = null) {
         onDraftChange: draft => persistEncounter(draft),
         onDuplicate: () => { showToast('Rencontre dupliquée', 'success'); },
         onSavePersistentCharacter: async character => { await awaitStore(requireStoreApi('savePersistentCharacter')(character), 'Personnage'); showToast('Personnage persistant ajouté', 'success'); },
-        onDeletePersistentCharacter: async id => { await awaitStore(requireStoreApi('deletePersistentCharacter')(id), 'Suppression'); showToast('Personnage persistant supprimé', 'success'); },
+        onDeletePersistentCharacter: async id => {
+          // CA39 : un personnage suivi qui a des suivis ouverts n'est supprimé qu'après confirmation ; ses suivis sont archivés.
+          const pending = typeof Store.previewFollowedCharacterRemoval === 'function' ? Store.previewFollowedCharacterRemoval(id).archived : 0;
+          if (pending && !await confirmInTool({ title: 'Supprimer ce personnage persistant ?', confirmLabel: 'Supprimer et archiver',
+            text: `Ce personnage a ${pending} suivi${pending > 1 ? 's' : ''} ouvert${pending > 1 ? 's' : ''} (blessure, maladie ou séquelle). Le supprimer archive ce${pending > 1 ? 's' : ''} suivi${pending > 1 ? 's' : ''}.` })) return;
+          await awaitStore(requireStoreApi('deletePersistentCharacter')(id), 'Suppression');
+          showToast(pending ? `Personnage persistant supprimé, ${pending} suivi(s) archivé(s)` : 'Personnage persistant supprimé', 'success', { label: 'Annuler', onClick: () => Store.undo() });
+        },
         onLaunch: async draft => {
           if (!draft.entries.length) throw userError('Ajoutez au moins un profil à la composition avant de lancer.');
           const model = await persistEncounter(draft);
@@ -1470,8 +1478,9 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
     },
     removeParticipant: async id => {
       try {
-        await awaitStore(Store.removeParticipant(id), 'Retrait');
-        showToast('Combattant retiré du combat', 'success');
+        // CA10 : même question qu'à la fin du combat si ce participant a un suivi ouvert.
+        if (!await removeParticipantWithChoice(Store, id)) return;
+        showToast('Combattant retiré du combat', 'success', { label: 'Annuler', onClick: () => Store.undo() });
       } catch (error) {
         showToast(contextMessage('Combattant non retiré', error, 'réessayez.'), 'error');
         throw error;
@@ -1608,7 +1617,7 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         };
         form.querySelectorAll('[data-order]').forEach(button => button.addEventListener('click', () => reorder(button.dataset.order)));
         form.querySelector('[data-remove-participant]').addEventListener('click', async () => {
-          setBusy(true); try { await awaitStore(Store.removeParticipant(id), 'Retrait'); form.closest('dialog')?.close(); } catch (error) { setBusy(false); alertError(contextMessage('Combattant non retiré', error, 'réessayez.')); }
+          setBusy(true); try { if (await removeParticipantWithChoice(Store, id)) form.closest('dialog')?.close(); else setBusy(false); } catch (error) { setBusy(false); alertError(contextMessage('Combattant non retiré', error, 'réessayez.')); }
         });
         form.addEventListener('submit', async event => {
           event.preventDefault(); const save = form.querySelector('button[type="submit"]'); setBusy(true);
@@ -1838,10 +1847,21 @@ on(DOM.combat.btnNextTurn, 'click', advanceTurn);
 on(DOM.combat.btnReset, 'click', () => { DOM.combat.results.replaceChildren(); });
 // Un seul gestionnaire pour l'ancien bouton masqué et pour la barre d'outils de séance.
 // Décision du MJ (06/11) : pas de boîte native (le navigateur intégré de l'app la refuse sans l'afficher) ; le filet est le toast « Annuler ».
-const endCombat = () => {
-  Store.resetCombat();
+// CAMP-10 : PV, États et Blessures Critiques des personnages suivis sont reportés ; la fenêtre « Garder ou archiver »
+// ne s'ouvre que si un PNJ, une créature ou un PJ sans fiche a un suivi ouvert (CA8, CA9). Un seul ↶ annule tout (CA11).
+const endCombat = async () => {
+  const candidates = typeof Store.previewEncounterEnd === 'function' ? Store.previewEncounterEnd() : [];
+  let keepIds = [];
+  if (candidates.length) {
+    const choice = await openEncounterEndDialog({ candidates });
+    if (!choice) return;
+    keepIds = choice.keepIds;
+  }
+  try { await (typeof Store.endEncounter === 'function' ? Store.endEncounter({ keepIds }) : Store.resetCombat()); }
+  catch (error) { showToast(contextMessage('Combat non terminé', error, 'réessayez.'), 'error'); return; }
   DOM.combat.results?.replaceChildren();
-  showToast('Combat terminé : tous les combattants retirés, round remis à zéro', 'warning', { label: 'Annuler', onClick: () => Store.undo() });
+  const kept = keepIds.length ? ` ; ${keepIds.length} personnage(s) gardé(s) pour le suivi` : '';
+  showToast(`Combat terminé : tous les combattants retirés, round remis à zéro${kept}`, 'warning', { label: 'Annuler', onClick: () => Store.undo() });
 };
 if (DOM.combat.btnEndCombat) on(DOM.combat.btnEndCombat, 'click', endCombat);
 on(qs('#workspace-end-combat'), 'click', endCombat);

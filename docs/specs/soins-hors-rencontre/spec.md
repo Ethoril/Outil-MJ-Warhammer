@@ -108,7 +108,7 @@ Cadrage du 11/11/2026, sur `7d636b6` (prod 3.45.1). Origine : constat CAMP-10 de
 
 ## Dépendances
 
-- **ARCH-10 (version des données de sauvegarde)** : S8 transforme des sauvegardes existantes, une seule fois. Elle a besoin de l'étape de version décidée le même jour dans un autre chantier ; elle ne se livre pas avant et n'invente pas son propre mécanisme. En attendant, les anciens suivis s'affichent sous le libellé de repli (CA4) et restent archivables à la main, comme aujourd'hui.
+- **ARCH-10 (version des données de sauvegarde)** : livré le 12/11. S8 est une étape de sa chaîne de migrations (plan § 9).
 - S1 à S7 et S9 n'en dépendent pas : les champs nouveaux d'un suivi, absents d'une ancienne sauvegarde, se lisent comme vides.
 
 ## Hors périmètre

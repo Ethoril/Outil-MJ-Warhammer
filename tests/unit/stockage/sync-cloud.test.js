@@ -1,7 +1,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { googleAuthErrorCode, googleAuthErrorMessage } from '../../../js/core/auth-errors.js';
-import { migrateSnapshot } from '../../../js/core/migrations.js';
+import { migrateSnapshot, CURRENT_SCHEMA_VERSION } from '../../../js/core/migrations.js';
 import { migrateV2SyncDocument, createMigratingTransport, initializeV3Root } from '../../../js/core/sync-migration.js';
 import { indexedDB } from 'fake-indexeddb';
 import { createPersistence } from '../../../js/core/persistence.js';
@@ -63,7 +63,7 @@ test('v2 cloud missing empty reserve and participants migrates without changing 
   const source = emptyCloud(), before = structuredClone(source);
   const migrated = migrateV2SyncDocument(source);
   assert.equal(migrated.revision, 27);
-  assert.equal(migrated.state.schemaVersion, 3);
+  assert.equal(migrated.state.schemaVersion, CURRENT_SCHEMA_VERSION);
   assert.deepEqual(migrated.state.reserve, []);
   assert.deepEqual(migrated.state.combat.participants, []);
   assert.equal(migrated.state.combat.round, 3);
@@ -956,7 +956,7 @@ test('E05 protocole — journal, historique et UI ne sont jamais envoyés', () =
 
 test('E05 protocole — schéma incompatible refusé et extensions prototypes inertes', () => {
   assert.throws(
-    () => validateSyncDocument({ revision: 0, state: { schemaVersion: 4 }, receipts: {} }),
+    () => validateSyncDocument({ revision: 0, state: { schemaVersion: CURRENT_SCHEMA_VERSION + 1 }, receipts: {} }),
     error => error instanceof SyncProtocolError && error.code === 'SCHEMA_INCOMPATIBLE'
   );
   assert.throws(
@@ -1169,10 +1169,10 @@ test('E05 session — une file E02 incompatible est purgée en gardant l’état
 
 describe('Source cloud des fiches PJ', () => {
 const legacy={revision:8,state:{schemaVersion:2,reserve:[{id:'p',name:'PJ',hp:14,armor:{arms:2}}],combat:{round:1,participants:[]}},receipts:{old:4}};
-test('Cloud v3 — migrer v2 conserve la révision, les six zones et le document source',()=>{const before=structuredClone(legacy);const root=migrateV2SyncDocument(legacy);assert.equal(root.revision,8);assert.equal(root.state.schemaVersion,3);assert.equal(root.state.reserve[0].armorLocations.rightArm,2);assert.deepEqual(root.receipts,{});assert.deepEqual(legacy,before);assert.equal(initializeV3Root({corrupt:true},root),undefined);});
+test('Cloud v3 — migrer v2 conserve la révision, les six zones et le document source',()=>{const before=structuredClone(legacy);const root=migrateV2SyncDocument(legacy);assert.equal(root.revision,8);assert.equal(root.state.schemaVersion,CURRENT_SCHEMA_VERSION);assert.equal(root.state.reserve[0].armorLocations.rightArm,2);assert.deepEqual(root.receipts,{});assert.deepEqual(legacy,before);assert.equal(initializeV3Root({corrupt:true},root),undefined);});
 test('Cloud v3 — course initialisation retourne le gagnant et ne réécrit jamais v2',async()=>{const winner=migrateV2SyncDocument({...legacy,revision:9});let reads=[],writes=[];const transport=createMigratingTransport({current:'v3',legacy:'v2',read:async path=>{reads.push(path);return path==='v2'?legacy:null;},transact:async(path,update)=>{writes.push(path);assert.equal(update(winner),undefined);return {root:winner};}});assert.deepEqual(await transport.read(),winner);assert.deepEqual(reads,['v3','v2']);assert.deepEqual(writes,['v3']);});
 test('Cloud v3 — source malformed ou future refuse migration avant toute écriture',()=>{for(const raw of [{...legacy,revision:-1},{...legacy,state:{schemaVersion:4}},{...legacy,receipts:{bad:-2}},{...legacy,unknown:true}])assert.throws(()=>migrateV2SyncDocument(raw));});
-test('Cloud v3 — ancienne file ne rejoue pas les opérations v2 et exige choix explicite',async()=>{const persistence=createPersistence({indexedDB,dbName:'pj-old-queue',contextId:'guest'});await persistence.saveAtomic({state:legacy.state,session:{protocolVersion:2,deviceId:'old',sequence:4,baseRevision:8},operations:[{deviceId:'old',sequence:5,baseRevision:8,state:legacy.state}]});let conflicts=[],transactions=0;const session=createSyncSession({persistence,deviceId:'new',transport:{read:async()=>migrateV2SyncDocument(legacy),transaction:async()=>{transactions++;}},onConflict:data=>conflicts.push(data)});await session.open();assert.equal(conflicts.length,1);assert.equal(conflicts[0].localState.schemaVersion,3);assert.equal(conflicts[0].localState.reserve[0].id,'p');assert.deepEqual(await persistence.listOutbox(),[]);assert.equal((await persistence.readSession()).protocolVersion,3);assert.equal(transactions,0);assert.equal((await session.reconcile()).status,'conflict');assert.equal((await persistence.load()).syncPending,true);session.stop();const reopened=createSyncSession({persistence,deviceId:'new',transport:{read:async()=>migrateV2SyncDocument(legacy),transaction:async()=>{throw new Error('Ne doit pas envoyer avant un choix');}},onConflict:data=>conflicts.push(data)});await reopened.open();assert.equal(conflicts.length,2);assert.equal((await reopened.reconcile()).status,'conflict');await reopened.resolveRemote();assert.equal((await persistence.load()).syncPending,false);assert.equal((await reopened.reconcile()).status,'synced');reopened.stop();persistence.close();});
+test('Cloud v3 — ancienne file ne rejoue pas les opérations v2 et exige choix explicite',async()=>{const persistence=createPersistence({indexedDB,dbName:'pj-old-queue',contextId:'guest'});await persistence.saveAtomic({state:legacy.state,session:{protocolVersion:2,deviceId:'old',sequence:4,baseRevision:8},operations:[{deviceId:'old',sequence:5,baseRevision:8,state:legacy.state}]});let conflicts=[],transactions=0;const session=createSyncSession({persistence,deviceId:'new',transport:{read:async()=>migrateV2SyncDocument(legacy),transaction:async()=>{transactions++;}},onConflict:data=>conflicts.push(data)});await session.open();assert.equal(conflicts.length,1);assert.equal(conflicts[0].localState.schemaVersion,CURRENT_SCHEMA_VERSION);assert.equal(conflicts[0].localState.reserve[0].id,'p');assert.deepEqual(await persistence.listOutbox(),[]);assert.equal((await persistence.readSession()).protocolVersion,3);assert.equal(transactions,0);assert.equal((await session.reconcile()).status,'conflict');assert.equal((await persistence.load()).syncPending,true);session.stop();const reopened=createSyncSession({persistence,deviceId:'new',transport:{read:async()=>migrateV2SyncDocument(legacy),transaction:async()=>{throw new Error('Ne doit pas envoyer avant un choix');}},onConflict:data=>conflicts.push(data)});await reopened.open();assert.equal(conflicts.length,2);assert.equal((await reopened.reconcile()).status,'conflict');await reopened.resolveRemote();assert.equal((await persistence.load()).syncPending,false);assert.equal((await reopened.reconcile()).status,'synced');reopened.stop();persistence.close();});
 const makeSource=(reader)=>createFicheSource({loadSdk:async()=>({db:{},firestore:{doc:(_db,_collection,id)=>id,getDocFromServer:reader,getDoc:()=>{throw Error('cache forbidden');}}})});
 test('Lecture fiches — erreur partielle explicite et metadata source réelle',async()=>{const source=makeSource(async id=>{if(id==='wren')throw Object.assign(Error('refus'),{code:'permission-denied'});return {exists:()=>id!=='hellaya',data:()=>({schemaVersion:4,revision:19,data:{nom:id,equipment:[]}})};});const rows=await source.fetchAll();assert.equal(rows.find(row=>row.charId==='wren').status,'error');assert.equal(rows.find(row=>row.charId==='hellaya').status,'missing');assert.deepEqual(rows[0].metadata,{schemaVersion:4,revision:19});});
 test('Lecture fiches — refus global propagé, enveloppe invalide jamais utilisée',async()=>{await assert.rejects(makeSource(async()=>{throw Error('network unavailable');}).fetchAll(),/network unavailable/);const rows=await makeSource(async()=>({exists:()=>true,data:()=>({data:[]})})).fetchAll();assert.ok(rows.every(row=>row.status==='invalid'&&row.data===null));});
@@ -1696,7 +1696,8 @@ test('C7 migrateSnapshot — idempotent avec participant ajouté et divineEffect
 
 test('C7 migrateSnapshot — 1re passe : seule l’horloge de jeu initiale est migrée, pas le participant', () => {
   const { data, report } = migrateSnapshot(combatState(), { exportedAt: EXPORTED_AT });
-  assert.deepEqual(report.migrated, [{ path: 'extensions.v5.gameClock', from: 'absent', to: 'initiale-sans-temps-écoulé' }]);
+  // Le passage de schéma (étapes de SCHEMA_MIGRATIONS) est rapporté à part : il ne touche pas le participant.
+  assert.deepEqual(report.migrated.filter(row => row.path !== 'schemaVersion'), [{ path: 'extensions.v5.gameClock', from: 'absent', to: 'initiale-sans-temps-écoulé' }]);
   assert.deepEqual(report.rejected, []);
   assert.deepEqual(report.repaired, []);
   assert.equal(data.exportedAt, EXPORTED_AT);

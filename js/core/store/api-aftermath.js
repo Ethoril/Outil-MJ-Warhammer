@@ -7,10 +7,35 @@ import { updateCriticalDeathCountdown } from '../v5-critical-aftermath.js';
 import { uid, cloneValue } from '../models.js';
 import { sequelaCharacteristicTotals, sequelaEffectRows, sequelaPhase } from '../v5-sequela-effects.js';
 import { consumeObstinate } from '../v5-obstinate.js';
+import { aftermathSubjects, aftermathOwnership, mutableAftermathSubject } from '../aftermath-subjects.js';
 
 /** Q6 T6 : le testeur (participant) et les réponses du MJ aux questions d'États de ce Test (CA8, CA12). */
 const aftermathTestOptions = (tester, input) => ({ tester: tester || null, conditionContext: input?.conditionContext || {} });
-const healerParticipant = (draft, input) => (draft.combat?.participants || []).find(row => row.id === input?.healerId) || null;
+/** Sujet soignable par son identifiant : participant du combat en cours ou personnage suivi hors rencontre (`suivi:<id>`). */
+const subjectIn = (draft, id) => (id == null ? null : aftermathSubjects(draft).find(row => row.id === id) || null);
+const healerParticipant = (draft, input) => (input?.externalHealer ? null : subjectIn(draft, input?.healerId));
+/** Écrit sur le patient (PV, États, Blessures Critiques), qu'il soit en rencontre ou suivi hors rencontre. */
+const writePatient = (next, patientId, change) => {
+  const handle = mutableAftermathSubject(next, patientId);
+  if (!handle) return next;
+  change(handle.target);
+  return handle.commit();
+};
+/** CA13 : un suivi dont le sujet n'est ni en rencontre ni suivi hors rencontre (scène suspendue, ancien suivi) ne reçoit aucun soin. */
+const consultationOnly = (input, kind, row, patient, details = {}) => (row && !patient
+  ? { status: 'refused', reason: 'subject-unavailable', receipt: { id: input.operationId ?? null, kind, status: 'refused', reason: 'subject-unavailable', ...details } } : null);
+/** Soigneur extérieur (CA22) : le reçu et le traitement portent son nom et la mention « extérieur ». */
+const signExternalHealer = (outcome, found) => {
+  if (!found?.external || !outcome?.receipt) return outcome;
+  outcome.receipt.healerName = found.healer.healerName;
+  outcome.receipt.healerExternal = true;
+  if (outcome.receipt.status === 'applied') for (const list of ['incidents', 'diseases', 'sequelae']) for (const row of outcome.state?.[list] || []) {
+    for (const entry of [...(row.treatments || []), ...(row.careLog || []), ...(row.history || []), ...(row.immobilization?.attempts || [])]) {
+      if (entry?.healerId === found.healer.participantId) entry.healerName = found.healer.healerName;
+    }
+  }
+  return outcome;
+};
 const countAftermathTest = (draft, state, outcome, actor, input) => {
   if (outcome.receipt?.status !== 'applied' || outcome.state?.revision === state.revision || !actor) return outcome;
   const context = input.conditionContext || {};
@@ -26,7 +51,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return stored == null ? createAftermathState() : validateAftermathState(stored);
     },
     previewAftermathAdvance(input = {}) {
-      const participants = currentEnvelope().combat?.participants || [];
+      const participants = aftermathSubjects(currentEnvelope());
       const state = api.getAftermathState();
       const preview = previewAftermathAdvance(state, { ...input, absentParticipantIds: absentAftermathSubjects(state, participants) });
       if (preview.status !== 'ready') return preview;
@@ -38,7 +63,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     /** F2-I occurrences that have no incident yet: the only way (with a lost-Wounds cause) to open one. */
     listAftermathProposals() {
       const linked = new Set(api.getAftermathState().incidents.filter(row => row.source.kind === 'critical').map(row => `${row.participantId}:${row.source.criticalId}`));
-      return (currentEnvelope().combat?.participants || []).flatMap(participant => (participant.extensions?.v5?.criticalAftermath || [])
+      return aftermathSubjects(currentEnvelope()).flatMap(participant => (participant.extensions?.v5?.criticalAftermath || [])
         .filter(record => !linked.has(`${participant.id}:${record.id}`))
         .map(record => ({
           participantId: participant.id, participantName: participant.name, criticalId: record.id, criticalWoundId: record.criticalWoundId,
@@ -49,7 +74,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     registerAftermathIncident(input = {}) {
       return runAftermathCommand('register-aftermath-incident', (state, draft) => {
         const refuse = reason => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'incident', status: 'refused', reason } });
-        const participant = (draft.combat?.participants || []).find(row => row.id === input.participantId);
+        const participant = subjectIn(draft, input.participantId);
         if (!participant) return refuse('unknown-subject');
         let source, requiresSurgery = false, id = input.id;
         if (input.criticalId != null) {
@@ -65,12 +90,12 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
           source = { kind: 'wounds-lost', cause: input.cause.trim() };
           id ??= `incident:${input.operationId}`;
         } else return refuse('incident-source-required');
-        return registerWoundIncident(state, { id, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: participant.id, source, subjectKind: input.subjectKind, bandaged: input.bandaged, requiresSurgery });
+        return registerWoundIncident(state, { id, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: participant.id, source, subjectKind: input.subjectKind, bandaged: input.bandaged, requiresSurgery, owner: aftermathOwnership(draft, participant) });
       });
     },
     advanceAftermathCalendar(input = {}) {
       return runAftermathCommand('advance-aftermath-calendar', (state, draft) => {
-        const participants = draft.combat?.participants || [];
+        const participants = aftermathSubjects(draft);
         const enduranceScores = {};
         for (const incident of state.incidents) {
           const patient = participants.find(row => row.id === incident.participantId);
@@ -88,7 +113,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
           for (const check of outcome.receipt.processedDailyChecks || []) {
             const context = { ...(input.conditionContext || {}), ...(input.conditionContexts?.[check.participantId] || {}) };
             const chosen = context.preRollTalent === 'strong-minded' || context.obstinateTesterIds?.includes(check.participantId);
-            if (chosen) consumeObstinate(staged.state, staged.state.combat.participants.find(row => row.id === check.participantId), { preRollTalent: 'strong-minded' });
+            if (chosen) consumeObstinate(staged.state, subjectIn(staged.state, check.participantId), { preRollTalent: 'strong-minded' });
           }
           return staged.state;
         };
@@ -99,26 +124,27 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     archiveAftermathIncident(input = {}) {
       return runAftermathCommand('archive-aftermath-incident', (state, draft) => {
         const incident = state.incidents.find(row => row.id === input.incidentId);
-        if (incident && (draft.combat?.participants || []).some(row => row.id === incident.participantId)) return { status: 'refused', reason: 'subject-still-present', receipt: { id: input.operationId ?? null, kind: 'archive-incident', status: 'refused', reason: 'subject-still-present', incidentId: input.incidentId } };
+        if (incident && subjectIn(draft, incident.participantId)) return { status: 'refused', reason: 'subject-still-present', receipt: { id: input.operationId ?? null, kind: 'archive-incident', status: 'refused', reason: 'subject-still-present', incidentId: input.incidentId } };
         return archiveAftermathIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId });
       });
     },
     treatAftermathWound(input = {}) {
       return runAftermathCommand('treat-aftermath-wound', (state, draft) => {
         const incident = state.incidents.find(row => row.id === input.incidentId);
-        const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+        const patient = incident && subjectIn(draft, incident.participantId);
         const refuse = reason => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'treatment', status: 'refused', reason, incidentId: input.incidentId } });
+        if (incident && !patient) return refuse('subject-unavailable');
         // Un homoncule ne guérit que par guérison naturelle ou par magie : ni Soin ni médecine.
         if (patient && !previewFamiliarHealing(patient, { kind: 'heal' }).ok) return refuse('familiar-healing');
         const found = incident ? aftermathHealerOf(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input) : { ok: false };
         const outcome = treatWoundIncident(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, wounds: Number(patient?.hp) || 0, supplies: input.supplies, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, inCombat: input.inCombat === true, bleedingOnly: input.bleedingOnly === true, surgeryChoice: input.surgeryChoice ?? null });
         countAftermathTest(draft, state, outcome, healerParticipant(draft, input), input);
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        signExternalHealer(outcome, found);
         if (outcome.receipt.status === 'applied') {
           const receipt = outcome.receipt;
           // Même chemin que les autres soins : Empaleuse fiché, Empoisonné à 0, plafond de Blessures, Hémorragiques retirés par Blessure rendue.
-          outcome.afterApply = next => {
-            const target = next.combat.participants.find(row => row.id === patient.id);
+          outcome.afterApply = next => writePatient(next, patient.id, target => {
             const planned = receipt.bleedingOnly ? receipt.bleedingToRemove : receipt.healed;
             if (planned > 0) {
               const hpBefore = target.hp;
@@ -136,8 +162,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
             }
             if (receipt.fumbleDamage) target.hp = Math.max(0, Number(target.hp) - receipt.fumbleDamage);
             receipt.currentWoundsAfter = target.hp;
-            return next;
-          };
+          });
         }
         return outcome;
       });
@@ -145,28 +170,30 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     treatAftermathInfection(input = {}) {
       return runAftermathCommand('treat-aftermath-infection', (state, draft) => {
         const incident = state.incidents.find(row => row.id === input.incidentId);
+        const gone = consultationOnly(input, 'infection-treatment', incident, incident && subjectIn(draft, incident.participantId), { incidentId: input.incidentId });
+        if (gone) return gone;
         const found = input.remedy === true || !incident ? { ok: false } : aftermathHealerOf(draft, incident.subjectKind === 'animal' ? 'animal-care' : 'heal', input);
         const outcome = treatInfection(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll ?? null, remedy: input.remedy === true });
         if (!input.remedy) countAftermathTest(draft, state, outcome, healerParticipant(draft, input), input);
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        signExternalHealer(outcome, found);
         return outcome;
       });
     },
     treatAftermathSurgicalIncident(input = {}) {
       return runAftermathCommand('treat-aftermath-surgery', (state, draft) => {
         const incident = state.incidents.find(row => row.id === input.incidentId);
-        const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+        const patient = incident && subjectIn(draft, incident.participantId);
         const record = incident?.source.kind === 'critical' ? (patient?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId) : null;
+        const gone = consultationOnly(input, 'surgery', incident, patient, { incidentId: input.incidentId });
+        if (gone) return gone;
         const found = aftermathHealerOf(draft, 'heal', input);
         const outcome = treatSurgicalIncident(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, healer: found.ok ? found.healer : null, roll: input.roll, surgeryRequired: sequelaAmputation(record) === 'occurred' || (record?.sequela?.durableEffects || []).some(effect => effect.kind === 'surgery-deadline'), d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         countAftermathTest(draft, state, outcome, healerParticipant(draft, input), input);
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        signExternalHealer(outcome, found);
         if (outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
-          outcome.afterApply = next => {
-            const target = next.combat.participants.find(row => row.id === patient.id);
-            target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage);
-            return next;
-          };
+          outcome.afterApply = next => writePatient(next, patient.id, target => { target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage); });
         }
         return outcome;
       });
@@ -176,7 +203,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return runAftermathCommand('close-aftermath-incident', (state, draft) => {
         const refuse = (reason, details = {}) => ({ status: 'refused', reason, receipt: { id: input.operationId ?? null, kind: 'close-incident', status: 'refused', reason, incidentId: input.incidentId, ...details } });
         const incident = state.incidents.find(row => row.id === input.incidentId);
-        const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+        const patient = incident && subjectIn(draft, incident.participantId);
         let statesCleared = true, wound = null, record = null, surgeryRequired = false;
         if (incident?.status === 'open' && incident.source.kind === 'critical') {
           if (!patient) return refuse('unknown-subject');
@@ -200,8 +227,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
         }
         const outcome = closeAftermathIncident(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, statesCleared, temporaryEffectsEnded: input.temporaryEffectsEnded === true, surgeryRequired });
         if (outcome.receipt.status === 'applied' && wound) {
-          outcome.afterApply = next => {
-            const target = next.combat.participants.find(row => row.id === patient.id);
+          outcome.afterApply = next => writePatient(next, patient.id, target => {
             target.extensions.v5.criticalWounds = (target.extensions.v5.criticalWounds || []).filter(row => row.id !== wound.id);
             const be = criticalDeathToughnessBonus(target);
             if (be !== null) {
@@ -211,8 +237,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
             next.log = [{ id: uid(), kind: 'management', actorId: target.id, actorName: target.name,
               text: `${target.name} : Blessure Critique guérie (états et malus temporaires terminés) · ${record.effectName || record.id}`,
               detail: { kind: 'heal-critical-wound', incidentId: incident.id, criticalId: record.id } }, ...(next.log || [])].slice(0, 300);
-            return next;
-          };
+          });
         }
         return outcome;
       });
@@ -220,7 +245,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     /** Séquelles de la convalescence (F2-J2) : suivis, phases, décisions en attente, étapes proposées par incident et pertes de caractéristique à renvoyer à la fiche. */
     listAftermathSequelae() {
       const state = api.getAftermathState();
-      const participants = currentEnvelope().combat?.participants || [];
+      const participants = aftermathSubjects(currentEnvelope());
       const day = state.calendar.currentDay;
       const incidents = state.incidents.filter(row => row.status === 'open' && row.source.kind === 'critical').map(incident => {
         const record = (participants.find(row => row.id === incident.participantId)?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId);
@@ -238,7 +263,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     openAftermathSequelae(input = {}) {
       return runAftermathCommand('open-aftermath-sequelae', (state, draft) => {
         const incident = state.incidents.find(row => row.id === input.incidentId);
-        const patient = incident && (draft.combat?.participants || []).find(row => row.id === incident.participantId);
+        const patient = incident && subjectIn(draft, incident.participantId);
         const record = incident?.source.kind === 'critical' ? (patient?.extensions?.v5?.criticalAftermath || []).find(row => row.id === incident.source.criticalId) : null;
         const toughnessBonus = Number.isSafeInteger(input.toughnessBonus) && input.toughnessBonus >= 0 ? input.toughnessBonus : (patient ? criticalDeathToughnessBonus(patient) : null);
         return openSequelae(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, incidentId: input.incidentId, record, toughnessBonus, facts: input.facts || {} });
@@ -247,7 +272,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     setAftermathSequelaFacts(input = {}) {
       return runAftermathCommand('set-aftermath-sequela-facts', (state, draft) => {
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
-        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        const patient = sequela && subjectIn(draft, sequela.participantId);
         const toughnessBonus = Number.isSafeInteger(input.toughnessBonus) && input.toughnessBonus >= 0 ? input.toughnessBonus : (patient ? criticalDeathToughnessBonus(patient) : null);
         return setSequelaFacts(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, facts: input.facts || {}, toughnessBonus });
       });
@@ -256,10 +281,13 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return runAftermathCommand('immobilize-aftermath-fracture', (state, draft) => {
         const found = aftermathHealerOf(draft, 'heal', input);
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
-        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        const patient = sequela && subjectIn(draft, sequela.participantId);
+        const gone = consultationOnly(input, 'immobilization', sequela, patient, { sequelaId: input.sequelaId });
+        if (gone) return gone;
         const outcome = immobilizeFracture(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         countAftermathTest(draft, state, outcome, healerParticipant(draft, input), input);
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        signExternalHealer(outcome, found);
         return withHealingFumble(outcome, patient);
       });
     },
@@ -269,7 +297,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     resolveAftermathFracture(input = {}) {
       return runAftermathCommand('resolve-aftermath-fracture', (state, draft) => {
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
-        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        const patient = sequela && subjectIn(draft, sequela.participantId);
         const outcome = resolveFractureHealing(state, { ...aftermathTestOptions(patient, input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll ?? null });
         return outcome.receipt?.waived === false ? countAftermathTest(draft, state, outcome, patient, input) : outcome;
       });
@@ -278,10 +306,13 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return runAftermathCommand('treat-aftermath-torn-muscle', (state, draft) => {
         const found = aftermathHealerOf(draft, 'heal', input);
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
-        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        const patient = sequela && subjectIn(draft, sequela.participantId);
+        const gone = consultationOnly(input, 'muscle-heal', sequela, patient, { sequelaId: input.sequelaId });
+        if (gone) return gone;
         const outcome = treatTornMuscle(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, d10: input.d10 ?? null, wounds: Number(patient?.hp) || 0 });
         countAftermathTest(draft, state, outcome, healerParticipant(draft, input), input);
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        signExternalHealer(outcome, found);
         return withHealingFumble(outcome, patient);
       });
     },
@@ -291,7 +322,7 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     recordAftermathPostEncounterTest(input = {}) {
       return runAftermathCommand('record-aftermath-post-encounter-test', (state, draft) => {
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
-        const patient = sequela && (draft.combat?.participants || []).find(row => row.id === sequela.participantId);
+        const patient = sequela && subjectIn(draft, sequela.participantId);
         const outcome = recordPostEncounterTest(state, { ...aftermathTestOptions(patient, input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll });
         return countAftermathTest(draft, state, outcome, patient, input);
       });
@@ -304,29 +335,36 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
     },
     decideAftermathImpressiveScars(input = {}) {
       return runAftermathCommand('decide-aftermath-impressive-scars', (state, draft) => {
-        if (!(draft.combat?.participants || []).some(row => row.id === input.participantId)) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'scar-decision', status: 'refused', reason: 'unknown-subject' } };
-        return decideImpressiveScars(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, agreed: input.agreed });
+        const subject = subjectIn(draft, input.participantId);
+        if (!subject) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'scar-decision', status: 'refused', reason: 'unknown-subject' } };
+        return decideImpressiveScars(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, agreed: input.agreed, owner: aftermathOwnership(draft, subject) });
       });
     },
     /** Perte de caractéristique décidée par le MJ (V5 p.177). Rien n'est écrit sur la fiche : la valeur est conservée avec sa provenance pour le retour futur. */
     recordAftermathCharacteristicLoss(input = {}) {
       return runAftermathCommand('record-aftermath-characteristic-loss', (state, draft) => {
-        if (!(draft.combat?.participants || []).some(row => row.id === input.participantId)) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'characteristic-loss', status: 'refused', reason: 'unknown-subject' } };
-        return recordCharacteristicLoss(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, carac: input.carac, amount: input.amount, base: input.base ?? null, advances: input.advances ?? null, reason: input.reason });
+        const subject = subjectIn(draft, input.participantId);
+        if (!subject) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'characteristic-loss', status: 'refused', reason: 'unknown-subject' } };
+        return recordCharacteristicLoss(state, { operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, carac: input.carac, amount: input.amount, base: input.base ?? null, advances: input.advances ?? null, reason: input.reason, owner: aftermathOwnership(draft, subject) });
       });
     },
     registerAftermathDisease(input = {}) {
       return runAftermathCommand('register-aftermath-disease', (state, draft) => {
-        if (!(draft.combat?.participants || []).some(row => row.id === input.participantId)) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'disease', status: 'refused', reason: 'unknown-subject' } };
-        return registerDisease(state, { id: input.id ?? `disease:${input.operationId}`, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, label: input.label, durationDays: input.durationDays, sequelaId: (state.sequelae || []).some(row => row.id === input.sequelaId && row.kind === 'disease' && row.participantId === input.participantId) ? input.sequelaId : null });
+        const subject = subjectIn(draft, input.participantId);
+        if (!subject) return { status: 'refused', reason: 'unknown-subject', receipt: { id: input.operationId ?? null, kind: 'disease', status: 'refused', reason: 'unknown-subject' } };
+        return registerDisease(state, { id: input.id ?? `disease:${input.operationId}`, operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, participantId: input.participantId, label: input.label, durationDays: input.durationDays, sequelaId: (state.sequelae || []).some(row => row.id === input.sequelaId && row.kind === 'disease' && row.participantId === input.participantId) ? input.sequelaId : null, owner: aftermathOwnership(draft, subject) });
       });
     },
     careForAftermathDisease(input = {}) {
       return runAftermathCommand('care-aftermath-disease', (state, draft) => {
+        const disease = (state.diseases || []).find(row => row.id === input.diseaseId);
+        const gone = consultationOnly(input, 'disease-care', disease, disease && subjectIn(draft, disease.participantId), { diseaseId: input.diseaseId });
+        if (gone) return gone;
         const found = aftermathHealerOf(draft, 'heal', input);
         const outcome = careForDisease(state, { ...aftermathTestOptions(healerParticipant(draft, input), input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, diseaseId: input.diseaseId, healer: found.ok ? found.healer : null, roll: input.roll, difficultyDR: input.difficultyDR ?? 0, rested: input.rested === true });
         countAftermathTest(draft, state, outcome, healerParticipant(draft, input), input);
         if (outcome.receipt.reason === 'healer-skill-required' && found.reason) outcome.receipt.reason = found.reason;
+        signExternalHealer(outcome, found);
         return outcome;
       });
     },

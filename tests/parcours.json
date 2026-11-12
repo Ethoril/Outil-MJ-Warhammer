@@ -176,6 +176,7 @@
     "recette-g-c18-browser.mjs": {"famille":"ticket","chantier":"recette-g"},
     "recette-g-c19-browser.mjs": {"famille":"ticket","chantier":"recette-g"},
     "recette-g-c20-browser.mjs": {"famille":"doublon","chantier":"recette-g","doublonDe":"recette-g-c17-browser.mjs","note":"deux copies du squelette de divin-v5-t5-browser, une vingtaine de lignes d’écart"},
+    "soins-hors-rencontre-browser.mjs": {"famille":"general"},
     "sw-update-fresh-cache-browser.mjs": {"famille":"general","socle":true},
     "terminer-combat-browser.mjs": {"famille":"general","socle":true},
     "topbar-onglets-mobile-browser.mjs": {"famille":"ticket","chantier":"correctif"},

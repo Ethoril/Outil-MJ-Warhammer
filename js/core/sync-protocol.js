@@ -7,7 +7,7 @@
  */
 import { sanitizeMagicEnvelope } from './sanitize.js';
 
-export const SYNC_PROTOCOL_VERSION = 3;
+export const SYNC_PROTOCOL_VERSION = 4;
 
 // These fields belong to a device/session and must never enter the shared root.
 export const LOCAL_STATE_FIELDS = Object.freeze([
@@ -60,7 +60,9 @@ function assertRevision(value, field) {
 }
 
 function assertSharedStateVersion(state) {
-  if (hasOwn(state, 'schemaVersion') && state.schemaVersion !== SYNC_PROTOCOL_VERSION) {
+  // Une version plus ancienne reste lisible : elle passe par la chaîne de migrations avant d'être appliquée
+  // (frontière distante de sync-session, puis migrateSnapshot dans le Store). Seule une version future est refusée.
+  if (hasOwn(state, 'schemaVersion') && !(Number.isInteger(state.schemaVersion) && state.schemaVersion >= 3 && state.schemaVersion <= SYNC_PROTOCOL_VERSION)) {
     incompatible('Version de données partagées incompatible', {
       schemaVersion: state.schemaVersion,
       expected: SYNC_PROTOCOL_VERSION

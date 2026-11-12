@@ -6,7 +6,7 @@ import { BONE_DAYS, MAJOR_BONE_EXTRA_DAYS, MUSCLE_DAYS, IMMOBILIZATION_WEEK_DAYS
  * Chaque séquelle porte un identifiant stable dérivé de l'occurrence F2-I ; les Tests utilisent la compétence réelle et un d100 saisi.
  * Les DR sont des DR V5 : « +2 SL » du livre est +2 DR (plus facile), « −1 SL » est −1 DR.
  */
-const { assertState, receipt, result, commit, priorReceipt, runTest, healCheck, enduranceCheck, pendingTest, testFacts, healerProblem, validRoll, validScore, ID, clone } = aftermathKit;
+const { assertState, receipt, result, commit, priorReceipt, runTest, healCheck, enduranceCheck, pendingTest, testFacts, healerProblem, validRoll, validScore, ID, clone, ownership } = aftermathKit;
 
 const SIDED_PARTS = new Set(['hand', 'arm', 'foot', 'leg', 'ear', 'eye']);
 const COUNTED_PARTS = new Set(['finger', 'toe']);
@@ -108,7 +108,7 @@ export const requiredSequelaFacts = item => missingFacts(item, item.side ? { sid
 function build(item, incident, facts, toughnessBonus) {
   const base = {
     id: item.id, participantId: incident.participantId, incidentId: incident.id, key: item.key, kind: item.kind, label: item.label,
-    source: { criticalId: incident.source.criticalId, criticalWoundId: incident.source.criticalWoundId }, startDay: incident.injuryDay, status: 'open', history: []
+    source: { criticalId: incident.source.criticalId, criticalWoundId: incident.source.criticalWoundId }, startDay: incident.injuryDay, status: 'open', history: [], ...ownership(incident)
   };
   const data = { ...base, ...Object.fromEntries(['part', 'severity', 'condition', 'name', 'difficultyDR'].filter(k => item[k] !== undefined).map(k => [k, item[k]])) };
   return finish(data, { ...(item.side ? { side: item.side } : {}), ...facts }, toughnessBonus);
@@ -378,7 +378,7 @@ export function decideSurgeryDeadline(stateValue, { operationId, expectedRevisio
   target.decision = { day: state.calendar.currentDay, footLost, decidedBy: 'MJ' };
   if (footLost) {
     const id = `${sequela.id}:foot-lost`;
-    const made = { id, participantId: sequela.participantId, incidentId: sequela.incidentId, key: 'deadline-foot', kind: 'loss', part: 'foot', label: 'Perte : pied (chirurgie manquée)', source: clone(sequela.source), startDay: state.calendar.currentDay, status: 'permanent', side, relearned: 0, history: [] };
+    const made = { id, participantId: sequela.participantId, incidentId: sequela.incidentId, key: 'deadline-foot', kind: 'loss', part: 'foot', label: 'Perte : pied (chirurgie manquée)', source: clone(sequela.source), startDay: state.calendar.currentDay, status: 'permanent', side, relearned: 0, history: [], ...ownership(sequela) };
     if (lossCollision(next, made, side)) return refusal('part-already-lost');
     next.sequelae.push(made);
   }
@@ -401,7 +401,7 @@ export function recordRelearning(stateValue, { operationId, expectedRevision, se
 }
 
 /** p.178 : « et que le MJ est d'accord » : les cicatrices impressionnantes sont une décision explicite du MJ pour un personnage. */
-export function decideImpressiveScars(stateValue, { operationId, expectedRevision, participantId, agreed } = {}) {
+export function decideImpressiveScars(stateValue, { operationId, expectedRevision, participantId, agreed, owner = null } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
@@ -411,9 +411,10 @@ export function decideImpressiveScars(stateValue, { operationId, expectedRevisio
   const next = clone(state);
   next.sequelae ??= [];
   const id = `scars:${participantId}`;
-  const existing = next.sequelae.find(row => row.id === id);
+  // Une seule décision par sujet : elle garde son identifiant d'origine quand son sujet change d'identifiant (CAMP-10).
+  const existing = next.sequelae.find(row => row.kind === 'scar-decision' && row.participantId === participantId) || next.sequelae.find(row => row.id === id);
   if (existing) { existing.agreed = agreed; existing.decidedDay = state.calendar.currentDay; }
-  else next.sequelae.push({ id, participantId, kind: 'scar-decision', label: 'Cicatrices impressionnantes', status: 'permanent', agreed, decidedDay: state.calendar.currentDay, history: [] });
+  else next.sequelae.push({ id, participantId, kind: 'scar-decision', label: 'Cicatrices impressionnantes', status: 'permanent', agreed, decidedDay: state.calendar.currentDay, history: [], ...ownership(owner) });
   return commit(next, receipt(state, operationId, 'scar-decision', 'applied', agreed ? 'scars-agreed' : 'scars-declined', { participantId }));
 }
 
@@ -425,7 +426,7 @@ export function splitCharacteristicLoss({ base, advances, amount }) {
   return { appliedToBase: toBase, appliedToAdvances: toAdvances, base: base - toBase, advances: advances - toAdvances };
 }
 
-export function recordCharacteristicLoss(stateValue, { operationId, expectedRevision, participantId, carac, amount, base = null, advances = null, reason } = {}) {
+export function recordCharacteristicLoss(stateValue, { operationId, expectedRevision, participantId, carac, amount, base = null, advances = null, reason, owner = null } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
   if (prior) return { state: clone(state), receipt: prior };
@@ -438,7 +439,7 @@ export function recordCharacteristicLoss(stateValue, { operationId, expectedRevi
   const applied = split ? split.appliedToBase + split.appliedToAdvances : amount;
   const next = clone(state);
   next.sequelae ??= [];
-  next.sequelae.push({ id: `characteristic-loss:${operationId}`, participantId, kind: 'characteristic-loss', label: `Perte de ${carac}`, status: 'permanent', carac, requested: amount, applied, split, reason: reason.trim(), day: state.calendar.currentDay, history: [] });
+  next.sequelae.push({ id: `characteristic-loss:${operationId}`, participantId, kind: 'characteristic-loss', label: `Perte de ${carac}`, status: 'permanent', carac, requested: amount, applied, split, reason: reason.trim(), day: state.calendar.currentDay, history: [], ...ownership(owner) });
   return commit(next, receipt(state, operationId, 'characteristic-loss', 'applied', 'characteristic-loss-recorded', { participantId, carac, applied, split }));
 }
 
@@ -487,6 +488,7 @@ export function previewSequelaeAdvance(state, days) {
 export function pendingSequelaDecisions(state) {
   const day = state.calendar.currentDay, out = [];
   for (const s of state.sequelae || []) {
+    if (s.status === 'archived') continue;
     if (s.status === 'needs-facts') out.push({ sequelaId: s.id, participantId: s.participantId, kind: 'needs-facts', label: s.label, missing: s.missing });
     else if (s.kind === 'broken-bone' && sequelaPhase(s, day) === 'awaiting-test') out.push({ sequelaId: s.id, participantId: s.participantId, kind: 'fracture-final-test', label: s.label });
     else if (s.kind === 'surgery-deadline' && s.status === 'open' && day > s.deadlineDay) out.push({ sequelaId: s.id, participantId: s.participantId, kind: 'surgery-deadline-missed', label: s.label });

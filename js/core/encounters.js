@@ -32,6 +32,14 @@ function requiredText(value, fallback) {
   return typeof value === 'string' && value.trim() ? value.trim() : fallback;
 }
 
+/** Les Blessures Critiques d'un personnage suivi reviennent sur son exemplaire (CA24). */
+function withFollowedCriticals(extensions, persistent) {
+  const v5 = persistent?.extensions?.v5 || {};
+  const carried = Object.fromEntries(['criticalAftermath', 'criticalWounds'].filter(key => Array.isArray(v5[key]) && v5[key].length).map(key => [key, cloneValue(v5[key])]));
+  return Object.keys(carried).length ? { ...extensions, v5: { ...(extensions.v5 || {}), ...carried } } : extensions;
+}
+const ficheIdOf = row => (typeof row?.extensions?.ficheId === 'string' && row.extensions.ficheId.trim()) || '';
+
 function cloneParticipant(profile, options, idFactory) {
   const persistent = options.persistentCharacter || null;
   const baseHp = persistent ? Number(persistent.hp) || 0 : Number(profile.hp) || 0;
@@ -39,7 +47,8 @@ function cloneParticipant(profile, options, idFactory) {
   return {
     id: idFactory(),
     profileId: profile.id || null,
-    persistentCharacterId: persistent?.id || options.persistentCharacterId || null,
+    // CA26 : seul l'exemplaire qui représente le personnage suivi en porte le lien.
+    persistentCharacterId: persistent?.id || null,
     improvised: false,
     name: requiredText(options.name, profile.name || 'Sans-nom'),
     kind: profile.kind || 'Créature',
@@ -52,7 +61,7 @@ function cloneParticipant(profile, options, idFactory) {
     color: options.color || 'default',
     armor: cloneValue(profile.armor || {}),
     ...normalizeFicheFields(profile),
-    extensions: cloneValue(profile.extensions || {}),
+    extensions: withFollowedCriticals(cloneValue(profile.extensions || {}), persistent),
     caracs: normalizeCaracs(profile.caracs),
     tags: normalizeTags(profile.tags),
     notes: typeof profile.notes === 'string' ? profile.notes : '',
@@ -130,11 +139,24 @@ export function launchEncounter(encounter, { profiles = [], persistentCharacters
   const profileTotals = new Map();
   model.entries.filter(entry => !entry.namePrefix).forEach(entry => profileTotals.set(entry.profileId, (profileTotals.get(entry.profileId) || 0) + entry.quantity));
   const profileCounters = new Map();
+  // Un seul exemplaire par personnage suivi et par rencontre. Un PJ lié à une fiche retrouve son personnage suivi
+  // sans choix dans Préparer (CA24), sauf si plusieurs personnages portent cette fiche (CA38 : l'outil ne choisit pas).
+  const adopted = new Set();
+  const followedOf = (entry, profile) => {
+    let character = entry.persistentCharacterId ? persistentMap.get(entry.persistentCharacterId) : null;
+    if (!character && profile.kind === 'PJ' && ficheIdOf(profile)) {
+      const candidates = [...persistentMap.values()].filter(row => ficheIdOf(row) === ficheIdOf(profile));
+      character = candidates.length === 1 ? candidates[0] : null;
+    }
+    if (!character || adopted.has(character.id)) return null;
+    adopted.add(character.id);
+    return character;
+  };
   for (const entry of model.entries) {
     const profile = profileMap.get(entry.profileId);
     if (!profile) throw new Error(`Profil introuvable pour l’entrée ${entry.id}`);
     for (let index = 0; index < entry.quantity; index++) {
-      const persistent = index === 0 && entry.persistentCharacterId ? persistentMap.get(entry.persistentCharacterId) : null;
+      const persistent = index === 0 ? followedOf(entry, profile) : null;
       let name = entry.namePrefix ? `${entry.namePrefix} ${index + 1}` : profile.name;
       if (!entry.namePrefix && profileTotals.get(entry.profileId) > 1) {
         const number = (profileCounters.get(entry.profileId) || 0) + 1;

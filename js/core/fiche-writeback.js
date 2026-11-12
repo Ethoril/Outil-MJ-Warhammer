@@ -6,6 +6,7 @@
 // (preuves de jet, motifs, notes, mutations en attente, délais, perte de personnage à arbitrer) n'entre dans un change.
 // Prudence (contre-vérification du 07/11) : rien ne remonte ni ne se clôt sur la fiche sans que la source soit retrouvée
 // et levée dans l'outil ; une Base qui remonte, une clôture de suivi ou une Fortune douteuse ne sont jamais pré-cochées.
+import { followedSubjectId } from './aftermath-subjects.js';
 import { cloneValue } from './models.js';
 import { sequelaEffectRows, sequelaCharacteristicTotals, normalizeCarac, PART_TEXT } from './v5-sequela-effects.js';
 import { rebaseMagicLayers } from './v5-magic-effects.js';
@@ -87,8 +88,16 @@ const anyListEntry = (state, charId, read, id) => readCopies(state, charId).flat
  * Participants du registre de convalescence rattachés à la fiche : copies actuelles, plus les identifiants retenus
  * (`ficheWriteback.owners`) quand le participant existait encore. Un participant de combat est recréé à chaque rencontre.
  */
+const followedOf = (state, charId) => (Array.isArray(state.persistentCharacters) ? state.persistentCharacters : []).filter(row => isRecord(row) && row.id && ficheIdOf(row) === charId);
+/** CAMP-10 : sujets des suivis rattachés aux personnages suivis de la fiche (`suivi:<id>` hors rencontre, ou l'identifiant porté par la ligne). */
+function ownedSubjectIds(state, charId) {
+  const owners = new Set(followedOf(state, charId).map(row => row.id));
+  const register = state.extensions?.v5?.aftermathRegister;
+  const rows = isRecord(register) ? [...(register.sequelae || []), ...(register.diseases || []), ...(register.incidents || [])] : [];
+  return [...[...owners].map(followedSubjectId), ...rows.filter(row => isRecord(row) && owners.has(row.ownerId)).map(row => row.participantId)];
+}
 const participantIdsOf = (state, charId) => new Set([...allSubjects(state).filter(row => ficheIdOf(row) === charId).map(row => row.id),
-  ...(Array.isArray(writeback(state).owners?.[charId]) ? writeback(state).owners[charId] : [])]);
+  ...(Array.isArray(writeback(state).owners?.[charId]) ? writeback(state).owners[charId] : []), ...ownedSubjectIds(state, charId)]);
 
 /**
  * Retient, pour chaque fiche, les participants qui portent des séquelles, maladies ou incidents du registre, tant qu'ils
@@ -411,7 +420,8 @@ function suiviRows(state, charId, base) {
 /** Pertes de caractéristique décidées par le MJ dont le participant n'est rattaché à aucune fiche : à reporter à la main. */
 function orphanLosses(state) {
   const register = state.extensions?.v5?.aftermathRegister;
-  const known = new Set([...allSubjects(state).map(row => row.id), ...Object.values(writeback(state).owners || {}).flat()]);
+  const known = new Set([...allSubjects(state).map(row => row.id), ...Object.values(writeback(state).owners || {}).flat(),
+    ...(Array.isArray(state.persistentCharacters) ? state.persistentCharacters : []).filter(row => isRecord(row) && row.id).map(row => followedSubjectId(row.id))]);
   return (register?.sequelae || []).filter(row => isRecord(row) && row.kind === 'characteristic-loss' && row.status === 'permanent' && !known.has(row.participantId))
     .map(row => ({ sequelaId: row.id, label: text(`Perte de ${normalizeCarac(row.carac) || row.carac} −${row.applied ?? row.requested ?? '?'} : participant introuvable, à reporter à la main`, 200) }));
 }

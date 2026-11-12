@@ -18,7 +18,7 @@
       "$uid": {
         "current": {
           ".read": "auth != null && auth.uid === $uid",
-          ".write": "auth != null && auth.uid === $uid && newData.hasChildren(['revision', 'state']) && newData.child('state/schemaVersion').val() === 3 && newData.child('revision').isNumber() && newData.child('revision').val() >= 0 && newData.child('revision').val() % 1 === 0 && (!data.exists() || newData.child('revision').val() >= data.child('revision').val())",
+          ".write": "auth != null && auth.uid === $uid && newData.hasChildren(['revision', 'state']) && (newData.child('state/schemaVersion').val() === 3 || newData.child('state/schemaVersion').val() === 4) && newData.child('revision').isNumber() && newData.child('revision').val() >= 0 && newData.child('revision').val() % 1 === 0 && (!data.exists() || newData.child('revision').val() >= data.child('revision').val())",
           "receipts": {
             ".validate": "newData.hasChildren()",
             "$device": {

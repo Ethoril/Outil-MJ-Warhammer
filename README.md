@@ -12,7 +12,7 @@ Onglets de la barre du haut (raccourcis `1` à `4`).
 |---|---|
 | **Préparer** (1) | Réserve de profils (PNJ, PJ, créatures), création, import JSON ([format](docs/IMPORT_PROFILS_JSON.md)) ou texte ([format](docs/IMPORT_PROFILS_TEXTE.md)), composition des rencontres, liaison avec les fiches des PJ. |
 | **Jouer** (2) | Combat V5 : initiative, tour courant, résolution des Tests (moteur d’effets unifié, détail des modificateurs), dégâts, critiques, États, magie, prières et miracles, engagements et plateau des mêlées, montures, journal, annulation/rétablissement. Barre du haut : Temps de campagne, Événements, Rappels, « Terminer le combat », « Envoyer aux fiches ». |
-| **Campagne** (3) | Temps de campagne, synthèse des suivis des personnages (blessures, critiques, maladies, séquelles, convalescence), soins contextuels. |
+| **Campagne** (3) | Temps de campagne, synthèse des suivis des personnages (blessures, critiques, maladies, séquelles, convalescence), soins des participants de la rencontre et des personnages suivis hors rencontre. |
 | **Bibliothèque** (4) | Règles consultables, bestiaire, références (armes, armures, mots-clés, talents, sorts, prières). |
 
 Transversal : thème clair/sombre, historique structuré, synchronisation multi-appareils optionnelle (Firebase Realtime Database, connexion Google), sauvegardes et points de restauration (IndexedDB).
@@ -64,6 +64,8 @@ Chaque sauvegarde (IndexedDB, points de restauration, fichier exporté, repli lo
 2. Monter `CURRENT_SCHEMA_VERSION` à `N + 1`, et `SYNC_PROTOCOL_VERSION` (`js/core/sync-protocol.js`) avec, qui doit lui rester égal.
 3. Ajouter un test de l’étape sur une sauvegarde figée dans `tests/fixtures/`. `tests/unit/stockage/version-sauvegardes.test.js` échoue tant que la chaîne ne couvre pas la version courante.
 
+Étapes réelles à ce jour : 3 → 4 (soins hors rencontre : les anciens suivis sans participant sont rattachés au personnage du PJ ou archivés ; test `tests/unit/stockage/migration-suivis.test.js`). Un document de synchronisation écrit dans un schéma plus ancien est relu par la même chaîne (`normalizeRemoteDocument`), et la règle Firebase doit accepter le nouveau numéro.
+
 La lecture ne réécrit rien : la sauvegarde garde son ancien numéro jusqu’à la prochaine écriture, et l’étape se rejoue à chaque ouverture d’ici là. Elle doit donc rendre le même résultat si on la rejoue sur la même entrée. Une fois réécrite, la sauvegarde porte le nouveau numéro et ne repasse plus par l’étape.
 
 ## Lancement en local
@@ -95,7 +97,7 @@ La configuration Firebase (`firebaseConfig`) dans `js/core/sync.js` est **public
 
 La sécurité est assurée par les **Firebase Security Rules** sur Realtime Database.
 
-Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). Les branches v1 et v2 restent lisibles uniquement par le compte propriétaire pour permettre la reprise, mais leurs écritures sont bloquées afin d’éviter qu’un ancien client ne remplace un état plus récent. La version 3.13.0 utilise `wfrp-sessions-v3/$uid/current`, isolé par compte, avec validation du schéma 3, de la révision et des reçus.
+Le fichier de règles de production versionné est [`firebase.database.rules.json`](firebase.database.rules.json). Les branches v1 et v2 restent lisibles uniquement par le compte propriétaire pour permettre la reprise, mais leurs écritures sont bloquées afin d’éviter qu’un ancien client ne remplace un état plus récent. La version 3.13.0 utilise `wfrp-sessions-v3/$uid/current`, isolé par compte, avec validation du schéma (3 ou 4 depuis le chantier « soins hors rencontre »), de la révision et des reçus. Toute montée de `CURRENT_SCHEMA_VERSION` exige de déployer ces règles avant de publier l’outil.
 
 Pour déployer uniquement ces règles sur le projet Firebase configuré :
 

@@ -10,6 +10,8 @@ Le patient d'un suivi n'est plus « le participant du combat qui porte cet ident
 2. sinon : le participant du combat qui porte `participantId`, comme aujourd'hui ;
 3. sinon : aucun sujet (scène suspendue ou ancien suivi), consultation seule.
 
+**Précision du 12/11 (voir § 9).** Le registre, les effets de séquelle en combat et « Envoyer aux fiches » regroupent tout par `participantId`. Pour ne pas réécrire ces lectures, un suivi rattaché porte toujours l'identifiant de son sujet **actuel** : celui de l'exemplaire en rencontre, sinon `suivi:<id du personnage>`. `ownerId` reste le rattachement enregistré ; `participantId` est réaligné à la fin du combat, au retrait et au lancement (`reconcileAftermathOwners`).
+
 Les commandes de soin lisent et écrivent ce sujet au lieu de fouiller `combat.participants`. Les règles de soin (`js/core/v5-aftermath.js`, `js/core/v5-sequelae.js`) ne changent pas : elles reçoivent déjà des faits (score, PV, jet), pas un participant.
 
 ## 2. Modèle de données
@@ -22,7 +24,7 @@ Tous les champs sont facultatifs ; absents, ils se lisent comme vides (règle du
 | ligne du registre | `ownerLabel` | nom enregistré à l'ouverture (CA1) |
 | maladie, séquelle | statut `archived` | déjà présent pour les blessures ; étendu (CA8, CA35) |
 | personnage persistant | `extensions.v5.criticalAftermath`, `criticalWounds` | Blessures Critiques reportées à la fin du combat (CA6, CA17) |
-| reçu et traitement | `healerId` de forme `external:<opération>` + `healerName` | soigneur extérieur (CA22) ; `validHealer` exige déjà un identifiant |
+| reçu et traitement | `healerId` de forme `external:<nom en minuscules>` + `healerName` | soigneur extérieur (CA22) ; identifiant stable par nom, pour que « un soin par soigneur et par jour » et le refus du double envoi jouent aussi pour lui |
 
 `participantId` reste sur chaque ligne : il sert en rencontre et à la trace `ficheWriteback.owners`, toujours lue.
 
@@ -65,7 +67,7 @@ previewEncounterEnd()                    // → participants à garder ou non (C
 | CA24 à CA27 | tests unitaires de `launchEncounter` et d'un cycle rencontre → hors rencontre → rencontre |
 | CA28 à CA30 | tests unitaires de l'aperçu et de l'avance du temps |
 | CA32, CA33 | tests unitaires des commandes d'ouverture |
-| CA34 à CA37 | sauvegardes figées dans `tests/fixtures`, après ARCH-10 |
+| CA34 à CA37 | étape 3 → 4 de `SCHEMA_MIGRATIONS` jouée sur `tests/fixtures/suivis-orphelins-v3.json` : rattachement, archivage, ligne de journal, rejeu identique, sauvegarde en version 4 non retransformée |
 | CA36 | aperçu de « Envoyer aux fiches » comparé avant et après sur la même sauvegarde |
 | CA38 à CA41 | tests unitaires ciblés |
 
@@ -88,3 +90,13 @@ previewEncounterEnd()                    // → participants à garder ou non (C
 - **Reports en double** : un PJ présent en rencontre et modifié depuis Campagne au même moment. Le sujet résolu est alors l'exemplaire du combat ; le personnage persistant n'est écrit qu'à la fin. À tester (CA27).
 - **`store.js` partagé** avec d'autres chantiers du 11/11 (ARCH-08, ARCH-03) : lots courts, rebasés souvent.
 - **Chantier H** : `participantIdsOf` doit compter les lignes par propriétaire sans rien perdre de la trace actuelle (CA36).
+
+## 9. Mise à jour du 12/11/2026 (après ARCH-10, relecture avant le premier lot)
+
+- **S8 passe par la chaîne d'ARCH-10.** La reprise est l'étape `{ from: 3, to: 4 }` de `SCHEMA_MIGRATIONS` (`js/core/migrations.js`), pure et rejouable : mêmes entrées, même résultat, aucun identifiant tiré au sort ni horodatage. `CURRENT_SCHEMA_VERSION` et `SYNC_PROTOCOL_VERSION` passent à 4 ensemble. Une sauvegarde réécrite porte 4 et ne repasse plus par l'étape (CA37).
+- **Ce que fait l'étape.** Pour chaque suivi vivant dont le participant n'est dans aucune scène (combat, scène active, scènes suspendues) : si la trace `ficheWriteback.owners` le donne à une fiche et qu'un seul personnage suivi (ou, à défaut, un seul profil de réserve) porte cette fiche, le suivi lui est rattaché (`ownerId`, `participantId = suivi:<id>`), le personnage étant créé depuis le profil au besoin (identifiant déterministe `fiche:<charId>`) ; si la trace existe mais que la fiche ne désigne personne sans ambiguïté, le suivi est laissé tel quel et signalé dans le rapport ; sinon il est archivé. Une ligne de journal donne les nombres (CA35).
+- **Synchronisation cloud.** La règle Firebase versionnée exige `schemaVersion === 3` et le protocole refuse un document distant d'une autre version. `firebase.database.rules.json` accepte désormais 3 et 4, et un document distant en version 3 est relu par la chaîne de migrations. **Les règles doivent être déployées avant la publication** (action du MJ).
+- **Clé des suivis** : voir la précision du § 1. `ficheWriteback` compte en plus les lignes portées par `suivi:<id>` des personnages liés à la fiche.
+- **Map Display** : `offScenePjParticipants` ne projette pas un personnage gardé qui n'est pas un PJ (champ `kind` posé à la garde) ; les personnages existants gardent leur comportement.
+- **Recommencer le combat** recrée les participants : les suivis rattachés suivent leur personnage, les autres suivis ouverts des anciens participants sont archivés (invariant « plus de suivi orphelin »).
+- **Deux personnages pour une même fiche (CA38)** : le lancement n'en adopte aucun ; Campagne le signale et propose « Garder celui-ci », qui supprime l'autre et archive ses suivis.

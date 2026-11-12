@@ -2,6 +2,7 @@
  * Liaison RPG Map Display (contrat v1, docs/CONTRAT_LIAISON_MAP_DISPLAY.md §4-§5). Module pur : construit l'état
  * `token.state` d'un participant et le diff entre deux instantanés. Montures (§8) : un cavalier monté porte `rider`.
  */
+import { projectFollowedCharacter } from './aftermath-subjects.js';
 import { creatureSizeOf } from './creature-size.js';
 import { carriesSense } from './creature-senses.js';
 import { participantCamp } from './encounters.js';
@@ -180,21 +181,13 @@ export function diffTokenStates(prev = {}, next = {}) {
  */
 export function offScenePjParticipants(characters = [], sceneParticipants = [], profileOf = () => null) {
   const inScene = new Set(sceneParticipants.filter(row => row?.kind === 'PJ' && row.persistentCharacterId).map(row => row.persistentCharacterId));
-  return characters.filter(character => character?.id && !inScene.has(character.id)).map(character => {
-    const profile = (character.profileId && profileOf(character.profileId)) || {};
-    return {
-      ...profile,
-      ...character,
-      id: character.id,
-      kind: 'PJ',
-      camp: 'pj',
-      persistentCharacterId: character.id,
-      profileId: character.profileId ?? profile.id ?? null,
-      name: character.name || profile.name || '',
-      caracs: character.caracs ?? profile.caracs,
-      extensions: { ...(profile.extensions || {}), ...(character.extensions || {}) }
-    };
-  });
+  // Même projection que les personnages suivis de Campagne ; un PNJ gardé à la fin d'un combat (`kind` posé) n'est pas un PJ.
+  return characters.filter(character => character?.id && !inScene.has(character.id) && (!character.kind || character.kind === 'PJ')).map(character => ({
+    ...projectFollowedCharacter(character, (character.profileId && profileOf(character.profileId)) || null),
+    id: character.id,
+    kind: 'PJ',
+    camp: 'pj'
+  }));
 }
 
 /** Liste des PJ pour la liaison durable (`mj.roster`, §3) : `[{ ref, label }]`, triée par nom. */

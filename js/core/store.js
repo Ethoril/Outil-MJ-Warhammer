@@ -155,6 +155,7 @@ import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 import { declaredMountOf, linkDeclaredMounts, mountProfileId, planMountToggle, applyMountToggle } from './mounts.js';
 import { createAftermathState, validateAftermathState, aftermathHealer, aftermathEnduranceScore, advanceAftermathCalendar } from './v5-aftermath.js';
+import { aftermathSubjects, mutableAftermathSubject, followedCharacters, followedCharacterConflicts, planEncounterEnd, planFollowedCharacterRemoval, settleAftermathSubjects, aftermathRowLabel, aftermathPlaceOf } from './aftermath-subjects.js';
 
 export const KEY = { SCHEMA: LEGACY_SCHEMA_KEY, EXTENSIONS: 'wfrp.extensions.v1', RESERVE: 'wfrp.reserve.v1', COMBAT: 'wfrp.combat.v1', LOG: 'wfrp.log.v1', DICE: 'wfrp.dice.v1', TS: 'wfrp.sync.ts.v1' };
 
@@ -1374,7 +1375,14 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
   }
   /** Soigneur, compétence de la fiche et d100 : aucune réussite ni DR n'est saisi à la main. */
   function aftermathHealerOf(draft, purpose, input) {
-    const participant = (draft.combat?.participants || []).find(row => row.id === input.healerId);
+    // Soigneur extérieur (CA22) : nom, score, Bonus d'Intelligence et talent Chirurgie saisis par le MJ.
+    if (input.externalHealer) {
+      const { name, score, intelligenceBonus, hasSurgeryTalent } = input.externalHealer;
+      if (typeof name !== 'string' || !name.trim() || !Number.isSafeInteger(score) || score < 0 || !Number.isSafeInteger(intelligenceBonus) || intelligenceBonus < 0) return { ok: false, reason: 'external-healer-facts-required' };
+      return { ok: true, external: true, healer: { participantId: `external:${name.trim().toLocaleLowerCase('fr')}`, healerName: name.trim(), external: true, skill: purpose, skillId: null,
+        skillName: purpose === 'animal-care' ? 'Soins aux animaux' : 'Guérison', score, advances: 1, intelligenceBonus, hasSurgeryTalent: hasSurgeryTalent === true } };
+    }
+    const participant = aftermathSubjects(draft).find(row => row.id === input.healerId);
     if (!participant) return { ok: false, reason: 'healer-required' };
     return aftermathHealer(participant, purpose, input.skillId ?? null);
   }
@@ -1390,9 +1398,10 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
   function withHealingFumble(outcome, patient) {
     if (patient && outcome.receipt.status === 'applied' && outcome.receipt.fumbleDamage) {
       outcome.afterApply = next => {
-        const target = next.combat.participants.find(row => row.id === patient.id);
-        target.hp = Math.max(0, Number(target.hp) - outcome.receipt.fumbleDamage);
-        return next;
+        const handle = mutableAftermathSubject(next, patient.id);
+        if (!handle) return next;
+        handle.target.hp = Math.max(0, Number(handle.target.hp) - outcome.receipt.fumbleDamage);
+        return handle.commit();
       };
     }
     return outcome;
@@ -1442,7 +1451,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     const anchor = Number.isSafeInteger(state.extensions?.v5?.aftermathClockSync?.syncedSeconds) ? state.extensions.v5.aftermathClockSync.syncedSeconds : fromSeconds;
     const days = Math.floor((toSeconds - anchor) / AFTERMATH_DAY_SECONDS);
     if (days < 1) return { ok: true, state: withAftermathAnchor(state, anchor) };
-    const participants = state.combat?.participants || [];
+    const participants = aftermathSubjects(state);
     const enduranceScores = {};
     for (const incident of register.incidents) {
       const patient = participants.find(row => row.id === incident.participantId);
@@ -1634,6 +1643,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const combatRequested = !sameValue(before?.combat, next?.combat);
         let canonical = migrateSnapshot(next, { appVersion, contextId }).data;
         canonical = synchronizeSceneCombat(before, canonical, localRevision + 1, { sceneRequested, combatRequested });
+        // CAMP-10 : une fois le combat aligné sur la scène, un suivi rattaché suit son personnage et aucun suivi vivant
+        // ne reste lié à un participant disparu.
+        canonical = settleAftermathSubjects(before, canonical);
         // Scene activation/suspension and legacy combat edits can change the
         // canonical combat position without representing elapsed time. Keep
         // the clock's projection in the same atomic command and history state;
@@ -1973,15 +1985,19 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       save();
       emitBus('combat');
     },
-    removeParticipant(id) {
+    removeParticipant(id, { keep = false } = {}) {
       if (!canMutate()) return false;
       const participant = combat.participants.get(id);
       if (!participant) return;
+      // CA10 : le retrait suit les règles de la fin du combat (report, garde ou archivage des suivis).
+      const leaving = planEncounterEnd(currentEnvelope(), { participantIds: [id], keepIds: keep ? [id] : [] });
+      const followed = leaving.reports.length + leaving.created.length + leaving.archived.length > 0;
       // Un participant lié par un familier passe par une commande annulable même sans persistance : l'historique des liens (commandes) ne se mêle pas à l'instantané hérité.
       const linked = familiarLinksOf(participant).length > 0 || Boolean(participant.extensions?.v5?.familiarOf)
         || participant.extensions?.v5?.mounted === true
         || Array.from(combat.participants.values()).some(item => item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id);
-      if (persistence || linked) return api.executeCommand('remove-participant', draft => {
+      if (persistence || linked || followed) return api.executeCommand('remove-participant', initial => {
+        const draft = planEncounterEnd(initial, { participantIds: [id], keepIds: keep ? [id] : [] }).envelope;
         const stripLinks = item => {
           if (item.extensions?.v5?.familiarOf?.masterId === id) return withV5(item, v5 => {
             const { familiarOf, ...rest } = v5;
@@ -3442,9 +3458,12 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           if (!profile.extensions?.ficheId) return { ...profile, hp: participant.hp, maxHp: participant.maxHp };
           // Current health belongs to each explicitly linked persistent character.
           for (const copy of participants.filter(item => item.profileId === profile.id)) {
+            // CA26 : une copie sans lien ne représente pas un personnage déjà représenté par un autre exemplaire du combat.
+            const represented = id => participants.some(item => item.id !== copy.id && item.persistentCharacterId === id);
             const candidates = (draft.persistentCharacters || []).filter(character => copy.persistentCharacterId
               ? character.id === copy.persistentCharacterId
               : character.profileId === profile.id || character.extensions?.ficheId === profile.extensions.ficheId);
+            if (!copy.persistentCharacterId && candidates.length && candidates.every(character => represented(character.id))) continue;
             if (candidates.length !== 1) {
               missing.add(profile.name);
               continue;
@@ -3667,15 +3686,32 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       emitBus('log');
       return true;
     },
+    /** Participants à garder ou non à la fin du combat, ou au retrait de `participantIds` (CA8, CA9). */
+    previewEncounterEnd({ participantIds = null } = {}) {
+      return planEncounterEnd(currentEnvelope(), { participantIds }).needsChoice;
+    },
+    /** Fin du combat en une commande (un seul ↶) : reports sur les personnages suivis, gardes et archivages (CA6 à CA11). */
+    endEncounter({ keepIds = [] } = {}) {
+      if (!canMutate()) return false;
+      return api.executeCommand('reset-combat', draft => {
+        const plan = planEncounterEnd(draft, { keepIds });
+        const base = plan.envelope;
+        const notes = [
+          plan.created.length ? `personnage(s) suivi(s) : ${plan.created.map(row => row.name).join(', ')}` : '',
+          plan.archived.length ? `${plan.archived.length} suivi(s) archivé(s)` : ''
+        ].filter(Boolean).join(' ; ');
+        return {
+          ...base,
+          extensions: withoutCombatInitiativeResolution(base.extensions),
+          combat: { ...base.combat, round: 0, currentActorId: null, order: [], participants: [] },
+          diceLines: [],
+          log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Combat terminé.${notes ? ` Hors rencontre : ${notes}.` : ''}` }, ...(base.log || [])].slice(0, 300)
+        };
+      });
+    },
     resetCombat() {
       if (!canMutate()) return false;
-      if (persistence) return api.executeCommand('reset-combat', draft => ({
-        ...draft,
-        extensions:withoutCombatInitiativeResolution(draft.extensions),
-        combat: { ...draft.combat, round: 0, currentActorId: null, order: [], participants: [] },
-        diceLines: [],
-        log: [{ id: uid(), ts: Date.now(), kind: 'management', text: 'Combat terminé.' }, ...(draft.log || [])].slice(0, 300)
-      }));
+      if (persistence) return api.endEncounter();
       beginCommand('reset-combat');
       recordSnapshot('end-combat');
       cleanupDiceLinesForParticipants(combat.participants.keys());
@@ -4034,9 +4070,46 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if (!character.id) character.id = uid();
       return api.executeCommand('save-persistent-character', draft => ({ ...draft, persistentCharacters: [...(draft.persistentCharacters || []).filter(item => item.id !== character.id), character] }));
     },
-    deletePersistentCharacter(id) {
-      return api.executeCommand('delete-persistent-character', draft => ({ ...draft, persistentCharacters: (draft.persistentCharacters || []).filter(item => item.id !== id) }));
+    /** Supprimer un personnage suivi archive ses suivis ouverts (CA39) ; `previewFollowedCharacterRemoval` en donne le nombre. */
+    previewFollowedCharacterRemoval(id) {
+      return { archived: planFollowedCharacterRemoval(currentEnvelope(), id).archived.length };
     },
+    deletePersistentCharacter(id) {
+      return api.executeCommand('delete-persistent-character', draft => {
+        const plan = planFollowedCharacterRemoval(draft, id);
+        if (!plan.archived.length) return plan.envelope;
+        const name = (draft.persistentCharacters || []).find(item => item.id === id)?.name || 'Personnage';
+        return { ...plan.envelope, log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `${name} supprimé : ${plan.archived.length} suivi(s) archivé(s).` }, ...(plan.envelope.log || [])].slice(0, 300) };
+      });
+    },
+    /** Sujets soignables : participants du combat, puis personnages suivis hors rencontre (`offEncounter`). */
+    listAftermathSubjects() {
+      const present = api.listParticipants();
+      const ids = new Set(present.map(row => row.id));
+      return cloneValue([...present, ...aftermathSubjects(currentEnvelope()).filter(row => !ids.has(row.id)).map(row => ({ ...row, offEncounter: true }))]);
+    },
+    /** Personnages suivis avec leur situation : `combat`, `suspendue` (consultation seule) ou `suivi` (hors rencontre). */
+    listFollowedCharacters() {
+      return cloneValue(followedCharacters(currentEnvelope()).map(row => ({ id: row.id, name: row.character.name || row.subject.name || '', where: row.where, subjectId: row.subjectId, hp: row.subject.hp, maxHp: row.subject.maxHp })));
+    },
+    /** Fiches portées par plusieurs personnages suivis (CA38) : le MJ choisit lequel garder. */
+    listFollowedCharacterConflicts() { return followedCharacterConflicts(currentEnvelope()); },
+    resolveFollowedCharacterConflict({ keepId } = {}) {
+      return api.executeCommand('resolve-followed-character-conflict', draft => {
+        const conflict = followedCharacterConflicts(draft).find(row => row.characters.some(item => item.id === keepId));
+        if (!conflict) throw Object.assign(new Error('Ce personnage n’est plus en double.'), { userFacing: true });
+        let next = draft, archived = 0;
+        for (const other of conflict.characters.filter(item => item.id !== keepId)) {
+          const plan = planFollowedCharacterRemoval(next, other.id);
+          next = plan.envelope; archived += plan.archived.length;
+        }
+        const kept = conflict.characters.find(item => item.id === keepId);
+        return { ...next, log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Personnage suivi gardé : ${kept.name}. Doublon(s) supprimé(s)${archived ? `, ${archived} suivi(s) archivé(s)` : ''}.` }, ...(next.log || [])].slice(0, 300) };
+      });
+    },
+    /** Nom stable d'une ligne du registre (CA2 à CA4). */
+    getAftermathRowLabel(row) { return aftermathRowLabel(currentEnvelope(), row); },
+    getAftermathSubjectPlace(participantId) { return aftermathPlaceOf(currentEnvelope(), participantId); },
     getActiveScene() { return cloneValue(activeScene); },
     listSuspendedScenes() { return cloneValue(suspendedScenes); },
     launchEncounter(idOrEncounter) {

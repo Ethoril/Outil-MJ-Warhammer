@@ -582,7 +582,8 @@ test('E05 codec indépendant — root absent ou vide ne crée pas extensions/div
   assert.deepEqual(normalizeRemoteDocument({}), emptyRoot);
   assert.deepEqual(normalizeRemoteDocument(doc({})), emptyRoot);
   const decoded = normalizeRemoteDocument(doc(stateWithoutRegistry));
-  assert.deepEqual(decoded.state, stateWithoutRegistry,
+  // Un document distant d'un schéma plus ancien est relu par la chaîne de migrations : seul le numéro change ici.
+  assert.deepEqual(decoded.state, { ...stateWithoutRegistry, schemaVersion: 4 },
     'un état partagé sans registre n’acquiert aucun accès par normalisation');
   assert.equal(Object.hasOwn(decoded.state, 'extensions'), false);
   const existingV5 = normalizeRemoteDocument(doc({

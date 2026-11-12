@@ -10,6 +10,19 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## À publier — Soins hors rencontre (`CAMP-10`, branche `claude/soins-hors-rencontre-40d5b6`, 12/11/2026)
+
+Spec, plan et tâches : `docs/specs/soins-hors-rencontre/`. Pas de numéro de version tant que le MJ n'a pas donné son feu vert.
+
+- Personnages suivis : un personnage persistant existe entre deux rencontres avec ses PV, ses États et ses Blessures Critiques. Hors rencontre, il est soignable depuis Campagne sous l'identifiant `suivi:<id>` (`js/core/aftermath-subjects.js`).
+- Nom stable : chaque suivi enregistre à son ouverture « participant — rencontre » ; « Suivi hors rencontre N » et « Participant absent » disparaissent.
+- Fin du combat et retrait d'un participant : PV, États et Blessures Critiques sont reportés ; un PJ lié à une fiche est suivi d'office ; pour un PNJ, une créature ou un PJ sans fiche qui a un suivi ouvert, une fenêtre de l'outil demande « Garder » ou non (sinon ses suivis sont archivés). Un seul ↶ annule tout.
+- Campagne : participants de la rencontre, puis personnages suivis hors rencontre avec leurs PV ; mêmes opérations (soin, infection, chirurgie, clôture, séquelles, maladies, pertes, cicatrices) ; soigneur au choix parmi les participants, les personnages suivis et un soigneur extérieur (nom, score, Bonus d'Intelligence, talent Chirurgie saisis).
+- Temps : les Tests quotidiens de Résistance d'une blessure non bandée sont demandés pour tout personnage suivi, en rencontre ou non.
+- Retour en rencontre : un PJ lié à une fiche retrouve son personnage suivi sans choix ; un PNJ gardé n'entre que s'il est choisi sur la ligne de la rencontre dans Préparer ; un seul exemplaire par personnage.
+- Sauvegardes : schéma 4. À la mise à jour, un ancien suivi d'un PJ à fiche est rattaché à son personnage suivi, les autres anciens suivis sans participant sont archivés (une ligne de journal en donne le nombre). « Envoyer aux fiches » : aperçu inchangé.
+- Avant de publier : déployer `firebase.database.rules.json` (accepte les schémas 3 et 4), sans quoi la synchronisation du compte refuse les écritures en schéma 4.
+
 ## 3.46.0 — Montures et Rapace du Bestiaire V2, Forme bestiale élargie, reliquat de l’audit du 08/11 (11/11/2026)
 
 - Bestiaire (règle maison du MJ) : livre `L27`, Bestiaire du Vieux Monde (WJDR V2), avec six montures déclarables (Cheval de guerre, Cheval de selle, Coursier elfique, Destrier, Destrier du Chaos, Poney) et le Rapace, convertis en V5 par `tools/build-bestiary-l27.mjs` (Blessures selon la formule V5, sabots comme le Cheval V5) ; le livre est dans le cache hors ligne.

@@ -44,7 +44,7 @@ function assertState(state) {
   for (const disease of state.diseases || []) {
     if (!disease || !ID(disease.id) || ids.has(disease.id) || !ID(disease.participantId) || !ID(disease.label)
       || !Number.isSafeInteger(disease.remainingDays) || disease.remainingDays < 0
-      || !['active', 'ended'].includes(disease.status) || !Array.isArray(disease.careLog)) throw new TypeError('maladie invalide');
+      || !['active', 'ended', 'archived'].includes(disease.status) || !Array.isArray(disease.careLog)) throw new TypeError('maladie invalide');
     ids.add(disease.id);
   }
   for (const sequela of state.sequelae || []) {
@@ -110,6 +110,8 @@ const isDoubleSubmission = (state, kind, incidentId, healerId, roll) => {
   return Boolean(last) && last.status === 'applied' && last.kind === kind && last.incidentId === incidentId && last.healerId === healerId && last.roll === roll;
 };
 const validScore = score => Number.isSafeInteger(score) && score >= 0;
+/** Champs facultatifs d'une ligne (CAMP-10) : nom enregistré à l'ouverture et personnage suivi propriétaire. Absents = vides. */
+const ownership = owner => ({ ...(ID(owner?.ownerLabel) ? { ownerLabel: owner.ownerLabel.trim() } : {}), ...(ID(owner?.ownerId) ? { ownerId: owner.ownerId } : {}) });
 const validRoll = roll => Number.isInteger(roll) && roll >= 1 && roll <= 100;
 
 export function createAftermathState({ originDay = 0 } = {}) {
@@ -191,7 +193,7 @@ function validHealer(healer, skills) {
 }
 
 export function registerWoundIncident(stateValue, {
-  id, operationId, expectedRevision, participantId, source, subjectKind = 'person', bandaged = false, requiresSurgery = false
+  id, operationId, expectedRevision, participantId, source, subjectKind = 'person', bandaged = false, requiresSurgery = false, owner = null
 } = {}) {
   const state = assertState(stateValue);
   const opId = operationId || id;
@@ -211,7 +213,7 @@ export function registerWoundIncident(stateValue, {
   next.incidents.push({
     id, participantId, source: clone(source), subjectKind, injuryDay: state.calendar.currentDay, status: 'open', bandaged,
     requiresSurgery, surgeryCompleted: !requiresSurgery,
-    infection: false, dailyChecks: [], treatments: []
+    infection: false, dailyChecks: [], treatments: [], ...ownership(owner)
   });
   return commit(next, receipt(state, opId, 'incident', 'applied', 'incident-registered', { incidentId: id, source }));
 }
@@ -433,7 +435,7 @@ export function closeAftermathIncident(stateValue, {
 }
 
 export function registerDisease(stateValue, {
-  id, operationId, expectedRevision, participantId, label, durationDays, sequelaId = null
+  id, operationId, expectedRevision, participantId, label, durationDays, sequelaId = null, owner = null
 } = {}) {
   const state = assertState(stateValue);
   const prior = priorReceipt(state, operationId);
@@ -445,7 +447,7 @@ export function registerDisease(stateValue, {
   if (state.incidents.some(item => item.id === id) || (state.diseases || []).some(item => item.id === id)) return refusal('disease-already-exists');
   const next = clone(state);
   next.diseases ??= [];
-  next.diseases.push({ id, participantId, label: label.trim(), startDay: state.calendar.currentDay, remainingDays: durationDays, status: 'active', careLog: [], ...(sequelaId ? { sequelaId } : {}) });
+  next.diseases.push({ id, participantId, label: label.trim(), startDay: state.calendar.currentDay, remainingDays: durationDays, status: 'active', careLog: [], ...(sequelaId ? { sequelaId } : {}), ...ownership(owner) });
   return commit(next, receipt(state, operationId, 'disease', 'applied', 'disease-registered', { diseaseId: id }));
 }
 
@@ -505,4 +507,4 @@ export function archiveAftermathIncident(stateValue, { operationId, expectedRevi
 }
 
 /** Primitives partagées avec le suivi des séquelles durables (J2) : mêmes reçus, révisions, Tests et soigneurs que J1. */
-export const aftermathKit = { assertState, receipt, result, commit, priorReceipt, runTest, healCheck, enduranceCheck, pendingTest, testFacts, healerProblem, validRoll, validScore, ID, clone };
+export const aftermathKit = { assertState, receipt, result, commit, priorReceipt, runTest, healCheck, enduranceCheck, pendingTest, testFacts, healerProblem, validRoll, validScore, ID, clone, ownership };

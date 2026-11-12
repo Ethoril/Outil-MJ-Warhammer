@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 3,
+  "appVersion": "3.46.0",
+  "contextId": "guest",
+  "reserve": [
+    { "id": "profil-hilda", "name": "Hilda", "kind": "PJ", "hp": 14, "maxHp": 14, "caracs": { "E": 35, "Int": 40 }, "extensions": { "ficheId": "fiche-hilda" } },
+    { "id": "profil-wren", "name": "Wren", "kind": "PJ", "hp": 12, "maxHp": 12, "caracs": { "E": 30, "Int": 30 }, "extensions": { "ficheId": "fiche-wren" } },
+    { "id": "profil-gobelin", "name": "Gobelin", "kind": "Créature", "hp": 9, "maxHp": 9, "caracs": { "E": 30 } }
+  ],
+  "persistentCharacters": [
+    { "id": "pc-wren", "name": "Wren", "profileId": "profil-wren", "hp": 7, "maxHp": 12, "states": [], "extensions": { "ficheId": "fiche-wren" } }
+  ],
+  "combat": {
+    "round": 0, "currentActorId": null, "order": [],
+    "participants": [
+      { "id": "p-present", "name": "Garde", "kind": "PNJ", "zone": "active", "camp": "ennemi", "hp": 4, "maxHp": 12, "caracs": { "E": 30 }, "states": [] }
+    ]
+  },
+  "activeScene": null,
+  "suspendedScenes": [
+    { "id": "scene-suspendue", "encounterId": "e1", "title": "Auberge", "status": "suspended", "round": 2, "order": [], "participants": [
+      { "id": "p-suspendu", "name": "Brigand", "kind": "PNJ", "zone": "active", "camp": "ennemi", "hp": 3, "maxHp": 11, "caracs": { "E": 30 }, "states": [] }
+    ] }
+  ],
+  "log": [{ "id": "ancien", "kind": "management", "text": "Combat terminé." }],
+  "diceLines": [],
+  "extensions": {
+    "v5": {
+      "ficheWriteback": { "owners": { "fiche-hilda": ["vieux-hilda-1", "vieux-hilda-2"], "fiche-wren": ["vieux-wren"], "fiche-perdue": ["vieux-perdu"] } },
+      "aftermathRegister": {
+        "schemaVersion": 1, "revision": 12,
+        "calendar": { "schemaVersion": 1, "originDay": 0, "currentDay": 9 },
+        "receipts": [],
+        "incidents": [
+          { "id": "i-hilda-1", "participantId": "vieux-hilda-1", "source": { "kind": "wounds-lost", "cause": "embuscade" }, "subjectKind": "person", "injuryDay": 2, "status": "open", "bandaged": true, "requiresSurgery": false, "surgeryCompleted": true, "infection": false, "dailyChecks": [], "treatments": [] },
+          { "id": "i-hilda-2", "participantId": "vieux-hilda-2", "source": { "kind": "wounds-lost", "cause": "chute" }, "subjectKind": "person", "injuryDay": 6, "status": "open", "bandaged": false, "requiresSurgery": false, "surgeryCompleted": true, "infection": false, "dailyChecks": [], "treatments": [] },
+          { "id": "i-wren", "participantId": "vieux-wren", "source": { "kind": "wounds-lost", "cause": "combat" }, "subjectKind": "person", "injuryDay": 4, "status": "open", "bandaged": true, "requiresSurgery": false, "surgeryCompleted": true, "infection": false, "dailyChecks": [], "treatments": [] },
+          { "id": "i-gobelin", "participantId": "vieux-gobelin", "source": { "kind": "wounds-lost", "cause": "combat" }, "subjectKind": "person", "injuryDay": 4, "status": "open", "bandaged": false, "requiresSurgery": false, "surgeryCompleted": true, "infection": false, "dailyChecks": [], "treatments": [] },
+          { "id": "i-gobelin-clos", "participantId": "vieux-gobelin", "source": { "kind": "wounds-lost", "cause": "piège" }, "subjectKind": "person", "injuryDay": 1, "status": "closed", "closedDay": 3, "bandaged": true, "requiresSurgery": false, "surgeryCompleted": true, "infection": false, "dailyChecks": [], "treatments": [] },
+          { "id": "i-perdu", "participantId": "vieux-perdu", "source": { "kind": "wounds-lost", "cause": "combat" }, "subjectKind": "person", "injuryDay": 5, "status": "open", "bandaged": true, "requiresSurgery": false, "surgeryCompleted": true, "infection": false, "dailyChecks": [], "treatments": [] },
+          { "id": "i-present", "participantId": "p-present", "source": { "kind": "wounds-lost", "cause": "combat" }, "subjectKind": "person", "injuryDay": 8, "status": "open", "bandaged": false, "requiresSurgery": false, "surgeryCompleted": true, "infection": false, "dailyChecks": [], "treatments": [] },
+          { "id": "i-suspendu", "participantId": "p-suspendu", "source": { "kind": "wounds-lost", "cause": "combat" }, "subjectKind": "person", "injuryDay": 7, "status": "open", "bandaged": false, "requiresSurgery": false, "surgeryCompleted": true, "infection": false, "dailyChecks": [], "treatments": [] }
+        ],
+        "diseases": [
+          { "id": "d-gobelin", "participantId": "vieux-gobelin", "label": "Fièvre des marais", "startDay": 4, "remainingDays": 3, "status": "active", "careLog": [] },
+          { "id": "d-hilda-finie", "participantId": "vieux-hilda-1", "label": "Toux", "startDay": 1, "remainingDays": 0, "status": "ended", "careLog": [] }
+        ],
+        "sequelae": [
+          { "id": "characteristic-loss:op-hilda", "participantId": "vieux-hilda-1", "kind": "characteristic-loss", "label": "Perte de Ag", "status": "permanent", "carac": "Ag", "requested": 3, "applied": 3, "split": null, "reason": "Fracture mal soignée", "day": 3, "history": [] },
+          { "id": "scars:vieux-gobelin", "participantId": "vieux-gobelin", "kind": "scar-decision", "label": "Cicatrices impressionnantes", "status": "permanent", "agreed": true, "decidedDay": 5, "history": [] }
+        ]
+      }
+    }
+  }
+}
