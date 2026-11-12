@@ -3,6 +3,7 @@
 // écart avec un adversaire, Blessures sur demande). Rien ne s'écrit ; l'échelle à sept crans est celle du moteur (Petite 2 … Monstrueuse 6).
 import { creatureWounds } from './v5-magic-arbitrations.js';
 import { naturalReachOf } from './v5-weapon-qualities.js';
+import { especeDe } from '../data/donnees-communes.js';
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
@@ -48,10 +49,9 @@ export function parseSizeTrait(trait) {
   return bare ? describe(bare) : null;
 }
 
-// Espèce lue sur la fiche d'un PJ (champ `race`) : Taille V5 de l'espèce (Halfelin et Gnome Petits, Ogre Grand ; rappel du MJ, 07/11/2026).
-// Skink et Skink caméléon Petits (Lustria L07 p. 160 ; bestiaire L07 p. 136 et 142). Les fiches écrivent l'espèce en clé à tirets (`skink`, `haut-elfe`).
-const SPECIES_SIZE = Object.freeze({ halfelin: 'small', halfling: 'small', gnome: 'small', skink: 'small', 'skink cameleon': 'small', ogre: 'large' });
-const speciesKey = value => fold(value).replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+// Espèce lue sur la fiche d'un PJ (champ `race`) : Taille de l'espèce, registre commun js/data/donnees-communes.js.
+// Une espèce Moyenne ne déclare rien : la Taille reste « Moyenne supposée », comme sans espèce.
+const speciesSize = value => { const taille = especeDe(value)?.taille; return taille && taille !== 'average' ? taille : null; };
 
 /** Taille du participant : Trait, sinon champ `size` (profil), sinon espèce de la fiche, sinon Moyenne supposée (`assumed: true`). */
 export function creatureSizeOf(participant) {
@@ -59,7 +59,7 @@ export function creatureSizeOf(participant) {
   if (fromTrait) return { ...fromTrait, assumed: false, source: 'trait' };
   const fromField = SIZE_WORDS[fold(participant?.size ?? participant?.profile?.size)];
   if (fromField) return { ...describe(fromField), assumed: false, source: 'field' };
-  const fromSpecies = SPECIES_SIZE[speciesKey(participant?.race ?? participant?.profile?.race)];
+  const fromSpecies = speciesSize(participant?.race ?? participant?.profile?.race);
   if (fromSpecies) return { ...describe(fromSpecies), assumed: false, source: 'species' };
   return { ...describe('average'), assumed: true, source: 'assumed' };
 }

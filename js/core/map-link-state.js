@@ -8,8 +8,9 @@ import { carriesSense } from './creature-senses.js';
 import { participantCamp } from './encounters.js';
 import { carriesMovement, planMovement } from './creature-movement.js';
 import { normalizeTokenColor } from './models.js';
+import { LIAISON_CARTE } from '../data/donnees-communes.js';
 
-export const MAP_LINK_VERSION = 1;
+export const MAP_LINK_VERSION = LIAISON_CARTE.version;
 
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
 const v5Of = participant => participant?.extensions?.v5 || {};

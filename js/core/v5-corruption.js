@@ -1,4 +1,5 @@
 /** Pure helpers for F2-K1 corruption adjudication (WFRP V5, pp. 187–189). */
+import { especeDe } from '../data/donnees-communes.js';
 
 const INFLUENCE_LEVELS = new Set(['minor', 'moderate', 'major']);
 const CORRUPTION_TEST_SKILLS = Object.freeze({
@@ -99,25 +100,15 @@ export function markCorruptionThresholdTest(participant) {
     pendingCorruptionTest: { id: `corruption-threshold:${participant.id}:${points}:${threshold}`, status: 'pending', pointsAtTrigger: points, thresholdAtTrigger: threshold } } } };
 }
 
-const normalizeSpecies = value => {
-  const species = typeof value === 'string' ? value.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('fr').replace(/[-_]+/g, ' ') : '';
-  if (['humain', 'human'].includes(species)) return 'human';
-  if (['nain', 'dwarf'].includes(species)) return 'dwarf';
-  if (['halfling', 'halfing', 'halfelin'].includes(species)) return 'halfling';
-  if (['elfe', 'elf', 'wood elf', 'high elf', 'sea elf', 'elfe sylvain', 'elfe haut', 'haut elfe', 'elfe marin', 'elfe des mers'].includes(species)) return 'elf';
-  return null;
-};
-const PHYSICAL_MUTATION_MAX = Object.freeze({ human: 50, halfling: 10, dwarf: 5, elf: 0 });
-
 /** p.188 species table. Unknown species deliberately leaves the choice to the GM. */
 export function mutationDomainForSpecies({ species, roll, gmChoice } = {}) {
-  const normalized = normalizeSpecies(species);
-  if (!normalized) {
+  const physicalMax = especeDe(species)?.mutationPhysiqueMax ?? null;
+  if (physicalMax === null) {
     if (gmChoice === 'physical' || gmChoice === 'mental') return Object.freeze({ domain: gmChoice, needsGmChoice: false, selectedBy: 'gm' });
     return Object.freeze({ domain: null, needsGmChoice: true });
   }
   rollD100(roll, 'Jet de manifestation physique/mentale');
-  return Object.freeze({ domain: roll <= PHYSICAL_MUTATION_MAX[normalized] ? 'physical' : 'mental', needsGmChoice: false });
+  return Object.freeze({ domain: roll <= physicalMax ? 'physical' : 'mental', needsGmChoice: false });
 }
 
 /** Resolve an over-threshold Test; mutation effects remain pending GM approval. */

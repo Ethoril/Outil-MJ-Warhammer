@@ -21,6 +21,10 @@ Transversal : thème clair/sombre, historique structuré, synchronisation multi-
 
 - **Fiches des PJ** (dépôt `ennemi-interieur-wfrp4`, Firestore) : l’outil lit les fiches (`js/core/fiche-source.js`, `js/core/fiche-sync.js`, `js/ui/fiche-sync-view.js`) et réécrit en fin de séance les valeurs durables via « Envoyer aux fiches » (`js/core/fiche-writeback.js`, `js/ui/fiche-writeback-view.js`) : aperçu à cocher, conflits tranchés par le MJ, annulation du dernier envoi. Registre des variables : [docs/VARIABLES_PERSISTANTES_PJ.md](docs/VARIABLES_PERSISTANTES_PJ.md) ; guide : [docs/GUIDE_FICHES_PJ_ET_REPRISE_V3.md](docs/GUIDE_FICHES_PJ_ET_REPRISE_V3.md).
 - **RPG Map Display** (dépôt `rpg-map-display`) : l’outil pilote les pions de la carte (image, PV, états, taille, portées, montures, morts) et reçoit les retours (posé / à poser, engagements, Course). Code : `js/core/map-link*.js`, `js/ui/map-link-*.js`. Contrat versionné, copie identique dans les deux dépôts : [docs/CONTRAT_LIAISON_MAP_DISPLAY.md](docs/CONTRAT_LIAISON_MAP_DISPLAY.md). Serveur local de liaison : `tools/serve-liaison.mjs`.
+- **Données communes aux trois dépôts** : espèces (Taille, Mouvement, formule des Blessures, seuil de mutation) et constantes de la liaison carte (canal, version, délais). Source unique : [js/data/donnees-communes.js](js/data/donnees-communes.js), à ne modifier qu’ici. Copies : `js/shared/donnees-communes.js` (Map Display) et `js/data/donnees-communes.js` (fiches).
+  - `node tools/recopier-donnees-communes.mjs` réécrit les deux copies (LF) ; à lancer après chaque modification de la source, puis commiter la copie dans chaque dépôt.
+  - `node tools/recopier-donnees-communes.mjs --check` n’écrit rien et échoue si une copie manque ou a dérivé.
+  - Dépôts ailleurs que sur `E:` (ou worktrees) : `--carte <dossier> --fiches <dossier>`, ou variables `DONNEES_COMMUNES_CARTE` / `DONNEES_COMMUNES_FICHES`. Garde-fou : `tests/unit/donnees/donnees-communes.test.mjs`.
 
 ## Arborescence
 

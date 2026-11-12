@@ -6,6 +6,7 @@ import { normalizeEquipment, calculateArmor, armourProtection, equipmentQualitie
 import { getReferenceCatalogue, resolveSkill, aggregateTalents } from './reference-catalog.js';
 import { actionHasDamage, normalizeDamageFields, strengthBonusOf } from './damage.js';
 import { rebaseMagicLayers } from './v5-magic-effects.js';
+import { especeDe } from '../data/donnees-communes.js';
 import { FAMILIAR_SYSTEMS, HOMUNCULUS_KINDS, FAMILIAR_WINDS, COMPANION_TRAITS, FAMILIAR_NAMES } from './familiars.js';
 
 export const FICHE_CHAR_IDS = Object.freeze(['bhelgi', 'caelel', 'elysia', 'hellaya', 'wren']);
@@ -58,9 +59,6 @@ export const FICHE_BASIC_SKILLS = Object.freeze([
   ['Subornation', 'soc'], ['Survie en extérieur', 'int']
 ].map(([name, carac]) => Object.freeze({ name, carac })));
 
-// Espèces utilisant la formule locale de Blessures sans Bonus de Force.
-const RACES_SANS_BF = new Set(['gnome', 'skink', 'skink cameleon']);
-
 const number = value => (Number.isFinite(Number(value)) ? Number(value) : 0);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
@@ -74,19 +72,19 @@ export function normalizeName(value) {
  * null quand F (sauf espèces sans BF), E ou FM manque : le résultat n'est pas calculable.
  */
 export function woundsMax({ totals, race, talents = [] }) {
-  const sansBF = RACES_SANS_BF.has(normalizeName(race).replace(/[-_]+/g, ' '));
+  const espece = especeDe(race);
+  const sansBF = espece?.sansBonusForce === true;
   if (!['E', 'FM', ...(sansBF ? [] : ['F'])].every(key => Number.isFinite(totals?.[key]))) return null;
   const bonus = key => Math.floor(number(totals?.[key]) / 10);
   const hardy = (Array.isArray(talents) ? talents : []).filter(item => normalizeName(item?.nom) === 'dur a cuire').length;
   const strength = sansBF ? 0 : bonus('F');
-  return (strength + 2 * bonus('E') + bonus('FM') + hardy * bonus('E')) * (normalizeName(race) === 'ogre' ? 2 : 1);
+  return (strength + 2 * bonus('E') + bonus('FM') + hardy * bonus('E')) * (espece?.multiplicateurBlessures ?? 1);
 }
 
 /**
  * Fiche brute (`doc.data`) → ce que l'outil en retient : totaux, initiative, blessures max
  * et compétences utilisables (`name`, `carac`, `total`).
  */
-const MOVEMENT = Object.freeze({ humain: 4, 'elfe sylvain': 5, 'haut elfe': 5, halfelin: 3, ogre: 6, elfe: 5, halfling: 3, nain: 3, gnome: 3, 'elfe noir': 5, 'elfe des mers': 5, skink: 6, 'skink cameleon': 6 });
 const validNumber = value => value !== null && value !== '' && typeof value !== 'boolean' && Number.isFinite(Number(value));
 const own = (object, key) => Object.hasOwn(object, key);
 const stable = value => Array.isArray(value) ? value.map(stable) : isRecord(value) ? Object.fromEntries(Object.keys(value).sort().map(key => [key, stable(value[key])])) : value;
@@ -163,7 +161,7 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   const prayers = list('prieres', 'prayers');
   const race = typeof raw.race === 'string' ? raw.race : '';
   const raceKey = normalizeName(race).replace(/[-_]+/g, ' ');
-  const movement = Object.hasOwn(MOVEMENT, raceKey) ? MOVEMENT[raceKey] : null;
+  const movement = especeDe(raceKey)?.mouvement ?? null;
   if (race && movement === null) warnings.push({ field: 'movement', code: 'unknown-species', severity: 'warning', message: `Espèce « ${race} » inconnue : saisir ou confirmer le Mouvement du profil.`, consequence: 'movement-preserved' });
   else if (own(raw, 'race') && !raceKey) warnings.push({ field: 'movement', code: 'race-missing', severity: 'warning', message: 'Espèce non renseignée sur la fiche : Mouvement du profil conservé.', consequence: 'movement-preserved' });
   const max = coverage.talents !== 'present' ? null : woundsMax({ totals, race, talents: talentsRaw });

@@ -62,6 +62,7 @@ const ASSETS_TO_CACHE = [
   './js/core/creature-senses.js',
   './js/core/creature-natures.js',
   './js/data/creature-keywords.js',
+  './js/data/donnees-communes.js',
   './js/data/creature-abilities.js',
   './js/data/creature-trait-names.js',
   './js/ui/keyword-picker.js',
