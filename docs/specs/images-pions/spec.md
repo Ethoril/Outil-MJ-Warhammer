@@ -91,6 +91,13 @@ Cadrage du 13/11/2026, sur `42d6965` (prod 3.47.1). Origine : [docs/CONSTAT_IMAG
 - **CA33.** Chaque profil est dans un seul dossier, d'après le classement unique relu par le MJ (celui de CA26). Un profil sans classement apparaît dans « À classer » au lieu de disparaître.
 - **CA34.** La navigation par dossiers se fait au clavier et porte des noms accessibles ; le parcours d'accessibilité existant reste vert.
 
+### S12 — Livres ajoutés au corpus (ajout du MJ, 13/11/2026)
+
+- **CA35.** Tous les profils de PNJ d'*Ennemi Intérieur 3 — Le Pouvoir derrière le Trône* entrent au bestiaire par la chaîne existante (valeurs imprimées, livre et page), sont classés en dossiers et figurent dans la liste des illustrations à créer tant qu'ils n'ont pas d'image.
+- **CA36.** Tous les profils du *Tome de la Corruption* et du *Seigneur liche* (V2) entrent au bestiaire convertis en V5 par la même règle que les profils V2 déjà convertis (montures, L27) ; chaque profil garde la trace de sa source V2 (livre, page) et de la conversion. Le profil secondaire V2 se lit ainsi : A attaques par round, B blessures, BF, BE, M mouvement, PD points de destin ; Mag et PF sont ignorés.
+- **CA37.** Les variantes de troupe illustrées sans profil imprimé (Gobelin archer, Ogre crache-plomb, Orc kostaud) reçoivent un profil maison : caractéristiques du profil de base, armes adaptées, marqué décision du MJ. Capitaine vampire pirate et Zombie flibustier : profils maison copiés du Vampire et du Zombie de L06.
+- **CA38.** La bibliothèque d'images grossit pendant le chantier (274 images le 13/11 après-midi) : la table et la liste se régénèrent au fil de l'eau, sans nombre d'images figé dans la spec.
+
 ## Hors périmètre
 
 - Relever le plafond de 24 Kio ou le cumul de 512 Kio par campagne des images embarquées.

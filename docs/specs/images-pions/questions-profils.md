@@ -115,3 +115,9 @@ Réponses possibles :
 - **Q2 à Q4 Variantes de troupe** (Gobelin archer, Ogre crache-plomb, Orc kostaud) : les profils communs de base conviennent, mais il faut adapter les armes.
 - **Q6 Vampires pirates** : profils maison copiés du Vampire (L06 p. 343) pour le capitaine et du Zombie (L06 p. 340) pour le zombie flibustier.
 - **Pas encore posées au MJ** : Q7 (vampire lahmiane), Q8 (Fausse Hydre), Q9 (Fils d'Ulric), Q10 (Main pourpre).
+- **Suite des réponses (13/11, après-midi)** :
+  - **Livres V2** (Tome de la Corruption, Seigneur liche) : convertir **tous** les profils en V5, pas seulement ceux qui ont une image.
+  - **Q7 Vampire lahmiane** : pas posée ; traitée comme les autres profils V2 (L27 p. 114 converti), dans la logique des réponses Q1 et Q5.
+  - **Q8 Fausse Hydre** : pas de profil de bestiaire ; monstre de campagne, image donnée par le sélecteur.
+  - **Q9 Fils d'Ulric** : à chercher dans *Ennemi Intérieur 3 — Le Pouvoir derrière le Trône*, ajouté au corpus par le MJ, dont **tous** les profils de PNJ sont à extraire (profils et illustrations à créer).
+  - **Q10 Main pourpre** : pas de profil de bestiaire ; PNJ de campagne, image donnée par le sélecteur.
