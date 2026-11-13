@@ -10,6 +10,15 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.47.1 — Doublons du moteur supprimés, Précise = Pointue (13/11/2026)
+
+- `REGLES-02` : un seul choix « DR ou Désavantage » pour les pénalités d’États.
+- `REGLES-03` : un seul cumul « meilleur bonus, pire malus » (Caractéristiques, PA, résumé des Tests).
+- `REGLES-06` : clés de Caractéristiques tirées d’une seule source, `js/core/carac-keys.js`.
+- `REGLES-11` : qualités d’armes comparées par identifiant canonique (`isQuality`, `hasQuality`). Décision du MJ (13/11) : Précise se lit comme Pointue partout (alias du registre, +1 DR sur une réussite, un seul +1 DR si l’arme porte les deux) ; l’ancien +10 V4, jamais appliqué, est retiré.
+- `REGLES-12` : copie jamais exécutée du refus de cumul des prières retirée, la table du moteur fait foi.
+- Preuves : tests de caractérisation `tests/unit/refactor/doublons-regles-*.test.js`, suite unitaire 6213 + 159, socle navigateur 15/15.
+
 ## 3.47.0 — Soins hors rencontre, blocages de sorts par le moteur, données communes aux trois dépôts (13/11/2026)
 
 Soins hors rencontre (`CAMP-10`) : spec, plan et tâches dans `docs/specs/soins-hors-rencontre/`.

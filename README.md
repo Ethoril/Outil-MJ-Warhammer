@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer (v3.47.0)
+# Outil MJ — Warhammer (v3.47.1)
 
 Application web progressive (PWA) qui assiste le Maître de Jeu de **Warhammer Fantasy 4e**, avec le combat et la magie **V5**. Un seul utilisateur (le MJ, francophone) ; HTML5 et modules ES natifs, sans bundler ; hors ligne grâce au service worker. En ligne : <https://ethoril.github.io/Outil-MJ-Warhammer/> (GitHub Pages, branche `main`).
 
