@@ -35,7 +35,7 @@ Fusionné dans `main` et publié en 3.46.0 (branche archivée en tag `archive/ep
 - Rendu sans signal observable : `engagements-plateau` ×2, `lot6-a`, `lot4-c43` (focus et défilement), `q6-t10-ecrans`, `divin-v5-brise-flee-sprint`, `lot3-v5-domaines`, `v3-b-combat` ×2.
 - Déjà des boucles sur condition (rien à faire) : `divin-v5-p4c`, `divin-v5-t5`, `recette-g-c17`, `recette-g-c20`, `lot1-pwa-sessions`.
 
-**Non traité** : dépendance à l'horloge (`Date.now()` dans une trentaine de parcours), ports fixes des émulateurs, scripts npm de lots clos (`test:lot2-*`, `test:magic-*`).
+**Non traité** : dépendance à l'horloge (`Date.now()` dans une trentaine de parcours), ports fixes des émulateurs, scripts npm de lots clos : retirés le 13/11 (`test:lot2-*`, `test:magic-*`, sauf `build:magic-local`).
 
 ## Doublons arbitrés (13/11/2026)
 

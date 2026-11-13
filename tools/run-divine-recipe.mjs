@@ -12,8 +12,8 @@ const sameDirectory=process.platform==='win32'
 if(!sameDirectory)throw new Error(`Refusing to read or write outside the recipe checkout. Run from project root: ${projectRoot} (cwd: ${workingDirectory})`);
 const root=projectRoot,output=resolve(root,'tmp/divin'),node=process.execPath;
 mkdirSync(output,{recursive:true});
-const edge='C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe';
-const environment={...process.env,PLAYWRIGHT_EXECUTABLE_PATH:process.env.PLAYWRIGHT_EXECUTABLE_PATH||(existsSync(edge)?edge:'')};
+// Navigateur : PLAYWRIGHT_EXECUTABLE_PATH s’il est défini, sinon le canal Edge du helper tests/helpers/browser.mjs.
+const environment={...process.env};
 delete environment.PSModulePath;
 const commands=[
  ['generation',node,['tools/build-v5-divine-contracts.mjs','--check']],
