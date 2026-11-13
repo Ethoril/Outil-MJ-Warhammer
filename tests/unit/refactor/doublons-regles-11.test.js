@@ -22,13 +22,16 @@ test('REGLES-11 listes : absente ou invalide lue comme vide ; alias et noms reco
   assert.equal(hasQuality([{ id: 'bouclier' }], 'bouclier'), true);
   assert.equal(hasQuality([{ name: 'À répétition' }], 'a-repetition'), true);
   assert.equal(hasQuality(['impact'], 'percutante'), true);
+  // MJ 13/11 (option A) : Précise = Pointue partout.
+  assert.equal(hasQuality(['precise'], 'pointue'), true);
+  assert.deepEqual(normalizeQualities(['precise', 'pointue']).map(row => row.id), ['pointue']);
 });
 
-test('REGLES-11 plus de comparaison de chaîne recopiée dans resolution.js et v5-combat-rules.js (Précise en attente du MJ)', () => {
+test('REGLES-11 plus de comparaison de chaîne recopiée dans resolution.js et v5-combat-rules.js', () => {
   const root = path.resolve(import.meta.dirname, '../../../js/core');
   for (const file of ['resolution.js', 'v5-combat-rules.js']) {
     const source = fs.readFileSync(path.join(root, file), 'utf8');
-    const copies = source.match(/typeof (row|q) ?=== ?'string' ?\? ?\1 ?: ?\1\?\.id\)? ?===? ?'(?!precise')/g) || [];
+    const copies = source.match(/typeof (row|q) ?=== ?'string' ?\? ?\1 ?: ?\1\?\.id\)? ?===? ?'/g) || [];
     assert.deepEqual(copies, [], file);
   }
 });

@@ -92,7 +92,7 @@ Les mentions « mécanique partielle » indiquent explicitement les effets resta
 | points-faibles | Points faibles | V5 | Livre de base V5 EN p.306 | Un Critique infligé par une arme Empaleuse ignore les PA de cette armure. | PA de la seule pièce ignorés sur critique Empaleuse |
 | pointue | Pointue | V5 | Livre de base V5 EN p.305 | +1 DR à tout Test réussi pour attaquer avec cette arme. Imprécise l'emporte. | Moteur attack-sl-bonus |
 | pratique | Pratique | V5 | Livre de base V5 EN p.298 | Un Test raté utilisant l'objet gagne +1 DR ; les pénalités de port d'armure sont réduites d'un niveau (-3 DR → -2 DR). | Manuel |
-| precise | Précise | V4 | Livre de base FR (V4) p.298 | +10 à tout Test effectué avec cette arme. | Moteur target-score-bonus |
+| precise | Précise | V4 | Livre de base FR (V4) p.298 | +10 à tout Test effectué avec cette arme (V4, supprimé en V5). | Alias de Pointue (REGLES-11, MJ 13/11) : +1 DR sur une réussite, jamais de +10 |
 | protectrice | Protectrice X | V4 | Livre de base FR (V4) p.298 | Quand l'arme sert à s'opposer à une attaque, elle confère X PA à toutes les localisations. Avec X ≥ 2, elle peut aussi s'opposer aux projectiles tirés dans sa ligne de vue. | PA séparés ; bouclier sélectionné, disponible et utilisé pour opposition ; tir : X ≥ 2 + ligne de vue |
 | raffine | Raffiné X | V5 | Livre de base V5 EN p.298 | Signe de statut : l'objet est d'autant plus impressionnant que X est élevé. Aucun effet chiffré. | Manuel |
 | rapide | Rapide | V5 | Livre de base V5 EN p.304 | +2 en Initiative de combat pour attaquer avec cette arme ; perdu si l'arme sert au combat à deux armes. | Manuel |

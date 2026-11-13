@@ -170,11 +170,6 @@ export function previewResolution(input) {
   initial.combatPrelude=prelude;
   const prepared = previewV5ActionQualities(initial,weaponSkillPreview.receipt?{sourceQualities:weaponSkillPreview.action.qualities}:undefined);
   const normalized = prepared.normalized;
-  // « Précise » hérité de la V4 (+10) : en V5 la qualité est « Pointue » (+1 DR sur une réussite, Imprécise l'emporte ; livre p. 305).
-  if(Array.isArray(normalized.action?.qualities)&&normalized.action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='precise')){
-    const asPointue=row=>(typeof row==='string'?row:row?.id)==='precise'?{id:'pointue',name:'Pointue',parameter:''}:row;
-    normalized.action={...normalized.action,qualities:normalizeQualities(normalized.action.qualities.map(asPointue))};
-  }
   if(weaponItem?.extensions?.v5?.destroyed===true)normalized.destroyedWeaponUnresolved='Arme détruite : elle ne peut pas être utilisée.';
   if(normalized.v5?.context?.knockout===true){
     const qids=(normalized.action?.qualities||[]).map(q=>canonicalQualityId(q)),nature=normalized.v5?.context?.attackNature;
@@ -819,7 +814,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const allQualities = [...action.qualities, ...(normalized.defense?.qualities || [])];
   const approvedHomebrewQualities=[...(normalized.combatPrelude?.small?.approvedQualities||[]),...(normalized.combatPrelude?.small?.defenderApprovedQualities||[])];
   const mechanicalWarnings = allQualities.filter(q => !approvedHomebrewQualities.includes(q.id)&&Object.hasOwn(ENGINES, q.id)
-    && (keywordMechanicalStatus(q.id).status !== 'covered' || ['target-score-bonus', 'add-units-die'].includes(ENGINES[q.id].engine)))
+    && (keywordMechanicalStatus(q.id).status !== 'covered' || ENGINES[q.id].engine === 'add-units-die'))
     .map(q => ({ keywordId: q.id, reason: 'description-mecanique-v5-requise' }));
   // Weapon damage of a landed attack (`BF+4` read with the attacker's F). A
   // `manual` status (unknown expression, F missing) means no automatic damage:
@@ -1568,7 +1563,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       supplementaryTalentPlans.push(...small.plans);
       unresolved.push(...small.unresolved);
       approvedHomebrewQualities.push(...small.approvedQualities);
-      const unsupported=victimInput.action.qualities.filter(q=>!small.approvedQualities.includes(q.id)&&Object.hasOwn(ENGINES,q.id)&&(keywordMechanicalStatus(q.id).status!=='covered'||['target-score-bonus','add-units-die'].includes(ENGINES[q.id].engine)));
+      const unsupported=victimInput.action.qualities.filter(q=>!small.approvedQualities.includes(q.id)&&Object.hasOwn(ENGINES,q.id)&&(keywordMechanicalStatus(q.id).status!=='covered'||ENGINES[q.id].engine==='add-units-die'));
       mechanicalWarnings.push(...unsupported.map(q=>({keywordId:q.id,reason:'description-mecanique-v5-requise-hors-comparaison-petit',participantId:victim.id})));
       if(unsupported.length)continue;
       const dealt=computeDamage({weaponDamage,strengthBonus,damageBonus,sl:opposed.netSl,roll,targetToughnessBonus:Math.floor((Number(victim.caracs?.E)||0)/10),targetArmour:guard.ap,qualities:victimInput.action.qualities,damageMultiplier:small.multiplier,approvedQualities:small.approvedQualities});

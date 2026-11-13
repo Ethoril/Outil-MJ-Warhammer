@@ -23,18 +23,6 @@ export function activeEngines(qualities = []) {
 const aUnMoteur = (qualities, nom) => activeEngines(qualities).some(e => e.engine === nom);
 
 /**
- * Précise — bonus au score cible du test.
- * Rend le score modifié, jamais négatif.
- */
-export function applyTargetBonus(baseTarget, qualities = []) {
-  let bonus = 0;
-  for (const e of activeEngines(qualities)) {
-    if (e.engine === 'target-score-bonus') bonus += Number(e.params?.bonus) || 0;
-  }
-  return { target: Math.max(0, (Number(baseTarget) || 0) + bonus), bonus };
-}
-
-/**
  * Pointue / Imprécise — modifient le DR du test d'attaque, jamais sa réussite.
  * Pointue : +1 sur une réussite seulement ; Imprécise : −1 sur tout test, et
  * elle l'emporte sur Pointue. Rend le DR modifié et le bonus appliqué (0 sans qualité).

@@ -5,7 +5,7 @@ import { Participant, DiceLine, CARAC_KEYS, Profile, normalizeCaracs } from '../
 import { sanitizeParticipant, parseState, sanitizeProfile } from '../../../js/core/sanitize.js';
 import { computeEndOfTurn, createCombatEngine } from '../../../js/core/combat.js';
 import { computeDamage, damageBreakdown, formatDamageFormula } from '../../../js/core/damage.js';
-import { activeEngines, applyAttackSl, applyTargetBonus, isCriticalRoll, isFumbleRoll } from '../../../js/core/roll-qualities.js';
+import { activeEngines, applyAttackSl, isCriticalRoll, isFumbleRoll } from '../../../js/core/roll-qualities.js';
 import { EFFECT_MODES, advanceEndOfTurn, getEffectCapability, normalizeEffects } from '../../../js/core/effects.js';
 import { canonicalQualityId, normalizeQualities } from '../../../js/core/quality-normalization.js';
 import { MAX_APPLIED_RESOLUTION_IDS, ResolutionError, applyResolution, normalizeResolutionInput, previewResolution, replayResolution, inferActionType } from '../../../js/core/resolution.js';
@@ -1739,21 +1739,17 @@ describe('Qualites de jet', () => {
 // Ces trois-là étaient déclarés dans ENGINES mais consommés nulle part : le jet
 // n'en tenait aucun compte, ils se réduisaient à des pastilles informatives.
 
-test('Précise — +10 au score cible', () => {
-  assert.equal(applyTargetBonus(45, [{ id: 'precise' }]).target, 55);
-  assert.equal(applyTargetBonus(45, [{ id: 'precise' }]).bonus, 10);
-  assert.equal(applyTargetBonus(45, []).target, 45, 'sans la qualité, score inchangé');
-  assert.equal(applyTargetBonus(45, []).bonus, 0);
+// REGLES-11 (MJ 13/11) : Précise (+10 V4) n'existe plus en V5 ; elle se lit comme Pointue partout.
+test('Précise — se lit comme Pointue : +1 DR sur une réussite, jamais de +10', () => {
+  assert.deepEqual(activeEngines([{ id: 'precise' }]).map(e => e.id), ['pointue']);
+  assert.deepEqual(activeEngines([{ id: 'Précise' }]).map(e => e.id), ['pointue'], 'slug dérivé du libellé');
+  assert.deepEqual(applyAttackSl(2, true, [{ id: 'precise' }]), applyAttackSl(2, true, [{ id: 'pointue' }]));
+  assert.deepEqual(applyAttackSl(-1, false, [{ id: 'precise' }]), applyAttackSl(-1, false, []));
 });
 
-test('Précise — jamais de score négatif, et libellé accentué toléré', () => {
-  assert.equal(applyTargetBonus(0, [{ id: 'Précise' }]).target, 10, 'slug dérivé du libellé');
-  assert.equal(applyTargetBonus(-5, []).target, 0, 'borné à zéro');
-});
-
-test('Précise — ne s\'applique pas deux fois si le mot-clé est répété', () => {
-  const r = applyTargetBonus(45, [{ id: 'precise' }, { id: 'precise' }]);
-  assert.equal(r.target, 55, 'dédoublonné par slug');
+test('Précise et Pointue sur la même arme : un seul +1 DR', () => {
+  assert.deepEqual(applyAttackSl(2, true, [{ id: 'precise' }, { id: 'pointue' }]), applyAttackSl(2, true, [{ id: 'pointue' }]));
+  assert.deepEqual(activeEngines([{ id: 'precise' }, { id: 'pointue' }]).map(e => e.id), ['pointue']);
 });
 
 test('Empaleuse — critique élargi aux multiples de 10, sur réussite', () => {
@@ -1807,7 +1803,7 @@ test('activeEngines — dédoublonne les alias et ignore l\'inconnu', () => {
 
   assert.deepEqual(activeEngines([{ id: 'nawak' }]), [], 'mot-clé inconnu ignoré');
   assert.deepEqual(activeEngines(null), [], 'entrée invalide tolérée');
-  assert.deepEqual(activeEngines(['precise']).map(x => x.id), ['precise'], 'chaîne acceptée');
+  assert.deepEqual(activeEngines(['pointue']).map(x => x.id), ['pointue'], 'chaîne acceptée');
 });
 
 test('Pointue — +1 DR sur une réussite seulement', () => {
