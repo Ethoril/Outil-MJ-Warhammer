@@ -1249,8 +1249,8 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const sourceUrl = new URL('../../../docs/divin/sources/L01-hospice-readings.mjs', import.meta.url);
 const hash = '925cf38a31ffa3561c63df3a9a1c2e2c18034ff0ed1e1d90571965a068434c5e';
 const visualRoot = 'C:/Users/arnot/.codex/visualizations/2026/10/18/01a14da8-877d-7ea0-a2d5-38e6a9590721';
-const lectureNote = `${visualRoot}/DIVIN_L01_GRAND_HOSPICE_68_81_LECTURE.md`;
-const principalNote = `${visualRoot}/DIVIN_L01_GRAND_HOSPICE_CONTROLE_PRINCIPAL.md`;
+const lectureNote = resolve(root, 'tests/fixtures/divin-sources/DIVIN_L01_GRAND_HOSPICE_68_81_LECTURE.md');
+const principalNote = resolve(root, 'tests/fixtures/divin-sources/DIVIN_L01_GRAND_HOSPICE_CONTROLE_PRINCIPAL.md');
 const expectedClassifications = new Map([
   [68, ['religious-candidate', 'religious-candidate']],
   [69, ['religious-candidate', 'religious-candidate']],
