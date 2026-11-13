@@ -49,3 +49,9 @@ Fusionné dans `main` et publié en 3.46.0 (branche archivée en tag `archive/ep
 La famille `doublon` de l’index reste disponible, vide.
 
 Écartés après lecture (structure commune, vérifications différentes) : `f2-j` / `f2-j2`, `f2-c-ui` / `f2-c-workspace`, `lot3-v5-relecture2-ui` / `-history` (hypothèses de l'audit), `recette-g-c11` / `c16`, la série `divin-v5-b4` à `b18`.
+
+## Variables d’environnement de `browser-startup` et `boot-client-block-browser`
+
+Ces deux parcours rejouent l’ancienne révision publiée par `git show <révision>:<fichier>`.
+- `STARTUP_PREVIOUS_REVISION` : révision de référence (défaut `682d0af`). Elle doit exister dans l’historique local ; sinon le parcours échoue d’emblée avec « Révision de référence introuvable ».
+- `GIT_DIR` : lue par git lui-même ; à définir seulement si le dépôt n’est pas celui du dossier courant. Un clone superficiel ou un `GIT_DIR` erroné provoque le même message.
