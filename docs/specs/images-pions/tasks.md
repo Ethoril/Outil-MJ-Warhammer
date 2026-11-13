@@ -55,7 +55,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 - [x] **T13 — Classement de tout le bestiaire.** `tools/token-images-categories.csv` couvre toutes les créatures (appariées ou non) ; un générateur écrit `js/data/bestiary-folders.js` (id de profil → dossier, libellés français des dossiers), avec `--check`.
   Fichiers : `tools/token-images-categories.csv`, `tools/build-bestiary-folders.mjs`, `js/data/bestiary-folders.js`, test dans `tests/unit/donnees/`. CA : 33. Après : T12.
   Acceptation : test (chaque profil dans un seul dossier, aucun sans classement, `--check` vert).
-- [ ] **T14 — Navigation par dossiers.** Arborescence, compteurs, fil d'Ariane, « À classer », recherche et filtres bornés au dossier ouvert, clavier et noms accessibles.
+- [x] **T14 — Navigation par dossiers.** Arborescence, compteurs, fil d'Ariane, « À classer », recherche et filtres bornés au dossier ouvert, clavier et noms accessibles.
   Fichiers : `js/ui/bestiary-library.js`, `js/core/bestiary-profiles.js` (filtre par dossier, pur), `index.html`, `css/`, tests unitaires du filtre, test navigateur du bestiaire. CA : 31, 32, 34. Après : T13, lot 2 (mêmes fichiers d'interface).
   Acceptation : tests unitaires ciblés ; test navigateur sous `timeout 120` ; parcours d'accessibilité vert.
 

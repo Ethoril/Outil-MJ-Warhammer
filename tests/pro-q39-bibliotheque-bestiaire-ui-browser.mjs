@@ -37,7 +37,7 @@ try {
   await page.locator('#tab-library').click();
   check(await library.isVisible(), 'l’onglet Bibliothèque montre la bibliothèque de bestiaire');
   await library.locator('summary').click();
-  await page.locator('#bestiary-library-body .item').first().waitFor({ state: 'visible' });
+  await page.locator('#bestiary-library-body .bestiary-folder').first().waitFor({ state: 'visible' }); // racine : les dossiers (images des pions, T14)
   await page.getByLabel('Nom du profil').fill('Stegadon');
   const row = page.locator('#bestiary-library-body .item').filter({ has: page.locator('strong', { hasText: /^Stegadon\b/ }) }).first();
   await row.waitFor({ state: 'visible' });
