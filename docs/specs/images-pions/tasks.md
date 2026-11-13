@@ -22,7 +22,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 - [x] **T4 — Champ `tokenLibraryImage` et persistance.** Profil, `sanitize`, `PROFILE_KEYS`, export et import JSON ; exclusivité avec `tokenImage` ; pas de migration.
   Fichiers : `js/core/models.js`, `js/core/sanitize.js`, `js/core/migrations.js`, `js/core/json-profile-export.js`, `js/core/json-profile-import.js`, tests unitaires voisins existants. CA : 8, 10. Après : T3.
   Acceptation : tests ciblés des cinq modules (aller-retour avec et sans le champ ; chemin invalide rejeté).
-- [ ] **T5 — Sélecteur et vignettes dans la réserve.** Recherche par nom dans la table, vignette, mention « automatique » ou choix du MJ, retrait ; vignette absente si l'image ne charge pas.
+- [x] **T5 — Sélecteur et vignettes dans la réserve.** Recherche par nom dans la table, vignette, mention « automatique » ou choix du MJ, retrait ; vignette absente si l'image ne charge pas.
   Fichiers : `js/ui/reserve.js`, `index.html`, `css/` si besoin, `tests/liaison-images.browser.mjs`. CA : 6, 8, 11, 12, 13. Après : T4.
   Acceptation : `timeout 120 node tests/liaison-images.browser.mjs`.
 - [ ] **T6 — Montures.** Image automatique et image choisie de la monture d'un profil (section Monture de la réserve), envoyées dans `rider.imageUrl` et sur le pion de la monture.

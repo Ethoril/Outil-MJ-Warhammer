@@ -13,6 +13,8 @@ import { buildReserveProfileFromBestiary } from '../core/bestiary-profiles.js';
 import { sharedBestiaryLoader } from '../core/bestiary-loader.js';
 import { declaredMountOf, isMountCandidate } from '../core/mounts.js';
 import { syncTokenColorSelect } from './token-color-options.js';
+import { normalizeLibraryImage, tokenImageOf } from '../core/token-image.js';
+import { createTokenLibraryPicker, tokenImageCaption, tokenImageDisplaySrc, tokenThumbnail, hideOnError } from './token-image-picker.js';
 
 
 export function initReserveUI(Store, { onSaved = () => {} } = {}) {
@@ -22,15 +24,22 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   const btnCopyJson = qs('#btn-copy-profile-json');
   const settle = (operation, label = 'Opération') => Promise.resolve(operation).then(result => { if (result === false || result?.ok === false) throw result?.error || new Error(`${label} impossible.`); return result; }).catch(error => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'));
 
-  let tokenImage = null;
+  // Image du pion (images-pions, CA6-CA13) : importée (`tokenImage`) ou choisie dans la bibliothèque (`tokenLibraryImage`),
+  // exclusives ; sans elles, l'image automatique du profil du bestiaire (`imageExtensions` du profil édité).
+  let tokenImage = null, tokenLibraryImage = null, imageExtensions = null;
   let imageRevision = 0;
-  function setTokenImage(value) {
-    tokenImage = value || null;
+  function renderTokenImage() {
+    const resolved = tokenImageOf({ tokenImage, tokenLibraryImage, extensions: imageExtensions });
     const preview = DOM.reserve.form.querySelector('#token-image-preview');
     const remove = DOM.reserve.form.querySelector('#token-image-remove');
-    if (preview) { preview.hidden = !tokenImage; if (tokenImage) preview.src = tokenImage; else preview.removeAttribute('src'); }
-    if (remove) remove.hidden = !tokenImage;
+    const source = DOM.reserve.form.querySelector('#token-image-source');
+    const src = tokenImageDisplaySrc(resolved.url);
+    if (preview) { preview.hidden = !src; if (src) preview.src = src; else preview.removeAttribute('src'); }
+    if (remove) remove.hidden = !(tokenImage || tokenLibraryImage);
+    if (source) source.textContent = tokenImageCaption(resolved);
   }
+  function setTokenImage(value) { tokenImage = value || null; if (tokenImage) tokenLibraryImage = null; renderTokenImage(); }
+  function setLibraryImage(path) { tokenLibraryImage = normalizeLibraryImage(path) ?? null; if (tokenLibraryImage) tokenImage = null; renderTokenImage(); }
 
   function ensureProfileFields() {
     const kind = DOM.reserve.form?.querySelector('[name=kind]');
@@ -39,13 +48,19 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const meta = document.createElement('div');
     meta.id = 'form-profile-meta';
     meta.style.cssText = 'display:grid; gap:6px; margin:10px 0;';
-    meta.innerHTML = '<div class="row"><img id="token-image-preview" alt="Aperçu du pion" hidden style="width:64px;height:64px;border-radius:50%;object-fit:cover"><button type="button" id="token-image-select">Image du pion…</button><button type="button" id="token-image-remove" hidden>Retirer l’image</button><input id="token-image-file" type="file" accept="image/*" hidden></div><div class="row"><label>Couleur du pion <small class="muted">(cerclage d’un PJ sur la carte)</small><select name="tokenColor" id="token-color"></select></label></div><label>Culte<input name="cult" placeholder="Myrmidia"></label><label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
+    meta.innerHTML = '<fieldset id="token-image-field" class="token-image-field"><legend>Image du pion</legend><div class="row token-image-current"><img id="token-image-preview" alt="Aperçu du pion" hidden><span id="token-image-source" class="muted" aria-live="polite">Aucune image</span></div><div class="row"><button type="button" id="token-image-select">Importer une image…</button><button type="button" id="token-image-remove" hidden>Retirer l’image</button><input id="token-image-file" type="file" accept="image/*" hidden></div></fieldset><div class="row"><label>Couleur du pion <small class="muted">(cerclage d’un PJ sur la carte)</small><select name="tokenColor" id="token-color"></select></label></div><label>Culte<input name="cult" placeholder="Myrmidia"></label><label>Tags <small class="muted">(séparés par des virgules)</small><input name="tags" placeholder="chef, gobelin, magie"></label><label>Notes<textarea name="notes" rows="2" placeholder="Repères et consignes"></textarea></label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="favorite"> Profil favori</label><label style="display:flex; gap:6px; align-items:center;"><input type="checkbox" name="propagate"> Mettre à jour les exemplaires en cours (PV max et fiche, sans toucher aux PV actuels ni aux états)</label>';
     const actions = DOM.reserve.form.querySelector('.actions');
     DOM.reserve.form.insertBefore(meta, actions);
     const input = meta.querySelector('#token-image-file');
+    hideOnError(meta.querySelector('#token-image-preview'));
+    const picker = createTokenLibraryPicker({ onPick: row => {
+      imageRevision++; setLibraryImage(row.path); picker.clear(); if (btnSubmit) btnSubmit.disabled = false;
+      meta.querySelector('#token-image-remove')?.focus();
+    } });
+    meta.querySelector('#token-image-field').append(picker.element);
     syncTokenColorSelect(meta.querySelector('#token-color'), null);
     meta.querySelector('#token-image-select').addEventListener('click', () => input.click());
-    meta.querySelector('#token-image-remove').addEventListener('click', () => { imageRevision++; setTokenImage(null); if (btnSubmit) btnSubmit.disabled = false; });
+    meta.querySelector('#token-image-remove').addEventListener('click', () => { imageRevision++; tokenLibraryImage = null; setTokenImage(null); if (btnSubmit) btnSubmit.disabled = false; meta.querySelector('#token-image-select')?.focus(); });
     input.addEventListener('change', async () => {
       const file = input.files?.[0]; input.value = '';
       if (!file) return;
@@ -226,7 +241,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const right = document.createElement('div'); right.className = 'row';
     const tags = normalizeTags(p.tags);
     left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="muted">(${escapeHtml(p.kind)})</span>${p.favorite ? ' ⭐' : ''}</div><div class="muted" style="font-size:0.85em;">Init ${p.initiative} • PV ${p.hp}${tags.length ? ` • ${escapeHtml(tags.join(', '))}` : ''}</div>`;
-    if (p.tokenImage) { const image = document.createElement('img'); image.src = p.tokenImage; image.alt = 'Image du pion'; image.style.cssText = 'width:64px;height:64px;border-radius:50%;object-fit:cover;'; left.prepend(image); }
+    const thumb = tokenThumbnail(tokenImageOf(p), { size: 64, alt: 'Image du pion' }); if (thumb) left.prepend(thumb);
     const btnEdit = document.createElement('button'); btnEdit.textContent = 'Éditer'; btnEdit.classList.add('ghost'); btnEdit.addEventListener('click', () => loadProfileIntoForm(p));
     const btnDup = document.createElement('button'); btnDup.textContent = 'Dupliq.'; btnDup.classList.add('ghost'); btnDup.addEventListener('click', () => Store.duplicateProfile(p.id));
     const btnFav = document.createElement('button'); btnFav.textContent = p.favorite ? '★' : '☆'; btnFav.title = 'Profil favori'; btnFav.classList.add('ghost'); btnFav.addEventListener('click', () => settle(Store.updateProfile(p.id, { favorite: !p.favorite }), 'Favori'));
@@ -278,7 +293,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     ensureProfileFields();
     ensureKeywordPicker();
     keywordPicker.setSubject(p);
-    imageRevision++; setTokenImage(p.tokenImage);
+    imageRevision++; imageExtensions = p.extensions || null; tokenLibraryImage = normalizeLibraryImage(p.tokenLibraryImage) ?? null; tokenImage = p.tokenImage || null; renderTokenImage();
     if (btnSubmit) btnSubmit.disabled = false;
     setMountSubject(p);
     ensureArmorSides();
@@ -312,7 +327,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     ensureProfileFields();
     ensureKeywordPicker();
     keywordPicker.setSubject({});
-    imageRevision++; setTokenImage(null);
+    imageRevision++; imageExtensions = null; tokenLibraryImage = null; setTokenImage(null);
     if (btnSubmit) btnSubmit.disabled = false;
     setMountSubject(null);
     ensureArmorSides();
@@ -383,6 +398,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const id = fd.get('id');
     const data = { name: fd.get('name'), kind: fd.get('kind'), initiative: Number(fd.get('initiative') || 0), hp: Number(fd.get('hp') || 0), group: (fd.get('group') || '').trim(), cult: String(fd.get('cult') || '').trim(), tags: normalizeTags(fd.get('tags')), notes: String(fd.get('notes') || ''), favorite: fd.get('favorite') === 'on', caracs, armor, armorLocations, diceLines };
     data.tokenImage = tokenImage;
+    data.tokenLibraryImage = tokenImage ? null : tokenLibraryImage;
     const rawColor = String(fd.get('tokenColor') || '').trim();
     data.tokenColor = normalizeTokenColor(rawColor) ?? null;
     if (rawColor && !data.tokenColor) { showToast('Couleur du pion : teinte non reconnue.', 'error'); if (submit) submit.disabled = false; return; }

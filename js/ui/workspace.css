@@ -58,6 +58,8 @@
 .workspace-profile-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--workspace-gap); }
 .workspace-profile-card { display: grid; gap: 6px; align-content: start; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; min-width: 0; }
 .workspace-profile-card h3 { margin: 0; overflow-wrap: anywhere; }
+.workspace-profile-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.workspace-profile-head .token-thumb { width: 48px; height: 48px; flex: none; border-radius: 50%; object-fit: cover; }
 .workspace-profile-card p { margin: 0; }
 .workspace-tag { display: inline-flex; width: fit-content; padding: 3px 8px; border-radius: 999px; background: var(--chip); color: var(--chip-text); font-family: var(--font-ui); font-size: 12.5px; }
 .workspace-empty { max-width: 680px; }

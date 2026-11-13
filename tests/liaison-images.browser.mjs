@@ -28,4 +28,83 @@ try {
  await page.locator('#workspace-prepare').getByRole('button',{name:'Modifier Gobelin image'}).click();
  await expect(page.getByRole('dialog').locator('#token-image-preview')).toBeHidden();
  console.log('Image : import, sauvegarde, rechargement et retrait réussis.');
+ // Bibliothèque de Map Display (docs/specs/images-pions, T5) : la route simule le dépôt voisin, présent puis absent.
+ let libraryOnline = true;
+ const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64');
+ await page.route('**/rpg-map-display/maps/tokens/**', route => libraryOnline ? route.fulfill({ status: 200, contentType: 'image/png', body: pixel }) : route.fulfill({ status: 404, body: '' }));
+ const loupId = await page.evaluate(async () => {
+   const { Store } = await import('/js/main.js'); const { Profile } = await import('/js/core/models.js'); const { TOKEN_IMAGES } = await import('/js/data/token-images.js');
+   await Store.ready;
+   const id = TOKEN_IMAGES.find(row => row.path === 'maps/tokens/bestiaire/loup.webp').profiles[0];
+   await Store.addProfile(new Profile({ id: 'loup-auto', name: 'Loup auto', hp: 10, extensions: { v5: { bestiary: { id } } } }));
+   return id;
+ });
+ await page.reload(); await page.locator('#tab-prepare').click();
+ const card = page.locator('#workspace-prepare .workspace-profile-card').filter({ hasText: 'Loup auto' });
+ await expect(card.locator('img.token-thumb')).toHaveAttribute('src', '../rpg-map-display/maps/tokens/bestiaire/loup.webp');
+ await expect(card.locator('img.token-thumb')).toBeVisible();
+ await expect(card).toContainText('image automatique');
+ await page.locator('#workspace-prepare').getByRole('button', { name: 'Modifier Loup auto' }).click();
+ dialog = page.getByRole('dialog');
+ await expect(dialog.locator('#token-image-source')).toHaveText('Loup (bibliothèque, automatique)');
+ await expect(dialog.locator('#token-image-preview')).toBeVisible();
+ await expect(dialog.locator('#token-image-remove')).toBeHidden();
+ // Recherche au clavier, accents ignorés : Entrée ne soumet pas, Flèche bas passe aux résultats.
+ const search = dialog.getByRole('searchbox', { name: 'Chercher une image dans la bibliothèque de la carte' });
+ await search.fill('destrier de bohemond'); await search.press('Enter');
+ await expect(dialog).toBeVisible();
+ const results = dialog.getByRole('group', { name: 'Images trouvées dans la bibliothèque' });
+ await expect(results.getByRole('button')).toHaveText(['Destrier de Bohémond']);
+ await expect(results.locator('img.token-thumb')).toBeVisible();
+ await search.press('ArrowDown'); await expect(results.getByRole('button', { name: 'Destrier de Bohémond' })).toBeFocused();
+ await page.keyboard.press('Enter');
+ await expect(dialog.locator('#token-image-source')).toHaveText('Destrier de Bohémond (bibliothèque, choix du MJ)');
+ await expect(dialog.locator('#token-image-preview')).toHaveAttribute('src', '../rpg-map-display/maps/tokens/destriers/destrier-bohemond.webp');
+ await expect(dialog.locator('#token-image-remove')).toBeFocused();
+ await expect(search).toHaveValue('');
+ // L'image importée retire l'image choisie, et inversement.
+ await dialog.locator('#token-image-file').setInputFiles({ name: 'gob.png', mimeType: 'image/png', buffer: Buffer.from(png, 'base64') });
+ await expect(dialog.locator('#token-image-source')).toHaveText('Image importée (choix du MJ)');
+ await search.fill('squelette'); await results.getByRole('button', { name: 'Squelette' }).click();
+ await expect(dialog.locator('#token-image-source')).toHaveText('Squelette (bibliothèque, choix du MJ)');
+ await dialog.locator('#btn-submit-form').click(); await expect(dialog).toBeHidden();
+ const saved = await page.evaluate(async () => { const { Store } = await import('/js/main.js'); return Store.getProfile('loup-auto'); });
+ expect(saved.tokenLibraryImage).toBe('maps/tokens/ennemis/morts-vivants/squelette.webp');
+ expect(saved.tokenImage).toBeUndefined();
+ await page.reload(); await page.locator('#tab-prepare').click();
+ await expect(card).toContainText('image du MJ');
+ await expect(card.locator('img.token-thumb')).toHaveAttribute('src', '../rpg-map-display/' + saved.tokenLibraryImage);
+ // Retirer l'image du MJ fait revenir l'image automatique.
+ await page.locator('#workspace-prepare').getByRole('button', { name: 'Modifier Loup auto' }).click();
+ dialog = page.getByRole('dialog');
+ await dialog.locator('#token-image-remove').click();
+ await expect(dialog.locator('#token-image-source')).toHaveText('Loup (bibliothèque, automatique)');
+ await dialog.locator('#btn-submit-form').click(); await expect(dialog).toBeHidden();
+ const restored = await page.evaluate(async () => { const { Store } = await import('/js/main.js'); return Store.getProfile('loup-auto'); });
+ expect(Object.hasOwn(restored, 'tokenLibraryImage')).toBe(false);
+ // Bibliothèque injoignable : pas d'icône cassée, la recherche par les noms reste utilisable.
+ libraryOnline = false;
+ await page.reload(); await page.locator('#tab-prepare').click();
+ await expect(card).toContainText('image automatique');
+ await expect(card.locator('img.token-thumb')).toBeHidden();
+ await page.locator('#workspace-prepare').getByRole('button', { name: 'Modifier Loup auto' }).click();
+ dialog = page.getByRole('dialog');
+ await expect(dialog.locator('#token-image-source')).toHaveText('Loup (bibliothèque, automatique)');
+ await expect(dialog.locator('#token-image-preview')).toBeHidden();
+ await dialog.getByRole('searchbox', { name: 'Chercher une image dans la bibliothèque de la carte' }).fill('destrier de bohemond');
+ const offline = dialog.getByRole('group', { name: 'Images trouvées dans la bibliothèque' });
+ await expect(offline.getByRole('button', { name: 'Destrier de Bohémond' })).toBeVisible();
+ await expect(offline.locator('img')).toBeHidden();
+ await offline.getByRole('button', { name: 'Destrier de Bohémond' }).click();
+ await expect(dialog.locator('#token-image-source')).toHaveText('Destrier de Bohémond (bibliothèque, choix du MJ)');
+ await expect(dialog.locator('#token-image-preview')).toBeHidden();
+ const broken = await page.evaluate(() => [...document.querySelectorAll('img')].filter(img => !img.hidden && img.getBoundingClientRect().width > 0 && img.complete && img.naturalWidth === 0 && img.getAttribute('src')).map(img => img.outerHTML));
+ expect(broken).toEqual([]);
+ // 390 px : le sélecteur et ses résultats tiennent dans la fenêtre.
+ await page.setViewportSize({ width: 390, height: 844 });
+ await dialog.getByRole('searchbox', { name: 'Chercher une image dans la bibliothèque de la carte' }).fill('destrier');
+ const overflow = await dialog.evaluate(box => { const right = box.getBoundingClientRect().right + 0.5; return [...box.querySelectorAll('#token-image-field, #token-image-field *')].filter(el => el.getBoundingClientRect().width && el.getBoundingClientRect().right > right).map(el => el.className || el.tagName); });
+ expect(overflow).toEqual([]);
+ expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+ console.log(`Bibliothèque (${loupId}) : image automatique, recherche, choix au clavier, exclusivité, retrait et bibliothèque absente réussis.`);
 } finally { await browser.close(); server.close(); }

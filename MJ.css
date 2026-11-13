@@ -501,3 +501,16 @@ body:has(dialog.tool-sheet[open]) #toast-container { right: calc(clamp(480px, 50
 #supplement-errors .supplement-errors { padding: 8px 16px; color: var(--danger); }
 #supplement-errors summary { cursor: pointer; font-weight: 600; }
 #supplement-errors ul { margin: 6px 0 0; padding-left: 20px; color: var(--text); overflow-wrap: anywhere; }
+
+/* Images des pions (docs/specs/images-pions) : image du profil, sélecteur de la bibliothèque de Map Display, vignettes. */
+.token-image-field { display: grid; gap: 6px; min-width: 0; margin: 0; padding: 8px; border: 1px solid var(--border); border-radius: var(--radius); }
+.token-image-field legend { padding: 0 4px; }
+.token-image-current { align-items: center; gap: 8px; min-width: 0; }
+.token-image-current > span { overflow-wrap: anywhere; min-width: 0; }
+#token-image-preview, .token-thumb { flex: none; border-radius: 50%; object-fit: cover; }
+#token-image-preview { width: 64px; height: 64px; }
+.token-library-picker { display: grid; gap: 6px; min-width: 0; }
+.token-library-search { width: 100%; max-width: 100%; box-sizing: border-box; }
+.token-library-results { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.token-library-pick { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; overflow-wrap: anywhere; text-align: left; }
+.token-library-pick .token-thumb { width: 32px; height: 32px; }

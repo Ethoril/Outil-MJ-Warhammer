@@ -2,6 +2,8 @@ import { ResolutionError } from '../../core/resolution.js';
 import { locationProtection } from '../../core/equipment.js';
 import { userMessage } from '../messages.js';
 import { minusSigned } from '../resolution-panel/dom.js';
+import { tokenImageOf } from '../../core/token-image.js';
+import { tokenThumbnail, tokenImageShortCaption } from '../token-image-picker.js';
 
 export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'campaign', 'library']);
 
@@ -223,7 +225,11 @@ export function profileSummary(profile, {
   const card = node('article', 'workspace-profile-card');
   card.dataset.profileId = profile.id;
   const title = node('h3', '', profile.name || 'Sans-nom');
-  const meta = node('p', 'workspace-muted', `${profile.kind || 'Créature'} · Init ${profile.initiative ?? 0} · PV ${profile.hp ?? 0}${profile.favorite ? ' · ★ Favori' : ''}`);
+  // Vignette de l'image qui partira vers la carte, quelle que soit sa provenance (images-pions, CA12) ; absente si elle ne charge pas.
+  const image = tokenImageOf(profile);
+  const thumb = tokenThumbnail(image, { size: 48, alt: '' });
+  const imageNote = tokenImageShortCaption(image);
+  const meta = node('p', 'workspace-muted', `${profile.kind || 'Créature'} · Init ${profile.initiative ?? 0} · PV ${profile.hp ?? 0}${profile.favorite ? ' · ★ Favori' : ''}${imageNote ? ` · ${imageNote}` : ''}`);
   const group = profile.group ? node('p', 'workspace-tag', profile.group) : null;
   const actions = node('div', 'workspace-inline-actions');
   const profileName = profile.name || 'Sans-nom';
@@ -258,7 +264,7 @@ export function profileSummary(profile, {
     });
     actions.appendChild(remove);
   }
-  card.append(title, meta);
+  if (thumb) { const head = node('div', 'workspace-profile-head'); head.append(thumb, title); card.append(head, meta); } else card.append(title, meta);
   if (group) card.appendChild(group);
   if (profile.tags?.length) card.appendChild(node('p', 'workspace-muted', profile.tags.join(' · ')));
   card.appendChild(actions);
