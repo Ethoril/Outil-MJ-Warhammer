@@ -126,15 +126,13 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
     page.append(header);
 
     try {
-      const snapshot = typeof Store.getFullJSON === 'function' ? JSON.parse(Store.getFullJSON()) : {};
-      const clock = snapshot?.extensions?.v5?.gameClock;
+      const campaignSeconds = Store.getCampaignSeconds();
       const state = Store.getAftermathState();
-      const overview = typeof Store.listAftermathSequelae === 'function' ? Store.listAftermathSequelae() : { sequelae: state.sequelae || [], pending: [] };
-      const proposals = typeof Store.listAftermathProposals === 'function' ? Store.listAftermathProposals() : [];
+      const overview = Store.listAftermathSequelae();
+      const proposals = Store.listAftermathProposals();
       // CA14 : participants de la rencontre en cours, puis personnages suivis hors rencontre (`offEncounter`).
-      const participants = typeof Store.listAftermathSubjects === 'function' ? Store.listAftermathSubjects()
-        : (typeof Store.listParticipants === 'function' ? Store.listParticipants() : []);
-      const conflicts = typeof Store.listFollowedCharacterConflicts === 'function' ? Store.listFollowedCharacterConflicts() : [];
+      const participants = Store.listAftermathSubjects();
+      const conflicts = Store.listFollowedCharacterConflicts();
       const byId = new Map(participants.map(person => [person.id, person]));
       const incidents = state.incidents || [];
       const diseases = state.diseases || [];
@@ -154,8 +152,8 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
       for (const id of absentIds) {
         const row = rowsOf(id)[0];
         people.push({ id, person: null, absent: true, off: false,
-          name: (row && typeof Store.getAftermathRowLabel === 'function' ? Store.getAftermathRowLabel(row) : '') || 'Ancien suivi',
-          place: typeof Store.getAftermathSubjectPlace === 'function' ? Store.getAftermathSubjectPlace(id) : 'aucun' });
+          name: (row ? Store.getAftermathRowLabel(row) : '') || 'Ancien suivi',
+          place: Store.getAftermathSubjectPlace(id) });
       }
       const visible = filter === 'active' ? people.filter(person => activeIds.has(person.id)) : people;
       if (!visible.some(person => person.id === selected)) selected = visible[0]?.id ?? null;
@@ -170,7 +168,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
       const clockText = node('div');
       clockText.append(
         label('TEMPS DE JEU SUIVI'),
-        node('strong', 'campaign-clock-value', formatElapsed(clock?.campaignSeconds)),
+        node('strong', 'campaign-clock-value', formatElapsed(campaignSeconds)),
         node('p', '', `Convalescence : jour ${day.day} · jour ${day.dayInImperialWeek}/8 de la semaine impériale`)
       );
       clockInfo.append(clockIcon, clockText);

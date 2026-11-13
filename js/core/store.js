@@ -5629,6 +5629,11 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     isSuddenDeathEnabled() {
       return stateExtensions?.v5?.suddenDeathEnabled === true;
     },
+    // Secondes de l'horloge de campagne (extensions.v5.gameClock.campaignSeconds), null sans horloge.
+    getCampaignSeconds() {
+      const seconds = stateExtensions?.v5?.gameClock?.campaignSeconds;
+      return seconds === undefined || (seconds !== null && typeof seconds === 'object') ? null : seconds;
+    },
     getActionClock(actorId = null) {
       return v5StoreActionClock({
         ...(activeScene ? { activeScene } : {}),

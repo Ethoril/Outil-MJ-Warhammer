@@ -71,3 +71,20 @@ test('listTurnActions rend une copie : la muter ne change pas le store', () => {
   row.targetId = 'altered';
   assert.equal(store.listTurnActions('hero')[0].targetId, 'gob');
 });
+
+// CAMP-04 (13/11) : l'écran Campagne lisait l'horloge par JSON.parse(Store.getFullJSON()).extensions.v5.gameClock.
+test('getCampaignSeconds : mêmes secondes que l’ancienne lecture de l’écran Campagne', async () => {
+  const { createGameClock } = await import('../../../js/core/v5-game-time.js');
+  const base = createStore({ storage: memoryStorage() });
+  const clock = { ...createGameClock(JSON.parse(base.getFullJSON())), campaignSeconds: 90061 };
+  const store = storeWith({ gameClock: clock });
+  const legacySeconds = legacy(store)?.extensions?.v5?.gameClock?.campaignSeconds;
+  assert.equal(legacySeconds, 90061);
+  assert.equal(store.getCampaignSeconds(), legacySeconds);
+  // Sans horloge : l'ancienne lecture donnait undefined, l'accesseur null ; l'écran affiche le même texte pour les deux.
+  const empty = createStore({ storage: memoryStorage() });
+  assert.equal(legacy(empty)?.extensions?.v5?.gameClock?.campaignSeconds, undefined);
+  assert.equal(empty.getCampaignSeconds(), null);
+  const loaded = storeWith({ turnIndex: 1 });
+  assert.equal(loaded.getCampaignSeconds(), legacy(loaded)?.extensions?.v5?.gameClock?.campaignSeconds ?? null);
+});

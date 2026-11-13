@@ -167,16 +167,16 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     if (typeof id === 'string' && id.startsWith('external:')) return 'soigneur extérieur';
     let row = null;
     try { const state = Store.getAftermathState(); row = [...state.incidents, ...(state.diseases || []), ...(state.sequelae || [])].find(item => item.participantId === id) || null; } catch { row = null; }
-    return (row && typeof Store.getAftermathRowLabel === 'function' ? Store.getAftermathRowLabel(row) : null) || id;
+    return (row ? Store.getAftermathRowLabel(row) : null) || id;
   };
   /** Suivi sans sujet soignable dans cet écran : consultation seule, avec la raison (CA13). */
   const consultationText = participantId => {
-    const place = typeof Store.getAftermathSubjectPlace === 'function' ? Store.getAftermathSubjectPlace(participantId) : 'aucun';
+    const place = Store.getAftermathSubjectPlace(participantId);
     if (place === 'suspendue') return 'Scène suspendue : consultation seule. Reprenez la scène pour soigner.';
     if (place === 'suivi') return 'Personnage suivi hors rencontre : soignez-le depuis Campagne.';
     return 'Ancien suivi sans personnage : consultation seule.';
   };
-  const canArchive = participantId => (typeof Store.getAftermathSubjectPlace === 'function' ? Store.getAftermathSubjectPlace(participantId) : 'aucun') === 'aucun';
+  const canArchive = participantId => Store.getAftermathSubjectPlace(participantId) === 'aucun';
 
   const SIDE_OPTIONS = [['', 'Choisir…'], ['left', 'Gauche'], ['right', 'Droit(e)']];
   const PHASE_TEXT = {
@@ -255,7 +255,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   function renderSequelae(state, participants, nameOf, healerFieldsFn, { participantId = null, allowAbsentActions = false } = {}) {
     const section = node('section'); section.className = 'workspace-aftermath-sequelae'; section.setAttribute('aria-label', 'Séquelles durables et temporaires');
     section.appendChild(node('h4', 'Séquelles des critiques'));
-    const overview = typeof Store.listAftermathSequelae === 'function' ? Store.listAftermathSequelae() : { sequelae: [], pending: [], incidents: [], characteristics: {} };
+    const overview = Store.listAftermathSequelae();
     const revision = state.revision;
 
     // 1. Critiques dont les séquelles restent à ouvrir : les faits que le registre ne peut pas lire sont demandés ici.
@@ -481,7 +481,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
   }
 
   function renderProposals(state, participants, filterParticipantId = null) {
-    const allProposals = typeof Store.listAftermathProposals === 'function' ? Store.listAftermathProposals() : [];
+    const allProposals = Store.listAftermathProposals();
     const proposals = filterParticipantId ? allProposals.filter(row => row.participantId === filterParticipantId) : allProposals;
     const key = filterParticipantId ? `critical-proposals-${filterParticipantId}` : 'critical-proposals';
     const critical = details(key, `Critiques à suivre (${proposals.length})`);
@@ -640,7 +640,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     }
 
     // 1. Proposals for this participant
-    const proposals = (typeof Store.listAftermathProposals === 'function' ? Store.listAftermathProposals() : []).filter(row => row.participantId === participantId);
+    const proposals = Store.listAftermathProposals().filter(row => row.participantId === participantId);
     if (proposals.length) {
       container.appendChild(renderProposals(state, participants, participantId));
     }
@@ -662,7 +662,7 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     container.appendChild(renderDiseases(state, participants, nameOf, participantId, { allowAbsentActions: false }));
 
     // 4. Sequelae for this participant
-    const overview = typeof Store.listAftermathSequelae === 'function' ? Store.listAftermathSequelae() : { sequelae: [], pending: [], incidents: [], characteristics: {} };
+    const overview = Store.listAftermathSequelae();
     const hasSequelae = (overview.sequelae || []).some(row => row.participantId === participantId) ||
       (overview.pending || []).some(row => row.participantId === participantId) ||
       (overview.incidents || []).some(row => row.participantId === participantId && row.needsOpening);
