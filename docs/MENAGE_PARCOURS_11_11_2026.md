@@ -14,7 +14,7 @@ Fusionné dans `main` et publié en 3.46.0 (branche archivée en tag `archive/ep
 2. **Dépendances** : Playwright 1.65.0, fake-indexeddb 6.2.8. Playwright 1.65 refuse de choisir une option désactivée ; cela a révélé que `q6-t10-ecrans` et `q6-t10-magie` choisissaient Obstiné sans séance ouverte (option désactivée depuis 287ad8b, que 1.63 forçait). Leurs états de départ ouvrent maintenant une séance.
 3. **Helper partagé** `tests/helpers/static-server.mjs` : serveur statique (`createStaticServer`, `startStaticServer`), table MIME, blocage du réseau externe (`blockExternalNetwork`), évitement des ports que Chromium refuse. 151 parcours et le helper `lot4-ca-app` l'utilisent ; environ 1 950 lignes recopiées retirées. Le blocage réseau est désormais le même partout : seul le serveur local répond (29 parcours ne bloquaient que `https`).
 4. **Classement** : `tests/parcours.json` range les 180 fichiers en quatre familles — 32 généraux (dont un socle de 15 à lancer avant publication), 124 tests de lot ou de ticket, 4 doublons probables (arbitrés depuis, voir plus bas), 20 hors série (émulateurs Firebase, lanceur, module importé). Le lanceur lit cet index, refuse un fichier non classé, et un test unitaire (`tests/unit/outillage/index-parcours.test.js`) le vérifie en CI.
-   - `npm run test:browser-socle` : les 15 parcours du socle.
+   - `npm run test:browser-socle` : les parcours du socle (15 au 11/11, 16 depuis le parcours d'accessibilité du 13/11).
    - `npm run test:browser-general` : les 32 parcours généraux.
    - `npm run test:browser-all` : tout ce qui est lançable ; options `--famille`, `--socle`, `--jobs N`, filtre par nom.
 5. **Temporisations** : 10 attentes fixes remplacées par une attente sur condition (engagements-plateau ×4, lot4-c24, lot6-a, lot6-c, pro-q31, pro-q42) ; `fiche-writeback-browser` écoute sur un port libre (plus de conflit avec la recette sur 8766).
@@ -55,3 +55,12 @@ La famille `doublon` de l’index reste disponible, vide.
 Ces deux parcours rejouent l’ancienne révision publiée par `git show <révision>:<fichier>`.
 - `STARTUP_PREVIOUS_REVISION` : révision de référence (défaut `682d0af`). Elle doit exister dans l’historique local ; sinon le parcours échoue d’emblée avec « Révision de référence introuvable ».
 - `GIT_DIR` : lue par git lui-même ; à définir seulement si le dépôt n’est pas celui du dossier courant. Un clone superficiel ou un `GIT_DIR` erroné provoque le même message.
+
+## Parcours d'accessibilité (13/11/2026, COMP-ACCESSIB-10)
+
+`tests/accessibilite-browser.mjs`, famille « general », dans le socle (environ 5 s). Il ouvre l'application réelle à 390 px puis à 1366 px et vérifie, sur Préparer, Jouer (rencontre lancée, panneau de résolution d'une attaque ouvert), le menu ⋯, Campagne et Bibliothèque :
+- aucun débordement horizontal : la page ne défile pas en largeur, et aucun élément visible (fixe compris) ne sort de l'écran sans être rogné par un ancêtre ;
+- un nom accessible pour chaque bouton, lien, champ, menu, onglet et résumé visible, lu dans l'arbre d'accessibilité de Chromium ;
+- pour les fenêtres « Nouvelle rencontre », menu ⋯, « Rappels », « Événements / Jauges », « Temps de campagne », « Terminer le combat » et « Avancer le temps » : le focus entre à l'ouverture et revient à l'élément d'ouverture à la fermeture ; les trois dernières doivent rester modales et Tab n'en sort pas. Les fenêtres d'outil restent non modales (COMP-ACCESSIB-04).
+
+Hors périmètre, par décision du MJ : cibles tactiles de 44 px et raccourcis 1/2/3 sous une fenêtre. Un échec nomme l'écran, la largeur et l'élément. Un défaut connu non corrigé s'inscrit dans `EXCEPTIONS` en tête du fichier, liste qui ne peut que rétrécir (une exception devenue inutile fait échouer le parcours) ; elle est vide à la création.
