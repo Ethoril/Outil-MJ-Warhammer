@@ -34,11 +34,14 @@ try {
     const participants = [{ id: 'p1', name: 'Agnès', hp: 6, maxHp: 12 }, { id: 'p2', name: 'Bertin', hp: 10, maxHp: 10 }];
     const data = { state, pending, participants, calls: 0, seconds: 90061 };
     const Store = {
-      getFullJSON: () => JSON.stringify({ extensions: { v5: { gameClock: { campaignSeconds: data.seconds } } } }),
+      getCampaignSeconds: () => data.seconds,
       getAftermathState: () => structuredClone(data.state),
       listAftermathSequelae: () => ({ day: data.state.calendar.currentDay, sequelae: structuredClone(data.state.sequelae), pending: structuredClone(data.pending), incidents: [], characteristics: {} }),
       listAftermathProposals: () => [{ participantId: 'p1', effectName: 'Entaille critique', criticalId: 'c1' }],
-      listParticipants: () => structuredClone(data.participants)
+      listAftermathSubjects: () => structuredClone(data.participants),
+      listFollowedCharacterConflicts: () => [],
+      getAftermathRowLabel: () => '',
+      getAftermathSubjectPlace: () => 'aucun'
     };
     window.campaignTest = { data, view: mountCampaignWorkspace({ root: document.querySelector('#mount'), Store, onAdvanceTime: () => { data.calls++; } }) };
   }, { origin });
@@ -78,7 +81,7 @@ try {
     const { createAftermathState } = await import(`${origin}/js/core/v5-aftermath.js`);
     const { mountCampaignWorkspace } = await import(`${origin}/js/ui/campaign-workspace.js`);
     window.campaignTest.view.destroy();
-    const Store = { getFullJSON: () => JSON.stringify({ extensions: { v5: {} } }), getAftermathState: () => createAftermathState(), listParticipants: () => [], listAftermathSequelae: () => ({ sequelae: [], pending: [] }), listAftermathProposals: () => [] };
+    const Store = { getCampaignSeconds: () => null, getAftermathState: () => createAftermathState(), listAftermathSubjects: () => [], listFollowedCharacterConflicts: () => [], getAftermathRowLabel: () => '', getAftermathSubjectPlace: () => 'aucun', listAftermathSequelae: () => ({ sequelae: [], pending: [] }), listAftermathProposals: () => [] };
     window.campaignTest.empty = mountCampaignWorkspace({ root: document.querySelector('#mount'), Store });
   }, { origin });
   await expect(mount).toContainText('Aucun participant ni personnage suivi');
