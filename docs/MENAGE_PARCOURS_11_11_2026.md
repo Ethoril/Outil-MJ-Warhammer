@@ -1,12 +1,12 @@
 # Ménage des parcours navigateur — 11/11/2026
 
-Branche locale `claude/epic-goodall-210a79`, rien de poussé. Constats traités : CAMP-08, COMP-ARBITRAG-03, TESTS-07, TESTS-09, TESTS-10, HYG-12 (partie dépendances). Seuls `tests/`, `tools/`, `package.json` et `package-lock.json` ont changé.
+Fusionné dans `main` et publié en 3.46.0 (branche archivée en tag `archive/epic-goodall-210a79`). Constats traités : CAMP-08, COMP-ARBITRAG-03, TESTS-07, TESTS-09, TESTS-10, HYG-12 (partie dépendances). Ont changé : `tests/`, `tools/`, `package.json`, `package-lock.json` et, sur accord du MJ, neuf lignes de `js/ui/workspace.css`.
 
 ## État à la fin
 
 - Suite unitaire : verte, 6097 tests `.test.js` et 148 tests `.test.mjs`, 0 échec.
-- Parcours navigateur : **159 verts sur 160** lançables, chacun sous 120 s (`node tools/run-browser-journeys.mjs --jobs 4`).
-- Un rouge reste, antérieur à ce ménage : un débordement réel de l'interface en mobile, dont la correction est dans `js/ui/workspace.css` (hors périmètre). Voir « Ce qui reste ».
+- Parcours navigateur : **160 verts sur 160** lançables, chacun sous 120 s (`node tools/run-browser-journeys.mjs --jobs 4`).
+- Plus aucun rouge. Le dernier était un débordement réel de l'interface en mobile, corrigé dans `js/ui/workspace.css` : ce correctif est publié en 3.46.0 (commit 65d3808).
 
 ## Ce qui est fait
 
@@ -22,11 +22,9 @@ Branche locale `claude/epic-goodall-210a79`, rien de poussé. Constats traités 
 
 ## Ce qui reste
 
-**Un parcours rouge : défaut de l'interface, pas du test**
-- `lot2-v5-remaining-talents-browser` : à 390 px, quand la cible a le talent Petit, le panneau de résolution dépasse la fenêtre de 32 px (défilement horizontal de la page).
-  - Cause : le menu « défense » (`defense-stat`) prend la largeur de son libellé le plus long, « Petit : quitter un adversaire plus petit · 0 », soit 294 px. Avec le champ voisin, la ligne fait 365 px et ne peut pas rétrécir : la grille de `.workspace-resolution-step` n'a pas de colonne déclarée, sa piste s'étire donc à 383 px dans une boîte de 314 px.
-  - Correctif vérifié en l'injectant dans une copie du parcours, qui passe alors en entier : `.workspace-resolution-step, .workspace-defense { grid-template-columns: minmax(0, 1fr); }` et `.workspace-roll-row > select { min-width: 0; flex: 1 1 auto; }`. Non appliqué : le fichier est sous `js/`. À vérifier aussi en largeur bureau avant de publier.
-  - `min-width: 0` sur le menu seul ne suffit pas (essayé).
+**Correctif d'interface (publié en 3.46.0)**
+- `lot2-v5-remaining-talents-browser` signalait un vrai défaut : à 390 px, quand la cible a le talent Petit, le panneau de résolution dépassait la fenêtre de 32 px. Le menu de défense prenait la largeur de son libellé le plus long (294 px) et la grille de `.workspace-resolution-step`, sans colonne déclarée, s'étirait avec lui.
+- Corrigé dans `js/ui/workspace.css` : piste `minmax(0, 1fr)` sur `.workspace-resolution-step` et `.workspace-defense`, et `min-width: 0; flex: 0 1 auto` sur le menu d'une ligne de jet. Mesuré après correctif : à 390 px le menu fait 223 px et la page ne défile plus ; à 1440 px il garde ses 294 px, rendu inchangé.
 
 **Parcours restés hors du helper (9)** : serveurs à logique propre — `browser-startup` (sert une ancienne révision par git), `e04-idb-browser`, `lot1-pwa-sessions-browser`, `sw-update-fresh-cache-browser`, `divin-v5-source-browser-independent` — et quatre parcours cloud non relançables sans émulateurs (`divin-v5-cloud-browser`, `divin-v5-p4c-cloud`, `lot2-v5-25-cloud-browser`, `lot3-v5-35-cloud-browser`).
 
