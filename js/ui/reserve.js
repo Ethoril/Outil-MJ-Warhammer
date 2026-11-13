@@ -13,8 +13,8 @@ import { buildReserveProfileFromBestiary } from '../core/bestiary-profiles.js';
 import { sharedBestiaryLoader } from '../core/bestiary-loader.js';
 import { declaredMountOf, isMountCandidate } from '../core/mounts.js';
 import { syncTokenColorSelect } from './token-color-options.js';
-import { normalizeLibraryImage, tokenImageOf } from '../core/token-image.js';
-import { createTokenLibraryPicker, tokenImageCaption, tokenImageDisplaySrc, tokenThumbnail, hideOnError } from './token-image-picker.js';
+import { normalizeLibraryImage, tokenImageOf, shownTokenImageOf } from '../core/token-image.js';
+import { createTokenLibraryPicker, tokenImageCaption, tokenImageDisplaySrc, tokenThumbnail, setImageSrc } from './token-image-picker.js';
 
 
 export function initReserveUI(Store, { onSaved = () => {} } = {}) {
@@ -28,15 +28,20 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   // exclusives ; sans elles, l'image automatique du profil du bestiaire (`imageExtensions` du profil édité).
   let tokenImage = null, tokenLibraryImage = null, imageExtensions = null;
   let imageRevision = 0;
+  // Un PJ n'envoie pas d'image (CA16) : ni aperçu, ni import, ni sélecteur, une mention ; ses images enregistrées restent, le
+  // retrait reste possible. Le type se lit dans le formulaire (il peut changer pendant l'édition).
   function renderTokenImage() {
-    const resolved = tokenImageOf({ tokenImage, tokenLibraryImage, extensions: imageExtensions });
-    const preview = DOM.reserve.form.querySelector('#token-image-preview');
-    const remove = DOM.reserve.form.querySelector('#token-image-remove');
-    const source = DOM.reserve.form.querySelector('#token-image-source');
-    const src = tokenImageDisplaySrc(resolved.url);
-    if (preview) { preview.hidden = !src; if (src) preview.src = src; else preview.removeAttribute('src'); }
+    const form = DOM.reserve.form;
+    const resolved = shownTokenImageOf({ kind: form.querySelector('[name=kind]')?.value, tokenImage, tokenLibraryImage, extensions: imageExtensions });
+    const pj = resolved.source === 'map';
+    const preview = form.querySelector('#token-image-preview');
+    const remove = form.querySelector('#token-image-remove');
+    const source = form.querySelector('#token-image-source');
+    if (preview) setImageSrc(preview, tokenImageDisplaySrc(resolved.url));
     if (remove) remove.hidden = !(tokenImage || tokenLibraryImage);
     if (source) source.textContent = tokenImageCaption(resolved);
+    const select = form.querySelector('#token-image-select'); if (select) select.hidden = pj;
+    const picker = form.querySelector('#token-image-field .token-library-picker'); if (picker) picker.hidden = pj;
   }
   function setTokenImage(value) { tokenImage = value || null; if (tokenImage) tokenLibraryImage = null; renderTokenImage(); }
   function setLibraryImage(path) { tokenLibraryImage = normalizeLibraryImage(path) ?? null; if (tokenLibraryImage) tokenImage = null; renderTokenImage(); }
@@ -52,7 +57,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const actions = DOM.reserve.form.querySelector('.actions');
     DOM.reserve.form.insertBefore(meta, actions);
     const input = meta.querySelector('#token-image-file');
-    hideOnError(meta.querySelector('#token-image-preview'));
+    const preview = meta.querySelector('#token-image-preview'); preview.decoding = 'async';
     const picker = createTokenLibraryPicker({ onPick: row => {
       imageRevision++; setLibraryImage(row.path); picker.clear(); if (btnSubmit) btnSubmit.disabled = false;
       meta.querySelector('#token-image-remove')?.focus();
@@ -60,7 +65,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     meta.querySelector('#token-image-field').append(picker.element);
     syncTokenColorSelect(meta.querySelector('#token-color'), null);
     meta.querySelector('#token-image-select').addEventListener('click', () => input.click());
-    meta.querySelector('#token-image-remove').addEventListener('click', () => { imageRevision++; tokenLibraryImage = null; setTokenImage(null); if (btnSubmit) btnSubmit.disabled = false; meta.querySelector('#token-image-select')?.focus(); });
+    meta.querySelector('#token-image-remove').addEventListener('click', () => { imageRevision++; tokenLibraryImage = null; setTokenImage(null); if (btnSubmit) btnSubmit.disabled = false; const select = meta.querySelector('#token-image-select'); (select.hidden ? DOM.reserve.form.querySelector('[name=kind]') : select)?.focus(); });
+    DOM.reserve.form.querySelector('[name=kind]')?.addEventListener('change', renderTokenImage);
     input.addEventListener('change', async () => {
       const file = input.files?.[0]; input.value = '';
       if (!file) return;
@@ -276,7 +282,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const right = document.createElement('div'); right.className = 'row';
     const tags = normalizeTags(p.tags);
     left.innerHTML = `<div><strong>${escapeHtml(p.name)}</strong> <span class="muted">(${escapeHtml(p.kind)})</span>${p.favorite ? ' ⭐' : ''}</div><div class="muted" style="font-size:0.85em;">Init ${p.initiative} • PV ${p.hp}${tags.length ? ` • ${escapeHtml(tags.join(', '))}` : ''}</div>`;
-    const thumb = tokenThumbnail(tokenImageOf(p), { size: 64, alt: 'Image du pion' }); if (thumb) left.prepend(thumb);
+    const thumb = tokenThumbnail(shownTokenImageOf(p), { size: 64, alt: 'Image du pion' }); if (thumb) left.prepend(thumb);
     const btnEdit = document.createElement('button'); btnEdit.textContent = 'Éditer'; btnEdit.classList.add('ghost'); btnEdit.addEventListener('click', () => loadProfileIntoForm(p));
     const btnDup = document.createElement('button'); btnDup.textContent = 'Dupliq.'; btnDup.classList.add('ghost'); btnDup.addEventListener('click', () => Store.duplicateProfile(p.id));
     const btnFav = document.createElement('button'); btnFav.textContent = p.favorite ? '★' : '☆'; btnFav.title = 'Profil favori'; btnFav.classList.add('ghost'); btnFav.addEventListener('click', () => settle(Store.updateProfile(p.id, { favorite: !p.favorite }), 'Favori'));
@@ -335,7 +341,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     const f = DOM.reserve.form;
     lockSourceFields(p);
     f.querySelector('[name=id]').value = p.id; f.querySelector('[name=name]').value = p.name;
-    f.querySelector('[name=kind]').value = p.kind; f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
+    f.querySelector('[name=kind]').value = p.kind; renderTokenImage(); f.querySelector('[name=initiative]').value = p.initiative; f.querySelector('[name=hp]').value = p.hp;
     f.querySelector('[name=group]').value = p.group || '';
     f.querySelector('[name=cult]').value = p.cult || '';
     syncTokenColorSelect(f.querySelector('[name=tokenColor]'), p.tokenColor);
@@ -369,7 +375,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     lockSourceFields();
     DOM.reserve.form.reset();
     DOM.reserve.form.querySelector('[name=id]').value = '';
-    DOM.reserve.form.querySelector('[name=kind]').value = 'Créature';
+    DOM.reserve.form.querySelector('[name=kind]').value = 'Créature'; renderTokenImage();
     DOM.reserve.form.querySelector('[name=group]').value = '';
     DOM.reserve.form.querySelector('[name=tags]').value = '';
     DOM.reserve.form.querySelector('[name=notes]').value = '';

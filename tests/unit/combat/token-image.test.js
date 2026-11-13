@@ -217,3 +217,24 @@ test('cavalier monté transformé : formImageUrl sur son pion, rider.imageUrl re
   const reverted = revertBeastForm(rider).participant;
   assert.equal(tokenStatesOf([reverted, mount], options)['p:mage'].formImageUrl, null);
 });
+
+// Corrections de la vérification du 13/11 (défauts 1 et 2).
+test('défaut 1 : une seule règle de chemin, outil et générateur alignés (pas de %, pas d’avif, segments nommés)', async () => {
+  const { isLibraryPath } = await import('../../../tools/build-token-images.mjs');
+  const refused = ['maps/tokens/%2e%2e/%2e%2e/x.webp', 'maps/tokens/a%20b.webp', 'maps/tokens/x.avif', 'maps/tokens/a b.webp', 'maps/tokens/é.webp',
+    'maps/tokens/./x.webp', 'maps/tokens/a//b.webp', 'maps/tokens//x.webp', 'maps/tokens/a/../x.webp', 'maps/tokens/x.webp?v=1', 'maps/tokens/x.webp#a',
+    'maps/tokens/a:b.webp', 'maps/tokens\\x.webp', 'maps/tokens/' + 'a'.repeat(184) + '.webp'];
+  const accepted = ['maps/tokens/x.webp', 'maps/tokens/a-b_c.d/E9.PNG', 'maps/tokens/a..b.webp', 'maps/tokens/x.jpeg', 'maps/tokens/x.jpg', 'maps/tokens/x.gif', 'maps/tokens/' + 'a'.repeat(183) + '.webp'];
+  for (const path of refused) { assert.equal(normalizeLibraryImage(path), undefined, path); assert.equal(isLibraryPath(path), false, path); }
+  for (const path of accepted) { assert.equal(normalizeLibraryImage(path), path, path); assert.equal(isLibraryPath(path), true, path); }
+  for (const row of TOKEN_IMAGES) { assert.equal(normalizeLibraryImage(row.path), row.path, row.path); assert.equal(isLibraryPath(row.path), true, row.path); }
+});
+test('défaut 2 : un PJ montre l’image de la carte, pas celle qu’il porte (rien n’est envoyé), sans effacer ses données', async () => {
+  const { shownTokenImageOf } = await import('../../../js/core/token-image.js');
+  const pj = { id: 'p', kind: 'PJ', name: 'Elysia', hp: 10, tokenLibraryImage: 'maps/tokens/pnj/aubergiste.webp', tokenImage: imported };
+  assert.deepEqual(shownTokenImageOf(pj, table), { url: null, source: 'map' });
+  assert.equal(pj.tokenLibraryImage, 'maps/tokens/pnj/aubergiste.webp');
+  assert.equal(tokenStateOf({ id: 'x', kind: 'PJ', persistentCharacterId: 'c', name: 'E', hp: 5 }, [], { imageUrl: tokenImageOf(pj, table).url }).imageUrl, null);
+  assert.deepEqual(shownTokenImageOf({ ...pj, kind: 'PNJ' }, table), { url: imported, source: 'imported' });
+  assert.deepEqual(shownTokenImageOf({ ...fromBestiary('B-LOUP'), kind: 'Créature' }, table), { url: 'maps/tokens/bestiaire/loup.webp', source: 'auto' });
+});

@@ -7,17 +7,13 @@
  */
 import { TOKEN_IMAGES } from '../data/token-images.js';
 import { REIKLAND_BEASTS } from '../data/v5-transformation-bestiary.js';
+import { normalizeLibraryImage } from './token-library-path.js';
 
+// Règle unique du chemin de bibliothèque, partagée avec le générateur de la table.
+export { normalizeLibraryImage };
 const LIBRARY_PREFIX = 'maps/tokens/';
-const LIBRARY_PATH = /^maps\/tokens\/[^\\?#:\u0000-\u001f\u007f]+\.(?:webp|png|jpe?g|gif)$/i;
 /** Racine de Map Display vue depuis l'outil (dépôts voisins, même serveur local ou même site). */
 const MAP_DISPLAY_ROOT = '../rpg-map-display/';
-
-/** Chemin d'une image de la bibliothèque (contrat de liaison §6) : `maps/tokens/…`, sans `..`, extension d'image, ≤ 200 caractères. */
-export function normalizeLibraryImage(value) {
-  return typeof value === 'string' && value.length <= 200 && value.startsWith(LIBRARY_PREFIX) && !value.split('/').includes('..')
-    && !value.includes('//') && LIBRARY_PATH.test(value) ? value : undefined;
-}
 
 // Image importée : déjà normalisée à l'enregistrement (models.js) ; ici, seulement la forme.
 const importedImageOf = value => (typeof value === 'string' && /^data:image\/(?:webp|jpeg);base64,./.test(value) ? value : undefined);
@@ -42,6 +38,14 @@ export function tokenImageOf(profile, table = TOKEN_IMAGES) {
   const bestiaryId = profile?.extensions?.v5?.bestiary?.id;
   const auto = typeof bestiaryId === 'string' ? normalizeLibraryImage(autoIndexOf(table).get(bestiaryId)) : undefined;
   return auto ? { url: auto, source: 'auto' } : { url: null, source: null };
+}
+
+/**
+ * Image montrée dans l'outil pour un profil : celle qui partira vers la carte. Un PJ n'envoie rien (CA16), la carte garde la sienne :
+ * `{ url: null, source: 'map' }`, quelles que soient les images qu'il porte (elles restent enregistrées).
+ */
+export function shownTokenImageOf(profile, table = TOKEN_IMAGES) {
+  return profile?.kind === 'PJ' ? { url: null, source: 'map' } : tokenImageOf(profile, table);
 }
 
 /**

@@ -510,6 +510,7 @@ body:has(dialog.tool-sheet[open]) #toast-container { right: calc(clamp(480px, 50
 #token-image-preview, .token-thumb { flex: none; border-radius: 50%; object-fit: cover; }
 #token-image-preview { width: 64px; height: 64px; }
 .token-library-picker { display: grid; gap: 6px; min-width: 0; }
+.token-library-picker[hidden], .form-mount-image[hidden] { display: none; }
 .token-library-search { width: 100%; max-width: 100%; box-sizing: border-box; }
 .token-library-results { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
 .token-library-pick { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; overflow-wrap: anywhere; text-align: left; }

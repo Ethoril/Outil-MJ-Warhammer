@@ -13,6 +13,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { REIKLAND_BEASTS } from '../js/data/v5-transformation-bestiary.js';
+import { normalizeLibraryImage } from '../js/core/token-library-path.js';
 
 export const CSV = 'tools/token-images.csv';
 export const OUT = 'js/data/token-images.js';
@@ -27,12 +28,8 @@ export function slug(text) {
     .replace(/[’'`]/g, ' ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
-/** Chemin relatif sous maps/tokens/, sans `..` ni barre inverse, extension d'image, 200 caractères au plus. */
-export function isLibraryPath(value) {
-  return typeof value === 'string' && value.length <= 200 && value.startsWith('maps/tokens/')
-    && !value.includes('\\') && !value.split('/').some(part => part === '..' || part === '.' || part === '')
-    && /\.(webp|png|jpe?g|gif|avif)$/i.test(value);
-}
+/** Chemin de la bibliothèque valide : la règle de l'outil (js/core/token-library-path.js), la même à l'écriture et à l'envoi. */
+export const isLibraryPath = value => normalizeLibraryImage(value) !== undefined;
 
 /** Lignes du CSV (séparateur `;`, en-tête ignoré) → [{ path, label, profiles }]. */
 export function parseCsv(text) {

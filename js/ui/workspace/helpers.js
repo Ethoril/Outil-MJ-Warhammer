@@ -2,7 +2,7 @@ import { ResolutionError } from '../../core/resolution.js';
 import { locationProtection } from '../../core/equipment.js';
 import { userMessage } from '../messages.js';
 import { minusSigned } from '../resolution-panel/dom.js';
-import { tokenImageOf } from '../../core/token-image.js';
+import { shownTokenImageOf } from '../../core/token-image.js';
 import { tokenThumbnail, tokenImageShortCaption } from '../token-image-picker.js';
 
 export const WORKSPACE_SPACES = Object.freeze(['prepare', 'play', 'campaign', 'library']);
@@ -225,8 +225,9 @@ export function profileSummary(profile, {
   const card = node('article', 'workspace-profile-card');
   card.dataset.profileId = profile.id;
   const title = node('h3', '', profile.name || 'Sans-nom');
-  // Vignette de l'image qui partira vers la carte, quelle que soit sa provenance (images-pions, CA12) ; absente si elle ne charge pas.
-  const image = tokenImageOf(profile);
+  // Vignette de l'image qui partira vers la carte, quelle que soit sa provenance (images-pions, CA12) ; absente si elle ne charge pas,
+  // et pour un PJ, qui n'envoie rien (CA16).
+  const image = shownTokenImageOf(profile);
   const thumb = tokenThumbnail(image, { size: 48, alt: '' });
   const imageNote = tokenImageShortCaption(image);
   const meta = node('p', 'workspace-muted', `${profile.kind || 'Créature'} · Init ${profile.initiative ?? 0} · PV ${profile.hp ?? 0}${profile.favorite ? ' · ★ Favori' : ''}${imageNote ? ` · ${imageNote}` : ''}`);

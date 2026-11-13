@@ -68,6 +68,7 @@ const ASSETS_TO_CACHE = [
   './js/data/token-images.js',
   './js/data/bestiary-folders.js',
   './js/core/token-image.js',
+  './js/core/token-library-path.js',
   './js/ui/token-image-picker.js',
   './js/data/creature-abilities.js',
   './js/data/creature-trait-names.js',
