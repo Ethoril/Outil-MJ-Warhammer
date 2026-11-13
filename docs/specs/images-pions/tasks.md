@@ -10,6 +10,9 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 - [ ] **T2 — Générateur et table.** `tools/build-token-images.mjs` lit le CSV et écrit `js/data/token-images.js` (trié par chemin, LF) ; `--check` sort en code 1 si le fichier a dérivé. `form` déduit du dossier et du suffixe (`-bete` → `beasts`, `-vie` → `jade`), `beast` = clé de `v5-transformation-bestiary.js`.
   Fichiers : `tools/build-token-images.mjs`, `js/data/token-images.js`, `tests/unit/donnees/token-images.test.mjs`. CA : 20, 22. Après : T1 relu.
   Acceptation : `node --test tests/unit/donnees/token-images.test.mjs` (ids existants, un profil dans une seule image, 18 formes sur 9 clés connues, `--check` vert).
+- [ ] **T2b — Illustrations à créer.** `tools/list-missing-token-images.mjs` écrit `docs/specs/images-pions/illustrations-a-creer.md` : profils du bestiaire sans image, regroupés par créature puis classés par dossiers de la bibliothèque ; individus nommés à part ; bêtes de Forme bestiale et monstres de transformation sans image. Le classement par dossier (faction) qui ne se déduit pas des données est tranché au jugement dans un fichier relu par le MJ (`tools/token-images-categories.csv`).
+  Fichiers : `tools/list-missing-token-images.mjs`, `tools/token-images-categories.csv`, `docs/specs/images-pions/illustrations-a-creer.md`. CA : 26, 27. Après : T2.
+  Acceptation : relancer la commande sans changement ne modifie rien ; aucun profil apparié n'y figure ; tout profil non apparié y figure une fois.
 
 ## Lot 2 — Outil MJ
 

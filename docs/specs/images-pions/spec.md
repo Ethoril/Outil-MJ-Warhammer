@@ -73,6 +73,11 @@ Cadrage du 13/11/2026, sur `42d6965` (prod 3.47.1). Origine : [docs/CONSTAT_IMAG
 - **CA24.** En séance, une image de bibliothèque absente n'empêche ni l'envoi de l'état ni l'affichage du pion : il apparaît sans image.
 - **CA25.** Le contrat de liaison entre l'outil et la carte décrit la nouvelle forme d'image admise ; ses deux copies (outil, carte) restent identiques.
 
+### S9 — Illustrations à créer (ajout du MJ, 13/11/2026)
+
+- **CA26.** Le MJ reçoit la liste des illustrations qui manquent à la bibliothèque, classée par dossiers (les catégories de `maps/tokens/` : `bestiaire`, `ennemis/<faction>`, `monstres`, `destriers`, `bestiaire/forme-bestiale`…), pour les faire créer. Chaque entrée donne le nom de fichier proposé (celui qui s'appariera tout seul), le nom français, le nom anglais, les livres et pages, et le nombre de profils couverts. Une créature présente dans plusieurs livres n'y figure qu'une fois.
+- **CA27.** La liste est produite par une commande déterministe à partir du bestiaire et de la table ; la relancer après l'ajout d'images la met à jour. Les individus nommés (PNJ des scénarios) sont séparés des créatures génériques ; les bêtes de Forme bestiale sans image et les monstres de l'autre sort de transformation y figurent dans leur dossier.
+
 ## Hors périmètre
 
 - Relever le plafond de 24 Kio ou le cumul de 512 Kio par campagne des images embarquées.
