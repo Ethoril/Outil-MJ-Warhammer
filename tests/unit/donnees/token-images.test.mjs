@@ -10,7 +10,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { TOKEN_IMAGES } from '../../../js/data/token-images.js';
 import { REIKLAND_BEASTS } from '../../../js/data/v5-transformation-bestiary.js';
-import { buildTable, parseCsv, isLibraryPath } from '../../../tools/build-token-images.mjs';
+import { buildTable, parseCsv, isLibraryPath, slug } from '../../../tools/build-token-images.mjs';
+import { generate, buildMissing, parseCategories, loadBestiary } from '../../../tools/list-missing-token-images.mjs';
 
 const racine = fileURLToPath(new URL('../../../', import.meta.url));
 const dossierBestiaire = join(racine, 'js/data/bestiary');
@@ -103,4 +104,40 @@ test('table à jour du CSV (--check vert) ; --check rouge sans rien écrire sur 
   const genere = readFileSync(join(racine, 'js/data/token-images.js'), 'utf8');
   assert.ok(!genere.includes('\r'));
   assert.match(genere.split('\n')[0], /fichier généré.*ne pas modifier à la main/i);
+});
+
+test('illustrations à créer : chaque profil sans image y figure une fois, aucun profil illustré (CA26)', () => {
+  const { missing } = generate(racine);
+  const listes = missing.entries.flatMap(e => e.profileIds);
+  assert.equal(new Set(listes).size, listes.length, 'un profil listé deux fois');
+  const illustres = new Set(TOKEN_IMAGES.flatMap(image => image.profiles));
+  const attendus = [...profils.values()].filter(p => p.kind !== 'template' && !illustres.has(p.id)).map(p => p.id).sort();
+  assert.deepEqual([...listes].sort(), attendus);
+  for (const e of missing.entries) assert.match(e.file, /^[a-z0-9-]+(\/[a-z0-9-]+)*\/[a-z0-9-]+\.webp$/);
+  assert.equal(missing.forms.length, 0, 'les 9 bêtes de Forme bestiale ont leurs deux images');
+  assert.equal(missing.kadon.length, 9);
+});
+
+test('classement : une ligne par créature du bestiaire, appariée ou non (CA33)', () => {
+  const categories = parseCategories(readFileSync(join(racine, 'tools/token-images-categories.csv'), 'utf8'));
+  const sansClasse = [...profils.values()].filter(p => p.kind !== 'template')
+    .map(p => slug(p.nameFr)).filter(cle => !categories.has(cle));
+  assert.deepEqual(sansClasse, []);
+});
+
+test('illustrations à créer : échoue sur une créature sans image non classée ; classement invalide refusé', () => {
+  const livres = [{ book: 'L99', profiles: [{ id: 'X1', book: 'L99', page: 1, kind: 'profile', nameFr: 'Bête inconnue', name: 'Unknown' }] }];
+  assert.throws(() => buildMissing({ books: livres, table: [], categories: new Map() }), /bete-inconnue/);
+  const ok = buildMissing({ books: livres, table: [], categories: parseCategories('en-tête\nbete-inconnue;monstres;non;\n') });
+  assert.deepEqual(ok.entries.map(e => [e.file, e.profileIds]), [['monstres/bete-inconnue.webp', ['X1']]]);
+  assert.throws(() => parseCategories('en-tête\nx;Monstres;non;\n'), /dossier invalide/);
+  assert.throws(() => parseCategories('en-tête\nx;monstres;peut-être;\n'), /oui ou non/);
+  assert.throws(() => parseCategories('en-tête\nx;monstres;non;\nx;bestiaire;non;\n'), /deux fois/);
+  assert.ok(loadBestiary(racine).length > 0);
+});
+
+test('illustrations à créer : --check vert, liste en LF', () => {
+  const vert = lancer('tools/list-missing-token-images.mjs', ['--check']);
+  assert.equal(vert.status, 0, vert.stdout + vert.stderr);
+  assert.ok(!readFileSync(join(racine, 'docs/specs/images-pions/illustrations-a-creer.md'), 'utf8').includes('\r'));
 });
