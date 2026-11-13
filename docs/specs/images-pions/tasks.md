@@ -44,6 +44,21 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
   Fichiers carte : `js/core/schema.js`, `js/core/types.js`, `js/app/mjLink.js`, `js/render/layers/tokens.js` et autres lecteurs d'image, tests. CA : 17, 18. Après : T7.
   Acceptation : tests unitaires de la carte ciblés (`mjLink`, schéma, rendu).
 
+## Lot 5 — Profils des images sans profil
+
+- [ ] **T12 — Créer les profils manquants.** [P avec le lot 2] Pour chaque image à `aucun` qui est une créature ou un PNJ : chercher le profil dans le corpus (texte extrait d'abord ; Gemini Decisions sur les pages si le texte ne suffit pas), l'ajouter par la chaîne existante du bestiaire, l'apparier dans `tools/token-images.csv` et régénérer la table et la liste des illustrations. Ce qui reste introuvable part en questions au MJ.
+  Fichiers : `tools/lib/bestiary-*.mjs`, `js/data/bestiary/`, `tools/token-images.csv`, `js/data/token-images.js`, `docs/specs/images-pions/illustrations-a-creer.md`, `docs/specs/images-pions/questions-profils.md`. CA : 28, 29, 30. Après : T2b.
+  Acceptation : `node tools/verify-bestiary-stats.mjs`, tests ciblés du bestiaire et `tests/unit/donnees/token-images.test.mjs` verts ; chaque profil créé cite livre et page.
+
+## Lot 6 — Bestiaire en dossiers
+
+- [ ] **T13 — Classement de tout le bestiaire.** `tools/token-images-categories.csv` couvre toutes les créatures (appariées ou non) ; un générateur écrit `js/data/bestiary-folders.js` (id de profil → dossier, libellés français des dossiers), avec `--check`.
+  Fichiers : `tools/token-images-categories.csv`, `tools/build-bestiary-folders.mjs`, `js/data/bestiary-folders.js`, test dans `tests/unit/donnees/`. CA : 33. Après : T12.
+  Acceptation : test (chaque profil dans un seul dossier, aucun sans classement, `--check` vert).
+- [ ] **T14 — Navigation par dossiers.** Arborescence, compteurs, fil d'Ariane, « À classer », recherche et filtres bornés au dossier ouvert, clavier et noms accessibles.
+  Fichiers : `js/ui/bestiary-library.js`, `js/core/bestiary-profiles.js` (filtre par dossier, pur), `index.html`, `css/`, tests unitaires du filtre, test navigateur du bestiaire. CA : 31, 32, 34. Après : T13, lot 2 (mêmes fichiers d'interface).
+  Acceptation : tests unitaires ciblés ; test navigateur sous `timeout 120` ; parcours d'accessibilité vert.
+
 ## Clôture
 
 - [ ] **T10 — Recette locale.** `node tools/serve-liaison.mjs` : loup du bestiaire (auto), PNJ avec image choisie > 24 Kio, monture avec destrier nommé, PJ en Forme bestiale des deux vents puis retour. Captures à l'appui.

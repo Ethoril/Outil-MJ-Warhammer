@@ -78,6 +78,19 @@ Cadrage du 13/11/2026, sur `42d6965` (prod 3.47.1). Origine : [docs/CONSTAT_IMAG
 - **CA26.** Le MJ reçoit la liste des illustrations qui manquent à la bibliothèque, classée par dossiers (les catégories de `maps/tokens/` : `bestiaire`, `ennemis/<faction>`, `monstres`, `destriers`, `bestiaire/forme-bestiale`…), pour les faire créer. Chaque entrée donne le nom de fichier proposé (celui qui s'appariera tout seul), le nom français, le nom anglais, les livres et pages, et le nombre de profils couverts. Une créature présente dans plusieurs livres n'y figure qu'une fois.
 - **CA27.** La liste est produite par une commande déterministe à partir du bestiaire et de la table ; la relancer après l'ajout d'images la met à jour. Les individus nommés (PNJ des scénarios) sont séparés des créatures génériques ; les bêtes de Forme bestiale sans image et les monstres de l'autre sort de transformation y figurent dans leur dossier.
 
+### S10 — Profils des images sans profil (ajout du MJ, 13/11/2026)
+
+- **CA28.** Chaque image de la bibliothèque qui représente une créature ou un PNJ et n'a aucun profil du bestiaire (hors PJ, formes bestiales et destriers nommés, qui relèvent de Q6) reçoit un profil, apparié à l'image ; à défaut elle figure dans une liste de questions posées au MJ, avec ce qui manque.
+- **CA29.** Un profil créé ne contient que des valeurs imprimées dans un livre du corpus (livre et page cités) ou données par le MJ. Rien n'est inventé ni extrapolé.
+- **CA30.** Les profils créés passent par la chaîne existante du bestiaire (extraction, corrections relues, vérification des caractéristiques), apparaissent dans la Bibliothèque de bestiaire et se copient en réserve comme les autres.
+
+### S11 — Bestiaire en dossiers (ajout du MJ, 13/11/2026)
+
+- **CA31.** La Bibliothèque de bestiaire de l'outil se parcourt par dossiers, les mêmes que ceux de la bibliothèque d'images (`bestiaire`, `ennemis` › faction, `monstres`, `destriers`, PNJ nommés par livre) : ouvrir un dossier montre ses sous-dossiers et ses profils, avec leur nombre ; un fil d'Ariane permet de remonter.
+- **CA32.** La recherche par nom et les filtres existants (livre, genre, mot-clé) restent disponibles et portent sur le dossier ouvert ; depuis la racine, sur tout le bestiaire.
+- **CA33.** Chaque profil est dans un seul dossier, d'après le classement unique relu par le MJ (celui de CA26). Un profil sans classement apparaît dans « À classer » au lieu de disparaître.
+- **CA34.** La navigation par dossiers se fait au clavier et porte des noms accessibles ; le parcours d'accessibilité existant reste vert.
+
 ## Hors périmètre
 
 - Relever le plafond de 24 Kio ou le cumul de 512 Kio par campagne des images embarquées.
