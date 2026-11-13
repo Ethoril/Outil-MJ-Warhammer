@@ -106,3 +106,12 @@ Réponses possibles :
 2. Approché : Cultiste (L06 p. 347, E0-P-104) pour les huit.
 3. Approché : Cultiste humain (L20 p. 218, E0-P-657) pour les huit.
 4. Pas de profil : les images restent à choisir à la main.
+
+## Réponses du MJ (13/11/2026)
+
+- **Q1 Démons** : le MJ ajoute au corpus un livre V2, le *Tome de la Corruption*, qui contient de nombreux démons. Les profils sont à retravailler pour être compatibles V5, comme cela a été fait pour les montures.
+- **Q5 Khemri** : le MJ a ajouté *Le Seigneur liche*, autre livre V2, à traiter comme le Tome de la Corruption.
+- **Profil secondaire V2** (donné par le MJ) : A = nombre d'attaques par round ; B = blessures ; BF = bonus de Force ; BE = bonus d'Endurance ; M = mouvement ; Mag = aptitude magique (obsolète, à ne pas regarder) ; PF = points de folie (obsolète, à ne pas regarder) ; PD = points de destin.
+- **Q2 à Q4 Variantes de troupe** (Gobelin archer, Ogre crache-plomb, Orc kostaud) : les profils communs de base conviennent, mais il faut adapter les armes.
+- **Q6 Vampires pirates** : profils maison copiés du Vampire (L06 p. 343) pour le capitaine et du Zombie (L06 p. 340) pour le zombie flibustier.
+- **Pas encore posées au MJ** : Q7 (vampire lahmiane), Q8 (Fausse Hydre), Q9 (Fils d'Ulric), Q10 (Main pourpre).
