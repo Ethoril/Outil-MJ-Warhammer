@@ -10,6 +10,7 @@
     "test:browser-general": "node tools/run-browser-journeys.mjs --famille general",
     "test:fiches-browser": "node tests/fiches-pj-browser.mjs",
     "test:firebase-v3": "node tests/firebase-rules-v3-emulator.mjs",
+    "test:firebase-emulators": "firebase emulators:exec --only auth,database --project demo-outil-mj --non-interactive \"node tests/firebase-rules-v3-emulator.mjs && node tests/cloud-sparse-v2-emulator.mjs\"",
     "test:references-browser": "node tests/browser-references-smoke.mjs",
     "test:pwa-sessions": "node tests/lot1-pwa-sessions-browser.mjs",
     "test:startup": "node tests/browser-startup.mjs",

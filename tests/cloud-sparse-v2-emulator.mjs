@@ -8,7 +8,7 @@ import { indexedDB } from 'fake-indexeddb';
 import { createPersistence } from '../js/core/persistence.js';
 import { createStore } from '../js/core/store.js';
 import { createSyncSession } from '../js/core/sync-session.js';
-import { migrateSnapshot } from '../js/core/migrations.js';
+import { migrateSnapshot, CURRENT_SCHEMA_VERSION } from '../js/core/migrations.js';
 import { migrateV2SyncDocument, createMigratingTransport } from '../js/core/sync-migration.js';
 function local(raw) {
   const url = new URL('http://' + raw);
@@ -60,7 +60,7 @@ try {
   assert.equal(migrated.state.combat.participants[0].id, dense.state.combat.participants[0].id);
   const transport = createMigratingTransport({ current: currentPath, legacy: legacyPath, read, transact, subscribe: () => () => {} });
   const remote = await transport.read();
-  assert.equal(remote.state.schemaVersion, 3); assert.equal(remote.revision, 5);
+  assert.equal(remote.state.schemaVersion, CURRENT_SCHEMA_VERSION); assert.equal(remote.revision, 5);
   assert.equal(Object.hasOwn(remote.state, 'reserve'), false, 'new v3 roundtrip also omits []');
   assert.equal(migrations, 1);
   assert.deepEqual(await read(legacyPath), source, 'original v2 unchanged');
