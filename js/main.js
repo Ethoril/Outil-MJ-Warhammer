@@ -11,7 +11,8 @@ import { createCombatEngine } from './core/combat.js';
 import { d100 } from './core/dice.js';
 import { initReserveUI } from './ui/reserve.js';
 import { createBestiaryLibrary } from './ui/bestiary-library.js';
-import { createBestiaryLoader, registerSummonLibrary, buildReserveProfileFromBestiary } from './core/bestiary-profiles.js';
+import { registerSummonLibrary, buildReserveProfileFromBestiary } from './core/bestiary-profiles.js';
+import { sharedBestiaryLoader } from './core/bestiary-loader.js';
 import { initImportModalUI } from './ui/import-modal.js';
 import { initCardUI } from './ui/card.js';
 import { initCombatViewUI } from './ui/combat-view.js';
@@ -306,7 +307,7 @@ const reserveUI = initReserveUI(Store, { onSaved: payload => {
 const bestiaryLibrary = createBestiaryLibrary({ container: qs('#bestiary-library-body'), store: Store, notify: (message, type = 'info') => showToast(message, type) });
 qs('#bestiary-library').addEventListener('toggle', event => { if (event.target.open) bestiaryLibrary.open(); });
 // Les sorts d'invocation (Relever les morts, Réanimation, Manifestation de Démon Mineur) lisent leurs profils dans L06.
-createBestiaryLoader(async path => { const response = await fetch(path); if (!response.ok) throw new Error(`${path} : ${response.status}`); return response.json(); })
+sharedBestiaryLoader()
   .book('L06').then(registerSummonLibrary).catch(error => console.warn('Profils d’invocation (L06) indisponibles', error));
 const importModalUI = initImportModalUI(Store);
 const cardUI = initCardUI(Store, Combat);
@@ -1079,7 +1080,7 @@ async function openFicheSyncView() {
         // Familiers déclarés par la fiche : profil type du bestiaire (homoncules L17, animaux L02), nom français.
         familiarProfiles: async familiars => {
           const { ficheFamiliarTemplate } = await import('./core/fiche-sync.js');
-          const loader = createBestiaryLoader(async path => { const response = await fetch(path); if (!response.ok) throw new Error(`${path} : ${response.status}`); return response.json(); });
+          const loader = sharedBestiaryLoader();
           const profiles = {};
           for (const familiar of familiars) {
             const template = ficheFamiliarTemplate(familiar);

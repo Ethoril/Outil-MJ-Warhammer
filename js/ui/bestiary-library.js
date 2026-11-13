@@ -2,7 +2,8 @@
  * Bibliothèque de profils de bestiaire : liste filtrable (livre, nom, mot-clé avec descendants), fiche en lecture seule,
  * ajout au combat (un ou plusieurs exemplaires) et copie dans la Réserve. Les données se chargent à la demande, livre par livre.
  */
-import { BESTIARY_STAT_KEYS, armourDetailNamesZones, bestiarySpellLines, buildParticipantFromBestiary, buildReserveProfileFromBestiary, createBestiaryLoader, filterBestiary, unvaluedSkillNames } from '../core/bestiary-profiles.js';
+import { BESTIARY_STAT_KEYS, armourDetailNamesZones, bestiarySpellLines, buildParticipantFromBestiary, buildReserveProfileFromBestiary, filterBestiary, unvaluedSkillNames } from '../core/bestiary-profiles.js';
+import { sharedBestiaryLoader } from '../core/bestiary-loader.js';
 import { keywordMatches, keywordTree } from '../core/creature-keywords.js';
 import { CAMP_LABELS } from '../core/encounters.js';
 import { Participant, Profile } from '../core/models.js';
@@ -10,7 +11,6 @@ import { Participant, Profile } from '../core/models.js';
 const el = (tag, text, className = '') => { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; };
 const MAX_ROWS = 100;
 const KIND_LABELS = { profile: 'Profil', template: 'Gabarit', 'pregenerated-character': 'Prétiré' };
-const fetchJson = async path => { const response = await fetch(path); if (!response.ok) throw new Error(`${path} : ${response.status}`); return response.json(); };
 
 const printed = value => (value === null || value === undefined ? '—' : String(value));
 
@@ -41,7 +41,7 @@ export function renderBestiarySheet(record, referential) {
 /**
  * `store` : le Store de l'application. `loader` : injectable pour les tests. Renvoie `{ open, refresh }`.
  */
-export function createBestiaryLibrary({ container, store, loader = createBestiaryLoader(fetchJson), notify = () => {} } = {}) {
+export function createBestiaryLibrary({ container, store, loader = sharedBestiaryLoader(), notify = () => {} } = {}) {
   if (!container) throw new TypeError('Conteneur de la bibliothèque manquant');
   const bookSelect = el('select'), kindSelect = el('select'), keywordSelect = el('select'), textInput = el('input');
   bookSelect.setAttribute('aria-label', 'Livre'); kindSelect.setAttribute('aria-label', 'Genre'); keywordSelect.setAttribute('aria-label', 'Mot-clé'); textInput.setAttribute('aria-label', 'Nom du profil');
