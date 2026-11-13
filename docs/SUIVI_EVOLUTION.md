@@ -10,6 +10,19 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.47.2 — Reliquat de l’audit du 08/11 tranché le 13/11 : accessibilité gardée par un parcours, Campagne, bestiaire, hygiène des tests (13/11/2026)
+
+Rien de visible à la table.
+
+- `COMP-ACCESSIB-10` : parcours `tests/accessibilite-browser.mjs` dans le socle (16 parcours) : débordement à 390 px et en bureau, noms accessibles, focus des fenêtres, sur Préparer, Jouer, Campagne et Bibliothèque ; aucun défaut trouvé, liste d’exceptions vide.
+- `CAMP-04` : l’écran Campagne lit l’horloge par `Store.getCampaignSeconds()` ; gardes `typeof` retirées. Les autres appels à `getFullJSON` (`ARCH-07`) restent, décision du MJ.
+- `CAMP-12` : statut, résumé et regroupement des personnes de Campagne en fonctions pures testées, `js/ui/campaign-model.js`.
+- `COMP-ZONESNON-06` : un seul chargeur de bestiaire, `js/core/bestiary-loader.js`. L’onglet des montures charge encore tous les livres : l’index ne dit pas lesquels contiennent des montures.
+- Parcours : `lot2-v5-25-release-browser` et `f2-j-review-browser` retirés (doublons) ; `recette-g-c20-browser` et `lot2-v5-23-control-browser` gardés.
+- `TESTS-05` : preuves du test des prières copiées dans `tests/fixtures/divin-sources/`. `TESTS-11` : scripts npm de lots clos retirés. `COMP-ARBITRAG-02` : `browser-startup` échoue en nommant la cause si la révision de référence manque. `COMP-DEPLOIEM-03` : `npm run test:firebase-emulators`.
+- Laissés sur décision du MJ : `ARCH-06`, `ARCH-09`, `ARCH-13`. Clos sans objet : `TESTS-03`, `COMP-DEPLOIEM-06`.
+- Preuves : suite unitaire 6224 + 159, socle navigateur 16/16.
+
 ## 3.47.1 — Doublons du moteur supprimés, Précise = Pointue (13/11/2026)
 
 - `REGLES-02` : un seul choix « DR ou Désavantage » pour les pénalités d’États.
