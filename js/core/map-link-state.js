@@ -113,8 +113,9 @@ const isPjMount = (participant, participants) => {
  * (option `maxHp`) ; à défaut, le maximum retombe sur les PV courants. `color` (`#rrggbb`, `tokenColor` du profil, ou
  * du cavalier pour une monture, voir `tokenStatesOf`) n'est renseigné que pour un PJ ou la monture d'un PJ : la teinte de
  * son cerclage sur la carte. Il part toujours, `null` sinon, pour que la carte efface la teinte d'une monture démontée.
+ * `formImageUrl` (image de Forme bestiale, PJ compris) part toujours aussi : chemin, ou `null` pour retrouver l'image d'avant.
  */
-export function tokenStateOf(participant, participants = [], { maxHp = null, imageUrl = null, color = null } = {}) {
+export function tokenStateOf(participant, participants = [], { maxHp = null, imageUrl = null, color = null, formImageUrl = null } = {}) {
   const pj = participant.kind === 'PJ';
   const current = Number(participant.hp) || 0;
   const max = Number(maxHp ?? participant.maxHp) > 0 ? Number(maxHp ?? participant.maxHp) : Math.max(current, 1);
@@ -125,6 +126,7 @@ export function tokenStateOf(participant, participants = [], { maxHp = null, ima
     kind: pj || isPjMount(participant, participants) ? 'pc' : 'npc',
     visionSource: pj,
     imageUrl: pj ? null : imageUrl,
+    formImageUrl: formImageUrl ?? null,
     color: pj || isPjMount(participant, participants) ? normalizeTokenColor(color) ?? null : null,
     sizeCells: SIZE_CELLS[creatureSizeOf(participant).key] ?? 1,
     ...rangeCellsOf(participant),
@@ -161,7 +163,7 @@ export function tokenStatesOf(participants = [], options = {}) {
   const colorOf = participant => normalizeTokenColor(options.colorOf?.(participant))
     ?? (v5Of(participant).mountOf ? normalizeTokenColor(options.colorOf?.(byId.get(v5Of(participant).mountOf) ?? {})) : undefined) ?? null;
   const stateOf = participant => tokenStateOf(participant, participants, { maxHp: options.maxHpOf?.(participant) ?? null, imageUrl: options.imageUrlOf?.(participant) ?? null,
-    color: colorOf(participant) });
+    formImageUrl: options.formImageUrlOf?.(participant) ?? null, color: colorOf(participant) });
   return Object.fromEntries(participants.map(participant => {
     const state = stateOf(participant);
     const mount = v5Of(participant).mounted === true ? byId.get(v5Of(participant).mountId) : null;

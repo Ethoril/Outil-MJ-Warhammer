@@ -6,6 +6,7 @@
  * Ne dépend pas de models.js (qui importe d'ici `normalizeLibraryImage`).
  */
 import { TOKEN_IMAGES } from '../data/token-images.js';
+import { REIKLAND_BEASTS } from '../data/v5-transformation-bestiary.js';
 
 const LIBRARY_PREFIX = 'maps/tokens/';
 const LIBRARY_PATH = /^maps\/tokens\/[^\\?#:\u0000-\u001f\u007f]+\.(?:webp|png|jpe?g|gif)$/i;
@@ -69,4 +70,24 @@ const fold = value => String(value ?? '').toLocaleLowerCase().normalize('NFD').r
 export function searchTokenImages(query, table = TOKEN_IMAGES, { limit = Infinity } = {}) {
   const wanted = fold(query).trim();
   return (table || []).filter(row => !wanted || fold(row.label).includes(wanted) || fold(row.path.slice(LIBRARY_PREFIX.length)).includes(wanted)).slice(0, limit);
+}
+
+// Forme bestiale (S6) : la forme garde le profil de la bête (copie de REIKLAND_BEASTS[clé]), pas sa clé ; on la retrouve par le nom.
+const BEAST_KEY_BY_NAME = new Map(Object.entries(REIKLAND_BEASTS).map(([key, beast]) => [beast.name, key]));
+/** Vent d'une Forme bestiale : `wind` écrit à la transformation, sinon `isJade` (déjà enregistré avant), sinon Vent des Bêtes. */
+const formWindOf = form => (form.wind === 'beasts' || form.wind === 'jade' ? form.wind : form.isJade === true ? 'jade' : 'beasts');
+
+/**
+ * Image de forme (`formImageUrl`, contrat §4) d'un participant sous Forme bestiale : celle de la table pour sa bête et le vent
+ * du sort lancé. `null` hors forme, pour la Transformation de Kadon (hors périmètre) et pour une bête sans image dans ce vent
+ * (CA19 : le pion reste inchangé).
+ */
+export function formImageOf(participant, table = TOKEN_IMAGES) {
+  const form = participant?.extensions?.v5?.beastForm;
+  if (!form || typeof form !== 'object' || form.kind === 'kadon') return null;
+  const beast = BEAST_KEY_BY_NAME.get(form.beastProfile?.name ?? form.name);
+  if (!beast) return null;
+  const wind = formWindOf(form);
+  const row = (table || []).find(item => item?.form?.beast === beast && item.form.wind === wind);
+  return normalizeLibraryImage(row?.path) ?? null;
 }

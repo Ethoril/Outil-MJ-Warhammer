@@ -104,3 +104,116 @@ test('participant sans profil de Réserve (ajouté depuis le bestiaire) : sa pro
   assert.equal(participantTokenImageUrl(participant, () => undefined), loup.path);
   assert.equal(participantTokenImageUrl({ id: 'y', kind: 'PNJ', profileId: 'p', name: 'Y', hp: 3 }, () => ({ tokenImage: imported })), imported);
 });
+
+// S6 — Formes bestiales (T8, CA17-CA19) : image de forme selon la bête et le vent du sort lancé, champ `formImageUrl` séparé.
+const { formImageOf } = await import('../../../js/core/token-image.js');
+const { BEAST_PROFILES, applyBeastForm, revertBeastForm } = await import('../../../js/core/v5-magic-arbitrations.js');
+const { createMapLink } = await import('../../../js/core/map-link.js');
+const { sanitizeParticipant } = await import('../../../js/core/sanitize.js');
+const mage = (id = 'mage', extra = {}) => ({ id, name: id, kind: 'PJ', camp: 'pj', hp: 30, maxHp: 30, fortune: 2, zone: 'active', init: 50,
+  caracs: { CC: 40, CT: 40, F: 30, E: 30, Int: 52, FM: 45, Ag: 40, I: 40, Dex: 40, Soc: 31, M: 4 },
+  skills: [{ name: 'Langue (Magick)', total: 60 }, { name: 'Focalisation', total: 60 }], talents: [], states: [], equipment: [],
+  armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: { channelling: { type: 'winds', sl: 20 } } }, ...extra });
+const transformed = (beastKey, options = {}, base = mage()) => applyBeastForm(base, BEAST_PROFILES[beastKey], options).participant;
+const formPath = (beast, wind) => TOKEN_IMAGES.find(row => row.form?.beast === beast && row.form.wind === wind)?.path;
+
+test('CA17 : vent des Bêtes → variante -bete, vent de Jade → variante -vie, écrit à la transformation', () => {
+  const beasts = transformed('wolf');
+  assert.equal(beasts.extensions.v5.beastForm.wind, 'beasts');
+  assert.equal(formImageOf(beasts), 'maps/tokens/bestiaire/forme-bestiale/loup-bete.webp');
+  const jade = transformed('wolf', { isJade: true });
+  assert.equal(jade.extensions.v5.beastForm.wind, 'jade');
+  assert.equal(formImageOf(jade), 'maps/tokens/bestiaire/forme-bestiale/loup-vie.webp');
+  for (const key of Object.keys(BEAST_PROFILES)) for (const [isJade, wind] of [[false, 'beasts'], [true, 'jade']]) {
+    assert.equal(formImageOf(transformed(key, { isJade })), formPath(key, wind) ?? null, `${key} ${wind}`);
+  }
+  assert.equal(sanitizeParticipant(jade).extensions.v5.beastForm.wind, 'jade', 'le vent survit à la normalisation');
+});
+
+test('vent absent (transformation commencée avant cette version) lu au point de lecture, sans réécrire la forme', () => {
+  const old = transformed('bear');
+  delete old.extensions.v5.beastForm.wind;
+  delete old.extensions.v5.beastForm.isJade;
+  const before = structuredClone(old);
+  assert.equal(formImageOf(old), 'maps/tokens/bestiaire/forme-bestiale/ours-bete.webp', 'absent = Vent des Bêtes');
+  assert.deepEqual(old, before, 'aucune réécriture');
+  const oldJade = transformed('bear', { isJade: true });
+  delete oldJade.extensions.v5.beastForm.wind;
+  assert.equal(formImageOf(oldJade), 'maps/tokens/bestiaire/forme-bestiale/ours-vie.webp', 'isJade, déjà enregistré avant, désigne le Vent de Jade');
+  const bad = transformed('bear');
+  bad.extensions.v5.beastForm.wind = 'ghur';
+  assert.equal(formImageOf(bad), 'maps/tokens/bestiaire/forme-bestiale/ours-bete.webp', 'valeur inconnue lue comme absente');
+});
+
+test('CA19 et hors périmètre : null hors forme, pour Kadon et pour une bête sans image dans ce vent', () => {
+  assert.equal(formImageOf(mage()), null);
+  assert.equal(formImageOf(null), null);
+  assert.equal(formImageOf(undefined), null);
+  const kadon = transformed('wolf');
+  kadon.extensions.v5.beastForm.kind = 'kadon';
+  assert.equal(formImageOf(kadon), null, 'Transformation de Kadon : pas d’image de forme');
+  const onlyBeastsWolf = TOKEN_IMAGES.filter(row => row.form?.beast === 'wolf' && row.form.wind === 'beasts');
+  assert.equal(formImageOf(transformed('wolf'), onlyBeastsWolf), 'maps/tokens/bestiaire/forme-bestiale/loup-bete.webp');
+  assert.equal(formImageOf(transformed('wolf', { isJade: true }), onlyBeastsWolf), null, 'pas de variante Jade : pion inchangé');
+  assert.equal(formImageOf(transformed('horse'), onlyBeastsWolf), null, 'bête sans image : pion inchangé');
+  const custom = applyBeastForm(mage(), { ...BEAST_PROFILES.wolf, name: 'Loup-garou maison' }).participant;
+  assert.equal(formImageOf(custom), null, 'profil saisi hors Bêtes du Reikland');
+  const state = tokenStatesOf([transformed('horse')], { formImageUrlOf: participant => formImageOf(participant, onlyBeastsWolf) });
+  assert.equal(Object.values(state)[0].formImageUrl, null, 'CA19 : formImageUrl null, la carte garde son image');
+});
+
+test('formImageUrl toujours présent dans token.state : chemin ou null, PJ compris ; imageUrl d’un PJ toujours non envoyé', () => {
+  const pnj = { id: 'g', kind: 'PNJ', name: 'G', hp: 5 };
+  assert.equal(tokenStateOf(pnj).formImageUrl, null);
+  assert.ok(Object.hasOwn(tokenStateOf(pnj), 'formImageUrl'));
+  assert.equal(tokenStateOf(pnj, [], { formImageUrl: 'maps/tokens/bestiaire/forme-bestiale/loup-bete.webp' }).formImageUrl, 'maps/tokens/bestiaire/forme-bestiale/loup-bete.webp');
+  const pj = transformed('wolf', { isJade: true }, mage('mage', { persistentCharacterId: 'c-mage' }));
+  const states = tokenStatesOf([pj, pnj], { imageUrlOf: () => imported, formImageUrlOf: participant => formImageOf(participant) });
+  assert.equal(states['pj:c-mage'].formImageUrl, 'maps/tokens/bestiaire/forme-bestiale/loup-vie.webp', 'CA17 : vaut pour un PJ');
+  assert.equal(states['pj:c-mage'].imageUrl, null, 'CA16 : l’image d’un PJ reste celle de la carte');
+  assert.equal(states['p:g'].formImageUrl, null);
+  assert.ok(Object.hasOwn(tokenStatesOf([pnj])['p:g'], 'formImageUrl'), 'sans option, null');
+});
+
+test('CA17-CA18 de bout en bout : sort réellement lancé, envoi à la transformation, null au retour', async () => {
+  const { createStore } = await import('../../../js/core/store.js');
+  for (const [spell, wind, path] of [['Forme bestiale', 'beasts', 'maps/tokens/bestiaire/forme-bestiale/loup-bete.webp'],
+    ['Forme bestiale - Jade', 'jade', 'maps/tokens/bestiaire/forme-bestiale/loup-vie.webp']]) {
+    const listeners = new Map();
+    const bus = { emit: event => (listeners.get(event) || []).forEach(fn => fn()), on: (event, fn) => listeners.set(event, [...(listeners.get(event) || []), fn]) };
+    const store = createStore({ bus }); await store.ready;
+    await store.loadFromJSON({ schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'mage', order: ['mage'],
+      participants: [mage('mage', { persistentCharacterId: 'c-mage' })] }, diceLines: [], log: [], extensions: { v5: { turnIndex: 1 } } });
+    const channel = { sent: [], postMessage(message) { this.sent.push(message); } };
+    const link = createMapLink({ channel, getParticipants: () => store.listParticipants(), formImageUrlOf: participant => formImageOf(participant) });
+    bus.on('combat', link.refresh); // câblage de main.js
+    link.refresh();
+    const ref = Object.keys(tokenStatesOf(store.listParticipants()))[0];
+    const sentFormImages = () => channel.sent.filter(m => ['token.state', 'token.add'].includes(m.type) && m.payload.ref === ref).map(m => m.payload.formImageUrl);
+    assert.equal(tokenStatesOf(store.listParticipants())[ref].formImageUrl, null, 'avant : null');
+    assert.deepEqual(sentFormImages(), [], 'état initial lu à la création de la liaison');
+    await store.applySpellExecution(spell, { actorId: 'mage', targetIds: ['mage'], roll: 25, sl: 8, beastKey: 'wolf', attributeActive: false });
+    const caster = store.listParticipants().find(p => p.id === 'mage');
+    assert.equal(caster.extensions.v5.beastForm?.wind, wind, spell);
+    assert.deepEqual(sentFormImages(), [path], `${spell} : envoyé dès la transformation`);
+    const sentBefore = channel.sent.length;
+    await store.revertBeastForm('mage');
+    assert.equal(store.listParticipants().find(p => p.id === 'mage').extensions.v5.beastForm, undefined);
+    assert.deepEqual(sentFormImages(), [path, null], 'CA18 : null au retour, la carte retrouve l’image d’avant');
+    const back = channel.sent.slice(sentBefore).find(m => m.type === 'token.state' && m.payload.ref === ref);
+    assert.equal(back.payload.imageUrl, null, 'imageUrl d’un PJ toujours non envoyé');
+  }
+});
+
+test('cavalier monté transformé : formImageUrl sur son pion, rider.imageUrl reste l’image de la monture', () => {
+  const rider = transformed('wolf', {}, mage('mage', { kind: 'PNJ', extensions: { v5: { ownMountId: 'm', mounted: true, mountId: 'm' } } }));
+  const mount = { id: 'm', kind: 'Créature', name: 'Destrier', hp: 20, extensions: { v5: { mountOf: 'mage' } } };
+  const options = { imageUrlOf: p => (p.id === 'm' ? 'maps/tokens/bestiaire/destrier.webp' : null), formImageUrlOf: p => formImageOf(p) };
+  const states = tokenStatesOf([rider, mount], options);
+  assert.equal(states['p:mage'].mounted, true, 'la transformation ne démonte pas le cavalier');
+  assert.equal(states['p:mage'].formImageUrl, 'maps/tokens/bestiaire/forme-bestiale/loup-bete.webp');
+  assert.equal(states['p:mage'].rider.imageUrl, 'maps/tokens/bestiaire/destrier.webp');
+  assert.equal(states['p:m'].formImageUrl, null);
+  const reverted = revertBeastForm(rider).participant;
+  assert.equal(tokenStatesOf([reverted, mount], options)['p:mage'].formImageUrl, null);
+});

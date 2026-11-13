@@ -240,7 +240,9 @@ export function applyBeastForm(caster, beastProfile, options = {}) {
     originalBaseCaracs: structuredClone(caster.extensions?.v5?.baseCaracs || caster.baseCaracs || caster.caracs),
     originalBaseTraits: structuredClone(caster.extensions?.v5?.baseTraits || caster.traits || []),
     originalTemporaryTraits: structuredClone(caster.extensions?.v5?.temporaryTraits || []),
-    isJade: preview.isJade
+    isJade: preview.isJade,
+    // Vent du sort lancé (images des pions, S6) : variante -bete ou -vie de l'image de forme. Absent sur une forme plus ancienne.
+    ...(kadon ? {} : { wind: preview.isJade ? 'jade' : 'beasts' })
   };
 
   // Remplacer Mouvement et les seules caractéristiques prévues ; le reste du profil, et les traits du lanceur, sont conservés.
