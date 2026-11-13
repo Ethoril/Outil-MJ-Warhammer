@@ -295,6 +295,7 @@
    "careForAftermathDisease/0",
    "getTurnIndex/0",
    "isSuddenDeathEnabled/0",
+   "getCampaignSeconds/0",
    "getActionClock/0",
    "listTurnActions/1",
    "getFullJSON/0",
@@ -2523,6 +2524,11 @@
     "state": "9903be3c3b8c1a6d"
    },
    {
+    "label": "sweep getCampaignSeconds",
+    "result": "bfb04fd3defa6d04",
+    "state": "9903be3c3b8c1a6d"
+   },
+   {
     "label": "sweep getActionClock",
     "result": "1a101d532d8df3d1",
     "state": "9903be3c3b8c1a6d"
@@ -2875,6 +2881,7 @@
    "careForAftermathDisease/0",
    "getTurnIndex/0",
    "isSuddenDeathEnabled/0",
+   "getCampaignSeconds/0",
    "getActionClock/0",
    "listTurnActions/1",
    "getFullJSON/0",
@@ -5100,6 +5107,11 @@
    {
     "label": "sweep isSuddenDeathEnabled",
     "result": "b5bea41b6c623f7c",
+    "state": "153521694ee4f1e5"
+   },
+   {
+    "label": "sweep getCampaignSeconds",
+    "result": "b045dd9c18caa8be",
     "state": "153521694ee4f1e5"
    },
    {

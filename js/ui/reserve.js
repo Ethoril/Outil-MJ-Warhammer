@@ -9,11 +9,11 @@ import { resolveKeyword } from '../core/reference-catalog.js';
 import { contextMessage } from './messages.js';
 import { createKeywordPicker } from './keyword-picker.js';
 import { exportProfilesJson } from '../core/json-profile-export.js';
-import { createBestiaryLoader, buildReserveProfileFromBestiary } from '../core/bestiary-profiles.js';
+import { buildReserveProfileFromBestiary } from '../core/bestiary-profiles.js';
+import { sharedBestiaryLoader } from '../core/bestiary-loader.js';
 import { declaredMountOf, isMountCandidate } from '../core/mounts.js';
 import { syncTokenColorSelect } from './token-color-options.js';
 
-const fetchJson = async path => { const response = await fetch(path); if (!response.ok) throw new Error(`${path} : ${response.status}`); return response.json(); };
 
 export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   const formTitle = qs('#form-title');
@@ -85,7 +85,9 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
 
   // Monture du profil : animal du bestiaire (Dressé (Monture) par défaut, tout le bestiaire sur demande), copié en profil de bibliothèque.
   let mountSection = null, mountSubjectId = null, bestiaryProfiles = null;
-  const bestiaryLoader = createBestiaryLoader(fetchJson);
+  // Tous les livres restent chargés : l'index ne dit pas quels livres contiennent une créature Dressé (Monture), et la recherche
+  // porte sur les noms de tout le bestiaire. Le chargeur partagé évite seulement de relire les livres déjà chargés ailleurs.
+  const bestiaryLoader = sharedBestiaryLoader();
   const loadBestiary = () => bestiaryProfiles || (bestiaryProfiles = bestiaryLoader.index()
     .then(books => bestiaryLoader.load(books.map(book => book.book))).then(rows => rows.filter(row => row.kind === 'profile' || !row.kind))
     .catch(error => { bestiaryProfiles = null; throw error; }));
