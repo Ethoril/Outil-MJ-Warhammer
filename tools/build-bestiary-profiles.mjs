@@ -27,7 +27,8 @@ const BOOKS = {
   L11: ['The Imperial Zoo', 'V4'], L12: ['Tribes and Tribulations', 'V4'], L13: ['Up in Arms', 'V4'], L14: ['Sea Wardens of Cothique', 'V4'],
   L16: ['Lords of Stone and Steel', 'V4'], L17: ['Winds of Magic', 'V4'], L18: ['Power Behind the Throne Companion', 'V4'], L19: ['Middenheim: City of the White Wolf', 'V4'],
   L20: ['Altdorf: Crown of the Empire', 'V4'], L21: ['Empire in Ruins Companion', 'V4'], L22: ['The Horned Rat Companion', 'V4'], L23: ['Enemy in Shadows Companion', 'V4'],
-  L24: ['Rough Nights & Hard Days', 'V4'], L25: ['Sea of Claws', 'V4'], L26: ['Death on the Reik Companion', 'V4']
+  L24: ['Rough Nights & Hard Days', 'V4'], L25: ['Sea of Claws', 'V4'], L26: ['Death on the Reik Companion', 'V4'],
+  L28: ['Le Pouvoir derrière le Trône (Ennemi Intérieur 3)', 'V4']
 };
 const outFlag = process.argv.find(arg => arg.startsWith('--out='));
 const OUT = outFlag ? outFlag.slice(6) : 'js/data/bestiary';
@@ -35,6 +36,7 @@ const ids = process.argv.slice(2).filter(arg => !arg.startsWith('--out='));
 if (!ids.length) { console.error('usage : node tools/build-bestiary-profiles.mjs L06 [L11 …]'); process.exit(2); }
 
 const inventory = JSON.parse(readFileSync('docs/BESTIAIRE_INVENTAIRE.json', 'utf8'));
+const printedFr = new Map(inventory.profiles.filter(entry => entry.nameFrPrinted).map(entry => [entry.id, entry]));
 const baseName = name => name.replace(/\s*\(.*\)\s*$/, '').replace(/\s+—.*$/, '').trim();
 const canonicalNames = new Map();
 const traitRefs = new Map();
@@ -70,7 +72,9 @@ function applyManualKeywords(record) {
 function applyFrenchName(record) {
   if (NAME_FIXES[record.id]) record.name = NAME_FIXES[record.id];
   applyManualKeywords(record);
-  const found = NAMES_FR[record.id];
+  // Livre français (L28) : l'intitulé imprimé, relu, est le nom français (tools/build-bestiary-l28.mjs).
+  const printed = printedFr.get(record.id);
+  const found = NAMES_FR[record.id] || (printed ? { nameFr: printed.nameFrPrinted, source: `${printed.book} p.${printed.page}` } : null);
   if (found) { record.nameFr = found.nameFr; record.nameFrSource = found.source; }
   else if (record.kind !== 'pregenerated-character') { record.nameFr = proposeFrenchName(record.name); record.nameFrSource = 'proposition'; }
   else { record.nameFr = record.name; record.nameFrSource = 'proposition'; }

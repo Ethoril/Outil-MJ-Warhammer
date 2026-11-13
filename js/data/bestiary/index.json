@@ -275,6 +275,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L28",
+   "file": "L28.json",
+   "title": "Le Pouvoir derrière le Trône (Ennemi Intérieur 3)",
+   "edition": "V4",
+   "counts": {
+    "profiles": 64,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

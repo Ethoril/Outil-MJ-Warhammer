@@ -7,10 +7,12 @@ agna-lottrisdottir-envoye-nain-argent-4;pnj/l19;oui;
 agrin-le-sang-du-flagellant-est-celui-de-sigmar-losburg-zelote-humain-bronze-0;pnj/l26;oui;
 aigle-geant;monstres;non;
 albert-pfortner-docker-humain-argent-1;pnj/l23;oui;
+albrecht-helseher-seigneur-sorcier-or-2;pnj/l28;oui;
 albrecht-the-fish-chef-de-bande;pnj/l04;oui;
 aleanora-al-shortbottom-percepteuse-de-peage-halfling-bronze-5;pnj/l23;oui;
 alette-zimmermann-voleuse-humaine-bronze-3;pnj/l23;oui;
 alfric-half-nose-anvilbreaker-receleur-nain-argent-2;pnj/l18;oui;
+allavandrel-fanmaris-maitre-de-la-chasse-argent-3;pnj/l28;oui;
 allrella-elphoise-et-helga-slaanesh-cultistes-argent-1;pnj/l24;oui;
 alphonse-hercules-de-gasgoigne-detective-ancien-voleur-argent-3;pnj/l22;oui;
 alrik-skagsson-inquisiteur-argent-5;pnj/l03;oui;
@@ -31,8 +33,11 @@ anke-dorflinger-chasseuse-de-primes-humaine-argent-3;pnj/l23;oui;
 anna-lise-levertske-soeur-ancienne-apothicaire-bronze-4;pnj/l01;oui;
 annalisa-kessler-chef-hors-la-loi-bronze-4;pnj/l23;oui;
 anomoq-pretre-skink-de-sotek;pnj/l07;oui;
+anton-hundisch-sorcier-novice-humain-bronze-3;pnj/l28;oui;
+antonia-fiegling-ranconneur-humain-bronze-5;pnj/l28;oui;
 anuidethar-veilthorn-facteur-marchand;pnj/l09;oui;
 apprenti-artisan-humain-ancien-serviteur-bronze-2;peuples/humains;non;
+ar-ulric-jarrick-valgeir-lecteur-or-2;pnj/l28;oui;
 arachnarok-araignee;monstres;non;
 araignee-des-falaises;bestiaire;non;
 araignee-geante;bestiaire;non;image : bestiaire/araignee-geante.webp
@@ -54,7 +59,9 @@ bamse-du-nordland;bestiaire;non;image : bestiaire/chien.webp
 banshee;ennemis/morts-vivants;non;
 baragor-guttrisson-maitre-forgeron-nain;pnj/l16;oui;
 baron-ewald-von-laue-noble-humain-or-3;pnj/l20;oui;
+baron-heinrich-todbringer-emissaire-humain-ancien-conseiller-et-intendant-argent-4;pnj/l28;oui;
 baron-sigismund-von-der-bahr-noble-humain-or-3;pnj/l26;oui;
+baron-stefan-todbringer-heritier-souffreteux-humain;pnj/l28;oui;
 bastiladon;ennemis/hommes-lezards;non;
 batelier-humain-argent-2;peuples/humains;non;
 beate-moser;pnj/l19;oui;
@@ -88,9 +95,12 @@ briseur-d-os-rat-ogre;ennemis/skavens;non;
 brocks-et-reiner-espions-argent-3;pnj/l24;oui;
 brokur-zindrisson-artisan-nain-argent-1;pnj/l23;oui;
 brunhilde-klaglich-maitre-espion-humain-or-4;pnj/l18;oui;
+brunhilde-klaglich-maitre-espion-or-4;pnj/l28;oui;image : pnj/l18/brunhilde-klaglich-maitre-espion-humain-or-4.webp
 brunner;pnj/l04;oui;
 bruno-brigand-humain-argent-2;pnj/l23;oui;
 bruno-franke-judicial-champion-or-3;pnj/l24;oui;
+bruno-hansgorp-coupe-jarret-humain-bronze-3;pnj/l28;oui;
+bruno-kohl-entremetteur-humain-ancien-noble-et-apothicaire-bronze-3;pnj/l28;oui;
 brute;peuples/humains;non;
 bruug-sauvage-orc-skirmisher;pnj/l12;oui;
 bugshot-gobelin-des-forets-skirmisher;pnj/l12;oui;
@@ -141,6 +151,7 @@ cheval-de-selle;bestiaire;non;image : bestiaire/cheval-selle.webp
 cheval-de-trait;bestiaire;non;
 cheval-de-trait-lourd;bestiaire;non;
 chevaliers-de-l-empire-destrier-lourd-cheval-de-guerre;bestiaire;non;image : bestiaire/destrier.webp
+chevaux-de-guerre;bestiaire;non;
 chien;bestiaire;non;image : bestiaire/chien.webp
 chien-des-marais-de-grootscher;bestiaire;non;image : bestiaire/chien.webp
 chimera;monstres;non;
@@ -151,6 +162,7 @@ clan-moulder-unique-experiment;ennemis/skavens;non;
 clan-skryre-prototype;ennemis/skavens;non;
 clan-skryre-warlock-engineer;ennemis/skavens;non;
 claudia-carbonetti-chef-de-bande-argent-3;pnj/l22;oui;
+claus-liebnitz-pretre-sergent-d-ulric-veteran-ancien-chevalier-de-l-ordre-du-loup-blanc-argent-3;pnj/l28;oui;
 clementine-clausewitz-soeur-shallya-bronze-4;pnj/l01;oui;
 clothilde-telland-noble-or-4;pnj/l24;oui;
 coatl;ennemis/hommes-lezards;non;
@@ -180,8 +192,10 @@ culchan;bestiaire;non;
 cultiste;ennemis/reprouves;non;image : ennemis/reprouves/cultiste-chaos.webp
 cultiste-humain;ennemis/reprouves;non;image : ennemis/reprouves/cultiste-chaos.webp
 cultiste-novice-des-crocs-jaunes;ennemis/reprouves;non;
+cultistes-de-la-main-pourpre-7;ennemis/reprouves;non;
 cultists-de-jade-sceptre-or-2;ennemis/reprouves;non;
 daggerfish;bestiaire;non;
+dagmar-mitschuldige-soldat-humain-argent-3;pnj/l28;oui;
 daleathra-bladeborn-agente;pnj/l09;oui;
 damina-hroska-assassine-de-basse-naissance-citadine;pnj/l09;oui;
 de-base-commun-troll;monstres;non;
@@ -200,15 +214,18 @@ dederick-ritter-capitaine-de-naufrageurs-humain;pnj/l26;oui;
 delberz-trutte-colporteur-humain-bronze-4;pnj/l23;oui;
 demeth-soulbane-corsaire;pnj/l09;oui;
 demigriffon;monstres;non;
+demon-mineur-de-tzeentch;ennemis/demons;non;
 demonette-de-slaanesh;ennemis/demons;non;image : ennemis/demons/demonette-slaanesh.webp
 destrier;bestiaire;non;image : bestiaire/destrier.webp
 destrier-du-chaos;bestiaire;non;image : bestiaire/destrier-chaos.webp
 destrier-noir;ennemis/elfes-noirs;non;
 detlef-sierck-genius-or-3;pnj/l24;oui;
+dieter-schmiedehammer-champion-de-justice-or-3;pnj/l28;oui;
 disque-bibliotheque-de-tzeentch;ennemis/demons;non;
 docteur-argent-5;peuples/humains;non;
 doktor-argent-5;peuples/humains;non;
 dominique-herveaux-assassin-or-1;pnj/l24;oui;
+doppelganger;monstres;non;
 dragon;monstres;non;image : monstres/dragon.webp
 dragon-de-l-enfer;ennemis/elfes-noirs;non;
 dragon-de-l-enfer-juvenile;ennemis/elfes-noirs;non;
@@ -243,6 +260,8 @@ ella-terenz-escroc-humain;pnj/l02;oui;
 elsbeth-blattner-sorciere-humaine;pnj/l10;oui;
 elspeth-von-draken-seigneur-sorcier-humain-or-2;pnj/l17;oui;
 emil-hartwig-contremaitre-humain;pnj/l10;oui;
+emil-valgeir-pretre-guerrier-d-ulric-veteran-humain-argent-2;pnj/l28;oui;
+emmanuelle-schlagen-conseiller-argent-4;pnj/l28;oui;
 emmanuelle-von-liebwitz-electeur-countess-or-15;pnj/l24;oui;
 emmaretta-chasseuse-bronze-4;pnj/l23;oui;
 emmille-munzstatter-artisan-humain-argent-1;pnj/l19;oui;
@@ -251,6 +270,7 @@ epine-a-empaler;bestiaire;non;plante de Lustrie
 erich-frohlich-villageois-humain;pnj/l10;oui;
 erich-massenbach;pj;oui;
 erich-von-holzenauer-noble-or-2;pnj/l24;oui;
+erina-eberhauer-sorcier-flamboyant-argent-3;pnj/l28;oui;
 ernst-heidlemann-apprenti-sorcier-humain-argent-3;pnj/l21;oui;
 ernst-maler-bourgmestre-or-1;pnj/l24;oui;
 erwin-blucher-officier-or-1;pnj/l24;oui;
@@ -269,6 +289,7 @@ fantasma;pnj/l11;oui;
 fantome;ennemis/morts-vivants;non;
 fargal-kraggzin-capitaine-rodeur-nain;pnj/l10;oui;
 faucon-colombe;bestiaire;non;image : bestiaire/faucon.webp
+faucon-eclaireur-humain-ancien-chasseur-et-domestique-bronze-5;pnj/l28;oui;
 faucon-rouge-d-arabie;bestiaire;non;image : bestiaire/faucon.webp
 faussaire;peuples/humains;non;
 felix-jaeger-hors-la-loi-humain;pnj/l16;oui;
@@ -285,6 +306,7 @@ frere-martin-et-frere-rolf-moines-ou-nonnes-humains-bronze-4;pnj/l26;oui;
 frere-samhel-pretre-de-morr-humain;pnj/l02;oui;
 freya-husslhaus-pretre-humain-argent-1;pnj/l20;oui;
 friedrich-von-pfeifraucher-magnat-or-5;pnj/l24;oui;
+fritz-dreckig-negociant-humain-argent-2;pnj/l28;oui;
 furie-du-chaos;ennemis/demons;non;
 gabriella-von-bundebad-grande-vampire;pnj/l10;oui;
 gaglah-ghran-hobgobelin-elite;pnj/l12;oui;
@@ -297,6 +319,7 @@ gardes-du-corps-et-men-at-arms-argent-3;peuples/humains;non;
 gardes-du-palanquin;ennemis/skavens;non;
 gargantuan;monstres;non;
 garn-sauvage-orc-skirmisher;pnj/l12;oui;
+gaston-serviteur-humain-ancien-employe-argent-3;pnj/l28;oui;
 geant;monstres;non;image : monstres/geant.webp
 geant-loup;monstres;non;
 geant-squig;ennemis/gobelins;non;
@@ -312,6 +335,7 @@ gitface;pnj/l21;oui;
 giuseppe-le-chien-chien-de-chasse-tileen;pnj/l22;oui;image : bestiaire/chien.webp
 glimbrin-oddsocks-maitre-voleur-bronze-5;pnj/l24;oui;
 globadiers-de-vent-empoisonne-laches;ennemis/skavens;non;
+glugnur-tueur-de-troll-nain-bronze-2;pnj/l28;oui;
 gnome;peuples/gnomes;non;
 gobbla-bloated-squig-des-cavernes;pnj/l12;oui;
 gobelin;ennemis/gobelins;non;image : ennemis/gobelins/gobelin-lancier.webp
@@ -327,7 +351,9 @@ gor;ennemis/hommes-betes;non;image : ennemis/hommes-betes/homme-bete-gor.webp
 gorfang-chief-de-rouge-fangs;pnj/l12;oui;
 gors-de-la-couronne-rouge;ennemis/hommes-betes;non;image : ennemis/hommes-betes/homme-bete-gor.webp
 gotrek-gurnisson-tueur-de-demons-nain;pnj/l16;oui;
+gotthard-wallenstein-marchand-argent-5;pnj/l28;oui;
 goule-de-crypte;ennemis/morts-vivants;non;image : ennemis/morts-vivants/goule.webp
+graf-boris-todbringer-noble-seigneur-humain-electeur-imperial-or-7;pnj/l28;oui;
 grafina-griselda-magnat-humain;pnj/l02;oui;
 grand-cerf;bestiaire;non;image : bestiaire/grand-cerf.webp
 grand-loup;bestiaire;non;
@@ -358,11 +384,14 @@ guerrier-des-clans-du-clan-mors;ennemis/skavens;non;image : ennemis/skavens/skav
 guerrier-des-clans-lache;ennemis/skavens;non;image : ennemis/skavens/skaven-guerrier-des-clans.webp
 guerrier-des-clans-malade;ennemis/skavens;non;image : ennemis/skavens/skaven-guerrier-des-clans.webp
 guerrier-du-chaos;ennemis/reprouves;non;image : ennemis/reprouves/guerrier-du-chaos.webp
+guerriers-skavens-de-snikkit-6;ennemis/skavens;non;
+gueulard-chien-de-garde;pnj/l28;oui;
 gunna-von-sperren-reine-des-contrebandiers;pnj/l04;oui;
 gunni-bart-et-hans-frederick-smugglers-bronze-3;pnj/l24;oui;
 gunther-emming-grand-pretre-or-1;pnj/l24;oui;
 gurniksson-hammerback-contremaitre-mineur;pnj/l03;oui;
 gustaf-rechtshandler-avocat-or-1;pnj/l24;oui;
+gustav-holschtweig-colporteur-humain-bronze-4;pnj/l28;oui;
 gustav-zasle-cambrioleur-humain-argent-3;pnj/l20;oui;
 gutbug-goblin-chief;pnj/l12;oui;
 guzgog-tirailleur-ungor;pnj/l06;oui;image : ennemis/hommes-betes/homme-bete-ungor.webp
@@ -402,6 +431,8 @@ hermizor-de-la-maison-arguental-suite-de-haute-naissance;pnj/l09;oui;
 herwig-algnar-maitre-marchand-humain;pnj/l14;oui;
 hesh-le-contaminateur-porteur-de-la-parole;pnj/l16;oui;
 hhrag-wolf-wispra-hobgobelin-skirmisher;pnj/l12;oui;
+hildegarde-zimperlich-valet-argent-5;pnj/l28;oui;
+hildi-holschtweig-colporteur-humain-bronze-4;pnj/l28;oui;
 hilma-bootschlecht-docker-humain-bronze-3;pnj/l26;oui;
 hizsss-snakeskin-sauvage-orc-shaman-lord;pnj/l12;oui;
 holg-stuntysticker-orc-skirmisher;pnj/l12;oui;image : ennemis/orcs/orc-archer.webp
@@ -419,6 +450,7 @@ hors-la-loi;peuples/humains;non;
 hubkind-s-mob-bronze-4;peuples/humains;non;
 huffer-argent-1;peuples/humains;non;
 hulreth-disciple-de-khaine-de-haute-naissance-pretre-guerrier;pnj/l09;oui;
+hultz-fleischer-coupe-jarret-humain-bronze-3;pnj/l28;oui;
 humain;peuples/humains;non;
 hydre-de-guerre;monstres;non;image : monstres/hydre-de-guerre.webp
 hyenadon;bestiaire;non;
@@ -431,12 +463,14 @@ infiltrateur-du-clan-eshin;ennemis/skavens;non;
 ingrid-sasslewort;pnj/l22;oui;
 inta-dapesht;pnj/l24;oui;
 isabella-voyante-bronze-4;pnj/l01;oui;
+isolde-begegnen-grande-pretresse-de-shallya-or-1;pnj/l28;oui;image : pnj/l18/isolde-begegnen-grande-pretresse-humain-or-1.webp
 isolde-begegnen-grande-pretresse-humain-or-1;pnj/l18;oui;
 isolde-gudhoffen-villageois-bronze-3;pnj/l18;oui;
 isrogdal-l-urgent-ogre-protagoniste-ancien-pugiliste-argent-1;pnj/l01;oui;
 jacopo-schmidt-procureur-humain-argent-1;pnj/l19;oui;
 jaego-roth-capitaine-corsaire;pnj/l25;oui;
 jaguar;bestiaire;non;
+janna-eberhauer-maitre-sorcier-or-1;pnj/l28;oui;
 jareth-brackblood-capitaine-pillard;pnj/l09;oui;
 jean-luc-de-cadent-agent-or-1;pnj/l24;oui;
 jendrik-von-dabernick-officier-or-1;pnj/l24;oui;
@@ -445,21 +479,27 @@ jeune-loup-rejeton-humain-or-1;peuples/humains;non;
 jeune-noble-or-1;peuples/humains;non;
 jimmi-greenleaf-artisan-halfling;pnj/l10;oui;
 joachim-bitterfeld-artisan-argent-1;pnj/l24;oui;
+joachim-hoflich-maitre-du-barreau-or-1;pnj/l28;oui;
 johann-hindersson-percepteur-de-peage-humain-bronze-5;pnj/l23;oui;
 johann-le-fantome;pnj/l23;oui;
+johann-schwermutt-officier-or-1;pnj/l28;oui;
 johanna-schnee-medecin-humain-argent-3;pnj/l26;oui;
 johen-sorciere-humaine-bronze-2;pnj/l19;oui;
 jorunn-gromsdottir;pj;oui;
 josef-aufwiegler-rabble-rouser-bronze-3;pnj/l24;oui;
+josef-sparsam-chancelier-ancien-maitre-du-barreau-or-3;pnj/l28;oui;
 josef-von-angendorf-chat-cambrioleur-or-2;pnj/l24;oui;
 joueur-nain-argent-2;peuples/nains;non;
 kalimel-nightpiercer-eclaireur;pnj/l09;oui;
 kappan-s-racketeers-voyous-bronze-3;peuples/humains;non;
 kargun-grimbarden-dwarf-artillerist;pnj/l12;oui;
+karl-heinz-wasmeier-maitre-du-barreau-or-1;pnj/l28;oui;
+karl-matthaus-voleur-humain-bronze-1;pnj/l28;oui;
 karstin-largsdottir-agent-or-1;pnj/l03;oui;
 kasper-lauengram-brigand-humain-bronze-1;pnj/l23;oui;
 kat-sperber-colporteur-du-middenland-bronze-4;pnj/l19;oui;
 katarina-briesach-champion-du-chaos-mutant;pnj/l20;oui;
+katarina-todbringer-noble-or-3;pnj/l28;oui;
 katrin-thormsdottir-naine-tueuse-de-demons;pnj/l16;oui;
 kazador-thunderhorn-seigneur-de-karak-nain;pnj/l16;oui;
 kazgar-rognisson-gardien-de-porte-nain;pnj/l16;oui;
@@ -469,14 +509,17 @@ kelrathi-maitre-des-betes;pnj/l09;oui;
 kernethar-grimwitch-sorcier-fugitif;pnj/l09;oui;
 kharibdyss;ennemis/elfes-noirs;non;
 kheitalla-megere-de-la-mort;pnj/l09;oui;
+kirsten-jung-conseiller-argent-4;pnj/l28;oui;
 kistiane-brockdorf;pj;oui;
 klaus-jager-chasseur-humain-bronze-2;pnj/l26;oui;
 klik-rustclaw-commandant-des-vermines-de-la-mort;pnj/l22;oui;
+konrad-alpiger-homme-a-tout-faire-serveur-humain-argent-2;pnj/l28;oui;
 konrad-brecht-racketteur-humain-bronze-5;pnj/l23;oui;
 krag-breaker;pnj/l11;oui;
 kraken;monstres;non;
 krazold-ironhand-guide-fluvial-nain-bronze-4;pnj/l26;oui;
 kroxigor;ennemis/hommes-lezards;non;
+kurt-gruber-serveur-bourgeois-humain-ancienne-recrue-argent-2;pnj/l28;oui;
 kurt-helborg-chevalier-du-cercle-interieur-or-4;pnj/l20;oui;
 l-abomination-du-stirland;pnj/l20;oui;
 l-epouse-de-la-saumure-sirene-et-sorciere;pnj/l07;oui;
@@ -496,6 +539,7 @@ le-vacarme-vert;pnj/l21;oui;
 leech-wyrm;monstres;non;
 leonard-ecuyer-humain;pnj/l02;oui;
 les-betes-de-la-ferme;monstres;non;
+les-gladiateurs-minotaures;ennemis/hommes-betes;non;
 les-jumeaux;pnj/l23;oui;
 les-plongeurs-funestes;ennemis/gobelins;non;plongeurs funestes gobelins (Doom Divers)
 les-zombies-du-seigneur-des-tombes;ennemis/morts-vivants;non;image : ennemis/morts-vivants/zombi.webp
@@ -517,14 +561,17 @@ loup-blanc;bestiaire;non;image : bestiaire/loup-blanc.webp
 loup-funeste;ennemis/morts-vivants;non;
 loup-rat;ennemis/skavens;non;
 ludolf-kohler-seigneur-de-la-mer-imperial-or-3;pnj/l25;oui;
+luigi-pavarotti-arnaqueur-argent-2;pnj/l28;oui;
 luitpoldstrasse-louis-lostpockets-maitre-mendiant-bronze-4;pnj/l03;oui;
 lunn-yorrisson-ingenieur-argent-2;pnj/l20;oui;
+lurk-gladiateur-humain-argent-2;pnj/l28;oui;
 lurkerfish;bestiaire;non;
 luthor-harkon-vampire-archi-grand-commodore-et-empereur-autoproclame;pnj/l07;oui;
 lynathryn-nightsong;pj;oui;
 magister-hugo-greendale;pnj/l19;oui;
 magistrates-judges-or-2;peuples/humains;non;
 magnus-bugman-maitre-de-savoir-or-2;pnj/l23;oui;
+magus-du-culte-de-la-main-pourpre;ennemis/reprouves;non;
 maitre-d-equipage-hans-sauber-maitre-de-barge-humain-ancien-sergent-argent-3;pnj/l26;oui;
 maitre-de-meute;ennemis/skavens;non;
 maitre-modeleur-wrakrennch;pnj/l22;oui;
@@ -539,6 +586,7 @@ maren-mauer-colporteur-humain-bronze-4;pnj/l20;oui;
 margaret-von-aschendorf-abbesse-shallya-argent-2;pnj/l01;oui;
 maria-braund-hors-la-loi-humain-bronze-2;pnj/l23;oui;
 maria-ulrike-von-liebwitz-noble-seigneur-or-7;pnj/l24;oui;
+marie-astrid-platini-prostitue-humain-bronze-1;pnj/l28;oui;
 marie-duvallier-soeur-shallya-ancienne-medecin-bronze-4;pnj/l01;oui;
 marin-argent-3;peuples/humains;non;
 marta-gerbenshreiber-huissier-humain-argent-5;pnj/l19;oui;
@@ -549,6 +597,7 @@ matthias-hubkind-sorciere-chasseur-argent-3;pnj/l24;oui;
 matthias-primvik-percepteur-humain;pnj/l10;oui;
 matthogg-brute-ogre;pnj/l12;oui;image : ennemis/ogres/ogre-guerrier.webp
 maximilian-aschaffenburg-rejeton-or-1;pnj/l24;oui;
+maximillian-von-genscher-officier-or-1;pnj/l28;oui;
 melinda-greyweave-sorciere-elfe-bronze-2;pnj/l20;oui;
 mentag-l-invaincu-champion-de-la-fosse-argent-5;pnj/l21;oui;
 mercenaire-aguerri-argent-3;peuples/humains;non;
@@ -575,8 +624,10 @@ mutant;ennemis/reprouves;non;image : ennemis/reprouves/reprouve-mute.webp
 naiades;monstres;non;
 nain;peuples/nains;non;
 nanna-logansdottir-naine-maitresse-du-foyer;pnj/l16;oui;
+nastassia-agent-or-4;pnj/l28;oui;image : pnj/l18/nastassia-maitre-espion-humain-or-4.webp
 nastassia-maitre-espion-humain-or-4;pnj/l18;oui;
 nastassia-von-saponatheim-rejeton-or-1;pnj/l24;oui;
+natasha-sinnlich-emissaire-argent-4;pnj/l28;oui;
 naufrageur-humain-typique;peuples/humains;non;
 nazzaalta-talltale-docker-ogre;pnj/l01;oui;
 negociant-parvenu-et-odieux-marchand-humain-argent-5;peuples/humains;non;
@@ -602,6 +653,7 @@ orc;ennemis/orcs;non;image : ennemis/orcs/orc-guerrier.webp
 orque-sauvage;ennemis/orcs;non;
 orth-vii-chylis-lightbringer-maitre-sorcier-elfe-or-1;pnj/l20;oui;
 otto-et-hendrik-vogel-clercs-humains;pnj/l10;oui;
+otto-geschwur-coupe-jarret-humain-bronze-3;pnj/l28;oui;
 otto-krupp-maitre-de-guilde-or-1;pnj/l24;oui;
 ours;bestiaire;non;image : bestiaire/ours.webp
 p-tarix-celui-qui-ecrit;pnj/l17;oui;
@@ -619,6 +671,7 @@ pere-pedragar-pretre-de-taal;pnj/l04;oui;
 pere-tantlus-radu-pretre-humain;pnj/l10;oui;
 performers-argent-1;peuples/humains;non;
 peter-tavelli-croc-jaune-cultiste-bronze-4;pnj/l18;oui;
+petra-liebkosen-emissaire-argent-4;pnj/l28;oui;
 petra-steinmetz-grande-pretresse-or-1;pnj/l24;oui;
 phenix-coeur-de-givre;monstres;non;
 phenix-fleche-de-flamme;monstres;non;
@@ -640,6 +693,7 @@ python-des-marais-d-amaxon;bestiaire;non;
 racketteur;peuples/humains;non;
 ragni-thorisson-officier-or-1;pnj/l03;oui;
 rainette-lustrienne;bestiaire;non;
+rallane-lafarel-troubadour-argent-3;pnj/l28;oui;
 ranolf-quickfingers-rodeur-humain;pnj/l10;oui;
 rapace;bestiaire;non;image : bestiaire/faucon.webp
 raphael-julevno-grand-astromancien-or-1;pnj/l17;oui;
@@ -658,6 +712,7 @@ receleur;peuples/humains;non;
 reginhard-vieth-capitaine-pirate-humain-maitre-d-armes-de-navire-or-1;pnj/l26;oui;
 reik-rivermarshal-sigfreda-marham-von-sieblich-maitre-d-armes-de-navire-humain-or-1;pnj/l20;oui;
 reine-thurma-dame-de-karak-naine;pnj/l16;oui;
+reiner-ehrlich-maitre-du-barreau-or-1;pnj/l28;oui;
 reiner-et-karl-dampfer-et-hans-vollrat-matelots-fluviaux-argent-1;pnj/l26;oui;
 reinholdt-waffenkammer-officier-humain-or-1;pnj/l20;oui;
 rejeton-de-mathlann;peuples/elfes;non;
@@ -665,6 +720,7 @@ rejeton-de-mathlann-sentinelle;peuples/elfes;non;
 rejeton-saurus-difforme;ennemis/hommes-lezards;non;
 rembrandt-haube-hors-la-loi-humain-bronze-2;pnj/l23;oui;
 renard;bestiaire;non;image : bestiaire/renard.webp
+renata-hoeflehner-serveuse-humain-argent-2;pnj/l28;oui;
 renia-grunewald-envoyee-humaine-argent-2;pnj/l21;oui;
 reptilion-a-criniere-d-ecailles;bestiaire;non;
 restless-fantome;ennemis/morts-vivants;non;
@@ -708,8 +764,10 @@ seigneur-finrian;pnj/l07;oui;
 seigneur-skrolk-seigneur-de-la-peste-skaven;pnj/l07;oui;
 seigneur-tyrkel-von-hargenfels-lieutenant-de-la-premiere-flotte-imperiale-maitre-d-equipage-humain-argent-5;pnj/l20;oui;
 seiren-walburg-pretre-humain;pnj/l10;oui;
+selena-prostitue-humain-bronze-1;pnj/l28;oui;
 selin-ebonspite-agent;pnj/l09;oui;
 selthira-heartrender-sorciere-elfe-de-basse-naissance-citadine;pnj/l09;oui;
+senestre-faucon;pnj/l28;oui;
 sergent-de-la-garde;peuples/humains;non;
 sergent-du-guet;peuples/humains;non;
 sergent-du-guet-argent-1;peuples/humains;non;
@@ -725,6 +783,7 @@ serviteur-humain-argent-3;peuples/humains;non;
 serviteurs-argent-1;peuples/humains;non;
 seymour-taungar-troubadour-humain-argent-3;pnj/l20;oui;
 shadowblade-assassin-elfe-noir;pnj/l14;oui;
+siegfried-prunkvoll-chevalier-commandeur-or-2;pnj/l28;oui;
 siegfried-von-saponatheim-noble-or-2;pnj/l24;oui;
 sigfrida-junker-noble-humaine-aventureuse-aspirante-duelliste-or-1;pnj/l26;oui;
 sigrund-dopplewasser-escroc-humain-bronze-3;pnj/l26;oui;
@@ -746,6 +805,7 @@ slann-de-la-quatrieme-generation;ennemis/hommes-lezards;non;
 slann-de-la-troisieme-generation;ennemis/hommes-lezards;non;
 sleeves-subalterne-halfling-argent-1;pnj/l23;oui;
 slith-snake-wrangla-sauvage-orc-warlord;pnj/l12;oui;
+snikkit-vermine-de-choc-skaven;pnj/l28;oui;
 snotling;ennemis/gobelins;non;
 soeur-type-soeur-shallya-bronze-4;peuples/humains;non;
 sofia-fischer-novice-humaine-bronze-2;pnj/l26;oui;
@@ -774,6 +834,7 @@ stirpikes;bestiaire;non;
 suffonsification-suffy-rumster-lvi-apprenti-artisan-bronze-2;pnj/l03;oui;
 sven-stoutbeard-ingenieur-nain-argent-2;pnj/l26;oui;
 svenrina-la-grise-hallovadottir-maitre-artiste-nain-argent-5;pnj/l20;oui;
+swelt-tunger-artisan-humain-ancien-voleur-argent-1;pnj/l28;oui;
 swilegrakk-chamane-bray-lanceur-de-sorts;pnj/l06;oui;image : shaman-bray.webp
 syreen;monstres;non;
 taggees-espions-or-2;pnj/l24;oui;
@@ -791,6 +852,7 @@ thorgrim-grudgebearer-nain-seigneur-de-karak;pnj/l16;oui;
 throgg-roi-troll;pnj/l25;oui;
 thyk-hurgarsson-compagnon-de-guilde-argent-5;pnj/l03;oui;
 thyrus-gormann-seigneur-sorcier-or-2;pnj/l20;oui;
+tiasmara-flarett-cuisinier-halfling-argent-2;pnj/l28;oui;
 tigrati-head-parvisch-cultiste-bronze-2;pnj/l18;oui;
 tiguana;bestiaire;non;
 tlat-l-l-enigme-protecteur-coatl;pnj/l07;oui;
@@ -810,6 +872,8 @@ trolls-des-rivieres;monstres;non;image : monstres/troll-des-rivieres.webp
 tzku-ta;pnj/l07;oui;
 ugrik-le-perdu-ogre-hors-la-loi-bronze-2;pnj/l01;oui;
 ulfhednar-le-destructeur-guerrier-du-chaos;pnj/l21;oui;image : ennemis/reprouves/guerrier-du-chaos.webp
+uli-breitner-proprietaire-marchand-humain-anciennement-recrue-et-entremetteur-argent-5;pnj/l28;oui;
+ulrich-schutzmann-capitaine-de-la-garde-or-1;pnj/l28;oui;
 undead-chevalier-wight;ennemis/morts-vivants;non;image : ennemis/morts-vivants/revenant.webp
 ungor;ennemis/hommes-betes;non;image : ennemis/hommes-betes/homme-bete-ungor.webp
 ungors-de-la-couronne-rouge;ennemis/hommes-betes;non;image : ennemis/hommes-betes/homme-bete-ungor.webp

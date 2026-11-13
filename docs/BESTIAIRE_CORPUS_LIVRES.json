@@ -1,0 +1,18 @@
+{
+ "schemaVersion": 1,
+ "policy": "Livres ajoutés au corpus pour le seul bestiaire, après le scellement des manifestes divins (DIVIN_CORPUS_LIVRES*.json, dont l'empreinte est figée dans le registre des miracles). Lu par tools/lib/bestiary-extract.mjs (corpusBooks). Les PDF restent hors du dépôt.",
+ "books": [
+  {
+   "id": "L28",
+   "file": "Ennemi Intérieur 3 - Le Pouvoir derrière le Trone.pdf",
+   "path": "E:/Projet Warhammer Ennemi Intérieur/tmp/catalogue-bibliotheque/pdfs/Ennemi Intérieur 3 - Le Pouvoir derrière le Trone.pdf",
+   "sha256": "3408b911081832df748a504ab2de2ee4eec1653d18fb75cb147dd4333de35284",
+   "physicalPages": 167,
+   "pageOffset": 3,
+   "language": "fr",
+   "edition": "V4",
+   "addedOn": "2026-11-13",
+   "sourceRole": "Ennemi Intérieur 3 — Le Pouvoir derrière le Trône (WJDR V4, français), ajouté par le MJ le 13/11/2026 : tous les profils de PNJ entrent au bestiaire (T15). Page physique = page imprimée + 3."
+  }
+ ]
+}

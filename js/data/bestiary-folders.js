@@ -15,7 +15,7 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-529', 'E0-P-530', 'E0-P-600', 'E0-P-743', 'E0-P-744', 'E0-P-759', 'E0-P-760', 'E0-P-761',
       'E0-P-762', 'E0-P-763', 'E0-P-764', 'E0-P-765', 'E0-P-766', 'E0-P-792', 'E0-P-801', 'E0-P-836',
       'E0-P-905', 'E0-P-906', 'E0-P-907', 'E0-P-908', 'E0-P-958', 'E0-P-959', 'E0-P-962', 'E0-P-985',
-      'E0-P-986', 'E0-P-987', 'E0-P-988', 'E0-P-989', 'E0-P-990', 'E0-P-991'
+      'E0-P-986', 'E0-P-987', 'E0-P-988', 'E0-P-989', 'E0-P-990', 'E0-P-991', 'E0-P-1031'
     ]) }),
   Object.freeze({ id: 'monstres', parent: null, label: 'Monstres',
     profiles: Object.freeze([
@@ -27,14 +27,14 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-491', 'E0-P-507', 'E0-P-515', 'E0-P-524', 'E0-P-525', 'E0-P-526', 'E0-P-527', 'E0-P-668',
       'E0-P-669', 'E0-P-670', 'E0-P-671', 'E0-P-672', 'E0-P-673', 'E0-P-674', 'E0-P-691', 'E0-P-742',
       'E0-P-807', 'E0-P-909', 'E0-P-910', 'E0-P-912', 'E0-P-913', 'E0-P-915', 'E0-P-916', 'E0-P-917',
-      'E0-P-918', 'E0-P-960', 'E0-P-961', 'E0-P-963'
+      'E0-P-918', 'E0-P-960', 'E0-P-961', 'E0-P-963', 'E0-P-1055'
     ]) }),
   Object.freeze({ id: 'ennemis', parent: null, label: 'Ennemis',
     profiles: Object.freeze([]) }),
   Object.freeze({ id: 'ennemis/demons', parent: 'ennemis', label: 'Démons',
     profiles: Object.freeze([
       'E0-P-107', 'E0-P-108', 'E0-P-534', 'E0-P-551', 'E0-P-665', 'E0-P-689', 'E0-P-788', 'E0-P-789',
-      'E0-P-790', 'E0-P-843'
+      'E0-P-790', 'E0-P-843', 'E0-P-1002'
     ]) }),
   Object.freeze({ id: 'ennemis/elfes-noirs', parent: 'ennemis', label: 'Elfes noirs',
     profiles: Object.freeze([
@@ -49,7 +49,8 @@ export const BESTIARY_FOLDERS = Object.freeze([
     ]) }),
   Object.freeze({ id: 'ennemis/hommes-betes', parent: 'ennemis', label: 'Hommes-bêtes',
     profiles: Object.freeze([
-      'E0-P-101', 'E0-P-102', 'E0-P-103', 'E0-P-009', 'E0-P-704', 'E0-P-707', 'E0-P-708', 'E0-P-804'
+      'E0-P-101', 'E0-P-102', 'E0-P-103', 'E0-P-009', 'E0-P-704', 'E0-P-707', 'E0-P-708', 'E0-P-804',
+      'E0-P-1012'
     ]) }),
   Object.freeze({ id: 'ennemis/hommes-lezards', parent: 'ennemis', label: 'Hommes-lézards',
     profiles: Object.freeze([
@@ -76,14 +77,14 @@ export const BESTIARY_FOLDERS = Object.freeze([
   Object.freeze({ id: 'ennemis/reprouves', parent: 'ennemis', label: 'Réprouvés',
     profiles: Object.freeze([
       'E0-P-104', 'E0-P-105', 'E0-P-106', 'E0-P-044', 'E0-P-554', 'E0-P-556', 'E0-P-657', 'E0-P-664',
-      'E0-P-739', 'E0-P-745', 'E0-P-840', 'E0-P-859', 'E0-P-870'
+      'E0-P-739', 'E0-P-745', 'E0-P-840', 'E0-P-859', 'E0-P-870', 'E0-P-997', 'E0-P-998'
     ]) }),
   Object.freeze({ id: 'ennemis/skavens', parent: 'ennemis', label: 'Skavens',
     profiles: Object.freeze([
       'E0-P-109', 'E0-P-110', 'E0-P-111', 'E0-P-023', 'E0-P-024', 'E0-P-025', 'E0-P-026', 'E0-P-061',
       'E0-P-062', 'E0-P-511', 'E0-P-512', 'E0-P-513', 'E0-P-555', 'E0-P-557', 'E0-P-718', 'E0-P-720',
       'E0-P-721', 'E0-P-723', 'E0-P-725', 'E0-P-726', 'E0-P-730', 'E0-P-731', 'E0-P-732', 'E0-P-733',
-      'E0-P-734', 'E0-P-735', 'E0-P-736', 'E0-P-737', 'E0-P-894'
+      'E0-P-734', 'E0-P-735', 'E0-P-736', 'E0-P-737', 'E0-P-894', 'E0-P-1015'
     ]) }),
   Object.freeze({ id: 'ennemis/vampires', parent: 'ennemis', label: 'Vampires',
     profiles: Object.freeze([
@@ -258,6 +259,17 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-948', 'E0-P-949', 'E0-P-950', 'E0-P-951', 'E0-P-952', 'E0-P-954', 'E0-P-955', 'E0-P-956',
       'E0-P-957', 'E0-P-964', 'E0-P-965', 'E0-P-966', 'E0-P-968', 'E0-P-972', 'E0-P-973', 'E0-P-982',
       'E0-P-983'
+    ]) }),
+  Object.freeze({ id: 'pnj/l28', parent: 'pnj', label: 'L28 — Le Pouvoir derrière le Trône (Ennemi Intérieur 3)',
+    profiles: Object.freeze([
+      'E0-P-1000', 'E0-P-1001', 'E0-P-1003', 'E0-P-1004', 'E0-P-1005', 'E0-P-1006', 'E0-P-1007', 'E0-P-1008',
+      'E0-P-1009', 'E0-P-1010', 'E0-P-1011', 'E0-P-1013', 'E0-P-1014', 'E0-P-1016', 'E0-P-1017', 'E0-P-1018',
+      'E0-P-1019', 'E0-P-1020', 'E0-P-1021', 'E0-P-1022', 'E0-P-1023', 'E0-P-1024', 'E0-P-1025', 'E0-P-1026',
+      'E0-P-1027', 'E0-P-1028', 'E0-P-1029', 'E0-P-1030', 'E0-P-1032', 'E0-P-1033', 'E0-P-1034', 'E0-P-1035',
+      'E0-P-1036', 'E0-P-1037', 'E0-P-1038', 'E0-P-1039', 'E0-P-1040', 'E0-P-1041', 'E0-P-1042', 'E0-P-1043',
+      'E0-P-1044', 'E0-P-1045', 'E0-P-1046', 'E0-P-1047', 'E0-P-1048', 'E0-P-1049', 'E0-P-1050', 'E0-P-1051',
+      'E0-P-1052', 'E0-P-1053', 'E0-P-1054', 'E0-P-992', 'E0-P-993', 'E0-P-994', 'E0-P-995', 'E0-P-996',
+      'E0-P-999'
     ]) }),
   Object.freeze({ id: 'pj', parent: null, label: 'PJ prétirés',
     profiles: Object.freeze([

@@ -8,15 +8,51 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 
 | Dossier | Illustrations | Profils couverts |
 | --- | ---: | ---: |
-| `monstres` | 11 | 11 |
-| Individus nommés (`pnj/<livre>`, `pj`) | 400 | 400 |
+| `bestiaire` | 1 | 1 |
+| `ennemis/demons` | 1 | 1 |
+| `ennemis/hommes-betes` | 1 | 1 |
+| `ennemis/reprouves` | 2 | 2 |
+| `ennemis/skavens` | 1 | 1 |
+| `monstres` | 12 | 12 |
+| Individus nommés (`pnj/<livre>`, `pj`) | 454 | 454 |
 | `bestiaire/forme-bestiale` | 0 | — |
 | `monstres/transformation-kadon` | 9 | — |
-| **Total** | **420** | **411** |
+| **Total** | **481** | **472** |
 
 ## Créatures génériques
 
-### `monstres` (11)
+### `bestiaire` (1)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `bestiaire/chevaux-de-guerre.webp` | Chevaux de guerre | Chevaux de guerre | L28 p.110 | 1 |  |
+
+### `ennemis/demons` (1)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `ennemis/demons/demon-mineur-de-tzeentch.webp` | Démon mineur de Tzeentch | Démon mineur de Tzeentch | L28 p.43 | 1 |  |
+
+### `ennemis/hommes-betes` (1)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `ennemis/hommes-betes/les-gladiateurs-minotaures.webp` | Les gladiateurs minotaures | Les gladiateurs minotaures | L28 p.67 | 1 |  |
+
+### `ennemis/reprouves` (2)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `ennemis/reprouves/cultistes-de-la-main-pourpre-7.webp` | Cultistes de la Main pourpre (7) | Cultistes de la Main pourpre (7) | L28 p.28 | 1 |  |
+| `ennemis/reprouves/magus-du-culte-de-la-main-pourpre.webp` | Magus du culte de la Main pourpre | Magus du culte de la Main pourpre | L28 p.28 | 1 |  |
+
+### `ennemis/skavens` (1)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `ennemis/skavens/guerriers-skavens-de-snikkit-6.webp` | Guerriers skavens de Snikkit (6) | Guerriers skavens de Snikkit (6) | L28 p.91 | 1 |  |
+
+### `monstres` (12)
 
 | Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
 | --- | --- | --- | --- | ---: | --- |
@@ -24,6 +60,7 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 | `monstres/carcasse-de-porc.webp` | Carcasse de porc | Pig Carcass | L21 p.25 | 1 |  |
 | `monstres/carcasse-de-vache.webp` | Carcasse de vache | Cow Carcass | L21 p.25 | 1 |  |
 | `monstres/carrosse-anime.webp` | Carrosse animé | Animated Coach | L21 p.24 | 1 |  |
+| `monstres/doppelganger.webp` | Doppelgänger | Doppelgänger | L28 p.148 | 1 |  |
 | `monstres/les-betes-de-la-ferme.webp` | Les bêtes de la ferme | The Farmyard Beasts | L23 p.106 | 1 |  |
 | `monstres/mobilier-anime-grand.webp` | Mobilier animé, grand | Animated Furniture, Large | L21 p.24 | 1 |  |
 | `monstres/mobilier-anime-moyen.webp` | Mobilier animé, moyen | Animated Furniture, Medium | L21 p.24 | 1 |  |
@@ -540,6 +577,65 @@ PNJ de scénario, monstres uniques et PJ prétirés, par livre de première appa
 | `pnj/l26/commissaire-de-bord-eberhardt-kleingeld-prepose-humain-ancien-matelot-fluvial-argent-5.webp` | Commissaire de bord Eberhardt Kleingeld — Préposé humain, ancien matelot fluvial (Argent 5) | Purser Eberhardt Kleingeld — Human Attendant, Former Boat-Hand (Silver 5) | L26 p.108 | 1 |  |
 | `pnj/l26/frere-martin-et-frere-rolf-moines-ou-nonnes-humains-bronze-4.webp` | Frère Martin et frère Rolf — Moines (ou nonnes) humains (Bronze 4) | Brother Martin and Brother Rolf — Human Monks (Nuns) (Brass 4) | L26 p.116 | 1 |  |
 | `pnj/l26/pere-marcus-professeur-humain-ancien-abbe-or-1.webp` | Père Marcus — Professeur humain, ancien abbé (Or 1) | Father Marcus — Human Professor, Former Abbot (Gold 1) | L26 p.116 | 1 |  |
+
+### L28 — Le Pouvoir derrière le Trône (Ennemi Intérieur 3) (54)
+
+| Fichier proposé | Nom français | Nom anglais | Pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `pnj/l28/kurt-gruber-serveur-bourgeois-humain-ancienne-recrue-argent-2.webp` | Kurt Gruber, serveur — Bourgeois humain, ancienne recrue (Argent 2) | Kurt Gruber, serveur — Bourgeois humain, ancienne recrue (Argent 2) | L28 p.23 | 1 |  |
+| `pnj/l28/uli-breitner-proprietaire-marchand-humain-anciennement-recrue-et-entremetteur-argent-5.webp` | Uli Breitner, propriétaire — Marchand humain, anciennement recrue et entremetteur (Argent 5) | Uli Breitner, propriétaire — Marchand humain, anciennement recrue et entremetteur (Argent 5) | L28 p.23 | 1 |  |
+| `pnj/l28/konrad-alpiger-homme-a-tout-faire-serveur-humain-argent-2.webp` | Konrad Alpiger — Homme à tout faire/serveur humain (Argent 2) | Konrad Alpiger — Homme à tout faire/serveur humain (Argent 2) | L28 p.24 | 1 |  |
+| `pnj/l28/renata-hoeflehner-serveuse-humain-argent-2.webp` | Renata Hoeflehner — Serveuse humain (Argent 2) | Renata Hoeflehner — Serveuse humain (Argent 2) | L28 p.24 | 1 |  |
+| `pnj/l28/tiasmara-flarett-cuisinier-halfling-argent-2.webp` | Tiasmara Flarett — Cuisinier halfling (Argent 2) | Tiasmara Flarett — Cuisinier halfling (Argent 2) | L28 p.24 | 1 |  |
+| `pnj/l28/graf-boris-todbringer-noble-seigneur-humain-electeur-imperial-or-7.webp` | Graf Boris Todbringer — Noble seigneur humain électeur impérial (Or 7) | Graf Boris Todbringer — Noble seigneur humain électeur impérial (Or 7) | L28 p.32 | 1 |  |
+| `pnj/l28/baron-heinrich-todbringer-emissaire-humain-ancien-conseiller-et-intendant-argent-4.webp` | Baron Heinrich Todbringer — Émissaire humain, ancien conseiller et intendant (Argent 4) | Baron Heinrich Todbringer — Émissaire humain, ancien conseiller et intendant (Argent 4) | L28 p.33 | 1 |  |
+| `pnj/l28/baron-stefan-todbringer-heritier-souffreteux-humain.webp` | Baron Stefan Todbringer — Héritier souffreteux humain | Baron Stefan Todbringer — Héritier souffreteux humain | L28 p.33 | 1 |  |
+| `pnj/l28/emil-valgeir-pretre-guerrier-d-ulric-veteran-humain-argent-2.webp` | Emil Valgeir — Prêtre guerrier d’Ulric vétéran humain (Argent 2) | Emil Valgeir — Prêtre guerrier d’Ulric vétéran humain (Argent 2) | L28 p.55 | 1 |  |
+| `pnj/l28/claus-liebnitz-pretre-sergent-d-ulric-veteran-ancien-chevalier-de-l-ordre-du-loup-blanc-argent-3.webp` | Claus Liebnitz — Prêtre sergent d’Ulric vétéran, ancien chevalier de l’ordre du Loup blanc (Argent 3) | Claus Liebnitz — Prêtre sergent d’Ulric vétéran, ancien chevalier de l’ordre du Loup blanc (Argent 3) | L28 p.56 | 1 |  |
+| `pnj/l28/glugnur-tueur-de-troll-nain-bronze-2.webp` | Glugnur — Tueur de troll nain (Bronze 2) | Glugnur — Tueur de troll nain (Bronze 2) | L28 p.61 | 1 |  |
+| `pnj/l28/gustav-holschtweig-colporteur-humain-bronze-4.webp` | Gustav Holschtweig — Colporteur humain (Bronze 4) | Gustav Holschtweig — Colporteur humain (Bronze 4) | L28 p.62 | 1 |  |
+| `pnj/l28/hildi-holschtweig-colporteur-humain-bronze-4.webp` | Hildi Holschtweig — Colporteur humain (Bronze 4) | Hildi Holschtweig — Colporteur humain (Bronze 4) | L28 p.62 | 1 |  |
+| `pnj/l28/antonia-fiegling-ranconneur-humain-bronze-5.webp` | Antonia Fiegling — Rançonneur humain (Bronze 5) | Antonia Fiegling — Rançonneur humain (Bronze 5) | L28 p.63 | 1 |  |
+| `pnj/l28/bruno-hansgorp-coupe-jarret-humain-bronze-3.webp` | Bruno Hansgorp — Coupe-jarret humain (Bronze 3) | Bruno Hansgorp — Coupe-jarret humain (Bronze 3) | L28 p.63 | 1 |  |
+| `pnj/l28/karl-matthaus-voleur-humain-bronze-1.webp` | Karl Matthaus — Voleur humain (Bronze 1*) | Karl Matthaus — Voleur humain (Bronze 1*) | L28 p.64 | 1 |  |
+| `pnj/l28/erina-eberhauer-sorcier-flamboyant-argent-3.webp` | Erina Eberhauer — Sorcier flamboyant (Argent 3) | Erina Eberhauer — Sorcier flamboyant (Argent 3) | L28 p.91 | 1 |  |
+| `pnj/l28/snikkit-vermine-de-choc-skaven.webp` | Snikkit — Vermine de choc skaven | Snikkit — Vermine de choc skaven | L28 p.91 | 1 |  |
+| `pnj/l28/bruno-kohl-entremetteur-humain-ancien-noble-et-apothicaire-bronze-3.webp` | Bruno Kohl — Entremetteur humain, ancien noble et apothicaire (Bronze 3) | Bruno Kohl — Entremetteur humain, ancien noble et apothicaire (Bronze 3) | L28 p.94 | 1 |  |
+| `pnj/l28/fritz-dreckig-negociant-humain-argent-2.webp` | Fritz Dreckig — Négociant humain (Argent 2) | Fritz Dreckig — Négociant humain (Argent 2) | L28 p.94 | 1 |  |
+| `pnj/l28/otto-geschwur-coupe-jarret-humain-bronze-3.webp` | Otto Geschwur — Coupe-jarret humain (Bronze 3) | Otto Geschwur — Coupe-jarret humain (Bronze 3) | L28 p.94 | 1 |  |
+| `pnj/l28/selena-prostitue-humain-bronze-1.webp` | Selena — Prostitué humain (Bronze 1) | Selena — Prostitué humain (Bronze 1) | L28 p.94 | 1 |  |
+| `pnj/l28/marie-astrid-platini-prostitue-humain-bronze-1.webp` | Marie-Astrid Platini — Prostitué humain (Bronze 1) | Marie-Astrid Platini — Prostitué humain (Bronze 1) | L28 p.95 | 1 |  |
+| `pnj/l28/anton-hundisch-sorcier-novice-humain-bronze-3.webp` | Anton Hundisch — Sorcier novice humain (Bronze 3) | Anton Hundisch — Sorcier novice humain (Bronze 3) | L28 p.97 | 1 |  |
+| `pnj/l28/dagmar-mitschuldige-soldat-humain-argent-3.webp` | Dagmar Mitschuldige — Soldat humain (Argent 3) | Dagmar Mitschuldige — Soldat humain (Argent 3) | L28 p.97 | 1 |  |
+| `pnj/l28/hultz-fleischer-coupe-jarret-humain-bronze-3.webp` | Hultz Fleischer — Coupe-jarret humain (Bronze 3) | Hultz Fleischer — Coupe-jarret humain (Bronze 3) | L28 p.97 | 1 |  |
+| `pnj/l28/faucon-eclaireur-humain-ancien-chasseur-et-domestique-bronze-5.webp` | Faucon — Éclaireur humain, ancien chasseur et domestique (Bronze 5) | Faucon — Éclaireur humain, ancien chasseur et domestique (Bronze 5) | L28 p.109 | 1 |  |
+| `pnj/l28/gaston-serviteur-humain-ancien-employe-argent-3.webp` | Gaston — Serviteur humain, ancien employé (Argent 3) | Gaston — Serviteur humain, ancien employé (Argent 3) | L28 p.109 | 1 |  |
+| `pnj/l28/gueulard-chien-de-garde.webp` | Gueulard — Chien de garde | Gueulard — Chien de garde | L28 p.109 | 1 |  |
+| `pnj/l28/swelt-tunger-artisan-humain-ancien-voleur-argent-1.webp` | Swelt Tunger — Artisan humain, ancien voleur (Argent 1) | Swelt Tunger — Artisan humain, ancien voleur (Argent 1) | L28 p.109 | 1 |  |
+| `pnj/l28/lurk-gladiateur-humain-argent-2.webp` | Lurk — Gladiateur humain (Argent 2) | Lurk — Gladiateur humain (Argent 2) | L28 p.110 | 1 |  |
+| `pnj/l28/senestre-faucon.webp` | Sénestre — Faucon | Sénestre — Faucon | L28 p.110 | 1 |  |
+| `pnj/l28/josef-sparsam-chancelier-ancien-maitre-du-barreau-or-3.webp` | Josef Sparsam — Chancelier, ancien maître du barreau (Or 3) | Josef Sparsam — Chancelier, ancien maître du barreau (Or 3) | L28 p.114 | 1 |  |
+| `pnj/l28/dieter-schmiedehammer-champion-de-justice-or-3.webp` | Dieter Schmiedehammer — Champion de justice (Or 3) | Dieter Schmiedehammer — Champion de justice (Or 3) | L28 p.116 | 1 |  |
+| `pnj/l28/rallane-lafarel-troubadour-argent-3.webp` | Rallane Lafarel — Troubadour (Argent 3) | Rallane Lafarel — Troubadour (Argent 3) | L28 p.118 | 1 |  |
+| `pnj/l28/katarina-todbringer-noble-or-3.webp` | Katarina Todbringer — Noble (Or 3) | Katarina Todbringer — Noble (Or 3) | L28 p.120 | 1 |  |
+| `pnj/l28/hildegarde-zimperlich-valet-argent-5.webp` | Hildegarde Zimperlich — Valet (Argent 5) | Hildegarde Zimperlich — Valet (Argent 5) | L28 p.122 | 1 |  |
+| `pnj/l28/johann-schwermutt-officier-or-1.webp` | Johann Schwermutt — Officier (Or 1) | Johann Schwermutt — Officier (Or 1) | L28 p.124 | 1 |  |
+| `pnj/l28/ulrich-schutzmann-capitaine-de-la-garde-or-1.webp` | Ulrich Schutzmann — Capitaine de la garde (Or 1) | Ulrich Schutzmann — Capitaine de la garde (Or 1) | L28 p.124 | 1 |  |
+| `pnj/l28/maximillian-von-genscher-officier-or-1.webp` | Maximillian von Genscher — Officier (Or 1) | Maximillian von Genscher — Officier (Or 1) | L28 p.125 | 1 |  |
+| `pnj/l28/albrecht-helseher-seigneur-sorcier-or-2.webp` | Albrecht Helseher — Seigneur sorcier (Or 2) | Albrecht Helseher — Seigneur sorcier (Or 2) | L28 p.127 | 1 |  |
+| `pnj/l28/janna-eberhauer-maitre-sorcier-or-1.webp` | Janna Eberhauer — Maître sorcier (Or 1) | Janna Eberhauer — Maître sorcier (Or 1) | L28 p.128 | 1 |  |
+| `pnj/l28/ar-ulric-jarrick-valgeir-lecteur-or-2.webp` | Ar-Ulric Jarrick Valgeir — Lecteur (Or 2) | Ar-Ulric Jarrick Valgeir — Lecteur (Or 2) | L28 p.130 | 1 |  |
+| `pnj/l28/emmanuelle-schlagen-conseiller-argent-4.webp` | Emmanuelle Schlagen — Conseiller (Argent 4) | Emmanuelle Schlagen — Conseiller (Argent 4) | L28 p.132 | 1 |  |
+| `pnj/l28/siegfried-prunkvoll-chevalier-commandeur-or-2.webp` | Siegfried Prunkvoll — Chevalier commandeur (Or 2) | Siegfried Prunkvoll — Chevalier commandeur (Or 2) | L28 p.134 | 1 |  |
+| `pnj/l28/allavandrel-fanmaris-maitre-de-la-chasse-argent-3.webp` | Allavandrel Fanmaris — Maître de la chasse (Argent 3) | Allavandrel Fanmaris — Maître de la chasse (Argent 3) | L28 p.136 | 1 |  |
+| `pnj/l28/gotthard-wallenstein-marchand-argent-5.webp` | Gotthard Wallenstein — Marchand (Argent 5) | Gotthard Wallenstein — Marchand (Argent 5) | L28 p.138 | 1 |  |
+| `pnj/l28/luigi-pavarotti-arnaqueur-argent-2.webp` | Luigi Pavarotti — Arnaqueur (Argent 2) | Luigi Pavarotti — Arnaqueur (Argent 2) | L28 p.140 | 1 |  |
+| `pnj/l28/kirsten-jung-conseiller-argent-4.webp` | Kirsten Jung — Conseiller (Argent 4) | Kirsten Jung — Conseiller (Argent 4) | L28 p.142 | 1 |  |
+| `pnj/l28/natasha-sinnlich-emissaire-argent-4.webp` | Natasha Sinnlich — Émissaire (Argent 4) | Natasha Sinnlich — Émissaire (Argent 4) | L28 p.142 | 1 |  |
+| `pnj/l28/petra-liebkosen-emissaire-argent-4.webp` | Petra Liebkosen — Émissaire (Argent 4) | Petra Liebkosen — Émissaire (Argent 4) | L28 p.143 | 1 |  |
+| `pnj/l28/joachim-hoflich-maitre-du-barreau-or-1.webp` | Joachim Hoflich — Maître du barreau (Or 1) | Joachim Hoflich — Maître du barreau (Or 1) | L28 p.145 | 1 |  |
+| `pnj/l28/reiner-ehrlich-maitre-du-barreau-or-1.webp` | Reiner Ehrlich — Maître du barreau (Or 1) | Reiner Ehrlich — Maître du barreau (Or 1) | L28 p.145 | 1 |  |
+| `pnj/l28/karl-heinz-wasmeier-maitre-du-barreau-or-1.webp` | Karl Heinz Wasmeier — Maître du barreau (Or 1) | Karl Heinz Wasmeier — Maître du barreau (Or 1) | L28 p.146 | 1 |  |
 
 ## `bestiaire/forme-bestiale`
 

@@ -1,0 +1,9334 @@
+{
+ "schemaVersion": 1,
+ "book": "L28",
+ "title": "Le Pouvoir derrière le Trône (Ennemi Intérieur 3)",
+ "edition": "V4",
+ "source": {
+  "corpusId": "L28",
+  "sha256": "3408b911081832df748a504ab2de2ee4eec1653d18fb75cb147dd4333de35284"
+ },
+ "profiles": [
+  {
+   "id": "E0-P-1000",
+   "book": "L28",
+   "page": 33,
+   "physicalPage": 36,
+   "kind": "profile",
+   "blockKey": "L28:36:0",
+   "name": "Baron Heinrich Todbringer — Émissaire humain, ancien conseiller et intendant (Argent 4)",
+   "nameFr": "Baron Heinrich Todbringer — Émissaire humain, ancien conseiller et intendant (Argent 4)",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 46,
+    "F": 61,
+    "E": 52,
+    "I": 36,
+    "Ag": 44,
+    "Dex": 31,
+    "Int": 49,
+    "FM": 51,
+    "Soc": 44
+   },
+   "wounds": 21,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 54
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 61
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 54
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 54
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 54
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 54
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 59
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 54
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 46
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 46
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 54
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 66
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 62
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 57
+    },
+    {
+     "name": "Lore (Altdorf)",
+     "nameFr": "Savoir (Altdorf)",
+     "value": 54
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 59
+    },
+    {
+     "name": "Lore (Ostland)",
+     "nameFr": "Savoir (Ostland)",
+     "frUnverified": true,
+     "value": 54
+    },
+    {
+     "name": "Secret Signs (Réseau d’espionnage à Middenheim)",
+     "nameFr": "Signes secrets (Réseau d’espionnage à Middenheim)",
+     "frUnverified": true,
+     "value": 54
+    }
+   ],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Night Vision"
+    },
+    {
+     "name": "Seasoned Traveller"
+    }
+   ],
+   "trappings": [
+    "liasse de papiers diplomatiques",
+    "habit de cour raffiné (mais pratique)",
+    "réseau d’espionnage à Middenheim"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.33"
+  },
+  {
+   "id": "E0-P-1001",
+   "book": "L28",
+   "page": 33,
+   "physicalPage": 36,
+   "kind": "profile",
+   "blockKey": "L28:36:1",
+   "name": "Baron Stefan Todbringer — Héritier souffreteux humain",
+   "nameFr": "Baron Stefan Todbringer — Héritier souffreteux humain",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 15,
+    "F": 36,
+    "E": 31,
+    "I": 14,
+    "Ag": 22,
+    "Dex": 21,
+    "Int": 15,
+    "FM": 15,
+    "Soc": 15
+   },
+   "wounds": 10,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 44
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 33
+    }
+   ],
+   "trappings": [
+    "vêtements"
+   ],
+   "specialRules": [
+    "Craintif (Étrangers)"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.33"
+  },
+  {
+   "id": "E0-P-1002",
+   "book": "L28",
+   "page": 43,
+   "physicalPage": 46,
+   "kind": "profile",
+   "blockKey": "L28:46:0",
+   "name": "Démon mineur de Tzeentch",
+   "nameFr": "Démon mineur de Tzeentch",
+   "stats": {
+    "M": 4,
+    "CC": 60,
+    "CT": 50,
+    "F": 40,
+    "E": 30,
+    "I": 75,
+    "Ag": 60,
+    "Dex": 35,
+    "Int": 50,
+    "FM": 70,
+    "Soc": 45
+   },
+   "wounds": 17,
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Corruption",
+     "param": "Moderate",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Daemonic",
+     "rating": "8+",
+     "ref": "E0-T-018"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Clever",
+     "ref": "E0-T-073"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Métal, Tzeentch",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Disease",
+     "param": "Fièvre Cérébrale Pourpre",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Focalisation (Chamon 74, Tzeentch 85) et Langue (Magick)",
+     "rank": 76
+    }
+   ],
+   "specialRules": [
+    "Doppelgänger (voir ci-dessous)"
+   ],
+   "keywords": [
+    "demon-mineur",
+    "tzeentch"
+   ],
+   "nameFrSource": "L28 p.43"
+  },
+  {
+   "id": "E0-P-1003",
+   "book": "L28",
+   "page": 55,
+   "physicalPage": 58,
+   "kind": "profile",
+   "blockKey": "L28:58:0",
+   "name": "Emil Valgeir — Prêtre guerrier d’Ulric vétéran humain (Argent 2)",
+   "nameFr": "Emil Valgeir — Prêtre guerrier d’Ulric vétéran humain (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 48,
+    "CT": 32,
+    "F": 41,
+    "E": 45,
+    "I": 52,
+    "Ag": 32,
+    "Dex": 34,
+    "Int": 41,
+    "FM": 53,
+    "Soc": 44
+   },
+   "wounds": 17,
+   "armour": {
+    "ap": 4
+   },
+   "attacks": [
+    {
+     "name": "Hache-marteau",
+     "damage": 12,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 47
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 68
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 54
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 54
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 59
+    },
+    {
+     "name": "Entertain (Speeches)",
+     "nameFr": "Divertissement (Discours)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 47
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 44
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 63
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 54
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 74
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 59
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 55
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 73
+    }
+   ],
+   "talents": [
+    {
+     "name": "Bless (Ulric)"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Etiquette (Adeptes d’Ulric)"
+    }
+   ],
+   "trappings": [
+    "peau de loup gris",
+    "armure de plates",
+    "arme simple (hache-marteau)",
+    "croc du loup du givre",
+    "2d10 pistoles d’argent"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.55"
+  },
+  {
+   "id": "E0-P-1004",
+   "book": "L28",
+   "page": 56,
+   "physicalPage": 59,
+   "kind": "profile",
+   "blockKey": "L28:59:0",
+   "name": "Claus Liebnitz — Prêtre sergent d’Ulric vétéran, ancien chevalier de l’ordre du Loup blanc (Argent 3)",
+   "nameFr": "Claus Liebnitz — Prêtre sergent d’Ulric vétéran, ancien chevalier de l’ordre du Loup blanc (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 55,
+    "CT": 45,
+    "F": 45,
+    "E": 41,
+    "I": 45,
+    "Ag": 38,
+    "Dex": 35,
+    "Int": 46,
+    "FM": 54,
+    "Soc": 48
+   },
+   "wounds": 17,
+   "armour": {
+    "ap": 4
+   },
+   "attacks": [
+    {
+     "name": "Hache",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 48
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 64
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 58
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 52
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 58
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 65
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 61
+    },
+    {
+     "name": "Entertain (Speeches)",
+     "nameFr": "Divertissement (Discours)",
+     "value": 58
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 58
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 48
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 49
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 56
+    },
+    {
+     "name": "Trade (Farrier)",
+     "nameFr": "Métier (Maréchal-ferrant)",
+     "value": 45
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 58
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 49
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 66
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 58
+    }
+   ],
+   "traits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Furious Assault"
+    },
+    {
+     "name": "Bless (Ulric)"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Holy Hatred"
+    },
+    {
+     "name": "Invoke (Ulric)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Etiquette (Adeptes d’Ulric)"
+    }
+   ],
+   "trappings": [
+    "arme simple (hache)",
+    "armure de plates portée par-dessus une armure en cuir souple",
+    "bouclier",
+    "cheval de guerre",
+    "3d10 pistoles d’argent"
+   ],
+   "keywords": [
+    "loup"
+   ],
+   "nameFrSource": "L28 p.56"
+  },
+  {
+   "id": "E0-P-1005",
+   "book": "L28",
+   "page": 56,
+   "physicalPage": 59,
+   "kind": "profile",
+   "blockKey": "L28:59:1",
+   "name": "Isolde Begegnen — Human High Priestess (Gold 1)",
+   "nameFr": "Isolde Begegnen — Grande prêtresse de Shallya (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 32,
+    "F": 34,
+    "E": 50,
+    "I": 44,
+    "Ag": 54,
+    "Dex": 37,
+    "Int": 56,
+    "FM": 51,
+    "Soc": 54
+   },
+   "wounds": 18,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 64
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 71
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 74
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 64
+    },
+    {
+     "name": "Entertain (Speeches)",
+     "nameFr": "Divertissement (Discours)",
+     "value": 64
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 69
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 76
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 64
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 64
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 74
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 77
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 66
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 70
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 61
+    },
+    {
+     "name": "Lore (Herbs)",
+     "nameFr": "Savoir (Herbes)",
+     "value": 66
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 66
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 66
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 76
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Bless (Shallya)"
+    },
+    {
+     "name": "Surgery"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Hatred (Adeptes de Nurgle)"
+    },
+    {
+     "name": "Invoke (Shallya)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Resistant (Maladie)"
+    },
+    {
+     "name": "Etiquette (Cultistes)"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Holy Visions"
+    }
+   ],
+   "trappings": [
+    "symbole religieux de Shallya",
+    "robe",
+    "bourse contenant l’équivalent de 1 CO"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.56"
+  },
+  {
+   "id": "E0-P-1006",
+   "book": "L28",
+   "page": 61,
+   "physicalPage": 64,
+   "kind": "profile",
+   "blockKey": "L28:64:0",
+   "name": "Glugnur — Tueur de troll nain (Bronze 2)",
+   "nameFr": "Glugnur — Tueur de troll nain (Bronze 2)",
+   "stats": {
+    "M": 3,
+    "CC": 60,
+    "CT": 33,
+    "F": 42,
+    "E": 51,
+    "I": 30,
+    "Ag": 26,
+    "Dex": 35,
+    "Int": 35,
+    "FM": 55,
+    "Soc": 20
+   },
+   "wounds": 19,
+   "attacks": [
+    {
+     "name": "Hache",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 75
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 44
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 45
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 52
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 40
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 61
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 71
+    },
+    {
+     "name": "Lore (Trolls)",
+     "nameFr": "Savoir (Trolls)",
+     "frUnverified": true,
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "elfes, ou tout le monde une fois sous influence du stimulant",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Hatred",
+     "param": "Peaux-vertes",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Prejudice",
+     "param": "non guerriers",
+     "ref": "E0-T-081"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Resolute"
+    },
+    {
+     "name": "Frenzy"
+    },
+    {
+     "name": "Relentless"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Fearless (Tous)"
+    },
+    {
+     "name": "Slayer"
+    },
+    {
+     "name": "Night Vision"
+    }
+   ],
+   "trappings": [
+    "arme simple (Hache)",
+    "3 doses de Délice de Ranald",
+    "bourse contenant 2 CO et 15/–"
+   ],
+   "keywords": [
+    "troll",
+    "nain"
+   ],
+   "nameFrSource": "L28 p.61"
+  },
+  {
+   "id": "E0-P-1007",
+   "book": "L28",
+   "page": 62,
+   "physicalPage": 65,
+   "kind": "profile",
+   "blockKey": "L28:65:0",
+   "name": "Gustav Holschtweig — Colporteur humain (Bronze 4)",
+   "nameFr": "Gustav Holschtweig — Colporteur humain (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 26,
+    "F": 41,
+    "E": 33,
+    "I": 35,
+    "Ag": 32,
+    "Dex": 33,
+    "Int": 41,
+    "FM": 45,
+    "Soc": 35
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Dague",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 42
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 45
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
+     "name": "Trade (Tinker)",
+     "nameFr": "Métier (Bricoleur)",
+     "value": 48
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 45
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 48
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 56
+    }
+   ],
+   "talents": [
+    {
+     "name": "Tinker"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Rover"
+    }
+   ],
+   "trappings": [
+    "dague",
+    "assortiment de 20 casseroles et poêles",
+    "4 marmites",
+    "12 louches",
+    "20 assortiments de couverts",
+    "12 mètres de soie",
+    "70 rubans de soie",
+    "4 peaux de cuir tanné",
+    "24 gants-marionnettes en peluche",
+    "une bourse contenant 2 CO et 7/–",
+    "une boîte contenant des sacs de 3 CO et 5/–"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.62"
+  },
+  {
+   "id": "E0-P-1008",
+   "book": "L28",
+   "page": 62,
+   "physicalPage": 65,
+   "kind": "profile",
+   "blockKey": "L28:65:1",
+   "name": "Hildi Holschtweig — Colporteur humain (Bronze 4)",
+   "nameFr": "Hildi Holschtweig — Colporteur humain (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 28,
+    "F": 32,
+    "E": 33,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 37,
+    "FM": 32,
+    "Soc": 35
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Dague",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 45
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
+     "name": "Trade (Tinker)",
+     "nameFr": "Métier (Bricoleur)",
+     "value": 45
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 45
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 43
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 50
+    }
+   ],
+   "talents": [
+    {
+     "name": "Tinker"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "sac de couchage",
+    "dague",
+    "collier en or (2 CO)",
+    "alliance en or (1 CO)",
+    "bourse contenant 1 CO et 3d10 pistoles d’argent"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.62"
+  },
+  {
+   "id": "E0-P-1009",
+   "book": "L28",
+   "page": 63,
+   "physicalPage": 66,
+   "kind": "profile",
+   "blockKey": "L28:66:0",
+   "name": "Antonia Fiegling — Rançonneur humain (Bronze 5)",
+   "nameFr": "Antonia Fiegling — Rançonneur humain (Bronze 5)",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 26,
+    "F": 31,
+    "E": 40,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 31,
+    "FM": 22,
+    "Soc": 26
+   },
+   "wounds": 13,
+   "armour": {
+    "ap": 1,
+    "detail": "Corps"
+   },
+   "attacks": [
+    {
+     "name": "Coup-de-poing",
+     "damage": 5,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Matraque",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 32
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 36
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 45
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 41
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 36
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "quiconque se dresse sur son chemin",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Criminal"
+    }
+   ],
+   "trappings": [
+    "arme simple (matraque)",
+    "coup-de-poing",
+    "justaucorps de cuir",
+    "bague en or sertie d’une opale (1 CO)",
+    "bourse contenant 38 pistoles d’argent à la ceinture"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.63"
+  },
+  {
+   "id": "E0-P-1010",
+   "book": "L28",
+   "page": 63,
+   "physicalPage": 66,
+   "kind": "profile",
+   "blockKey": "L28:66:1",
+   "name": "Bruno Hansgorp — Coupe-jarret humain (Bronze 3)",
+   "nameFr": "Bruno Hansgorp — Coupe-jarret humain (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 25,
+    "F": 55,
+    "E": 54,
+    "I": 41,
+    "Ag": 38,
+    "Dex": 28,
+    "Int": 25,
+    "FM": 25,
+    "Soc": 28
+   },
+   "wounds": 17,
+   "armour": {
+    "ap": 1,
+    "detail": "Corps"
+   },
+   "attacks": [
+    {
+     "name": "Coup-de-poing",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 35
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 75
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 66
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 74
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 27
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "non Middenheimers",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Dirty Fighting",
+     "rank": 2
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 2
+    }
+   ],
+   "trappings": [
+    "coup-de-poing",
+    "justaucorps de cuir",
+    "bourse contenant 2d10 pistoles d’argent à la ceinture"
+   ],
+   "notes": [
+    "* Le bonus apporté par Combat déloyal est déjà inclus, puisque Bruno ne connaît aucune autre manière de se battre."
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.63"
+  },
+  {
+   "id": "E0-P-1011",
+   "book": "L28",
+   "page": 64,
+   "physicalPage": 67,
+   "kind": "profile",
+   "blockKey": "L28:67:0",
+   "name": "Karl Matthaus — Voleur humain (Bronze 1*)",
+   "nameFr": "Karl Matthaus — Voleur humain (Bronze 1*)",
+   "stats": {
+    "M": 4,
+    "CC": 22,
+    "CT": 35,
+    "F": 25,
+    "E": 33,
+    "I": 41,
+    "Ag": 38,
+    "Dex": 42,
+    "Int": 33,
+    "FM": 35,
+    "Soc": 38
+   },
+   "wounds": 11,
+   "attacks": [
+    {
+     "name": "Fronde",
+     "damage": 6,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Surin",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 42
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 48
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 48
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 51
+    },
+    {
+     "name": "Ranged (Sling)",
+     "nameFr": "Projectiles (Fronde)",
+     "value": 45
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 38
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Figures d’autorité",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Alley Cat"
+    },
+    {
+     "name": "Flee!"
+    }
+   ],
+   "trappings": [
+    "surin (dague)",
+    "bourse contenant 8 grosses billes",
+    "fronde",
+    "bourse secrète contenant 8 pistoles et 17 sous de cuivre"
+   ],
+   "notes": [
+    "* Le fait que Karl et ses comparses soient jeunes fait baisser leur statut, qui serait plus élevé autrement."
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.64"
+  },
+  {
+   "id": "E0-P-1012",
+   "book": "L28",
+   "page": 67,
+   "physicalPage": 70,
+   "kind": "profile",
+   "blockKey": "L28:70:0",
+   "name": "Les gladiateurs minotaures",
+   "nameFr": "Les gladiateurs minotaures",
+   "stats": {
+    "M": 6,
+    "CC": 65,
+    "CT": 25,
+    "F": 51,
+    "E": 50,
+    "I": 25,
+    "Ag": 35,
+    "Dex": 25,
+    "Int": 20,
+    "FM": 30,
+    "Soc": 15
+   },
+   "wounds": 36,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Gourdin",
+     "damage": 9,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Horns",
+     "damage": 9,
+     "trait": "Horns"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Horns",
+     "rating": "+9",
+     "ref": "E0-T-028"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "specialRules": [
+    "Vision nocturne Attention"
+   ],
+   "keywords": [
+    "minotaure"
+   ],
+   "nameFrSource": "L28 p.67"
+  },
+  {
+   "id": "E0-P-1013",
+   "book": "L28",
+   "page": 87,
+   "physicalPage": 90,
+   "kind": "profile",
+   "blockKey": "L28:90:0",
+   "name": "Nastassia — Human Spymaster (Gold 4)",
+   "nameFr": "Nastassia — Agent (Or 4)",
+   "stats": {
+    "M": 4,
+    "CC": 56,
+    "CT": 49,
+    "F": 37,
+    "E": 35,
+    "I": 60,
+    "Ag": 58,
+    "Dex": 38,
+    "Int": 65,
+    "FM": 60,
+    "Soc": 63
+   },
+   "wounds": 15,
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 83
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 83
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 76
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 78
+    },
+    {
+     "name": "Entertain (Interprétation)",
+     "nameFr": "Divertissement (Interprétation)",
+     "frUnverified": true,
+     "value": 78
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 52
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 53
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 80
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 80
+    },
+    {
+     "name": "Language (Estalian)",
+     "nameFr": "Langue (Estalien)",
+     "value": 75
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 70
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 85
+    },
+    {
+     "name": "Language (Wastelander)",
+     "nameFr": "Langue (Wastelander)",
+     "value": 90
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 86
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 85
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 85
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 86
+    },
+    {
+     "name": "Lore (Middenland)",
+     "nameFr": "Savoir (Middenland)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Secret Signs (Réseau d’espionnage de Middenheim)",
+     "nameFr": "Signes secrets (Réseau d’espionnage de Middenheim)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 83
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Secret Identity"
+    },
+    {
+     "name": "Mimic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Lip Reading"
+    },
+    {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Tower of Memories"
+    }
+   ],
+   "trappings": [
+    "pigeons voyageurs (dans sa maison)",
+    "laissez-passer pour l’intérieur du Palais",
+    "cotte de mailles",
+    "coupe-gorge",
+    "amulette de cuivre trois fois bénie",
+    "potion d’invisibilité",
+    "3 couronnes d’or en coupures diverses"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.87"
+  },
+  {
+   "id": "E0-P-1014",
+   "book": "L28",
+   "page": 91,
+   "physicalPage": 94,
+   "kind": "profile",
+   "blockKey": "L28:94:0",
+   "name": "Snikkit — Vermine de choc skaven",
+   "nameFr": "Snikkit — Vermine de choc skaven",
+   "stats": {
+    "M": 5,
+    "CC": 55,
+    "CT": 25,
+    "F": 35,
+    "E": 35,
+    "I": 55,
+    "Ag": 50,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 25,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "armour": {
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Lance courte",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 70
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 65
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 55
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 65
+    }
+   ],
+   "traits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "arme simple (lance courte)",
+    "dague",
+    "cotte de mailles",
+    "chausses et coiffe portées sur du cuir souple",
+    "bouclier"
+   ],
+   "notes": [
+    "*Snikkit n’a qu’un œil, ce qui explique sa faible CT."
+   ],
+   "starred": [
+    "CT"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "L28 p.91"
+  },
+  {
+   "id": "E0-P-1015",
+   "book": "L28",
+   "page": 91,
+   "physicalPage": 94,
+   "kind": "profile",
+   "blockKey": "L28:94:1",
+   "name": "Guerriers skavens de Snikkit (6)",
+   "nameFr": "Guerriers skavens de Snikkit (6)",
+   "stats": {
+    "M": 5,
+    "CC": 30,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 20,
+    "Soc": 20
+   },
+   "wounds": 11,
+   "armour": {
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Fronde",
+     "damage": 6,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Arme simple",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Sling)",
+     "nameFr": "Projectiles (Fronde)",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "trappings": [
+    "lui sans armure"
+   ],
+   "keywords": [
+    "skaven"
+   ],
+   "nameFrSource": "L28 p.91"
+  },
+  {
+   "id": "E0-P-1016",
+   "book": "L28",
+   "page": 91,
+   "physicalPage": 94,
+   "kind": "profile",
+   "blockKey": "L28:94:2",
+   "name": "Erina Eberhauer — Sorcier flamboyant (Argent 3)",
+   "nameFr": "Erina Eberhauer — Sorcier flamboyant (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 44,
+    "CT": 31,
+    "F": 30,
+    "E": 31,
+    "I": 33,
+    "Ag": 37,
+    "Dex": 31,
+    "Int": 48,
+    "FM": 42,
+    "Soc": 31
+   },
+   "wounds": 13,
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 52
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 36
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 54
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 47
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 51
+    },
+    {
+     "name": "Channelling (Aqshy)",
+     "nameFr": "Focalisation (Aqshy)",
+     "frUnverified": true,
+     "value": 52
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 43
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 58
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 43
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 34
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 58
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 51
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Linguistics"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Arcane Magic (Feu)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Perfect Pitch"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "trappings": [],
+   "spells": {
+    "Petty": [
+     "Bruits",
+     "Coup de vent",
+     "Éblouissant",
+     "Fléchette",
+     "Lumière",
+     "Serrure ouverte",
+     "Tendre l’oreille"
+    ],
+    "spells": [
+     "Chute",
+     "Envol",
+     "Grands feux d’U’Zhul",
+     "L’Épée ardente de Rhuin"
+    ]
+   },
+   "keywords": [
+    "lanceur-de-sorts"
+   ],
+   "nameFrSource": "L28 p.91"
+  },
+  {
+   "id": "E0-P-1017",
+   "book": "L28",
+   "page": 94,
+   "physicalPage": 97,
+   "kind": "profile",
+   "blockKey": "L28:97:0",
+   "name": "Selena — Prostitué humain (Bronze 1)",
+   "nameFr": "Selena — Prostitué humain (Bronze 1)",
+   "stats": {
+    "M": 4,
+    "CC": 32,
+    "CT": 35,
+    "F": 28,
+    "E": 35,
+    "I": 35,
+    "Ag": 36,
+    "Dex": 38,
+    "Int": 28,
+    "FM": 30,
+    "Soc": 35
+   },
+   "wounds": 11,
+   "attacks": [
+    {
+     "name": "Dague",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 40
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 45
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 33
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 31
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 45
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 40
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 40
+    }
+   ],
+   "trappings": [
+    "dague",
+    "bracelet en or (2 CO)",
+    "fiole de parfum écœurant",
+    "pendentif en argent (5 pistoles)"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.94"
+  },
+  {
+   "id": "E0-P-1018",
+   "book": "L28",
+   "page": 94,
+   "physicalPage": 97,
+   "kind": "profile",
+   "blockKey": "L28:97:1",
+   "name": "Fritz Dreckig — Négociant humain (Argent 2)",
+   "nameFr": "Fritz Dreckig — Négociant humain (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 37,
+    "CT": 43,
+    "F": 44,
+    "E": 45,
+    "I": 33,
+    "Ag": 31,
+    "Dex": 28,
+    "Int": 26,
+    "FM": 35,
+    "Soc": 25
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 1,
+    "detail": "Corps"
+   },
+   "attacks": [
+    {
+     "name": "Dague",
+     "damage": 6,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Fléau",
+     "damage": 9,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Épée",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 30
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 36
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 53
+    },
+    {
+     "name": "Melee (Flail)",
+     "nameFr": "Corps à corps (Fléau)",
+     "value": 55
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 30
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 36
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 30
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 54
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Elfes",
+     "ref": "E0-T-081"
+    }
+   ],
+   "trappings": [
+    "justaucorps de cuir",
+    "arme simple (épée, sur le mur derrière le bar)",
+    "fléau (caché sous le bar)",
+    "dague",
+    "mais peu de gens oseraient voler Fritz."
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.94"
+  },
+  {
+   "id": "E0-P-1019",
+   "book": "L28",
+   "page": 94,
+   "physicalPage": 97,
+   "kind": "profile",
+   "blockKey": "L28:97:2",
+   "name": "Bruno Kohl — Entremetteur humain, ancien noble et apothicaire (Bronze 3)",
+   "nameFr": "Bruno Kohl — Entremetteur humain, ancien noble et apothicaire (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": 31,
+    "F": 34,
+    "E": 28,
+    "I": 53,
+    "Ag": 52,
+    "Dex": 60,
+    "Int": 31,
+    "FM": 28,
+    "Soc": 49
+   },
+   "wounds": 9,
+   "attacks": [
+    {
+     "name": "Dague",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Matraque",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 64
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 43
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 64
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 62
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 49
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 69
+    },
+    {
+     "name": "Trade (Poisoner)",
+     "nameFr": "Métier (Empoisonneur)",
+     "value": 75
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 51
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 68
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 69
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 38
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 48
+    },
+    {
+     "name": "Lore (Chemistry)",
+     "nameFr": "Savoir (Chimie)",
+     "value": 41
+    },
+    {
+     "name": "Lore (Remèdes)",
+     "nameFr": "Savoir (Remèdes)",
+     "frUnverified": true,
+     "value": 41
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 64
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Gardes",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Concoct"
+    },
+    {
+     "name": "Doomed (Pas d’excès dans le colportage)"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Etiquette (Criminels, Nobles)"
+    }
+   ],
+   "trappings": [
+    "dague",
+    "collier en or ostentatoire (2 CO)",
+    "2 anneaux en or (2 CO chacun)",
+    "20 doses de Délice de Ranald",
+    "5 doses de racine de mandragore"
+   ],
+   "keywords": [
+    "humain",
+    "noble"
+   ],
+   "nameFrSource": "L28 p.94"
+  },
+  {
+   "id": "E0-P-1020",
+   "book": "L28",
+   "page": 94,
+   "physicalPage": 97,
+   "kind": "profile",
+   "blockKey": "L28:97:3",
+   "name": "Otto Geschwur — Coupe-jarret humain (Bronze 3)",
+   "nameFr": "Otto Geschwur — Coupe-jarret humain (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 42,
+    "CT": 28,
+    "F": 56,
+    "E": 41,
+    "I": 35,
+    "Ag": 36,
+    "Dex": 29,
+    "Int": 33,
+    "FM": 25,
+    "Soc": 23
+   },
+   "wounds": 15,
+   "attacks": [
+    {
+     "name": "Dague +7, Massue +9",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 46
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 53
+    },
+    {
+     "name": "Entertain (Taunt)",
+     "nameFr": "Divertissement (Raillerie)",
+     "value": 33
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 46
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 28
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 33
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 51
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 51
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Les faibles",
+     "ref": "E0-T-081"
+    }
+   ],
+   "trappings": [
+    "dague",
+    "arme simple (massue sous le comptoir)"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.94"
+  },
+  {
+   "id": "E0-P-1021",
+   "book": "L28",
+   "page": 95,
+   "physicalPage": 98,
+   "kind": "profile",
+   "blockKey": "L28:98:0",
+   "name": "Marie-Astrid Platini — Prostitué humain (Bronze 1)",
+   "nameFr": "Marie-Astrid Platini — Prostitué humain (Bronze 1)",
+   "stats": {
+    "M": 4,
+    "CC": 31,
+    "CT": 37,
+    "F": 30,
+    "E": 32,
+    "I": 22,
+    "Ag": 31,
+    "Dex": 36,
+    "Int": 24,
+    "FM": 43,
+    "Soc": 34
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 40
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 45
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 33
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 28
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 45
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 31
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 45
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 40
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Personnes ennuyeuses",
+     "ref": "E0-T-081"
+    }
+   ],
+   "trappings": [
+    "dague",
+    "collier de perles en argent (10 CO)",
+    "bracelet en or (4 CO)",
+    "1 dose de Délice de Ranald",
+    "fiole de parfum musqué",
+    "2 mouchoirs en soie",
+    "2 couronnes d’or",
+    "5 pistoles d’argent"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.95"
+  },
+  {
+   "id": "E0-P-1022",
+   "book": "L28",
+   "page": 96,
+   "physicalPage": 99,
+   "kind": "profile",
+   "blockKey": "L28:99:0",
+   "name": "Brunhilde Klaglich — Human Spymaster (Gold 4)",
+   "nameFr": "Brunhilde Klaglich — Maître espion (Or 4)",
+   "stats": {
+    "M": 4,
+    "CC": 61,
+    "CT": 49,
+    "F": 37,
+    "E": 35,
+    "I": 63,
+    "Ag": 59,
+    "Dex": 40,
+    "Int": 67,
+    "FM": 60,
+    "Soc": 61
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Epée magique",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 81
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 81
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 81
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 78
+    },
+    {
+     "name": "Entertain (Interprétation)",
+     "nameFr": "Divertissement (Interprétation)",
+     "frUnverified": true,
+     "value": 81
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 52
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 60
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 74
+    },
+    {
+     "name": "Hypnotism",
+     "nameFr": "Hypnotisme",
+     "value": 87
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 83
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 87
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 81
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 88
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 81
+    },
+    {
+     "name": "Lore (Middenland)",
+     "nameFr": "Savoir (Middenland)",
+     "frUnverified": true,
+     "value": 87
+    },
+    {
+     "name": "Lore (Hochland)",
+     "nameFr": "Savoir (Hochland)",
+     "frUnverified": true,
+     "value": 87
+    },
+    {
+     "name": "Secret Signs (Thief)",
+     "nameFr": "Signes secrets (Voleur)",
+     "value": 87
+    },
+    {
+     "name": "Secret Signs (Vagabond)",
+     "nameFr": "Signes secrets (Vagabond)",
+     "frUnverified": true,
+     "value": 82
+    },
+    {
+     "name": "Secret Signs (Code de Wasmeier)",
+     "nameFr": "Signes secrets (Code de Wasmeier)",
+     "frUnverified": true,
+     "value": 87
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 81
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Concoct"
+    },
+    {
+     "name": "Doomed (Des convives indésirables défont toutes vos broderies)"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Identités Secrètes",
+     "rank": 5
+    },
+    {
+     "name": "Mimic"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Lip Reading"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Criminels, Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Tower of Memories"
+    }
+   ],
+   "trappings": [
+    "cotte de mailles à manches longues",
+    "bandeau magique (sous un chapeau aux bords larges, 1 PA à la tête)",
+    "épée magique (compte comme une arme simple, mais bénéficie des Atouts d’arme Empaleuse et Dévastatrice)",
+    "2 dagues",
+    "2 doses de Brise-cœur (WFJDR, p. 306)",
+    "potion d’ivresse (voir p. 97)",
+    "2 opales (d’une valeur de 20 CO chacune)",
+    "nécessaire de déguisement",
+    "accès à 22 CO et 11/– en pièces"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.96"
+  },
+  {
+   "id": "E0-P-1023",
+   "book": "L28",
+   "page": 97,
+   "physicalPage": 100,
+   "kind": "profile",
+   "blockKey": "L28:100:0",
+   "name": "Anton Hundisch — Sorcier novice humain (Bronze 3)",
+   "nameFr": "Anton Hundisch — Sorcier novice humain (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 31,
+    "F": 28,
+    "E": 29,
+    "I": 33,
+    "Ag": 37,
+    "Dex": 32,
+    "Int": 46,
+    "FM": 39,
+    "Soc": 26
+   },
+   "wounds": 9,
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 44
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 31
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 47
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 49
+    },
+    {
+     "name": "Channelling (Ulgu)",
+     "nameFr": "Focalisation (Ulgu)",
+     "frUnverified": true,
+     "value": 49
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 43
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 61
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 43
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 29
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 56
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 49
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Linguistics"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Arcane Magic (Ombres)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Perfect Pitch"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Second Sight"
+    }
+   ],
+   "trappings": [
+    "dague",
+    "bouteille de Riesling bon marché",
+    "blague contenant du Délice de Ranald",
+    "10 pistoles d’argent"
+   ],
+   "spells": {
+    "Petty": [
+     "Bruits",
+     "Coup de vent",
+     "Fléchette",
+     "Tendre l’oreille"
+    ],
+    "spells": [
+     "Jumeau maléfique",
+     "Linceul d’Invisibilité",
+     "Miasme mystifiant",
+     "Ombres étrangleuses"
+    ]
+   },
+   "keywords": [
+    "lanceur-de-sorts",
+    "humain"
+   ],
+   "nameFrSource": "L28 p.97"
+  },
+  {
+   "id": "E0-P-1024",
+   "book": "L28",
+   "page": 97,
+   "physicalPage": 100,
+   "kind": "profile",
+   "blockKey": "L28:100:1",
+   "name": "Dagmar Mitschuldige — Soldat humain (Argent 3)",
+   "nameFr": "Dagmar Mitschuldige — Soldat humain (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 49,
+    "CT": 36,
+    "F": 43,
+    "E": 50,
+    "I": 38,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 32,
+    "FM": 40,
+    "Soc": 27
+   },
+   "wounds": 23,
+   "armour": {
+    "detail": "Corps 2, Bras 4, Tête 2"
+   },
+   "attacks": [
+    {
+     "name": "Epée",
+     "damage": 8,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Zweihänder",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 48
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 59
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 59
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 43
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 38
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 48
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 48
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Reversal"
+    }
+   ],
+   "trappings": [
+    "chemise de mailles",
+    "brassards",
+    "heaume",
+    "zweihänder",
+    "épée",
+    "coup-de-poing",
+    "15 CO",
+    "anneau d’or (2 CO)"
+   ],
+   "keywords": [
+    "soldat",
+    "humain"
+   ],
+   "nameFrSource": "L28 p.97"
+  },
+  {
+   "id": "E0-P-1025",
+   "book": "L28",
+   "page": 97,
+   "physicalPage": 100,
+   "kind": "profile",
+   "blockKey": "L28:100:2",
+   "name": "Hultz Fleischer — Coupe-jarret humain (Bronze 3)",
+   "nameFr": "Hultz Fleischer — Coupe-jarret humain (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 58,
+    "CT": 32,
+    "F": 50,
+    "E": 54,
+    "I": 35,
+    "Ag": 33,
+    "Dex": 35,
+    "Int": 33,
+    "FM": 31,
+    "Soc": 32
+   },
+   "wounds": 18,
+   "armour": {
+    "ap": 2,
+    "detail": "Bras 4, Corps 2, Tête 2"
+   },
+   "attacks": [
+    {
+     "name": "Coup-de-poing",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Massue",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 36
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 68
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 68
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 48
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 63
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 34
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 60
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 64
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 64
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 36
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 37
+    }
+   ],
+   "talents": [
+    {
+     "name": "Dirty Fighting",
+     "rank": 2
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Etiquette (Criminels)"
+    }
+   ],
+   "trappings": [
+    "cotte de mailles",
+    "gourdin",
+    "dague",
+    "coup-de-poing",
+    "3 CO",
+    "11/–"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.97"
+  },
+  {
+   "id": "E0-P-1026",
+   "book": "L28",
+   "page": 109,
+   "physicalPage": 112,
+   "kind": "profile",
+   "blockKey": "L28:112:0",
+   "name": "Gaston — Serviteur humain, ancien employé (Argent 3)",
+   "nameFr": "Gaston — Serviteur humain, ancien employé (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 32,
+    "F": 40,
+    "E": 38,
+    "I": 28,
+    "Ag": 47,
+    "Dex": 33,
+    "Int": 38,
+    "FM": 38,
+    "Soc": 44
+   },
+   "wounds": 13,
+   "armour": {
+    "ap": 1,
+    "detail": "Corps, Tête"
+   },
+   "attacks": [
+    {
+     "name": "Fouet",
+     "damage": 6,
+     "trait": "Ranged",
+     "rangeYards": 6,
+     "ranged": true
+    },
+    {
+     "name": "Dague",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 52
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 49
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 61
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 62
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 62
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 38
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 48
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 49
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 48
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 38
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 42
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 49
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 48
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 46
+    },
+    {
+     "name": "Lore (Torture)",
+     "nameFr": "Savoir (Torture)",
+     "value": 58
+    }
+   ],
+   "talents": [
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "trappings": [
+    "pourpoint et calotte de cuir",
+    "dague",
+    "fouet",
+    "instruments de torture"
+   ],
+   "keywords": [
+    "serviteur",
+    "humain"
+   ],
+   "nameFrSource": "L28 p.109"
+  },
+  {
+   "id": "E0-P-1027",
+   "book": "L28",
+   "page": 109,
+   "physicalPage": 112,
+   "kind": "profile",
+   "blockKey": "L28:112:1",
+   "name": "Swelt Tunger — Artisan humain, ancien voleur (Argent 1)",
+   "nameFr": "Swelt Tunger — Artisan humain, ancien voleur (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 32,
+    "CT": 35,
+    "F": 48,
+    "E": 48,
+    "I": 56,
+    "Ag": 57,
+    "Dex": 52,
+    "Int": 30,
+    "FM": 53,
+    "Soc": 33
+   },
+   "wounds": 17,
+   "attacks": [
+    {
+     "name": "Couperet",
+     "damage": 9,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 77
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 63
+    },
+    {
+     "name": "Pick Lock",
+     "nameFr": "Crochetage",
+     "value": 67
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 67
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 58
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 73
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 35
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 66
+    },
+    {
+     "name": "Trade (Cook)",
+     "nameFr": "Métier (Cuisinier)",
+     "value": 62
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 66
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 64
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 58
+    }
+   ],
+   "trappings": [
+    "arme simple (couperet - tellement affûté qu’il inflige BF+5 Dégâts)",
+    "des outils de crochetage"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.109"
+  },
+  {
+   "id": "E0-P-1028",
+   "book": "L28",
+   "page": 109,
+   "physicalPage": 112,
+   "kind": "profile",
+   "blockKey": "L28:112:2",
+   "name": "Gueulard — Chien de garde",
+   "nameFr": "Gueulard — Chien de garde",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": null,
+    "F": 20,
+    "E": 20,
+    "I": 35,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 15,
+    "FM": 10,
+    "Soc": 15
+   },
+   "wounds": 5,
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Trained",
+     "param": "Garder, Guerre",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Size",
+     "param": "Petit",
+     "ref": "E0-T-045"
+    },
+    {
+     "name": "Territorial",
+     "param": "Maison et jardin",
+     "ref": "E0-T-056"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "keywords": [
+    "chien"
+   ],
+   "nameFrSource": "L28 p.109"
+  },
+  {
+   "id": "E0-P-1029",
+   "book": "L28",
+   "page": 109,
+   "physicalPage": 112,
+   "kind": "profile",
+   "blockKey": "L28:112:3",
+   "name": "Faucon — Éclaireur humain, ancien chasseur et domestique (Bronze 5)",
+   "nameFr": "Faucon — Éclaireur humain, ancien chasseur et domestique (Bronze 5)",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 58,
+    "F": 40,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 33,
+    "FM": 42,
+    "Soc": 41
+   },
+   "wounds": 16,
+   "armour": {
+    "ap": 2,
+    "detail": "Corps, Bras, Tête"
+   },
+   "attacks": [
+    {
+     "name": "Arc",
+     "damage": 7,
+     "trait": "Ranged",
+     "rangeYards": 50,
+     "ranged": true
+    },
+    {
+     "name": "Épée",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 40
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 45
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 40
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 55
+    },
+    {
+     "name": "Animal Training (Faucon)",
+     "nameFr": "Dressage (Faucon)",
+     "frUnverified": true,
+     "value": 55
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 49
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 40
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 48
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 75
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 40
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 43
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Autorités de Middenheim",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Hunter's Eye"
+    },
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Fast Shot"
+    },
+    {
+     "name": "Night Vision"
+    }
+   ],
+   "trappings": [
+    "cotte de mailles et coiffe de mailles",
+    "arme simple (épée)",
+    "bouclier",
+    "arc"
+   ],
+   "keywords": [
+    "humain",
+    "serviteur"
+   ],
+   "nameFrSource": "L28 p.109"
+  },
+  {
+   "id": "E0-P-1030",
+   "book": "L28",
+   "page": 110,
+   "physicalPage": 113,
+   "kind": "profile",
+   "blockKey": "L28:113:0",
+   "name": "Sénestre — Faucon",
+   "nameFr": "Sénestre — Faucon",
+   "stats": {
+    "M": 2,
+    "CC": 55,
+    "CT": null,
+    "F": 15,
+    "E": 15,
+    "I": 35,
+    "Ag": 45,
+    "Dex": null,
+    "Int": 10,
+    "FM": 20,
+    "Soc": 10
+   },
+   "wounds": 1,
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 3,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Trained",
+     "param": "Guerre",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Size",
+     "param": "Très Petit",
+     "ref": "E0-T-045"
+    }
+   ],
+   "specialRules": [
+    "Vol 100 Griffeur"
+   ],
+   "keywords": [
+    "bete"
+   ],
+   "nameFrSource": "L28 p.110"
+  },
+  {
+   "id": "E0-P-1031",
+   "book": "L28",
+   "page": 110,
+   "physicalPage": 113,
+   "kind": "profile",
+   "blockKey": "L28:113:1",
+   "name": "Chevaux de guerre",
+   "nameFr": "Chevaux de guerre",
+   "stats": {
+    "M": 7,
+    "CC": 25,
+    "CT": null,
+    "F": 45,
+    "E": 35,
+    "I": 15,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 10,
+    "FM": 10,
+    "Soc": 10
+   },
+   "wounds": 22,
+   "size": "large",
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Stride",
+     "ref": "E0-T-084"
+    },
+    {
+     "name": "Trained",
+     "param": "Dompté, Guerre, Monture",
+     "ref": "E0-T-060"
+    },
+    {
+     "name": "Skittish",
+     "ref": "E0-T-047"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L28 p.110"
+  },
+  {
+   "id": "E0-P-1032",
+   "book": "L28",
+   "page": 110,
+   "physicalPage": 113,
+   "kind": "profile",
+   "blockKey": "L28:113:2",
+   "name": "Lurk — Gladiateur humain (Argent 2)",
+   "nameFr": "Lurk — Gladiateur humain (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 51,
+    "CT": 36,
+    "F": 53,
+    "E": 47,
+    "I": 58,
+    "Ag": 38,
+    "Dex": 33,
+    "Int": 21,
+    "FM": 28,
+    "Soc": 28
+   },
+   "wounds": 19,
+   "armour": {
+    "detail": "Tête, Corps et Bras 4, Jambes 2"
+   },
+   "attacks": [
+    {
+     "name": "Fléau de guerre",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 53
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 38
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 66
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 71
+    },
+    {
+     "name": "Melee (Flail)",
+     "nameFr": "Corps à corps (Fléau)",
+     "value": 71
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 53
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 68
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 26
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 57
+    }
+   ],
+   "talents": [
+    {
+     "name": "Dirty Fighting"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "In-fighter"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Hardy"
+    }
+   ],
+   "trappings": [
+    "cotte",
+    "chausses",
+    "coiffe de mailles",
+    "plastron",
+    "heaume et brassards",
+    "fléau de guerre. Il porte son armure tout le temps",
+    "sauf quand il dort"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.110"
+  },
+  {
+   "id": "E0-P-1033",
+   "book": "L28",
+   "page": 114,
+   "physicalPage": 117,
+   "kind": "profile",
+   "blockKey": "L28:117:0",
+   "name": "Josef Sparsam — Chancelier, ancien maître du barreau (Or 3)",
+   "nameFr": "Josef Sparsam — Chancelier, ancien maître du barreau (Or 3)",
+   "stats": {
+    "M": 4,
+    "CC": 32,
+    "CT": 28,
+    "F": 30,
+    "E": 51,
+    "I": 54,
+    "Ag": 51,
+    "Dex": 50,
+    "Int": 68,
+    "FM": 37,
+    "Soc": 38
+   },
+   "wounds": 16,
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 55
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 63
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 43
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 91
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 59
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 88
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 58
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 73
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 74
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 61
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 83
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 71
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 56
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 88
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 93
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 88
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 88
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 83
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 58
+    }
+   ],
+   "talents": [
+    {
+     "name": "Supportive",
+     "rank": 2
+    },
+    {
+     "name": "Doomed (Le nez dans les problèmes)"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Cat-tongued"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Érudits, Guildes, Nobles)"
+    }
+   ],
+   "trappings": [
+    "beaux vêtements",
+    "sceau de sa fonction",
+    "1d10 doses de Délice de Ranald",
+    "3d10 CO"
+   ],
+   "nameFrSource": "L28 p.114"
+  },
+  {
+   "id": "E0-P-1034",
+   "book": "L28",
+   "page": 116,
+   "physicalPage": 119,
+   "kind": "profile",
+   "blockKey": "L28:119:0",
+   "name": "Dieter Schmiedehammer — Champion de justice (Or 3)",
+   "nameFr": "Dieter Schmiedehammer — Champion de justice (Or 3)",
+   "stats": {
+    "M": 4,
+    "CC": 63,
+    "CT": 52,
+    "F": 63,
+    "E": 48,
+    "I": 63,
+    "Ag": 50,
+    "Dex": 30,
+    "Int": 39,
+    "FM": 55,
+    "Soc": 38
+   },
+   "wounds": 19,
+   "armour": {
+    "ap": 2,
+    "detail": "Tête, Bras, Corps"
+   },
+   "attacks": [
+    {
+     "name": "Arme simple",
+     "damage": 12,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Zweihander",
+     "damage": 13,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 83
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 83
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 53
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 53
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 93
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 93
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 83
+    },
+    {
+     "name": "Melee (Parry)",
+     "nameFr": "Corps à corps (Parade)",
+     "value": 83
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 75
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 59
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 73
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 82
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 44
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 54
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 83
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 51
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 68
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 58
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 42
+    }
+   ],
+   "talents": [
+    {
+     "name": "Beat Blade"
+    },
+    {
+     "name": "Combat Reflexes"
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 2
+    },
+    {
+     "name": "Disarm"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Distract"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Feint"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Reaction Strike"
+    },
+    {
+     "name": "Iron Jaw"
+    },
+    {
+     "name": "Combat Master"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Step Aside"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Riposte"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Very Strong"
+    }
+   ],
+   "trappings": [
+    "cotte de mailles raffinée",
+    "une zweihander raffinée",
+    "bourse contenant l’équivalent de 3 CO"
+   ],
+   "nameFrSource": "L28 p.116"
+  },
+  {
+   "id": "E0-P-1035",
+   "book": "L28",
+   "page": 118,
+   "physicalPage": 121,
+   "kind": "profile",
+   "blockKey": "L28:121:0",
+   "name": "Rallane Lafarel — Troubadour (Argent 3)",
+   "nameFr": "Rallane Lafarel — Troubadour (Argent 3)",
+   "stats": {
+    "M": 5,
+    "CC": 61,
+    "CT": 62,
+    "F": 30,
+    "E": 55,
+    "I": 52,
+    "Ag": 65,
+    "Dex": 69,
+    "Int": 41,
+    "FM": 41,
+    "Soc": 63
+   },
+   "wounds": 22,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 68
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 88
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 74
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 93
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 89
+    },
+    {
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
+     "frUnverified": true,
+     "value": 66
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 83
+    },
+    {
+     "name": "Play (Lute)",
+     "nameFr": "Musicien (Luth)",
+     "value": 89
+    },
+    {
+     "name": "Play (Violon)",
+     "nameFr": "Musicien (Violon)",
+     "frUnverified": true,
+     "value": 84
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 75
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 83
+    },
+    {
+     "name": "Perform (Dance)",
+     "nameFr": "Représentation (Danse)",
+     "value": 85
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 46
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "nains",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Mimic"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Perfect Pitch"
+    },
+    {
+     "name": "Jump Up"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Night Vision"
+    }
+   ],
+   "trappings": [
+    "habits de cour raffinés",
+    "luth de qualité"
+   ],
+   "nameFrSource": "L28 p.118"
+  },
+  {
+   "id": "E0-P-1036",
+   "book": "L28",
+   "page": 120,
+   "physicalPage": 123,
+   "kind": "profile",
+   "blockKey": "L28:123:0",
+   "name": "Katarina Todbringer — Noble (Or 3)",
+   "nameFr": "Katarina Todbringer — Noble (Or 3)",
+   "stats": {
+    "M": 4,
+    "CC": 38,
+    "CT": 32,
+    "F": 31,
+    "E": 31,
+    "I": 42,
+    "Ag": 32,
+    "Dex": 44,
+    "Int": 29,
+    "FM": 37,
+    "Soc": 51
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 71
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 42
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 66
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 43
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 32
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 41
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 44
+    },
+    {
+     "name": "Play (Lute)",
+     "nameFr": "Musicien (Luth)",
+     "value": 59
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 34
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 64
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 41
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 39
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 44
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 61
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    }
+   ],
+   "trappings": [
+    "habits de cour raffinés",
+    "Katarina est escortée par un détachement de 20 Chevaliers Panthères"
+   ],
+   "keywords": [
+    "noble"
+   ],
+   "nameFrSource": "L28 p.120"
+  },
+  {
+   "id": "E0-P-1037",
+   "book": "L28",
+   "page": 122,
+   "physicalPage": 125,
+   "kind": "profile",
+   "blockKey": "L28:125:0",
+   "name": "Hildegarde Zimperlich — Valet (Argent 5)",
+   "nameFr": "Hildegarde Zimperlich — Valet (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 32,
+    "F": 35,
+    "E": 32,
+    "I": 48,
+    "Ag": 32,
+    "Dex": 30,
+    "Int": 49,
+    "FM": 40,
+    "Soc": 39
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Canne",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 42
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 43
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 54
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 49
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 42
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 45
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 62
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 68
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 74
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 68
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 52
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 42
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 42
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 69
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 69
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Ceux qui se montrent ignorants du savoir-vivre et du protocole",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Nobles, Serviteurs)"
+    }
+   ],
+   "trappings": [
+    "habits de cour raffinés",
+    "mais désuets",
+    "bijoux d’une valeur de 20 CO",
+    "canne en bois d’acajou (compte comme un bâton de combat)",
+    "bourse contenant des pièces pour une valeur de 1 CO"
+   ],
+   "notes": [
+    "* Ne s’applique qu’au vin et au brandy, dont elle a l’habitude. Les Tests impliquant d’autres types de boissons alcoolisées sont réalisés avec son Endurance de 32. ** Ne s’applique qu’aux attaques réalisées avec sa canne."
+   ],
+   "nameFrSource": "L28 p.122"
+  },
+  {
+   "id": "E0-P-1038",
+   "book": "L28",
+   "page": 124,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L28:127:0",
+   "name": "Johann Schwermutt — Officier (Or 1)",
+   "nameFr": "Johann Schwermutt — Officier (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 62,
+    "CT": 62,
+    "F": 60,
+    "E": 57,
+    "I": 57,
+    "Ag": 38,
+    "Dex": 35,
+    "Int": 53,
+    "FM": 56,
+    "Soc": 59
+   },
+   "wounds": 21,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 58
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 79
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 82
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 89
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 82
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 87
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 72
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 76
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 58
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 73
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 82
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 73
+    },
+    {
+     "name": "Play (Drum)",
+     "nameFr": "Musicien (Tambour)",
+     "value": 55
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 68
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 73
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 82
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 82
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 72
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 82
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 77
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 82
+    },
+    {
+     "name": "Lore (Savoir-vivre)",
+     "nameFr": "Savoir (Savoir-vivre)",
+     "frUnverified": true,
+     "value": 63
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 58
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 73
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 73
+    }
+   ],
+   "talents": [
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Unshakeable"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Dicer"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Shieldsman"
+    },
+    {
+     "name": "Etiquette (Nobles, Soldats)"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Combat Aware"
+    }
+   ],
+   "trappings": [
+    "uniforme composé d’une armure de plates ancienne",
+    "d’une cape grise en peau de loup portée par-dessus"
+   ],
+   "nameFrSource": "L28 p.124"
+  },
+  {
+   "id": "E0-P-1039",
+   "book": "L28",
+   "page": 124,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L28:127:1",
+   "name": "Ulrich Schutzmann — Capitaine de la garde (Or 1)",
+   "nameFr": "Ulrich Schutzmann — Capitaine de la garde (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 64,
+    "CT": 37,
+    "F": 58,
+    "E": 48,
+    "I": 57,
+    "Ag": 36,
+    "Dex": 34,
+    "Int": 57,
+    "FM": 57,
+    "Soc": 54
+   },
+   "wounds": 18,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 56
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 69
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 79
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 89
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 46
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 78
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 56
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 78
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 77
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 67
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 77
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 72
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 62
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 58
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 58
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 77
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 82
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 77
+    }
+   ],
+   "talents": [
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Doomed (Méfie-toi de l’Homme)"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Break and Enter"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Robust"
+    },
+    {
+     "name": "Etiquette (Criminel, Noble, Soldat)"
+    }
+   ],
+   "trappings": [],
+   "nameFrSource": "L28 p.124"
+  },
+  {
+   "id": "E0-P-1040",
+   "book": "L28",
+   "page": 125,
+   "physicalPage": 128,
+   "kind": "profile",
+   "blockKey": "L28:128:0",
+   "name": "Maximillian von Genscher — Officier (Or 1)",
+   "nameFr": "Maximillian von Genscher — Officier (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 62,
+    "CT": 62,
+    "F": 60,
+    "E": 57,
+    "I": 57,
+    "Ag": 52,
+    "Dex": 35,
+    "Int": 44,
+    "FM": 59,
+    "Soc": 64
+   },
+   "wounds": 21,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 72
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 82
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 87
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 72
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 94
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 82
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 87
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 82
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 82
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 69
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 72
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 64
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 70
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 77
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 64
+    },
+    {
+     "name": "Play (Fife)",
+     "nameFr": "Musicien (Fifre)",
+     "value": 40
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 67
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 54
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 77
+    },
+    {
+     "name": "Ranged (Blackpowder)",
+     "nameFr": "Projectiles (Poudre noire)",
+     "value": 82
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 77
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 77
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 72
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 64
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 54
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 59
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 54
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Crack the Whip"
+    },
+    {
+     "name": "Drilled"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Dicer"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Shieldsman"
+    },
+    {
+     "name": "Etiquette (Nobles, Soldats)"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Combat Aware"
+    }
+   ],
+   "trappings": [],
+   "nameFrSource": "L28 p.125"
+  },
+  {
+   "id": "E0-P-1041",
+   "book": "L28",
+   "page": 127,
+   "physicalPage": 130,
+   "kind": "profile",
+   "blockKey": "L28:130:0",
+   "name": "Albrecht Helseher — Seigneur sorcier (Or 2)",
+   "nameFr": "Albrecht Helseher — Seigneur sorcier (Or 2)",
+   "stats": {
+    "M": 4,
+    "CC": 53,
+    "CT": 27,
+    "F": 28,
+    "E": 41,
+    "I": 58,
+    "Ag": 57,
+    "Dex": 37,
+    "Int": 65,
+    "FM": 60,
+    "Soc": 45
+   },
+   "wounds": 16,
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 47
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 83
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 67
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 65
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 63
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 63
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 50
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 77
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 78
+    },
+    {
+     "name": "Channelling (Chamon)",
+     "nameFr": "Focalisation (Chamon)",
+     "frUnverified": true,
+     "value": 80
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 43
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 78
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 75
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 85
+    },
+    {
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
+     "frUnverified": true,
+     "value": 75
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 85
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 50
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 78
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 68
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 85
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 46
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 80
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 85
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 80
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Arcane Magic (Métal)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "trappings": [
+    "dans la limite du raisonnable"
+   ],
+   "spells": {
+    "Petty": [
+     "Fléchette",
+     "Éblouissant",
+     "Drain",
+     "Coup de vent",
+     "Lumière",
+     "Flamme magique",
+     "Choc"
+    ],
+    "Arcane": [
+     "Armure aethyrique",
+     "Arme aethyrique",
+     "Carreau",
+     "Dôme",
+     "Enchevêtrement",
+     "Envol",
+     "Explosion",
+     "Pont",
+     "Protection",
+     "Sang corrosif"
+    ],
+    "spells": [
+     "Arme enchantée",
+     "Creuset de Chamon",
+     "Écaille d’acier",
+     "Forge de Chamon",
+     "L’Or des fous",
+     "Transmutation de Chamon jeune sexagénaire",
+     "grand",
+     "émacié et ascétique à la longue et épaisse crinière noire et lustrée",
+     "sans aucune touche de gris malgré son âge",
+     "et aux yeux perçants d’un bleu incroyablement vif"
+    ]
+   },
+   "keywords": [
+    "lanceur-de-sorts"
+   ],
+   "nameFrSource": "L28 p.127"
+  },
+  {
+   "id": "E0-P-1042",
+   "book": "L28",
+   "page": 128,
+   "physicalPage": 131,
+   "kind": "profile",
+   "blockKey": "L28:131:0",
+   "name": "Janna Eberhauer — Maître sorcier (Or 1)",
+   "nameFr": "Janna Eberhauer — Maître sorcier (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 27,
+    "F": 30,
+    "E": 32,
+    "I": 52,
+    "Ag": 54,
+    "Dex": 37,
+    "Int": 58,
+    "FM": 53,
+    "Soc": 55
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 66
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 64
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 70
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 60
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 53
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 53
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 69
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 71
+    },
+    {
+     "name": "Channelling (Azyr)",
+     "nameFr": "Focalisation (Azyr)",
+     "frUnverified": true,
+     "value": 68
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 67
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 68
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 68
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 73
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 67
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 68
+    },
+    {
+     "name": "Lore (Magic)",
+     "nameFr": "Savoir (Magie)",
+     "value": 73
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 63
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 68
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Pure Soul"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Detect Artefact"
+    },
+    {
+     "name": "Instinctive Diction"
+    },
+    {
+     "name": "Aethyric Attunement"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Arcane Magic (Cieux)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Second Sight"
+    },
+    {
+     "name": "Sixth Sense"
+    }
+   ],
+   "trappings": [
+    "à la discrétion du MJ. Comme Helseher"
+   ],
+   "spells": {
+    "Petty": [
+     "Alerte",
+     "Coup de vent",
+     "Éblouissant",
+     "Fléchette",
+     "Lumière",
+     "Flamme magique",
+     "Repères",
+     "Serrure ouverte",
+     "Sommeil"
+    ],
+    "Arcane": [
+     "Arme aethyrique",
+     "Armure aethyrique",
+     "Attaques en chaîne",
+     "Bouclier anti-flèches",
+     "Envol",
+     "Téléportation"
+    ],
+    "spells": [
+     "Arc de T’Essla",
+     "Bouclier céruléen",
+     "Ironie du Destin",
+     "Le Premier Signe d’Amul",
+     "Le Second Signe d’Amul",
+     "Maudit"
+    ]
+   },
+   "keywords": [
+    "lanceur-de-sorts"
+   ],
+   "nameFrSource": "L28 p.128"
+  },
+  {
+   "id": "E0-P-1043",
+   "book": "L28",
+   "page": 130,
+   "physicalPage": 133,
+   "kind": "profile",
+   "blockKey": "L28:133:0",
+   "name": "Ar-Ulric Jarrick Valgeir — Lecteur (Or 2)",
+   "nameFr": "Ar-Ulric Jarrick Valgeir — Lecteur (Or 2)",
+   "stats": {
+    "M": 4,
+    "CC": 60,
+    "CT": 35,
+    "F": 59,
+    "E": 58,
+    "I": 57,
+    "Ag": 34,
+    "Dex": 38,
+    "Int": 58,
+    "FM": 55,
+    "Soc": 53
+   },
+   "wounds": 20,
+   "armour": {
+    "ap": 4
+   },
+   "attacks": [
+    {
+     "name": "Hache-marteau de Skoll",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 78
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 68
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 54
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 78
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 85
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 80
+    },
+    {
+     "name": "Entertain (Speeches)",
+     "nameFr": "Divertissement (Discours)",
+     "value": 73
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 73
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 54
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 78
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 74
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 77
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 73
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 68
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 63
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 78
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 77
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 78
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 66
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 68
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 78
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 68
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 73
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 73
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 68
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 78
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 63
+    }
+   ],
+   "traits": [
+    {
+     "name": "Immunity",
+     "param": "Feu",
+     "ref": "E0-T-031"
+    },
+    {
+     "name": "Magic Resistance",
+     "rating": "2",
+     "ref": "E0-T-037"
+    },
+    {
+     "name": "Ward",
+     "rating": "9+",
+     "ref": "E0-T-066"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Bless (Ulric)"
+    },
+    {
+     "name": "Supportive"
+    },
+    {
+     "name": "Doomed (La tentation mène inévitablement au maelström)"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Inspiring"
+    },
+    {
+     "name": "Invoke (Ulric)"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Cultistes, Nobles, Soldats)"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Bookish"
+    },
+    {
+     "name": "Combat Aware"
+    }
+   ],
+   "trappings": [
+    "où qu’il aille",
+    "une arme t"
+   ],
+   "nameFrSource": "L28 p.130"
+  },
+  {
+   "id": "E0-P-1044",
+   "book": "L28",
+   "page": 132,
+   "physicalPage": 135,
+   "kind": "profile",
+   "blockKey": "L28:135:0",
+   "name": "Emmanuelle Schlagen — Conseiller (Argent 4)",
+   "nameFr": "Emmanuelle Schlagen — Conseiller (Argent 4)",
+   "stats": {
+    "M": 4,
+    "CC": 42,
+    "CT": 53,
+    "F": 30,
+    "E": 48,
+    "I": 44,
+    "Ag": 53,
+    "Dex": 52,
+    "Int": 44,
+    "FM": 38,
+    "Soc": 65
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 62
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 78
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 51
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 90
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 63
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 80
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 63
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 75
+    },
+    {
+     "name": "Entertain (Interprétation)",
+     "nameFr": "Divertissement (Interprétation)",
+     "frUnverified": true,
+     "value": 85
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 62
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 47
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 59
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 54
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 85
+    },
+    {
+     "name": "Play (Harpsichord)",
+     "nameFr": "Musicien (Clavecin)",
+     "value": 62
+    },
+    {
+     "name": "Play (Lute)",
+     "nameFr": "Musicien (Luth)",
+     "value": 62
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 59
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 54
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 88
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 40
+    },
+    {
+     "name": "Perform (Dance)",
+     "nameFr": "Représentation (Danse)",
+     "value": 73
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 63
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 58
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 59
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 54
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 80
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Jump Up"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    }
+   ],
+   "trappings": [
+    "vêtements de cour de qualité",
+    "bijoux d’une valeur de 30 CO",
+    "sacoche contenant des pièces pour une valeur de 3 CO"
+   ],
+   "nameFrSource": "L28 p.132"
+  },
+  {
+   "id": "E0-P-1045",
+   "book": "L28",
+   "page": 134,
+   "physicalPage": 137,
+   "kind": "profile",
+   "blockKey": "L28:137:0",
+   "name": "Siegfried Prunkvoll — Chevalier commandeur (Or 2)",
+   "nameFr": "Siegfried Prunkvoll — Chevalier commandeur (Or 2)",
+   "stats": {
+    "M": 4,
+    "CC": 58,
+    "CT": 31,
+    "F": 55,
+    "E": 32,
+    "I": 54,
+    "Ag": 49,
+    "Dex": 37,
+    "Int": 25,
+    "FM": 44,
+    "Soc": 24
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 5
+   },
+   "attacks": [
+    {
+     "name": "Épée",
+     "damage": 11,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 59
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 57
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 29
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 59
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 29
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 73
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 78
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 68
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 59
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 28
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 35
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 35
+    },
+    {
+     "name": "Trade (Farrier)",
+     "nameFr": "Métier (Maréchal-ferrant)",
+     "value": 47
+    },
+    {
+     "name": "Play (Harpsichord)",
+     "nameFr": "Musicien (Clavecin)",
+     "value": 42
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 35
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 27
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 37
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 35
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 50
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 30
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 35
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 29
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Roublard et Ruraux",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Stout-hearted"
+    },
+    {
+     "name": "Strike Mighty Blow",
+     "rank": 2
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    }
+   ],
+   "trappings": [
+    "armure de plates complète magique (compte comme Magique, 0 Encombrement lorsque l’ensemble complet est porté)",
+    "cotte de mailles et cuirs",
+    "épée de bonne qualité",
+    "sacoche contenant des pièces pour une valeur de 2 CO"
+   ],
+   "nameFrSource": "L28 p.134"
+  },
+  {
+   "id": "E0-P-1046",
+   "book": "L28",
+   "page": 136,
+   "physicalPage": 139,
+   "kind": "profile",
+   "blockKey": "L28:139:0",
+   "name": "Allavandrel Fanmaris — Maître de la chasse (Argent 3)",
+   "nameFr": "Allavandrel Fanmaris — Maître de la chasse (Argent 3)",
+   "stats": {
+    "M": 5,
+    "CC": 45,
+    "CT": 75,
+    "F": 52,
+    "E": 52,
+    "I": 75,
+    "Ag": 55,
+    "Dex": 68,
+    "Int": 69,
+    "FM": 57,
+    "Soc": 58
+   },
+   "wounds": 25,
+   "attacks": [
+    {
+     "name": "Arc long",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 100,
+     "ranged": true
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 75
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 77
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 75
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 68
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 75
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 73
+    },
+    {
+     "name": "Animal Training (Cheval)",
+     "nameFr": "Dressage (Cheval)",
+     "frUnverified": true,
+     "value": 84
+    },
+    {
+     "name": "Animal Training (Chien)",
+     "nameFr": "Dressage (Chien)",
+     "frUnverified": true,
+     "value": 89
+    },
+    {
+     "name": "Animal Training (Faucon)",
+     "nameFr": "Dressage (Faucon)",
+     "frUnverified": true,
+     "value": 89
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 77
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 70
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 62
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 95
+    },
+    {
+     "name": "Language (Elthárin)",
+     "nameFr": "Langue (Elthárin)",
+     "frUnverified": true,
+     "value": 74
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 73
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 62
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 79
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 79
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 95
+    },
+    {
+     "name": "Set Trap",
+     "nameFr": "Piégeage",
+     "value": 88
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 95
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 98
+    },
+    {
+     "name": "Ranged (Sling)",
+     "nameFr": "Projectiles (Fronde)",
+     "value": 95
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 73
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 72
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 67
+    },
+    {
+     "name": "Lore (Beasts)",
+     "nameFr": "Savoir (Bêtes)",
+     "value": 89
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 84
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 79
+    },
+    {
+     "name": "Secret Signs (Hunter)",
+     "nameFr": "Signes secrets (Chasseur)",
+     "value": 79
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 77
+    }
+   ],
+   "talents": [
+    {
+     "name": "Animal Affinity"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Striding Gait (Régions boisées)"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Hunter's Eye"
+    },
+    {
+     "name": "Acute Sense (Vue)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Deadeye Shot"
+    },
+    {
+     "name": "Accurate Shot"
+    },
+    {
+     "name": "Fast Shot"
+    },
+    {
+     "name": "Sharpshooter"
+    },
+    {
+     "name": "Marksman"
+    },
+    {
+     "name": "Trapper"
+    },
+    {
+     "name": "Night Vision"
+    }
+   ],
+   "trappings": [
+    "vêtements d’extérieur pratiques",
+    "notamment des bottes solides et une cape épaisse et chaude",
+    "couteau de chasse",
+    "arc long et carquois de 12 flèches"
+   ],
+   "nameFrSource": "L28 p.136"
+  },
+  {
+   "id": "E0-P-1047",
+   "book": "L28",
+   "page": 138,
+   "physicalPage": 141,
+   "kind": "profile",
+   "blockKey": "L28:141:0",
+   "name": "Gotthard Wallenstein — Marchand (Argent 5)",
+   "nameFr": "Gotthard Wallenstein — Marchand (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 30,
+    "F": 32,
+    "E": 30,
+    "I": 47,
+    "Ag": 42,
+    "Dex": 43,
+    "Int": 46,
+    "FM": 41,
+    "Soc": 43
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Rapière",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 44
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 53
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 57
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 48
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 50
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 62
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 53
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 58
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 49
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 37
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 68
+    },
+    {
+     "name": "Play (Harpsichord)",
+     "nameFr": "Musicien (Clavecin)",
+     "value": 48
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 63
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 61
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 56
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 51
+    },
+    {
+     "name": "Lore (Reikland)",
+     "nameFr": "Savoir (Reikland)",
+     "value": 51
+    },
+    {
+     "name": "Lore (Slaanesh)",
+     "nameFr": "Savoir (Slaanesh)",
+     "frUnverified": true,
+     "value": 61
+    },
+    {
+     "name": "Secret Signs (Cultistes)",
+     "nameFr": "Signes secrets (Cultistes)",
+     "frUnverified": true,
+     "value": 56
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 63
+    }
+   ],
+   "traits": [
+    {
+     "name": "Mental Corruption",
+     "param": "Accro à l’adrénaline",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Prejudice",
+     "param": "Indigents présomptueux, Rabat-joie, Régisseurs snobinards",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Embezzle"
+    },
+    {
+     "name": "Secret Identity"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Etiquette (Criminels, Guildes, Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Briber"
+    }
+   ],
+   "trappings": [
+    "vêtements de qualité ou miteux",
+    "selon le contexte",
+    "nécessaire de déguisement",
+    "sacoche contenant des pièces d’une valeur de 1 couronne",
+    "d10 doses de Délice de Ranald",
+    "fleur de lune et/ou mystracine",
+    "d10 bougies et un morceau de racine de gingembre"
+   ],
+   "nameFrSource": "L28 p.138"
+  },
+  {
+   "id": "E0-P-1048",
+   "book": "L28",
+   "page": 140,
+   "physicalPage": 143,
+   "kind": "profile",
+   "blockKey": "L28:143:0",
+   "name": "Luigi Pavarotti — Arnaqueur (Argent 2)",
+   "nameFr": "Luigi Pavarotti — Arnaqueur (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 52,
+    "CT": 32,
+    "F": 43,
+    "E": 40,
+    "I": 55,
+    "Ag": 56,
+    "Dex": 60,
+    "Int": 64,
+    "FM": 50,
+    "Soc": 62
+   },
+   "wounds": 17,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 76
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 73
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 87
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 82
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 66
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 72
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 67
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 82
+    },
+    {
+     "name": "Entertain (Interprétation)",
+     "nameFr": "Divertissement (Interprétation)",
+     "frUnverified": true,
+     "value": 72
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 82
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 68
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 66
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 82
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 74
+    },
+    {
+     "name": "Hypnotism",
+     "nameFr": "Hypnotisme",
+     "value": 84
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 53
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 70
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 84
+    },
+    {
+     "name": "Language (Thief)",
+     "nameFr": "Langue (Voleur)",
+     "value": 84
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 82
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 63
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 74
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 82
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 75
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 85
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 63
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 65
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 73
+    },
+    {
+     "name": "Lore (Anatomy)",
+     "nameFr": "Savoir (Anatomie)",
+     "value": 74
+    },
+    {
+     "name": "Lore (Heraldry)",
+     "nameFr": "Savoir (Héraldique)",
+     "value": 79
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 74
+    },
+    {
+     "name": "Lore (Remèdes)",
+     "nameFr": "Savoir (Remèdes)",
+     "frUnverified": true,
+     "value": 74
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 77
+    },
+    {
+     "name": "Sail (Caravelle)",
+     "nameFr": "Voile (Caravelle)",
+     "frUnverified": true,
+     "value": 76
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Strong Back"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Cat-tongued"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Field Dressing"
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Seasoned Traveller"
+    }
+   ],
+   "trappings": [
+    "vêtements de cour de qualité",
+    "bien que tape-à-l’œil",
+    "bijoux d’une valeur de 10 CO",
+    "y compris une pièce d’argent polie attachée à une chaîne",
+    "sacoche contenant des pièces pour une valeur de 2 CO."
+   ],
+   "nameFrSource": "L28 p.140"
+  },
+  {
+   "id": "E0-P-1049",
+   "book": "L28",
+   "page": 142,
+   "physicalPage": 145,
+   "kind": "profile",
+   "blockKey": "L28:145:0",
+   "name": "Natasha Sinnlich — Émissaire (Argent 4)",
+   "nameFr": "Natasha Sinnlich — Émissaire (Argent 4)",
+   "stats": {
+    "M": 4,
+    "CC": 38,
+    "CT": 35,
+    "F": 38,
+    "E": 48,
+    "I": 47,
+    "Ag": 48,
+    "Dex": 37,
+    "Int": 47,
+    "FM": 38,
+    "Soc": 61
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 52
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 63
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 56
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 86
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 63
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 76
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 63
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 60
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 48
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 57
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 82
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 71
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 57
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 67
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 89
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 48
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 63
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 58
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 62
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 77
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 86
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Cat-tongued"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    }
+   ],
+   "trappings": [
+    "vêtements de cour de qualité; bijoux d’une valeur de 30 CO",
+    "sacoche contenant des pièces pour une valeur de 3 CO"
+   ],
+   "nameFrSource": "L28 p.142"
+  },
+  {
+   "id": "E0-P-1050",
+   "book": "L28",
+   "page": 142,
+   "physicalPage": 145,
+   "kind": "profile",
+   "blockKey": "L28:145:1",
+   "name": "Kirsten Jung — Conseiller (Argent 4)",
+   "nameFr": "Kirsten Jung — Conseiller (Argent 4)",
+   "stats": {
+    "M": 4,
+    "CC": 44,
+    "CT": 38,
+    "F": 39,
+    "E": 48,
+    "I": 58,
+    "Ag": 55,
+    "Dex": 32,
+    "Int": 48,
+    "FM": 46,
+    "Soc": 67
+   },
+   "wounds": 15,
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 42
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 65
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 49
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 92
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 65
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 72
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 75
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 66
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 83
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 58
+    },
+    {
+     "name": "Language (Bretonnian)",
+     "nameFr": "Langue (Bretonnien)",
+     "value": 58
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 58
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 87
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 58
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 78
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 58
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 90
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 49
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 63
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 58
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 63
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 58
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 87
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Guildes, Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "trappings": [
+    "vêtements de cour de qualité",
+    "bijoux d’une valeur de 20 CO",
+    "sacoche contenant des pièces pour une valeur de 3 CO"
+   ],
+   "nameFrSource": "L28 p.142"
+  },
+  {
+   "id": "E0-P-1051",
+   "book": "L28",
+   "page": 143,
+   "physicalPage": 146,
+   "kind": "profile",
+   "blockKey": "L28:146:0",
+   "name": "Petra Liebkosen — Émissaire (Argent 4)",
+   "nameFr": "Petra Liebkosen — Émissaire (Argent 4)",
+   "stats": {
+    "M": 4,
+    "CC": 37,
+    "CT": 37,
+    "F": 36,
+    "E": 47,
+    "I": 54,
+    "Ag": 55,
+    "Dex": 60,
+    "Int": 43,
+    "FM": 38,
+    "Soc": 62
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Art (Writing)",
+     "nameFr": "Art (Écriture)",
+     "value": 65
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 70
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 51
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 87
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 65
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 67
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 65
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 47
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 82
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 46
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 46
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 69
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 53
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 72
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 63
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 64
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 95
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 46
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 67
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 67
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 63
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 58
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 82
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Attractive"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    }
+   ],
+   "trappings": [
+    "vêtements de cour de qualité",
+    "bijoux d’une valeur de 35 CO",
+    "sacoche contenant des pièces pour une valeur de 3 CO"
+   ],
+   "nameFrSource": "L28 p.143"
+  },
+  {
+   "id": "E0-P-1052",
+   "book": "L28",
+   "page": 145,
+   "physicalPage": 148,
+   "kind": "profile",
+   "blockKey": "L28:148:0",
+   "name": "Reiner Ehrlich — Maître du barreau (Or 1)",
+   "nameFr": "Reiner Ehrlich — Maître du barreau (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 33,
+    "F": 30,
+    "E": 49,
+    "I": 55,
+    "Ag": 43,
+    "Dex": 52,
+    "Int": 64,
+    "FM": 57,
+    "Soc": 51
+   },
+   "wounds": 16,
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 60
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 56
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 56
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 67
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 60
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 84
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 84
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 71
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 75
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 64
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 84
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 69
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 54
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 89
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 69
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 74
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 74
+    },
+    {
+     "name": "Secret Signs (Guilder)",
+     "nameFr": "Signes secrets (Guilde)",
+     "value": 74
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 66
+    }
+   ],
+   "talents": [
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Supportive"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Savant (Loi)"
+    },
+    {
+     "name": "Savoir (Érudits, Guildes, Nobles)"
+    },
+    {
+     "name": "Bookish"
+    }
+   ],
+   "trappings": [
+    "insigne",
+    "robes sombres par-dessus des vêtements de qualité",
+    "sacoche contenant des pièces d’une valeur de 2 CO"
+   ],
+   "nameFrSource": "L28 p.145"
+  },
+  {
+   "id": "E0-P-1053",
+   "book": "L28",
+   "page": 145,
+   "physicalPage": 148,
+   "kind": "profile",
+   "blockKey": "L28:148:1",
+   "name": "Joachim Hoflich — Maître du barreau (Or 1)",
+   "nameFr": "Joachim Hoflich — Maître du barreau (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 35,
+    "F": 40,
+    "E": 30,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 45,
+    "FM": 30,
+    "Soc": 10
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Weapon",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    }
+   ],
+   "trappings": [
+    "insigne",
+    "robes sombres par-dessus des vêtements de qualité",
+    "sacoche contenant des pièces d’une valeur de 2 CO"
+   ],
+   "notes": [
+    "*Doppelgänger: un doppelgänger peut prendre la forme de toute créature humanoïde qu’il a rencontrée, d’une taille comprise entre 1 m 20 et 2 m 40. La ressemblance est telle que seuls ceux qui connaissaient très bien l’original peuvent espérer remarquer la supercherie. Il leur faudra même réussir un Test d’Intuition Difficile (-20) pour sentir que quelque chose cloche."
+   ],
+   "specialRules": [
+    "Doppelgänger"
+   ],
+   "nameFrSource": "L28 p.145"
+  },
+  {
+   "id": "E0-P-1054",
+   "book": "L28",
+   "page": 146,
+   "physicalPage": 149,
+   "kind": "profile",
+   "blockKey": "L28:149:0",
+   "name": "Karl Heinz Wasmeier — Maître du barreau (Or 1)",
+   "nameFr": "Karl Heinz Wasmeier — Maître du barreau (Or 1)",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": 32,
+    "F": 34,
+    "E": 56,
+    "I": 58,
+    "Ag": 53,
+    "Dex": 55,
+    "Int": 64,
+    "FM": 57,
+    "Soc": 64
+   },
+   "wounds": 18,
+   "attacks": [
+    {
+     "name": "Dague",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 80
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 84
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 84
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 43
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 63
+    },
+    {
+     "name": "Entertain (Interprétation)",
+     "nameFr": "Divertissement (Interprétation)",
+     "frUnverified": true,
+     "value": 74
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 68
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 77
+    },
+    {
+     "name": "Channelling (Dhar, Tzeentch)",
+     "nameFr": "Focalisation (Dhar, Tzeentch)",
+     "frUnverified": true,
+     "value": 77
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 54
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 73
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 84
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 84
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 84
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 78
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 82
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 84
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 76
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 71
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 84
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 79
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 79
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 74
+    },
+    {
+     "name": "Lore (Tzeentch)",
+     "nameFr": "Savoir (Tzeentch)",
+     "frUnverified": true,
+     "value": 84
+    },
+    {
+     "name": "Secret Signs (Main Pourpre)",
+     "nameFr": "Signes secrets (Main Pourpre)",
+     "frUnverified": true,
+     "value": 84
+    },
+    {
+     "name": "Secret Signs (Message codé de Wasmeier)",
+     "nameFr": "Signes secrets (Message codé de Wasmeier)",
+     "frUnverified": true,
+     "value": 89
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 84
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Supportive"
+    },
+    {
+     "name": "Criminal"
+    },
+    {
+     "name": "Disciple of Change"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Argumentative"
+    },
+    {
+     "name": "Secret Identity"
+    },
+    {
+     "name": "Beneath Notice"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Speedreader"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Chaos Magic (Tzeentch)"
+    },
+    {
+     "name": "Petty Magic"
+    },
+    {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Cat-tongued"
+    },
+    {
+     "name": "Magical Sense"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Commanding Presence"
+    },
+    {
+     "name": "Savant (Loi)"
+    },
+    {
+     "name": "Etiquette (Érudits, Guildes, Nobles)"
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Bookish"
+    }
+   ],
+   "trappings": [
+    "insigne",
+    "robes sombres par-dessus des vêtements de qualité",
+    "sacoche contenant des pièces d’une valeur de 2 CO"
+   ],
+   "spells": {
+    "Petty": [
+     "Alerte",
+     "Éblouissant",
+     "Flamme magique",
+     "Fléchette",
+     "Tendre l’oreille"
+    ],
+    "Arcane": [
+     "Arme aethyrique",
+     "Armure aethyrique",
+     "Chute",
+     "Envol",
+     "Pont",
+     "Poussée"
+    ],
+    "Lore of Tzeentch": [
+     "Avantage de Tzeentch",
+     "Éclair du changement",
+     "Feu bleu de Tzeentch",
+     "Maître du Destin",
+     "Malédiction de Tzeentch",
+     "Trahison de Tzeentch"
+    ]
+   },
+   "nameFrSource": "L28 p.146"
+  },
+  {
+   "id": "E0-P-1055",
+   "book": "L28",
+   "page": 148,
+   "physicalPage": 151,
+   "kind": "profile",
+   "blockKey": "L28:151:0",
+   "name": "Doppelgänger",
+   "nameFr": "Doppelgänger",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 35,
+    "F": 40,
+    "E": 30,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 35,
+    "Int": 45,
+    "FM": 30,
+    "Soc": 10
+   },
+   "wounds": 13,
+   "attacks": [
+    {
+     "name": "Griffes osseuses",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Immune to Psychology",
+     "ref": "E0-T-030"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "conditional": true,
+     "ref": "E0-T-022"
+    }
+   ],
+   "specialRules": [
+    "Doppelgänger"
+   ],
+   "nameFrSource": "L28 p.148"
+  },
+  {
+   "id": "E0-P-992",
+   "book": "L28",
+   "page": 23,
+   "physicalPage": 26,
+   "kind": "profile",
+   "blockKey": "L28:26:0",
+   "name": "Kurt Gruber, serveur — Bourgeois humain, ancienne recrue (Argent 2)",
+   "nameFr": "Kurt Gruber, serveur — Bourgeois humain, ancienne recrue (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 32,
+    "F": 35,
+    "E": 45,
+    "I": 30,
+    "Ag": 32,
+    "Dex": 33,
+    "Int": 38,
+    "FM": 39,
+    "Soc": 28
+   },
+   "wounds": 14,
+   "skills": [
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 44
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 35
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 47
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 53
+    },
+    {
+     "name": "Entertain (Comedy)",
+     "nameFr": "Divertissement (Comédie)",
+     "value": 35
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 45
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 38
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 48
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 38
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 55
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 48
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Dicer"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Serviteurs)"
+    }
+   ],
+   "trappings": [
+    "justaucorps de cuir",
+    "2 dagues",
+    "bourse contenant 1 CO et 10/-"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.23"
+  },
+  {
+   "id": "E0-P-993",
+   "book": "L28",
+   "page": 23,
+   "physicalPage": 26,
+   "kind": "profile",
+   "blockKey": "L28:26:1",
+   "name": "Uli Breitner, propriétaire — Marchand humain, anciennement recrue et entremetteur (Argent 5)",
+   "nameFr": "Uli Breitner, propriétaire — Marchand humain, anciennement recrue et entremetteur (Argent 5)",
+   "stats": {
+    "M": 4,
+    "CC": 44,
+    "CT": 26,
+    "F": 33,
+    "E": 61,
+    "I": 28,
+    "Ag": 33,
+    "Dex": 39,
+    "Int": 44,
+    "FM": 45,
+    "Soc": 46
+   },
+   "wounds": 19,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 43
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 56
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 38
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 54
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 59
+    },
+    {
+     "name": "Melee (Two-Handed)",
+     "nameFr": "Corps à corps (Deux mains)",
+     "value": 59
+    },
+    {
+     "name": "Entertain (Singing)",
+     "nameFr": "Divertissement (Chant)",
+     "value": 56
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 43
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 45
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 54
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 35
+    },
+    {
+     "name": "Language (Guilder)",
+     "nameFr": "Langue (Guilde)",
+     "value": 46
+    },
+    {
+     "name": "Language (Tilean)",
+     "nameFr": "Langue (Tiléen)",
+     "value": 46
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 61
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 49
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 36
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 51
+    },
+    {
+     "name": "Perform (Jonglage)",
+     "nameFr": "Représentation (Jonglage)",
+     "frUnverified": true,
+     "value": 51
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 55
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 64
+    },
+    {
+     "name": "Lore (Tilée)",
+     "nameFr": "Savoir (Tilée)",
+     "frUnverified": true,
+     "value": 64
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 49
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 56
+    }
+   ],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Dicer"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Savvy"
+    }
+   ],
+   "trappings": [
+    "coup-de-poing",
+    "matraque et bouclier derrière le bar",
+    "zweihänder et justaucorps de cuir dans sa chambre privée",
+    "auberge les Armes du Templier",
+    "2 CO dans une bourse à la ceinture"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.23"
+  },
+  {
+   "id": "E0-P-994",
+   "book": "L28",
+   "page": 24,
+   "physicalPage": 27,
+   "kind": "profile",
+   "blockKey": "L28:27:0",
+   "name": "Renata Hoeflehner — Serveuse humain (Argent 2)",
+   "nameFr": "Renata Hoeflehner — Serveuse humain (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 32,
+    "CT": 30,
+    "F": 33,
+    "E": 34,
+    "I": 33,
+    "Ag": 32,
+    "Dex": 33,
+    "Int": 41,
+    "FM": 36,
+    "Soc": 37
+   },
+   "wounds": 12,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 42
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 47
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 42
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 42
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 38
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 42
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 43
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 42
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 38
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 47
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 49
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Strong-minded"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Etiquette (Serviteurs)"
+    },
+    {
+     "name": "Very Resilient"
+    }
+   ],
+   "trappings": [
+    "dague",
+    "chaîne de cou en or d’une valeur de 1 CO",
+    "chevalière en or d’une valeur de 1 CO"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.24"
+  },
+  {
+   "id": "E0-P-995",
+   "book": "L28",
+   "page": 24,
+   "physicalPage": 27,
+   "kind": "profile",
+   "blockKey": "L28:27:1",
+   "name": "Konrad Alpiger — Homme à tout faire/serveur humain (Argent 2)",
+   "nameFr": "Konrad Alpiger — Homme à tout faire/serveur humain (Argent 2)",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 33,
+    "F": 41,
+    "E": 44,
+    "I": 33,
+    "Ag": 37,
+    "Dex": 41,
+    "Int": 40,
+    "FM": 35,
+    "Soc": 38
+   },
+   "wounds": 15,
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 43
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 47
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 51
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 47
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 53
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 43
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 43
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 49
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 55
+    }
+   ],
+   "talents": [
+    {
+     "name": "Alley Cat"
+    },
+    {
+     "name": "Sturdy"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Etiquette (Serviteurs)"
+    },
+    {
+     "name": "Very Resilient"
+    }
+   ],
+   "trappings": [
+    "justaucorps de cuir",
+    "dague",
+    "matraque (à la cave)",
+    "8 pistoles"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L28 p.24"
+  },
+  {
+   "id": "E0-P-996",
+   "book": "L28",
+   "page": 24,
+   "physicalPage": 27,
+   "kind": "profile",
+   "blockKey": "L28:27:2",
+   "name": "Tiasmara Flarett — Cuisinier halfling (Argent 2)",
+   "nameFr": "Tiasmara Flarett — Cuisinier halfling (Argent 2)",
+   "stats": {
+    "M": 3,
+    "CC": 22,
+    "CT": 34,
+    "F": 31,
+    "E": 27,
+    "I": 32,
+    "Ag": 32,
+    "Dex": 53,
+    "Int": 32,
+    "FM": 45,
+    "Soc": 60
+   },
+   "wounds": 8,
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 42
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 55
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 70
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 42
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 37
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 42
+    },
+    {
+     "name": "Trade (Cook)",
+     "nameFr": "Métier (Cuisinier)",
+     "value": 68
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 42
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 47
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Artistic"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Small"
+    },
+    {
+     "name": "Resistant (Chaos)"
+    },
+    {
+     "name": "Acute Sense (Goût)"
+    },
+    {
+     "name": "Night Vision"
+    }
+   ],
+   "trappings": [
+    "dague",
+    "tirelire contenant 57 pistoles (cachée dans sa chambre)"
+   ],
+   "keywords": [
+    "halfling"
+   ],
+   "nameFrSource": "L28 p.24"
+  },
+  {
+   "id": "E0-P-997",
+   "book": "L28",
+   "page": 28,
+   "physicalPage": 31,
+   "kind": "profile",
+   "blockKey": "L28:31:0",
+   "name": "Cultistes de la Main pourpre (7)",
+   "nameFr": "Cultistes de la Main pourpre (7)",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 44,
+    "F": 36,
+    "E": 39,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 29,
+    "Int": 39,
+    "FM": 37,
+    "Soc": 26
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Arbalète",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Filet",
+     "damage": 0,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Gourdin ou Hache",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 64
+    }
+   ],
+   "trappings": [
+    "filet barbelé",
+    "arbalètes"
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "L28 p.28"
+  },
+  {
+   "id": "E0-P-998",
+   "book": "L28",
+   "page": 28,
+   "physicalPage": 31,
+   "kind": "profile",
+   "blockKey": "L28:31:1",
+   "name": "Magus du culte de la Main pourpre",
+   "nameFr": "Magus du culte de la Main pourpre",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": 34,
+    "F": 36,
+    "E": 41,
+    "I": 55,
+    "Ag": 44,
+    "Dex": 35,
+    "Int": 44,
+    "FM": 54,
+    "Soc": 51
+   },
+   "wounds": 16,
+   "attacks": [
+    {
+     "name": "Dague",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 44
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Channelling (Dhar, Tzeentch)",
+     "nameFr": "Focalisation (Dhar, Tzeentch)",
+     "frUnverified": true,
+     "value": 68
+    },
+    {
+     "name": "Language (Magick)",
+     "nameFr": "Langue (Magick)",
+     "value": 85
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 65
+    },
+    {
+     "name": "Lore (Chaos)",
+     "nameFr": "Savoir (Chaos)",
+     "value": 75
+    }
+   ],
+   "traits": [
+    {
+     "name": "Spellcaster",
+     "param": "Ombres, Tzeentch",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Mutation",
+     "param": "Cheveux transformés en doigts",
+     "ref": "E0-T-040"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "conditional": true,
+     "ref": "E0-T-022"
+    }
+   ],
+   "trappings": [
+    "bâton",
+    "dague"
+   ],
+   "notes": [
+    "* Sort: Effrayant actif *Les sorts listés ci-dessous sont ceux que le Magus est prêt à utiliser pour la capture de Kastor Lieberung. Si les choses commencent à mal tourner pour eux ou si les Joueurs ont trop de facilités, n’hésitez pas à lui faire lancer la Tempête de feu de Tzeentch (L’Ennemi dans l’Ombre - Compagnon p. 83) sur tous les participants."
+   ],
+   "spells": {
+    "Petty": [
+     "Choc",
+     "Éblouissant",
+     "Fléchette",
+     "Sommeil"
+    ],
+    "Arcane": [
+     "Chute",
+     "Effrayant",
+     "Enchevêtrement (sous la forme d’une fumée violette étouffante)"
+    ],
+    "Lore of Tzeentch": [
+     "Trahison de Tzeentch"
+    ]
+   },
+   "nameFrSource": "L28 p.28"
+  },
+  {
+   "id": "E0-P-999",
+   "book": "L28",
+   "page": 32,
+   "physicalPage": 35,
+   "kind": "profile",
+   "blockKey": "L28:35:0",
+   "name": "Graf Boris Todbringer — Noble seigneur humain électeur impérial (Or 7)",
+   "nameFr": "Graf Boris Todbringer — Noble seigneur humain électeur impérial (Or 7)",
+   "stats": {
+    "M": 4,
+    "CC": 71,
+    "CT": 42,
+    "F": 52,
+    "E": 57,
+    "I": 68,
+    "Ag": 53,
+    "Dex": 55,
+    "Int": 62,
+    "FM": 68,
+    "Soc": 66
+   },
+   "wounds": 26,
+   "skills": [
+    {
+     "name": "Art (Calligraphy)",
+     "nameFr": "Art (Calligraphie)",
+     "value": 75
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 73
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 88
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 86
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 73
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 91
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 73
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 91
+    },
+    {
+     "name": "Melee (Cavalry)",
+     "nameFr": "Corps à corps (Cavalerie)",
+     "value": 87
+    },
+    {
+     "name": "Melee (Fencing)",
+     "nameFr": "Corps à corps (Escrime)",
+     "value": 81
+    },
+    {
+     "name": "Entertain (Speeches)",
+     "nameFr": "Divertissement (Discours)",
+     "value": 76
+    },
+    {
+     "name": "Entertain (Narration)",
+     "nameFr": "Divertissement (Narration)",
+     "frUnverified": true,
+     "value": 71
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 73
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 72
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 67
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 72
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 88
+    },
+    {
+     "name": "Language (Ancien Teutogen)",
+     "nameFr": "Langue (Ancien Teutogen)",
+     "frUnverified": true,
+     "value": 72
+    },
+    {
+     "name": "Language (Battle)",
+     "nameFr": "Langue (Bataille)",
+     "value": 72
+    },
+    {
+     "name": "Language (Classical)",
+     "nameFr": "Langue (Classique)",
+     "value": 82
+    },
+    {
+     "name": "Language (Khazalid)",
+     "nameFr": "Langue (Khazalid)",
+     "value": 67
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 81
+    },
+    {
+     "name": "Play (Harpsichord)",
+     "nameFr": "Musicien (Clavecin)",
+     "value": 65
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 88
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 72
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 83
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 62
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 81
+    },
+    {
+     "name": "Perform (Dance)",
+     "nameFr": "Représentation (Danse)",
+     "value": 63
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 77
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 62
+    },
+    {
+     "name": "Lore (Arts)",
+     "nameFr": "Savoir (Arts)",
+     "frUnverified": true,
+     "value": 72
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "frUnverified": true,
+     "value": 72
+    },
+    {
+     "name": "Lore (Warfare)",
+     "nameFr": "Savoir (Guerre)",
+     "value": 82
+    },
+    {
+     "name": "Lore (History)",
+     "nameFr": "Savoir (Histoire)",
+     "value": 77
+    },
+    {
+     "name": "Lore (Law)",
+     "nameFr": "Savoir (Loi)",
+     "value": 72
+    },
+    {
+     "name": "Lore (Middenheim)",
+     "nameFr": "Savoir (Middenheim)",
+     "value": 82
+    },
+    {
+     "name": "Lore (Middenland)",
+     "nameFr": "Savoir (Middenland)",
+     "frUnverified": true,
+     "value": 82
+    },
+    {
+     "name": "Lore (Nordland)",
+     "nameFr": "Savoir (Nordland)",
+     "frUnverified": true,
+     "value": 77
+    },
+    {
+     "name": "Lore (Politics)",
+     "nameFr": "Savoir (Politique)",
+     "value": 77
+    },
+    {
+     "name": "Bribery",
+     "nameFr": "Subornation",
+     "value": 86
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 82
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "ceux qui, d’après lui, lui ont fait du tort",
+     "ref": "E0-T-003"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Suave"
+    },
+    {
+     "name": "Blather",
+     "rank": 2
+    },
+    {
+     "name": "Beat Blade",
+     "rank": 2
+    },
+    {
+     "name": "Luck",
+     "rank": 2
+    },
+    {
+     "name": "Stout-hearted",
+     "rank": 2
+    },
+    {
+     "name": "Combat Reflexes",
+     "rank": 3
+    },
+    {
+     "name": "Disarm",
+     "rank": 2
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Distract"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Inspiring",
+     "rank": 3
+    },
+    {
+     "name": "Feint",
+     "rank": 2
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Wealthy",
+     "rank": 10
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Noble Blood"
+    },
+    {
+     "name": "Carouser"
+    },
+    {
+     "name": "Public Speaker",
+     "rank": 2
+    },
+    {
+     "name": "Step Aside",
+     "rank": 2
+    },
+    {
+     "name": "Tenacious"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Commanding Presence",
+     "rank": 3
+    },
+    {
+     "name": "Reversal"
+    },
+    {
+     "name": "Riposte",
+     "rank": 2
+    },
+    {
+     "name": "Etiquette (Guilde, Noble, Soldat)"
+    },
+    {
+     "name": "War Leader",
+     "rank": 2
+    },
+    {
+     "name": "Gregarious"
+    },
+    {
+     "name": "Very Resilient"
+    },
+    {
+     "name": "Iron Will",
+     "rank": 3
+    }
+   ],
+   "trappings": [
+    "Croc runique du Middenland (Mord-les- Jambes)",
+    "armure de plates complète (qualité optimale)",
+    "Grand-duché de Middenheim",
+    "tutelle de la Baronnie du Nordland",
+    "habit royal (qualité optimale)",
+    "joyaux de la Couronne et caisses de la cité de Middenheim",
+    "plusieurs terres et états un peu partout dans l’Empire"
+   ],
+   "keywords": [
+    "noble",
+    "humain"
+   ],
+   "nameFrSource": "L28 p.32"
+  }
+ ]
+}

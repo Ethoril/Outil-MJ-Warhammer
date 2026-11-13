@@ -32,7 +32,7 @@ for (const item of index.books) {
       assert.equal(profile.page, entry.page, profile.id);
       assert.deepEqual(validateBestiaryRecord(profile), [], `${profile.id} ${profile.name}`);
       for (const ability of profile.abilities || []) assert.ok(inventory.traits.some(trait => trait.id === ability), `${profile.id} → ${ability}`);
-      if (profile.nameFr) assert.ok(['proposition'].includes(profile.nameFrSource) || /^L(05|27) p\.\d+$/.test(profile.nameFrSource), `${profile.id} source du nom français`);
+      if (profile.nameFr) assert.ok(['proposition'].includes(profile.nameFrSource) || /^L(05|27|28) p\.\d+$/.test(profile.nameFrSource), `${profile.id} source du nom français`);
       assert.ok(!('_dropped' in profile), 'aucun résidu de génération');
     }
     const counts = { profile: 0, template: 0, 'pregenerated-character': 0 };
@@ -838,5 +838,45 @@ test('L05 : seuls l’Ours (p. 315) et le Pigeon (p. 316), absents de L06, sont 
   assert.deepEqual([pigeon.page, pigeon.nameFr, pigeon.nameFrSource, pigeon.wounds, pigeon.size], [316, 'Pigeon', 'L05 p.316', 1, 'tiny']);
   assert.deepEqual(Object.values(pigeon.stats), [2, 15, null, 5, 15, 25, 40, null, 10, 20, 10]);
   assert.ok(pigeon.traits.some(trait => trait.name === 'Fly' && trait.rating === '100'));
+});
+});
+
+describe('bestiaire L28 (T15, Le Pouvoir derrière le Trône)', () => {
+const read = path => JSON.parse(readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8'));
+const book = read('js/data/bestiary/L28.json');
+const byId = id => book.profiles.find(profile => profile.id === id);
+
+test('L28 : 64 profils du livre V4 français, nom français imprimé avec sa page, valeurs relues', () => {
+  assert.equal(book.edition, 'V4');
+  assert.equal(book.profiles.length, 64);
+  for (const profile of book.profiles) {
+    assert.equal(profile.nameFrSource, `L28 p.${profile.page}`, profile.id);
+    assert.equal(profile.physicalPage, profile.page + 3, profile.id);
+  }
+  const uli = byId('E0-P-993');
+  assert.equal(uli.nameFr, 'Uli Breitner, propriétaire — Marchand humain, anciennement recrue et entremetteur (Argent 5)');
+  assert.deepEqual([...Object.values(uli.stats), uli.wounds], [4, 44, 26, 33, 61, 28, 33, 39, 44, 45, 46, 19]);
+  assert.ok(uli.skills.some(skill => skill.name === 'Melee (Two-Handed)' && skill.value === 59 && skill.nameFr === 'Corps à corps (Deux mains)'));
+  const gueulard = byId('E0-P-1028');
+  assert.equal(gueulard.stats.CT, null);
+  assert.deepEqual(gueulard.attacks.map(attack => [attack.trait, attack.damage]), [['Weapon', 5]]);
+});
+
+test('L28 : les PNJ aussi imprimés au Compagnon (L18) gardent leurs deux profils, aux mêmes caractéristiques', () => {
+  const l18 = read('js/data/bestiary/L18.json');
+  for (const [id28, id18] of [['E0-P-1005', 'E0-P-549'], ['E0-P-1013', 'E0-P-545'], ['E0-P-1022', 'E0-P-550']]) {
+    const other = l18.profiles.find(profile => profile.id === id18);
+    assert.deepEqual([byId(id28).stats, byId(id28).wounds], [other.stats, other.wounds], id28);
+    assert.equal(byId(id28).name, other.name, 'nom anglais repris du Compagnon');
+  }
+});
+
+test('L28 : le filigrane de l’exemplaire n’est jamais lu dans les données', () => {
+  assert.doesNotMatch(readFileSync(new URL('../../../js/data/bestiary/L28.json', import.meta.url), 'utf8'), /@[\w-]+\.[a-z]{2,}/);
+});
+
+test('L05 : l’Ours porte son nom anglais (Bear), le Pigeon le sien', () => {
+  const l05 = read('js/data/bestiary/L05.json');
+  assert.deepEqual(l05.profiles.map(profile => [profile.name, profile.nameFr]), [['Bear', 'Ours'], ['Pigeon', 'Pigeon']]);
 });
 });

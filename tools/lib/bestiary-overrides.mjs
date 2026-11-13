@@ -74,6 +74,8 @@ export const WOUNDS_ABSENT_IDS = Object.freeze(new Set(['E0-P-515']));
  */
 export const NAME_FIXES = Object.freeze({
   'E0-P-438': 'Matthogg — Ogre Bruiser',
+  // Livre de base V4 FR (L05) : nom anglais du profil (le nom français vient de NAMES_FR), comme les autres livres.
+  'E0-P-194': 'Bear', 'E0-P-199': 'Pigeon',
   // Middenheim (L19) : tirets longs lus à la place des umlauts (E-D25)
   'E0-P-585': 'Emmille Münzstätter — Human Artisan (Silver 1)',
   // Altdorf (L20) : titre de section collé au nom, parenthèse doublée, umlaut lu comme un tiret long (E-D26)
@@ -184,7 +186,9 @@ export const TRAPPING_JOINS = Object.freeze({
  * Le texte est celui du livre, recopié ligne à ligne.
  */
 // Noms de Traits imprimés que l'inventaire ne connaît pas : gardés dans `specialRules` plutôt que perdus (Urzo, L23 p. 104 : Animalistic Legs).
-export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs', 'Mark of Slaanesh', 'Coven Sorcerer', 'Prey of the Dark Prince', 'Vampiric Gaze', 'Hunger', 'Corrupt']));
+// L28 (V4 français) : « Doppelgänger » (Démon mineur de Tzeentch p. 43, Doppelgänger p. 148) et « Craintif (Étrangers) » (Stefan Todbringer p. 33),
+// imprimés sans Trait correspondant à l'inventaire : gardés tels qu'imprimés en règles spéciales.
+export const TRAITS_KEPT_AS_RULES = Object.freeze(new Set(['Animalistic Legs', 'Mark of Slaanesh', 'Coven Sorcerer', 'Prey of the Dark Prince', 'Vampiric Gaze', 'Hunger', 'Corrupt', 'Doppelgänger', 'Craintif']));
 
 // Noms imprimés dans la liste facultative sans équivalent à l'inventaire (River Trolls, L26 p. 89 : « Stealth », qui est une compétence) : gardés dans `optionalSpecialRules`.
 // Q40 : « Cult (Fanatical or Chaos) » (Leviathan, L11 p. 85), « Fanatical Cultists » (Fen Worm, L11 p. 52) : noms imprimés sans Trait à l'inventaire.
@@ -210,7 +214,12 @@ export const BODY_LINE_FIXES =Object.freeze({
   // Livre de base V5 (L06) p. 344 : Varghulf, le début de « Traits Continued » (colonne de droite, chiffre « 4 » de la page) a mangé le début de Hungry.
   'L06:344:0': [['feast, losing their next Move and Action', 'Hungry: If they incapacitate an opponent or encounter a fresh body, they must pass an Average (+2 SL) Cool Test or feast, losing their next Move and Action']],
   // Livre de base V5 (L06) p. 331 : Fenbeast, lettre « c » de la citation voisine collée à la qualité « Magical ».
-  'L06:331:0': [['c', '']]
+  'L06:331:0': [['c', '']],
+  // Le Pouvoir derrière le Trône (L28) p. 95 : Marie-Astrid Platini, virgule oubliée entre deux compétences (relu sur la page).
+  'L28:98:0': [['Intimidation 33, Langue (Reikspiel) 28 Marchandage 45,', 'Intimidation 33, Langue (Reikspiel) 28, Marchandage 45,']],
+  // Même livre p. 28 : Magus de la Main pourpre, le paragraphe sous l'encadré des sorts n'est pas un nom de sort (la règle reste au livre).
+  'L28:31:1': [['Le Magus aura déjà lancé le sort Effrayant sur elle-même,', ''], ['bien que celui-ci s’estompe après 5 Rounds si les Personnages', ''],
+    ['parviennent à laisser parler les cultistes. Un Test de Savoir', ''], ['(Magick) Intermédiaire (+0) effectué par un Personnage', ''], ['possédant le Talent Seconde vue permettra de le remarquer.', '']]
 });
 
 export const BODY_OVERRIDES = Object.freeze({

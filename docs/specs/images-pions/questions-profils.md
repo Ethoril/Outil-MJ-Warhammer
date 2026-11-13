@@ -121,3 +121,23 @@ Réponses possibles :
   - **Q8 Fausse Hydre** : pas de profil de bestiaire ; monstre de campagne, image donnée par le sélecteur.
   - **Q9 Fils d'Ulric** : à chercher dans *Ennemi Intérieur 3 — Le Pouvoir derrière le Trône*, ajouté au corpus par le MJ, dont **tous** les profils de PNJ sont à extraire (profils et illustrations à créer).
   - **Q10 Main pourpre** : pas de profil de bestiaire ; PNJ de campagne, image donnée par le sélecteur.
+
+## Questions nées de T15 (13/11/2026, L28 — Le Pouvoir derrière le Trône)
+
+### Q11 — Fils d’Ulric : le livre ne les imprime pas
+
+`demagogue-fils-ulric`, `guetteur-fils-ulric`, `vaurien-fils-ulric`. L28 décrit des « démagogues » et des « vauriens » dans la prose (p. 34-35), mais n'imprime aucun profil de Fils d’Ulric. Ses 64 blocs de profil ont tous été lus.
+
+Réponses possibles :
+1. Pas de profil : les images restent à choisir à la main.
+2. Approché : un figurant humain du bestiaire, par exemple Voyou humain (L06 p. 322, E0-P-069).
+3. Je te donne les caractéristiques.
+
+### Q12 — Main pourpre : L28 imprime la rencontre du Magus et de ses 7 cultistes
+
+L28 p. 28 imprime le « Magus du culte de la Main pourpre » (E0-P-998) et les « Cultistes de la Main pourpre (7) » (E0-P-997), un profil pour les sept. Leur description correspond aux images (« un autre est équipé d’une massue et d’un filet barbelé » ↔ `kurt-filets`). La réponse à Q10 (« pas de profil ») date d'avant l'arrivée du livre.
+
+Réponses possibles :
+1. `magus.webp` devient l'image automatique du Magus ; les sept images de cultistes restent au choix sur le profil des Cultistes (un profil n'a qu'une image automatique).
+2. Comme 1, et l'une des sept images devient en plus l'image automatique des Cultistes (laquelle ?).
+3. Pas d'appariement : réponse Q10 maintenue.

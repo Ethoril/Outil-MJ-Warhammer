@@ -1444,3 +1444,74 @@ AJOUT : 443 références de profils et 39 Traits ou capacités, tous marqués `a
 | E0-P-982 | L26 p.116 | Father Marcus — Human Professor, Former Abbot (Gold 1) | Prejudice, Weapon | — |
 | E0-P-983 | L26 p.116 | Brother Martin and Brother Rolf — Human Monks (Nuns) (Brass 4) | Prejudice, Weapon | — |
 | E0-P-984 | L26 p.118 | Profil sans titre (L26 p. 118) | Fast, Fear, Fly, Hungry, Immune to Psychology, Night Vision, Painless, Size, Territorial, Unstable, Weapon | — |
+
+## Livre L28 du 13/11/2026 (Le Pouvoir derrière le Trône)
+
+AJOUT : 64 profils de PNJ et de créatures, marqués `addedOn: "2026-11-13"`. Livre V4 en français ; page physique = page imprimée + 3. Trois PNJ sont aussi au Compagnon (L18) avec les mêmes caractéristiques : Isolde Begegnen, Nastassia, Brunhilde Klaglich.
+
+| ID | Source | Nom imprimé | Traits reconnus |
+| --- | --- | --- | --- |
+| E0-P-992 | L28 p.23 | Kurt Gruber, serveur — Bourgeois humain, ancienne recrue (Argent 2) | — |
+| E0-P-993 | L28 p.23 | Uli Breitner, propriétaire — Marchand humain, anciennement recrue et entremetteur (Argent 5) | — |
+| E0-P-994 | L28 p.24 | Renata Hoeflehner — Serveuse humain (Argent 2) | — |
+| E0-P-995 | L28 p.24 | Konrad Alpiger — Homme à tout faire/serveur humain (Argent 2) | — |
+| E0-P-996 | L28 p.24 | Tiasmara Flarett — Cuisinier halfling (Argent 2) | — |
+| E0-P-997 | L28 p.28 | Cultistes de la Main pourpre (7) | Ranged, Weapon |
+| E0-P-998 | L28 p.28 | Magus du culte de la Main pourpre | Fear, Mutation, Spellcaster, Weapon |
+| E0-P-999 | L28 p.32 | Graf Boris Todbringer — Noble seigneur humain électeur impérial (Or 7) | Animosity |
+| E0-P-1000 | L28 p.33 | Baron Heinrich Todbringer — Émissaire humain, ancien conseiller et intendant (Argent 4) | — |
+| E0-P-1001 | L28 p.33 | Baron Stefan Todbringer — Héritier souffreteux humain | — |
+| E0-P-1002 | L28 p.43 | Démon mineur de Tzeentch | Champion, Clever, Corruption, Daemonic, Disease, Fear, Night Vision, Spellcaster, Unstable, Weapon |
+| E0-P-1003 | L28 p.55 | Emil Valgeir — Prêtre guerrier d’Ulric vétéran humain (Argent 2) | Armour, Weapon |
+| E0-P-1004 | L28 p.56 | Claus Liebnitz — Prêtre sergent d’Ulric vétéran, ancien chevalier de l’ordre du Loup blanc (Argent 3) | Armour, Belligerent, Fury, Weapon |
+| E0-P-1005 | L28 p.56 | Isolde Begegnen — Grande prêtresse de Shallya (Or 1) | — |
+| E0-P-1006 | L28 p.61 | Glugnur — Tueur de troll nain (Bronze 2) | Animosity, Fury, Hatred, Prejudice, Weapon |
+| E0-P-1007 | L28 p.62 | Gustav Holschtweig — Colporteur humain (Bronze 4) | Weapon |
+| E0-P-1008 | L28 p.62 | Hildi Holschtweig — Colporteur humain (Bronze 4) | Weapon |
+| E0-P-1009 | L28 p.63 | Antonia Fiegling — Rançonneur humain (Bronze 5) | Armour, Prejudice, Weapon |
+| E0-P-1010 | L28 p.63 | Bruno Hansgorp — Coupe-jarret humain (Bronze 3) | Armour, Prejudice, Weapon |
+| E0-P-1011 | L28 p.64 | Karl Matthaus — Voleur humain (Bronze 1*) | Prejudice, Ranged, Weapon |
+| E0-P-1012 | L28 p.67 | Les gladiateurs minotaures | Belligerent, Fury, Horns, Hungry, Size, Weapon |
+| E0-P-1013 | L28 p.87 | Nastassia — Agent (Or 4) | — |
+| E0-P-1014 | L28 p.91 | Snikkit — Vermine de choc skaven | Armour, Infected, Night Vision, Tracker, Weapon |
+| E0-P-1015 | L28 p.91 | Guerriers skavens de Snikkit (6) | Armour, Infected, Night Vision, Ranged, Skittish, Tracker, Weapon |
+| E0-P-1016 | L28 p.91 | Erina Eberhauer — Sorcier flamboyant (Argent 3) | — |
+| E0-P-1017 | L28 p.94 | Selena — Prostitué humain (Bronze 1) | Weapon |
+| E0-P-1018 | L28 p.94 | Fritz Dreckig — Négociant humain (Argent 2) | Armour, Prejudice, Weapon |
+| E0-P-1019 | L28 p.94 | Bruno Kohl — Entremetteur humain, ancien noble et apothicaire (Bronze 3) | Prejudice, Weapon |
+| E0-P-1020 | L28 p.94 | Otto Geschwur — Coupe-jarret humain (Bronze 3) | Prejudice, Weapon |
+| E0-P-1021 | L28 p.95 | Marie-Astrid Platini — Prostitué humain (Bronze 1) | Prejudice, Weapon |
+| E0-P-1022 | L28 p.96 | Brunhilde Klaglich — Maître espion (Or 4) | Armour, Weapon |
+| E0-P-1023 | L28 p.97 | Anton Hundisch — Sorcier novice humain (Bronze 3) | — |
+| E0-P-1024 | L28 p.97 | Dagmar Mitschuldige — Soldat humain (Argent 3) | Armour, Weapon |
+| E0-P-1025 | L28 p.97 | Hultz Fleischer — Coupe-jarret humain (Bronze 3) | Armour, Weapon |
+| E0-P-1026 | L28 p.109 | Gaston — Serviteur humain, ancien employé (Argent 3) | Armour, Ranged, Weapon |
+| E0-P-1027 | L28 p.109 | Swelt Tunger — Artisan humain, ancien voleur (Argent 1) | Weapon |
+| E0-P-1028 | L28 p.109 | Gueulard — Chien de garde | Bestial, Night Vision, Size, Skittish, Stride, Territorial, Trained, Weapon |
+| E0-P-1029 | L28 p.109 | Faucon — Éclaireur humain, ancien chasseur et domestique (Bronze 5) | Armour, Prejudice, Ranged, Weapon |
+| E0-P-1030 | L28 p.110 | Sénestre — Faucon | Bestial, Size, Skittish, Trained, Weapon |
+| E0-P-1031 | L28 p.110 | Chevaux de guerre | Size, Skittish, Stride, Trained, Weapon |
+| E0-P-1032 | L28 p.110 | Lurk — Gladiateur humain (Argent 2) | Armour, Weapon |
+| E0-P-1033 | L28 p.114 | Josef Sparsam — Chancelier, ancien maître du barreau (Or 3) | — |
+| E0-P-1034 | L28 p.116 | Dieter Schmiedehammer — Champion de justice (Or 3) | Armour, Weapon |
+| E0-P-1035 | L28 p.118 | Rallane Lafarel — Troubadour (Argent 3) | Prejudice |
+| E0-P-1036 | L28 p.120 | Katarina Todbringer — Noble (Or 3) | — |
+| E0-P-1037 | L28 p.122 | Hildegarde Zimperlich — Valet (Argent 5) | Prejudice, Weapon |
+| E0-P-1038 | L28 p.124 | Johann Schwermutt — Officier (Or 1) | — |
+| E0-P-1039 | L28 p.124 | Ulrich Schutzmann — Capitaine de la garde (Or 1) | — |
+| E0-P-1040 | L28 p.125 | Maximillian von Genscher — Officier (Or 1) | — |
+| E0-P-1041 | L28 p.127 | Albrecht Helseher — Seigneur sorcier (Or 2) | — |
+| E0-P-1042 | L28 p.128 | Janna Eberhauer — Maître sorcier (Or 1) | — |
+| E0-P-1043 | L28 p.130 | Ar-Ulric Jarrick Valgeir — Lecteur (Or 2) | Armour, Immunity, Magic Resistance, Ward, Weapon |
+| E0-P-1044 | L28 p.132 | Emmanuelle Schlagen — Conseiller (Argent 4) | — |
+| E0-P-1045 | L28 p.134 | Siegfried Prunkvoll — Chevalier commandeur (Or 2) | Armour, Prejudice, Weapon |
+| E0-P-1046 | L28 p.136 | Allavandrel Fanmaris — Maître de la chasse (Argent 3) | Ranged |
+| E0-P-1047 | L28 p.138 | Gotthard Wallenstein — Marchand (Argent 5) | Mental Corruption, Prejudice, Weapon |
+| E0-P-1048 | L28 p.140 | Luigi Pavarotti — Arnaqueur (Argent 2) | — |
+| E0-P-1049 | L28 p.142 | Natasha Sinnlich — Émissaire (Argent 4) | — |
+| E0-P-1050 | L28 p.142 | Kirsten Jung — Conseiller (Argent 4) | — |
+| E0-P-1051 | L28 p.143 | Petra Liebkosen — Émissaire (Argent 4) | — |
+| E0-P-1052 | L28 p.145 | Reiner Ehrlich — Maître du barreau (Or 1) | — |
+| E0-P-1053 | L28 p.145 | Joachim Hoflich — Maître du barreau (Or 1) | Immune to Psychology, Weapon |
+| E0-P-1054 | L28 p.146 | Karl Heinz Wasmeier — Maître du barreau (Or 1) | Weapon |
+| E0-P-1055 | L28 p.148 | Doppelgänger | Fear, Immune to Psychology, Weapon |

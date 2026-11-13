@@ -26,9 +26,9 @@ maps/tokens/bestiaire/coursier-elfique.webp;Coursier elfique;E0-P-987;Coursier e
 maps/tokens/bestiaire/crapaud-tache-d-encre.webp;Crapaud tache-d’encre;E0-P-283;Crapaud tache-d’encre;L07 p.170;exact;
 maps/tokens/bestiaire/culchan.webp;Culchan;E0-P-293;Culchan;L07 p.173;exact;
 maps/tokens/bestiaire/daggerfish.webp;Daggerfish;E0-P-907;Daggerfish;L25 p.141;exact;
-maps/tokens/bestiaire/destrier-chaos.webp;Destrier du Chaos;E0-P-989;Destrier du Chaos;L27 p.118;approché;
+maps/tokens/bestiaire/destrier-chaos.webp;Destrier du Chaos;E0-P-989;Destrier du Chaos;L27 p.118;exact;
 maps/tokens/bestiaire/destrier.webp;Destrier;E0-P-988|E0-P-457|E0-P-766;Destrier | Chevaliers de l’Empire — Destrier — Lourd cheval de guerre | Cheval de guerre lourd;L27 p.118 | L13 p.29 | L23 p.24;approché;exact : Destrier (L27) — approché : « Destrier — Lourd cheval de guerre » (L13 p.29) et Cheval de guerre lourd (L23 p.24), le destrier étant le cheval de guerre lourd. Le Cheval de guerre (L27) et le Cheval de guerre léger (L23) restent sans image
-maps/tokens/bestiaire/drakenhund.webp;Drakenhund sylvanien;E0-P-369;Drakenhund sylvanien;L10 p.38;approché;
+maps/tokens/bestiaire/drakenhund.webp;Drakenhund sylvanien;E0-P-369;Drakenhund sylvanien;L10 p.38;exact;
 maps/tokens/bestiaire/epine-a-empaler.webp;Épine-à-empaler;E0-P-271;Épine-à-empaler;L07 p.167;exact;
 maps/tokens/bestiaire/familier-de-combat.webp;Familier de combat;E0-P-528;Familier de combat;L17 p.182;exact;
 maps/tokens/bestiaire/familier-de-puissance.webp;Familier de puissance;E0-P-529;Familier de puissance;L17 p.182;exact;
@@ -105,7 +105,7 @@ maps/tokens/destriers/destrier-kislev-lancier-aile.webp;Destrier kislévite (lan
 maps/tokens/destriers/destrier-kislev-legion-griffon.webp;Destrier kislévite (Légion du Griffon);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, Légion du Griffon) — choix manuel sur la monture
 maps/tokens/elysia.webp;Elysia;;;;aucun;pas un profil du bestiaire (PJ)
 maps/tokens/ennemis/demons/changelin-de-tzeentch.webp;Changelin de Tzeentch;E0-P-551|E0-P-689;Changelin de Tzeentch | Changeling de Tzeentch;L18 p.85 | L21 p.56;exact;Changelin de Tzeentch (L18 p.85) et Changeling de Tzeentch (L21 p.56)
-maps/tokens/ennemis/demons/demonette-slaanesh.webp;Démonette de Slaanesh;E0-P-108;Démonette de Slaanesh;L06 p.350;approché;
+maps/tokens/ennemis/demons/demonette-slaanesh.webp;Démonette de Slaanesh;E0-P-108;Démonette de Slaanesh;L06 p.350;exact;
 maps/tokens/ennemis/demons/disque-bibliotheque-de-tzeentch.webp;Disque-bibliothèque de Tzeentch;E0-P-534;Disque-bibliothèque de Tzeentch;L17 p.213;exact;
 maps/tokens/ennemis/demons/furie-du-chaos.webp;Furie du Chaos;E0-P-788;Furie du Chaos;L23 p.84;exact;
 maps/tokens/ennemis/demons/horreur-bleue.webp;Horreur bleue;E0-P-790;Horreur bleue;L23 p.85;exact;
@@ -393,12 +393,12 @@ maps/tokens/pnj/l07/soren-hoarder-vitki.webp;Soren Hoarder — Vitki;E0-P-244;So
 maps/tokens/pnj/l07/tzku-ta.webp;Tzku’Ta;E0-P-255;Tzku’Ta;L07 p.113;exact;
 maps/tokens/pnj/l07/uthl-kritchnaak-heraut-exalte-de-nurgle.webp;Uthl’Kritchnaak — Héraut exalté de Nurgle;E0-P-247;Uthl’Kritchnaak — Héraut exalté de Nurgle;L07 p.61;exact;
 maps/tokens/pnj/l18/alfric-half-nose-anvilbreaker-receleur-nain-argent-2.webp;Alfric Half-Nose Anvilbreaker — Receleur (Nain, Argent 2);E0-P-546|E0-P-574;Alfric `Half-Nose' Anvilbreaker — Receleur nain (Argent 2) | Alfric `Half-Nose' Anvilbreaker — Receleur nain (Argent 2);L18 p.63 | L19 p.39;exact;doublon Middenheim L18/L19
-maps/tokens/pnj/l18/brunhilde-klaglich-maitre-espion-humain-or-4.webp;Brunhilde Klaglich — Maître espion humain (Or 4);E0-P-550;Brunhilde Klaglich — Maître espion humain (Or 4);L18 p.74;exact;
+maps/tokens/pnj/l18/brunhilde-klaglich-maitre-espion-humain-or-4.webp;Brunhilde Klaglich — Maître espion humain (Or 4);E0-P-550|E0-P-1022;Brunhilde Klaglich — Maître espion humain (Or 4) | Brunhilde Klaglich — Maître espion (Or 4);L18 p.74 | L28 p.96;exact;doublon Pouvoir derrière le Trône L18/L28 (mêmes caractéristiques)
 maps/tokens/pnj/l18/edel-mueller-grande-pretresse-humain-or-1.webp;Edel Mueller — Grande prêtresse humain (Or 1);E0-P-548;Edel Mueller — Grande prêtresse humain (Or 1);L18 p.68;exact;
 maps/tokens/pnj/l18/hausmeister-breugal-gouverneur-humain-ancien-conseiller-or-3.webp;Hausmeister Breugal — Gouverneur humain, ancien conseiller (Or 3);E0-P-544;Hausmeister Breugal — Gouverneur humain, ancien conseiller (Or 3);L18 p.56;exact;
 maps/tokens/pnj/l18/henri-phillippe-rocheteau-doyen-de-village-humain-ancien-marchand-argent-5.webp;Henri-Phillippe Rocheteau — Doyen de village humain, ancien marchand (Argent 5);E0-P-558;Henri-Phillippe Rocheteau — Doyen de village humain, ancien marchand (Argent 5);L18 p.114;exact;
-maps/tokens/pnj/l18/isolde-begegnen-grande-pretresse-humain-or-1.webp;Isolde Begegnen — Grande prêtresse humain (Or 1);E0-P-549;Isolde Begegnen — Grande prêtresse humain (Or 1);L18 p.71;exact;
-maps/tokens/pnj/l18/nastassia-maitre-espion-humain-or-4.webp;Nastassia — Maître espion humain (Or 4);E0-P-545;Nastassia — Maître espion humain (Or 4);L18 p.60;exact;
+maps/tokens/pnj/l18/isolde-begegnen-grande-pretresse-humain-or-1.webp;Isolde Begegnen — Grande prêtresse humain (Or 1);E0-P-549|E0-P-1005;Isolde Begegnen — Grande prêtresse humain (Or 1) | Isolde Begegnen — Grande prêtresse de Shallya (Or 1);L18 p.71 | L28 p.56;exact;doublon Pouvoir derrière le Trône L18/L28 (mêmes caractéristiques)
+maps/tokens/pnj/l18/nastassia-maitre-espion-humain-or-4.webp;Nastassia — Maître espion humain (Or 4);E0-P-545|E0-P-1013;Nastassia — Maître espion humain (Or 4) | Nastassia — Agent (Or 4);L18 p.60 | L28 p.87;exact;doublon Pouvoir derrière le Trône L18/L28 (mêmes caractéristiques)
 maps/tokens/pnj/l18/parzival-tristan-aschaffenberg-noble-ancien-soldat-argent-5.webp;Parzival Tristan Aschaffenberg — Noble, ancien soldat (Argent 5*);E0-P-560;Parzival Tristan Aschaffenberg — Noble, ancien soldat (Argent 5*);L18 p.115;exact;
 maps/tokens/pnj/l18/peter-tavelli-croc-jaune-cultiste-bronze-4.webp;Peter Tavelli — Croc-Jaune cultiste (Bronze 4);E0-P-552;Peter Tavelli — Croc-Jaune cultiste (Bronze 4);L18 p.96;exact;
 maps/tokens/pnj/l18/sascha-rothbert-procureur-humain-argent-1.webp;Sascha Rothbert — Procureur humain (Argent 1);E0-P-543;Sascha Rothbert — Procureur humain (Argent 1);L18 p.53;exact;
