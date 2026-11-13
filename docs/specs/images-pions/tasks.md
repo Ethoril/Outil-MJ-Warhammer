@@ -16,7 +16,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 
 ## Lot 2 — Outil MJ
 
-- [ ] **T3 — Résolution et envoi automatique.** `js/core/token-image.js` (`normalizeLibraryImage`, `tokenImageOf`, `libraryImageSrc`) ; `imageUrlOf` de `js/main.js` l'utilise. PJ inchangé.
+- [x] **T3 — Résolution et envoi automatique.** `js/core/token-image.js` (`normalizeLibraryImage`, `tokenImageOf`, `libraryImageSrc`) ; `imageUrlOf` de `js/main.js` l'utilise. PJ inchangé.
   Fichiers : `js/core/token-image.js`, `js/main.js`, `tests/unit/combat/token-image.test.js`. CA : 1, 2, 3, 7, 9, 16. Après : T2.
   Acceptation : `node --test tests/unit/combat/token-image.test.js` et `node --test tests/unit/combat/liaison-images.test.js`.
 - [ ] **T4 — Champ `tokenLibraryImage` et persistance.** Profil, `sanitize`, `PROFILE_KEYS`, export et import JSON ; exclusivité avec `tokenImage` ; pas de migration.
