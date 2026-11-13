@@ -40,7 +40,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 - [ ] **T8 — Outil : vent et `formImageUrl`.** Écrire `beastForm.wind` à la transformation (selon le sort lancé) ; `formImageOf` ; `formImageUrl` dans `tokenStateOf`, y compris pour un PJ ; `null` hors forme, pour `kadon` et pour une bête sans image.
   Fichiers : `js/core/v5-magic-arbitrations.js` et son appelant, `js/core/token-image.js`, `js/core/map-link-state.js`, `js/core/map-link.js`, `js/main.js`, `js/core/sanitize.js` si `wind` y est filtré, tests unitaires. CA : 17, 18, 19. Après : T3, T7.
   Acceptation : `node --test tests/unit/combat/token-image.test.js` et les tests existants de Forme bestiale.
-- [ ] **T9 — Carte : `formImageUrl`.** [P avec T8] Champ du pion (schéma, types), détenu par l'outil dans `mjLink.js` (`null` efface), affichage `formImageUrl ?? imageUrl` partout où l'image d'un pion est dessinée.
+- [x] **T9 — Carte : `formImageUrl`.** [P avec T8] Champ du pion (schéma, types), détenu par l'outil dans `mjLink.js` (`null` efface), affichage `formImageUrl ?? imageUrl` partout où l'image d'un pion est dessinée.
   Fichiers carte : `js/core/schema.js`, `js/core/types.js`, `js/app/mjLink.js`, `js/render/layers/tokens.js` et autres lecteurs d'image, tests. CA : 17, 18. Après : T7.
   Acceptation : tests unitaires de la carte ciblés (`mjLink`, schéma, rendu).
 
