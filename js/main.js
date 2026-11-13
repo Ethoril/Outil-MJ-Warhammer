@@ -47,7 +47,7 @@ import { openCampaignTimeDialog } from './ui/v5-campaign-time-dialog.js';
 import { renderMapLinkIndicator } from './ui/map-link-indicator.js';
 import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-link.js';
 import { offScenePjParticipants, mapMaxHpOf } from './core/map-link-state.js';
-import { tokenImageOf } from './core/token-image.js';
+import { participantTokenImageUrl } from './core/token-image.js';
 import { runProposalOf } from './core/map-link-run.js';
 import { mountMapLinkFeedback } from './ui/map-link-feedback.js';
 import { setMapDistanceProvider } from './ui/resolution-panel.js';
@@ -1883,9 +1883,9 @@ if (typeof BroadcastChannel === 'function') {
     channel: new BroadcastChannel(MAP_LINK_CHANNEL),
     // Scène, plus les PJ persistants hors scène : leur pion reste lié en exploration (contrat §3).
     getParticipants: () => { const scene = Store.listParticipants(); return [...scene, ...offScenePjParticipants(Store.listPersistentCharacters(), scene, id => Store.getProfile(id))]; },
-    // Image importée, sinon choisie dans la bibliothèque, sinon automatique du bestiaire (docs/specs/images-pions) ; un participant
-    // ajouté depuis le bestiaire sans profil de Réserve porte lui-même `extensions.v5.bestiary.id`. Un PJ n'envoie rien (map-link-state).
-    imageUrlOf: participant => tokenImageOf(Store.getProfile(participant.profileId) ?? participant).url,
+    // Image importée, sinon choisie dans la bibliothèque, sinon automatique du bestiaire (docs/specs/images-pions), y compris pour
+    // une monture (profil `monture-<id>`) et un participant ajouté depuis le bestiaire sans profil. Un PJ n'envoie rien (map-link-state).
+    imageUrlOf: participant => participantTokenImageUrl(participant, id => Store.getProfile(id)),
     colorOf: participant => Store.getProfile(participant.profileId)?.tokenColor ?? null,
     maxHpOf: participant => mapMaxHpOf(participant, Store.getProfile(participant.profileId)),
     onStatus: showMapLinkStatus,

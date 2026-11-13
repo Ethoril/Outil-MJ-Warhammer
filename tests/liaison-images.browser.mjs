@@ -106,5 +106,25 @@ try {
  const overflow = await dialog.evaluate(box => { const right = box.getBoundingClientRect().right + 0.5; return [...box.querySelectorAll('#token-image-field, #token-image-field *')].filter(el => el.getBoundingClientRect().width && el.getBoundingClientRect().right > right).map(el => el.className || el.tagName); });
  expect(overflow).toEqual([]);
  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
- console.log(`Bibliothèque (${loupId}) : image automatique, recherche, choix au clavier, exclusivité, retrait et bibliothèque absente réussis.`);
+ // Monture (T6) : image automatique du profil monture-<id>, puis choisie, puis retirée ; enregistrée aussitôt.
+ await dialog.locator('#btn-submit-form').click(); await expect(dialog).toBeHidden();
+ await page.evaluate(async () => {
+   const { Store } = await import('/js/main.js'); const { Profile } = await import('/js/core/models.js'); const { TOKEN_IMAGES } = await import('/js/data/token-images.js');
+   const id = TOKEN_IMAGES.find(row => row.path === 'maps/tokens/bestiaire/destrier.webp').profiles[0];
+   await Store.addProfile(new Profile({ id: 'chevalier', name: 'Chevalier', kind: 'PNJ', hp: 12 }));
+   await Store.setProfileMount('chevalier', { template: { name: 'Destrier', hp: 20, extensions: { v5: { bestiary: { id } } } }, bestiaryId: id, name: 'Destrier' });
+ });
+ await page.locator('#workspace-prepare').getByRole('button', { name: 'Modifier Chevalier' }).click();
+ dialog = page.getByRole('dialog');
+ const mountImage = dialog.locator('.form-mount-image-current');
+ await expect(mountImage).toContainText('Image de la monture : Destrier (bibliothèque, automatique)');
+ await dialog.getByRole('searchbox', { name: 'Chercher une image de la monture dans la bibliothèque de la carte' }).fill('destrier de bohemond');
+ await dialog.locator('.form-mount-image-picker').getByRole('button', { name: 'Destrier de Bohémond' }).click();
+ await expect(mountImage).toContainText('Image de la monture : Destrier de Bohémond (bibliothèque, choix du MJ)');
+ await expect(dialog.getByRole('button', { name: 'Retirer l’image de la monture' })).toBeFocused();
+ expect(await page.evaluate(async () => (await import('/js/main.js')).Store.getProfile('monture-chevalier').tokenLibraryImage)).toBe('maps/tokens/destriers/destrier-bohemond.webp');
+ await dialog.getByRole('button', { name: 'Retirer l’image de la monture' }).click();
+ await expect(mountImage).toContainText('Image de la monture : Destrier (bibliothèque, automatique)');
+ expect(await page.evaluate(async () => Object.hasOwn((await import('/js/main.js')).Store.getProfile('monture-chevalier'), 'tokenLibraryImage'))).toBe(false);
+ console.log(`Bibliothèque (${loupId}) : image automatique, recherche, choix au clavier, exclusivité, retrait, bibliothèque absente et monture réussis.`);
 } finally { await browser.close(); server.close(); }

@@ -1,7 +1,7 @@
 // Images des pions depuis la bibliothèque de Map Display (docs/specs/images-pions, T3) : résolution de l'image envoyée.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeLibraryImage, tokenImageOf, libraryImageSrc, tokenImageLabelOf, searchTokenImages } from '../../../js/core/token-image.js';
+import { normalizeLibraryImage, tokenImageOf, libraryImageSrc, tokenImageLabelOf, searchTokenImages, participantTokenImageUrl } from '../../../js/core/token-image.js';
 import { TOKEN_IMAGES } from '../../../js/data/token-images.js';
 import { tokenStatesOf, tokenStateOf } from '../../../js/core/map-link-state.js';
 
@@ -66,4 +66,41 @@ test('vignette de l’outil, libellé et recherche par nom dans la table', () =>
   assert.deepEqual(searchTokenImages('pnj', table).map(row => row.label), ['Aubergiste'], 'le dossier compte aussi');
   assert.equal(searchTokenImages('', table).length, 2);
   assert.ok(searchTokenImages('', TOKEN_IMAGES, { limit: 5 }).length === 5);
+});
+
+// T6 — Montures : le profil `monture-<id>` garde l'identifiant du bestiaire ; même champ, même résolution (CA14, CA15).
+test('CA14-CA15 : cavalier monté, image automatique puis choisie de sa monture dans rider.imageUrl et sur le pion de la monture', async () => {
+  const { createStore } = await import('../../../js/core/store.js');
+  const { Profile } = await import('../../../js/core/models.js');
+  const { mountProfileId } = await import('../../../js/core/mounts.js');
+  const destrier = TOKEN_IMAGES.find(row => row.path === 'maps/tokens/bestiaire/destrier.webp');
+  const data = new Map();
+  const store = createStore({ storage: { getItem: key => data.get(key) ?? null, setItem: (key, value) => data.set(key, String(value)) } });
+  store.addProfile(new Profile({ id: 'chevalier', name: 'Chevalier', kind: 'PNJ', hp: 12 }));
+  store.setProfileMount('chevalier', { template: { name: 'Destrier', hp: 20, maxHp: 20, extensions: { v5: { bestiary: { id: destrier.profiles[0] } } } }, bestiaryId: destrier.profiles[0], name: 'Destrier' });
+  const mountId = mountProfileId('chevalier');
+  assert.equal(store.getProfile(mountId).extensions.v5.bestiary.id, destrier.profiles[0]);
+  const scene = [
+    { id: 'r', kind: 'PNJ', profileId: 'chevalier', name: 'Chevalier', hp: 12, extensions: { v5: { ownMountId: 'm', mounted: true, mountId: 'm' } } },
+    { id: 'm', kind: 'Créature', profileId: mountId, name: 'Destrier', hp: 20, extensions: { v5: { mountOf: 'r' } } }
+  ];
+  const states = () => tokenStatesOf(scene, { imageUrlOf: participant => participantTokenImageUrl(participant, id => store.getProfile(id)) });
+  assert.equal(states()['p:r'].rider.imageUrl, 'maps/tokens/bestiaire/destrier.webp', 'image automatique de la monture');
+  assert.equal(states()['p:m'].imageUrl, 'maps/tokens/bestiaire/destrier.webp');
+  assert.equal(states()['p:r'].imageUrl, null, 'le cavalier garde la sienne (aucune ici)');
+  store.updateProfile(mountId, { tokenLibraryImage: 'maps/tokens/destriers/destrier-bohemond.webp' });
+  assert.equal(states()['p:r'].rider.imageUrl, 'maps/tokens/destriers/destrier-bohemond.webp', 'le choix du MJ l’emporte');
+  assert.equal(states()['p:m'].imageUrl, 'maps/tokens/destriers/destrier-bohemond.webp');
+  const pj = [{ ...scene[0], kind: 'PJ', persistentCharacterId: 'c1' }, scene[1]];
+  const pjStates = tokenStatesOf(pj, { imageUrlOf: participant => participantTokenImageUrl(participant, id => store.getProfile(id)) });
+  assert.equal(pjStates['pj:c1'].imageUrl, null, 'un PJ monté n’envoie pas son image');
+  assert.equal(pjStates['pj:c1'].rider.imageUrl, 'maps/tokens/destriers/destrier-bohemond.webp', 'mais celle de sa monture part');
+  store.updateProfile(mountId, { tokenLibraryImage: null });
+  assert.equal(states()['p:r'].rider.imageUrl, 'maps/tokens/bestiaire/destrier.webp', 'retrait : retour à l’automatique');
+});
+test('participant sans profil de Réserve (ajouté depuis le bestiaire) : sa propre source du bestiaire', () => {
+  const loup = TOKEN_IMAGES.find(row => row.path === 'maps/tokens/bestiaire/loup.webp');
+  const participant = { id: 'x', kind: 'Créature', profileId: null, name: 'Loup', hp: 8, extensions: { v5: { bestiary: { id: loup.profiles[0] } } } };
+  assert.equal(participantTokenImageUrl(participant, () => undefined), loup.path);
+  assert.equal(participantTokenImageUrl({ id: 'y', kind: 'PNJ', profileId: 'p', name: 'Y', hp: 3 }, () => ({ tokenImage: imported })), imported);
 });

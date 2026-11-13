@@ -43,6 +43,16 @@ export function tokenImageOf(profile, table = TOKEN_IMAGES) {
   return auto ? { url: auto, source: 'auto' } : { url: null, source: null };
 }
 
+/**
+ * Image envoyée pour un participant (`imageUrlOf` de la liaison) : celle de son profil de Réserve, sinon, pour un participant
+ * ajouté depuis le bestiaire sans profil, la sienne. Une monture est un profil (`monture-<id>`) : même résolution (T6).
+ * Un PJ n'envoie rien, mais c'est `tokenStateOf` qui l'écarte.
+ */
+export function participantTokenImageUrl(participant, profileOf = () => null, table = TOKEN_IMAGES) {
+  const profile = participant?.profileId ? profileOf(participant.profileId) : null;
+  return tokenImageOf(profile || participant, table).url;
+}
+
 /** Adresse d'une image de la bibliothèque pour les vignettes de l'outil ; `null` hors bibliothèque. */
 export function libraryImageSrc(path) {
   const valid = normalizeLibraryImage(path);

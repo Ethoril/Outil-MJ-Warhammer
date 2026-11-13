@@ -25,7 +25,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 - [x] **T5 — Sélecteur et vignettes dans la réserve.** Recherche par nom dans la table, vignette, mention « automatique » ou choix du MJ, retrait ; vignette absente si l'image ne charge pas.
   Fichiers : `js/ui/reserve.js`, `index.html`, `css/` si besoin, `tests/liaison-images.browser.mjs`. CA : 6, 8, 11, 12, 13. Après : T4.
   Acceptation : `timeout 120 node tests/liaison-images.browser.mjs`.
-- [ ] **T6 — Montures.** Image automatique et image choisie de la monture d'un profil (section Monture de la réserve), envoyées dans `rider.imageUrl` et sur le pion de la monture.
+- [x] **T6 — Montures.** Image automatique et image choisie de la monture d'un profil (section Monture de la réserve), envoyées dans `rider.imageUrl` et sur le pion de la monture.
   Fichiers : `js/ui/reserve.js`, `js/main.js`, `tests/unit/combat/token-image.test.js`. CA : 14, 15. Après : T5.
   Acceptation : test unitaire de `tokenStatesOf` avec cavalier monté.
 

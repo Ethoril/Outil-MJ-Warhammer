@@ -121,7 +121,14 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     allLabel.append(all, ' tout le bestiaire');
     search.append(text, allLabel);
     const results = document.createElement('div'); results.className = 'form-mount-results'; results.style.cssText = 'display:flex; flex-wrap:wrap; gap:6px;';
-    mountSection.append(title, current, search, results);
+    // Image du pion de la monture (images-pions T6) : automatique d'après son profil du bestiaire, remplaçable par une image choisie.
+    const image = document.createElement('div'); image.className = 'form-mount-image'; image.hidden = true;
+    const imageCurrent = document.createElement('div'); imageCurrent.className = 'row token-image-current form-mount-image-current';
+    const imagePicker = createTokenLibraryPicker({ label: 'Chercher une image de la monture dans la bibliothèque de la carte', placeholder: 'Image de la monture : destrier, poney…',
+      className: 'form-mount-image-picker', onPick: row => saveMountImage({ tokenLibraryImage: row.path }) });
+    image.append(imageCurrent, imagePicker.element);
+    mountSection._imagePicker = imagePicker;
+    mountSection.append(title, current, image, search, results);
     f.insertBefore(mountSection, f.querySelector('.actions'));
     const refresh = () => {
       results.textContent = '';
@@ -147,6 +154,33 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     on(text, 'input', refresh);
     on(all, 'change', refresh);
   }
+  // Enregistré tout de suite sur le profil de la monture (`monture-<id>`), comme la monture elle-même.
+  function saveMountImage(patch) {
+    const profileId = mountSubjectId, mountId = declaredMountOf(Store.getProfile(profileId))?.profileId;
+    if (!mountId) return;
+    settle(Store.updateProfile(mountId, patch), 'Image de la monture').then(() => {
+      mountSection._imagePicker.clear();
+      setMountSubject(Store.getProfile(profileId));
+      (mountSection.querySelector('.form-mount-image-remove') || mountSection.querySelector('.form-mount-image-picker input'))?.focus();
+    });
+  }
+  function renderMountImage(declared) {
+    const box = mountSection.querySelector('.form-mount-image');
+    const mountProfile = declared ? Store.getProfile(declared.profileId) : null;
+    box.hidden = !mountProfile;
+    const current = box.querySelector('.form-mount-image-current');
+    current.textContent = '';
+    if (!mountProfile) return;
+    const resolved = tokenImageOf(mountProfile);
+    const thumb = tokenThumbnail(resolved, { size: 48, alt: 'Image du pion de la monture' });
+    if (thumb) current.append(thumb);
+    current.append(Object.assign(document.createElement('span'), { className: 'muted', textContent: `Image de la monture : ${tokenImageCaption(resolved)}` }));
+    if (resolved.source === 'chosen' || resolved.source === 'imported') {
+      const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'ghost tiny form-mount-image-remove'; remove.textContent = 'Retirer l’image de la monture';
+      remove.addEventListener('click', () => saveMountImage({ tokenImage: null, tokenLibraryImage: null }));
+      current.append(remove);
+    }
+  }
   function setMountSubject(profile) {
     ensureMountSection();
     if (!mountSection) return;
@@ -163,6 +197,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     mountSection.querySelector('.form-mount-search').disabled = !mountSubjectId;
     mountSection.querySelector('.form-mount-all').disabled = !mountSubjectId;
     mountSection.querySelector('.form-mount-results').textContent = '';
+    renderMountImage(mountSubjectId ? declared : null);
   }
 
   function ensureArmorSides() {
