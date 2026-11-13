@@ -4,7 +4,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 
 ## Lot 1 — Table d'appariement
 
-- [ ] **T1 — Proposer l'appariement.** Produire `tools/token-images.csv` : une ligne par image de `E:/rpg-map-display/maps/tokens/**/*.webp` (120), colonnes du plan. Appariement exact sur `nameFr`/`name` normalisés, puis approchés et recherche par noms anglais tranchés au jugement ; PJ, PNJ, destriers nommés : aucun profil, note « pas un profil du bestiaire » ; `forme-bestiale/` : aucun profil, note « forme : <clé>, <vent> ». Les doublons racine/`pj/` sont listés tels quels.
+- [x] **T1 — Proposer l'appariement.** Produire `tools/token-images.csv` : une ligne par image de `E:/rpg-map-display/maps/tokens/**/*.webp` (120), colonnes du plan. Appariement exact sur `nameFr`/`name` normalisés, puis approchés et recherche par noms anglais tranchés au jugement ; PJ, PNJ, destriers nommés : aucun profil, note « pas un profil du bestiaire » ; `forme-bestiale/` : aucun profil, note « forme : <clé>, <vent> ». Les doublons racine/`pj/` sont listés tels quels.
   Fichiers : `tools/token-images.csv` (script d'aide jetable dans `tmp/`). CA : 4, 21, 22.
   Acceptation : 120 lignes ; chaque id cité existe dans `js/data/bestiary/L*.json` ; **relecture du MJ** avant T2.
 - [ ] **T2 — Générateur et table.** `tools/build-token-images.mjs` lit le CSV et écrit `js/data/token-images.js` (trié par chemin, LF) ; `--check` sort en code 1 si le fichier a dérivé. `form` déduit du dossier et du suffixe (`-bete` → `beasts`, `-vie` → `jade`), `beast` = clé de `v5-transformation-bestiary.js`.

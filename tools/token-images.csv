@@ -1,0 +1,121 @@
+chemin;libellé;profils (ids séparés par |);noms des profils;livre et page;confiance;note
+maps/tokens/bestiaire/araignee-geante.webp;Araignée géante;E0-P-076|E0-P-413|E0-P-003;Araignée géante | Araignée géante | Drakwald Mancatcher (Giant Spider);L06 p.326 | L12 p.19 | L11 p.13;approché;exact : Araignée géante (L06, L12) — approché : Drakwald Mancatcher, araignée géante du Drakwald (L11)
+maps/tokens/bestiaire/blaireau.webp;Blaireau;E0-P-139;Blaireau;L02 p.76;exact;
+maps/tokens/bestiaire/boeuf.webp;Bœuf;E0-P-762;Bœuf;L23 p.23;exact;
+maps/tokens/bestiaire/chat-sauvage.webp;Chat sauvage;E0-P-052;Chat sauvage;L11 p.82;exact;le Chat domestique (L02 p.77) et le Chat des montagnes (L22 p.73) restent sans image
+maps/tokens/bestiaire/chauve-souris-geante.webp;Chauve-souris géante;E0-P-291;Chauve-souris géante;L07 p.173;exact;
+maps/tokens/bestiaire/cheval-selle.webp;Cheval de selle;E0-P-458|E0-P-764|E0-P-986|E0-P-077;Cheval de selle | Cheval de selle | Cheval de selle | Cheval;L13 p.29 | L23 p.23 | L27 p.118 | L06 p.327;approché;Cheval de selle (L13, L23, L27) — le Cheval générique du livre de base (L06 p.327) reçoit aussi cette image
+maps/tokens/bestiaire/chien.webp;Chien;E0-P-074|E0-P-760|E0-P-180|E0-P-181|E0-P-182|E0-P-697|E0-P-751;Chien | Chien | Lockhund du Hochland | Bamse du Nordland | Chien des marais de Grootscher | Savage le chien — Bon chien (Bronze 0) | Giuseppe le chien — Chien de chasse tiléen;L06 p.325 | L23 p.22 | L04 p.133 | L04 p.133 | L04 p.133 | L21 p.71 | L22 p.95;approché;exact : Chien (L06, L23) — approché : races de chiens de L04 p.133 (Lockhund, Bamse, Chien des marais) et chiens nommés Savage (L21) et Giuseppe (L22)
+maps/tokens/bestiaire/chouette.webp;Chouette;E0-P-143;Chouette;L02 p.77;exact;
+maps/tokens/bestiaire/corbeau.webp;Corbeau;E0-P-140;Corbeau;L02 p.77;exact;
+maps/tokens/bestiaire/coursier-elfique.webp;Coursier elfique;E0-P-987;Coursier elfique;L27 p.118;exact;
+maps/tokens/bestiaire/destrier-chaos.webp;Destrier du Chaos;E0-P-989;Destrier du Chaos;L27 p.118;approché;
+maps/tokens/bestiaire/destrier.webp;Destrier;E0-P-988|E0-P-457|E0-P-766;Destrier | Chevaliers de l’Empire — Destrier — Lourd cheval de guerre | Cheval de guerre lourd;L27 p.118 | L13 p.29 | L23 p.24;approché;exact : Destrier (L27) — approché : « Destrier — Lourd cheval de guerre » (L13 p.29) et Cheval de guerre lourd (L23 p.24), le destrier étant le cheval de guerre lourd. Le Cheval de guerre (L27) et le Cheval de guerre léger (L23) restent sans image
+maps/tokens/bestiaire/drakenhund.webp;Drakenhund sylvanien;E0-P-369;Drakenhund sylvanien;L10 p.38;approché;
+maps/tokens/bestiaire/faucon.webp;Faucon;E0-P-183|E0-P-184|E0-P-039|E0-P-991;Faucon-colombe | Faucon rouge d’Arabie | Gris montagne faucon | Rapace;L04 p.134 | L04 p.134 | L11 p.63 | L27 p.120;approché;faucons et petits rapaces : Faucon-colombe, Faucon rouge d’Arabie (L04), Faucon gris des montagnes (L11), Rapace (L27)
+maps/tokens/bestiaire/forme-bestiale/araignee-geante-bete.webp;Araignée géante (Forme bestiale, Vent des Bêtes);;;;aucun;forme : giant-spider, beasts
+maps/tokens/bestiaire/forme-bestiale/araignee-geante-vie.webp;Araignée géante (Forme bestiale, Vent de Jade);;;;aucun;forme : giant-spider, jade
+maps/tokens/bestiaire/forme-bestiale/cheval-bete.webp;Cheval (Forme bestiale, Vent des Bêtes);;;;aucun;forme : horse, beasts
+maps/tokens/bestiaire/forme-bestiale/cheval-vie.webp;Cheval (Forme bestiale, Vent de Jade);;;;aucun;forme : horse, jade
+maps/tokens/bestiaire/forme-bestiale/chien-bete.webp;Chien (Forme bestiale, Vent des Bêtes);;;;aucun;forme : dog, beasts
+maps/tokens/bestiaire/forme-bestiale/chien-vie.webp;Chien (Forme bestiale, Vent de Jade);;;;aucun;forme : dog, jade
+maps/tokens/bestiaire/forme-bestiale/loup-bete.webp;Loup (Forme bestiale, Vent des Bêtes);;;;aucun;forme : wolf, beasts
+maps/tokens/bestiaire/forme-bestiale/loup-vie.webp;Loup (Forme bestiale, Vent de Jade);;;;aucun;forme : wolf, jade
+maps/tokens/bestiaire/forme-bestiale/ours-bete.webp;Ours (Forme bestiale, Vent des Bêtes);;;;aucun;forme : bear, beasts
+maps/tokens/bestiaire/forme-bestiale/ours-vie.webp;Ours (Forme bestiale, Vent de Jade);;;;aucun;forme : bear, jade
+maps/tokens/bestiaire/forme-bestiale/pigeon-bete.webp;Pigeon (Forme bestiale, Vent des Bêtes);;;;aucun;forme : pigeon, beasts
+maps/tokens/bestiaire/forme-bestiale/pigeon-vie.webp;Pigeon (Forme bestiale, Vent de Jade);;;;aucun;forme : pigeon, jade
+maps/tokens/bestiaire/forme-bestiale/rat-geant-bete.webp;Rat géant (Forme bestiale, Vent des Bêtes);;;;aucun;forme : giant-rat, beasts
+maps/tokens/bestiaire/forme-bestiale/rat-geant-vie.webp;Rat géant (Forme bestiale, Vent de Jade);;;;aucun;forme : giant-rat, jade
+maps/tokens/bestiaire/forme-bestiale/sanglier-bete.webp;Sanglier (Forme bestiale, Vent des Bêtes);;;;aucun;forme : boar, beasts
+maps/tokens/bestiaire/forme-bestiale/sanglier-vie.webp;Sanglier (Forme bestiale, Vent de Jade);;;;aucun;forme : boar, jade
+maps/tokens/bestiaire/forme-bestiale/serpent-bete.webp;Serpent (Forme bestiale, Vent des Bêtes);;;;aucun;forme : snake, beasts
+maps/tokens/bestiaire/forme-bestiale/serpent-vie.webp;Serpent (Forme bestiale, Vent de Jade);;;;aucun;forme : snake, jade
+maps/tokens/bestiaire/grand-cerf.webp;Grand cerf;E0-P-001;Grand cerf;L11 p.10;exact;
+maps/tokens/bestiaire/loup-blanc.webp;Loup blanc;E0-P-600|E0-P-663;Loup blanc | Le Loup blanc de Shining Rock;L19 p.117 | L21 p.14;approché;exact : Loup blanc (L19) — approché : le Loup blanc de Shining Rock (L21, individu nommé)
+maps/tokens/bestiaire/loup.webp;Loup;E0-P-078;Loup;L06 p.327;exact;Grand loup (L11), Loup géant (L12) et Loup funeste (L06) restent sans image : créatures distinctes
+maps/tokens/bestiaire/ours.webp;Ours;;;;aucun;aucun profil Ours au bestiaire (l’ours n’existe que comme bête de Forme bestiale)
+maps/tokens/bestiaire/pigeon.webp;Pigeon;;;;aucun;aucun profil Pigeon au bestiaire (le pigeon n’existe que comme bête de Forme bestiale)
+maps/tokens/bestiaire/poney.webp;Poney;E0-P-990;Poney;L27 p.119;exact;
+maps/tokens/bestiaire/rat-geant.webp;Rat géant;E0-P-075;Rat géant;L06 p.326;exact;
+maps/tokens/bestiaire/renard.webp;Renard;E0-P-141;Renard;L02 p.77;exact;
+maps/tokens/bestiaire/sanglier.webp;Sanglier;E0-P-073|E0-P-412;Sanglier | Guerre Boar;L06 p.325 | L12 p.19;approché;exact : Sanglier (L06) — approché : Sanglier de guerre (War Boar, L12 p.19)
+maps/tokens/bestiaire/vipere.webp;Vipère;E0-P-836;Impérial Viper;L24 p.33;nom anglais;Imperial Viper (L24 p.33)
+maps/tokens/bestigor.webp;Bestigor (ancienne image);;;;aucun;doublon ancien (11 Kio) de ennemis/hommes-betes/homme-bete-bestigor.webp, qui porte le profil
+maps/tokens/bhelgi.webp;Bhelgi;;;;aucun;pas un profil du bestiaire (PJ) — doublon de pj/bhelgi.webp
+maps/tokens/caelel.webp;Caelel;;;;aucun;pas un profil du bestiaire (PJ) — doublon de pj/caelel.webp
+maps/tokens/demagogue-fils-ulric.webp;Démagogue, Fils d’Ulric;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Fils d’Ulric)
+maps/tokens/destriers/destrier-bohemond.webp;Destrier de Bohémond;;;;aucun;pas un profil du bestiaire (destrier nommé du PJ Bohémond) — choix manuel sur la monture
+maps/tokens/destriers/destrier-bretonnie-graal.webp;Destrier bretonnien (Graal);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, chevalier du Graal) — le profil Destrier porte bestiaire/destrier.webp — choix manuel sur la monture
+maps/tokens/destriers/destrier-bretonnie-royaume.webp;Destrier bretonnien (Royaume);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, chevalier du Royaume) — choix manuel sur la monture
+maps/tokens/destriers/destrier-empire-loup-blanc.webp;Destrier impérial (Loup blanc);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, chevalier du Loup blanc) — choix manuel sur la monture
+maps/tokens/destriers/destrier-empire-reiksguard.webp;Destrier impérial (Reiksguard);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, Reiksguard) — choix manuel sur la monture
+maps/tokens/destriers/destrier-kislev-lancier-aile.webp;Destrier kislévite (lancier ailé);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, lancier ailé) — choix manuel sur la monture
+maps/tokens/destriers/destrier-kislev-legion-griffon.webp;Destrier kislévite (Légion du Griffon);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, Légion du Griffon) — choix manuel sur la monture
+maps/tokens/elysia.webp;Elysia;;;;aucun;pas un profil du bestiaire (PJ) — doublon de pj/elysia.webp
+maps/tokens/ennemis/demons/demonette-slaanesh.webp;Démonette de Slaanesh;E0-P-108;Démonette de Slaanesh;L06 p.350;approché;
+maps/tokens/ennemis/demons/horreur-tzeentch.webp;Horreur de Tzeentch;E0-P-789;Horreur rose;L23 p.85;approché;Horreur rose (L23 p.85) — l’Horreur bleue reste sans image
+maps/tokens/ennemis/demons/khorne-buveur-de-sang.webp;Buveur de sang de Khorne;;;;aucun;aucun profil de Buveur de sang (Bloodthirster) au bestiaire
+maps/tokens/ennemis/demons/khorne-chien-de-sang.webp;Chien de sang de Khorne;;;;aucun;aucun profil de Chien de chair (Flesh Hound) au bestiaire
+maps/tokens/ennemis/demons/nurgle-grand-immonde.webp;Grand Immonde de Nurgle;;;;aucun;aucun profil de Grand Immonde (Great Unclean One) au bestiaire
+maps/tokens/ennemis/demons/nurgle-nurglings.webp;Nurglings;;;;aucun;aucun profil de Nurglings au bestiaire
+maps/tokens/ennemis/demons/portepeste-nurgle.webp;Portepeste de Nurgle;;;;aucun;aucun profil de Portepeste (Plaguebearer) au bestiaire — Uthl’Kritchnaak, héraut exalté de Nurgle (L07 p.61), est un individu nommé
+maps/tokens/ennemis/demons/sanguinaire-khorne.webp;Sanguinaire de Khorne;E0-P-107|E0-P-843;Sanguinaire de Khorne | Bloodletters;L06 p.349 | L24 p.35;approché;Sanguinaire de Khorne (L06) et Bloodletters (L24 p.35, même créature)
+maps/tokens/ennemis/demons/slaanesh-bete-de-slaanesh.webp;Bête de Slaanesh;;;;aucun;aucun profil de Bête de Slaanesh (Fiend) au bestiaire
+maps/tokens/ennemis/demons/tzeentch-incendiaire.webp;Incendiaire de Tzeentch;E0-P-665;Lance-flammes de Tzeentch;L21 p.21;nom anglais;Lance-flammes de Tzeentch (Flamers of Tzeentch, L21 p.21)
+maps/tokens/ennemis/gobelins/gobelin-archer.webp;Gobelin archer;;;;aucun;pas de profil d’archer gobelin distinct (le Tirailleur est un gabarit)
+maps/tokens/ennemis/gobelins/gobelin-chamane.webp;Gobelin chamane;E0-P-006|E0-P-419;Gobelin des forêts chamane | Bograt Blasted – gobelin des forêts Shaman;L11 p.15 | L12 p.27;approché;Gobelin des forêts chamane (L11) et Bograt le Foudroyé, chamane gobelin des forêts (L12, individu nommé)
+maps/tokens/ennemis/gobelins/gobelin-lancier.webp;Gobelin lancier;E0-P-089|E0-P-396|E0-P-424;Gobelin | De base Goblin | Ratlicker – Goblin Soldier;L06 p.336 | L12 p.9 | L12 p.38;approché;gobelin de base : Gobelin (L06), Gobelin de base (L12), Ratlicker, soldat gobelin (L12, individu nommé) — préférée à l’ancienne goblin.webp (3 Kio)
+maps/tokens/ennemis/hommes-betes/homme-bete-bestigor.webp;Bestigor;E0-P-119;Skrakk — Bestigor (Élite);L06 p.354;approché;Skrakk — Bestigor (L06 p.354, individu nommé, seul profil de bestigor) — préférée à l’ancienne bestigor.webp
+maps/tokens/ennemis/hommes-betes/homme-bete-gor.webp;Gor;E0-P-101|E0-P-707;Gor | Gors de la Couronne rouge;L06 p.345 | L21 p.84;approché;exact : Gor (L06) — approché : Gors de la Couronne rouge (L21) — préférée à l’ancienne gor.webp
+maps/tokens/ennemis/hommes-betes/homme-bete-ungor.webp;Ungor;E0-P-102|E0-P-122|E0-P-708;Ungor | Guzgog — Tirailleur ungor | Ungors de la Couronne rouge;L06 p.345 | L06 p.356 | L21 p.84;approché;exact : Ungor (L06) — approché : Guzgog, tirailleur ungor (L06, individu nommé), Ungors de la Couronne rouge (L21) — préférée à l’ancienne ungor.webp
+maps/tokens/ennemis/morts-vivants/goule.webp;Goule;E0-P-091;Goule de crypte;L06 p.338;approché;Goule de crypte (L06)
+maps/tokens/ennemis/morts-vivants/revenant.webp;Revenant;E0-P-060;Undead chevalier (Wight);L11 p.93;nom anglais;Chevalier mort-vivant (Wight, L11 p.93) : Wight = Revenant
+maps/tokens/ennemis/morts-vivants/squelette.webp;Squelette;E0-P-093;Squelette;L06 p.339;exact;les Squelettes sans tête (L18) restent sans image
+maps/tokens/ennemis/morts-vivants/zombi.webp;Zombi;E0-P-094|E0-P-566|E0-P-715;Zombie | Zombie | Les Zombies du Seigneur des tombes;L06 p.340 | L18 p.117 | L21 p.118;approché;Zombie (L06, L18) et les Zombies du Seigneur des tombes (L21)
+maps/tokens/ennemis/ogres/ogre-crache-plomb.webp;Ogre crache-plomb;;;;aucun;aucun profil de Crache-plomb (Leadbelcher) au bestiaire
+maps/tokens/ennemis/ogres/ogre-guerrier.webp;Ogre guerrier;E0-P-072|E0-P-402|E0-P-438|E0-P-542;Ogre | De base Ogre | Matthogg — Brute ogre | Golthog — Soldat ogre (Argent 3);L06 p.324 | L12 p.14 | L12 p.78 | L18 p.31;approché;Ogre (L06), Ogre de base (L12) — individus nommés au rôle de combattant : Matthogg, brute ogre (L12), Golthog, soldat ogre (L18)
+maps/tokens/ennemis/ogres/ogre-rhinox.webp;Rhinox;E0-P-127|E0-P-013;Rhinox | Rhinox;L01 p.34 | L11 p.25;approché;Rhinox (L01, L11)
+maps/tokens/ennemis/orcs/orc-archer.webp;Orc archer;E0-P-429;Holg Stuntysticker – Orc Skirmisher;L12 p.51;approché;Holg Stuntysticker, tirailleur orc (L12, individu nommé)
+maps/tokens/ennemis/orcs/orc-guerrier.webp;Orc guerrier;E0-P-090|E0-P-397|E0-P-428;Orc | De base Orc | Hagblad – Orc Soldier;L06 p.337 | L12 p.10 | L12 p.50;approché;Orc (L06), Orc de base (L12) — Hagblad, soldat orc (L12, individu nommé)
+maps/tokens/ennemis/orcs/orc-kostaud.webp;Orc kostaud;;;;aucun;aucun profil de Kostaud (Big ’Un) au bestiaire
+maps/tokens/ennemis/reprouves/cultiste-chaos.webp;Cultiste du Chaos;E0-P-104|E0-P-657;Cultiste | Cultiste humain;L06 p.347 | L20 p.218;approché;Cultiste (L06), Cultiste humain (L20)
+maps/tokens/ennemis/reprouves/guerrier-du-chaos.webp;Guerrier du Chaos;E0-P-106|E0-P-705|E0-P-706;Guerrier du Chaos | Zurn la Couronne sanglante — Guerrier du Chaos | Ulfhednar le Destructeur — Guerrier du Chaos;L06 p.348 | L21 p.84 | L21 p.84;approché;exact : Guerrier du Chaos (L06) — approché : Zurn la Couronne sanglante et Ulfhednar le Destructeur, guerriers du Chaos (L21, individus nommés)
+maps/tokens/ennemis/reprouves/reprouve-mute.webp;Réprouvé muté;E0-P-105;Mutant;L06 p.347;approché;Mutant (L06)
+maps/tokens/ennemis/rois-des-tombes/roi-des-tombes-khemri.webp;Roi des Tombes de Khemri;;;;aucun;aucun profil de Roi des Tombes au bestiaire
+maps/tokens/ennemis/rois-des-tombes/ushabti-khemri.webp;Ushabti de Khemri;;;;aucun;aucun profil d’Ushabti au bestiaire
+maps/tokens/ennemis/skavens/skaven-coureur-degouts.webp;Skaven coureur d’égouts;E0-P-894|E0-P-738;Caniveau coureur skaven | Dricht Skuttlespite — Coureur des ruelles du clan Eshin;L24 p.85 | L22 p.54;nom anglais;Gutter Runner : Coureur skaven (L24 p.85) — Dricht Skuttlespite, coureur du clan Eshin (L22, individu nommé)
+maps/tokens/ennemis/skavens/skaven-guerrier-des-clans.webp;Skaven guerrier des clans;E0-P-109|E0-P-511|E0-P-720|E0-P-723|E0-P-726|E0-P-732;Guerrier des clans | Guerrier des clans du clan Morbidus | Guerrier des clans de Treecherik | Guerrier des clans du clan Mors | Guerrier des clans malade | Guerrier des clans lâche;L06 p.351 | L16 p.90 | L22 p.18 | L22 p.20 | L22 p.25 | L22 p.31;approché;Guerrier des clans (L06) et ses variantes : clan Morbidus (L16), Treecherik, clan Mors, malade, lâche (L22)
+maps/tokens/ennemis/skavens/skaven-moine-de-la-peste.webp;Skaven moine de la peste;E0-P-512;Moine de la peste;L16 p.90;approché;Moine de la peste (L16 p.90)
+maps/tokens/ennemis/vampires-pirates/capitaine-vampire-pirate.webp;Capitaine vampire pirate;;;;aucun;aucun profil générique — Luthor Harkon (L07 p.73) est un individu nommé
+maps/tokens/ennemis/vampires-pirates/zombie-flibustier.webp;Zombie flibustier;;;;aucun;aucun profil de zombie pirate (Deadhand) au bestiaire
+maps/tokens/ennemis/vampires/comte-vampire-von-carstein.webp;Comte vampire von Carstein;E0-P-099|E0-P-926;Vampire | Vampire noble;L06 p.343 | L26 p.21;approché;vampire générique : Vampire (L06), Vampire noble (L26)
+maps/tokens/ennemis/vampires/vampire-lahmiane.webp;Vampire lahmiane;;;;aucun;aucun profil de Lahmiane au bestiaire
+maps/tokens/erich-echarpe-violette.webp;Erich, écharpe violette;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/franz-bourse-mauve.webp;Franz, bourse mauve;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/goblin.webp;Gobelin (ancienne image);;;;aucun;ancienne image (3 Kio) — le Gobelin porte ennemis/gobelins/gobelin-lancier.webp
+maps/tokens/gor.webp;Gor (ancienne image);;;;aucun;doublon ancien (11 Kio) de ennemis/hommes-betes/homme-bete-gor.webp, qui porte le profil
+maps/tokens/guetteur-fils-ulric.webp;Guetteur, Fils d’Ulric;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Fils d’Ulric)
+maps/tokens/hans-plume-verte.webp;Hans, plume violette;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/hellaya.webp;Hellaya;;;;aucun;pas un profil du bestiaire (PJ) — doublon de pj/hellaya.webp
+maps/tokens/hydre.webp;Fausse Hydre;;;;aucun;pas un profil du bestiaire (monstre unique de campagne selon le catalogue de la carte) — l’Hydre de guerre porte monstres/hydre-de-guerre.webp
+maps/tokens/karl-cape-violette.webp;Karl, cape violette;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/kurt-filets.webp;Kurt, filets;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/magus.webp;Magus;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/monstres/dragon.webp;Dragon;E0-P-082;Dragon;L06 p.330;exact;
+maps/tokens/monstres/geant.webp;Géant;E0-P-084;Géant;L06 p.332;exact;
+maps/tokens/monstres/griffon.webp;Griffon;E0-P-085|E0-P-011;Griffon | Griffon;L06 p.332 | L11 p.21;exact;
+maps/tokens/monstres/hydre-de-guerre.webp;Hydre de guerre;E0-P-319;Hydre de guerre;L09 p.47;exact;
+maps/tokens/monstres/troll-des-rivieres.webp;Troll des rivières;E0-P-030|E0-P-963;Troll des rivières | Trolls des rivières;L11 p.49 | L26 p.89;approché;exact : Troll des rivières (L11) — approché : Trolls des rivières (L26) — le gabarit de L12 n’est pas une créature
+maps/tokens/otto-gants-pourpres.webp;Otto, gants pourpres;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/pj/bhelgi.webp;Bhelgi;;;;aucun;pas un profil du bestiaire (PJ)
+maps/tokens/pj/bohemond.webp;Bohémond;;;;aucun;pas un profil du bestiaire (PJ)
+maps/tokens/pj/caelel.webp;Caelel;;;;aucun;pas un profil du bestiaire (PJ)
+maps/tokens/pj/elysia.webp;Elysia;;;;aucun;pas un profil du bestiaire (PJ)
+maps/tokens/pj/hellaya.webp;Hellaya;;;;aucun;pas un profil du bestiaire (PJ)
+maps/tokens/pj/wren.webp;Wren;;;;aucun;pas un profil du bestiaire (PJ)
+maps/tokens/shaman-bray.webp;Chamane bray;E0-P-121;Swilegrakk — Chamane-bray (Lanceur de sorts);L06 p.355;nom anglais;Swilegrakk — Chamane-bray (Bray-Shaman, L06 p.355, individu nommé, seul profil de chamane bray)
+maps/tokens/ungor.webp;Ungor (ancienne image);;;;aucun;doublon ancien de ennemis/hommes-betes/homme-bete-ungor.webp, qui porte le profil
+maps/tokens/vaurien-fils-ulric.webp;Vaurien, Fils d’Ulric;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Fils d’Ulric)
+maps/tokens/wilhelm-ceinture-lie-de-vin.webp;Wilhelm, ceinture lie-de-vin;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/wren.webp;Wren;;;;aucun;pas un profil du bestiaire (PJ) — doublon de pj/wren.webp
