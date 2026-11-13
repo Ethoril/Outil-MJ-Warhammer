@@ -68,6 +68,7 @@ const ASSETS_TO_CACHE = [
   './js/data/creature-trait-names.js',
   './js/ui/keyword-picker.js',
   './js/core/bestiary-profiles.js',
+  './js/core/carac-keys.js',
   './js/data/bestiary/index.json',
   './js/data/bestiary/L01.json',
   './js/data/bestiary/L02.json',

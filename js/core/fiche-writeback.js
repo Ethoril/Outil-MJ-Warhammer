@@ -12,6 +12,7 @@ import { sequelaEffectRows, sequelaCharacteristicTotals, normalizeCarac, PART_TE
 import { rebaseMagicLayers } from './v5-magic-effects.js';
 import { V5_CORRUPTION_MUTATION_CATALOG } from './v5-corruption-mutation-catalog.js';
 import { ficheErrorMessage } from './fiche-sync.js';
+import { CARAC_BY_LOWER } from './carac-keys.js';
 
 export const WRITEBACK_COMMAND_TYPE = 'outil-mj';
 const SEND_ID = /^[A-Za-z0-9_-]{1,64}$/;
@@ -24,7 +25,7 @@ const COUNTERS = Object.freeze({
   corruption: { label: 'Corruption modifiée en jeu (outil MJ)', snapshot: ['durables', 'corruption'], zeroWhenAbsent: true }
 });
 // Clés de caractéristique de la fiche → clés canoniques de l'outil.
-const CARACS = Object.freeze({ cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' });
+const CARACS = CARAC_BY_LOWER;
 const FICHE_CARAC = Object.freeze(Object.fromEntries(Object.entries(CARACS).map(([key, canonical]) => [canonical, key])));
 const ROW_COLLECTIONS = Object.freeze(['talentsAcq', 'equipment']);
 const MAX_ROW_ID = 200;

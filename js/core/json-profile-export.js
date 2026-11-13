@@ -3,10 +3,11 @@ import { getReferenceCatalogue } from './reference-catalog.js';
 import { FICHE_BASIC_SKILLS } from './fiche-sync.js';
 import { calculateArmor } from './equipment.js';
 import { normalizeArmorLocations } from './models.js';
+import { CARAC_BY_LOWER } from './carac-keys.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const BASIC_SKILLS = new Map(FICHE_BASIC_SKILLS.map(skill => [skill.name, skill.carac]));
-const CARAC_UPPER = { cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' };
+const CARAC_UPPER = CARAC_BY_LOWER;
 const sameValues = (a, b) => Object.keys({ ...a, ...b }).every(key => (a?.[key] ?? 0) === (b?.[key] ?? 0));
 const has = value => value !== undefined && value !== null && value !== '';
 

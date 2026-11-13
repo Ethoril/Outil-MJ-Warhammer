@@ -1,3 +1,4 @@
+import { CARAC_BY_LOWER, CARAC_ENGLISH_ALIASES } from './carac-keys.js';
 /**
  * Effets des séquelles durables et temporaires (V5 livre de base p.177-179), lus dans le registre de convalescence.
  * Module pur, sans dépendance : le registre est la seule source ; les lignes calculées ici sont projetées sur le
@@ -22,7 +23,7 @@ export const PART_TEXT = {
 const FEMININE_PARTS = new Set(['leg', 'hand', 'ear', 'tongue', 'head']);
 const sideText = (part, side) => side === 'right' ? (FEMININE_PARTS.has(part) ? 'droite' : 'droit') : SIDE_TEXT[side] || side;
 const sided = (part, side) => `${PART_TEXT[part] || part}${side ? ` ${sideText(part, side)}` : ''}`;
-const CARAC_ALIASES = { cc: 'CC', ws: 'CC', ct: 'CT', bs: 'CT', f: 'F', s: 'F', e: 'E', t: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', wp: 'FM', soc: 'Soc', fel: 'Soc' };
+const CARAC_ALIASES = { ...CARAC_BY_LOWER, ...CARAC_ENGLISH_ALIASES };
 export const normalizeCarac = value => CARAC_ALIASES[fold(value)] || (value ? String(value) : null);
 
 export const isLanguageTest = label => /(^|\W)(langues?|languages?)(\W|$)/.test(fold(label));

@@ -21,6 +21,7 @@ import { normalizeArmorLocations, locationProtection } from './equipment.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
 import { isTargetDaemon, isTargetUndead } from './v5-magic-target-nature.js';
 import { projectDivineGear } from './v5-divine-effects-gear.js';
+import { PROFILE_CARAC_KEYS, CARAC_BY_LOWER } from './carac-keys.js';
 
 /** Expressions chiffrées déclarées par un contrat ; aucun dé et aucune interprétation de prose. */
 export function spellFormulaValue(formula,caster,sl=0){
@@ -35,7 +36,7 @@ export function spellFormulaValue(formula,caster,sl=0){
 
 const fold = str => String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
-export const STANDARD_CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
+export const STANDARD_CARACS = PROFILE_CARAC_KEYS;
 
 /**
  * Calcule les caractéristiques effectives après application de la règle de non-cumul V5 :
@@ -231,7 +232,7 @@ const CARAC_BY_NAME = new Map([
   ['intelligence', 'Int'], ['sociabilite', 'Soc'], ['initiative', 'I'], ['endurance', 'E'],
   ['agilite', 'Ag'], ['dexterite', 'Dex'], ['mouvement', 'M'], ['force', 'F']
 ]);
-const CARAC_ABBR = { fm: 'FM', cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', soc: 'Soc', m: 'M' };
+const CARAC_ABBR = { ...CARAC_BY_LOWER, m: 'M' };
 const BONUS_ABBR = { bfm: 'FM', bcc: 'CC', bct: 'CT', bf: 'F', be: 'E', bi: 'I', bag: 'Ag', bdex: 'Dex', bint: 'Int', bsoc: 'Soc', bm: 'M' };
 const lookupCarac = name => CARAC_BY_NAME.get(name) ?? CARAC_ABBR[name] ?? null;
 

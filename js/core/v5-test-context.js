@@ -1,7 +1,8 @@
 import { normalizeState } from './effects.js';
 import { resolveV5TestModifiers, finalizeV5TestModifiers, resolveConditionPenaltyMix } from './v5-test-modifiers.js';
+import { PROFILE_CARAC_KEYS } from './carac-keys.js';
 
-const CHARACTERISTICS = new Set(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
+const CHARACTERISTICS = new Set(PROFILE_CARAC_KEYS);
 const TALENT_MARKERS = new Set(['talent-active', 'talent-pending']);
 const NON_STACKING = new Set(['aterre', 'souille', 'surpris', 'inconscient']);
 

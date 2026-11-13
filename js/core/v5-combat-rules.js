@@ -30,6 +30,7 @@ import { awakeningSpell, awakeningMessage } from './v5-spell-restrictions.js';
 export { conditionLevels };
 import { weaponHandsForParticipant } from './equipment.js';
 import { hasMomentum, withMomentum } from './v5-momentum-state.js';
+import { CARAC_KEYS } from './carac-keys.js';
 export { hasMomentum, withMomentum } from './v5-momentum-state.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
 /** Un participant qui vient d'acquérir une restriction de Peur perd l'Élan qu'il avait. */
@@ -109,7 +110,7 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
 // Malice de Ranald : pendant la durée, dans tout Test opposé contre l’adversaire désigné, deux Caractéristiques du prêtre prennent
 // la valeur de l’adversaire ; la fiche ne change pas, le score du Test est décalé de l’écart lu au moment du Test.
 // Caractéristique réelle d'une action : les actions de profil et manuelles portent « Custom » (aucune).
-const TEST_CHARACTERISTICS = new Set(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
+const TEST_CHARACTERISTICS = new Set(CARAC_KEYS);
 export const actionCharacteristic = action => TEST_CHARACTERISTICS.has(action?.attr) ? action.attr : null;
 // Couche de Malice de Ranald du porteur contre cet adversaire, ou null.
 export function characteristicMatchAgainst(tester, opponent) {
