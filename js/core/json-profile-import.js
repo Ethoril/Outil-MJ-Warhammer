@@ -1,6 +1,7 @@
 /** Import local de profils au format JSON (version 1). L'entrée reste inerte : ni HTML, ni code, ni réseau. */
 import { canonicalQualityId, isKnownQuality, normalizeQualities } from './quality-normalization.js';
 import { canonicalCaracKey, normalizeTags, cloneValue, normalizeArmorLocations, FICHE_DATA_FIELDS, normalizeTokenColor, normalizeTokenImage } from './models.js';
+import { normalizeLibraryImage } from './token-image.js';
 import { normalizeDamageFields } from './damage.js';
 import { getKeywordBySlug, getKeywordList } from './keywords.js';
 import { normalizeEquipment } from './equipment.js';
@@ -21,6 +22,7 @@ const shownValue = value => (typeof value === 'string' ? value : JSON.stringify(
 
 const PROFILE_KEYS = {
   tokenImage: ['tokenimage'],
+  tokenLibraryImage: ['tokenlibraryimage'],
   tokenColor: ['tokencolor', 'couleurpion'],
   name: ['nom', 'name'], kind: ['type', 'kind'], group: ['groupe', 'group'],
   hp: ['pv', 'hp', 'pvmax', 'blessures'], initiative: ['initiative', 'init'],
@@ -335,6 +337,8 @@ function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
   if (values.cult !== undefined && typeof values.cult !== 'string') { errors.push({ field: 'culte', reason: 'texte-attendu', value: shownValue(values.cult) }); delete values.cult; }
   if (values.movement !== undefined) { const moved = parseInteger(values.movement, 'mouvement', errors, { min: 0 }); if (moved === null) delete values.movement; else values.movement = moved; }
   if (values.tokenImage !== undefined) { const image = normalizeTokenImage(values.tokenImage); if (image) profile.tokenImage = image; }
+  // Image choisie dans la bibliothèque : un chemin invalide est ignoré (lu comme absent), l'image importée l'emporte.
+  if (values.tokenLibraryImage !== undefined && !profile.tokenImage) { const path = normalizeLibraryImage(values.tokenLibraryImage); if (path) profile.tokenLibraryImage = path; }
   if (values.tokenColor !== undefined && values.tokenColor !== null && values.tokenColor !== '') { const color = normalizeTokenColor(values.tokenColor); if (color) profile.tokenColor = color; else errors.push({ field: 'couleur du pion', reason: 'couleur-attendue', value: shownValue(values.tokenColor) }); }
   const hasArmor = values.armor !== undefined || values.armorLocations !== undefined;
   // Talents, compétences, sorts, prières, équipement, Traits et ressources à la forme de l'outil : ils passent par la voie des fiches.

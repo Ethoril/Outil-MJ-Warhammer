@@ -87,6 +87,7 @@ export function exportProfileJson(profile) {
   const jets = (profile.diceLines || []).filter(action => !action.extensions?.fiche?.equipmentId).map(exportAction);
   const out = {
     ...(profile.tokenImage ? { tokenImage: profile.tokenImage } : {}),
+    ...(profile.tokenLibraryImage ? { tokenLibraryImage: profile.tokenLibraryImage } : {}),
     ...(profile.tokenColor ? { tokenColor: profile.tokenColor } : {}),
     nom: profile.name, type: profile.kind, ...(profile.group ? { groupe: profile.group } : {}),
     pv: profile.maxHp ?? profile.hp, initiative: profile.initiative, caracteristiques: { ...profile.caracs },

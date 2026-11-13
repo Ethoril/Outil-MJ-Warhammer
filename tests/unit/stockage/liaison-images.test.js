@@ -49,3 +49,20 @@ test('couleur du pion conservée au rechargement, effacée par un patch null (co
   reloaded.updateProfile('e', { tokenColor: null });
   assert.equal(Object.hasOwn(reloaded.getProfile('e'), 'tokenColor'), false);
 });
+test('image choisie dans la bibliothèque conservée au rechargement, exclusive de l’image importée (images-pions T4)', () => {
+  const chosen = 'maps/tokens/pnj/aubergiste.webp';
+  const storage = makeStorage();
+  const store = createStore({ storage });
+  store.addProfile(new Profile({ id: 'a', name: 'Aubergiste', hp: 8, tokenLibraryImage: chosen }));
+  store.duplicateProfile('a');
+  const reloaded = createStore({ storage });
+  assert.deepEqual(reloaded.listProfiles().map(p => p.tokenLibraryImage), [chosen, chosen]);
+  reloaded.updateProfile('a', { tokenImage: image });
+  assert.equal(reloaded.getProfile('a').tokenImage, image);
+  assert.equal(Object.hasOwn(reloaded.getProfile('a'), 'tokenLibraryImage'), false, 'l’image importée retire l’image choisie');
+  reloaded.updateProfile('a', { tokenLibraryImage: chosen });
+  assert.equal(reloaded.getProfile('a').tokenLibraryImage, chosen);
+  assert.equal(Object.hasOwn(reloaded.getProfile('a'), 'tokenImage'), false, 'et inversement');
+  reloaded.updateProfile('a', { tokenLibraryImage: null });
+  assert.equal(Object.hasOwn(createStore({ storage }).getProfile('a'), 'tokenLibraryImage'), false);
+});

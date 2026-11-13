@@ -2,6 +2,7 @@ import { normalizeEffects } from './effects.js';
 import { normalizeQualities } from './quality-normalization.js';
 import { normalizeDamageFields } from './damage.js';
 import { CARAC_KEYS, EXTRA_CARAC_KEYS, canonicalCaracKey } from './carac-keys.js';
+import { normalizeLibraryImage } from './token-image.js';
 
 export const uid = () => Math.random().toString(36).slice(2, 10);
 
@@ -112,6 +113,9 @@ export function canonicalizeProfileFields(raw) {
   if (!isRecord(raw)) return raw;
   const { actions, ...rest } = raw;
   if (Object.hasOwn(rest, 'tokenImage')) rest.tokenImage = normalizeTokenImage(rest.tokenImage) ?? null;
+  if (Object.hasOwn(rest, 'tokenLibraryImage')) rest.tokenLibraryImage = normalizeLibraryImage(rest.tokenLibraryImage) ?? null;
+  // Image importée et image choisie dans la bibliothèque s'excluent (images-pions, CA8) : en poser une retire l'autre.
+  if (rest.tokenImage) rest.tokenLibraryImage = null; else if (rest.tokenLibraryImage) rest.tokenImage = null;
   if (Object.hasOwn(rest, 'tokenColor')) rest.tokenColor = normalizeTokenColor(rest.tokenColor) ?? null;
   if (Array.isArray(raw.diceLines) || Array.isArray(actions)) rest.diceLines = profileActionSource(raw);
   return rest;
@@ -180,6 +184,8 @@ export class Profile {
     this.id = id;
     const tokenImage = normalizeTokenImage(ficheFields.tokenImage);
     if (tokenImage) this.tokenImage = tokenImage;
+    const tokenLibraryImage = tokenImage ? undefined : normalizeLibraryImage(ficheFields.tokenLibraryImage);
+    if (tokenLibraryImage) this.tokenLibraryImage = tokenLibraryImage;
     const tokenColor = normalizeTokenColor(ficheFields.tokenColor);
     if (tokenColor) this.tokenColor = tokenColor;
     this.name = (name || 'Sans-nom').trim();

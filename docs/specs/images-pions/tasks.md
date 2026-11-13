@@ -19,7 +19,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 - [x] **T3 — Résolution et envoi automatique.** `js/core/token-image.js` (`normalizeLibraryImage`, `tokenImageOf`, `libraryImageSrc`) ; `imageUrlOf` de `js/main.js` l'utilise. PJ inchangé.
   Fichiers : `js/core/token-image.js`, `js/main.js`, `tests/unit/combat/token-image.test.js`. CA : 1, 2, 3, 7, 9, 16. Après : T2.
   Acceptation : `node --test tests/unit/combat/token-image.test.js` et `node --test tests/unit/combat/liaison-images.test.js`.
-- [ ] **T4 — Champ `tokenLibraryImage` et persistance.** Profil, `sanitize`, `PROFILE_KEYS`, export et import JSON ; exclusivité avec `tokenImage` ; pas de migration.
+- [x] **T4 — Champ `tokenLibraryImage` et persistance.** Profil, `sanitize`, `PROFILE_KEYS`, export et import JSON ; exclusivité avec `tokenImage` ; pas de migration.
   Fichiers : `js/core/models.js`, `js/core/sanitize.js`, `js/core/migrations.js`, `js/core/json-profile-export.js`, `js/core/json-profile-import.js`, tests unitaires voisins existants. CA : 8, 10. Après : T3.
   Acceptation : tests ciblés des cinq modules (aller-retour avec et sans le champ ; chemin invalide rejeté).
 - [ ] **T5 — Sélecteur et vignettes dans la réserve.** Recherche par nom dans la table, vignette, mention « automatique » ou choix du MJ, retrait ; vignette absente si l'image ne charge pas.

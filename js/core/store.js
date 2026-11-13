@@ -1850,6 +1850,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       beginCommand('update-profile');
       Object.assign(p, canonicalizeProfileFields(patch));
       if (p.tokenImage == null) delete p.tokenImage;
+      if (p.tokenLibraryImage == null) delete p.tokenLibraryImage;
       if (p.tokenColor == null) delete p.tokenColor;
       markDirty(`reserve/${id}`, p);
       // Profiles are reusable templates; active participant copies are frozen

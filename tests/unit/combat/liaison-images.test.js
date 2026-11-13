@@ -99,3 +99,37 @@ test('couleur du pion : un changement de profil diffuse un token.state du PJ', (
   assert.deepEqual(channel.sent.filter(m => m.type === 'token.state').map(m => [m.payload.ref, m.payload.color]), [['pj:c1', '#6fb4e6']]);
 });
 
+
+// Image choisie dans la bibliothèque de Map Display (docs/specs/images-pions, T4) : champ facultatif `tokenLibraryImage`.
+const chosen = 'maps/tokens/pnj/aubergiste.webp';
+test('image choisie : profil, normalisation, migration, sans réécrire un profil qui ne l’a pas', async () => {
+  const { migrateSnapshot } = await import('../../../js/core/migrations.js');
+  assert.equal(new Profile({ name: 'Aubergiste', tokenLibraryImage: chosen }).tokenLibraryImage, chosen);
+  assert.equal(Object.hasOwn(new Profile({ name: 'Aubergiste' }), 'tokenLibraryImage'), false);
+  assert.equal(Object.hasOwn(new Profile({ name: 'Aubergiste', tokenLibraryImage: 'maps/tokens/../x.webp' }), 'tokenLibraryImage'), false);
+  const valid = value => sanitizeProfile({ id: 'a', name: 'Aubergiste', tokenLibraryImage: value }).tokenLibraryImage;
+  assert.equal(valid(chosen), chosen);
+  for (const bad of ['maps/tokens/../x.webp', 'https://exemple.fr/a.webp', image, 12, null, '']) assert.equal(valid(bad), undefined);
+  assert.equal(Object.hasOwn(sanitizeProfile({ id: 'a', name: 'Aubergiste' }), 'tokenLibraryImage'), false);
+  const migrated = migrateSnapshot({ schemaVersion: 4, combat: {}, reserve: [{ id: 'a', name: 'A', hp: 5, tokenLibraryImage: chosen }, { id: 'b', name: 'B', hp: 5 }, { id: 'c', name: 'C', hp: 5, tokenLibraryImage: 'maps/x.webp' }] }).data;
+  assert.equal(migrated.reserve.find(p => p.id === 'a').tokenLibraryImage, chosen);
+  assert.equal(migrated.reserve.find(p => p.id === 'a').extensions?.tokenLibraryImage, undefined, 'champ connu, pas rangé en extension');
+  assert.equal(Object.hasOwn(migrated.reserve.find(p => p.id === 'b'), 'tokenLibraryImage'), false);
+  assert.equal(Object.hasOwn(migrated.reserve.find(p => p.id === 'c'), 'tokenLibraryImage'), false, 'chemin invalide écarté');
+});
+test('image choisie : aller-retour JSON avec et sans le champ, chemin invalide ignoré à l’import', () => {
+  const withChoice = new Profile({ name: 'Aubergiste', hp: 8, tokenLibraryImage: chosen });
+  assert.equal(parseProfileJson(exportProfilesJson(withChoice)).profiles[0].tokenLibraryImage, chosen);
+  const without = parseProfileJson(exportProfilesJson(new Profile({ name: 'Aubergiste', hp: 8 }))).profiles[0];
+  assert.equal(Object.hasOwn(without, 'tokenLibraryImage'), false);
+  const bad = parseProfileJson(JSON.stringify({ nom: 'Aubergiste', type: 'PNJ', pv: 8, tokenLibraryImage: '../secret.webp' }));
+  assert.equal(bad.profiles[0].tokenLibraryImage, undefined);
+});
+test('image choisie et image importée s’excluent dans un patch de profil', async () => {
+  const { canonicalizeProfileFields } = await import('../../../js/core/models.js');
+  assert.deepEqual(canonicalizeProfileFields({ tokenImage: image }), { tokenImage: image, tokenLibraryImage: null });
+  assert.deepEqual(canonicalizeProfileFields({ tokenLibraryImage: chosen }), { tokenLibraryImage: chosen, tokenImage: null });
+  assert.deepEqual(canonicalizeProfileFields({ tokenImage: null, tokenLibraryImage: null }), { tokenImage: null, tokenLibraryImage: null });
+  assert.deepEqual(canonicalizeProfileFields({ name: 'x' }), { name: 'x' }, 'un patch sans image ne touche à aucune des deux');
+  assert.deepEqual(canonicalizeProfileFields({ tokenLibraryImage: 'maps/x.webp' }), { tokenLibraryImage: null });
+});
