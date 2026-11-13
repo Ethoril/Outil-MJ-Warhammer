@@ -1,6 +1,9 @@
 #!/usr/bin/env node
-// Recopie la source unique js/data/donnees-communes.js (espèces, constantes de liaison) dans RPG Map Display
-// et dans le dépôt des fiches des PJ, octet pour octet, en fins de ligne LF.
+// Recopie les sources uniques de l'outil MJ dans RPG Map Display et dans le dépôt des fiches des PJ, octet pour octet,
+// en fins de ligne LF :
+//   - js/data/donnees-communes.js (espèces, constantes de liaison) → carte et fiches ;
+//   - js/data/token-images.js (table des images de la bibliothèque de la carte) → carte seulement ;
+//   - docs/CONTRAT_LIAISON_MAP_DISPLAY.md (contrat de liaison) → carte seulement, copie « docs/CONTRAT-LIAISON-OUTIL-MJ.md ».
 //
 //   node tools/recopier-donnees-communes.mjs            écrit les copies
 //   node tools/recopier-donnees-communes.mjs --check    n'écrit rien ; code 1 si une copie manque ou a dérivé
@@ -12,15 +15,23 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const SOURCE = 'js/data/donnees-communes.js';
+export const SOURCE_TOKEN_IMAGES = 'js/data/token-images.js';
+export const SOURCE_CONTRAT = 'docs/CONTRAT_LIAISON_MAP_DISPLAY.md';
 export const DEPOTS_PAR_DEFAUT = Object.freeze({
   carte: 'E:/rpg-map-display',
   fiches: 'E:/Projet Warhammer Ennemi Intérieur/ennemi-interieur-wfrp4'
 });
-/** Emplacement de la copie dans chaque dépôt cible. */
+/** Emplacement de la copie des données communes dans chaque dépôt cible. */
 export const COPIES = Object.freeze({
   carte: 'js/core/donnees-communes.js',
   fiches: 'js/data/donnees-communes.js'
 });
+/** Chaque source et ses copies, par dépôt cible (un dépôt absent de `copies` n'en reçoit pas). */
+export const RECOPIES = Object.freeze([
+  Object.freeze({ source: SOURCE, copies: COPIES }),
+  Object.freeze({ source: SOURCE_TOKEN_IMAGES, copies: Object.freeze({ carte: 'js/core/token-images.js' }) }),
+  Object.freeze({ source: SOURCE_CONTRAT, copies: Object.freeze({ carte: 'docs/CONTRAT-LIAISON-OUTIL-MJ.md' }) })
+]);
 
 const racineOutil = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const enLF = texte => texte.replace(/\r\n?/g, '\n');
@@ -34,22 +45,25 @@ export function depotsCibles(argv = [], env = process.env) {
   };
 }
 
-/** Compare (et écrit sauf `check`) chaque copie ; renvoie une ligne d'état par dépôt et `ok`. */
-export function recopier({ depots, check = false, racine = racineOutil } = {}) {
-  const brut = readFileSync(join(racine, SOURCE), 'utf8');
-  const source = enLF(brut);
+/** Compare (et écrit sauf `check`) chaque copie de chaque source ; renvoie une ligne d'état par copie et `ok`. */
+export function recopier({ depots, check = false, racine = racineOutil, recopies = RECOPIES } = {}) {
   const lignes = [];
   let ok = true;
-  if (brut !== source) { lignes.push(`source : fins de ligne CRLF dans ${SOURCE}`); ok = false; }
-  for (const [nom, dossier] of Object.entries(depots)) {
-    const cible = join(dossier, COPIES[nom]);
-    if (!existsSync(dossier)) { lignes.push(`${nom} : dépôt introuvable (${dossier})`); ok = false; continue; }
-    const actuel = existsSync(cible) ? readFileSync(cible, 'utf8') : null;
-    if (actuel === source) { lignes.push(`${nom} : à jour (${cible})`); continue; }
-    if (check) { lignes.push(`${nom} : ${actuel === null ? 'copie absente' : 'copie différente de la source'} (${cible})`); ok = false; continue; }
-    mkdirSync(dirname(cible), { recursive: true });
-    writeFileSync(cible, source);
-    lignes.push(`${nom} : copie écrite (${cible})`);
+  for (const { source: chemin, copies } of recopies) {
+    const brut = readFileSync(join(racine, chemin), 'utf8');
+    const source = enLF(brut);
+    if (brut !== source) { lignes.push(`source : fins de ligne CRLF dans ${chemin}`); ok = false; }
+    for (const [nom, dossier] of Object.entries(depots)) {
+      if (!copies[nom]) continue;
+      const cible = join(dossier, copies[nom]);
+      if (!existsSync(dossier)) { lignes.push(`${nom} : dépôt introuvable (${dossier})`); ok = false; continue; }
+      const actuel = existsSync(cible) ? readFileSync(cible, 'utf8') : null;
+      if (actuel === source) { lignes.push(`${nom} : à jour (${cible})`); continue; }
+      if (check) { lignes.push(`${nom} : ${actuel === null ? 'copie absente' : 'copie différente de la source'} (${cible}) ← ${chemin}`); ok = false; continue; }
+      mkdirSync(dirname(cible), { recursive: true });
+      writeFileSync(cible, source);
+      lignes.push(`${nom} : copie écrite (${cible})`);
+    }
   }
   return { ok, lignes };
 }
@@ -58,5 +72,10 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const argv = process.argv.slice(2);
   const { ok, lignes } = recopier({ depots: depotsCibles(argv), check: argv.includes('--check') });
   for (const ligne of lignes) console.log(ligne);
-  if (!ok) { console.error('Données communes : dérive ou copie manquante. Relancez sans --check depuis le dépôt de l’outil MJ.'); process.exitCode = 1; }
+  if (!ok) {
+    console.error('Copies communes : dérive ou copie manquante (données communes, table des images ou contrat de liaison).');
+    console.error('Après toute modification d’une source, ou une régénération de js/data/token-images.js, relancez depuis le dépôt de l’outil MJ :');
+    console.error('  node tools/recopier-donnees-communes.mjs');
+    process.exitCode = 1;
+  }
 }

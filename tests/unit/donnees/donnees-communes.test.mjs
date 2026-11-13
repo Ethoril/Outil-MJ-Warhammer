@@ -1,6 +1,7 @@
 // Garde-fou de la source unique js/data/donnees-communes.js (constats FICHES-05, COMP-LIAISONS-06 et -10, REGLES-07) :
 // valeurs des espèces et de la liaison carte, consommateurs de l'outil branchés dessus, copies des deux autres dépôts
-// identiques (vérifiées seulement si ces dépôts sont présents sur le poste ; jamais en CI).
+// identiques (vérifiées seulement si ces dépôts sont présents sur le poste ; jamais en CI). Même mécanisme pour la table
+// des images de la bibliothèque (js/data/token-images.js) et le contrat de liaison, recopiés dans la carte.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -12,7 +13,7 @@ import { creatureSizeOf } from '../../../js/core/creature-size.js';
 import { mutationDomainForSpecies } from '../../../js/core/v5-corruption.js';
 import { MAP_LINK_CHANNEL, MAP_LINK_PING_MS, MAP_LINK_TIMEOUT_MS, MAP_LINK_ECHO_MS } from '../../../js/core/map-link.js';
 import { MAP_LINK_VERSION } from '../../../js/core/map-link-state.js';
-import { recopier, depotsCibles, COPIES, SOURCE } from '../../../tools/recopier-donnees-communes.mjs';
+import { recopier, depotsCibles, COPIES, SOURCE, RECOPIES, SOURCE_TOKEN_IMAGES, SOURCE_CONTRAT } from '../../../tools/recopier-donnees-communes.mjs';
 
 const racine = new URL('../../../', import.meta.url);
 
@@ -64,7 +65,7 @@ test('liaison carte : constantes de l’outil lues dans la source commune', () =
 });
 
 test('source en LF, précachée par le service worker', () => {
-  assert.ok(!readFileSync(new URL(SOURCE, racine), 'utf8').includes('\r'));
+  for (const { source } of RECOPIES) assert.ok(!readFileSync(new URL(source, racine), 'utf8').includes('\r'), source);
   assert.match(readFileSync(new URL('sw.js', racine), 'utf8'), /'\.\/js\/data\/donnees-communes\.js'/);
 });
 
@@ -83,11 +84,38 @@ test('script de recopie : écrit les copies manquantes, puis --check passe ; une
   assert.equal(recopier({ depots: { carte: join(tmp, 'absent') }, check: true }).ok, false, 'dépôt introuvable');
 });
 
+test('script de recopie : table des images et contrat vont dans la carte seulement ; une table régénérée fait échouer --check, en français', () => {
+  const tmp = mkdtempSync(join(tmpdir(), 'recopies-'));
+  const depots = { carte: join(tmp, 'carte'), fiches: join(tmp, 'fiches') };
+  for (const dossier of Object.values(depots)) mkdirSync(dossier);
+  assert.equal(recopier({ depots }).ok, true);
+  const copiesCarte = Object.fromEntries(RECOPIES.map(r => [r.source, join(depots.carte, r.copies.carte)]));
+  assert.equal(readFileSync(copiesCarte[SOURCE_TOKEN_IMAGES], 'utf8'), readFileSync(new URL(SOURCE_TOKEN_IMAGES, racine), 'utf8'));
+  assert.equal(readFileSync(copiesCarte[SOURCE_CONTRAT], 'utf8'), readFileSync(new URL(SOURCE_CONTRAT, racine), 'utf8'), 'contrat octet pour octet');
+  assert.equal(existsSync(join(depots.fiches, 'js/core/token-images.js')), false, 'rien de plus dans le dépôt des fiches');
+  assert.equal(existsSync(join(depots.fiches, 'docs')), false);
+  assert.equal(recopier({ depots, check: true }).ok, true);
+  // La table est régénérée dans l'outil : la copie de la carte n'est plus à jour.
+  writeFileSync(copiesCarte[SOURCE_TOKEN_IMAGES], readFileSync(copiesCarte[SOURCE_TOKEN_IMAGES], 'utf8') + '// ancienne\n');
+  const derive = recopier({ depots, check: true });
+  assert.equal(derive.ok, false);
+  assert.match(derive.lignes.join('\n'), /carte : copie différente de la source \(.*token-images\.js\) ← js\/data\/token-images\.js/);
+  // Une copie de contrat modifiée est détectée de la même façon (CA25).
+  assert.equal(recopier({ depots }).ok, true, 'la recopie rétablit les copies');
+  writeFileSync(copiesCarte[SOURCE_CONTRAT], 'autre contenu\n');
+  assert.match(recopier({ depots, check: true }).lignes.join('\n'), /CONTRAT-LIAISON-OUTIL-MJ\.md\) ← docs\/CONTRAT_LIAISON_MAP_DISPLAY\.md/);
+});
+
 test('copies réelles des deux autres dépôts identiques à la source (poste du MJ seulement)', t => {
   const depots = depotsCibles([]);
   // Une copie pas encore fusionnée dans son dépôt est sautée ici (le script --check, lui, la signale) ; une copie présente doit être identique.
-  const presents = Object.fromEntries(Object.entries(depots).filter(([nom, dossier]) => existsSync(join(dossier, COPIES[nom]))));
-  if (!Object.keys(presents).length) { t.skip('aucune copie présente sur ce poste (dépôts absents ou branche non fusionnée)'); return; }
-  const { ok, lignes } = recopier({ depots: presents, check: true });
-  assert.ok(ok, lignes.join('\n'));
+  let verifiees = 0;
+  for (const recopie of RECOPIES) {
+    const presents = Object.fromEntries(Object.entries(depots).filter(([nom, dossier]) => recopie.copies[nom] && existsSync(join(dossier, recopie.copies[nom]))));
+    if (!Object.keys(presents).length) continue;
+    verifiees += 1;
+    const { ok, lignes } = recopier({ depots: presents, check: true, recopies: [recopie] });
+    assert.ok(ok, `${lignes.join('\n')}\nRelancez : node tools/recopier-donnees-communes.mjs`);
+  }
+  if (!verifiees) t.skip('aucune copie présente sur ce poste (dépôts absents ou branche non fusionnée)');
 });

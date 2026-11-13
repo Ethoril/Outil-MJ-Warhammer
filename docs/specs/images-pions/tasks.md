@@ -31,7 +31,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 
 ## Lot 3 — Contrat et carte
 
-- [ ] **T7 — Contrat et garde-fou.** [P] Amender §4/§6 dans les deux copies du contrat (chemin relatif, `formImageUrl`). Étendre `tools/recopier-donnees-communes.mjs` à `js/data/token-images.js` → `rpg-map-display/js/core/token-images.js`. Côté carte : `tests/tokenImages.test.mjs` (chaque chemin de la table et de `maps/tokens/catalog.json` existe) et un test de `mjLink` avec chemin relatif (pion valide, cumul embarqué nul).
+- [x] **T7 — Contrat et garde-fou.** [P] Amender §4/§6 dans les deux copies du contrat (chemin relatif, `formImageUrl`). Étendre `tools/recopier-donnees-communes.mjs` à `js/data/token-images.js` → `rpg-map-display/js/core/token-images.js`. Côté carte : `tests/tokenImages.test.mjs` (chaque chemin de la table et de `maps/tokens/catalog.json` existe) et un test de `mjLink` avec chemin relatif (pion valide, cumul embarqué nul).
   Fichiers : les deux contrats, `tools/recopier-donnees-communes.mjs`, `tests/unit/donnees/donnees-communes.test.mjs` ; carte : `js/core/token-images.js`, `tests/tokenImages.test.mjs`, test de liaison existant. CA : 5, 23, 24, 25. Après : T2.
   Acceptation : `node tools/recopier-donnees-communes.mjs --check` ; dans la carte `node --test tests/tokenImages.test.mjs` et le test de liaison.
 
