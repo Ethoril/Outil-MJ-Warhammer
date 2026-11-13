@@ -52,7 +52,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 
 ## Lot 6 — Bestiaire en dossiers
 
-- [ ] **T13 — Classement de tout le bestiaire.** `tools/token-images-categories.csv` couvre toutes les créatures (appariées ou non) ; un générateur écrit `js/data/bestiary-folders.js` (id de profil → dossier, libellés français des dossiers), avec `--check`.
+- [x] **T13 — Classement de tout le bestiaire.** `tools/token-images-categories.csv` couvre toutes les créatures (appariées ou non) ; un générateur écrit `js/data/bestiary-folders.js` (id de profil → dossier, libellés français des dossiers), avec `--check`.
   Fichiers : `tools/token-images-categories.csv`, `tools/build-bestiary-folders.mjs`, `js/data/bestiary-folders.js`, test dans `tests/unit/donnees/`. CA : 33. Après : T12.
   Acceptation : test (chaque profil dans un seul dossier, aucun sans classement, `--check` vert).
 - [ ] **T14 — Navigation par dossiers.** Arborescence, compteurs, fil d'Ariane, « À classer », recherche et filtres bornés au dossier ouvert, clavier et noms accessibles.

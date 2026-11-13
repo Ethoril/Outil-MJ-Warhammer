@@ -14,6 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { TOKEN_IMAGES } from '../js/data/token-images.js';
 import { REIKLAND_BEASTS, KADON_MONSTERS } from '../js/data/v5-transformation-bestiary.js';
 import { slug } from './build-token-images.mjs';
+import { creatureKey, isCreature } from './lib/creature-key.mjs';
 
 export const CATEGORIES = 'tools/token-images-categories.csv';
 export const OUT = 'docs/specs/images-pions/illustrations-a-creer.md';
@@ -53,8 +54,8 @@ export function buildMissing({ books, table = TOKEN_IMAGES, categories, beasts =
   const creatures = new Map();
   for (const { profiles } of books) {
     for (const p of profiles) {
-      if (p.kind === 'template') continue;
-      const key = slug(p.nameFr || p.name);
+      if (!isCreature(p)) continue;
+      const key = creatureKey(p);
       if (!creatures.has(key)) creatures.set(key, []);
       creatures.get(key).push(p);
     }
