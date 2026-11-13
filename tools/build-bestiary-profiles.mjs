@@ -9,7 +9,7 @@ import { extractProfiles, corpusBooks } from './lib/bestiary-extract.mjs';
 import { assignInventoryIds } from './lib/bestiary-ids.mjs';
 import { buildRecord } from './lib/bestiary-record.mjs';
 import { TEMPLATE_IDS, NAME_FIXES, WOUNDS_ABSENT_IDS, ARMOUR_DETAIL } from './lib/bestiary-overrides.mjs';
-import { MANUAL_BLOCKS } from './lib/bestiary-manual.mjs';
+import { MANUAL_BLOCKS, PARTIAL_BOOKS } from './lib/bestiary-manual.mjs';
 import { KEYWORDS_MANUAL } from './lib/bestiary-keywords-manual.mjs';
 import { parsePregenerated } from './lib/bestiary-pregen.mjs';
 import { cleanSkills } from './lib/bestiary-record.mjs';
@@ -86,7 +86,8 @@ const manifest = corpusBooks();
 for (const book of ids) {
   if (!BOOKS[book]) throw new Error(`Livre inconnu ou sans profil : ${book}`);
   const { profiles } = extractProfiles([book]);
-  const entries = inventory.profiles.filter(entry => entry.book === book);
+  // Livre partiel (L05) : seules les entrées retenues sont générées, les autres restent des références d'inventaire.
+  const entries = inventory.profiles.filter(entry => entry.book === book && (!PARTIAL_BOOKS[book] || PARTIAL_BOOKS[book].includes(entry.id)));
   const { byKey, missing, extra } = assignInventoryIds(profiles, entries);
   const records = [];
   const dropped = [];

@@ -34,8 +34,8 @@ maps/tokens/bestiaire/forme-bestiale/serpent-vie.webp;Serpent (Forme bestiale, V
 maps/tokens/bestiaire/grand-cerf.webp;Grand cerf;E0-P-001;Grand cerf;L11 p.10;exact;
 maps/tokens/bestiaire/loup-blanc.webp;Loup blanc;E0-P-600|E0-P-663;Loup blanc | Le Loup blanc de Shining Rock;L19 p.117 | L21 p.14;approché;exact : Loup blanc (L19) — approché : le Loup blanc de Shining Rock (L21, individu nommé)
 maps/tokens/bestiaire/loup.webp;Loup;E0-P-078;Loup;L06 p.327;exact;Grand loup (L11), Loup géant (L12) et Loup funeste (L06) restent sans image : créatures distinctes
-maps/tokens/bestiaire/ours.webp;Ours;;;;aucun;aucun profil Ours au bestiaire (l’ours n’existe que comme bête de Forme bestiale)
-maps/tokens/bestiaire/pigeon.webp;Pigeon;;;;aucun;aucun profil Pigeon au bestiaire (le pigeon n’existe que comme bête de Forme bestiale)
+maps/tokens/bestiaire/ours.webp;Ours;E0-P-194;Ours;L05 p.315;exact;profil V4 du Livre de base FR (absent de L06), ajouté par T12
+maps/tokens/bestiaire/pigeon.webp;Pigeon;E0-P-199;Pigeon;L05 p.316;exact;profil V4 du Livre de base FR (absent de L06), ajouté par T12
 maps/tokens/bestiaire/poney.webp;Poney;E0-P-990;Poney;L27 p.119;exact;
 maps/tokens/bestiaire/rat-geant.webp;Rat géant;E0-P-075;Rat géant;L06 p.326;exact;
 maps/tokens/bestiaire/renard.webp;Renard;E0-P-141;Renard;L02 p.77;exact;

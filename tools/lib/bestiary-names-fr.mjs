@@ -20,6 +20,8 @@ export const NAMES_FR = Object.freeze({
   'E0-P-108': l05(335, 'Démonette de Slaanesh'), 'E0-P-109': l05(337, 'Guerrier des clans'), 'E0-P-110': l05(337, 'Vermine de choc'), 'E0-P-111': l05(337, 'Rat-ogre'),
   'E0-P-112': proposal('Soldat'), 'E0-P-113': proposal('Tirailleur'), 'E0-P-114': proposal('Élite'), 'E0-P-115': proposal('Meneur'), 'E0-P-116': proposal('Commandant'),
   'E0-P-117': proposal('Lanceur de sorts'), 'E0-P-118': proposal('Seigneur lanceur de sorts'),
+  // Livre de base V4 FR (L05) : les deux seuls profils tirés de ce livre (absents de L06).
+  'E0-P-194': l05(315, 'Ours'), 'E0-P-199': l05(316, 'Pigeon'),
   'E0-P-119': proposal('Skrakk — Bestigor (Élite)'), 'E0-P-120': proposal('Ungrakk — Seigneur-bête gor (Commandant)'),
   'E0-P-121': proposal('Swilegrakk — Chamane-bray (Lanceur de sorts)'), 'E0-P-122': proposal('Guzgog — Tirailleur ungor'),
   // Archives of the Empire 2 (L01)

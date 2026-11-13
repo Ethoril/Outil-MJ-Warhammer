@@ -529,6 +529,6 @@ test('B1 tous les profils de tous les livres (hors gabarits) se construisent', a
       built += 1;
     }
   }
-  assert.equal(built, 889); // 882 + L27 (6 montures et le Rapace du Bestiaire V2, 11/11/2026)
+  assert.equal(built, 891); // 882 + L27 (6 montures et le Rapace du Bestiaire V2, 11/11/2026) + L05 (Ours et Pigeon, T12 du 13/11/2026)
 });
 });

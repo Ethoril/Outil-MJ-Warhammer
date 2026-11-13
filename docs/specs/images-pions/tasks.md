@@ -46,7 +46,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 
 ## Lot 5 — Profils des images sans profil
 
-- [ ] **T12 — Créer les profils manquants.** [P avec le lot 2] Pour chaque image à `aucun` qui est une créature ou un PNJ : chercher le profil dans le corpus (texte extrait d'abord ; Gemini Decisions sur les pages si le texte ne suffit pas), l'ajouter par la chaîne existante du bestiaire, l'apparier dans `tools/token-images.csv` et régénérer la table et la liste des illustrations. Ce qui reste introuvable part en questions au MJ.
+- [x] **T12 — Créer les profils manquants.** [P avec le lot 2] Pour chaque image à `aucun` qui est une créature ou un PNJ : chercher le profil dans le corpus (texte extrait d'abord ; Gemini Decisions sur les pages si le texte ne suffit pas), l'ajouter par la chaîne existante du bestiaire, l'apparier dans `tools/token-images.csv` et régénérer la table et la liste des illustrations. Ce qui reste introuvable part en questions au MJ.
   Fichiers : `tools/lib/bestiary-*.mjs`, `js/data/bestiary/`, `tools/token-images.csv`, `js/data/token-images.js`, `docs/specs/images-pions/illustrations-a-creer.md`, `docs/specs/images-pions/questions-profils.md`. CA : 28, 29, 30. Après : T2b.
   Acceptation : `node tools/verify-bestiary-stats.mjs`, tests ciblés du bestiaire et `tests/unit/donnees/token-images.test.mjs` verts ; chaque profil créé cite livre et page.
 

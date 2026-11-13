@@ -46,6 +46,17 @@
    }
   },
   {
+   "book": "L05",
+   "file": "L05.json",
+   "title": "Livre de base (V4, français)",
+   "edition": "V4",
+   "counts": {
+    "profiles": 2,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L06",
    "file": "L06.json",
    "title": "Livre de base V5",

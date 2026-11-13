@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { validateBestiaryRecord } from '../../../js/core/bestiary-profiles.js';
 import { isMountCandidate } from '../../../js/core/mounts.js';
+import { PARTIAL_BOOKS } from '../../../tools/lib/bestiary-manual.mjs';
 
 describe('données du bestiaire — structure', () => {
 const read = path => JSON.parse(readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8'));
@@ -22,7 +23,8 @@ test('Bestiaire : l’index décrit exactement les fichiers de livre présents, 
 for (const item of index.books) {
   test(`Bestiaire ${item.book} : un profil par entrée d’inventaire, tous conformes, valeurs imprimées`, () => {
     const data = read(`js/data/bestiary/${item.file}`);
-    const expected = inventory.profiles.filter(entry => entry.book === item.book);
+    // Livre partiel (L05) : seules les entrées retenues par PARTIAL_BOOKS sont générées.
+    const expected = inventory.profiles.filter(entry => entry.book === item.book && (!PARTIAL_BOOKS[item.book] || PARTIAL_BOOKS[item.book].includes(entry.id)));
     assert.deepEqual(data.profiles.map(profile => profile.id).sort(), expected.map(entry => entry.id).sort(), 'identifiants = inventaire');
     for (const profile of data.profiles) {
       const entry = expected.find(row => row.id === profile.id);
@@ -819,5 +821,22 @@ test('E1 : chaque livre du complément a une ligne de couverture et les question
   assert.equal(coverage.reduce((sum, entry) => sum + entry.profiles, 0), 443);
   assert.equal(inventory.counts.openQuestions, inventory.openQuestions.length);
   assert.equal(added(inventory.openQuestions).length, 4);
+});
+});
+
+describe('bestiaire L05 (T12, images des pions)', () => {
+const read = path => JSON.parse(readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8'));
+const book = read('js/data/bestiary/L05.json');
+
+test('L05 : seuls l’Ours (p. 315) et le Pigeon (p. 316), absents de L06, sont tirés du Livre de base V4 FR, valeurs imprimées', () => {
+  assert.deepEqual(book.profiles.map(profile => profile.id), ['E0-P-194', 'E0-P-199']);
+  const [bear, pigeon] = book.profiles;
+  assert.deepEqual([bear.page, bear.nameFr, bear.nameFrSource, bear.wounds, bear.size], [315, 'Ours', 'L05 p.315', 28, 'large']);
+  assert.deepEqual(Object.values(bear.stats), [4, 35, null, 55, 45, 20, 25, 15, 10, 15, null]);
+  assert.deepEqual(bear.attacks.map(attack => [attack.trait, attack.damage]), [['Weapon', 8], ['Bite', 9]]);
+  assert.equal(bear.armour.ap, 1);
+  assert.deepEqual([pigeon.page, pigeon.nameFr, pigeon.nameFrSource, pigeon.wounds, pigeon.size], [316, 'Pigeon', 'L05 p.316', 1, 'tiny']);
+  assert.deepEqual(Object.values(pigeon.stats), [2, 15, null, 5, 15, 25, 40, null, 10, 20, 10]);
+  assert.ok(pigeon.traits.some(trait => trait.name === 'Fly' && trait.rating === '100'));
 });
 });
