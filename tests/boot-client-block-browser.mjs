@@ -6,6 +6,9 @@ import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
 import { createStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
+const revisionReference = process.env.STARTUP_PREVIOUS_REVISION || '682d0af';
+try { execFileSync('git', ['cat-file', '-e', revisionReference + ':index.html'], { cwd: root, stdio: 'ignore' }); }
+catch { throw new Error(`Révision de référence introuvable : « git show ${revisionReference}:index.html » échoue (clone superficiel, historique absent ou GIT_DIR erroné). Donnez une révision présente avec STARTUP_PREVIOUS_REVISION.`); }
 const server = createStaticServer({ root });
 let browser;
 try {
@@ -21,7 +24,7 @@ try {
   }
   const legacy = await isolatedContext();
   // Preserve the published initial screen; the independent bootstrap fix changes its button state.
-  await legacy.route(origin + '/', route => route.fulfill({ contentType: 'text/html', body: execFileSync('git', ['show', '682d0af:index.html'], { cwd: root, encoding: 'utf8' }) }));
+  await legacy.route(origin + '/', route => route.fulfill({ contentType: 'text/html', body: execFileSync('git', ['show', revisionReference + ':index.html'], { cwd: root, encoding: 'utf8' }) }));
   await legacy.route('**/js/main.js', route => route.fulfill({ contentType: 'text/javascript', body: readFileSync(new URL('../js/main.js', import.meta.url), 'utf8').replace("from './ui/journal-view.js'", "from './ui/log-view.js'") }));
   const before = await legacy.newPage(), legacyFailures = [];
   before.on('requestfailed', request => legacyFailures.push({ url: request.url(), error: request.failure()?.errorText }));

@@ -7,3 +7,7 @@ node_modules/
 /tmp/
 
 /captures/
+
+# Journaux des émulateurs Firebase (npm run test:firebase-emulators)
+database-debug.log
+firebase-debug.log

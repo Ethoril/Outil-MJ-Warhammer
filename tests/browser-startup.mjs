@@ -16,6 +16,12 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const output = resolve(root, 'tmp/startup-receipt');
 mkdirSync(output, { recursive: true });
 const previousRevision = process.env.STARTUP_PREVIOUS_REVISION || '682d0af';
+// Échoue tout de suite, en français, si la révision de référence est introuvable (clone superficiel, GIT_DIR erroné…).
+function exigerRevision(revision, fichier) {
+  try { execFileSync('git', ['cat-file', '-e', revision + ':' + fichier], { cwd: root, stdio: 'ignore' }); }
+  catch { throw new Error(`Révision de référence introuvable : « git show ${revision}:${fichier} » échoue (clone superficiel, historique absent ou GIT_DIR erroné). Donnez une révision présente avec STARTUP_PREVIOUS_REVISION.`); }
+}
+exigerRevision(previousRevision, 'index.html');
 let servePrevious = false;
 const previousAssets = new Map();
 const types = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.json': 'application/json', '.css': 'text/css', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.webmanifest': 'application/manifest+json' };

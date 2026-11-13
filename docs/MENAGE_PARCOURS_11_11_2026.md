@@ -10,10 +10,10 @@ Fusionné dans `main` et publié en 3.46.0 (branche archivée en tag `archive/ep
 
 ## Ce qui est fait
 
-1. **Parcours de release** (`lot2-v5-25-release-browser`, `lot3-v5-35-release-browser`) : chacun construit son export avant de le vérifier ; l'outil de construction ne garde qu'un export (13 Mo) à la fois. Ils sont maintenant dans la série du lanceur.
+1. **Parcours de release** (`lot3-v5-35-release-browser` (celui du lot 2.5 a été retiré le 13/11)) : chacun construit son export avant de le vérifier ; l'outil de construction ne garde qu'un export (13 Mo) à la fois. Ils sont maintenant dans la série du lanceur.
 2. **Dépendances** : Playwright 1.65.0, fake-indexeddb 6.2.8. Playwright 1.65 refuse de choisir une option désactivée ; cela a révélé que `q6-t10-ecrans` et `q6-t10-magie` choisissaient Obstiné sans séance ouverte (option désactivée depuis 287ad8b, que 1.63 forçait). Leurs états de départ ouvrent maintenant une séance.
 3. **Helper partagé** `tests/helpers/static-server.mjs` : serveur statique (`createStaticServer`, `startStaticServer`), table MIME, blocage du réseau externe (`blockExternalNetwork`), évitement des ports que Chromium refuse. 151 parcours et le helper `lot4-ca-app` l'utilisent ; environ 1 950 lignes recopiées retirées. Le blocage réseau est désormais le même partout : seul le serveur local répond (29 parcours ne bloquaient que `https`).
-4. **Classement** : `tests/parcours.json` range les 180 fichiers en quatre familles — 32 généraux (dont un socle de 15 à lancer avant publication), 124 tests de lot ou de ticket, 4 doublons probables, 20 hors série (émulateurs Firebase, lanceur, module importé). Le lanceur lit cet index, refuse un fichier non classé, et un test unitaire (`tests/unit/outillage/index-parcours.test.js`) le vérifie en CI.
+4. **Classement** : `tests/parcours.json` range les 180 fichiers en quatre familles — 32 généraux (dont un socle de 15 à lancer avant publication), 124 tests de lot ou de ticket, 4 doublons probables (arbitrés depuis, voir plus bas), 20 hors série (émulateurs Firebase, lanceur, module importé). Le lanceur lit cet index, refuse un fichier non classé, et un test unitaire (`tests/unit/outillage/index-parcours.test.js`) le vérifie en CI.
    - `npm run test:browser-socle` : les 15 parcours du socle.
    - `npm run test:browser-general` : les 32 parcours généraux.
    - `npm run test:browser-all` : tout ce qui est lançable ; options `--famille`, `--socle`, `--jobs N`, filtre par nom.
@@ -35,17 +35,23 @@ Fusionné dans `main` et publié en 3.46.0 (branche archivée en tag `archive/ep
 - Rendu sans signal observable : `engagements-plateau` ×2, `lot6-a`, `lot4-c43` (focus et défilement), `q6-t10-ecrans`, `divin-v5-brise-flee-sprint`, `lot3-v5-domaines`, `v3-b-combat` ×2.
 - Déjà des boucles sur condition (rien à faire) : `divin-v5-p4c`, `divin-v5-t5`, `recette-g-c17`, `recette-g-c20`, `lot1-pwa-sessions`.
 
-**Non traité** : dépendance à l'horloge (`Date.now()` dans une trentaine de parcours), ports fixes des émulateurs, scripts npm de lots clos (`test:lot2-*`, `test:magic-*`).
+**Non traité** : dépendance à l'horloge (`Date.now()` dans une trentaine de parcours), ports fixes des émulateurs, scripts npm de lots clos : retirés le 13/11 (`test:lot2-*`, `test:magic-*`, sauf `build:magic-local`).
 
-## Doublons à arbitrer (aucun supprimé)
+## Doublons arbitrés (13/11/2026)
 
-| Parcours marqué doublon | Couvert par | Indice |
-|---|---|---|
-| `lot2-v5-25-release-browser` | `lot3-v5-35-release-browser` | Mêmes vérifications, ligne pour ligne ; lot3 ajoute la magie. Le plus sûr des quatre. |
-| `f2-j-review-browser` | `campaign-crossflow-browser` | Même en-tête, même scénario (critique, suivi lié, soin, saut de jours) ; campaign-crossflow passe en plus par l'onglet Campagne. |
-| `recette-g-c20-browser` | `recette-g-c17-browser` | Deux copies du squelette de `divin-v5-t5-browser`, une vingtaine de lignes d'écart. À vérifier : l'une des deux, ou les deux, sont peut-être déjà couvertes par T5. |
-| `lot2-v5-23-control-browser` | `lot2-v5-23-browser` | Contrôle du même lot 2.3 ; recouvrement partiel, le moins sûr. |
+| Parcours | Décision |
+|---|---|
+| `lot2-v5-25-release-browser` | Retiré (couvert par `lot3-v5-35-release-browser`, vérifié vert). |
+| `f2-j-review-browser` | Retiré (couvert par `campaign-crossflow-browser`, vérifié vert). |
+| `recette-g-c20-browser` | Gardé, famille `ticket`. |
+| `lot2-v5-23-control-browser` | Gardé, famille `ticket`. |
 
-Pour en retirer un : supprimer le fichier et sa ligne dans `tests/parcours.json`. Pour le garder : passer sa famille à `ticket`.
+La famille `doublon` de l’index reste disponible, vide.
 
 Écartés après lecture (structure commune, vérifications différentes) : `f2-j` / `f2-j2`, `f2-c-ui` / `f2-c-workspace`, `lot3-v5-relecture2-ui` / `-history` (hypothèses de l'audit), `recette-g-c11` / `c16`, la série `divin-v5-b4` à `b18`.
+
+## Variables d’environnement de `browser-startup` et `boot-client-block-browser`
+
+Ces deux parcours rejouent l’ancienne révision publiée par `git show <révision>:<fichier>`.
+- `STARTUP_PREVIOUS_REVISION` : révision de référence (défaut `682d0af`). Elle doit exister dans l’historique local ; sinon le parcours échoue d’emblée avec « Révision de référence introuvable ».
+- `GIT_DIR` : lue par git lui-même ; à définir seulement si le dépôt n’est pas celui du dossier courant. Un clone superficiel ou un `GIT_DIR` erroné provoque le même message.

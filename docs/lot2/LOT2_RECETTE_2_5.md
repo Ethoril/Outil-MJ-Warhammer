@@ -44,7 +44,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File tests/run-lot2-v5-25-emulato
 node tools/build-v5-talent-classification.mjs
 node tools/build-v5-talent-coverage.mjs
 node tools/build-lot2-local-release.mjs
-node tests/lot2-v5-25-release-browser.mjs
+node tests/lot3-v5-35-release-browser.mjs
 git diff --check
 ```
 
