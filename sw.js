@@ -28,6 +28,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/fiche-details.js',
   './js/ui/campaign-workspace.js',
   './js/ui/campaign-workspace.css',
+  './js/ui/campaign-model.js',
   './js/data/shared/catalogue/skill-resolver.js',
   './js/data/shared/catalogue/talent-resolver.js',
   './js/data/shared/catalogue/talent-source.js',

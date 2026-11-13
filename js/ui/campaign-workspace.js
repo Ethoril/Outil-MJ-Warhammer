@@ -1,5 +1,6 @@
 import { aftermathDate } from '../core/v5-aftermath.js';
 import { createV5AftermathPanel } from './v5-aftermath-panel.js';
+import { PLACE_NOTICE, PLACE_TEXT, buildCampaignPeople, countText, followupsOf, formatElapsed, getInitials, getPersonStatus, hpText, personSubtitle } from './campaign-model.js';
 
 // Helpers DOM sobres
 const node = (tag, className = '', text = '') => {
@@ -15,11 +16,6 @@ const btn = (text, className, action) => {
   return el;
 };
 const label = text => node('div', 'campaign-kicker', text);
-const countText = (count, singular, plural = `${singular}s`) => `${count} ${count === 1 ? singular : plural}`;
-const activeIncident = row => row.status === 'open';
-const activeDisease = row => row.status === 'active';
-const visibleSequela = row => ['open', 'needs-facts', 'permanent'].includes(row.status);
-
 const phaseText = {
   'needs-facts': 'Faits à préciser', healing: 'En guérison', 'awaiting-test': 'Test à effectuer',
   healed: 'Guérie', permanent: 'Permanente', severe: 'Phase sévère', recovering: 'Récupération',
@@ -31,55 +27,11 @@ const pendingText = {
   'post-encounter-test': 'Test après la rencontre'
 };
 
-function formatElapsed(seconds) {
-  if (!Number.isSafeInteger(seconds) || seconds < 0) return 'Horloge non initialisée';
-  let left = seconds;
-  const parts = [];
-  for (const [unit, short] of [[86400, 'j'], [3600, 'h'], [60, 'min'], [1, 's']]) {
-    const amount = Math.floor(left / unit);
-    if (amount) parts.push(`${amount} ${short}`);
-    left %= unit;
-  }
-  return parts.join(' ') || '0 s';
-}
-
-function humanSummary(incidents, diseases, sequelae) {
-  const pieces = [];
-  if (incidents.length) pieces.push(countText(incidents.length, 'blessure suivie', 'blessures suivies'));
-  if (diseases.length) pieces.push(countText(diseases.length, 'maladie suivie', 'maladies suivies'));
-  if (sequelae.length) pieces.push(countText(sequelae.length, 'séquelle suivie', 'séquelles suivies'));
-  return pieces.join(' · ') || 'Aucun suivi actif';
-}
-
 function addLine(list, title, detail) {
   const item = node('li', 'campaign-followup');
   item.append(node('strong', '', title));
   if (detail) item.append(node('span', '', detail));
   list.append(item);
-}
-
-function getInitials(name) {
-  if (!name) return '?';
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-}
-
-const PLACE_TEXT = { suspendue: 'Scène suspendue', aucun: 'Ancien suivi' };
-const PLACE_NOTICE = {
-  suspendue: 'Ce suivi appartient à un participant d’une scène suspendue : consultation seule. Reprenez la scène pour soigner.',
-  aucun: 'Ancien suivi sans personnage : consultation seule. Il peut être archivé.'
-};
-
-function getPersonStatus(entry, ownIncidents, ownDiseases, ownSequelae, ownProposals) {
-  if (entry.absent) return { text: PLACE_TEXT[entry.place] || PLACE_TEXT.aucun, color: 'blue' };
-  if (ownProposals.length || ownIncidents.some(i => !i.bandaged || i.infection || (i.requiresSurgery && !i.surgeryCompleted))) {
-    return { text: 'À traiter', color: 'red' };
-  }
-  if (ownIncidents.length || ownDiseases.length || ownSequelae.length) {
-    return { text: 'À surveiller', color: 'amber' };
-  }
-  return { text: 'Rien à traiter', color: 'green' };
 }
 
 /**
@@ -133,28 +85,13 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
       // CA14 : participants de la rencontre en cours, puis personnages suivis hors rencontre (`offEncounter`).
       const participants = Store.listAftermathSubjects();
       const conflicts = Store.listFollowedCharacterConflicts();
-      const byId = new Map(participants.map(person => [person.id, person]));
       const incidents = state.incidents || [];
       const diseases = state.diseases || [];
       const sequelae = overview.sequelae || [];
-      const activeIds = new Set([
-        ...incidents.filter(activeIncident),
-        ...diseases.filter(activeDisease),
-        ...sequelae.filter(visibleSequela),
-        ...(overview.pending || []),
-        ...proposals
-      ].map(row => row.participantId));
-
-      const absentIds = [...activeIds].filter(id => !byId.has(id));
-      const people = participants.map(person => ({ id: person.id, person, name: person.name || 'Personnage sans nom', absent: false, off: person.offEncounter === true }));
+      const registry = { incidents, diseases, sequelae, proposals };
       // CA2 à CA4 : un suivi sans sujet garde le nom enregistré à son ouverture, jamais un rang d'affichage.
-      const rowsOf = id => [...incidents, ...diseases, ...sequelae, ...(overview.pending || [])].filter(row => row.participantId === id);
-      for (const id of absentIds) {
-        const row = rowsOf(id)[0];
-        people.push({ id, person: null, absent: true, off: false,
-          name: (row ? Store.getAftermathRowLabel(row) : '') || 'Ancien suivi',
-          place: Store.getAftermathSubjectPlace(id) });
-      }
+      const { people, activeIds, absentIds } = buildCampaignPeople({ participants, incidents, diseases, sequelae, pending: overview.pending || [], proposals,
+        rowLabel: row => Store.getAftermathRowLabel(row), subjectPlace: id => Store.getAftermathSubjectPlace(id) });
       const visible = filter === 'active' ? people.filter(person => activeIds.has(person.id)) : people;
       if (!visible.some(person => person.id === selected)) selected = visible[0]?.id ?? null;
       const day = aftermathDate(state);
@@ -253,11 +190,8 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         list.append(node('p', 'campaign-empty', filter === 'active' ? 'Aucun suivi actif.' : 'Aucun participant ni personnage suivi.'));
       }
       for (const entry of visible) {
-        const ownIncidents = incidents.filter(row => row.participantId === entry.id && activeIncident(row));
-        const ownDiseases = diseases.filter(row => row.participantId === entry.id && activeDisease(row));
-        const ownSequelae = sequelae.filter(row => row.participantId === entry.id && visibleSequela(row));
-        const ownProposals = proposals.filter(row => row.participantId === entry.id);
-        const statusMeta = getPersonStatus(entry, ownIncidents, ownDiseases, ownSequelae, ownProposals);
+        const own = followupsOf(entry.id, registry);
+        const statusMeta = getPersonStatus(entry, own.incidents, own.diseases, own.sequelae, own.proposals);
 
         const selectPerson = btn('', `campaign-person${entry.id === selected ? ' is-selected' : ''}`, () => {
           selected = entry.id; render();
@@ -272,14 +206,9 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         avatar.setAttribute('aria-hidden', 'true');
 
         const main = node('span', 'campaign-person-main');
-        const subtitle = ownProposals.length
-          ? `${countText(ownProposals.length, 'critique à suivre', 'critiques à suivre')} · ${humanSummary(ownIncidents, ownDiseases, ownSequelae)}`
-          : humanSummary(ownIncidents, ownDiseases, ownSequelae);
-        main.append(node('strong', 'campaign-person-name', entry.name), node('small', '', subtitle));
+        main.append(node('strong', 'campaign-person-name', entry.name), node('small', '', personSubtitle(own)));
 
-        const hp = entry.person && Number.isFinite(Number(entry.person.hp)) && Number.isFinite(Number(entry.person.maxHp))
-          ? `${entry.person.hp} / ${entry.person.maxHp} PV`
-          : (entry.absent ? 'Consultation' : 'PV indisponibles');
+        const hp = hpText(entry, 'Consultation');
         const hpBox = node('span', 'campaign-person-hp');
         hpBox.append(node('small', '', 'BLESSURES'), node('strong', '', hp));
 
@@ -324,10 +253,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
           node('p', 'campaign-muted', 'Les suivis disponibles apparaîtront ici.')
         );
       } else {
-        const ownIncidents = incidents.filter(row => row.participantId === chosen.id && activeIncident(row));
-        const ownDiseases = diseases.filter(row => row.participantId === chosen.id && activeDisease(row));
-        const ownSequelae = sequelae.filter(row => row.participantId === chosen.id && visibleSequela(row));
-        const ownProposals = proposals.filter(row => row.participantId === chosen.id);
+        const { incidents: ownIncidents, diseases: ownDiseases, sequelae: ownSequelae, proposals: ownProposals } = followupsOf(chosen.id, registry);
         const pending = (overview.pending || []).filter(row => row.participantId === chosen.id);
 
         const top = node('div', 'campaign-detail-top');
@@ -339,9 +265,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
         largeAvatar.setAttribute('aria-hidden', 'true');
         const profileInfo = node('div');
         profileInfo.append(node('h3', 'campaign-detail-title', chosen.name));
-        const hp = chosen.person && Number.isFinite(Number(chosen.person.hp)) && Number.isFinite(Number(chosen.person.maxHp))
-          ? `${chosen.person.hp} / ${chosen.person.maxHp} PV`
-          : (chosen.absent ? (PLACE_TEXT[chosen.place] || PLACE_TEXT.aucun) : 'PV indisponibles');
+        const hp = hpText(chosen, PLACE_TEXT[chosen.place] || PLACE_TEXT.aucun);
         profileInfo.append(node('p', 'campaign-muted', hp));
         profile.append(largeAvatar, profileInfo);
         top.append(profile);
