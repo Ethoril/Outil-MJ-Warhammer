@@ -52,7 +52,7 @@ test('18 formes bestiales sur les 9 bêtes connues, chacune dans les deux vents'
 });
 
 test('chemins valides, uniques, triés ; groupe = premier dossier ; table figée', () => {
-  assert.equal(TOKEN_IMAGES.length, 120);
+  assert.equal(TOKEN_IMAGES.length, 439);
   const chemins = TOKEN_IMAGES.map(image => image.path);
   assert.deepEqual(chemins, [...chemins].sort());
   assert.equal(new Set(chemins).size, chemins.length);

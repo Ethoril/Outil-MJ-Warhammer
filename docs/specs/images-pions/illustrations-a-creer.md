@@ -8,439 +8,29 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 
 | Dossier | Illustrations | Profils couverts |
 | --- | ---: | ---: |
-| `bestiaire` | 55 | 55 |
-| `ennemis/demons` | 5 | 5 |
-| `ennemis/elfes-noirs` | 14 | 15 |
-| `ennemis/gobelins` | 15 | 15 |
-| `ennemis/hommes-betes` | 4 | 4 |
-| `ennemis/hommes-lezards` | 26 | 27 |
-| `ennemis/morts-vivants` | 24 | 26 |
-| `ennemis/ogres` | 2 | 2 |
-| `ennemis/orcs` | 6 | 6 |
-| `ennemis/reprouves` | 8 | 9 |
-| `ennemis/skavens` | 19 | 21 |
-| `ennemis/vampires` | 1 | 1 |
-| `monstres` | 56 | 61 |
-| `peuples/elfes` | 3 | 3 |
-| `peuples/gnomes` | 1 | 1 |
-| `peuples/halflings` | 2 | 2 |
-| `peuples/humains` | 76 | 78 |
-| `peuples/nains` | 2 | 3 |
-| Individus nommés (`pnj/<livre>`, `pj`) | 457 | 458 |
+| `monstres` | 11 | 11 |
+| Individus nommés (`pnj/<livre>`, `pj`) | 400 | 400 |
 | `bestiaire/forme-bestiale` | 0 | — |
 | `monstres/transformation-kadon` | 9 | — |
-| **Total** | **785** | **792** |
+| **Total** | **420** | **411** |
 
 ## Créatures génériques
 
-### `bestiaire` (55)
+### `monstres` (11)
 
 | Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
 | --- | --- | --- | --- | ---: | --- |
-| `bestiaire/amibes.webp` | Amibes | Amoebae | L26 p.85 | 1 |  |
-| `bestiaire/ane-ou-mule.webp` | Âne ou mule | Donkey or Mule | L23 p.22 | 1 |  |
-| `bestiaire/anguilles-du-reik.webp` | Anguilles du Reik | Reik Eels | L26 p.86 | 1 |  |
-| `bestiaire/araignee-des-falaises.webp` | Araignée des falaises | Cliff Spider | L22 p.73 | 1 |  |
-| `bestiaire/aspic-a-anneaux-bleus.webp` | Aspic à anneaux bleus | Blue-Ringed Asp | L07 p.172 | 1 |  |
-| `bestiaire/asticot-de-sang.webp` | Asticot de sang | Bloodmaggot | L07 p.169 | 1 |  |
-| `bestiaire/cervelle-douve.webp` | Cervelle-douve | Brainfluke | L07 p.168 | 1 |  |
-| `bestiaire/chameleoleech.webp` | Chameleoleech | Chameleoleech | L11 p.50 | 1 |  |
-| `bestiaire/chassipede.webp` | Chassipède | Huntipede | L07 p.169 | 1 |  |
-| `bestiaire/chat.webp` | Chat | Cat | L02 p.77 | 1 |  |
-| `bestiaire/chat-des-montagnes.webp` | Chat des montagnes | Mountain Cat | L22 p.73 | 1 |  |
-| `bestiaire/chauve-souris-de-sang.webp` | Chauve-souris de sang | Blood Bat | L07 p.173 | 1 |  |
-| `bestiaire/cheval-de-guerre.webp` | Cheval de guerre | Warhorse | L27 p.117 | 1 |  |
-| `bestiaire/cheval-de-guerre-leger.webp` | Cheval de guerre léger | Light Warhorse | L23 p.24 | 1 |  |
-| `bestiaire/cheval-de-trait.webp` | Cheval de trait | Draught Horse | L23 p.23 | 1 |  |
-| `bestiaire/cheval-de-trait-lourd.webp` | Cheval de trait lourd | Heavy Draught Horse | L23 p.23 | 1 |  |
-| `bestiaire/crapaud-tache-d-encre.webp` | Crapaud tache-d’encre | Blot Toad | L07 p.170 | 1 |  |
-| `bestiaire/culchan.webp` | Culchan | Culchan | L07 p.173 | 1 |  |
-| `bestiaire/daggerfish.webp` | Daggerfish | Daggerfish | L25 p.141 | 1 |  |
-| `bestiaire/epine-a-empaler.webp` | Épine-à-empaler | Impaling Spikethorn | L07 p.167 | 1 | plante de Lustrie |
-| `bestiaire/familier-de-combat.webp` | Familier de combat | Combat Familiar | L17 p.182 | 1 | familier : forme animale au choix |
-| `bestiaire/familier-de-puissance.webp` | Familier de puissance | Power Familiar | L17 p.182 | 1 | familier : forme animale au choix |
-| `bestiaire/familier-de-sorts.webp` | Familier de sorts | Spell Familiar | L17 p.182 | 1 | familier : forme animale au choix |
-| `bestiaire/fen-worm.webp` | Fen Worm | Fen Worm | L11 p.52 | 1 |  |
-| `bestiaire/fourmi-charognarde.webp` | Fourmi charognarde | Carrion Ant | L07 p.169 | 1 |  |
-| `bestiaire/grand-loup.webp` | Grand loup | Great Wolf | L11 p.17 | 1 |  |
-| `bestiaire/grand-taurus.webp` | Grand Taurus | Great Taurus | L11 p.75 | 1 |  |
-| `bestiaire/grands-felins.webp` | Grands félins | Great Cats | L23 p.87 | 1 |  |
-| `bestiaire/guepe-de-sang.webp` | Guêpe de sang | Bloodwasp | L07 p.169 | 1 |  |
-| `bestiaire/gymmcrabs.webp` | Gymmcrabs | Gymmcrabs | L25 p.141 | 1 |  |
-| `bestiaire/hermine.webp` | Hermine | Stoat | L02 p.78 | 1 |  |
-| `bestiaire/hyenadon.webp` | Hyénadon | Hyenadon | L07 p.171 | 1 |  |
-| `bestiaire/jaguar.webp` | Jaguar | Jaguar | L07 p.173 | 1 |  |
-| `bestiaire/larve-itxi.webp` | Larve itxi | Itxi Grub | L07 p.168 | 1 |  |
-| `bestiaire/latch-eel.webp` | Latch Eel | Latch Eel | L25 p.141 | 1 |  |
-| `bestiaire/lezard-piranha.webp` | Lézard piranha | Piranha Lizard | L07 p.171 | 1 |  |
-| `bestiaire/liane-rampante-agrippeuse.webp` | Liane rampante agrippeuse | Grasping Creeper Vine | L07 p.167 | 1 | plante de Lustrie |
-| `bestiaire/lion-blanc.webp` | Lion blanc | White Lion | L14 p.81 | 1 |  |
-| `bestiaire/lion-de-guerre-de-chrace.webp` | Lion de guerre de Chrace | War Lion of Chrace | L11 p.82 | 1 |  |
-| `bestiaire/lurkerfish.webp` | Lurkerfish | Lurkerfish | L25 p.140 | 1 |  |
-| `bestiaire/nightraven-flock.webp` | Nightraven Flock | Nightraven Flock | L11 p.59 | 1 |  |
-| `bestiaire/nuage-de-spores-assoiffe-de-sang.webp` | Nuage de spores assoiffé de sang | Blood Hungry Spore Cloud | L07 p.167 | 1 | plante de Lustrie |
-| `bestiaire/pliodon.webp` | Pliodon | Pliodon | L07 p.179 | 1 |  |
-| `bestiaire/python-des-marais-d-amaxon.webp` | Python des marais d’Amaxon | Amaxon Swamp Python | L07 p.172 | 1 |  |
-| `bestiaire/rainette-lustrienne.webp` | Rainette lustrienne | Lustrian Treefrog | L07 p.170 | 1 |  |
-| `bestiaire/razorbill.webp` | Razorbill | Razorbill | L11 p.77 | 1 |  |
-| `bestiaire/reptilion-a-criniere-d-ecailles.webp` | Reptilion à crinière d’écailles | Scalemane Reptilion | L07 p.171 | 1 |  |
-| `bestiaire/sangsue-de-feu.webp` | Sangsue de feu | Fireleech | L07 p.168 | 1 |  |
-| `bestiaire/serpent-foreur.webp` | Serpent foreur | Borer Snake | L07 p.172 | 1 |  |
-| `bestiaire/serpents-de-sotek.webp` | Serpents de Sotek | Serpents of Sotek | L07 p.57 | 1 |  |
-| `bestiaire/stirpike.webp` | Stirpike | Stirpike | L11 p.36 | 1 |  |
-| `bestiaire/stirpikes.webp` | Stirpikes | Stirpikes | L26 p.88 | 1 |  |
-| `bestiaire/tiguana.webp` | Tiguana | Tiguana | L07 p.171 | 1 |  |
-| `bestiaire/tortue-happeuse-carnivore.webp` | Tortue happeuse carnivore | Carnivorous Snapper | L23 p.99 | 1 |  |
-| `bestiaire/viperine.webp` | Vipérine | Vypervine | L07 p.167 | 1 | plante de Lustrie |
-
-### `ennemis/demons` (5)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/demons/changelin-de-tzeentch.webp` | Changelin de Tzeentch | Changeling of Tzeentch | L18 p.85 | 1 |  |
-| `ennemis/demons/changeling-de-tzeentch.webp` | Changeling de Tzeentch | Changeling of Tzeentch | L21 p.56 | 1 |  |
-| `ennemis/demons/disque-bibliotheque-de-tzeentch.webp` | Disque-bibliothèque de Tzeentch | Library Disc of Tzeentch | L17 p.213 | 1 |  |
-| `ennemis/demons/furie-du-chaos.webp` | Furie du Chaos | Chaos Fury | L23 p.84 | 1 |  |
-| `ennemis/demons/horreur-bleue.webp` | Horreur bleue | Blue Horror | L23 p.85 | 1 |  |
-
-### `ennemis/elfes-noirs` (14)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/elfes-noirs/destrier-noir.webp` | Destrier noir | Dark Steed | L09 p.45 | 1 |  |
-| `ennemis/elfes-noirs/dragon-de-l-enfer.webp` | Dragon de l’Enfer | Helldrake | L09 p.49 | 1 |  |
-| `ennemis/elfes-noirs/dragon-de-l-enfer-juvenile.webp` | Dragon de l’Enfer juvénile | Juvenile Helldrake | L09 p.49 | 1 |  |
-| `ennemis/elfes-noirs/elfe-noir.webp` | Elfe noir | Dark Elf | L09 p.44 | 1 |  |
-| `ennemis/elfes-noirs/elfe-noir-de-basse-naissance-citadin.webp` | Elfe noir de basse naissance (citadin) | Dark Elf City Lowborn | L09 p.44 | 1 |  |
-| `ennemis/elfes-noirs/elfe-noir-de-basse-naissance-des-terres-sauvages.webp` | Elfe noir de basse naissance (des terres sauvages) | Dark Elf Wilderness Lowborn | L09 p.44 | 1 |  |
-| `ennemis/elfes-noirs/elfe-noir-de-haute-naissance.webp` | Elfe noir de haute naissance | Dark Elf Highborn | L09 p.44 | 1 |  |
-| `ennemis/elfes-noirs/harpie.webp` | Harpie | Harpy | L09 p.48 | 1 |  |
-| `ennemis/elfes-noirs/kharibdyss.webp` | Kharibdyss | Kharibdyss | L09 p.46, L25 p.144 | 2 |  |
-| `ennemis/elfes-noirs/oint-druchii.webp` | Oint druchii | Druchii Anointed | L09 p.51 | 1 |  |
-| `ennemis/elfes-noirs/pegase-noir.webp` | Pégase noir | Dark Pegasus | L09 p.45 | 1 |  |
-| `ennemis/elfes-noirs/pegases-noirs.webp` | Pégases noirs | Dark Pegasi | L11 p.57 | 1 |  |
-| `ennemis/elfes-noirs/sang-froid-naggarothi.webp` | Sang-froid naggarothi | Naggarothi Cold One | L09 p.46 | 1 |  |
-| `ennemis/elfes-noirs/sorcier-du-feu-maudit.webp` | Sorcier du feu maudit | Doomfire Warlock | L09 p.52 | 1 |  |
-
-### `ennemis/gobelins` (15)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/gobelins/de-base-gnoblar.webp` | De base Gnoblar | Basic Gnoblar | L12 p.9 | 1 |  |
-| `ennemis/gobelins/de-base-gobelin-des-forets.webp` | De base gobelin des forêts | Basic Forest Goblin | L12 p.9 | 1 |  |
-| `ennemis/gobelins/de-base-gobelin-nocturne.webp` | De base gobelin nocturne | Basic Night Goblin | L12 p.9 | 1 |  |
-| `ennemis/gobelins/de-base-hobgobelin.webp` | De base hobgobelin | Basic Hobgoblin | L12 p.12 | 1 |  |
-| `ennemis/gobelins/de-base-snotling.webp` | De base Snotling | Basic Snotling | L12 p.13 | 1 |  |
-| `ennemis/gobelins/geant-squig.webp` | Géant Squig | Giant Squig | L12 p.19 | 1 |  |
-| `ennemis/gobelins/gobelin-des-forets.webp` | Gobelin des forêts | Forest Goblin | L11 p.15 | 1 |  |
-| `ennemis/gobelins/gobelin-nocturne-chef.webp` | Gobelin nocturne chef | Night Goblin Chief | L12 p.16 | 1 |  |
-| `ennemis/gobelins/gobelin-nocturne-squig-des-cavernes-swarm.webp` | Gobelin nocturne squig des cavernes Swarm | Night Goblin Cave Squig Swarm | L11 p.27 | 1 |  |
-| `ennemis/gobelins/gobelins-nocturnes.webp` | Gobelins nocturnes | Night Goblins | L11 p.28 | 1 |  |
-| `ennemis/gobelins/hopping-squig.webp` | Hopping Squig | Hopping Squig | L12 p.19 | 1 |  |
-| `ennemis/gobelins/les-plongeurs-funestes.webp` | Les Plongeurs funestes | The Doom Divers | L21 p.32 | 1 | plongeurs funestes gobelins (Doom Divers) |
-| `ennemis/gobelins/snotling.webp` | Snotling | Snotling | L06 p.338 | 1 |  |
-| `ennemis/gobelins/squig-des-cavernes.webp` | Squig des cavernes | Cave Squig | L06 p.329 | 1 |  |
-| `ennemis/gobelins/squigs-colossaux.webp` | Squigs colossaux | Colossal Squigs | L21 p.63 | 1 |  |
-
-### `ennemis/hommes-betes` (4)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/hommes-betes/homme-bete-du-chaos.webp` | Homme-bête du Chaos | Chaos Beastman | L21 p.84 | 1 |  |
-| `ennemis/hommes-betes/hommes-betes-de-khorne.webp` | Hommes-bêtes de Khorne | Khornate Beastmen | L23 p.105 | 1 |  |
-| `ennemis/hommes-betes/minotaure.webp` | Minotaure | Minotaur | L06 p.346 | 1 |  |
-| `ennemis/hommes-betes/razorgor.webp` | Razorgor | Razorgor | L11 p.19 | 1 |  |
-
-### `ennemis/hommes-lezards` (26)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/hommes-lezards/arcanadon.webp` | Arcanadon | Arcanadon | L07 p.178 | 1 |  |
-| `ennemis/hommes-lezards/bastiladon.webp` | Bastiladon | Bastiladon | L07 p.178 | 1 |  |
-| `ennemis/hommes-lezards/carnosaur.webp` | Carnosaur | Carnosaur | L11 p.81 | 1 |  |
-| `ennemis/hommes-lezards/carnosaure.webp` | Carnosaure | Carnosaur | L07 p.180 | 1 |  |
-| `ennemis/hommes-lezards/coatl.webp` | Coatl | Coatl | L07 p.153 | 1 |  |
-| `ennemis/hommes-lezards/cornu-one.webp` | Cornu One | Horned One | L11 p.80 | 1 |  |
-| `ennemis/hommes-lezards/garde-du-temple-saurus.webp` | Garde du temple saurus | Saurus Temple Guard | L07 p.145 | 1 |  |
-| `ennemis/hommes-lezards/kroxigor.webp` | Kroxigor | Kroxigor | L07 p.148 | 1 |  |
-| `ennemis/hommes-lezards/razordon.webp` | Razordon | Razordon | L07 p.175 | 1 |  |
-| `ennemis/hommes-lezards/rejeton-saurus-difforme.webp` | Rejeton saurus difforme | Malformed Saurus Spawn | L07 p.58 | 1 |  |
-| `ennemis/hommes-lezards/ripperdactyle.webp` | Ripperdactyle | Ripperdactyl | L07 p.176 | 1 |  |
-| `ennemis/hommes-lezards/salamandre.webp` | Salamandre | Salamander | L07 p.175 | 1 |  |
-| `ennemis/hommes-lezards/sang-froid-monture-saurienne.webp` | Sang-froid (monture saurienne) | Cold One | L07 p.174 | 1 |  |
-| `ennemis/hommes-lezards/saurien-terrifiant.webp` | Saurien terrifiant | Dread Saurian | L07 p.181 | 1 |  |
-| `ennemis/hommes-lezards/saurus.webp` | Saurus | Saurus | L07 p.143 | 1 |  |
-| `ennemis/hommes-lezards/skink.webp` | Skink | Skink | L07 p.136 | 1 |  |
-| `ennemis/hommes-lezards/skink-cameleon.webp` | Skink caméléon | Chameleon Skink | L07 p.142 | 1 |  |
-| `ennemis/hommes-lezards/slann-de-la-cinquieme-generation.webp` | Slann de la cinquième génération | Slann of the Fifth Generation | L07 p.123 | 1 |  |
-| `ennemis/hommes-lezards/slann-de-la-deuxieme-generation.webp` | Slann de la deuxième génération | Slann of the Second Generation | L07 p.124 | 1 |  |
-| `ennemis/hommes-lezards/slann-de-la-premiere-generation.webp` | Slann de la première génération | Slann of the First Generation | L07 p.124 | 1 |  |
-| `ennemis/hommes-lezards/slann-de-la-quatrieme-generation.webp` | Slann de la quatrième génération | Slann of the Fourth Generation | L07 p.123 | 1 |  |
-| `ennemis/hommes-lezards/slann-de-la-troisieme-generation.webp` | Slann de la troisième génération | Slann of the Third Generation | L07 p.124 | 1 |  |
-| `ennemis/hommes-lezards/stegadon.webp` | Stégadon | Stegadon | L07 p.177, L11 p.79 | 2 |  |
-| `ennemis/hommes-lezards/terradon.webp` | Terradon | Terradon | L07 p.176 | 1 |  |
-| `ennemis/hommes-lezards/troglodon.webp` | Troglodon | Troglodon | L07 p.180 | 1 |  |
-| `ennemis/hommes-lezards/unicorne-saurien.webp` | Unicorne saurien | Horned One | L07 p.175 | 1 |  |
-
-### `ennemis/morts-vivants` (24)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/morts-vivants/banshee.webp` | Banshee | Tomb Banshee | L06 p.342 | 1 |  |
-| `ennemis/morts-vivants/bone-hydra.webp` | Bone Hydra | Bone Hydra | L25 p.146 | 1 |  |
-| `ennemis/morts-vivants/carrion-oiseaux-morts-vivants.webp` | Carrion (oiseaux morts-vivants) | Carrion | L26 p.118 | 1 |  |
-| `ennemis/morts-vivants/cauchemar-aile.webp` | Cauchemar ailé | Winged Nightmare | L21 p.118 | 1 |  |
-| `ennemis/morts-vivants/champion-zombie.webp` | Champion zombie | Zombie Champion | L18 p.117 | 1 |  |
-| `ennemis/morts-vivants/champions-squelettes-sans-tete.webp` | Champions squelettes sans tête | Headless Skeleton Champions | L18 p.119 | 1 |  |
-| `ennemis/morts-vivants/charogne.webp` | Charogne | Carrion | L22 p.120 | 1 |  |
-| `ennemis/morts-vivants/colosse-necrofex.webp` | Colosse nécrofex | Necrofex Colossus | L21 p.64 | 1 |  |
-| `ennemis/morts-vivants/cranes-volants-de-la-mort.webp` | Crânes volants de la mort | Flying Death Skulls | L18 p.117, L21 p.118, L22 p.120 | 3 |  |
-| `ennemis/morts-vivants/cranes-volants-de-la-mort-version-renforcee.webp` | Crânes volants de la mort (version renforcée) | Flying Death-Ier Skulls | L18 p.117 | 1 |  |
-| `ennemis/morts-vivants/fantome.webp` | Fantôme | Ghost | L06 p.341 | 1 |  |
-| `ennemis/morts-vivants/ghast-des-cryptes.webp` | Ghast des cryptes | Crypt Ghast | L10 p.68 | 1 |  |
-| `ennemis/morts-vivants/homme-rapiece.webp` | Homme rapiécé | Patchwork Man | L10 p.74 | 1 |  |
-| `ennemis/morts-vivants/horreur-des-cryptes.webp` | Horreur des cryptes | Crypt Horror | L10 p.68 | 1 |  |
-| `ennemis/morts-vivants/liche-pestilentielle.webp` | Liche pestilentielle | Pestilential Liche-Thing | L19 p.157 | 1 |  |
-| `ennemis/morts-vivants/loup-funeste.webp` | Loup funeste | Dire Wolf | L06 p.341 | 1 |  |
-| `ennemis/morts-vivants/mournguls.webp` | Mournguls | Mournguls | L21 p.61 | 1 |  |
-| `ennemis/morts-vivants/restless-fantome.webp` | Restless fantôme | Restless Ghost | L24 p.34 | 1 |  |
-| `ennemis/morts-vivants/sorciere-squelette.webp` | Sorcière squelette | Skeletal Witch | L10 p.51 | 1 |  |
-| `ennemis/morts-vivants/spectre.webp` | Spectre | Spectre | L19 p.117 | 1 |  |
-| `ennemis/morts-vivants/spectre-de-cairn.webp` | Spectre de cairn | Cairn Wraith | L06 p.342 | 1 |  |
-| `ennemis/morts-vivants/spectres-de-sorciere.webp` | Spectres de sorcière | Hexwraiths | L21 p.118 | 1 |  |
-| `ennemis/morts-vivants/squelettes-sans-tete.webp` | Squelettes sans tête | Headless Skeletons | L18 p.119 | 1 |  |
-| `ennemis/morts-vivants/terreur-abyssale.webp` | Terreur abyssale | Abyssal Terror | L22 p.120 | 1 |  |
-
-### `ennemis/ogres` (2)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/ogres/goinfre-ogre.webp` | Goinfre ogre | Ogre Gorger | L16 p.83 | 1 |  |
-| `ennemis/ogres/mournfang.webp` | Mournfang | Mournfang | L12 p.19 | 1 |  |
-
-### `ennemis/orcs` (6)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/orcs/chamane-orque-sauvage.webp` | Chamane orque sauvage | Savage Orc Shaman | L07 p.182 | 1 |  |
-| `ennemis/orcs/chef-orque-sauvage.webp` | Chef orque sauvage | Savage Orc Chief | L07 p.182 | 1 |  |
-| `ennemis/orcs/de-base-noir-orc.webp` | De base noir Orc | Basic Black Orc | L12 p.11 | 1 |  |
-| `ennemis/orcs/de-base-sauvage-orc.webp` | De base sauvage Orc | Basic Savage Orc | L12 p.10 | 1 |  |
-| `ennemis/orcs/idole-renegate-de-gork-ou-mork.webp` | Idole renégate de Gork (ou Mork) | Rogue Idol of Gork (or Mork) | L16 p.86 | 1 |  |
-| `ennemis/orcs/orque-sauvage.webp` | Orque sauvage | Savage Orc | L07 p.182 | 1 |  |
-
-### `ennemis/reprouves` (8)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/reprouves/croc-jaune-cultistes.webp` | Croc-Jaune cultistes | Yellow Fang Cultists | L18 p.97 | 2 |  |
-| `ennemis/reprouves/cultiste-novice-des-crocs-jaunes.webp` | Cultiste novice des Crocs-Jaunes | Yellow Fang Junior Cultist | L22 p.62 | 1 |  |
-| `ennemis/reprouves/cultists-de-jade-sceptre-or-2.webp` | Cultists de Jade Sceptre (Or 2) | Cultists of the Jade Sceptre (Gold 2) | L24 p.66 | 1 |  |
-| `ennemis/reprouves/enfant-de-chaos.webp` | Enfant de Chaos | Child of Chaos | L21 p.20 | 1 |  |
-| `ennemis/reprouves/miliciens-khorne-cultistes-argent-1.webp` | Miliciens — Khorne cultistes (Argent 1) | Watchmen — Khorne Cultists (Silver 1) | L24 p.35 | 1 |  |
-| `ennemis/reprouves/nurgle-cultists-sorcier-argent-3.webp` | Nurgle Cultists & sorcier (Argent 3) | Nurgle Cultists & Sorcerer (Silver 3) | L24 p.52 | 1 |  |
-| `ennemis/reprouves/roi-de-la-peste.webp` | Roi de la Peste | Blightking | L22 p.77 | 1 |  |
-| `ennemis/reprouves/wayward-moon-cultiste.webp` | Wayward Moon cultiste | Wayward Moon Cultist | L11 p.70 | 1 |  |
-
-### `ennemis/skavens` (19)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/skavens/briseur-d-os-rat-ogre.webp` | Briseur d’os, rat-ogre | Rat Ogre Bonebreaker | L22 p.52 | 1 |  |
-| `ennemis/skavens/clan-moulder-packmaster.webp` | Clan Moulder Packmaster | Clan Moulder Packmaster | L11 p.41 | 1 |  |
-| `ennemis/skavens/clan-moulder-unique-experiment.webp` | Clan Moulder Unique Experiment | Clan Moulder Unique Experiment | L11 p.41 | 1 |  |
-| `ennemis/skavens/clan-skryre-prototype.webp` | Clan Skryre ‘prototype’ | Clan Skryre ‘prototype’ | L11 p.95 | 1 |  |
-| `ennemis/skavens/clan-skryre-warlock-engineer.webp` | Clan Skryre Warlock Engineer | Clan Skryre Warlock Engineer | L11 p.95 | 1 |  |
-| `ennemis/skavens/gardes-du-palanquin.webp` | Gardes du palanquin | Palanquin Guards | L22 p.14 | 1 |  |
-| `ennemis/skavens/globadiers-de-vent-empoisonne-laches.webp` | Globadiers de vent empoisonné lâches | Turntail Poisoned Wind Globadiers | L22 p.31 | 1 |  |
-| `ennemis/skavens/grand-rat-de-la-verole.webp` | Grand rat de la vérole | Great Pox Rat | L22 p.50 | 1 |  |
-| `ennemis/skavens/gris-voyant-skaven.webp` | Gris voyant skaven | Skaven Grey Seer | L18 p.97 | 2 |  |
-| `ennemis/skavens/horreur-de-couvee.webp` | Horreur de couvée | Brood Horror | L22 p.51 | 1 |  |
-| `ennemis/skavens/infiltrateur-du-clan-eshin.webp` | Infiltrateur du clan Eshin | Clan Eshin Infiltrator | L22 p.18 | 1 |  |
-| `ennemis/skavens/loup-rat.webp` | Loup Rat | Wolf Rat | L11 p.41 | 1 |  |
-| `ennemis/skavens/maitre-de-meute.webp` | Maître de meute | Packmaster | L22 p.28 | 1 |  |
-| `ennemis/skavens/rat-de-la-peste.webp` | Rat de la peste | Plague Rat | L16 p.90, L22 p.50 | 2 |  |
-| `ennemis/skavens/rat-loup.webp` | Rat-loup | Wolf Rat | L22 p.50 | 1 |  |
-| `ennemis/skavens/rat-ogre.webp` | Rat-ogre | Rat Ogre | L06 p.352 | 1 |  |
-| `ennemis/skavens/rat-ogre-bonebreaker.webp` | Rat Ogre Bonebreaker | Rat Ogre Bonebreaker | L11 p.41 | 1 |  |
-| `ennemis/skavens/skaven-d-elite-des-vermines-de-la-mort.webp` | Skaven d’élite des Vermines de la mort | Deathvermin Stormvermin | L22 p.22 | 1 |  |
-| `ennemis/skavens/vermine-de-choc.webp` | Vermine de choc | Stormvermin | L06 p.352 | 1 |  |
-
-### `ennemis/vampires` (1)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `ennemis/vampires/varghulf.webp` | Varghulf | Varghulf | L06 p.344 | 1 |  |
-
-### `monstres` (56)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `monstres/aigle-geant.webp` | Aigle géant | Great Eagle | L11 p.63, L14 p.82, L22 p.73 | 3 |  |
-| `monstres/amoebae.webp` | Amoebae | Amoebae | L11 p.45 | 1 |  |
-| `monstres/amphisbaena.webp` | Amphisbaena | Amphisbaena | L11 p.47 | 1 |  |
-| `monstres/arachnarok-araignee.webp` | Arachnarok araignée | Arachnarok Spider | L11 p.13 | 1 |  |
-| `monstres/bete-des-marais.webp` | Bête des marais | Fenbeast | L06 p.331, L17 p.179 | 2 |  |
 | `monstres/carcasse-de-mouton.webp` | Carcasse de mouton | Sheep Carcass | L21 p.25 | 1 |  |
 | `monstres/carcasse-de-porc.webp` | Carcasse de porc | Pig Carcass | L21 p.25 | 1 |  |
 | `monstres/carcasse-de-vache.webp` | Carcasse de vache | Cow Carcass | L21 p.25 | 1 |  |
 | `monstres/carrosse-anime.webp` | Carrosse animé | Animated Coach | L21 p.24 | 1 |  |
-| `monstres/chimera.webp` | Chimera | Chimera | L11 p.67 | 1 |  |
-| `monstres/cockatrice.webp` | Cockatrice | Cockatrice | L11 p.65 | 1 |  |
-| `monstres/creatures-magiques-elementaire-incarne-de-mort.webp` | Créatures magiques — Élémentaire incarné de mort | Magical Creatures — Incarnate Elemental of Death | L17 p.175 | 1 |  |
-| `monstres/de-base-commun-troll.webp` | De base commun troll | Basic Common Troll | L12 p.15 | 1 |  |
-| `monstres/demigriffon.webp` | Demigriffon | Demigryph | L06 p.329 | 1 |  |
-| `monstres/dragon-de-magma.webp` | Dragon de magma | Magma Dragon | L16 p.84 | 1 |  |
-| `monstres/dragon-de-tessons.webp` | Dragon de tessons | Shard Dragon | L11 p.90 | 1 |  |
-| `monstres/dragon-des-mers.webp` | Dragon des mers | Sea Dragon | L09 p.50 | 1 |  |
-| `monstres/dragons-des-forets.webp` | Dragons des forêts | Forest Dragons | L11 p.30 | 1 |  |
-| `monstres/dread-maw.webp` | Dread Maw | Dread Maw | L11 p.23 | 1 |  |
-| `monstres/elementaire-de-mer.webp` | Élémentaire de mer | Sea Elemental | L25 p.142 | 1 |  |
-| `monstres/elementaire-incarne-de-betes.webp` | Élémentaire incarné de bêtes | Incarnate Elemental of Beasts | L17 p.176 | 1 |  |
-| `monstres/elementaire-incarne-de-feu.webp` | Élémentaire incarné de feu | Incarnate Elemental of Fire | L17 p.174 | 1 |  |
-| `monstres/ettins-maudits.webp` | Ettins maudits | Curs'd Ettins | L21 p.62 | 1 |  |
-| `monstres/gargantuan.webp` | Gargantuan | Gargantuan | L25 p.143 | 1 |  |
-| `monstres/geant-loup.webp` | Géant loup | Giant Wolf | L12 p.19 | 1 |  |
-| `monstres/golem-construct.webp` | Golem (construct) | Construct | L17 p.30 | 1 |  |
-| `monstres/kraken.webp` | Kraken | Kraken | L14 p.82 | 1 |  |
-| `monstres/leech-wyrm.webp` | Leech Wyrm | Leech Wyrm | L25 p.146 | 1 |  |
 | `monstres/les-betes-de-la-ferme.webp` | Les bêtes de la ferme | The Farmyard Beasts | L23 p.106 | 1 |  |
-| `monstres/leviathan.webp` | Léviathan | Leviathan | L11 p.85 | 1 |  |
-| `monstres/leviathan-a-orbes.webp` | Léviathan à orbes | Orb Leviathan | L25 p.147 | 1 |  |
-| `monstres/leviathan-noir.webp` | Léviathan noir | Black Leviathan | L25 p.147 | 1 |  |
-| `monstres/manticore.webp` | Manticore | Manticore | L06 p.333 | 1 |  |
-| `monstres/merwyrm.webp` | Merwyrm | Merwyrm | L11 p.88, L25 p.145 | 2 |  |
 | `monstres/mobilier-anime-grand.webp` | Mobilier animé, grand | Animated Furniture, Large | L21 p.24 | 1 |  |
 | `monstres/mobilier-anime-moyen.webp` | Mobilier animé, moyen | Animated Furniture, Medium | L21 p.24 | 1 |  |
 | `monstres/mobilier-anime-petit.webp` | Mobilier animé, petit | Animated Furniture, Small | L21 p.24 | 1 |  |
-| `monstres/monture-demigriffon.webp` | Monture demigriffon | Demigryph Mount | L13 p.109 | 1 |  |
-| `monstres/naiades.webp` | Naïades | Naiads | L26 p.88 | 1 |  |
-| `monstres/pegase.webp` | Pégase | Pegasus | L06 p.334 | 1 |  |
-| `monstres/phenix-coeur-de-givre.webp` | Phénix cœur-de-givre | Frostheart Phoenix | L14 p.84 | 1 |  |
-| `monstres/phenix-fleche-de-flamme.webp` | Phénix flèche-de-flamme | Flamespyre Phoenix | L14 p.83 | 1 |  |
-| `monstres/pieuvre-des-tourbieres.webp` | Pieuvre des tourbières | Bog Octopus | L06 p.328 | 1 |  |
-| `monstres/preyton.webp` | Preyton | Preyton | L11 p.61 | 1 |  |
 | `monstres/purple-skullback-araignee.webp` | Purple Skullback araignée | Purple Skullback Spider | L12 p.99 | 1 |  |
-| `monstres/roc-plume-vive.webp` | Roc plume-vive | Swiftfeather Roc | L07 p.89, L14 p.47 | 2 |  |
 | `monstres/sangsues-geantes.webp` | Sangsues géantes | Giant Leeches | L26 p.86 | 1 |  |
-| `monstres/siren.webp` | Siren | Siren | L11 p.86 | 1 |  |
-| `monstres/skin-loup.webp` | Skin loup | Skin Wolf | L11 p.70 | 1 |  |
-| `monstres/syreen.webp` | Syreen | Syreen | L25 p.145 | 1 |  |
-| `monstres/things-from-dead-wood.webp` | Things From Dead Wood | Things From the Dead Wood | L11 p.37 | 1 |  |
-| `monstres/triton.webp` | Triton | Triton | L25 p.149 | 1 |  |
-| `monstres/troll.webp` | Troll | Troll | L06 p.335 | 1 |  |
-| `monstres/troll-des-rivieres-megere.webp` | Troll des rivières mégère | River Troll Hag | L11 p.49 | 1 |  |
 | `monstres/ver-aveugle-pale.webp` | Ver aveugle pâle | Pallid Blindwyrm | L07 p.169 | 1 |  |
-| `monstres/wyvern.webp` | Wyvern | Wyvern | L11 p.32 | 1 |  |
-
-### `peuples/elfes` (3)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `peuples/elfes/elfe-haut-et-sylvain.webp` | Elfe (haut et sylvain) | High Elf or Wood Elf | L06 p.320 | 1 |  |
-| `peuples/elfes/rejeton-de-mathlann.webp` | Rejeton de Mathlann | Scion of Mathlann | L14 p.31 | 1 |  |
-| `peuples/elfes/rejeton-de-mathlann-sentinelle.webp` | Rejeton de Mathlann — Sentinelle | Scion of Mathlann Sentinel | L14 p.31 | 1 |  |
-
-### `peuples/gnomes` (1)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `peuples/gnomes/gnome.webp` | Gnome | Gnome | L06 p.323 | 1 |  |
-
-### `peuples/halflings` (2)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `peuples/halflings/halfling.webp` | Halfling | Halfling | L06 p.319 | 1 |  |
-| `peuples/halflings/halfling-voleur.webp` | Halfling voleur | Halfling Thief | L06 p.322 | 1 |  |
-
-### `peuples/humains` (76)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `peuples/humains/agitateur-bronze-2.webp` | Agitateur — Bronze 2 | Agitator — Brass 2 | L21 p.22 | 1 |  |
-| `peuples/humains/altdorfois-meurtrier.webp` | Altdorfois meurtrier | Murderous Altdorfer | L21 p.22 | 1 |  |
-| `peuples/humains/ancien-interrogateur.webp` | Ancien interrogateur | Former Interrogator | L22 p.94 | 1 |  |
-| `peuples/humains/apprenti-artisan-humain-ancien-serviteur-bronze-2.webp` | Apprenti artisan humain, ancien serviteur (Bronze 2) | Human Apprentice Artisan, Former Servant (Brass 2) | L26 p.107 | 1 |  |
-| `peuples/humains/assassins-argent-1.webp` | Assassins (Argent 1) | Assassins (Silver 1) | L24 p.51 | 1 |  |
-| `peuples/humains/athlete.webp` | Athlete | Athlete | L19 p.143 | 1 |  |
-| `peuples/humains/batelier-humain-argent-2.webp` | Batelier humain (Argent 2) | Human Boatman (Silver 2) | L26 p.106 | 1 |  |
-| `peuples/humains/boatmen-argent-2.webp` | Boatmen (Argent 2) | Boatmen (Silver 2) | L24 p.21 | 1 |  |
-| `peuples/humains/brute.webp` | Brute | Brute | L19 p.143 | 1 |  |
-| `peuples/humains/cannon-et-mortar-students-etudiant-engineers-bronze-4.webp` | Cannon et Mortar Students — Étudiant Engineers (Bronze 4) | Cannon and Mortar Students — Student Engineers (Brass 4) | L24 p.50 | 1 |  |
-| `peuples/humains/charlatan.webp` | Charlatan | Charlatan | L04 p.49 | 1 |  |
-| `peuples/humains/chasseur-de-primes-type.webp` | Chasseur de primes type | A Typical Bounty Hunter | L04 p.108 | 1 |  |
-| `peuples/humains/chef-de-hors-la-loi.webp` | Chef de hors-la-loi | Outlaw Chief | L04 p.103 | 1 |  |
-| `peuples/humains/cochers-argent-2.webp` | Cochers (Argent 2) | Coachmen (Silver 2) | L24 p.21 | 1 |  |
-| `peuples/humains/commandant-de-la-frontiere-sergent-de-cavalerie-humain-or-1.webp` | Commandant de la frontière — Sergent de cavalerie humain (Or 1) | Frontier Commander — Human Cavalry Sergeant (Gold 1) | L26 p.111 | 1 |  |
-| `peuples/humains/courtier-experimente-maitre-marchand-humain-or-1.webp` | Courtier expérimenté — Maître marchand humain (Or 1) | Experienced Broker — Human Master Merchant (Gold 1) | L26 p.109 | 1 |  |
-| `peuples/humains/docteur-argent-5.webp` | Docteur (Argent 5) | Doktor — Silver 5 | L13 p.114 | 1 |  |
-| `peuples/humains/doktor-argent-5.webp` | Doktor — Argent 5 | Doktor — Silver 5 | L25 p.127 | 1 |  |
-| `peuples/humains/duchesse-agee-magnat-humain-or-5.webp` | Duchesse âgée — Magnat humain (Or 5) | Elderly Duchess — Human Magnate (Gold 5) | L26 p.109 | 1 |  |
-| `peuples/humains/eclaireur-local-argent-1.webp` | Éclaireur local (Argent 1) | Local Scout — Silver 1 | L13 p.113 | 1 |  |
-| `peuples/humains/faiseur-d-affaires-vif-d-esprit-marchand-humain-argent-5.webp` | Faiseur d’affaires vif d’esprit — Marchand humain (Argent 5) | Quick-Witted Dealmaker — Human Merchant (Silver 5) | L26 p.109 | 1 |  |
-| `peuples/humains/faussaire.webp` | Faussaire | Forger | L04 p.47 | 1 |  |
-| `peuples/humains/fleches-noires-hors-la-loi-bronze-2.webp` | Flèches noires — Hors-la-loi (Bronze 2) | Black Arrows — Outlaws (Brass 2) | L23 p.99 | 1 |  |
-| `peuples/humains/garde-noire-de-morr-chevalier.webp` | Garde noire de Morr (chevalier) | Black Guard of Morr (Knight) | L04 p.34 | 1 |  |
-| `peuples/humains/gardes.webp` | Gardes | Guards | L21 p.79 | 1 |  |
-| `peuples/humains/gardes-du-corps-a-foison-sentinelles-humaines-argent-1.webp` | Gardes du corps à foison — Sentinelles humaines (Argent 1) | Bodyguards Aplenty — Human Sentries (Silver 1) | L23 p.96 | 1 |  |
-| `peuples/humains/gardes-du-corps-et-men-at-arms-argent-3.webp` | Gardes du corps et Men-at-Arms (Argent 3) | Bodyguards and Men-at-Arms (Silver 3) | L24 p.18 | 1 |  |
-| `peuples/humains/general-de-salon-conseiller-humain-ancien-officier-or-1.webp` | Général de salon — Conseiller humain, ancien officier (Or 1) | Armchair General — Human Counsellor, Former Officer (Gold 1) | L26 p.111 | 1 |  |
-| `peuples/humains/handmaids-et-serviteurs-argent-3.webp` | Handmaids et serviteurs (Argent 3) | Handmaids and Servants (Silver 3) | L24 p.18 | 1 |  |
-| `peuples/humains/homme-du-guet.webp` | Homme du guet | Watchman | L04 p.93 | 1 |  |
-| `peuples/humains/hors-la-loi.webp` | Hors-la-loi | Outlaw | L04 p.103 | 1 |  |
-| `peuples/humains/hubkind-s-mob-bronze-4.webp` | Hubkind's Mob (Bronze 4) | Hubkind's Mob (Brass 4) | L24 p.53 | 1 |  |
-| `peuples/humains/huffer-argent-1.webp` | Huffer — Argent 1 | Huffer — Silver 1 | L25 p.127 | 1 |  |
-| `peuples/humains/humain.webp` | Humain | Human | L06 p.319 | 1 |  |
-| `peuples/humains/jeune-loup-rejeton-humain-or-1.webp` | Jeune loup — Rejeton humain (Or 1) | Young Blood — Human Scion (Gold 1) | L26 p.110 | 1 |  |
-| `peuples/humains/jeune-noble-or-1.webp` | Jeune noble (Or 1) | Young Noble (Gold 1) | L24 p.53 | 1 |  |
-| `peuples/humains/kappan-s-racketeers-voyous-bronze-3.webp` | Kappan's Racketeers — Voyous (Bronze 3) | Kappan's Racketeers — Thugs (Brass 3) | L24 p.33 | 1 |  |
-| `peuples/humains/la-sentinelle-de-la-milice-ancien-villageois-argent-1.webp` | La sentinelle de la milice, ancien villageois (Argent 1) | The Militia Sentry, Former Villager (Silver 1) | L18 p.116 | 1 |  |
-| `peuples/humains/magistrates-judges-or-2.webp` | Magistrates — Judges (Or 2) | Magistrates — Judges (Gold 2) | L24 p.35 | 1 |  |
-| `peuples/humains/maquerelle.webp` | Maquerelle | Bawd | L04 p.48 | 1 |  |
-| `peuples/humains/marchand-humain.webp` | Marchand humain | Human Merchant | L06 p.321 | 1 |  |
-| `peuples/humains/marin-argent-3.webp` | Marin — Argent 3 | Sailor — Silver 3 | L25 p.127 | 1 |  |
-| `peuples/humains/matelot-fluvial-humain-argent-1.webp` | Matelot fluvial humain (Argent 1) | Human Boat-Hand (Silver 1) | L26 p.106 | 1 |  |
-| `peuples/humains/mercenaire-aguerri-argent-3.webp` | Mercenaire aguerri (Argent 3) | Seasoned Mercenary — Silver 3 | L13 p.113, L25 p.127 | 2 |  |
-| `peuples/humains/milicien-humain.webp` | Milicien humain | Human Watchman | L06 p.321 | 1 |  |
-| `peuples/humains/musicians-argent-1.webp` | Musicians (Argent 1) | Musicians (Silver 1) | L24 p.49 | 1 |  |
-| `peuples/humains/naufrageur-humain-typique.webp` | Naufrageur humain typique | Typical Human Wrecker | L26 p.80 | 1 |  |
-| `peuples/humains/negociant-parvenu-et-odieux-marchand-humain-argent-5.webp` | Négociant parvenu et odieux — Marchand humain (Argent 5) | Self Made, Obnoxious Trader — Human Merchant (Silver 5) | L26 p.108 | 1 |  |
-| `peuples/humains/noble-serviteurs-or-2.webp` | Noble serviteurs (Or 2) | Noble Servants (Gold 2) | L24 p.48 | 1 |  |
-| `peuples/humains/novice-argent-1.webp` | Novice — Argent 1 | Landsman — Silver 1 | L25 p.127 | 1 |  |
-| `peuples/humains/nulner-miliciens-argent-1.webp` | Nulner miliciens (Argent 1) | Nulner Watchmen (Silver 1) | L24 p.53 | 1 |  |
-| `peuples/humains/officier-argent-5.webp` | Officier — Argent 5 | Officer — Silver 5 | L25 p.127 | 1 |  |
-| `peuples/humains/operagoer-argent-3.webp` | Operagoer (Argent 3) | Operagoer (Silver 3) | L24 p.53 | 1 |  |
-| `peuples/humains/palace-gardes-or-2.webp` | Palace gardes (Or 2) | Palace Guards (Gold 2) | L24 p.49 | 1 |  |
-| `peuples/humains/performers-argent-1.webp` | Performers (Argent 1) | Performers (Silver 1) | L24 p.49 | 1 |  |
-| `peuples/humains/porteur-argent-1.webp` | Porteur (Argent 1) | Porter — Silver 1 | L13 p.114 | 1 |  |
-| `peuples/humains/proprietaire-de-planque-citadin.webp` | Propriétaire de planque (citadin) | Safe House Owner (Townsman) | L04 p.49 | 1 |  |
-| `peuples/humains/racketteur.webp` | Racketteur | Racketeer | L04 p.48 | 1 |  |
-| `peuples/humains/receleur.webp` | Receleur | Fence | L04 p.47 | 1 |  |
-| `peuples/humains/scribe-argent-2.webp` | Scribe (Argent 2) | Scribe — Silver 2 | L13 p.114 | 1 |  |
-| `peuples/humains/sergent-de-la-garde.webp` | Sergent de la garde | Guard Sergent | L21 p.79 | 1 |  |
-| `peuples/humains/sergent-du-guet.webp` | Sergent du guet | Watch Sergeant | L04 p.93 | 1 |  |
-| `peuples/humains/sergent-du-guet-argent-1.webp` | Sergent du guet (Argent 1) | Watch Sergeant (Silver 1) | L24 p.53 | 1 |  |
-| `peuples/humains/servants-cleaners-et-similar-menials-bronze-3.webp` | Servants, Cleaners, et Similar — Menials (Bronze 3) | Servants, Cleaners, and Similar — Menials (Brass 3) | L24 p.22 | 1 |  |
-| `peuples/humains/serviteur-humain-argent-3.webp` | Serviteur humain (Argent 3) | Human Servant (Silver 3) | L26 p.107 | 1 |  |
-| `peuples/humains/serviteurs-argent-1.webp` | Serviteurs (Argent 1) | Servants (Silver 1) | L24 p.49 | 1 |  |
-| `peuples/humains/soeur-type-soeur-shallya-bronze-4.webp` | Sœur type — Sœur (Shallya) (Bronze 4) | Typical Sister — Nun (Shallya) (Brass 4) | L01 p.76 | 1 |  |
-| `peuples/humains/soldat.webp` | Soldat | Soldier | L21 p.42 | 1 |  |
-| `peuples/humains/soldat-de-l-avant-garde.webp` | Soldat de l’avant-garde | Vanguard Soldier | L21 p.42 | 1 |  |
-| `peuples/humains/sorcier.webp` | Sorcier | Wizard | L18 p.118, L22 p.119 | 2 |  |
-| `peuples/humains/stagehands-argent-1.webp` | Stagehands (Argent 1) | Stagehands (Silver 1) | L24 p.49 | 1 |  |
-| `peuples/humains/villageois-bronze-4.webp` | Villageois (Bronze 4) | Villager (Brass 4) | L18 p.114 | 1 |  |
-| `peuples/humains/villageois-typique-villageois-bronze-3.webp` | Villageois typique — Villageois (Bronze 3) | Typical Villager — Villager (Brass 3) | L18 p.116 | 1 |  |
-| `peuples/humains/voyou-des-quais.webp` | Voyou des quais | Dockside Thug | L09 p.86 | 1 |  |
-| `peuples/humains/voyou-humain.webp` | Voyou humain | Human Thug | L06 p.322 | 1 |  |
-| `peuples/humains/voyous.webp` | Voyous | Thugs | L22 p.95 | 1 |  |
-
-### `peuples/nains` (2)
-
-| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `peuples/nains/joueur-nain-argent-2.webp` | Joueur nain (Argent 2) | Dwarf Gambler (Silver 2) | L26 p.110 | 1 |  |
-| `peuples/nains/nain.webp` | Nain | Dwarf | L06 p.320, L19 p.143 | 2 |  |
 
 ## Individus nommés
 
@@ -502,30 +92,6 @@ PNJ de scénario, monstres uniques et PJ prétirés, par livre de première appa
 | `pnj/l04/gunna-von-sperren-reine-des-contrebandiers.webp` | Gunna von Sperren — Reine des contrebandiers | Gunna von Sperren — Smuggler King | L04 p.65 | 1 |  |
 | `pnj/l04/pere-pedragar-pretre-de-taal.webp` | Père Pedragar, prêtre de Taal | Father Pedragar, Priest of Taal | L04 p.83 | 1 |  |
 | `pnj/l04/brunner.webp` | Brunner | Brunner | L04 p.111 | 1 |  |
-
-### L06 — Livre de base V5 (1)
-
-| Fichier proposé | Nom français | Nom anglais | Pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `pnj/l06/ungrakk-seigneur-bete-gor-commandant.webp` | Ungrakk — Seigneur-bête gor (Commandant) | Ungrakk — Gor Beastlord (Commander) | L06 p.355 | 1 |  |
-
-### L07 — Lustria (13)
-
-| Fichier proposé | Nom français | Nom anglais | Pages | Profils | Note |
-| --- | --- | --- | --- | ---: | --- |
-| `pnj/l07/adella-aux-mille-bouches.webp` | Adella aux Mille Bouches | Adella of the Thousand Mouths | L07 p.42 | 1 |  |
-| `pnj/l07/soren-hoarder-vitki.webp` | Soren Hoarder — Vitki | Soren Hoarder — Vitki | L07 p.44 | 1 |  |
-| `pnj/l07/uthl-kritchnaak-heraut-exalte-de-nurgle.webp` | Uthl’Kritchnaak — Héraut exalté de Nurgle | Uthl’Kritchnaak — Exalted Herald of Nurgle | L07 p.61 | 1 |  |
-| `pnj/l07/seigneur-skrolk-seigneur-de-la-peste-skaven.webp` | Seigneur Skrolk — Seigneur de la peste skaven | Lord Skrolk — Skaven Plaguelord | L07 p.62 | 1 |  |
-| `pnj/l07/black-jens-chancelier-goule.webp` | Black Jens — Chancelier goule | Black Jens — Ghoul Chancellor | L07 p.67 | 1 |  |
-| `pnj/l07/luthor-harkon-vampire-archi-grand-commodore-et-empereur-autoproclame.webp` | Luthor Harkon — Vampire archi-grand — Commodore et empereur autoproclamé | Luthor Harkon — Vampire Arch-Grand — Commodore and Self-Declared Emperor | L07 p.73 | 1 |  |
-| `pnj/l07/l-epouse-de-la-saumure-sirene-et-sorciere.webp` | L’Épouse de la saumure — Sirène et sorcière | The Brine Wife — Syreen and Witch | L07 p.75 | 1 |  |
-| `pnj/l07/seigneur-finrian.webp` | Seigneur Finrian | Lord Finrian | L07 p.87 | 1 |  |
-| `pnj/l07/lokhir-fellheart.webp` | Lokhir Fellheart | Lokhir Fellheart | L07 p.90 | 1 |  |
-| `pnj/l07/tzku-ta.webp` | Tzku’Ta | Tzku’Ta | L07 p.113 | 1 |  |
-| `pnj/l07/anomoq-pretre-skink-de-sotek.webp` | Anomoq — Prêtre skink de Sotek | Anomoq — Skink Priest of Sotek | L07 p.141 | 1 |  |
-| `pnj/l07/crotaz-l-veteran-balafre.webp` | Crotaz’L, vétéran balafré | Crotaz’L, Scar Veteran | L07 p.147 | 1 |  |
-| `pnj/l07/tlat-l-l-enigme-protecteur-coatl.webp` | Tlat’L l’Énigme, protecteur coatl | Tlat’L the Enigma, Coatl Protector | L07 p.155 | 1 |  |
 
 ### L09 — Temple of Spite (22)
 
@@ -699,58 +265,16 @@ PNJ de scénario, monstres uniques et PJ prétirés, par livre de première appa
 | `pnj/l17/xirat-p-celui-qui-lit.webp` | Xirat’P — Celui qui lit | Xirat’P – the One Who Reads | L17 p.213 | 1 |  |
 | `pnj/l17/mona-mimn-matriarche-fimir.webp` | Mòna Mimn — Matriarche fimir | Mòna Mimn — Fimir Matriarch | L17 p.216 | 1 |  |
 
-### L18 — Power Behind the Throne Companion (14)
+### L18 — Power Behind the Throne Companion (1)
 
 | Fichier proposé | Nom français | Nom anglais | Pages | Profils | Note |
 | --- | --- | --- | --- | ---: | --- |
-| `pnj/l18/sascha-rothbert-procureur-humain-argent-1.webp` | Sascha Rothbert — Procureur humain (Argent 1) | Sascha Rothbert — Human Procurer (Silver 1) | L18 p.53 | 1 |  |
-| `pnj/l18/hausmeister-breugal-gouverneur-humain-ancien-conseiller-or-3.webp` | Hausmeister Breugal — Gouverneur humain, ancien conseiller (Or 3) | Hausmeister Breugal — Human Governor, Former Advisor (Gold 3) | L18 p.56 | 1 |  |
-| `pnj/l18/nastassia-maitre-espion-humain-or-4.webp` | Nastassia — Maître espion humain (Or 4) | Nastassia — Human Spymaster (Gold 4) | L18 p.60 | 1 |  |
-| `pnj/l18/alfric-half-nose-anvilbreaker-receleur-nain-argent-2.webp` | Alfric `Half-Nose' Anvilbreaker — Receleur nain (Argent 2) | Alfric `Half-Nose' Anvilbreaker — Dwarf Fence (Silver 2) | L18 p.63, L19 p.39 | 2 |  |
-| `pnj/l18/thognar-aide-nain-argent-2.webp` | Thognar — Aide nain (Argent 2) | Thognar — Dwarf Aide (Silver 2) | L18 p.66 | 1 |  |
-| `pnj/l18/edel-mueller-grande-pretresse-humain-or-1.webp` | Edel Mueller — Grande prêtresse humain (Or 1) | Edel Mueller — Human High Priestess (Gold 1) | L18 p.68 | 1 |  |
-| `pnj/l18/isolde-begegnen-grande-pretresse-humain-or-1.webp` | Isolde Begegnen — Grande prêtresse humain (Or 1) | Isolde Begegnen — Human High Priestess (Gold 1) | L18 p.71 | 1 |  |
-| `pnj/l18/brunhilde-klaglich-maitre-espion-humain-or-4.webp` | Brunhilde Klaglich — Maître espion humain (Or 4) | Brunhilde Klaglich — Human Spymaster (Gold 4) | L18 p.74 | 1 |  |
-| `pnj/l18/peter-tavelli-croc-jaune-cultiste-bronze-4.webp` | Peter Tavelli — Croc-Jaune cultiste (Bronze 4) | Peter Tavelli — Yellow Fang Cultist (Brass 4) | L18 p.96 | 1 |  |
-| `pnj/l18/tigrati-head-parvisch-cultiste-bronze-2.webp` | Tigrati `Head' Parvisch — Cultiste (Bronze 2) | Tigrati `Head' Parvisch — Cultist (Brass 2) | L18 p.96 | 1 |  |
-| `pnj/l18/henri-phillippe-rocheteau-doyen-de-village-humain-ancien-marchand-argent-5.webp` | Henri-Phillippe Rocheteau — Doyen de village humain, ancien marchand (Argent 5) | Henri-Phillippe Rocheteau — Human Village Elder, Former Merchant (Silver 5) | L18 p.114 | 1 |  |
 | `pnj/l18/isolde-gudhoffen-villageois-bronze-3.webp` | Isolde Gudhoffen — Villageois (Bronze 3) | Isolde Gudhoffen — Villager (Brass 3) | L18 p.115 | 1 |  |
-| `pnj/l18/parzival-tristan-aschaffenberg-noble-ancien-soldat-argent-5.webp` | Parzival Tristan Aschaffenberg — Noble, ancien soldat (Argent 5*) | Parzival Tristan Aschaffenberg Noble, Former Soldier (Silver 5*) | L18 p.115 | 1 |  |
-| `pnj/l18/wuder-lechart-idiot-du-village-bronze-0.webp` | Wuder Lechart — Idiot du village (Bronze 0) | Wuder Lechart — Village Fool (Brass 0) | L18 p.116 | 1 |  |
 
-### L19 — Middenheim: City of the White Wolf (33)
+### L19 — Middenheim: City of the White Wolf (4)
 
 | Fichier proposé | Nom français | Nom anglais | Pages | Profils | Note |
 | --- | --- | --- | --- | ---: | --- |
-| `pnj/l19/sergent-wereburga-krotpreffer-garde-d-honneur-humain-argent-3.webp` | Sergent Wereburga Krotpreffer — Garde d’honneur humain (Argent 3) | Sergeant Wereburga Krotpreffer — Human Honour Guard (Silver 3) | L19 p.32 | 1 |  |
-| `pnj/l19/sergent-wolfgard-hohmann-garde-d-honneur-humain-argent-3.webp` | Sergent Wolfgard Hohmann — Garde d’honneur humain (Argent 3) | Sergeant Wolfgard Hohmann — Human Honour Guard (Silver 3) | L19 p.32 | 1 |  |
-| `pnj/l19/capitaine-moritz-valgeir-chevalier-humain-ancien-sergent-argent-5.webp` | Capitaine Moritz Valgeir — Chevalier humain, ancien sergent (Argent 5) | Captain Moritz Valgeir — Human Knight, Former Sergeant (Silver 5) | L19 p.52 | 1 |  |
-| `pnj/l19/wulfric-tore-marchand-humain-argent-5.webp` | Wulfric Tore — Marchand humain (Argent 5) | Wulfric Tore — Human Merchant (Silver 5) | L19 p.52 | 1 |  |
-| `pnj/l19/mote-yarrow-le-fetchling.webp` | Mote Yarrow le Fetchling | Mote Yarrow the Fetchling | L19 p.67 | 1 |  |
-| `pnj/l19/yanni-weber-maitre-sorcier-humain-or-1.webp` | Yanni Weber — Maître sorcier humain (Or 1) | Yanni Weber — Human Master Wizard (Gold 1) | L19 p.67 | 1 |  |
-| `pnj/l19/marta-gerbenshreiber-huissier-humain-argent-5.webp` | Marta Gerbenshreiber — Huissier humain (Argent 5) | Marta Gerbenshreiber — Human Bailiff (Silver 5) | L19 p.72 | 1 |  |
-| `pnj/l19/stefan-hochen-docteur-humain-argent-5.webp` | Stefan Hochen — Docteur humain (Argent 5) | Stefan Hochen — Human Doktor (Silver 5) | L19 p.72 | 1 |  |
-| `pnj/l19/johen-sorciere-humaine-bronze-2.webp` | Johen — Sorcière humaine (Bronze 2) | Johen — Human Witch (Brass 2) | L19 p.78 | 1 |  |
-| `pnj/l19/waldtraud-blass-maitre-apothicaire-humain-ancien-apprenti-artisan-argent-3.webp` | Waldtraud Blass — Maître apothicaire humain, ancien apprenti artisan (Argent 3) | Waldtraud Blass — Human Master Apothecary, Former Apprentice Artisan (Silver 3) | L19 p.78 | 1 |  |
-| `pnj/l19/ritta-escroc-humain-argent-2.webp` | Ritta — Escroc humain (Argent 2) | Ritta — Human Con Artist (Silver 2) | L19 p.85 | 1 |  |
-| `pnj/l19/emmille-munzstatter-artisan-humain-argent-1.webp` | Emmille Münzstätter — Artisan humain (Argent 1) | Emmille Münzstätter — Human Artisan (Silver 1) | L19 p.89 | 1 |  |
-| `pnj/l19/wulfrum-viert-intendant-humain-or-1.webp` | Wulfrum Viert — Intendant humain (Or 1) | Wulfrum Viert — Human Steward (Gold 1) | L19 p.89 | 1 |  |
-| `pnj/l19/agna-lottrisdottir-envoye-nain-argent-4.webp` | Agna Lottrisdottir — Envoyé nain (Argent 4) | Agna Lottrisdottir — Dwarf Envoy (Silver 4) | L19 p.95 | 1 |  |
-| `pnj/l19/helmut-beckenbauer-chef-de-bande-humain-argent-3.webp` | Helmut Beckenbauer — Chef de bande humain (Argent 3) | Helmut Beckenbauer — Human Gang Boss (Silver 3) | L19 p.95 | 1 |  |
-| `pnj/l19/frere-bengt-pretre-humain-argent-1.webp` | Frère Bengt — Prêtre humain (Argent 1) | Brother Bengt — Human Priest (Silver 1) | L19 p.100 | 1 |  |
-| `pnj/l19/walpurga-wurklich-agitateur-humain-bronze-2.webp` | Walpurga Wurklich — Agitateur humain (Bronze 2) | Walpurga Wurklich — Human Agitator (Brass 2) | L19 p.100 | 1 |  |
-| `pnj/l19/andrea-bruhn-conseiller-municipal-humain-argent-5.webp` | Andrea Bruhn — Conseiller municipal humain (Argent 5) | Andrea Bruhn — Human Town Councillor (Silver 5) | L19 p.106 | 1 |  |
-| `pnj/l19/grand-vizir-bhar-necromancien-argent-3.webp` | Grand Vizir Bhar — Nécromancien (Argent 3) | Grand Vizier Bhar — Necromancer (Silver 3) | L19 p.106 | 1 |  |
-| `pnj/l19/chatelain-chef-de-guerre-gnawretch-skrray.webp` | Châtelain-chef de guerre Gnawretch Skrray | Castellan-Warlord Gnawretch Skrray | L19 p.109 | 1 |  |
-| `pnj/l19/archi-prelat-kanker-flett.webp` | Archi-prélat Kanker Flett | Arch-Prelate Kanker Flett | L19 p.110 | 1 |  |
-| `pnj/l19/maitre-mouleur-skree.webp` | Maître-mouleur Skree | Master-Moulder Skree | L19 p.110 | 1 |  |
-| `pnj/l19/jacopo-schmidt-procureur-humain-argent-1.webp` | Jacopo Schmidt — Procureur humain (Argent 1) | Jacopo Schmidt — Human Procurer (Silver 1) | L19 p.114 | 1 |  |
-| `pnj/l19/traudl-bauer-penitent-humain-bronze-0.webp` | Traudl Bauer — Pénitent humain (Bronze 0) | Traudl Bauer — Human Penitent (Brass 0) | L19 p.114 | 1 |  |
-| `pnj/l19/le-peaussier-sanglant.webp` | Le Peaussier sanglant | The Bloody Hidesman | L19 p.115 | 1 |  |
-| `pnj/l19/beate-moser.webp` | Beate Moser | Beate Moser | L19 p.141 | 1 |  |
-| `pnj/l19/magister-hugo-greendale.webp` | `Magister' Hugo Greendale | `Magister' Hugo Greendale | L19 p.141 | 1 |  |
-| `pnj/l19/brigitte-schleigel.webp` | Brigitte Schleigel | Brigitte Schleigel | L19 p.142 | 1 |  |
-| `pnj/l19/vieux-otto.webp` | Vieux Otto | Old Otto | L19 p.142 | 1 |  |
 | `pnj/l19/gerdon-salzwed-receleur-de-middenheim-argent-2.webp` | Gerdon Salzwed — Receleur de Middenheim (Argent 2) | Gerdon Salzwed — Middenheimer Fence (Silver 2) | L19 p.150 | 1 |  |
 | `pnj/l19/hasso-schroeter-artiste-de-middenheim-bronze-5.webp` | Hasso Schroeter — Artiste de Middenheim (Bronze 5) | Hasso Schroeter Middenheimer Entertainer (Brass 5) | L19 p.151 | 1 |  |
 | `pnj/l19/kat-sperber-colporteur-du-middenland-bronze-4.webp` | Kat Sperber — Colporteur du Middenland (Bronze 4) | Kat Sperber — Middenlander Pedlar (Brass 4) | L19 p.152 | 1 |  |
@@ -857,7 +381,7 @@ PNJ de scénario, monstres uniques et PJ prétirés, par livre de première appa
 | `pnj/l22/martina-kurtz-contremaitre-de-mine-argent-5.webp` | Martina Kurtz — Contremaître de mine (Argent 5) | Martina Kurtz — Mine Foreman (Silver 5) | L22 p.103 | 1 |  |
 | `pnj/l22/wilhelm-koch-prospecteur-bronze-2.webp` | Wilhelm Koch — Prospecteur (Bronze 2) | Wilhelm Koch — Prospector (Brass 2) | L22 p.103 | 1 |  |
 
-### L23 — Enemy in Shadows Companion (38)
+### L23 — Enemy in Shadows Companion (37)
 
 | Fichier proposé | Nom français | Nom anglais | Pages | Profils | Note |
 | --- | --- | --- | --- | ---: | --- |
@@ -892,7 +416,6 @@ PNJ de scénario, monstres uniques et PJ prétirés, par livre de première appa
 | `pnj/l23/annalisa-kessler-chef-hors-la-loi-bronze-4.webp` | Annalisa Kessler — Chef hors-la-loi (Bronze 4) | Annalisa Kessler — Outlaw Chief (Brass 4) | L23 p.100 | 1 |  |
 | `pnj/l23/urzo.webp` | Urzo | Urzo | L23 p.104 | 1 |  |
 | `pnj/l23/les-jumeaux.webp` | Les Jumeaux | The Twins | L23 p.105 | 1 |  |
-| `pnj/l23/rassark-etrangement-rat-homme-bete.webp` | Rassark — Étrangement rat — Homme-bête | Rassark — Uncommonly Rat-Like — Beastman | L23 p.105 | 1 |  |
 | `pnj/l23/la-bete-imperiale.webp` | La Bête impériale | The Imperial Beast | L23 p.106 | 1 |  |
 | `pnj/l23/wolfgang-hollseher-sorcier-or-2.webp` | Wolfgang Hollseher — Sorcier (Or 2) | Wolfgang Hollseher — Wizard (Gold 2) | L23 p.109 | 1 |  |
 | `pnj/l23/benbow-cocher-argent-2.webp` | Benbow — Cocher (Argent 2) | Benbow — Coachman (Silver 2) | L23 p.110 | 1 |  |
