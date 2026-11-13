@@ -7,6 +7,7 @@
     "hors-serie": "jamais lancés par le lanceur : émulateurs Firebase, lanceurs, modules importés"
   },
   "parcours": {
+    "accessibilite-browser.mjs": {"famille":"general","socle":true},
     "auth-errors-browser.mjs": {"famille":"general"},
     "boot-client-block-browser.mjs": {"famille":"ticket","chantier":"correctif"},
     "browser-amputation-followup.mjs": {"famille":"ticket","chantier":"correctif"},
