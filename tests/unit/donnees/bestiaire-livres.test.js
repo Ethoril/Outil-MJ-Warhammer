@@ -880,3 +880,24 @@ test('L05 : l’Ours porte son nom anglais (Bear), le Pigeon le sien', () => {
   assert.deepEqual(l05.profiles.map(profile => [profile.name, profile.nameFr]), [['Bear', 'Ours'], ['Pigeon', 'Pigeon']]);
 });
 });
+
+describe('bestiaire L90 (T17, profils maison du MJ)', () => {
+const read = path => JSON.parse(readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8'));
+const book = read('js/data/bestiary/L90.json');
+const l06 = read('js/data/bestiary/L06.json');
+
+test('L90 : cinq profils maison, copies exactes d’un profil imprimé de L06, seules les armes changent', () => {
+  assert.equal(book.house, true);
+  assert.deepEqual(book.profiles.map(profile => profile.nameFr), ['Gobelin archer', 'Ogre crache-plomb', 'Orc kostaud', 'Capitaine vampire pirate', 'Zombie flibustier']);
+  for (const profile of book.profiles) {
+    const source = l06.profiles.find(item => item.id === profile.houseProfile.basedOn.id);
+    assert.match(profile.houseProfile.decision, /^Décision du MJ du 13\/11\/2026$/);
+    for (const field of ['stats', 'wounds', 'skills', 'traits', 'optionalTraits', 'armour', 'keywords']) assert.deepEqual(profile[field], source[field], `${profile.id} ${field}`);
+  }
+  const [archer, leadbelcher, bigUn, captain, zombie] = book.profiles;
+  assert.ok(archer.attacks.every(attack => !attack.optional));
+  assert.deepEqual(leadbelcher.attacks.at(-1), { name: 'Leadbelcher Gun', value: 20, damage: 12, rangeYards: 12, qualities: ['Impale'] });
+  assert.deepEqual(bigUn.attacks[0], { name: 'Choppa', value: 40, damage: 8 });
+  assert.deepEqual([captain.attacks, zombie.attacks], [l06.profiles.find(item => item.id === 'E0-P-099').attacks, l06.profiles.find(item => item.id === 'E0-P-094').attacks]);
+});
+});

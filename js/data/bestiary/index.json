@@ -286,6 +286,17 @@
     "templates": 0,
     "pregenerated": 0
    }
+  },
+  {
+   "book": "L90",
+   "file": "L90.json",
+   "title": "Maison (MJ) — profils de décision du MJ",
+   "edition": "V5",
+   "counts": {
+    "profiles": 5,
+    "templates": 0,
+    "pregenerated": 0
+   }
   }
  ]
 }

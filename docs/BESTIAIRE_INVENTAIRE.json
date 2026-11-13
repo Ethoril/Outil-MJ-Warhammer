@@ -25235,6 +25235,101 @@
       "id": "E0-P-1055",
       "blockKey": "L28:151:0",
       "addedOn": "2026-11-13"
+    },
+    {
+      "name": "Goblin Archer",
+      "book": "L90",
+      "page": 1,
+      "physicalPage": 1,
+      "kind": "profile",
+      "traitsUsed": [
+        "Afraid",
+        "Animosity",
+        "Infected",
+        "Night Vision"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L90 : profil maison, copie d’un profil imprimé du bestiaire avec armes adaptées (décision du MJ du 13/11/2026), hors corpus.",
+      "id": "E0-P-1056",
+      "blockKey": "L90:1:0",
+      "addedOn": "2026-11-13"
+    },
+    {
+      "name": "Ogre Leadbelcher",
+      "book": "L90",
+      "page": 2,
+      "physicalPage": 2,
+      "kind": "profile",
+      "traitsUsed": [
+        "Hungry",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L90 : profil maison, copie d’un profil imprimé du bestiaire avec armes adaptées (décision du MJ du 13/11/2026), hors corpus.",
+      "id": "E0-P-1057",
+      "blockKey": "L90:2:0",
+      "addedOn": "2026-11-13"
+    },
+    {
+      "name": "Orc Big ’Un",
+      "book": "L90",
+      "page": 3,
+      "physicalPage": 3,
+      "kind": "profile",
+      "traitsUsed": [
+        "Animosity",
+        "Belligerent",
+        "Infected",
+        "Night Vision"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L90 : profil maison, copie d’un profil imprimé du bestiaire avec armes adaptées (décision du MJ du 13/11/2026), hors corpus.",
+      "id": "E0-P-1058",
+      "blockKey": "L90:3:0",
+      "addedOn": "2026-11-13"
+    },
+    {
+      "name": "Capitaine vampire pirate",
+      "book": "L90",
+      "page": 4,
+      "physicalPage": 4,
+      "kind": "profile",
+      "traitsUsed": [
+        "Night Vision",
+        "Undead",
+        "Vampiric"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L90 : profil maison, copie d’un profil imprimé du bestiaire avec armes adaptées (décision du MJ du 13/11/2026), hors corpus.",
+      "id": "E0-P-1059",
+      "blockKey": "L90:4:0",
+      "addedOn": "2026-11-13"
+    },
+    {
+      "name": "Zombie flibustier",
+      "book": "L90",
+      "page": 5,
+      "physicalPage": 5,
+      "kind": "profile",
+      "traitsUsed": [
+        "Construct",
+        "Dark Vision",
+        "Fear",
+        "Infected",
+        "Painless",
+        "Undead",
+        "Unstable"
+      ],
+      "count": 7,
+      "abilityRefs": [],
+      "sourceNote": "L90 : profil maison, copie d’un profil imprimé du bestiaire avec armes adaptées (décision du MJ du 13/11/2026), hors corpus.",
+      "id": "E0-P-1060",
+      "blockKey": "L90:5:0",
+      "addedOn": "2026-11-13"
     }
   ],
   "counts": {
@@ -26393,6 +26488,23 @@
       "templates": 0,
       "pregeneratedCharacters": 0,
       "method": "Livre V4 français : en-têtes et étiquettes mis au format anglais à colonnes égales, noms de compétences, talents et Traits rendus en anglais (tools/lib/bestiary-french.mjs) ; intitulés relus sur les pages.",
+      "addedOn": "2026-11-13"
+    },
+    {
+      "book": "L90",
+      "profilePagesPhysical": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "rulePagesPrinted": [],
+      "entries": 5,
+      "profiles": 5,
+      "templates": 0,
+      "pregeneratedCharacters": 0,
+      "method": "Profils maison : copies de profils imprimés, armes adaptées par décision du MJ (tools/build-bestiary-maison.mjs).",
       "addedOn": "2026-11-13"
     }
   ],

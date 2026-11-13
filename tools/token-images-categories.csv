@@ -110,6 +110,7 @@ cannon-et-mortar-students-etudiant-engineers-bronze-4;peuples/humains;non;
 capitaine-moritz-valgeir-chevalier-humain-ancien-sergent-argent-5;pnj/l19;oui;
 capitaine-regina-willendorf-maitre-de-barge-humain-ancien-huffer-et-prepose-or-1;pnj/l26;oui;
 capitaine-valerion-tremendros-officier-de-haute-naissance;pnj/l09;oui;
+capitaine-vampire-pirate;ennemis/vampires-pirates;non;image : ennemis/vampires-pirates/capitaine-vampire-pirate.webp
 carcasse-de-mouton;monstres;non;
 carcasse-de-porc;monstres;non;
 carcasse-de-vache;monstres;non;
@@ -339,6 +340,7 @@ glugnur-tueur-de-troll-nain-bronze-2;pnj/l28;oui;
 gnome;peuples/gnomes;non;
 gobbla-bloated-squig-des-cavernes;pnj/l12;oui;
 gobelin;ennemis/gobelins;non;image : ennemis/gobelins/gobelin-lancier.webp
+gobelin-archer;ennemis/gobelins;non;image : ennemis/gobelins/gobelin-archer.webp
 gobelin-des-forets;ennemis/gobelins;non;
 gobelin-des-forets-chamane;ennemis/gobelins;non;image : ennemis/gobelins/gobelin-chamane.webp
 gobelin-nocturne-chef;ennemis/gobelins;non;
@@ -643,6 +645,7 @@ oblast-bete;pnj/l11;oui;
 officier-argent-5;peuples/humains;non;
 oglah-khan-hobgobelin-chief;pnj/l12;oui;
 ogre;ennemis/ogres;non;image : ennemis/ogres/ogre-guerrier.webp
+ogre-crache-plomb;ennemis/ogres;non;image : ennemis/ogres/ogre-crache-plomb.webp
 oint-druchii;ennemis/elfes-noirs;non;
 ol-bess-artisan-argent-1;pnj/l24;oui;
 ol-gribbleback;pnj/l11;oui;
@@ -650,6 +653,7 @@ olg-bloosalt-capitaine-skaeling-or-2;pnj/l25;oui;
 olgog-gristlefang;pnj/l21;oui;
 operagoer-argent-3;peuples/humains;non;
 orc;ennemis/orcs;non;image : ennemis/orcs/orc-guerrier.webp
+orc-kostaud;ennemis/orcs;non;image : ennemis/orcs/orc-kostaud.webp
 orque-sauvage;ennemis/orcs;non;
 orth-vii-chylis-lightbringer-maitre-sorcier-elfe-or-1;pnj/l20;oui;
 otto-et-hendrik-vogel-clercs-humains;pnj/l10;oui;
@@ -928,6 +932,7 @@ zarugh-kelvain-equipage-de-navire;pnj/l09;oui;
 zavant-konniger-detective-argent-5;pnj/l20;oui;
 zofia-miska-maitre-sorcier-humain-or-1;pnj/l20;oui;
 zombie;ennemis/morts-vivants;non;image : ennemis/morts-vivants/zombi.webp
+zombie-flibustier;ennemis/vampires-pirates;non;image : ennemis/vampires-pirates/zombie-flibustier.webp
 zschokke-glahh-hobgobelin-soldier;pnj/l12;oui;
 zurn-la-couronne-sanglante-guerrier-du-chaos;pnj/l21;oui;image : ennemis/reprouves/guerrier-du-chaos.webp
 zylra-kraggsdottir-citadine-naine;pnj/l16;oui;

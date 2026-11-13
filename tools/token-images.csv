@@ -134,7 +134,7 @@ maps/tokens/ennemis/elfes-noirs/sorcier-du-feu-maudit.webp;Sorcier du feu maudit
 maps/tokens/ennemis/gobelins/de-base-gnoblar.webp;Gnoblar de base;E0-P-393;De base Gnoblar;L12 p.9;exact;
 maps/tokens/ennemis/gobelins/de-base-hobgobelin.webp;Hobgobelin de base;E0-P-400;De base hobgobelin;L12 p.12;exact;
 maps/tokens/ennemis/gobelins/geant-squig.webp;Squig géant;E0-P-416;Géant Squig;L12 p.19;exact;
-maps/tokens/ennemis/gobelins/gobelin-archer.webp;Gobelin archer;;;;aucun;pas de profil d’archer gobelin distinct (le Tirailleur est un gabarit)
+maps/tokens/ennemis/gobelins/gobelin-archer.webp;Gobelin archer;E0-P-1056;Gobelin archer;L90 p.1;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
 maps/tokens/ennemis/gobelins/gobelin-chamane.webp;Gobelin chamane;E0-P-006|E0-P-419;Gobelin des forêts chamane | Bograt Blasted – gobelin des forêts Shaman;L11 p.15 | L12 p.27;approché;Gobelin des forêts chamane (L11) et Bograt le Foudroyé, chamane gobelin des forêts (L12, individu nommé)
 maps/tokens/ennemis/gobelins/gobelin-des-forets.webp;Gobelin des forêts;E0-P-005|E0-P-395;Gobelin des forêts | De base gobelin des forêts;L11 p.15 | L12 p.9;approché;Gobelin des forêts (L11 p.15) fusionné avec De base gobelin des forêts (L12 p.9)
 maps/tokens/ennemis/gobelins/gobelin-lancier.webp;Gobelin lancier;E0-P-089|E0-P-396|E0-P-424;Gobelin | De base Goblin | Ratlicker – Goblin Soldier;L06 p.336 | L12 p.9 | L12 p.38;approché;gobelin de base : Gobelin (L06), Gobelin de base (L12), Ratlicker, soldat gobelin (L12, individu nommé) — préférée à l’ancienne goblin.webp (3 Kio)
@@ -199,7 +199,7 @@ maps/tokens/ennemis/morts-vivants/terreur-abyssale.webp;Terreur abyssale;E0-P-75
 maps/tokens/ennemis/morts-vivants/zombi.webp;Zombi;E0-P-094|E0-P-566|E0-P-715;Zombie | Zombie | Les Zombies du Seigneur des tombes;L06 p.340 | L18 p.117 | L21 p.118;approché;Zombie (L06, L18) et les Zombies du Seigneur des tombes (L21)
 maps/tokens/ennemis/ogres/goinfre-ogre.webp;Goinfre ogre;E0-P-506;Goinfre ogre;L16 p.83;exact;
 maps/tokens/ennemis/ogres/mournfang.webp;Mournfang;E0-P-415;Mournfang;L12 p.19;exact;
-maps/tokens/ennemis/ogres/ogre-crache-plomb.webp;Ogre crache-plomb;;;;aucun;aucun profil de Crache-plomb (Leadbelcher) au bestiaire
+maps/tokens/ennemis/ogres/ogre-crache-plomb.webp;Ogre crache-plomb;E0-P-1057;Ogre crache-plomb;L90 p.2;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
 maps/tokens/ennemis/ogres/ogre-guerrier.webp;Ogre guerrier;E0-P-072|E0-P-402|E0-P-438|E0-P-542;Ogre | De base Ogre | Matthogg — Brute ogre | Golthog — Soldat ogre (Argent 3);L06 p.324 | L12 p.14 | L12 p.78 | L18 p.31;approché;Ogre (L06), Ogre de base (L12) — individus nommés au rôle de combattant : Matthogg, brute ogre (L12), Golthog, soldat ogre (L18)
 maps/tokens/ennemis/ogres/ogre-rhinox.webp;Rhinox;E0-P-127|E0-P-013;Rhinox | Rhinox;L01 p.34 | L11 p.25;approché;Rhinox (L01, L11)
 maps/tokens/ennemis/orcs/chamane-orque-sauvage.webp;Chamane orque sauvage;E0-P-309;Chamane orque sauvage;L07 p.182;exact;
@@ -208,7 +208,7 @@ maps/tokens/ennemis/orcs/de-base-noir-orc.webp;Orc noir de base;E0-P-399;De base
 maps/tokens/ennemis/orcs/idole-renegate-de-gork-ou-mork.webp;Idole renégate de Gork (ou Mork);E0-P-509;Idole renégate de Gork (ou Mork);L16 p.86;exact;
 maps/tokens/ennemis/orcs/orc-archer.webp;Orc archer;E0-P-429;Holg Stuntysticker – Orc Skirmisher;L12 p.51;approché;Holg Stuntysticker, tirailleur orc (L12, individu nommé)
 maps/tokens/ennemis/orcs/orc-guerrier.webp;Orc guerrier;E0-P-090|E0-P-397|E0-P-428;Orc | De base Orc | Hagblad – Orc Soldier;L06 p.337 | L12 p.10 | L12 p.50;approché;Orc (L06), Orc de base (L12) — Hagblad, soldat orc (L12, individu nommé)
-maps/tokens/ennemis/orcs/orc-kostaud.webp;Orc kostaud;;;;aucun;aucun profil de Kostaud (Big ’Un) au bestiaire
+maps/tokens/ennemis/orcs/orc-kostaud.webp;Orc kostaud;E0-P-1058;Orc kostaud;L90 p.3;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
 maps/tokens/ennemis/orcs/orque-sauvage.webp;Orque sauvage;E0-P-308|E0-P-398;Orque sauvage | De base sauvage Orc;L07 p.182 | L12 p.10;approché;Orque sauvage (L07 p.182) fusionné avec De base sauvage Orc (L12 p.10)
 maps/tokens/ennemis/reprouves/cultiste-chaos.webp;Cultiste du Chaos;E0-P-104|E0-P-657|E0-P-554|E0-P-556;Cultiste | Cultiste humain | Croc-Jaune cultistes | Croc-Jaune cultistes;L06 p.347 | L20 p.218 | L18 p.97 | L18 p.97;approché;Cultiste (L06), Cultiste humain (L20), Croc-Jaune cultistes (L18)
 maps/tokens/ennemis/reprouves/cultiste-novice-des-crocs-jaunes.webp;Cultiste novice des Crocs-Jaunes;E0-P-739;Cultiste novice des Crocs-Jaunes;L22 p.62;exact;
@@ -240,8 +240,8 @@ maps/tokens/ennemis/skavens/skaven-d-elite-des-vermines-de-la-mort.webp;Skaven d
 maps/tokens/ennemis/skavens/skaven-guerrier-des-clans.webp;Skaven guerrier des clans;E0-P-109|E0-P-511|E0-P-720|E0-P-723|E0-P-726|E0-P-732;Guerrier des clans | Guerrier des clans du clan Morbidus | Guerrier des clans de Treecherik | Guerrier des clans du clan Mors | Guerrier des clans malade | Guerrier des clans lâche;L06 p.351 | L16 p.90 | L22 p.18 | L22 p.20 | L22 p.25 | L22 p.31;approché;Guerrier des clans (L06) et ses variantes : clan Morbidus (L16), Treecherik, clan Mors, malade, lâche (L22)
 maps/tokens/ennemis/skavens/skaven-moine-de-la-peste.webp;Skaven moine de la peste;E0-P-512;Moine de la peste;L16 p.90;approché;Moine de la peste (L16 p.90)
 maps/tokens/ennemis/skavens/vermine-de-choc.webp;Vermine de choc;E0-P-110;Vermine de choc;L06 p.352;exact;
-maps/tokens/ennemis/vampires-pirates/capitaine-vampire-pirate.webp;Capitaine vampire pirate;;;;aucun;aucun profil générique — Luthor Harkon (L07 p.73) est un individu nommé
-maps/tokens/ennemis/vampires-pirates/zombie-flibustier.webp;Zombie flibustier;;;;aucun;aucun profil de zombie pirate (Deadhand) au bestiaire
+maps/tokens/ennemis/vampires-pirates/capitaine-vampire-pirate.webp;Capitaine vampire pirate;E0-P-1059;Capitaine vampire pirate;L90 p.4;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
+maps/tokens/ennemis/vampires-pirates/zombie-flibustier.webp;Zombie flibustier;E0-P-1060;Zombie flibustier;L90 p.5;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
 maps/tokens/ennemis/vampires/comte-vampire-von-carstein.webp;Comte vampire von Carstein;E0-P-099|E0-P-926;Vampire | Vampire noble;L06 p.343 | L26 p.21;approché;vampire générique : Vampire (L06), Vampire noble (L26)
 maps/tokens/ennemis/vampires/vampire-lahmiane.webp;Vampire lahmiane;;;;aucun;aucun profil de Lahmiane au bestiaire
 maps/tokens/ennemis/vampires/varghulf.webp;Varghulf;E0-P-100;Varghulf;L06 p.344;exact;

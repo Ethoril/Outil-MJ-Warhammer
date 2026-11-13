@@ -45,7 +45,7 @@ export const BESTIARY_FOLDERS = Object.freeze([
     profiles: Object.freeze([
       'E0-P-080', 'E0-P-089', 'E0-P-092', 'E0-P-005', 'E0-P-006', 'E0-P-015', 'E0-P-016', 'E0-P-393',
       'E0-P-394', 'E0-P-395', 'E0-P-396', 'E0-P-400', 'E0-P-401', 'E0-P-407', 'E0-P-414', 'E0-P-416',
-      'E0-P-677', 'E0-P-692'
+      'E0-P-677', 'E0-P-692', 'E0-P-1056'
     ]) }),
   Object.freeze({ id: 'ennemis/hommes-betes', parent: 'ennemis', label: 'Hommes-bêtes',
     profiles: Object.freeze([
@@ -68,11 +68,12 @@ export const BESTIARY_FOLDERS = Object.freeze([
     ]) }),
   Object.freeze({ id: 'ennemis/ogres', parent: 'ennemis', label: 'Ogres',
     profiles: Object.freeze([
-      'E0-P-127', 'E0-P-072', 'E0-P-013', 'E0-P-402', 'E0-P-415', 'E0-P-506'
+      'E0-P-127', 'E0-P-072', 'E0-P-013', 'E0-P-402', 'E0-P-415', 'E0-P-506', 'E0-P-1057'
     ]) }),
   Object.freeze({ id: 'ennemis/orcs', parent: 'ennemis', label: 'Orcs',
     profiles: Object.freeze([
-      'E0-P-090', 'E0-P-308', 'E0-P-309', 'E0-P-310', 'E0-P-397', 'E0-P-398', 'E0-P-399', 'E0-P-509'
+      'E0-P-090', 'E0-P-308', 'E0-P-309', 'E0-P-310', 'E0-P-397', 'E0-P-398', 'E0-P-399', 'E0-P-509',
+      'E0-P-1058'
     ]) }),
   Object.freeze({ id: 'ennemis/reprouves', parent: 'ennemis', label: 'Réprouvés',
     profiles: Object.freeze([
@@ -89,6 +90,10 @@ export const BESTIARY_FOLDERS = Object.freeze([
   Object.freeze({ id: 'ennemis/vampires', parent: 'ennemis', label: 'Vampires',
     profiles: Object.freeze([
       'E0-P-099', 'E0-P-100', 'E0-P-926'
+    ]) }),
+  Object.freeze({ id: 'ennemis/vampires-pirates', parent: 'ennemis', label: 'Vampires pirates',
+    profiles: Object.freeze([
+      'E0-P-1059', 'E0-P-1060'
     ]) }),
   Object.freeze({ id: 'peuples', parent: null, label: 'Peuples',
     profiles: Object.freeze([]) }),

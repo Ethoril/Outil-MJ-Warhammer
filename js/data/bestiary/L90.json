@@ -1,0 +1,755 @@
+{
+ "schemaVersion": 1,
+ "book": "L90",
+ "title": "Maison (MJ) — profils de décision du MJ",
+ "edition": "V5",
+ "house": true,
+ "source": {
+  "corpusId": null,
+  "sha256": null
+ },
+ "conversionNote": "L90 : profil maison, copie d’un profil imprimé du bestiaire avec armes adaptées (décision du MJ du 13/11/2026), hors corpus.",
+ "profiles": [
+  {
+   "id": "E0-P-1056",
+   "book": "L90",
+   "page": 1,
+   "physicalPage": 1,
+   "kind": "profile",
+   "blockKey": "L90:1:0",
+   "name": "Goblin Archer",
+   "nameFr": "Gobelin archer",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 30,
+    "F": 30,
+    "E": 30,
+    "I": 20,
+    "Ag": 30,
+    "Dex": 25,
+    "Int": 20,
+    "FM": 20,
+    "Soc": 15
+   },
+   "wounds": 11,
+   "armour": {
+    "toughnessBonus": 3,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Helmet",
+      "ap": 2,
+      "optional": true,
+      "locations": "Head"
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 30,
+     "damage": 7
+    },
+    {
+     "name": "Shortbow and Arrows",
+     "value": 35,
+     "damage": 6,
+     "rangeYards": 40,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 35
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 30
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 25
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 35
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 35
+    },
+    {
+     "name": "Stealth (Underground)",
+     "nameFr": "Discrétion (Souterraine)",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Afraid",
+     "param": "Elves",
+     "ref": "E0-T-001"
+    },
+    {
+     "name": "Animosity",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Hatred",
+     "param": "Dwarfs",
+     "ref": "E0-T-027"
+    },
+    {
+     "name": "Striding Gait",
+     "param": "Woodland",
+     "ref": "E0-T-051"
+    },
+    {
+     "name": "Venom",
+     "ref": "E0-T-064"
+    }
+   ],
+   "keywords": [
+    "gobelin"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 13/11/2026",
+    "question": "Q2",
+    "basedOn": {
+     "id": "E0-P-089",
+     "book": "L06",
+     "page": 336,
+     "name": "Goblin"
+    },
+    "weapon": "Arc court et flèches du Gobelin (L06 p. 336), imprimé en option, rendu obligatoire"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 13/11/2026, Q2) : copie de Gobelin (L06 p. 336) ; arme : Arc court et flèches du Gobelin (L06 p. 336), imprimé en option, rendu obligatoire."
+   ]
+  },
+  {
+   "id": "E0-P-1057",
+   "book": "L90",
+   "page": 2,
+   "physicalPage": 2,
+   "kind": "profile",
+   "blockKey": "L90:2:0",
+   "name": "Ogre Leadbelcher",
+   "nameFr": "Ogre crache-plomb",
+   "stats": {
+    "M": 6,
+    "CC": 30,
+    "CT": 20,
+    "F": 45,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 20,
+    "FM": 30,
+    "Soc": 20
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Gut Plate",
+      "ap": 2,
+      "optional": true,
+      "locations": "Body"
+     },
+     {
+      "name": "Helmet",
+      "ap": 2,
+      "optional": true,
+      "locations": "Head"
+     },
+     {
+      "name": "Ironfist",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 40,
+     "damage": 12
+    },
+    {
+     "name": "Leadbelcher Gun",
+     "value": 20,
+     "damage": 12,
+     "rangeYards": 12,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 55
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 55
+    },
+    {
+     "name": "Melee",
+     "nameFr": "Corps à corps",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    }
+   ],
+   "keywords": [
+    "ogre"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 13/11/2026",
+    "question": "Q3",
+    "basedOn": {
+     "id": "E0-P-072",
+     "book": "L06",
+     "page": 324,
+     "name": "Ogre"
+    },
+    "weapon": "Leadbelcher Gun (L01 p. 29 : 2M, portée BF × 3, dégâts BF + 4, Empaleuse) ; dégâts 12 comme l’Arme à une main du profil (BF + 4), portée 12, valeur = CT 20"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 13/11/2026, Q3) : copie de Ogre (L06 p. 324) ; arme : Leadbelcher Gun (L01 p. 29 : 2M, portée BF × 3, dégâts BF + 4, Empaleuse) ; dégâts 12 comme l’Arme à une main du profil (BF + 4), portée 12, valeur = CT 20."
+   ]
+  },
+  {
+   "id": "E0-P-1058",
+   "book": "L90",
+   "page": 3,
+   "physicalPage": 3,
+   "kind": "profile",
+   "blockKey": "L90:3:0",
+   "name": "Orc Big ’Un",
+   "nameFr": "Orc kostaud",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": 30,
+    "F": 35,
+    "E": 45,
+    "I": 20,
+    "Ag": 25,
+    "Dex": 20,
+    "Int": 18,
+    "FM": 35,
+    "Soc": 15
+   },
+   "wounds": 14,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Light Armour",
+      "ap": 1,
+      "optional": true
+     },
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     },
+     {
+      "name": "Helmet",
+      "ap": 2,
+      "optional": true,
+      "locations": "Head"
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Choppa",
+     "value": 40,
+     "damage": 8
+    },
+    {
+     "name": "Bow and Arrows",
+     "value": 35,
+     "damage": 7,
+     "optional": true,
+     "rangeYards": 50,
+     "qualities": [
+      "Impale"
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 40
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Animosity",
+     "param": "Orcs and Goblins",
+     "ref": "E0-T-003"
+    },
+    {
+     "name": "Belligerent",
+     "ref": "E0-T-004"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    }
+   ],
+   "keywords": [
+    "orque"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 13/11/2026",
+    "question": "Q4",
+    "basedOn": {
+     "id": "E0-P-090",
+     "book": "L06",
+     "page": 337,
+     "name": "Orc"
+    },
+    "weapon": "Choppa (L12 p. 10, Orc de base, « Weapon (Choppa) +8 » à la même Force 35), valeur = Corps à corps (Base) 40, à la place de l’Arme à une main"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 13/11/2026, Q4) : copie de Orc (L06 p. 337) ; arme : Choppa (L12 p. 10, Orc de base, « Weapon (Choppa) +8 » à la même Force 35), valeur = Corps à corps (Base) 40, à la place de l’Arme à une main."
+   ]
+  },
+  {
+   "id": "E0-P-1059",
+   "book": "L90",
+   "page": 4,
+   "physicalPage": 4,
+   "kind": "profile",
+   "blockKey": "L90:4:0",
+   "name": "Capitaine vampire pirate",
+   "nameFr": "Capitaine vampire pirate",
+   "stats": {
+    "M": 6,
+    "CC": 40,
+    "CT": 40,
+    "F": 50,
+    "E": 40,
+    "I": 40,
+    "Ag": 50,
+    "Dex": 40,
+    "Int": 30,
+    "FM": 30,
+    "Soc": 25
+   },
+   "wounds": 15,
+   "armour": {
+    "toughnessBonus": 4,
+    "parts": [
+     {
+      "name": "Medium Armour",
+      "ap": 3,
+      "optional": true
+     },
+     {
+      "name": "Heavy Armour",
+      "ap": 5,
+      "optional": true
+     },
+     {
+      "name": "Shield",
+      "ap": 2,
+      "optional": true,
+      "slBonus": 1,
+      "condition": "when Opposing an attack with Dodge or Melee"
+     }
+    ]
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 55,
+     "damage": 9
+    },
+    {
+     "name": "Bite",
+     "value": 60,
+     "damage": 8,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 35
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 60
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 55
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 60
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 60
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Vampiric",
+     "ref": "E0-T-063"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Bestial",
+     "ref": "E0-T-005"
+    },
+    {
+     "name": "Champion",
+     "ref": "E0-T-010"
+    },
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Fly",
+     "rating": "40",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Grim",
+     "ref": "E0-T-026"
+    },
+    {
+     "name": "Hungry",
+     "ref": "E0-T-029"
+    },
+    {
+     "name": "Mental Corruption",
+     "ref": "E0-T-038"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Petrifying Gaze",
+     "ref": "E0-T-043"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Death or Necromancy",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Tracker",
+     "ref": "E0-T-059"
+    },
+    {
+     "name": "Wallcrawler",
+     "ref": "E0-T-067"
+    }
+   ],
+   "keywords": [
+    "vampire"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 13/11/2026",
+    "question": "Q6",
+    "basedOn": {
+     "id": "E0-P-099",
+     "book": "L06",
+     "page": 343,
+     "name": "Vampire"
+    }
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 13/11/2026, Q6) : copie de Vampire (L06 p. 343)."
+   ]
+  },
+  {
+   "id": "E0-P-1060",
+   "book": "L90",
+   "page": 5,
+   "physicalPage": 5,
+   "kind": "profile",
+   "blockKey": "L90:5:0",
+   "name": "Zombie flibustier",
+   "nameFr": "Zombie flibustier",
+   "stats": {
+    "M": 4,
+    "CC": 15,
+    "CT": null,
+    "F": 30,
+    "E": 30,
+    "I": 5,
+    "Ag": 10,
+    "Dex": 10,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 25,
+     "damage": 7,
+     "qualities": [
+      "Magical"
+     ]
+    },
+    {
+     "name": "Bite",
+     "value": 30,
+     "damage": 6,
+     "free": "momentum"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 25
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 30
+    }
+   ],
+   "traits": [
+    {
+     "name": "Construct",
+     "ref": "E0-T-014"
+    },
+    {
+     "name": "Dark Vision",
+     "ref": "E0-T-017"
+    },
+    {
+     "name": "Fear",
+     "rating": "2",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Infected",
+     "ref": "E0-T-032"
+    },
+    {
+     "name": "Painless",
+     "ref": "E0-T-042"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    }
+   ],
+   "optionalTraits": [
+    {
+     "name": "Corruption",
+     "param": "Minor",
+     "ref": "E0-T-016"
+    },
+    {
+     "name": "Disease",
+     "param": "Various",
+     "ref": "E0-T-019"
+    },
+    {
+     "name": "Distracting",
+     "ref": "E0-T-020"
+    },
+    {
+     "name": "Territorial",
+     "ref": "E0-T-056"
+    }
+   ],
+   "keywords": [
+    "zombie"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 13/11/2026",
+    "question": "Q6",
+    "basedOn": {
+     "id": "E0-P-094",
+     "book": "L06",
+     "page": 340,
+     "name": "Zombie"
+    }
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 13/11/2026, Q6) : copie de Zombie (L06 p. 340)."
+   ]
+  }
+ ]
+}

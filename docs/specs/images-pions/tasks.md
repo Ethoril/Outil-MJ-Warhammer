@@ -63,7 +63,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 
 - [x] **T15 — Le Pouvoir derrière le Trône.** Déclarer le livre au corpus, extraire tous les profils de PNJ par la chaîne du bestiaire, les classer, apparier les images existantes (Fils d'Ulric), régénérer table, dossiers et liste des illustrations. CA : 35.
 - [ ] **T16 — Livres V2.** Après T15 (mêmes fichiers, identifiants séquentiels). Tome de la Corruption et Seigneur liche : tous les profils, convertis en V5 par la règle existante ; Vampire lahmiane de L27 p. 114 de même ; appariement des démons et de Khemri. CA : 36.
-- [ ] **T17 — Profils maison.** Avec T16. Gobelin archer, Ogre crache-plomb, Orc kostaud (base + armes), Capitaine vampire pirate, Zombie flibustier. CA : 37.
+- [x] **T17 — Profils maison.** Avec T16. Gobelin archer, Ogre crache-plomb, Orc kostaud (base + armes), Capitaine vampire pirate, Zombie flibustier. CA : 37.
 
 ## Clôture
 
