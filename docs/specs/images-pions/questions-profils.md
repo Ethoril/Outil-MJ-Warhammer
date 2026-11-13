@@ -141,3 +141,64 @@ Réponses possibles :
 1. `magus.webp` devient l'image automatique du Magus ; les sept images de cultistes restent au choix sur le profil des Cultistes (un profil n'a qu'une image automatique).
 2. Comme 1, et l'une des sept images devient en plus l'image automatique des Cultistes (laquelle ?).
 3. Pas d'appariement : réponse Q10 maintenue.
+
+## Questions nées de T16 (13/11/2026) : conversion des profils V2 non animaux
+
+La règle maison du 11/11 (`tools/build-bestiary-l27.mjs`) a été étalonnée sur le Cheval, le Sanglier et le Loup. Elle ne couvre que des montures et un rapace. Les deux livres V2 sont surtout faits de démons, de morts-vivants, de monstres et de PNJ humanoïdes (inventaire : `inventaire-livres-v2.md`). Pour eux, six points changent les caractéristiques ou les attaques. T16 attend ces réponses ; la Vampire lahmiane de L27 p. 114 en dépend aussi.
+
+### Q13 — Taille, donc Blessures
+
+La règle calcule les Blessures par la formule V5 selon la Taille. Le V2 n'imprime pas de Taille : pour les chevaux, tu l'avais fixée. La formule de la règle ne connaît que Petite, Moyenne et Grande ; le Buveur de sang ou le Grand Immonde seraient Énormes ou Monstrueux.
+
+1. La Taille de la même créature au bestiaire V4/V5 quand elle y est (Sanguinaire, Démonette, Horreur rose…), sinon une Taille que je propose par créature, liste à valider ; formule V5 étendue à Énorme et Monstrueuse telle que L06 p. 360 l'imprime.
+2. Garder les Blessures (B) imprimées en V2, sans formule.
+3. Tu fixes la Taille de chaque créature.
+
+### Q14 — Dextérité et Initiative des humanoïdes et des démons
+
+La règle met la Dex absente (le V2 n'en a pas) et l'Initiative égale à l'Agilité. Pour un cheval, c'est sans conséquence. Pour un PNJ, un Roi des Tombes ou une Démonette, une Dex absente bloque ses tests de Dextérité.
+
+1. Appliquer la règle telle quelle : Dex absente, I = Ag.
+2. Dex = Ag (l'Agilité V2 couvre aussi la dextérité), I = Ag.
+3. Tu décides autrement.
+
+### Q15 — Caractéristiques à 0 % ou « — »
+
+La règle traite CT 0 % → absente et Soc 0 % → 10 (comme le Cheval). Les démons et les morts-vivants impriment aussi Int, FM ou Soc à 0 % ou « — » (Incendiaires, Ushabti, Zombies momifiés).
+
+1. Toute valeur 0 % ou « — » devient absente, comme le Zombie V5 (L06 p. 340) ; Soc 0 → 10 reste réservé aux animaux.
+2. Règle telle quelle : CT 0 → absente, Soc 0 → 10 partout, Int et FM gardés à 0.
+3. Tu décides autrement.
+
+### Q16 — Attaques et dégâts
+
+La règle ne donne que les sabots (BF + 8, Assommante) et les serres du rapace. Le V2 imprime des armes (« arme à une main », « armes naturelles », lames démoniaques) dont les dégâts suivent les règles V2.
+
+1. Armes V2 → arme V5 de même nom (dégâts du Livre de base V5) ; armes naturelles → BF + n, comme la créature V5 la plus proche ; liste à valider.
+2. Dégâts imprimés en V2 (BF, BF + 2…), repris tels quels.
+3. Pas d'attaque structurée : l'arme imprimée reste en règle spéciale, à jouer à la main.
+
+### Q17 — Vol et mouvements entre parenthèses
+
+Le V2 imprime « M 1 (15) » (Disques de Tzeentch), « 4 (6) », etc. La règle n'a qu'un cas : le Rapace, M 2 au sol et Vol (100) repris du Pigeon.
+
+1. Valeur entre parenthèses = Vol (n), M = valeur hors parenthèses.
+2. Vol repris de la créature V4/V5 la plus proche quand elle existe, sinon comme 1.
+3. Tu fixes chaque cas.
+
+### Q18 — Talents, compétences et règles V2 sans équivalent
+
+Démoniaque, Effrayant, Terrifiant, Instabilité, Mort-vivant, Volonté de fer, Armes naturelles, mutations, sorts. La règle ne reprend que Perception et Esquive.
+
+1. Table de correspondance V2 → Traits V5 pour les homonymes sûrs (Effrayant → Peur, Terrifiant → Terreur, Mort-vivant → Mort-vivant, Vol → Vol…), à valider ; le reste en règles spéciales imprimées.
+2. Tout en règles spéciales imprimées, sans Trait V5.
+3. Tu décides autrement.
+
+### Q19 — Ce qui n'est pas un profil de créature
+
+- 44 blocs de carrière du Tome (« +10 % »).
+- 6 personnages prétirés du Seigneur liche.
+
+1. Carrières exclues du bestiaire ; prétirés inclus comme prétirés (genre existant).
+2. Carrières et prétirés exclus.
+3. Les deux inclus (carrières en gabarits).
