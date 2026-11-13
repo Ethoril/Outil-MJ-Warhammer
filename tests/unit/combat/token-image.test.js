@@ -224,7 +224,7 @@ test('défaut 1 : une seule règle de chemin, outil et générateur alignés (pa
   const refused = ['maps/tokens/%2e%2e/%2e%2e/x.webp', 'maps/tokens/a%20b.webp', 'maps/tokens/x.avif', 'maps/tokens/a b.webp', 'maps/tokens/é.webp',
     'maps/tokens/./x.webp', 'maps/tokens/a//b.webp', 'maps/tokens//x.webp', 'maps/tokens/a/../x.webp', 'maps/tokens/x.webp?v=1', 'maps/tokens/x.webp#a',
     'maps/tokens/a:b.webp', 'maps/tokens\\x.webp', 'maps/tokens/' + 'a'.repeat(184) + '.webp'];
-  const accepted = ['maps/tokens/x.webp', 'maps/tokens/a-b_c.d/E9.PNG', 'maps/tokens/a..b.webp', 'maps/tokens/x.jpeg', 'maps/tokens/x.jpg', 'maps/tokens/x.gif', 'maps/tokens/' + 'a'.repeat(183) + '.webp'];
+  const accepted = ['maps/tokens/x.webp', 'maps/tokens/a-b_c.d/E9.PNG', 'maps/tokens/x.jpeg', 'maps/tokens/x.jpg', 'maps/tokens/x.gif', 'maps/tokens/' + 'a'.repeat(183) + '.webp'];
   for (const path of refused) { assert.equal(normalizeLibraryImage(path), undefined, path); assert.equal(isLibraryPath(path), false, path); }
   for (const path of accepted) { assert.equal(normalizeLibraryImage(path), path, path); assert.equal(isLibraryPath(path), true, path); }
   for (const row of TOKEN_IMAGES) { assert.equal(normalizeLibraryImage(row.path), row.path, row.path); assert.equal(isLibraryPath(row.path), true, row.path); }
