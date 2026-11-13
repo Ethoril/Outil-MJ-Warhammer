@@ -1,34 +1,21 @@
 import { normalizeEffects } from './effects.js';
 import { normalizeQualities } from './quality-normalization.js';
 import { normalizeDamageFields } from './damage.js';
+import { CARAC_KEYS, EXTRA_CARAC_KEYS, canonicalCaracKey } from './carac-keys.js';
 
 export const uid = () => Math.random().toString(36).slice(2, 10);
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
-// Canonical characteristic keys, as written by the profile form and read by the engine.
-export const CARAC_KEYS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
-// Secondary keys already recognised by the text import; kept so no value is lost.
-export const EXTRA_CARAC_KEYS = Object.freeze(['M', 'A', 'B', 'BF']);
+// Clés canoniques (fiche, moteur), clés secondaires de l'import et alias : source unique dans carac-keys.js (REGLES-06).
+export { CARAC_KEYS, EXTRA_CARAC_KEYS, canonicalCaracKey } from './carac-keys.js';
 
 const CANONICAL_CARACS = new Set([...CARAC_KEYS, ...EXTRA_CARAC_KEYS]);
-const CARAC_ALIASES = new Map([
-  ['cc', 'CC'], ['ct', 'CT'], ['f', 'F'], ['e', 'E'], ['i', 'I'], ['ag', 'Ag'], ['agi', 'Ag'],
-  ['dex', 'Dex'], ['int', 'Int'], ['fm', 'FM'], ['soc', 'Soc'],
-  ['m', 'M'], ['a', 'A'], ['b', 'B'], ['bf', 'BF']
-]);
 
 function finiteCarac(value) {
   if (value === null || value === undefined || value === '' || typeof value === 'boolean') return null;
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
-}
-
-/** Canonical key for a label (`agi` → `Ag`), or null when it is not a characteristic. */
-export function canonicalCaracKey(key) {
-  const raw = String(key ?? '').trim();
-  if (CANONICAL_CARACS.has(raw)) return raw;
-  return CARAC_ALIASES.get(raw.toLocaleLowerCase()) || null;
 }
 
 /**

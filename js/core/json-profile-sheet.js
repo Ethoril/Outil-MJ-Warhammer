@@ -10,6 +10,7 @@ import { cloneValue, uid } from './models.js';
 import { getReferenceCatalogue, resolveTalent, resolveSkill } from './reference-catalog.js';
 import { ficheSnapshot, ficheFingerprint, planProfileSync, FICHE_BASIC_SKILLS } from './fiche-sync.js';
 import { parseSizeTrait } from './creature-size.js';
+import { CARAC_BY_LOWER } from './carac-keys.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 /** Clé de comparaison d'un nom : minuscules, sans accents ni ponctuation, « œ » = « oe ». */
@@ -50,7 +51,7 @@ const NAMED_KEYS = { name: ['nom', 'name'] };
 const ITEM_KEYS = { name: ['nom', 'name'], category: ['categorie', 'category'] };
 const TRAIT_KEYS = { name: ['nom', 'name'], value: ['valeur', 'value', 'rating', 'x'] };
 const BASIC_SKILLS = new Set(FICHE_BASIC_SKILLS.map(skill => skill.name));
-const CARAC_UPPER = { cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' };
+const CARAC_UPPER = CARAC_BY_LOWER;
 const BASIC_CARACS = new Map(FICHE_BASIC_SKILLS.map(skill => [skill.name, CARAC_UPPER[skill.carac]]));
 const CARAC_LOWER = { CC: 'cc', CT: 'ct', F: 'f', E: 'e', I: 'i', Ag: 'ag', Dex: 'dex', Int: 'int', FM: 'fm', Soc: 'soc' };
 const SIZE_WORDS_SHOWN = 'Petite, Moyenne, Grande, Énorme, Monstrueuse';

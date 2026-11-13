@@ -30,6 +30,8 @@ import { awakeningSpell, awakeningMessage } from './v5-spell-restrictions.js';
 export { conditionLevels };
 import { weaponHandsForParticipant } from './equipment.js';
 import { hasMomentum, withMomentum } from './v5-momentum-state.js';
+import { CARAC_KEYS } from './carac-keys.js';
+import { canonicalQualityId, hasQuality, isQuality } from './quality-normalization.js';
 export { hasMomentum, withMomentum } from './v5-momentum-state.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
 /** Un participant qui vient d'acquérir une restriction de Peur perd l'Élan qu'il avait. */
@@ -61,8 +63,8 @@ export function inferV5Kind(action = {}, attackContext = {}) {
 export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue()) {
   const context = normalized.protectionContext || {};
   const shield = normalized.target?.equipment?.find(item => item.kind === 'shield' && item.id === context.shieldId);
-  const bouclier = shield?.keywords?.some(item => item.id === 'bouclier') === true;
-  const word = shield?.keywords?.find(item => item.id === 'protectrice');
+  const bouclier = hasQuality(shield?.keywords, 'bouclier');
+  const word = shield?.keywords?.find(item => isQuality(item, 'protectrice'));
   const shieldDamage = Number(normalized.target?.extensions?.v5?.armorDamageByItem?.[shield?.id]) || 0;
   const rating = bouclier ? Math.max(0, Number(shield?.ap) - shieldDamage) : word?.parameter?.trim() === '' ? null : Number(word?.parameter);
   const source = catalogue.keywords.find(item => item.id === 'bouclier');
@@ -94,9 +96,9 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
   const v5Confirmed = confirmed && bouclier && canUseV5Bonus;
   const legacyRanged = !bouclier && rating >= 2;
   // Barrakul (décision MJ 05/11) : un bouclier non magique perd son +1 DR ; ses PA sont retirés par locationProtection.
-  const attackQualityIds = (normalized.action?.qualities || []).map(row => typeof row === 'string' ? row : row?.id);
+  const attackQualityIds = (normalized.action?.qualities || []).map(row => canonicalQualityId(row));
   const barrakulIgnored = (v5Confirmed || (!bouclier && confirmed)) && attackQualityIds.includes('barrakul')
-    && keywordMechanicalStatus('barrakul').status === 'covered' && !shield.keywords?.some(item => item.id === 'magique');
+    && keywordMechanicalStatus('barrakul').status === 'covered' && !hasQuality(shield.keywords, 'magique');
   return { confirmed: !bouclier && confirmed,
     ...(barrakulIgnored ? { barrakulIgnored: true } : {}),
     ...(bouclier ? { v5Bonus: v5Confirmed } : {}),
@@ -109,7 +111,7 @@ export function v5ShieldDefense(normalized, catalogue = getReferenceCatalogue())
 // Malice de Ranald : pendant la durée, dans tout Test opposé contre l’adversaire désigné, deux Caractéristiques du prêtre prennent
 // la valeur de l’adversaire ; la fiche ne change pas, le score du Test est décalé de l’écart lu au moment du Test.
 // Caractéristique réelle d'une action : les actions de profil et manuelles portent « Custom » (aucune).
-const TEST_CHARACTERISTICS = new Set(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
+const TEST_CHARACTERISTICS = new Set(CARAC_KEYS);
 export const actionCharacteristic = action => TEST_CHARACTERISTICS.has(action?.attr) ? action.attr : null;
 // Couche de Malice de Ranald du porteur contre cet adversaire, ou null.
 export function characteristicMatchAgainst(tester, opponent) {
@@ -251,7 +253,7 @@ export function buildCombatTest(normalized, role = 'actor') {
     if(armor.stealthDr&&/(?:discretion|furtivite)/u.test(foldedLabel))modifiers.push({id:'armor:stealth',label:'Armure portée (mailles/plates)',amount:armor.stealthDr});
     if(armor.perceptionDr&&/perception/u.test(foldedLabel))modifiers.push({id:'armor:perception',label:'Heaume fermé porté',amount:armor.perceptionDr});
   }
-  if(defending&&kind==='melee'&&normalized.action?.qualities?.some(row=>(typeof row==='string'?row:row?.id)==='a-enroulement'))
+  if(defending&&kind==='melee'&&normalized.action?.qualities?.some(row=>isQuality(row,'a-enroulement')))
     modifiers.push({id:'quality:a-enroulement',label:'Arme à enroulement adverse',amount:-1});
   if(!defending){
     const queued=actor?.extensions?.v5?.combatEffects||[],penalty=queued.find(row=>row.kind==='next-action-sl');
@@ -359,11 +361,11 @@ export function buildCombatTest(normalized, role = 'actor') {
     if (targetLevels.has('surpris')) modifiers.push({ id: 'target-surprised', label: 'Cible Surprise', amount: 2 });
   }
   // V5 p.165 : on ne tire engagé qu'avec une arme Pistolet.
-  if(!defending&&kind==='ranged'&&settings.context?.engagedWithShooter===true&&!(action.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='pistolet'))unresolved.push('Tir sur un adversaire engagé avec le tireur : seule une arme Pistolet permet de tirer en étant engagé (V5 p.165).');
+  if(!defending&&kind==='ranged'&&settings.context?.engagedWithShooter===true&&!(action.qualities||[]).some(row=>isQuality(row,'pistolet')))unresolved.push('Tir sur un adversaire engagé avec le tireur : seule une arme Pistolet permet de tirer en étant engagé (V5 p.165).');
   const pistolContact=previewV5PistolContact({qualities:action.qualities||[],attack:!defending,engaged:settings.context?.targetEngaged===true,ranged:kind==='ranged'});
   // Livre de base V5 v3 p.165 : un tir contre un adversaire engagé avec le tireur se résout comme une mêlée et ne compte pas comme un tir dans la mêlée.
   // Tireur engagé avec un autre que sa cible (p. 165) : seule une arme Pistolet permet de tirer.
-  if(!defending&&kind==='ranged'&&settings.context?.shooterEngagedElsewhere===true&&settings.context?.engagedWithShooter!==true&&!(action.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='pistolet'))unresolved.push('Tireur engagé en mêlée : seule une arme Pistolet permet de tirer (p. 165).');
+  if(!defending&&kind==='ranged'&&settings.context?.shooterEngagedElsewhere===true&&settings.context?.engagedWithShooter!==true&&!(action.qualities||[]).some(row=>isQuality(row,'pistolet')))unresolved.push('Tireur engagé en mêlée : seule une arme Pistolet permet de tirer (p. 165).');
   if(!defending&&kind==='ranged'&&settings.context?.targetEngaged===true&&settings.context?.engagedWithShooter!==true&&!pistolContact.allowed)disadvantages.push({id:'target-engaged',label:'Tir sur une cible engagée'});
   if(!defending&&kind==='test'&&action.attr==='F'&&context.entanglementTest===true){
     const weaponId=context.entanglementWeaponId||action.extensions?.fiche?.equipmentId||action.extensions?.equipment?.id;
@@ -391,7 +393,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   unresolved.push(...applyV5AttackSituationModifiers(modifiers,{role:talentRole,kind,actionType:action.type,actor,target,context:settings.context||{},actorSize:settings.actorSize,targetSize:settings.targetSize,talentRules:talentModifiers.penaltyRules,advantage:advantages.length-disadvantages.length,aimed:settings.aimed,rangeBands:kind==='ranged'&&!defending?computeV5WeaponRangeBands(settings.context?.weaponRangeYards??(actor.equipment?.find(item=>item.id===action.extensions?.fiche?.equipmentId)||action.extensions?.equipment)?.range??action.range??action.rangeYards,actor):null}));
   // À répétition (V5 v3 p.305) : deux tirs sur la même cible à −1 DR en une seule Action ; chaque tir est un Test, le second est gratuit (repeaterSecondShot).
   if (!defending && kind === 'ranged' && ['attack', 'attaque'].includes(action.type) && settings.context?.repeaterDoubleShot === true) {
-    if (!(action.qualities || []).some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) unresolved.push('Tir double : une arme À répétition est requise (V5 p.305).');
+    if (!(action.qualities || []).some(row => isQuality(row, 'a-repetition'))) unresolved.push('Tir double : une arme À répétition est requise (V5 p.305).');
     else modifiers.push({ id: 'quality:repeater-double', label: 'À répétition : tir double', amount: -1 });
   }
   if (sequelae.offHand) {

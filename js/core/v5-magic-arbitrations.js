@@ -11,6 +11,7 @@ export { revertBeastForm } from './v5-beast-form-revert.js';
 import { isTargetUndead, isTargetDaemon } from './v5-magic-target-nature.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { REIKLAND_BEASTS, KADON_MONSTERS } from '../data/v5-transformation-bestiary.js';
+import { CARAC_BY_LOWER } from './carac-keys.js';
 
 
 /** Bêtes du Reikland (Forme bestiale, Livre de base pp. 325-327) et monstres de Transformation de Kadon (pp. 328-335). */
@@ -27,7 +28,7 @@ const EXCLUDED_BEAST_TRAITS = /^(bestial|craintif|skittish)/;
 /** Traits optionnels que Forme bestiale refuse (V5 p. 245) : Taille (Énorme) et Nuée. */
 const EXCLUDED_BEAST_OPTIONAL = /^(nuee|taille \(enorme\))/;
 const ARMOR_LOCATIONS = Object.freeze(['head', 'body', 'rightArm', 'leftArm', 'rightLeg', 'leftLeg']);
-const CARAC_KEYS = Object.freeze({ cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' });
+const CARAC_KEYS = CARAC_BY_LOWER;
 
 const SIZE_KEYS = Object.freeze({ petite: 'small', moyenne: 'average', grande: 'large', enorme: 'enormous', monstrueuse: 'monstrous' });
 const SIZE_LABELS = Object.freeze({ small: 'Petite', average: 'Moyenne', large: 'Grande', enormous: 'Énorme', monstrous: 'Monstrueuse' });

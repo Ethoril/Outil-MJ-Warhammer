@@ -14,7 +14,7 @@ import { ENGINES } from '../data/keyword-engines.js';
 /** Pure E12 action resolution. It never reads DOM, mutates a Store or rolls implicitly. */
 import { isCriticalRoll, isFumbleRoll } from './roll-qualities.js';
 import { actionWeaponDamage, computeDamage, evaluateWeaponDamage, strengthBonusOf } from './damage.js';
-import { normalizeQualities } from './quality-normalization.js';
+import { normalizeQualities, canonicalQualityId, isQuality } from './quality-normalization.js';
 import { bestiaryProfileStateImmunity, planBestiaryProfileAbilities } from './creature-abilities.js';
 import { applyHeadCriticals } from './creature-heads.js';
 import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
@@ -152,7 +152,7 @@ export function previewResolution(input) {
     initial.action={...initial.action,qualities:conditional};
   }
   const sourceQualities=weaponItem?normalizeQualities([...equipmentQualities(weaponItem),...(initial.action.qualities||[])]):initial.action.qualities;
-  const salvoQuality=sourceQualities.find(row=>['salve','salvo'].includes(typeof row==='string'?row:row?.id));
+  const salvoQuality=sourceQualities.find(row=>['salve','salvo'].includes(canonicalQualityId(row)));
   const previousSalvoShots=Number(initial.v5?.context?.salvoPriorShotsThisTurn??(initial.v5State?.standardTurnActions||initial.v5State?.extensions?.v5?.standardTurnActions)?.filter(row=>
     row.actorId===initial.actor?.id&&row.weaponId===weaponItem?.id&&row.encounterId===initial.v5Clock?.encounterId&&row.turnId===initial.v5Clock?.turnId&&row.kind==='action'&&row.actionType==='attack').length??0);
   if(salvoQuality&&attackType(initial.action.type)&&initial.v5?.kind==='ranged'&&Number.isSafeInteger(previousSalvoShots)&&previousSalvoShots>0){
@@ -170,19 +170,14 @@ export function previewResolution(input) {
   initial.combatPrelude=prelude;
   const prepared = previewV5ActionQualities(initial,weaponSkillPreview.receipt?{sourceQualities:weaponSkillPreview.action.qualities}:undefined);
   const normalized = prepared.normalized;
-  // « Précise » hérité de la V4 (+10) : en V5 la qualité est « Pointue » (+1 DR sur une réussite, Imprécise l'emporte ; livre p. 305).
-  if(Array.isArray(normalized.action?.qualities)&&normalized.action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='precise')){
-    const asPointue=row=>(typeof row==='string'?row:row?.id)==='precise'?{id:'pointue',name:'Pointue',parameter:''}:row;
-    normalized.action={...normalized.action,qualities:normalizeQualities(normalized.action.qualities.map(asPointue))};
-  }
   if(weaponItem?.extensions?.v5?.destroyed===true)normalized.destroyedWeaponUnresolved='Arme détruite : elle ne peut pas être utilisée.';
   if(normalized.v5?.context?.knockout===true){
-    const qids=(normalized.action?.qualities||[]).map(q=>typeof q==='string'?q:q?.id),nature=normalized.v5?.context?.attackNature;
+    const qids=(normalized.action?.qualities||[]).map(q=>canonicalQualityId(q)),nature=normalized.v5?.context?.attackNature;
     if(!attackType(normalized.action?.type)||normalized.v5?.kind!=='melee'||normalized.action?.attr==='CT'||normalized.attackContext?.ranged===true||['spell','miracle','missile','ranged'].includes(nature)||qids.some(id=>['ablaze','enflamme'].includes(id))||normalized.action?.magical===true)
       normalized.knockoutUnresolved='Assommer : coup retenu impossible avec un projectile, un sort, un miracle ou une arme Enflammée; attaque de mêlée requise.';
     else if(!qids.includes('assommante'))normalized.knockoutUnresolved='Assommer : une arme avec la Qualité Assommante est requise.';
     normalized.knockoutValid=!normalized.knockoutUnresolved;
-    if(normalized.knockoutValid)normalized.action={...normalized.action,qualities:normalized.action.qualities.filter(q=>!['devastatrice','taille','empaleuse','perforante'].includes(typeof q==='string'?q:q?.id))};
+    if(normalized.knockoutValid)normalized.action={...normalized.action,qualities:normalized.action.qualities.filter(q=>!['devastatrice','taille','empaleuse','perforante'].includes(canonicalQualityId(q)))};
   }
   let weaponTrapRecovery=null,weaponTrapRecoveryConflict=false;
   const recoveryId=normalized.v5?.context?.recoverDroppedWeaponId,recoveryOwnerId=normalized.v5?.context?.recoverDroppedWeaponOwnerId;
@@ -439,7 +434,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   let doubled = actorTest.details.doubled;
   let criticalClassification = isCriticalRoll(roll, doubled, action.qualities);
   let fumbleClassification = isFumbleRoll(roll, doubled, action.qualities);
-  const explosionAttack=attackType(action.type)&&action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='explosion');
+  const explosionAttack=attackType(action.type)&&action.qualities.some(row=>isQuality(row,'explosion'));
   const explosionOpposed=explosionAttack&&normalized.v5.context?.explosionOpposed===true;
   const parrySecond=previewV5Parry({qualities:action.qualities,dualWielding:normalized.v5.context?.dualWielding===true,
     isSecondAttack:normalized.v5.context?.secondWeaponAttack===true,firstAttackHit:normalized.v5.context?.firstWeaponAttackHit===true});
@@ -605,14 +600,14 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const rawCriticalLocation = criticalAttack && context.fateAction==='automatic-success' && fateCriticalLocation ? criticalTableLocation({roll:null,...fateCriticalLocation},context) : criticalAttack && criticalLocationRoll != null ? criticalTableLocation(creatureLocationOf(criticalLocationRoll,target,context),context) : null;
   // Preneur de têtes (L25 p.155) : la table Tête est choisie, aucun jet de localisation n'est utile.
   const criticalLocation = wulfrikHeadTableChosen && criticalAttack ? { ...(rawCriticalLocation || criticalTableLocation({ roll: null, ...CALLED_SHOT_LOCATIONS.head }, context)), key: 'HEAD', name: 'Tête', tableOverride: 'Wulfrik · Preneur de têtes' } : rawCriticalLocation;
-  const inoffensive = action.qualities.some(q => q.id === 'inoffensive') && keywordMechanicalStatus('inoffensive').status === 'covered';
+  const inoffensive = action.qualities.some(q => isQuality(q, 'inoffensive')) && keywordMechanicalStatus('inoffensive').status === 'covered';
   const weaponReferenceId = action.extensions?.fiche?.equipmentId || action.extensions?.equipment?.id;
   const selectedWeapon = actor?.equipment?.find(item => item.id === weaponReferenceId && item.kind === 'weapon') || null;
   const weaponSource = selectedWeapon || action.extensions?.equipment || null;
   const conjuredEffectId=action.spellEffectId||action.extensions?.v5?.spellEffectId||null;
   const conjuredEffect=conjuredEffectId?(actor?.extensions?.v5?.spellEffects||[]).find(row=>row.id===conjuredEffectId):null;
   const conjuredWeaponKey=action.extensions?.v5?.conjuredWeaponKey||action.extensions?.v5?.conjuredWeaponProfile?.key||null;
-  const reloadQuality = action.qualities?.find(row => ['a-repetition','recharge','salve','salvo'].includes(typeof row === 'string' ? row : row?.id))
+  const reloadQuality = action.qualities?.find(row => ['a-repetition','recharge','salve','salvo'].includes(canonicalQualityId(row)))
     || (selectedWeapon?.reload!=null?{id:'recharge',parameter:String(selectedWeapon.reload)}:null);
   let weaponReload = null;
   let projectileLodging = null;
@@ -738,7 +733,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     else entanglementRelease={linkId,holderId:actor.id,weaponId,conjuredEffectId:conjuredLock?.effect.id||null,conditionParticipantId:condition.person.id,condition:clone(condition.state)};
   }
   if (attackType(action.type) && actorPlan.kind === 'ranged' && reloadQuality) {
-    const reloadIds = [...(action.qualities || []), ...(selectedWeapon?.keywords || [])].map(row => typeof row === 'string' ? row : row?.id);
+    const reloadIds = [...(action.qualities || []), ...(selectedWeapon?.keywords || [])].map(row => canonicalQualityId(row));
     const reloadLabel = reloadIds.includes('a-repetition') ? 'À répétition' : reloadIds.some(id => ['salve', 'salvo'].includes(id)) ? 'Salve' : 'Recharge';
     if (!selectedWeapon) {
       // Arme de profil sans exemplaire d'inventaire (C33) : le MJ saisit le chargeur à la main ; aucun compteur durable n'est muté.
@@ -749,7 +744,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     } else {
       const current = selectedWeapon.extensions?.v5?.reloadState || initialV5ReloadState({...selectedWeapon,keywords:[...(selectedWeapon.keywords||[]),...(action.qualities||[])]}).state;
       if (!current) unresolved.push('À répétition : compteur de tirs ou Recharge non interprétable; arbitrage MJ requis.');
-      else if(selectedWeapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true)&&current.requiresManualRotation===true&&context.freeHandAvailable!==true)
+      else if(selectedWeapon.keywords?.some(row=>isQuality(row,'a-repetition')&&row?.asterisk===true)&&current.requiresManualRotation===true&&context.freeHandAvailable!==true)
         unresolved.push('Poivrière : le canon tiré doit être préparé manuellement avant le prochain tir; confirmez que la seconde main est libre (L13 p.103).');
       else {
         const consumed = consumeV5WeaponShot(current);
@@ -758,7 +753,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         if (consumed.status !== 'shot') unresolved.push(`${reloadLabel} : l’arme doit être rechargée avant un nouveau tir.`);
         else {
           const after=consumed.state;
-          if(selectedWeapon.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true)){
+          if(selectedWeapon.keywords?.some(row=>isQuality(row,'a-repetition')&&row?.asterisk===true)){
             after.requiresManualRotation=false;
             if(context.freeHandAvailable!==true){
               after.shotsRemaining=0;
@@ -773,9 +768,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       }
     }
   }
-  if(attackType(action.type)&&actorPlan.kind==='ranged'&&selectedWeapon?.keywords?.some(row=>(typeof row==='string'?row:row?.id)==='a-repetition'&&row?.asterisk===true)&&typeof context.freeHandAvailable!=='boolean')
+  if(attackType(action.type)&&actorPlan.kind==='ranged'&&selectedWeapon?.keywords?.some(row=>isQuality(row,'a-repetition')&&row?.asterisk===true)&&typeof context.freeHandAvailable!=='boolean')
     unresolved.push('Poivrière : indiquez si la seconde main est libre; sinon ce tir perd le bénéfice d’À répétition et impose une recharge complète (L13 p.103).');
-  if (attackType(action.type) && actorPlan.kind === 'ranged' && criticalAttack && !(normalized.criticalDeclined||[]).length && hit && action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='empaleuse')) {
+  if (attackType(action.type) && actorPlan.kind === 'ranged' && criticalAttack && !(normalized.criticalDeclined||[]).length && hit && action.qualities.some(row=>isQuality(row,'empaleuse'))) {
     const ammunition=actor?.equipment?.find(item=>item.id===normalized.ammunitionId&&item.kind==='ammunition');
     const projectile=previewV5ImpaleProjectile({qualities:action.qualities,ranged:true,critical:true,ammunitionId:ammunition?.id,
       ammunitionType:ammunition?`${ammunition.name||''} ${ammunition.category||''}`:'',weaponId:selectedWeapon?.id,
@@ -805,7 +800,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const pistolContact = previewV5PistolContact({ qualities: action.qualities, attack: attackType(action.type),
     engaged: context.targetEngaged === true, ranged: actorPlan.kind === 'ranged' });
   const allowsPistolContactDodge = attackType(action.type) && actorPlan.kind === 'ranged' && (context.targetEngaged === true || context.engaged === true)
-    && action.qualities.some(row => (typeof row === 'string' ? row : row?.id) === 'pistolet')
+    && action.qualities.some(row => isQuality(row, 'pistolet'))
     && /^(?:Esquive|Dodge|Ag)$/iu.test(normalized.defense?.label || normalized.defense?.attr || '');
   if (!explosionAttack && !parryUnopposed && attackType(action.type) && actorPlan.kind === 'ranged' && normalized.defense && context.rangedOppositionAllowed !== true
     && !(defenderPlan.kind === 'test' && v5ShieldDefense(normalized).rangedDodgeAllowed)
@@ -819,25 +814,25 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const allQualities = [...action.qualities, ...(normalized.defense?.qualities || [])];
   const approvedHomebrewQualities=[...(normalized.combatPrelude?.small?.approvedQualities||[]),...(normalized.combatPrelude?.small?.defenderApprovedQualities||[])];
   const mechanicalWarnings = allQualities.filter(q => !approvedHomebrewQualities.includes(q.id)&&Object.hasOwn(ENGINES, q.id)
-    && (keywordMechanicalStatus(q.id).status !== 'covered' || ['target-score-bonus', 'add-units-die'].includes(ENGINES[q.id].engine)))
+    && (keywordMechanicalStatus(q.id).status !== 'covered' || ENGINES[q.id].engine === 'add-units-die'))
     .map(q => ({ keywordId: q.id, reason: 'description-mecanique-v5-requise' }));
   // Weapon damage of a landed attack (`BF+4` read with the attacker's F). A
   // `manual` status (unknown expression, F missing) means no automatic damage:
   // the MJ arbitrates instead of silently getting 0.
   let weapon = null;
-  const protectionTalent=evaluateV5Talents(actor,{event:'protection.before',role:'attacker',context:{kind:actorPlan.kind,weapon:{impale:action.qualities.some(q=>q.id==='empaleuse')}}});
+  const protectionTalent=evaluateV5Talents(actor,{event:'protection.before',role:'attacker',context:{kind:actorPlan.kind,weapon:{impale:action.qualities.some(q=>isQuality(q,'empaleuse'))}}});
   supplementaryTalentPlans.push(protectionTalent);
   const ignoredArmourFlaws=protectionTalent.proposals.filter(row=>row.op==='ignoreArmourFlaw').map(row=>row.key);
   if(frenzyDamage)supplementaryTalentPlans.push({proposals:[{op:'modifyDamage',amount:1,origins:[actor.states.find(s=>s.key==='frenzy').source]}]});
   const weaponDamage = actionWeaponDamage(action);
   const strengthBonus = mountedChargePlan?.useMountStrengthBonus ? mountedChargePlan.strengthBonus : strengthBonusOf(actor?.caracs);
   let blastPlan=null;
-  if(action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='explosion')&&attackType(action.type)&&hit){
+  if(action.qualities.some(row=>isQuality(row,'explosion'))&&attackType(action.type)&&hit){
     const blastTargets=context.explosionTargetIds;
     const blastWeapon=evaluateWeaponDamage(weaponDamage,strengthBonus);
     if(blastWeapon.status!=='resolved')unresolved.push('Explosion : Dégâts d’arme à interpréter manuellement avant de résoudre les cibles.');
     blastPlan=previewV5Blast({qualities:action.qualities,targetIds:blastTargets,weaponDamage:blastWeapon.status==='resolved'?blastWeapon.value:NaN,
-      unitsDie:roll%10,damaging:action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='devastatrice')});
+      unitsDie:roll%10,damaging:action.qualities.some(row=>isQuality(row,'devastatrice'))});
     if(!blastPlan.ready)unresolved.push(...blastPlan.unresolved);
     else {
       const roster=normalized.v5State?.participants||[];
@@ -847,7 +842,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     }
   }
   let spreadPlan=null;
-  if(action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='dispersion')&&attackType(action.type)&&actorPlan.kind==='ranged'&&hit){
+  if(action.qualities.some(row=>isQuality(row,'dispersion'))&&attackType(action.type)&&actorPlan.kind==='ranged'&&hit){
     const spreadWeapon=evaluateWeaponDamage(weaponDamage,strengthBonus);
     if(spreadWeapon.status!=='resolved')unresolved.push('Dispersion : Dégâts d’arme à interpréter manuellement avant de résoudre les cibles.');
     spreadPlan=previewV5Spread({qualities:action.qualities,rangeBand:context.spreadRangeBand,targetIds:context.spreadTargetIds,
@@ -878,7 +873,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       if(appendageAp===undefined||appendageAp===null||appendageAp===''||!Number.isSafeInteger(Number(appendageAp))||Number(appendageAp)<0)unresolved.push('Appendice : saisissez les PA de l’appendice atteint.');
       else protection={...protection,ap:Number(appendageAp)+(protection.shieldAp||0),baseAp:Number(appendageAp),counted:[],appendage:context.hitAppendage};
     }
-    if(hit&&action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='taille')){
+    if(hit&&action.qualities.some(row=>isQuality(row,'taille'))){
       const struckItemId=context.struckItemId;
       const struck=(protection.counted||[]).find(item=>item.id===struckItemId)||[protection.shield].find(item=>item?.id===struckItemId);
       // No armour or shield piece at this location: Hack has nothing to damage and must not block the attack.
@@ -916,10 +911,10 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       roll,
       targetToughnessBonus: Math.floor((Number(target.caracs?.E) || 0) / 10),
       targetArmour,
-      qualities: blastPlan?.ready?action.qualities.filter(row=>(typeof row==='string'?row:row?.id)!=='devastatrice'):action.qualities,
+      qualities: blastPlan?.ready?action.qualities.filter(row=>!isQuality(row,'devastatrice')):action.qualities,
       damageMultiplier:normalized.combatPrelude?.small?.multiplier||1,approvedQualities:normalized.combatPrelude?.small?.approvedQualities||[]
     });
-    if(damage&&blastPlan?.ready){damage={...damage,activeQualities:action.qualities,explosionUnitsDie:action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='devastatrice')?roll%10:0};}
+    if(damage&&blastPlan?.ready){damage={...damage,activeQualities:action.qualities,explosionUnitsDie:action.qualities.some(row=>isQuality(row,'devastatrice'))?roll%10:0};}
   }
 
   const special=previewTalentReplacement(normalized,{hit,test:actorTest,opposed,damage,location,qualityContext:v5ActionQualityContext(normalized)});
@@ -980,8 +975,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   if (!unopposedExplosion&&!parryUnopposed&&!(opposed?.winner==='defender'&&normalized.defense?.v5?.context?.specialAttack==='shieldsman')&&context.silentTakedown !== true && ['melee', 'ranged'].includes(defenderTest?.kind) && defenderTest.success && defenderCriticalClassification.critique) {
     const critLocation = normalized.defenderCriticalRolls?.location != null ? creatureLocationOf(normalized.defenderCriticalRolls.location,actor,normalized.defense?.v5?.context||{}) : null;
-    const defenderRolls=prepareCritical(target,normalized.defenderCriticalRolls,normalized.defense.v5,'defender',normalized.defense.qualities.some(q=>q.id==='inoffensive'),['first']);
-    const details = criticalDetails(defenderRolls, critLocation, divineCriticalSeverityBonus(target), normalized.defense.qualities.some(q => q.id === 'inoffensive'));
+    const defenderRolls=prepareCritical(target,normalized.defenderCriticalRolls,normalized.defense.v5,'defender',normalized.defense.qualities.some(q=>isQuality(q,'inoffensive')),['first']);
+    const details = criticalDetails(defenderRolls, critLocation, divineCriticalSeverityBonus(target), normalized.defense.qualities.some(q => isQuality(q, 'inoffensive')));
     const guard = critLocation ? locationProtection(actor, { location: critLocation, attackRoll: defenderTest.roll,
       hitLocationRoll: critLocation.roll, critical: true, ranged: false, qualities: normalized.defense.qualities,
       nature: defenderNature() }) : null;
@@ -1002,7 +997,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
         defenderSize:trapContext.defenderSize??normalized.v5.targetSize,opponentSize:trapContext.opponentSize??normalized.v5.actorSize,chooseTrap:trapChoice,
         hasDisarmTalent,spendMomentum:trapContext.trapBladeSpendMomentum===true,catchInFreeHand:trapContext.trapBladeCatch===true,
         chooseBreak:trapContext.trapBladeChooseBreak===true,strengthTestSuccess,meleeSl:defenderTest.sl,
-        unbreakable:(selectedWeapon?.keywords||[]).some(row=>(typeof row==='string'?row:row?.id)==='incassable')});
+        unbreakable:(selectedWeapon?.keywords||[]).some(row=>isQuality(row,'incassable'))});
       if(trapChoice&&!trap.ready)unresolved.push(...trap.unresolved);
       if(trapChoice&&trap.available&&trap.trapped){
         if(!selectedWeapon?.id)unresolved.push('Piège-lame : exemplaire durable de l’arme adverse requis.');
@@ -1049,8 +1044,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   const riposteExcess=defenderDamage&&knownHp(actor)?Math.max(0,defenderDamage.finalDamage-Number(actor.hp)):0;
   if(riposteExcess>0){
-    const rolls=prepareCritical(target,normalized.defenderCriticalRolls,normalized.defense.v5,'defender',normalized.defense.qualities.some(q=>q.id==='inoffensive'),['second']);
-    const extra=secondCritical(reverseV5Roll(defenderTest.roll),rolls,riposteExcess*10+divineCriticalSeverityBonus(target),normalized.defense.qualities.some(q=>q.id==='inoffensive'),defenderDamage.location);
+    const rolls=prepareCritical(target,normalized.defenderCriticalRolls,normalized.defense.v5,'defender',normalized.defense.qualities.some(q=>isQuality(q,'inoffensive')),['second']);
+    const extra=secondCritical(reverseV5Roll(defenderTest.roll),rolls,riposteExcess*10+divineCriticalSeverityBonus(target),normalized.defense.qualities.some(q=>isQuality(q,'inoffensive')),defenderDamage.location);
     defenderCritical={...(defenderCritical||{kind:'Critique',targetId:actor.id,details:null}),second:extra,excessWounds:riposteExcess};
     defenderCritical.items=criticalItems(defenderCritical.details,extra,normalized.defenderCriticalDeclined);
     defenderCritical.application=criticalApplication(defenderCritical.items);
@@ -1069,12 +1064,12 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   const slashPlan=previewV5Slash({qualities:action.qualities,criticalDamage:slashCritical,spendAdvantage:entailleSpend});
   const slash={...slashPlan,momentumSpent:entailleSpend};
   if(!slash.ready)unresolved.push(...slash.unresolved);
-  const entaille=action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='entaille');
+  const entaille=action.qualities.some(row=>isQuality(row,'entaille'));
   if(entaille&&entailleSpend>0&&(entailleSpend!==1||slash.bleedingConditions<2||!hasMomentum(actor)))unresolved.push('Entaille : un Élan disponible est requis pour une Hémorragique supplémentaire.');
   const slashConditions=slash.ready&&slash.bleedingConditions>0&&hit&&!replacement&&target
     ?[{id:`${normalized.resolutionId}:quality:entaille`,key:'hemorragique',name:'Hémorragique',level:slash.bleedingConditions,source:{kind:'quality',keywordId:'entaille',authorId:actor?.id}}]:[];
   const fast=previewV5Fast({qualities:action.qualities,isAttack:attackType(action.type),dualWielding:context.dualWielding===true,secondWeaponAttack:context.secondWeaponAttack===true});
-  const immobilisingQuality = action.qualities.find(row => (typeof row === 'string' ? row : row?.id) === 'immobilisante');
+  const immobilisingQuality = action.qualities.find(row => isQuality(row, 'immobilisante'));
   const entanglementKind=context.entanglementKind||selectedWeapon?.extensions?.v5?.entanglementKind
     ||(selectedWeapon?.baseId==='weapon-armes-corps-a-corps-armes-d-hast-mancatcher-2m'?'mancatcher':'wielder');
   const immobilisingStrength=immobilisingQuality?entanglementStrength({kind:entanglementKind,actorStrength:actor?.caracs?.F,
@@ -1198,8 +1193,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:arachnarok-web-poison`, key: 'empoisonne', name: 'Empoisonné', level: 1, source: { kind: 'bestiary-profile', ability: 'arachnarok-venom-webs', authorId: actor?.id } });
     }
     // Venin (Difficile) des crocs du Merwyrm (L25 p.145) seulement : les autres Venins passent par leur propre chemin.
-    if (profileId === 'E0-P-913' && action.qualities.some(row => (typeof row === 'string' ? row : row?.id) === 'venin') && damage?.finalDamage > 0) {
-      const venom = action.qualities.find(row => (typeof row === 'string' ? row : row?.id) === 'venin');
+    if (profileId === 'E0-P-913' && action.qualities.some(row => isQuality(row, 'venin')) && damage?.finalDamage > 0) {
+      const venom = action.qualities.find(row => isQuality(row, 'venin'));
       targetConditionApplication.push({ id: `${normalized.resolutionId}:f2h:creature-venom`, key: 'empoisonne', name: 'Empoisonné', level: 1, recoveryDifficulty: venom?.parameter || venom?.rating || null, source: { kind: 'bestiary-profile', ability: 'merwyrm-fanged-maw-venom', authorId: actor?.id } });
     }
   }
@@ -1224,7 +1219,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     targetConditionApplication.splice(targetConditionApplication.indexOf(row), 1);
     mechanicalWarnings.push({ ability: 'Immunité d’état du profil', state: row.name, reason: 'immunité de profil' });
   }
-  if(normalized.knockoutValid===true&&hit&&location?.key==='HEAD'&&action.qualities.some(q=>(typeof q==='string'?q:q?.id)==='assommante')){
+  if(normalized.knockoutValid===true&&hit&&location?.key==='HEAD'&&action.qualities.some(q=>isQuality(q,'assommante'))){
     const stunned=(target?.states||[]).filter(row=>row.key==='sonne').reduce((sum,row)=>sum+Math.max(1,Number(row.level)||1),0)+targetConditionApplication.filter(row=>row.key==='sonne').reduce((sum,row)=>sum+Math.max(1,Number(row.level)||1),0);
     const toughness=Number(target?.caracs?.BE??Math.floor(Number(target?.caracs?.E||0)/10));
     if(Number.isFinite(toughness)&&stunned>toughness)targetConditionApplication.push({id:`${normalized.resolutionId}:knockout:unconscious`,key:'inconscient',name:'Inconscient',level:1,source:{kind:'knockout',resolutionId:normalized.resolutionId,stunned,toughnessBonus:toughness}});
@@ -1537,7 +1532,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       const dealt=computeDamage({weaponDamage:blastTarget.damage,strengthBonus,damageBonus:0,sl:0,roll,
         targetToughnessBonus:Math.floor((Number(victim.caracs?.E)||0)/10),targetArmour:guard.ap,qualities:action.qualities.filter(row=>(typeof row==='string'?row:row?.id)!=='devastatrice'),
         damageMultiplier:normalized.combatPrelude?.small?.multiplier||1,approvedQualities:normalized.combatPrelude?.small?.approvedQualities||[]});
-      if(dealt)Object.assign(dealt,{activeQualities:action.qualities,explosionUnitsDie:action.qualities.some(row=>(typeof row==='string'?row:row?.id)==='devastatrice')?roll%10:0});
+      if(dealt)Object.assign(dealt,{activeQualities:action.qualities,explosionUnitsDie:action.qualities.some(row=>isQuality(row,'devastatrice'))?roll%10:0});
       const words=previewV5WeaponConditions({qualities:action.qualities.filter(row=>(typeof row==='string'?row:row?.id)!=='inflige'),hit:true,location:blastLocation,target:victim,actor,damage:dealt,resolutionId:`${normalized.resolutionId}:${victim.id}`});
       words.proposed.push(...secondaryInflictConditions(victim,dealt,blastLocation,`${normalized.resolutionId}:${victim.id}`));
       unresolved.push(...words.unresolved);
@@ -1568,7 +1563,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       supplementaryTalentPlans.push(...small.plans);
       unresolved.push(...small.unresolved);
       approvedHomebrewQualities.push(...small.approvedQualities);
-      const unsupported=victimInput.action.qualities.filter(q=>!small.approvedQualities.includes(q.id)&&Object.hasOwn(ENGINES,q.id)&&(keywordMechanicalStatus(q.id).status!=='covered'||['target-score-bonus','add-units-die'].includes(ENGINES[q.id].engine)));
+      const unsupported=victimInput.action.qualities.filter(q=>!small.approvedQualities.includes(q.id)&&Object.hasOwn(ENGINES,q.id)&&(keywordMechanicalStatus(q.id).status!=='covered'||ENGINES[q.id].engine==='add-units-die'));
       mechanicalWarnings.push(...unsupported.map(q=>({keywordId:q.id,reason:'description-mecanique-v5-requise-hors-comparaison-petit',participantId:victim.id})));
       if(unsupported.length)continue;
       const dealt=computeDamage({weaponDamage,strengthBonus,damageBonus,sl:opposed.netSl,roll,targetToughnessBonus:Math.floor((Number(victim.caracs?.E)||0)/10),targetArmour:guard.ap,qualities:victimInput.action.qualities,damageMultiplier:small.multiplier,approvedQualities:small.approvedQualities});
@@ -2248,7 +2243,7 @@ export function applyResolution(preview, currentState) {
     } else if(effect.type==='griffonsfoot-discharge'){
       const equipmentId=effect.equipmentId;
       const item=updated.equipment?.find(row=>row.id===equipmentId);
-      if(item)updated.equipment=updated.equipment.map(row=>row.id===equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),loadedCharges:0,griffonsfootReloadProgress:0,griffonsfootReloadRequiredSuccesses:Number(row.keywords?.find(quality=>(typeof quality==='string'?quality:quality?.id)==='recharge')?.parameter)||6,griffonsfootReloading:true,lastDischargeResolutionId:preview.resolutionId}}}:row);
+      if(item)updated.equipment=updated.equipment.map(row=>row.id===equipmentId?{...row,extensions:{...(row.extensions||{}),v5:{...(row.extensions?.v5||{}),loadedCharges:0,griffonsfootReloadProgress:0,griffonsfootReloadRequiredSuccesses:Number(row.keywords?.find(quality=>isQuality(quality,'recharge'))?.parameter)||6,griffonsfootReloading:true,lastDischargeResolutionId:preview.resolutionId}}}:row);
       addPending({kind:'griffonsfoot-reload',projectiles:effect.ammoRequired,powderRequired:true});
     } else if(effect.type==='griffonsfoot-reload-progress'){
       const item=updated.equipment?.find(row=>row.id===effect.equipmentId),v5=item?.extensions?.v5||{};

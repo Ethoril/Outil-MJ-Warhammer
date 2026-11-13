@@ -118,6 +118,28 @@ const MENTAL = new Set(['Int', 'I', 'FM', 'Soc']);
  *  - `needsInput` (`{ field, label }`), `unresolved` (tous les messages, questions comprises), `restrictions` ;
  *  - `parts` : chaque famille séparée, pour que `buildCombatTest` les place là où il les plaçait.
  */
+/**
+ * REGLES-02 : choix unique entre une pénalité d'États en DR et un Désavantage d'État, qui ne s'additionnent pas (le MJ tranche).
+ * Appelé par le calcul commun (combat, magie) et par le contexte de Test du divin.
+ * - `penalty` : plus forte pénalité d'État (DR, positive) ; `disadvantages` : lignes de Désavantage du pire État ;
+ * - `mode` : réponse du MJ (`sl` ou `disadvantage`) ; `ignoreNegative` : Obstiné (aucun conflit, pénalité ramenée à 0) ;
+ * - `requireReason` : DIV-05 (divin), le choix ne vaut qu'avec un motif `reason` ; tant qu'il n'est pas tranché, rien ne
+ *   s'applique. Sans motif exigé (combat, magie), un conflit non tranché applique les deux et reste une question.
+ * Rend `{ mixed, modeMissing, reasonMissing, appliedPenalty, disadvantages, mode, reason, arbitration }`.
+ */
+export function resolveConditionPenaltyMix({ penalty = 0, disadvantages = [], mode, reason, ignoreNegative = false, requireReason = false } = {}) {
+  const mixed = !ignoreNegative && penalty > 0 && disadvantages.length > 0;
+  const validMode = mode === 'sl' || mode === 'disadvantage';
+  const reasonText = typeof reason === 'string' ? reason.trim() : '';
+  const decided = validMode && (!requireReason || reasonText !== '');
+  const applySl = !mixed || (decided ? mode === 'sl' : !requireReason);
+  const applyDisadvantage = !mixed || (decided ? mode === 'disadvantage' : !requireReason);
+  return { mixed, modeMissing: mixed && !validMode, reasonMissing: mixed && requireReason && !reasonText,
+    appliedPenalty: !ignoreNegative && applySl ? penalty : 0, disadvantages: applyDisadvantage ? disadvantages : [],
+    mode: mixed && validMode ? mode : null, reason: mixed && reasonText ? reasonText : null,
+    arbitration: mixed && requireReason && decided ? { decisionId: 'DIV-05', mode, reason: reasonText } : null };
+}
+
 export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   const situation = context || {};
   const kind = test.kind || 'test', role = test.role || 'actor', opponent = test.opponent ?? null;
@@ -143,12 +165,10 @@ export function resolveV5TestModifiers(actor, test = {}, context = {}) {
   const penalty = penaltyEffects.penalty;
   // Des pénalités d'États différentes ne s'additionnent pas : DR contre Désavantage, le MJ tranche.
   const worstDisadvantage = conditionDisadvantageEffects(conditionDisadvantageRows(rules.disadvantages));
-  const mixed = !talents.ignoreNegative && penalty > 0 && worstDisadvantage.length > 0;
-  const mode = situation.conditionPenaltyMode;
-  const mixedUnresolved = mixed && !['sl', 'disadvantage'].includes(mode) ? [MIXED_CONDITION_QUESTION] : [];
-  const appliedPenalty = talents.ignoreNegative || mixed && mode === 'disadvantage' ? 0 : penalty;
+  const mix = resolveConditionPenaltyMix({ penalty, disadvantages: worstDisadvantage, mode: situation.conditionPenaltyMode, ignoreNegative: talents.ignoreNegative });
+  const { mixed, appliedPenalty, disadvantages: disadvantageRows } = mix;
+  const mixedUnresolved = mix.modeMissing ? [MIXED_CONDITION_QUESTION] : [];
   const penaltyRows = appliedPenalty ? [{ id: 'conditions', label: 'Plus forte pénalité d’État', amount: -appliedPenalty }] : [];
-  const disadvantageRows = !mixed || mode !== 'sl' ? worstDisadvantage : [];
   // U8 L6 : États écartés par la règle de cumul, montrés barrés (Q9).
   const droppedRows = penaltyEffects.dropped.map(row => ({ id: 'condition:' + row.key, label: 'État ' + ((actor?.states || []).find(s => s.key === row.key)?.name || row.key),
     amount: -(penaltyEffects.levels.get(row.key) || 0), rule: row.rule, source: 'État' }));

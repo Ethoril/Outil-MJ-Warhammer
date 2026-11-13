@@ -1777,6 +1777,18 @@ test('Mots clés × talents — V4 Précise se lit comme Pointue V5 (C33) ; Perc
   }
 });
 
+// REGLES-11 (MJ 13/11, option A) : Précise = Pointue partout. Une arme Précise et Pointue (Jezzail, L22) garde un seul +1 DR.
+test('REGLES-11 — Précise, Pointue, ou les deux : même Test, même DR, un seul +1 DR', () => {
+  const sum = qualities => { const p = previewResolution(raw({ action: attack({ qualities }) }));
+    return { score: p.test.score, sl: p.sl, damage: p.damage?.finalDamage, warnings: p.mechanicalWarnings.length }; };
+  const pointue = sum(['pointue']), none = sum([]);
+  assert.equal(pointue.sl, none.sl + 1, 'Pointue : +1 DR sur une réussite');
+  assert.deepEqual(sum(['precise']), pointue);
+  assert.deepEqual(sum(['precise', 'pointue']), pointue);
+  assert.deepEqual(sum([{ id: 'pointue' }, { name: 'Précise' }]), pointue);
+  assert.deepEqual(sum(['precise', 'imprecise']), sum(['pointue', 'imprecise']), 'Imprécise l’emporte aussi sur Précise');
+});
+
 test('Mots clés × talents — inconnu reste rappel visible sans moteur, armure inconnue ne vaut pas zéro', () => {
   const base = raw({ actor: person('a', { talents: talents('Coup puissant') }) });
   const unknown = previewResolution({ ...base, action: attack({ qualities: ['unknown-editorial-word'] }) });

@@ -21,6 +21,7 @@ import { normalizeArmorLocations, locationProtection } from './equipment.js';
 import { armorMaterial, wornArmourPieces } from './v5-armor-material.js';
 import { isTargetDaemon, isTargetUndead } from './v5-magic-target-nature.js';
 import { projectDivineGear } from './v5-divine-effects-gear.js';
+import { PROFILE_CARAC_KEYS, CARAC_BY_LOWER } from './carac-keys.js';
 
 /** Expressions chiffrées déclarées par un contrat ; aucun dé et aucune interprétation de prose. */
 export function spellFormulaValue(formula,caster,sl=0){
@@ -35,7 +36,7 @@ export function spellFormulaValue(formula,caster,sl=0){
 
 const fold = str => String(str || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 
-export const STANDARD_CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
+export const STANDARD_CARACS = PROFILE_CARAC_KEYS;
 
 /**
  * Calcule les caractéristiques effectives après application de la règle de non-cumul V5 :
@@ -64,43 +65,39 @@ export function calculateEffectiveStats(baseStats = {}, spellEffects = [], divin
 /** Variation nette par caractéristique d'un groupe de couches (meilleur bonus, pire malus, exceptions cumulées). */
 function statChanges(effects = []) {
   const changes = new Map();
-  const activeEffects = (Array.isArray(effects) ? effects : []).filter(e => e && e.statModifiers);
+  for (const [stat, { net, effects: sources }] of layerNets(effects, eff => (eff.statModifiers ? Object.entries(eff.statModifiers) : [])))
+    changes.set(stat, { net, capAt100: sources.some(eff => eff.capStatAt100 === true) });
+  return changes;
+}
 
-  // Collecter les modificateurs par caractéristique
+/**
+ * REGLES-03 : cumul V5 d'un groupe de couches (sorts, ou prières), seul calcul pour les Caractéristiques, les PA et le résumé des
+ * Tests. Par clé : meilleur bonus (plus les sources de Bénédiction de Lileath, `bonusTotal`), pire malus, exceptions explicites
+ * (`stackable`, `isStackable`) cumulées ; une couche = une source. `entriesOf(couche)` rend ses paires [clé, valeur] ; valeurs
+ * non numériques ou nulles ignorées. Rend Map clé → { net, effects } (`effects` : couches qui ont compté pour la clé).
+ */
+function layerNets(effects, entriesOf) {
   const modMap = new Map();
-
-  for (const eff of activeEffects) {
+  for (const eff of Array.isArray(effects) ? effects : []) {
+    if (!eff) continue;
     const isStackable = eff.stackable === true || eff.isStackable === true;
-    for (const [stat, rawVal] of Object.entries(eff.statModifiers || {})) {
+    for (const [key, rawVal] of entriesOf(eff)) {
       const val = Number(rawVal);
       if (!Number.isFinite(val) || val === 0) continue;
-      if (!modMap.has(stat)) {
-        modMap.set(stat, { bonuses: [], penalties: [], stackables: [] });
-      }
-      const entry = modMap.get(stat);
-      if (isStackable) {
-        entry.stackables.push(val);
-      } else if (val > 0) {
-        entry.bonuses.push(bonusSource(val, eff));
-      } else {
-        entry.penalties.push(val);
-      }
-      if (eff.capStatAt100 === true) {
-        entry.capAt100 = true;
-      }
+      if (!modMap.has(key)) modMap.set(key, { bonuses: [], penalties: [], stackables: [], effects: [] });
+      const entry = modMap.get(key);
+      if (isStackable) entry.stackables.push(val);
+      else if (val > 0) entry.bonuses.push(bonusSource(val, eff));
+      else entry.penalties.push(val);
+      entry.effects.push(eff);
     }
   }
-
-  // Appliquer le meilleur bonus et le pire malus (+ stackables) pour chaque caractéristique
-  for (const [stat, entry] of modMap.entries()) {
-    const bestBonus = bonusTotal(entry.bonuses);
+  const nets = new Map();
+  for (const [key, entry] of modMap) {
     const worstPenalty = entry.penalties.length > 0 ? Math.min(...entry.penalties) : 0;
-    const sumStackable = entry.stackables.reduce((acc, v) => acc + v, 0);
-
-    changes.set(stat, { net: bestBonus + worstPenalty + sumStackable, capAt100: entry.capAt100 === true });
+    nets.set(key, { net: bonusTotal(entry.bonuses) + worstPenalty + entry.stackables.reduce((acc, v) => acc + v, 0), effects: entry.effects });
   }
-
-  return changes;
+  return nets;
 }
 
 /** Source d'un bonus : valeur, lanceur et rang de Bénédiction de Lileath de ce lanceur au lancement (absent = 0). */
@@ -141,40 +138,15 @@ function magicApBonuses(spellEffects = [], divineEffects = []) {
 }
 
 function apGroupBonuses(effects = []) {
-  const activeEffects = (Array.isArray(effects) ? effects : []).filter(e => e && e.apModifiers);
-  const locMap = new Map();
-
-  for (const eff of activeEffects) {
-    const isStackable = eff.stackable === true || eff.isStackable === true;
+  const expand = eff => {
+    if (!eff.apModifiers) return [];
     const expanded = {};
-    for (const [key, value] of Object.entries(eff.apModifiers || {})) {
+    for (const [key, value] of Object.entries(eff.apModifiers)) {
       for (const loc of AP_GROUPS[key] ?? [key]) expanded[loc] = Number(expanded[loc] || 0) + Number(value);
     }
-    for (const [loc, rawVal] of Object.entries(expanded)) {
-      const val = Number(rawVal);
-      if (!Number.isFinite(val) || val === 0) continue;
-      if (!locMap.has(loc)) {
-        locMap.set(loc, { bonuses: [], penalties: [], stackables: [] });
-      }
-      const entry = locMap.get(loc);
-      if (isStackable) {
-        entry.stackables.push(val);
-      } else if (val > 0) {
-        entry.bonuses.push(bonusSource(val, eff));
-      } else {
-        entry.penalties.push(val);
-      }
-    }
-  }
-
-  const result = {};
-  for (const [loc, entry] of locMap.entries()) {
-    const bestBonus = bonusTotal(entry.bonuses);
-    const worstPenalty = entry.penalties.length > 0 ? Math.min(...entry.penalties) : 0;
-    const sumStackable = entry.stackables.reduce((acc, v) => acc + v, 0);
-    result[loc] = bestBonus + worstPenalty + sumStackable;
-  }
-  return result;
+    return Object.entries(expanded);
+  };
+  return Object.fromEntries([...layerNets(effects, expand)].map(([loc, { net }]) => [loc, net]));
 }
 
 /**
@@ -242,40 +214,8 @@ export function calculateEffectiveTestModifiers(spellEffects = [], divineEffects
 }
 
 function testModifierNets(spellEffects = []) {
-  const result = {};
-  const activeEffects = (spellEffects || []).filter(e => e && e.testModifiers && typeof e.testModifiers === 'object');
-  const modMap = new Map();
-
-  for (const eff of activeEffects) {
-    const isStackable = eff.stackable === true || eff.isStackable === true;
-    for (const [targetKey, rawVal] of Object.entries(eff.testModifiers || {})) {
-      const val = Number(rawVal);
-      if (!Number.isFinite(val) || val === 0) continue;
-      if (!modMap.has(targetKey)) {
-        modMap.set(targetKey, { bonuses: [], penalties: [], stackables: [] });
-      }
-      const entry = modMap.get(targetKey);
-      if (isStackable) {
-        entry.stackables.push(val);
-      } else if (val > 0) {
-        entry.bonuses.push(bonusSource(val, eff));
-      } else {
-        entry.penalties.push(val);
-      }
-    }
-  }
-
-  for (const [targetKey, entry] of modMap.entries()) {
-    const bestBonus = bonusTotal(entry.bonuses);
-    const worstPenalty = entry.penalties.length > 0 ? Math.min(...entry.penalties) : 0;
-    const sumStackable = entry.stackables.reduce((acc, v) => acc + v, 0);
-    const net = bestBonus + worstPenalty + sumStackable;
-    if (net !== 0) {
-      result[targetKey] = net;
-    }
-  }
-
-  return result;
+  const entries = eff => (eff.testModifiers && typeof eff.testModifiers === 'object' ? Object.entries(eff.testModifiers) : []);
+  return Object.fromEntries([...layerNets(spellEffects, entries)].filter(([, { net }]) => net !== 0).map(([key, { net }]) => [key, net]));
 }
 
 /** Round courant des effets magiques : hors combat (Round 0), le temps écoulé part du Round 1 où les effets sont posés. */
@@ -292,7 +232,7 @@ const CARAC_BY_NAME = new Map([
   ['intelligence', 'Int'], ['sociabilite', 'Soc'], ['initiative', 'I'], ['endurance', 'E'],
   ['agilite', 'Ag'], ['dexterite', 'Dex'], ['mouvement', 'M'], ['force', 'F']
 ]);
-const CARAC_ABBR = { fm: 'FM', cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', soc: 'Soc', m: 'M' };
+const CARAC_ABBR = { ...CARAC_BY_LOWER, m: 'M' };
 const BONUS_ABBR = { bfm: 'FM', bcc: 'CC', bct: 'CT', bf: 'F', be: 'E', bi: 'I', bag: 'Ag', bdex: 'Dex', bint: 'Int', bsoc: 'Soc', bm: 'M' };
 const lookupCarac = name => CARAC_BY_NAME.get(name) ?? CARAC_ABBR[name] ?? null;
 

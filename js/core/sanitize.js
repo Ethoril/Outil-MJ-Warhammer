@@ -2,6 +2,7 @@ import { normalizeEffects, normalizeState, resolveEffectCapability } from './eff
 import { cloneValue, normalizeAction, normalizeCaracs, normalizeTags, normalizeTraits, profileActionSource, normalizeFicheFields, normalizeTokenColor, normalizeTokenImage } from './models.js';
 import { validateDivineAccessRegistry } from './v5-divine-access.js';
 import { validateGameClock } from './v5-game-time.js';
+import { CARAC_KEYS } from './carac-keys.js';
 
 export function normalizeSearchText(value) {
   return String(value ?? '').toLocaleLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -66,7 +67,7 @@ function sanitizeMagicFields(value) {
   numeric(['M', 'movement'], 0, 1000);
   numeric(['durationMinutes', 'remainingMinutes', 'durationRounds', 'durationDays', 'days', 'remainingDays'], 0, 1000000);
   numeric(['expiresAtRound', 'appliedAtRound'], -1000000, 1000000);
-  for (const key of ['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']) if (out[key] !== '–') numeric([key], 0, 1000);
+  for (const key of CARAC_KEYS) if (out[key] !== '–') numeric([key], 0, 1000);
   for (const key of ['active', 'permanent', 'ignoreCriticalPenalties', 'equipmentDropped', 'isJade', 'damageCapToSlOnly', 'banished', 'dead', 'needsCorruptionTest']) if (Object.hasOwn(out, key) && typeof out[key] !== 'boolean') delete out[key];
   for (const key of ['baseCaracs', 'originalBaseCaracs', 'caracs']) if (Object.hasOwn(out, key)) out[key] = magicNumericMap(out[key], 0, 1000, true);
   for (const key of ['statModifiers', 'testModifiers', 'apModifiers']) if (Object.hasOwn(out, key)) out[key] = magicNumericMap(out[key], -1000, 1000);

@@ -39,6 +39,14 @@ export function canonicalQualityId(quality, registry = ENGINES) {
 }
 
 /**
+ * REGLES-11 : une qualité (chaîne, `{ id }` ou `{ name }`) est-elle `id` (identifiant canonique) ? Les alias du registre valent
+ * aussi pour une liste qui n'est pas passée par `normalizeQualities`.
+ */
+export const isQuality = (quality, id) => canonicalQualityId(quality) === id;
+/** REGLES-11 : la liste (absente = vide) contient-elle la qualité canonique `id` ? */
+export const hasQuality = (qualities, id) => Array.isArray(qualities) && qualities.some(quality => isQuality(quality, id));
+
+/**
  * Clone qualities, map aliases to one canonical id and retain the first
  * occurrence. Unknown editorial labels remain visible but have no engine.
  */

@@ -17,7 +17,6 @@ import {WRATH_SUMMON_RULES,planWrathSummon,wrathSummonParticipant} from './v5-di
 import {previewV5Test,selectV5Test,normalizeV5Roll} from './v5-roll.js';
 import {resolveV5ConditionTestContext,withV5TestTalents} from './v5-test-context.js';
 import {effectiveSkillScore,baseCharacteristicScore,magicSkillModifiers} from './v5-magic-talents.js';
-import {betweenGroupsRule} from './effect-engine.js';
 import {SUPPLEMENT_DIVINE_CONTRACTS} from './supplement-loader.js';
 
 const clone=value=>structuredClone(value);
@@ -243,28 +242,8 @@ function projectPrayerLesson(state,subjectKey,lesson,{operation='add'}={}){
  return {ok:true,state:next,removed,needsInput:[]};
 }
 const reducedRow=row=>row&&Object.fromEntries(['nom','portee','cible','duree','effet'].map(key=>[key,row[key]||'']));
-// Bonus d'arme divin et magique visant la même arme (ou toute arme) avec un même type de bonus de dégâts : cumul à arbitrer.
-const weaponBonusKeys=['damage','replaceDamageBonus','damageFormula'];
-const overlappingWeaponBonus=(left,right)=>Boolean(left&&right)&&(!left.equipmentId||!right.equipmentId||left.equipmentId===right.equipmentId)&&weaponBonusKeys.some(key=>left[key]!==undefined&&right[key]!==undefined);
-// DIV-05 lu depuis la table des politiques du moteur (U8 L3) : prière et sort se somment sur une caractéristique ou un Test (Q2 du
-// MJ, même clé comprise), et aussi pour les PA, les bonus d'arme et les Traits identiques (Q14, 06/11) : aucune de ces poses n'est
-// refusée tant que la table trace la paire. Une table qui ne la trace plus rétablit le refus (CA5).
-const prayerSpellSum=()=>betweenGroupsRule('prayer','spell')?.policy==='sum';
-function unresolvedCombination(state){
- const summed=prayerSpellSum();
- if(summed)return null;
- for(const target of parts(state)){
-  const spells=target.extensions?.v5?.spellEffects||[],divine=target.extensions?.v5?.divineEffects||[];
-  for(const layer of divine)for(const spell of spells){
-   if(Object.keys(layer.statModifiers||{}).some(key=>Number(layer.statModifiers[key])&&Number(spell.statModifiers?.[key])))return 'Le cumul d’un bonus divin et magique sur la même caractéristique reste à arbitrer (DIV-05).';
-   if(Object.keys(layer.testModifiers||{}).some(key=>Number(layer.testModifiers[key])&&Number(spell.testModifiers?.[key])))return 'Le cumul d’un modificateur de Test divin et magique sur la même cible de Test reste à arbitrer (DIV-05).';
-   if((layer.traits||[]).some(trait=>(spell.traits||[]).includes(trait)))return 'Le cumul d’un Trait divin et magique identique reste à arbitrer (DIV-05).';
-   if(overlappingWeaponBonus(layer.weaponBonus,spell.weaponBonus))return 'Le cumul d’un bonus d’arme divin et magique sur la même arme reste à arbitrer (DIV-05).';
-   if(Object.keys(layer.apModifiers||{}).length && (Object.keys(spell.apModifiers||{}).length||Number(spell.apBonus)||Number(spell.armorBonus)))return 'Le cumul de PA divins et magiques reste à arbitrer (DIV-05).';
-  }
- }
- return null;
-}
+// REGLES-12 : DIV-05, prière et sort se somment (table du moteur d'effets, Q2 et Q14) ; une paire absente de la table est signalée
+// par le moteur lui-même (CA5). Le refus recopié ici, jamais exécuté, est retiré.
 
 export function validateDivineSources(contract){
  if(!contract)return 'Prière inconnue dans le registre divin.';
@@ -862,7 +841,6 @@ export function previewStoreDivine(state,contractId,input={}){
   }
  }
  let calculated=preview.ready?applyDivineExecution(state,contract,captured):preview;
- if(calculated.ready){const conflict=unresolvedCombination(calculated.state);if(conflict)calculated=failure('blocked',conflict);}
  let wrathConditionPreview=null,wrathDamagePreview=null,wrathStatePreview=null;
  if(calculated.ready&&captured.wrathStateRuleId){
   const projected=projectWrathStates(parts(calculated.state).find(row=>row.id===ctx.actor.id),wrathStateRule(wrathTableResult.id),captured.executionId,state.combat?.round,contract.deity);
@@ -1548,7 +1526,6 @@ export function finalizeDivineState(before,next){
   next.combat.participants[index]=assertDivineWrathConditionsKept(expected,parts(next)[index]);
  }
  sweepDivineSummons(next);
- const conflict=unresolvedCombination(next);if(conflict)throw ruleError(conflict);
  if(!parts(next).some(row=>row.extensions?.v5?.divineEffects?.length) && !parts(before).some(row=>row.extensions?.v5?.divineEffects?.length))return next;
  next.combat.participants=parts(next).map(participant=>{
   const prior=parts(before).find(row=>row.id===participant.id);

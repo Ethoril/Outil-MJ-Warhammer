@@ -8,8 +8,9 @@ import { getReferenceCatalogue, resolveSkill, resolveTalent } from './reference-
 import { deriveHitMorphology } from './v5-hit-morphology.js';
 import { weaponNameFr } from '../data/weapon-names-fr.js';
 import { F2_H_PROFILE_ABILITIES } from '../data/f2-h-profile-abilities.js';
+import { CARAC_KEYS } from './carac-keys.js';
 
-export const BESTIARY_STAT_KEYS = Object.freeze(['M', 'CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
+export const BESTIARY_STAT_KEYS = Object.freeze(['M', ...CARAC_KEYS]);
 export const BESTIARY_KINDS = Object.freeze(['profile', 'template', 'pregenerated-character']);
 
 const isInt = value => Number.isSafeInteger(value);

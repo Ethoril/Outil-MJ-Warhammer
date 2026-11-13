@@ -5,6 +5,7 @@ import { V5_CRIT_DATA as CRIT_DATA } from '../data/v5-crits.js';
 import { V5_RULES, V5_RULE_SHORTCUTS } from '../data/v5-rules.js';
 import { MAGIC_DATA } from '../data/magic.js';
 import { getKeywordList, getKeywordsStatus, keywordMechanicalStatus } from '../core/keywords.js';
+import { ENGINES } from '../data/keyword-engines.js';
 import { getReferenceCatalogue, getReferenceSnapshot, refreshReferences } from '../core/reference-catalog.js';
 import { v5TalentCoverage, importedPjTalentPriorities, V5_TALENT_TREATMENT_LABELS } from '../core/v5-talent-coverage.js';
 import { v5QualityMechanicalStatus } from '../core/v5-talent-qualities.js';
@@ -156,8 +157,10 @@ function updateRulesList(term, root = qs('#panel-rules')) {
     matchedKeywords.forEach(k => {
       const key = `keyword:${favoriteKey(k.slug || k.name)}`;
       const coverage = v5QualityMechanicalStatus(k.id);
-      const effectStatus = k.edition !== 'V5' ? 'Description mécanique V5 à valider avant application' : coverage.status === 'covered' ? (coverage.limitations?.length ? `Mécanique partiellement couverte : ${coverage.limitations.join(' ; ')}` : 'Effet couvert par le moteur') : coverage.reason === 'version-effet-non-couverte' ? 'Effet modifié : à arbitrer' : 'Effet à appliquer manuellement';
-      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(k.name)}</strong>${k.parameter ? `<div class="muted">${escapeHtml(k.parameter)}</div>` : ''}</td><td>${escapeHtml(k.effect)}<p class="muted">${escapeHtml(k.source)} · ${escapeHtml(k.edition)} · ${escapeHtml(effectStatus)}</p>${k.note ? `<p class="muted">${escapeHtml(k.note)}</p>` : ''}</td></tr>`;
+      // REGLES-11 : un alias du registre (Précise → Pointue, Impact → Percutante) s'applique comme sa qualité cible.
+      const aliasId = ENGINES[k.id]?.aliasOf, aliasWord = aliasId ? keywords.find(w => w.id === aliasId) : null;
+      const effectStatus = aliasId ? `Appliquée comme ${aliasWord?.name || aliasId} (${aliasWord?.edition || 'V5'})` : k.edition !== 'V5' ? 'Description mécanique V5 à valider avant application' : coverage.status === 'covered' ? (coverage.limitations?.length ? `Mécanique partiellement couverte : ${coverage.limitations.join(' ; ')}` : 'Effet couvert par le moteur') : coverage.reason === 'version-effet-non-couverte' ? 'Effet modifié : à arbitrer' : 'Effet à appliquer manuellement';
+      html += `<tr><td><button type="button" class="rule-favorite ghost" data-favorite-key="${escapeHtml(key)}" aria-label="Favori">${favorites.has(key) ? '★' : '☆'}</button> <strong>${escapeHtml(k.name)}</strong>${k.parameter ? `<div class="muted">${escapeHtml(k.parameter)}</div>` : ''}</td><td>${escapeHtml(k.effect)}<p class="muted">${escapeHtml(k.source)} · ${escapeHtml(k.edition)} · ${escapeHtml(effectStatus)}</p>${aliasId ? `<p class="muted">Équivalence : se lit comme ${escapeHtml(aliasWord?.name || aliasId)}${aliasWord?.effect ? ` — ${escapeHtml(aliasWord.effect)}` : ''}</p>` : k.note ? `<p class="muted">${escapeHtml(k.note)}</p>` : ''}</td></tr>`;
     });
     html += `</tbody></table></div></details></div>`;
   }

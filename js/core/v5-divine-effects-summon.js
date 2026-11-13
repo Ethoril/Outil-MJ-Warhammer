@@ -10,6 +10,7 @@
  */
 import { SUMMON_BEAST_KEYS, buildBeastSummonProfile, summonOverridesError, summonCreatureParticipant, summonSensorParticipant } from '../data/divine-summon-profiles.js';
 import { REIKLAND_BEASTS } from '../data/v5-transformation-bestiary.js';
+import { PROFILE_CARAC_KEYS } from './carac-keys.js';
 
 // Interrupteur de repli : désactivé, rien n'est créé et le miracle se joue à la main ; le balayage des créatures existantes reste actif.
 export const DIVINE_SUMMON_ENABLED = true;
@@ -100,7 +101,7 @@ export const WRATH_SUMMON_RULES = Object.freeze({
   'wrath:88-88': Object.freeze({ kind: 'demon', min: 2, max: 20, dice: '2d10', label: 'Démon inférieur' }),
   'wrath:141-145': Object.freeze({ kind: 'servant', min: 1, max: 100, dice: 'd100', label: 'Serviteur divin' })
 });
-const WRATH_SUMMON_CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
+const WRATH_SUMMON_CARACS = PROFILE_CARAC_KEYS;
 const WRATH_SUMMON_CAMPS = Object.freeze(['allie', 'ennemi', 'neutre']);
 const TEXT_MAX = 200;
 const plain = value => value && typeof value === 'object' && !Array.isArray(value);

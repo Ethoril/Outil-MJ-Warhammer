@@ -1,7 +1,8 @@
 import { normalizeState } from './effects.js';
-import { resolveV5TestModifiers, finalizeV5TestModifiers } from './v5-test-modifiers.js';
+import { resolveV5TestModifiers, finalizeV5TestModifiers, resolveConditionPenaltyMix } from './v5-test-modifiers.js';
+import { PROFILE_CARAC_KEYS } from './carac-keys.js';
 
-const CHARACTERISTICS = new Set(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc', 'M']);
+const CHARACTERISTICS = new Set(PROFILE_CARAC_KEYS);
 const TALENT_MARKERS = new Set(['talent-active', 'talent-pending']);
 const NON_STACKING = new Set(['aterre', 'souille', 'surpris', 'inconscient']);
 
@@ -75,7 +76,6 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   const needsInput = [];
   const seenNeeds = new Set();
   const levels = {};
-  let arbitration = null;
 
   if (!isRecord(actor)) addNeed(needsInput, seenNeeds, 'actor', 'Fournir le sujet du Test.');
   if (!isRecord(context)) context = {};
@@ -191,33 +191,20 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   // Désavantages d'un seul État, le plus fort ; à égalité, le premier dans l'ordre À terre, Aveuglé, Souillé.
   const worstDisadvantage = common.parts.conditions.disadvantageRows.map(row => ({ ...row, id: contextDisadvantageId(row.id) }));
   const talentPart = common.parts.talents;
-  const hasSlPenalty = slPenalty > 0;
-  const hasDisadvantage = worstDisadvantage.length > 0;
-  const mode = context.conditionPenaltyMode;
-  const reason = typeof context.conditionPenaltyReason === 'string' ? context.conditionPenaltyReason.trim() : '';
+  // REGLES-02 : même choix DR ou Désavantage que le calcul commun, motif exigé (DIV-05). Obstiné n'y entre pas : ses plafonds
+  // s'appliquent après (`withV5TestTalents`).
+  const mix = resolveConditionPenaltyMix({ penalty: slPenalty, disadvantages: worstDisadvantage, mode: context.conditionPenaltyMode,
+    reason: context.conditionPenaltyReason, requireReason: true });
+  if (mix.modeMissing) addNeed(needsInput, seenNeeds, 'conditionPenaltyMode', 'Arbitrer les pénalités d’État incomparables selon DIV-05.');
+  if (mix.reasonMissing) addNeed(needsInput, seenNeeds, 'conditionPenaltyReason', 'Consigner le motif de l’arbitrage MJ DIV-05.');
+  const arbitration = mix.arbitration;
 
-  if (hasSlPenalty && hasDisadvantage) {
-    if (!['sl', 'disadvantage'].includes(mode)) {
-      addNeed(needsInput, seenNeeds, 'conditionPenaltyMode', 'Arbitrer les pénalités d’État incomparables selon DIV-05.');
-    }
-    if (!reason) {
-      addNeed(needsInput, seenNeeds, 'conditionPenaltyReason', 'Consigner le motif de l’arbitrage MJ DIV-05.');
-    }
-    if (['sl', 'disadvantage'].includes(mode) && reason) {
-      arbitration = { decisionId: 'DIV-05', mode, reason };
-    }
-  }
-
-  const applySl = !hasSlPenalty || !hasDisadvantage || mode === 'sl' && Boolean(reason);
-  const applyDisadvantage = !hasSlPenalty || !hasDisadvantage || mode === 'disadvantage' && Boolean(reason);
-  if (hasSlPenalty && applySl) {
+  if (mix.appliedPenalty > 0) {
     const label = [...conditionPenalty.levels].filter(([, level]) => level === slPenalty).map(([key]) => key).sort()
       .map(key => STATE_LABELS[key]).join(', ');
     slModifiers.push({ id: 'conditions:highest-sl', label: `Malus d’État maximal (${label})`, amount: -slPenalty });
   }
-  if (hasDisadvantage && applyDisadvantage) {
-    disadvantageSources.push(...worstDisadvantage);
-  }
+  disadvantageSources.push(...mix.disadvantages);
 
   // MJ 09/11 CA13 : séquelles durables du calcul commun (lignes `durable`, qu'aucun plafond n'efface) ; la Caractéristique perdue
   // est rendue en `scoreDelta`, à ajouter au score du Test. Deux yeux perdus : la question de la vue, si l'appelant ne l'a pas tranchée.
@@ -243,8 +230,8 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     ignoredPenaltySources,
     restrictions,
     needsInput,
-    conditionPenaltyMode: hasSlPenalty && hasDisadvantage && ['sl', 'disadvantage'].includes(mode) ? mode : null,
-    conditionPenaltyReason: hasSlPenalty && hasDisadvantage && reason ? reason : null,
+    conditionPenaltyMode: mix.mode,
+    conditionPenaltyReason: mix.reason,
     arbitration,
     scoreDelta: common.scoreDelta || 0,
     talents: { slModifiers: talentPart.slModifiers, advantageSources: talentPart.advantageSources, disadvantageSources: talentPart.disadvantageSources,

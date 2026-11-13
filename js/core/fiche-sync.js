@@ -8,6 +8,7 @@ import { actionHasDamage, normalizeDamageFields, strengthBonusOf } from './damag
 import { rebaseMagicLayers } from './v5-magic-effects.js';
 import { especeDe } from '../data/donnees-communes.js';
 import { FAMILIAR_SYSTEMS, HOMUNCULUS_KINDS, FAMILIAR_WINDS, COMPANION_TRAITS, FAMILIAR_NAMES } from './familiars.js';
+import { CARAC_BY_LOWER } from './carac-keys.js';
 
 export const FICHE_CHAR_IDS = Object.freeze(['bhelgi', 'caelel', 'elysia', 'hellaya', 'wren']);
 
@@ -47,7 +48,7 @@ function ficheKeywordTargets(raw) {
 }
 
 // Clés de la fiche → clés canoniques du profil.
-const CARAC_MAP = Object.freeze({ cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' });
+const CARAC_MAP = CARAC_BY_LOWER;
 
 // Table des compétences de base de la fiche (js/fiche.js, BASIC_SKILLS) : `skillsBasic` ne porte que les avances.
 export const FICHE_BASIC_SKILLS = Object.freeze([

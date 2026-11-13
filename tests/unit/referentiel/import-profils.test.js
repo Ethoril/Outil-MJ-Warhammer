@@ -395,7 +395,8 @@ test('Libellé des qualités : la valeur remplace le X d’un mot-clé à X', ()
   assert.equal(qualityLabel({ id: 'recharge', name: 'Recharge X', rating: 2 }), 'Recharge 2');
   assert.equal(qualityLabel({ id: 'recharge', name: 'Recharge X' }), 'Recharge X');
   assert.equal(qualityLabel({ id: 'percutante', name: 'Percutante', rating: 3 }), 'Percutante');
-  assert.equal(qualityLabel('Précise'), 'Précise');
+  assert.equal(qualityLabel('Pointue'), 'Pointue');
+  assert.equal(qualityLabel('Précise'), 'Pointue', 'REGLES-11 (MJ 13/11) : Précise se lit comme Pointue');
 });
 });
 

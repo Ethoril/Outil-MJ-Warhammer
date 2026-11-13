@@ -39,11 +39,12 @@ import conditionHandlers, { whenProblem, whenNeeds, whenApplies, whenFactFields 
 import gearHandlers from './v5-divine-effects-gear.js';
 import testsHandlers from './v5-divine-effects-tests.js';
 import summonHandlers from './v5-divine-effects-summon.js';
+import { CARAC_KEYS } from './carac-keys.js';
 
 const clone = value => structuredClone(value);
 const need = (field, label) => ({ field, label });
 // Caractéristiques égalables par la Malice de Ranald (M exclue : jamais par défaut, un M inconnu bloquerait l'aperçu).
-const MATCH_CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc']);
+const MATCH_CARACS = CARAC_KEYS;
 const knownCarac = (actor, carac) => Number.isFinite(Number(actor?.caracs?.[carac]));
 const healingAmount = effect => effect.value ?? effect.wounds;
 

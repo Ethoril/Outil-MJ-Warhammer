@@ -23,6 +23,7 @@ import spellContracts from '../data/v5-spell-contracts.json' with { type: 'json'
 import divineContracts from '../data/v5-divine-contracts.json' with { type: 'json' };
 import { onlyFields, validateEffectClause, normalizeTestTarget } from './effect-engine.js';
 import { validateV5ActionDeclarations } from './v5-action-costs-schema.js';
+import { CARAC_KEYS } from './carac-keys.js';
 
 export const SUPPLEMENT_SCHEMA_VERSION = 1;
 /** Familles qu'un supplément peut déclarer : clé du JSON → famille du porteur. */
@@ -43,7 +44,7 @@ export const PRAYER_PARAM_KINDS = Object.freeze({
   targets: Object.freeze(['count', 'self', 'characteristic-bonus']),
   duration: Object.freeze(['fixed', 'characteristic', 'characteristic-bonus']),
 });
-const CHARACTERISTICS = ['CC', 'CT', 'F', 'E', 'I', 'Ag', 'Dex', 'Int', 'FM', 'Soc'];
+const CHARACTERISTICS = CARAC_KEYS;
 const LAYER_CLAUSE_KEYS = ['id', 'event', 'role', 'when', 'effects'];
 const LAYER_EFFECT_KEYS = ['op', 'amount', 'key', 'stackable'];
 
