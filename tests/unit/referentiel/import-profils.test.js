@@ -529,6 +529,6 @@ test('B1 tous les profils de tous les livres (hors gabarits) se construisent', a
       built += 1;
     }
   }
-  assert.equal(built, 967); // 882 + L27 (6 montures et le Rapace du Bestiaire V2, 11/11/2026) + L05 (Ours et Pigeon, T12 du 13/11/2026) + L28 (64 profils, T15) + L90 (5 profils maison, T17, et 7 cultistes de la Main pourpre, Q12)
+  assert.equal(built, 1017); // 882 + L27 (6 montures et le Rapace du Bestiaire V2, 11/11/2026) + L05 (Ours et Pigeon, T12 du 13/11/2026) + L28 (64 profils, T15) + L90 (5 profils maison, T17, et 7 cultistes de la Main pourpre, Q12) + L29 (50 profils V2 convertis, T16)
 });
 });

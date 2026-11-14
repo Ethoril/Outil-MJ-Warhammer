@@ -25428,6 +25428,910 @@
       "id": "E0-P-1067",
       "blockKey": "L90:12:0",
       "addedOn": "2026-11-13"
+    },
+    {
+      "name": "Marie la Sanguinaire",
+      "book": "L29",
+      "page": 23,
+      "physicalPage": 25,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1068",
+      "blockKey": "L29:25:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Herman Schmidt",
+      "book": "L29",
+      "page": 60,
+      "physicalPage": 62,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1069",
+      "blockKey": "L29:62:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Herman Schmidt, enfant du Chaos",
+      "book": "L29",
+      "page": 60,
+      "physicalPage": 62,
+      "kind": "profile",
+      "traitsUsed": [
+        "Terror",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1070",
+      "blockKey": "L29:62:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Le démon du catalogue",
+      "book": "L29",
+      "page": 87,
+      "physicalPage": 89,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1071",
+      "blockKey": "L29:89:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Chien du Chaos",
+      "book": "L29",
+      "page": 111,
+      "physicalPage": 113,
+      "kind": "profile",
+      "traitsUsed": [
+        "Frenzy",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1072",
+      "blockKey": "L29:113:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Sanglebouc",
+      "book": "L29",
+      "page": 111,
+      "physicalPage": 113,
+      "kind": "profile",
+      "traitsUsed": [
+        "Frenzy",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1073",
+      "blockKey": "L29:113:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Amalgames",
+      "book": "L29",
+      "page": 117,
+      "physicalPage": 119,
+      "kind": "profile",
+      "traitsUsed": [
+        "Terror",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1074",
+      "blockKey": "L29:119:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Amphisbènes",
+      "book": "L29",
+      "page": 118,
+      "physicalPage": 120,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1075",
+      "blockKey": "L29:120:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Baisers de jouvence",
+      "book": "L29",
+      "page": 119,
+      "physicalPage": 121,
+      "kind": "profile",
+      "traitsUsed": [
+        "Night Vision",
+        "Fly",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1076",
+      "blockKey": "L29:121:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Basilics",
+      "book": "L29",
+      "page": 119,
+      "physicalPage": 121,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1077",
+      "blockKey": "L29:121:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Chimères",
+      "book": "L29",
+      "page": 120,
+      "physicalPage": 122,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Frenzy",
+        "Fly",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1078",
+      "blockKey": "L29:122:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Dragons du Chaos",
+      "book": "L29",
+      "page": 121,
+      "physicalPage": 123,
+      "kind": "profile",
+      "traitsUsed": [
+        "Terror",
+        "Night Vision",
+        "Fly",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1079",
+      "blockKey": "L29:123:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Dragons-ogres",
+      "book": "L29",
+      "page": 122,
+      "physicalPage": 124,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1080",
+      "blockKey": "L29:124:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Shaggoths",
+      "book": "L29",
+      "page": 122,
+      "physicalPage": 124,
+      "kind": "profile",
+      "traitsUsed": [
+        "Terror",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1081",
+      "blockKey": "L29:124:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Fanges du Chaos",
+      "book": "L29",
+      "page": 122,
+      "physicalPage": 124,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1082",
+      "blockKey": "L29:124:2",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Jabberwocks",
+      "book": "L29",
+      "page": 124,
+      "physicalPage": 126,
+      "kind": "profile",
+      "traitsUsed": [
+        "Terror",
+        "Night Vision",
+        "Regeneration",
+        "Stupid",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1083",
+      "blockKey": "L29:126:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Nuées du chagrin",
+      "book": "L29",
+      "page": 124,
+      "physicalPage": 126,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fly",
+        "Swarm",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1084",
+      "blockKey": "L29:126:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Soyeuses",
+      "book": "L29",
+      "page": 125,
+      "physicalPage": 127,
+      "kind": "profile",
+      "traitsUsed": [
+        "Night Vision",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1085",
+      "blockKey": "L29:127:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Vers des brèches",
+      "book": "L29",
+      "page": 126,
+      "physicalPage": 128,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1086",
+      "blockKey": "L29:128:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Vers des marais",
+      "book": "L29",
+      "page": 126,
+      "physicalPage": 128,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1087",
+      "blockKey": "L29:128:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Vers fouettards",
+      "book": "L29",
+      "page": 127,
+      "physicalPage": 129,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1088",
+      "blockKey": "L29:129:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Vers solaires",
+      "book": "L29",
+      "page": 127,
+      "physicalPage": 129,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1089",
+      "blockKey": "L29:129:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Knute Alsgaard",
+      "book": "L29",
+      "page": 141,
+      "physicalPage": 143,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1090",
+      "blockKey": "L29:143:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Ymir",
+      "book": "L29",
+      "page": 148,
+      "physicalPage": 150,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1091",
+      "blockKey": "L29:150:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Aspirant champion de Tchar",
+      "book": "L29",
+      "page": 164,
+      "physicalPage": 166,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1092",
+      "blockKey": "L29:166:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Maraudeur Kurgan",
+      "book": "L29",
+      "page": 165,
+      "physicalPage": 167,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1093",
+      "blockKey": "L29:167:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Poneys de guerre",
+      "book": "L29",
+      "page": 166,
+      "physicalPage": 168,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1094",
+      "blockKey": "L29:168:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Arme animée",
+      "book": "L29",
+      "page": 196,
+      "physicalPage": 198,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fly",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1095",
+      "blockKey": "L29:198:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Chiens de Khorne",
+      "book": "L29",
+      "page": 239,
+      "physicalPage": 241,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Frenzy",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1096",
+      "blockKey": "L29:241:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Juggernauts",
+      "book": "L29",
+      "page": 239,
+      "physicalPage": 241,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Frenzy",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1097",
+      "blockKey": "L29:241:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Sanguinaires de Khorne",
+      "book": "L29",
+      "page": 240,
+      "physicalPage": 242,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Frenzy",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1098",
+      "blockKey": "L29:242:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Bêtes de Nurgle",
+      "book": "L29",
+      "page": 241,
+      "physicalPage": 243,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1099",
+      "blockKey": "L29:243:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Nurglings",
+      "book": "L29",
+      "page": 242,
+      "physicalPage": 244,
+      "kind": "profile",
+      "traitsUsed": [
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1100",
+      "blockKey": "L29:244:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Portepestes",
+      "book": "L29",
+      "page": 243,
+      "physicalPage": 245,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1101",
+      "blockKey": "L29:245:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Bêtes de Slaanesh",
+      "book": "L29",
+      "page": 244,
+      "physicalPage": 246,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Unstable",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1102",
+      "blockKey": "L29:246:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Démonettes",
+      "book": "L29",
+      "page": 245,
+      "physicalPage": 247,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1103",
+      "blockKey": "L29:247:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Montures de Slaanesh",
+      "book": "L29",
+      "page": 246,
+      "physicalPage": 248,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1104",
+      "blockKey": "L29:248:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Disques de Tzeentch",
+      "book": "L29",
+      "page": 246,
+      "physicalPage": 248,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Fly",
+        "Unstable",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1105",
+      "blockKey": "L29:248:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Horreurs roses",
+      "book": "L29",
+      "page": 247,
+      "physicalPage": 249,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1106",
+      "blockKey": "L29:249:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Horreurs bleues",
+      "book": "L29",
+      "page": 248,
+      "physicalPage": 250,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1107",
+      "blockKey": "L29:250:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Hurleurs de Tzeentch",
+      "book": "L29",
+      "page": 248,
+      "physicalPage": 250,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Fly",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1108",
+      "blockKey": "L29:250:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Incendiaires de Tzeentch",
+      "book": "L29",
+      "page": 249,
+      "physicalPage": 251,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1109",
+      "blockKey": "L29:251:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Diablotins",
+      "book": "L29",
+      "page": 250,
+      "physicalPage": 252,
+      "kind": "profile",
+      "traitsUsed": [
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1110",
+      "blockKey": "L29:252:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Gargouilles du Chaos",
+      "book": "L29",
+      "page": 251,
+      "physicalPage": 253,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Fly",
+        "Unstable",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1111",
+      "blockKey": "L29:253:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Montures démoniaques",
+      "book": "L29",
+      "page": 251,
+      "physicalPage": 253,
+      "kind": "profile",
+      "traitsUsed": [
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1112",
+      "blockKey": "L29:253:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Zhthy'hl",
+      "book": "L29",
+      "page": 256,
+      "physicalPage": 258,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Fly",
+        "Unstable",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1113",
+      "blockKey": "L29:258:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Buveur de sang",
+      "book": "L29",
+      "page": 260,
+      "physicalPage": 262,
+      "kind": "profile",
+      "traitsUsed": [
+        "Frenzy",
+        "Terror",
+        "Night Vision",
+        "Fly",
+        "Unstable",
+        "Regeneration",
+        "Size"
+      ],
+      "count": 7,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1114",
+      "blockKey": "L29:262:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Grand immonde",
+      "book": "L29",
+      "page": 262,
+      "physicalPage": 264,
+      "kind": "profile",
+      "traitsUsed": [
+        "Spellcaster",
+        "Terror",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1115",
+      "blockKey": "L29:264:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Gardien des secrets",
+      "book": "L29",
+      "page": 265,
+      "physicalPage": 267,
+      "kind": "profile",
+      "traitsUsed": [
+        "Frenzy",
+        "Spellcaster",
+        "Terror",
+        "Night Vision",
+        "Unstable",
+        "Size"
+      ],
+      "count": 6,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1116",
+      "blockKey": "L29:267:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Duc du changement",
+      "book": "L29",
+      "page": 267,
+      "physicalPage": 269,
+      "kind": "profile",
+      "traitsUsed": [
+        "Frenzy",
+        "Spellcaster",
+        "Terror",
+        "Night Vision",
+        "Fly",
+        "Unstable",
+        "Size"
+      ],
+      "count": 7,
+      "abilityRefs": [],
+      "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1117",
+      "blockKey": "L29:269:0",
+      "addedOn": "2026-11-14"
     }
   ],
   "counts": {
@@ -26611,6 +27515,56 @@
       "pregeneratedCharacters": 0,
       "method": "Profils maison : copies de profils imprimés, armes adaptées par décision du MJ (tools/build-bestiary-maison.mjs).",
       "addedOn": "2026-11-13"
+    },
+    {
+      "book": "L29",
+      "profilePagesPhysical": [
+        25,
+        62,
+        89,
+        113,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        126,
+        127,
+        128,
+        129,
+        143,
+        150,
+        166,
+        167,
+        168,
+        198,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        258,
+        262,
+        264,
+        267,
+        269
+      ],
+      "rulePagesPrinted": [],
+      "entries": 50,
+      "profiles": 50,
+      "templates": 0,
+      "pregeneratedCharacters": 0,
+      "method": "Profils V2 transcrits et contrôlés contre la couche texte du PDF, convertis par tools/build-bestiary-v2-books.mjs.",
+      "addedOn": "2026-11-14"
     }
   ],
   "openQuestions": [

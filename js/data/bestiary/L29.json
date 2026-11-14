@@ -1,0 +1,5434 @@
+{
+ "schemaVersion": 1,
+ "book": "L29",
+ "title": "Le Tome de la Corruption (WJDR V2, converti en V5)",
+ "edition": "V5",
+ "sourceEdition": "V2",
+ "source": {
+  "corpusId": "L29",
+  "sha256": "2e576d7a833d59c4acd6c4986f38319cf4ce37eb1ae96105795e3b02abee25df"
+ },
+ "conversionNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+ "profiles": [
+  {
+   "id": "E0-P-1068",
+   "book": "L29",
+   "page": 23,
+   "physicalPage": 25,
+   "kind": "profile",
+   "blockKey": "L29:25:0",
+   "name": "Marie la Sanguinaire",
+   "nameFr": "Marie la Sanguinaire",
+   "stats": {
+    "M": 4,
+    "CC": 48,
+    "CT": 28,
+    "F": 51,
+    "E": 45,
+    "I": 53,
+    "Ag": 53,
+    "Dex": 53,
+    "Int": 50,
+    "FM": 56,
+    "Soc": 41
+   },
+   "wounds": 18,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4,
+    "detail": "tête 0, bras 0, corps 3, jambes 0"
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 48,
+     "damage": 9
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 41
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 41
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 53
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "value": 50
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 51
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 50
+    },
+    {
+     "name": "Language (tiléen)",
+     "nameFr": "Langue (tiléen)",
+     "value": 50
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 41
+    },
+    {
+     "name": "Trade (apothicaire)",
+     "nameFr": "Métier (apothicaire)",
+     "value": 53
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 63
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 70
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Surgery"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Gregarious"
+    }
+   ],
+   "specialRules": [
+    "Calcul mental",
+    "Intelligent",
+    "Lutte",
+    "Maîtrise (fléaux)",
+    "Résistance aux maladies",
+    "Compétence V2 : Lire/écrire",
+    "Compétence V2 : Préparation de poisons",
+    "Compétence V2 : Torture"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L29 p.23",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1069",
+   "book": "L29",
+   "page": 60,
+   "physicalPage": 62,
+   "kind": "profile",
+   "blockKey": "L29:62:0",
+   "name": "Herman Schmidt",
+   "nameFr": "Herman Schmidt",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": 29,
+    "F": 41,
+    "E": 35,
+    "I": 51,
+    "Ag": 51,
+    "Dex": 51,
+    "Int": 26,
+    "FM": 32,
+    "Soc": 21
+   },
+   "wounds": 13,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 45,
+     "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Secret Signs (rôdeur)",
+     "nameFr": "Signes secrets (rôdeur)",
+     "value": 26
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 21
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 51
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "value": 26
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 61
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 41
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 51
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 51
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 26
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 21
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 51
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 26
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Mimic"
+    }
+   ],
+   "specialRules": [
+    "Force accrue",
+    "Fuite",
+    "Résistance accrue",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "humain",
+    "mutant"
+   ],
+   "nameFrSource": "L29 p.60",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1070",
+   "book": "L29",
+   "page": 60,
+   "physicalPage": 62,
+   "kind": "profile",
+   "blockKey": "L29:62:1",
+   "name": "Herman Schmidt, enfant du Chaos",
+   "nameFr": "Herman Schmidt, enfant du Chaos",
+   "stats": {
+    "M": 2,
+    "CC": 25,
+    "CT": null,
+    "F": 19,
+    "E": 15,
+    "I": 46,
+    "Ag": 46,
+    "Dex": 46,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 6,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 1
+   },
+   "attacks": [
+    {
+     "name": "Tentacules",
+     "value": 25,
+     "damage": 5
+    }
+   ],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 56
+    }
+   ],
+   "traits": [
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Fearless"
+    }
+   ],
+   "specialRules": [
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "mutant"
+   ],
+   "nameFrSource": "L29 p.60",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1071",
+   "book": "L29",
+   "page": 87,
+   "physicalPage": 89,
+   "kind": "profile",
+   "blockKey": "L29:89:0",
+   "name": "Le démon du catalogue",
+   "nameFr": "Le démon du catalogue",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": null,
+    "F": 28,
+    "E": 38,
+    "I": 44,
+    "Ag": 44,
+    "Dex": 44,
+    "Int": 12,
+    "FM": 32,
+    "Soc": 5
+   },
+   "wounds": 6,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Morsure",
+     "value": 25,
+     "damage": 5
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Adhérence",
+    "Paralysie",
+    "Parasite"
+   ],
+   "keywords": [
+    "demon"
+   ],
+   "nameFrSource": "L29 p.87",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "small",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1072",
+   "book": "L29",
+   "page": 111,
+   "physicalPage": 113,
+   "kind": "profile",
+   "blockKey": "L29:113:0",
+   "name": "Chien du Chaos",
+   "nameFr": "Chien du Chaos",
+   "stats": {
+    "M": 7,
+    "CC": 44,
+    "CT": null,
+    "F": 34,
+    "E": 38,
+    "I": 47,
+    "Ag": 47,
+    "Dex": null,
+    "Int": 18,
+    "FM": 34,
+    "Soc": 5
+   },
+   "wounds": 12,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Dents",
+     "value": 44,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 47
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 34
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 57
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 57
+    }
+   ],
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Troublant",
+    "Mutations du Chaos",
+    "Silencieux comme les animaux des bois"
+   ],
+   "keywords": [
+    "chien",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.111",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1073",
+   "book": "L29",
+   "page": 111,
+   "physicalPage": 113,
+   "kind": "profile",
+   "blockKey": "L29:113:1",
+   "name": "Sanglebouc",
+   "nameFr": "Sanglebouc",
+   "stats": {
+    "M": 7,
+    "CC": 33,
+    "CT": null,
+    "F": 36,
+    "E": 44,
+    "I": 32,
+    "Ag": 32,
+    "Dex": null,
+    "Int": 20,
+    "FM": 37,
+    "Soc": 12
+   },
+   "wounds": 14,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Défenses",
+     "value": 33,
+     "damage": 7
+    },
+    {
+     "name": "Cornes",
+     "value": 33,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 32
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 32
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 42
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 20
+    }
+   ],
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Camouflage rural",
+    "Troublant",
+    "Charge de sanglebouc",
+    "Mutations du Chaos",
+    "Silencieux comme les animaux des bois"
+   ],
+   "keywords": [
+    "sanglier",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.111",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1074",
+   "book": "L29",
+   "page": 117,
+   "physicalPage": 119,
+   "kind": "profile",
+   "blockKey": "L29:119:0",
+   "name": "Amalgames",
+   "nameFr": "Amalgames",
+   "stats": {
+    "M": 4,
+    "CC": 46,
+    "CT": null,
+    "F": 55,
+    "E": 56,
+    "I": 21,
+    "Ag": 21,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": 10
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5
+   },
+   "attacks": [
+    {
+     "name": "Dents",
+     "value": 46,
+     "damage": 13
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque (cf. page 240)",
+    "Coups assommants",
+    "Absorption",
+    "Mutations du Chaos",
+    "Dénué de conscience",
+    "Monstrueuse puissance"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.117",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1075",
+   "book": "L29",
+   "page": 118,
+   "physicalPage": 120,
+   "kind": "profile",
+   "blockKey": "L29:120:0",
+   "name": "Amphisbènes",
+   "nameFr": "Amphisbènes",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": null,
+    "F": 42,
+    "E": 36,
+    "I": 43,
+    "Ag": 43,
+    "Dex": null,
+    "Int": 5,
+    "FM": 43,
+    "Soc": 2
+   },
+   "wounds": 28,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 3,
+    "ap": 1
+   },
+   "attacks": [
+    {
+     "name": "Crocs",
+     "value": 33,
+     "damage": 11
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 53
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 53
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 43
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Écailles (1)",
+    "Constriction",
+    "Forme inhabituelle",
+    "Morsure opportuniste",
+    "Morsure venimeuse"
+   ],
+   "keywords": [
+    "serpent",
+    "monstre"
+   ],
+   "nameFrSource": "L29 p.118",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": true,
+    "reference": "Amphisbaena L11 p. 47 (Grande)"
+   }
+  },
+  {
+   "id": "E0-P-1076",
+   "book": "L29",
+   "page": 119,
+   "physicalPage": 121,
+   "kind": "profile",
+   "blockKey": "L29:121:0",
+   "name": "Baisers de jouvence",
+   "nameFr": "Baisers de jouvence",
+   "stats": {
+    "M": 1,
+    "CC": 12,
+    "CT": null,
+    "F": 5,
+    "E": 11,
+    "I": 60,
+    "Ag": 60,
+    "Dex": null,
+    "Int": 35,
+    "FM": 30,
+    "Soc": 55
+   },
+   "wounds": 2,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 1
+   },
+   "attacks": [
+    {
+     "name": "Dard",
+     "value": 12,
+     "damage": 1
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 65
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 80
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 80
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 35
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Fly",
+     "rating": "6",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Fearless"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Réflexes éclair",
+    "De lait et de miel",
+    "Mutations du Chaos",
+    "Obsession",
+    "Compétence V2 : Filature"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.119",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "small",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1077",
+   "book": "L29",
+   "page": 119,
+   "physicalPage": 121,
+   "kind": "profile",
+   "blockKey": "L29:121:1",
+   "name": "Basilics",
+   "nameFr": "Basilics",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": null,
+    "F": 52,
+    "E": 43,
+    "I": 30,
+    "Ag": 30,
+    "Dex": null,
+    "Int": 14,
+    "FM": 14,
+    "Soc": 3
+   },
+   "wounds": 28,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Dents",
+     "value": 33,
+     "damage": 13
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 30
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 52
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 30
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Fearless"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Acuité visuelle",
+    "Coups précis",
+    "Écailles (3)",
+    "Résistance aux poisons",
+    "Morsure venimeuse",
+    "Mutations du Chaos",
+    "Regard pétrifiant"
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "L29 p.119",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1078",
+   "book": "L29",
+   "page": 120,
+   "physicalPage": 122,
+   "kind": "profile",
+   "blockKey": "L29:122:0",
+   "name": "Chimères",
+   "nameFr": "Chimères",
+   "stats": {
+    "M": 5,
+    "CC": 41,
+    "CT": null,
+    "F": 66,
+    "E": 66,
+    "I": 33,
+    "Ag": 33,
+    "Dex": null,
+    "Int": 14,
+    "FM": 74,
+    "Soc": 12
+   },
+   "wounds": 100,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 6,
+    "ap": 1
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 41,
+     "damage": 15
+    },
+    {
+     "name": "Dents",
+     "value": 41,
+     "damage": 15
+    },
+    {
+     "name": "Queue à pointes",
+     "value": 41,
+     "damage": 15
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 43
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 14
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Morsure venimeuse",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "chimere",
+    "bete"
+   ],
+   "nameFrSource": "L29 p.120",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "enormous",
+    "animal": true,
+    "reference": "Chimera L11 p. 67 (Énorme, Vol 80)"
+   }
+  },
+  {
+   "id": "E0-P-1079",
+   "book": "L29",
+   "page": 121,
+   "physicalPage": 123,
+   "kind": "profile",
+   "blockKey": "L29:123:0",
+   "name": "Dragons du Chaos",
+   "nameFr": "Dragons du Chaos",
+   "stats": {
+    "M": 6,
+    "CC": 64,
+    "CT": null,
+    "F": 65,
+    "E": 68,
+    "I": 30,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 47,
+    "FM": 89,
+    "Soc": 34
+   },
+   "wounds": 104,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 6,
+    "ap": 5
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 64,
+     "damage": 15
+    },
+    {
+     "name": "Queue",
+     "value": 64,
+     "damage": 15
+    },
+    {
+     "name": "Dents",
+     "value": 64,
+     "damage": 15
+    },
+    {
+     "name": "Ailes",
+     "value": 64,
+     "damage": 15
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 34
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 54
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 34
+    },
+    {
+     "name": "Lore (démonologie)",
+     "nameFr": "Savoir (démonologie)",
+     "value": 67
+    },
+    {
+     "name": "Lore (Désolations du Chaos)",
+     "nameFr": "Savoir (Désolations du Chaos)",
+     "value": 57
+    },
+    {
+     "name": "Lore (dragons)",
+     "nameFr": "Savoir (dragons)",
+     "value": 67
+    },
+    {
+     "name": "Lore (hommes-bêtes)",
+     "nameFr": "Savoir (hommes-bêtes)",
+     "value": 47
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 75
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 57
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 85
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 47
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 47
+    }
+   ],
+   "traits": [
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Fly",
+     "rating": "80",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Acuité visuelle",
+    "Coups assommants",
+    "Coups précis",
+    "Écailles (5)",
+    "Puissance imparable",
+    "Sain d'esprit",
+    "Attaques déchirantes",
+    "Multiplication des attaques",
+    "Mutations du Chaos",
+    "Souffle de feu"
+   ],
+   "keywords": [
+    "dragon",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.121",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "enormous",
+    "animal": false,
+    "reference": "Dragon L06 p. 330 (Énorme, Vol 80)"
+   }
+  },
+  {
+   "id": "E0-P-1080",
+   "book": "L29",
+   "page": 122,
+   "physicalPage": 124,
+   "kind": "profile",
+   "blockKey": "L29:124:0",
+   "name": "Dragons-ogres",
+   "nameFr": "Dragons-ogres",
+   "stats": {
+    "M": 7,
+    "CC": 48,
+    "CT": 22,
+    "F": 55,
+    "E": 48,
+    "I": 28,
+    "Ag": 28,
+    "Dex": 28,
+    "Int": 38,
+    "FM": 48,
+    "Soc": 20
+   },
+   "wounds": 34,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 48,
+     "damage": 13
+    },
+    {
+     "name": "Greataxe",
+     "value": 48,
+     "damage": 16
+    }
+   ],
+   "skills": [
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 20
+    },
+    {
+     "name": "Lore (histoire)",
+     "nameFr": "Savoir (histoire)",
+     "value": 58
+    },
+    {
+     "name": "Lore (Désolations du Chaos)",
+     "nameFr": "Savoir (Désolations du Chaos)",
+     "value": 38
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 65
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 75
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 38
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 48
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 38
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Écailles (2)",
+    "Maîtrise (armes lourdes)",
+    "Résistance au poison",
+    "Sain d'esprit",
+    "Absorption d'éclairs",
+    "Compétence V2 : Langue (deux au choix)"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.122",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1081",
+   "book": "L29",
+   "page": 122,
+   "physicalPage": 124,
+   "kind": "profile",
+   "blockKey": "L29:124:1",
+   "name": "Shaggoths",
+   "nameFr": "Shaggoths",
+   "stats": {
+    "M": 7,
+    "CC": 69,
+    "CT": 38,
+    "F": 58,
+    "E": 56,
+    "I": 32,
+    "Ag": 32,
+    "Dex": 32,
+    "Int": 58,
+    "FM": 68,
+    "Soc": 30
+   },
+   "wounds": 84,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 5,
+    "ap": 4
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 69,
+     "damage": 13
+    },
+    {
+     "name": "Greataxe",
+     "value": 69,
+     "damage": 16
+    },
+    {
+     "name": "Dents",
+     "value": 69,
+     "damage": 13
+    }
+   ],
+   "skills": [
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 50
+    },
+    {
+     "name": "Lore (histoire)",
+     "nameFr": "Savoir (histoire)",
+     "value": 78
+    },
+    {
+     "name": "Lore (Désolations du Chaos)",
+     "nameFr": "Savoir (Désolations du Chaos)",
+     "value": 58
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 68
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 88
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 58
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 52
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 58
+    }
+   ],
+   "traits": [
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Coups assommants",
+    "Coups précis",
+    "Écailles (4)",
+    "Maîtrise (armes lourdes)",
+    "Puissance imparable",
+    "Résistance au poison",
+    "Absorption d'éclairs",
+    "Monstrueuse puissance",
+    "Compétence V2 : Connaissances générales (trois au choix)",
+    "Compétence V2 : Langue (quatre au choix)"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.122",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "enormous",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1082",
+   "book": "L29",
+   "page": 122,
+   "physicalPage": 124,
+   "kind": "profile",
+   "blockKey": "L29:124:2",
+   "name": "Fanges du Chaos",
+   "nameFr": "Fanges du Chaos",
+   "stats": {
+    "M": 4,
+    "CC": 36,
+    "CT": null,
+    "F": 33,
+    "E": 56,
+    "I": 13,
+    "Ag": 13,
+    "Dex": null,
+    "Int": 18,
+    "FM": 26,
+    "Soc": 5
+   },
+   "wounds": 30,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5
+   },
+   "attacks": [
+    {
+     "name": "Pseudopodes",
+     "value": 36,
+     "damage": 9
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 33
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Magic Resistance"
+    }
+   ],
+   "specialRules": [
+    "Informe",
+    "Lutte",
+    "Troublant",
+    "Enveloppement",
+    "Mutagène",
+    "Rampant"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.122",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1083",
+   "book": "L29",
+   "page": 124,
+   "physicalPage": 126,
+   "kind": "profile",
+   "blockKey": "L29:126:0",
+   "name": "Jabberwocks",
+   "nameFr": "Jabberwocks",
+   "stats": {
+    "M": 6,
+    "CC": 79,
+    "CT": null,
+    "F": 55,
+    "E": 67,
+    "I": 14,
+    "Ag": 14,
+    "Dex": null,
+    "Int": 12,
+    "FM": 89,
+    "Soc": 8
+   },
+   "wounds": 50,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 6
+   },
+   "attacks": [
+    {
+     "name": "Dents",
+     "value": 79,
+     "damage": 13
+    },
+    {
+     "name": "Griffes",
+     "value": 79,
+     "damage": 13
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 55
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 55
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Stupid",
+     "ref": "E0-T-052"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Coups précis",
+    "Déconcerté par la douleur",
+    "Morsure venimeuse",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.124",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1084",
+   "book": "L29",
+   "page": 124,
+   "physicalPage": 126,
+   "kind": "profile",
+   "blockKey": "L29:126:1",
+   "name": "Nuées du chagrin",
+   "nameFr": "Nuées du chagrin",
+   "stats": {
+    "M": 0,
+    "CC": 28,
+    "CT": null,
+    "F": 14,
+    "E": 21,
+    "I": 46,
+    "Ag": 46,
+    "Dex": null,
+    "Int": 12,
+    "FM": 27,
+    "Soc": 15
+   },
+   "wounds": 4,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 28,
+     "damage": 3
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 46
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 46
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 66
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fly",
+     "rating": "4",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Aura de chagrin",
+    "Frénésie des larmes"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.124",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "small",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1085",
+   "book": "L29",
+   "page": 125,
+   "physicalPage": 127,
+   "kind": "profile",
+   "blockKey": "L29:127:0",
+   "name": "Soyeuses",
+   "nameFr": "Soyeuses",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": null,
+    "F": 18,
+    "E": 22,
+    "I": 48,
+    "Ag": 48,
+    "Dex": null,
+    "Int": 21,
+    "FM": 28,
+    "Soc": 14
+   },
+   "wounds": 7,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "attacks": [
+    {
+     "name": "Dents",
+     "value": 28,
+     "damage": 4
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 68
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 38
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 58
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 58
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 21
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Contortionist"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Grimpeur chevronné",
+    "Filaments",
+    "Venin"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.125",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1086",
+   "book": "L29",
+   "page": 126,
+   "physicalPage": 128,
+   "kind": "profile",
+   "blockKey": "L29:128:0",
+   "name": "Vers des brèches",
+   "nameFr": "Vers des brèches",
+   "stats": {
+    "M": 1,
+    "CC": 5,
+    "CT": null,
+    "F": 6,
+    "E": 11,
+    "I": 18,
+    "Ag": 18,
+    "Dex": null,
+    "Int": 2,
+    "FM": 10,
+    "Soc": 4
+   },
+   "wounds": 2,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 1
+   },
+   "attacks": [],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 48
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Fouissage",
+    "Minuscule",
+    "Subsistance"
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "L29 p.126",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "small",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1087",
+   "book": "L29",
+   "page": 126,
+   "physicalPage": 128,
+   "kind": "profile",
+   "blockKey": "L29:128:1",
+   "name": "Vers des marais",
+   "nameFr": "Vers des marais",
+   "stats": {
+    "M": 6,
+    "CC": 35,
+    "CT": null,
+    "F": 64,
+    "E": 41,
+    "I": 32,
+    "Ag": 32,
+    "Dex": null,
+    "Int": 10,
+    "FM": 12,
+    "Soc": 4
+   },
+   "wounds": 60,
+   "size": "enormous",
+   "armour": {
+    "toughnessBonus": 4,
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Crocs",
+     "value": 35,
+     "damage": 15
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 32
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 52
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Enormous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Écailles (3)",
+    "Troublant",
+    "Constriction",
+    "Fouissage",
+    "Morsure venimeuse"
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "L29 p.126",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "enormous",
+    "animal": true,
+    "reference": "Fen Worm L11 p. 52 (Énorme)"
+   }
+  },
+  {
+   "id": "E0-P-1088",
+   "book": "L29",
+   "page": 127,
+   "physicalPage": 129,
+   "kind": "profile",
+   "blockKey": "L29:129:0",
+   "name": "Vers fouettards",
+   "nameFr": "Vers fouettards",
+   "stats": {
+    "M": 0,
+    "CC": null,
+    "CT": 33,
+    "F": 10,
+    "E": 12,
+    "I": 24,
+    "Ag": 24,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": 10
+   },
+   "wounds": 2,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 1
+   },
+   "attacks": [
+    {
+     "name": "Organe fouetteur",
+     "value": 33,
+     "damage": 4
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 44
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Dénué de conscience",
+    "Minuscule",
+    "Sensibilité aux mouvements"
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "L29 p.127",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "small",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1089",
+   "book": "L29",
+   "page": 127,
+   "physicalPage": 129,
+   "kind": "profile",
+   "blockKey": "L29:129:1",
+   "name": "Vers solaires",
+   "nameFr": "Vers solaires",
+   "stats": {
+    "M": 1,
+    "CC": 14,
+    "CT": null,
+    "F": 46,
+    "E": 48,
+    "I": 60,
+    "Ag": 60,
+    "Dex": null,
+    "Int": 14,
+    "FM": 18,
+    "Soc": 8
+   },
+   "wounds": 13,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Troublant",
+    "Décharge électrique"
+   ],
+   "keywords": [
+    "monstre"
+   ],
+   "nameFrSource": "L29 p.127",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": true
+   }
+  },
+  {
+   "id": "E0-P-1090",
+   "book": "L29",
+   "page": 141,
+   "physicalPage": 143,
+   "kind": "profile",
+   "blockKey": "L29:143:0",
+   "name": "Knute Alsgaard",
+   "nameFr": "Knute Alsgaard",
+   "stats": {
+    "M": 4,
+    "CC": 56,
+    "CT": 39,
+    "F": 42,
+    "E": 43,
+    "I": 62,
+    "Ag": 62,
+    "Dex": 62,
+    "Int": 58,
+    "FM": 64,
+    "Soc": 73
+   },
+   "wounds": 18,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4,
+    "detail": "tête 0, bras 1, corps 1, jambes 0"
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "value": 56,
+     "damage": 8
+    },
+    {
+     "name": "Dagger",
+     "value": 56,
+     "damage": 6
+    },
+    {
+     "name": "Knuckledusters",
+     "value": 56,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 73
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 103
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 62
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "value": 58
+    },
+    {
+     "name": "Lore (Norsca)",
+     "nameFr": "Savoir (Norsca)",
+     "value": 58
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 62
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 78
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 82
+    },
+    {
+     "name": "Language (kislevien)",
+     "nameFr": "Langue (kislevien)",
+     "value": 58
+    },
+    {
+     "name": "Language (norse)",
+     "nameFr": "Langue (norse)",
+     "value": 58
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 58
+    },
+    {
+     "name": "Language (tiléen)",
+     "nameFr": "Langue (tiléen)",
+     "value": 58
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 93
+    },
+    {
+     "name": "Trade (cuisinier)",
+     "nameFr": "Métier (cuisinier)",
+     "value": 62
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 53
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Gregarious"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Code de la rue",
+    "Coups assommants",
+    "Dur en affaires",
+    "Étiquette",
+    "Résistance accrue",
+    "Sain d'esprit",
+    "Sang-froid",
+    "Compétence V2 : Baratin",
+    "Compétence V2 : Lecture sur les lèvres",
+    "Compétence V2 : Lire/Écrire"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L29 p.141",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1091",
+   "book": "L29",
+   "page": 148,
+   "physicalPage": 150,
+   "kind": "profile",
+   "blockKey": "L29:150:0",
+   "name": "Ymir",
+   "nameFr": "Ymir",
+   "stats": {
+    "M": 5,
+    "CC": 44,
+    "CT": 12,
+    "F": 38,
+    "E": 47,
+    "I": 31,
+    "Ag": 31,
+    "Dex": 31,
+    "Int": 23,
+    "FM": 28,
+    "Soc": 18
+   },
+   "wounds": 26,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4,
+    "ap": 1
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 44,
+     "damage": 9
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 41
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 38
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 23
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 31
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 31
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 23
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Camouflage rural",
+    "Grimpeur chevronné (cf. page 117)",
+    "Mutations du Chaos",
+    "Compétence V2 : Filature"
+   ],
+   "keywords": [
+    "monstre",
+    "chaos"
+   ],
+   "nameFrSource": "L29 p.148",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1092",
+   "book": "L29",
+   "page": 164,
+   "physicalPage": 166,
+   "kind": "profile",
+   "blockKey": "L29:166:0",
+   "name": "Aspirant champion de Tchar",
+   "nameFr": "Aspirant champion de Tchar",
+   "stats": {
+    "M": 4,
+    "CC": 63,
+    "CT": 38,
+    "F": 56,
+    "E": 63,
+    "I": 46,
+    "Ag": 46,
+    "Dex": 46,
+    "Int": 30,
+    "FM": 59,
+    "Soc": 32
+   },
+   "wounds": 22,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 6,
+    "ap": 5
+   },
+   "attacks": [
+    {
+     "name": "Military Flail",
+     "value": 63,
+     "damage": 10
+    },
+    {
+     "name": "Sword",
+     "value": 63,
+     "damage": 9
+    },
+    {
+     "name": "Javelin",
+     "value": 38,
+     "damage": 8,
+     "rangeYards": 15
+    }
+   ],
+   "skills": [
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 42
+    },
+    {
+     "name": "Lore (démonologie)",
+     "nameFr": "Savoir (démonologie)",
+     "value": 30
+    },
+    {
+     "name": "Lore (Désolations du Chaos)",
+     "nameFr": "Savoir (Désolations du Chaos)",
+     "value": 30
+    },
+    {
+     "name": "Lore (Norsca)",
+     "nameFr": "Savoir (Norsca)",
+     "value": 30
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 56
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 46
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 56
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 66
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 30
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 30
+    },
+    {
+     "name": "Language (kurgan)",
+     "nameFr": "Langue (kurgan)",
+     "value": 30
+    },
+    {
+     "name": "Language (norse)",
+     "nameFr": "Langue (norse)",
+     "value": 30
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 30
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 46
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 46
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 63
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 30
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Orientation"
+    }
+   ],
+   "specialRules": [
+    "Coups précis",
+    "Élu du Chaos (cf. page 176)",
+    "Grand voyageur",
+    "Maîtrise (armes de cavalerie, fléaux)",
+    "Résistance accrue",
+    "Rompu au Chaos (cf. page 69)",
+    "Sang-froid",
+    "Mutations du Chaos",
+    "Récompenses du Chaos",
+    "Don de Tchar",
+    "Compétence V2 : Soins des anomaux",
+    "Arme V2 : bouclier"
+   ],
+   "fatePoints": 1,
+   "keywords": [
+    "humain",
+    "guerrier-du-chaos"
+   ],
+   "nameFrSource": "L29 p.164",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1093",
+   "book": "L29",
+   "page": 165,
+   "physicalPage": 167,
+   "kind": "profile",
+   "blockKey": "L29:167:0",
+   "name": "Maraudeur Kurgan",
+   "nameFr": "Maraudeur Kurgan",
+   "stats": {
+    "M": 4,
+    "CC": 49,
+    "CT": 28,
+    "F": 41,
+    "E": 48,
+    "I": 34,
+    "Ag": 34,
+    "Dex": 34,
+    "Int": 21,
+    "FM": 38,
+    "Soc": 19
+   },
+   "wounds": 15,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4,
+    "detail": "tête 3, bras 0, corps 0, jambes 1"
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "value": 49,
+     "damage": 8
+    },
+    {
+     "name": "Javelin",
+     "value": 28,
+     "damage": 7,
+     "rangeYards": 12
+    }
+   ],
+   "skills": [
+    {
+     "name": "Lore (Désolations du Chaos)",
+     "nameFr": "Savoir (Désolations du Chaos)",
+     "value": 21
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 34
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 34
+    },
+    {
+     "name": "Language (kurgan)",
+     "nameFr": "Langue (kurgan)",
+     "value": 21
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 34
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 34
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 48
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 21
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 21
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Orientation"
+    }
+   ],
+   "specialRules": [
+    "Coups précis",
+    "Maîtrise (armes de cavalerie)",
+    "Résistance accrue",
+    "Rompu au Chaos (cf. page 69)",
+    "Mutations du Chaos",
+    "Arme V2 : bouclier"
+   ],
+   "keywords": [
+    "humain",
+    "adorateur-du-chaos"
+   ],
+   "nameFrSource": "L29 p.165",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1094",
+   "book": "L29",
+   "page": 166,
+   "physicalPage": 168,
+   "kind": "profile",
+   "blockKey": "L29:168:0",
+   "name": "Poneys de guerre",
+   "nameFr": "Poneys de guerre",
+   "stats": {
+    "M": 7,
+    "CC": 31,
+    "CT": null,
+    "F": 38,
+    "E": 42,
+    "I": 36,
+    "Ag": 36,
+    "Dex": null,
+    "Int": 11,
+    "FM": 21,
+    "Soc": 10
+   },
+   "wounds": 13,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Morsure",
+     "value": 31,
+     "damage": 5
+    }
+   ],
+   "skills": [
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 38
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 46
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Course à pied"
+   ],
+   "keywords": [
+    "cheval"
+   ],
+   "nameFrSource": "L29 p.166",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": true,
+    "reference": "Poney L27 p. 119 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1095",
+   "book": "L29",
+   "page": 196,
+   "physicalPage": 198,
+   "kind": "profile",
+   "blockKey": "L29:198:0",
+   "name": "Arme animée",
+   "nameFr": "Arme animée",
+   "stats": {
+    "M": 0,
+    "CC": 41,
+    "CT": null,
+    "F": 44,
+    "E": 48,
+    "I": 60,
+    "Ag": 60,
+    "Dex": 60,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 8,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 4,
+    "ap": 4
+   },
+   "attacks": [
+    {
+     "name": "Elle-même",
+     "value": 41,
+     "damage": 7
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fly",
+     "rating": "4",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Parade éclair",
+    "Dénué de conscience"
+   ],
+   "keywords": [
+    "demon"
+   ],
+   "nameFrSource": "L29 p.196",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "small",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1096",
+   "book": "L29",
+   "page": 239,
+   "physicalPage": 241,
+   "kind": "profile",
+   "blockKey": "L29:241:0",
+   "name": "Chiens de Khorne",
+   "nameFr": "Chiens de Khorne",
+   "stats": {
+    "M": 7,
+    "CC": 54,
+    "CT": null,
+    "F": 46,
+    "E": 38,
+    "I": 48,
+    "Ag": 48,
+    "Dex": 48,
+    "Int": 14,
+    "FM": 66,
+    "Soc": 5
+   },
+   "wounds": 16,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Crocs",
+     "value": 54,
+     "damage": 7
+    },
+    {
+     "name": "Griffes",
+     "value": 54,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 48
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 46
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 46
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 58
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 68
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Fearless"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Camouflage rural",
+    "Collier de Khorne",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "demon-de-khorne"
+   ],
+   "nameFrSource": "L29 p.239",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1097",
+   "book": "L29",
+   "page": 239,
+   "physicalPage": 241,
+   "kind": "profile",
+   "blockKey": "L29:241:1",
+   "name": "Juggernauts",
+   "nameFr": "Juggernauts",
+   "stats": {
+    "M": 7,
+    "CC": 58,
+    "CT": null,
+    "F": 55,
+    "E": 58,
+    "I": 24,
+    "Ag": 24,
+    "Dex": 24,
+    "Int": 6,
+    "FM": 44,
+    "Soc": null
+   },
+   "wounds": 38,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5,
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Cornes",
+     "value": 58,
+     "damage": 14
+    },
+    {
+     "name": "Sabots",
+     "value": 58,
+     "damage": 14
+    },
+    {
+     "name": "Morsure",
+     "value": 58,
+     "damage": 13
+    }
+   ],
+   "skills": [
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 24
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Aura démoniaque",
+    "Coups assommants",
+    "Coups précis",
+    "Assoiffé de sang",
+    "Mutations du Chaos",
+    "Piétinement"
+   ],
+   "keywords": [
+    "demon-de-khorne"
+   ],
+   "nameFrSource": "L29 p.239",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1098",
+   "book": "L29",
+   "page": 240,
+   "physicalPage": 242,
+   "kind": "profile",
+   "blockKey": "L29:242:0",
+   "name": "Sanguinaires de Khorne",
+   "nameFr": "Sanguinaires de Khorne",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": null,
+    "F": 51,
+    "E": 34,
+    "I": 48,
+    "Ag": 48,
+    "Dex": 48,
+    "Int": 48,
+    "FM": 48,
+    "Soc": 10
+   },
+   "wounds": 15,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3,
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 50,
+     "damage": 8
+    },
+    {
+     "name": "Zweihander",
+     "value": 50,
+     "damage": 10
+    },
+    {
+     "name": "Cornes",
+     "value": 50,
+     "damage": 9
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 48
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 48
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 48
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 48
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Maîtrise (armes lourdes)",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "demon-de-khorne"
+   ],
+   "nameFrSource": "L29 p.240",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false,
+    "reference": "Bloodletter L06 p. 349 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1099",
+   "book": "L29",
+   "page": 241,
+   "physicalPage": 243,
+   "kind": "profile",
+   "blockKey": "L29:243:0",
+   "name": "Bêtes de Nurgle",
+   "nameFr": "Bêtes de Nurgle",
+   "stats": {
+    "M": 3,
+    "CC": 30,
+    "CT": null,
+    "F": 36,
+    "E": 52,
+    "I": 18,
+    "Ag": 18,
+    "Dex": 18,
+    "Int": 10,
+    "FM": 58,
+    "Soc": null
+   },
+   "wounds": 36,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5,
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Tentacules",
+     "value": 30,
+     "damage": 9
+    }
+   ],
+   "skills": [
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 38
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Incarnation putride",
+    "Peur du feu",
+    "Mucus",
+    "Mutations du Chaos",
+    "Paralysie",
+    "Peau caoutchouteuse",
+    "Peste"
+   ],
+   "keywords": [
+    "demon-de-nurgle"
+   ],
+   "nameFrSource": "L29 p.241",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1100",
+   "book": "L29",
+   "page": 242,
+   "physicalPage": 244,
+   "kind": "profile",
+   "blockKey": "L29:244:0",
+   "name": "Nurglings",
+   "nameFr": "Nurglings",
+   "stats": {
+    "M": 4,
+    "CC": 20,
+    "CT": 30,
+    "F": 21,
+    "E": 23,
+    "I": 60,
+    "Ag": 60,
+    "Dex": 60,
+    "Int": 25,
+    "FM": 30,
+    "Soc": 25
+   },
+   "wounds": 4,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 20,
+     "damage": 5
+    },
+    {
+     "name": "Dents",
+     "value": 20,
+     "damage": 3
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 70
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 25
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 25
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 21
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Fearless"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Troublant",
+    "Mutations du Chaos",
+    "Peste"
+   ],
+   "keywords": [
+    "demon-de-nurgle"
+   ],
+   "nameFrSource": "L29 p.242",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "small",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1101",
+   "book": "L29",
+   "page": 243,
+   "physicalPage": 245,
+   "kind": "profile",
+   "blockKey": "L29:245:0",
+   "name": "Portepestes",
+   "nameFr": "Portepestes",
+   "stats": {
+    "M": 4,
+    "CC": 45,
+    "CT": null,
+    "F": 41,
+    "E": 47,
+    "I": 40,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 30,
+    "FM": 44,
+    "Soc": 11
+   },
+   "wounds": 16,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 45,
+     "damage": 8
+    },
+    {
+     "name": "Griffes",
+     "value": 45,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 30
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 30
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Coups précis",
+    "Mutations du Chaos",
+    "Peste",
+    "Torrent de corruption"
+   ],
+   "keywords": [
+    "demon-de-nurgle"
+   ],
+   "nameFrSource": "L29 p.243",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1102",
+   "book": "L29",
+   "page": 244,
+   "physicalPage": 246,
+   "kind": "profile",
+   "blockKey": "L29:246:0",
+   "name": "Bêtes de Slaanesh",
+   "nameFr": "Bêtes de Slaanesh",
+   "stats": {
+    "M": 6,
+    "CC": 33,
+    "CT": null,
+    "F": 36,
+    "E": 35,
+    "I": 39,
+    "Ag": 39,
+    "Dex": 39,
+    "Int": 14,
+    "FM": 43,
+    "Soc": null
+   },
+   "wounds": 13,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3,
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Cornes",
+     "value": 33,
+     "damage": 7
+    },
+    {
+     "name": "Langue",
+     "value": 33,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 39
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 36
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 49
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 36
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 59
+    },
+    {
+     "name": "Track",
+     "nameFr": "Pistage",
+     "value": 59
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Fearless"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Acuité visuelle",
+    "Aura démoniaque",
+    "Camouflage rural",
+    "Coups précis",
+    "Écailles (2)",
+    "Langue",
+    "Musc",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "demon-de-slaanesh"
+   ],
+   "nameFrSource": "L29 p.244",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1103",
+   "book": "L29",
+   "page": 245,
+   "physicalPage": 247,
+   "kind": "profile",
+   "blockKey": "L29:247:0",
+   "name": "Démonettes",
+   "nameFr": "Démonettes",
+   "stats": {
+    "M": 5,
+    "CC": 44,
+    "CT": null,
+    "F": 40,
+    "E": 37,
+    "I": 52,
+    "Ag": 52,
+    "Dex": 52,
+    "Int": 31,
+    "FM": 40,
+    "Soc": 55
+   },
+   "wounds": 14,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Pince",
+     "value": 44,
+     "damage": 10
+    }
+   ],
+   "skills": [
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 75
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 75
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 52
+    },
+    {
+     "name": "Entertain (danseur)",
+     "nameFr": "Divertissement (danseur)",
+     "value": 55
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 31
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 31
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 52
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Aura de Slaanesh",
+    "Mutations du Chaos",
+    "Compétence V2 : Langue (deux au choix)",
+    "Compétence V2 : Torture"
+   ],
+   "keywords": [
+    "demon-de-slaanesh"
+   ],
+   "nameFrSource": "L29 p.245",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false,
+    "reference": "Daemonette L06 p. 350 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1104",
+   "book": "L29",
+   "page": 246,
+   "physicalPage": 248,
+   "kind": "profile",
+   "blockKey": "L29:248:0",
+   "name": "Montures de Slaanesh",
+   "nameFr": "Montures de Slaanesh",
+   "stats": {
+    "M": 10,
+    "CC": 43,
+    "CT": null,
+    "F": 41,
+    "E": 48,
+    "I": 51,
+    "Ag": 51,
+    "Dex": 51,
+    "Int": 12,
+    "FM": 51,
+    "Soc": 3
+   },
+   "wounds": 34,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Langue",
+     "value": 43,
+     "damage": 11
+    }
+   ],
+   "skills": [
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 41
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 71
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Aura démoniaque",
+    "Mutations du Chaos",
+    "Compétence V2 : Sens de la magie"
+   ],
+   "keywords": [
+    "demon-de-slaanesh"
+   ],
+   "nameFrSource": "L29 p.246",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1105",
+   "book": "L29",
+   "page": 246,
+   "physicalPage": 248,
+   "kind": "profile",
+   "blockKey": "L29:248:1",
+   "name": "Disques de Tzeentch",
+   "nameFr": "Disques de Tzeentch",
+   "stats": {
+    "M": 1,
+    "CC": 35,
+    "CT": null,
+    "F": 51,
+    "E": 56,
+    "I": 44,
+    "Ag": 44,
+    "Dex": 44,
+    "Int": 44,
+    "FM": 58,
+    "Soc": null
+   },
+   "wounds": 40,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5
+   },
+   "attacks": [
+    {
+     "name": "Morsure",
+     "value": 35,
+     "damage": 13
+    }
+   ],
+   "skills": [
+    {
+     "name": "Lore (démonologie)",
+     "nameFr": "Savoir (démonologie)",
+     "value": 44
+    },
+    {
+     "name": "Lore (magie)",
+     "nameFr": "Savoir (magie)",
+     "value": 44
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 44
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 44
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 44
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 64
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Fly",
+     "rating": "60",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Fearless"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Mutations du Chaos",
+    "Compétence V2 : Sens de la magie"
+   ],
+   "keywords": [
+    "demon-de-tzeentch"
+   ],
+   "nameFrSource": "L29 p.246",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false,
+    "reference": "Library Disc L17 p. 213 (Grande, Vol 60)"
+   }
+  },
+  {
+   "id": "E0-P-1106",
+   "book": "L29",
+   "page": 247,
+   "physicalPage": 249,
+   "kind": "profile",
+   "blockKey": "L29:249:0",
+   "name": "Horreurs roses",
+   "nameFr": "Horreurs roses",
+   "stats": {
+    "M": 4,
+    "CC": 42,
+    "CT": null,
+    "F": 33,
+    "E": 35,
+    "I": 36,
+    "Ag": 36,
+    "Dex": 36,
+    "Int": 45,
+    "FM": 60,
+    "Soc": 15
+   },
+   "wounds": 15,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 42,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 36
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 80
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 36
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Division",
+    "Magie vivante",
+    "Mutation du Chaos"
+   ],
+   "keywords": [
+    "demon-de-tzeentch"
+   ],
+   "nameFrSource": "L29 p.247",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false,
+    "reference": "Pink Horror L23 p. 85 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1107",
+   "book": "L29",
+   "page": 248,
+   "physicalPage": 250,
+   "kind": "profile",
+   "blockKey": "L29:250:0",
+   "name": "Horreurs bleues",
+   "nameFr": "Horreurs bleues",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": null,
+    "F": 28,
+    "E": 35,
+    "I": 36,
+    "Ag": 36,
+    "Dex": 36,
+    "Int": 20,
+    "FM": 32,
+    "Soc": null
+   },
+   "wounds": 11,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 34,
+     "damage": 5
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 36
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 52
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 20
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 20
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 36
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Mutation du Chaos"
+   ],
+   "keywords": [
+    "demon-de-tzeentch"
+   ],
+   "nameFrSource": "L29 p.248",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false,
+    "reference": "Blue Horror L23 p. 85 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1108",
+   "book": "L29",
+   "page": 248,
+   "physicalPage": 250,
+   "kind": "profile",
+   "blockKey": "L29:250:1",
+   "name": "Hurleurs de Tzeentch",
+   "nameFr": "Hurleurs de Tzeentch",
+   "stats": {
+    "M": 1,
+    "CC": 36,
+    "CT": null,
+    "F": 42,
+    "E": 46,
+    "I": 44,
+    "Ag": 44,
+    "Dex": 44,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 24,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Barbillons",
+     "value": 36,
+     "damage": 11
+    },
+    {
+     "name": "Queue épineuse",
+     "value": 36,
+     "damage": 11
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Fly",
+     "rating": "20",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Acuité visuelle",
+    "Aura démoniaque",
+    "Coups assommants",
+    "Dénué de conscience",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "demon-de-tzeentch"
+   ],
+   "nameFrSource": "L29 p.248",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1109",
+   "book": "L29",
+   "page": 249,
+   "physicalPage": 251,
+   "kind": "profile",
+   "blockKey": "L29:251:0",
+   "name": "Incendiaires de Tzeentch",
+   "nameFr": "Incendiaires de Tzeentch",
+   "stats": {
+    "M": 6,
+    "CC": 27,
+    "CT": 45,
+    "F": 41,
+    "E": 46,
+    "I": 44,
+    "Ag": 44,
+    "Dex": 44,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 12,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Morsure",
+     "value": 27,
+     "damage": 7
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Aura démoniaque",
+    "Lévitation",
+    "Brasier",
+    "Dénué de conscience",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "demon-de-tzeentch"
+   ],
+   "nameFrSource": "L29 p.249",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false,
+    "reference": "Flamers L21 p. 21 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1110",
+   "book": "L29",
+   "page": 250,
+   "physicalPage": 252,
+   "kind": "profile",
+   "blockKey": "L29:252:0",
+   "name": "Diablotins",
+   "nameFr": "Diablotins",
+   "stats": {
+    "M": 4,
+    "CC": 28,
+    "CT": 26,
+    "F": 25,
+    "E": 36,
+    "I": 55,
+    "Ag": 55,
+    "Dex": 55,
+    "Int": 31,
+    "FM": 31,
+    "Soc": 45
+   },
+   "wounds": 6,
+   "size": "small",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Dents",
+     "value": 28,
+     "damage": 5
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 65
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 45
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 65
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 31
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 25
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 31
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 25
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Small",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Petty Magic (une au choix)"
+    },
+    {
+     "name": "Fearless"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Lévitation",
+    "Magie noire",
+    "Magie vulgaire (Chaos)",
+    "Troublant",
+    "Charme pernicieux",
+    "Mutations du Chaos",
+    "Angoisse",
+    "Bubon",
+    "Malice",
+    "Muse",
+    "Compétence V2 : Langue (deux au choix)",
+    "Compétence V2 : Torture"
+   ],
+   "keywords": [
+    "demon"
+   ],
+   "nameFrSource": "L29 p.250",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "small",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1111",
+   "book": "L29",
+   "page": 251,
+   "physicalPage": 253,
+   "kind": "profile",
+   "blockKey": "L29:253:0",
+   "name": "Gargouilles du Chaos",
+   "nameFr": "Gargouilles du Chaos",
+   "stats": {
+    "M": 4,
+    "CC": 35,
+    "CT": null,
+    "F": 41,
+    "E": 36,
+    "I": 44,
+    "Ag": 44,
+    "Dex": 44,
+    "Int": 30,
+    "FM": 42,
+    "Soc": 15
+   },
+   "wounds": 14,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 35,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 44
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 30
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 30
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 44
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Fly",
+     "rating": "6",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "demon"
+   ],
+   "nameFrSource": "L29 p.251",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1112",
+   "book": "L29",
+   "page": 251,
+   "physicalPage": 253,
+   "kind": "profile",
+   "blockKey": "L29:253:1",
+   "name": "Montures démoniaques",
+   "nameFr": "Montures démoniaques",
+   "stats": {
+    "M": 8,
+    "CC": 41,
+    "CT": null,
+    "F": 58,
+    "E": 59,
+    "I": 34,
+    "Ag": 34,
+    "Dex": 34,
+    "Int": 13,
+    "FM": 38,
+    "Soc": 10
+   },
+   "wounds": 36,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5
+   },
+   "attacks": [
+    {
+     "name": "Sabots",
+     "value": 41,
+     "damage": 14
+    },
+    {
+     "name": "Cornes énormes",
+     "value": 41,
+     "damage": 14
+    }
+   ],
+   "skills": [
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 58
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 44
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Aura démoniaque",
+    "Coups précis",
+    "Troublant",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "demon"
+   ],
+   "nameFrSource": "L29 p.251",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1113",
+   "book": "L29",
+   "page": 256,
+   "physicalPage": 258,
+   "kind": "profile",
+   "blockKey": "L29:258:0",
+   "name": "Zhthy'hl",
+   "nameFr": "Zhthy'hl",
+   "stats": {
+    "M": 4,
+    "CC": 44,
+    "CT": 41,
+    "F": 62,
+    "E": 44,
+    "I": 46,
+    "Ag": 46,
+    "Dex": 46,
+    "Int": 31,
+    "FM": 43,
+    "Soc": 20
+   },
+   "wounds": 18,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4,
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Cornes",
+     "value": 44,
+     "damage": 9
+    },
+    {
+     "name": "Zweihander",
+     "value": 44,
+     "damage": 11
+    }
+   ],
+   "skills": [
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 20
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 46
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 62
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 31
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 31
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 46
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Fly",
+     "rating": "8",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Maîtrise (armes lourdes)",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "demon"
+   ],
+   "nameFrSource": "L29 p.256",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1114",
+   "book": "L29",
+   "page": 260,
+   "physicalPage": 262,
+   "kind": "profile",
+   "blockKey": "L29:262:0",
+   "name": "Buveur de sang",
+   "nameFr": "Buveur de sang",
+   "stats": {
+    "M": 6,
+    "CC": 90,
+    "CT": null,
+    "F": 77,
+    "E": 77,
+    "I": 89,
+    "Ag": 89,
+    "Dex": 89,
+    "Int": 89,
+    "FM": 89,
+    "Soc": 66
+   },
+   "wounds": 232,
+   "size": "monstrous",
+   "armour": {
+    "toughnessBonus": 7,
+    "ap": 5
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 90,
+     "damage": 24
+    },
+    {
+     "name": "Dents",
+     "value": 90,
+     "damage": 24
+    }
+   ],
+   "skills": [
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 86
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 109
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 97
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 89
+    },
+    {
+     "name": "Language (toutes)",
+     "nameFr": "Langue (toutes)",
+     "value": 89
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 109
+    }
+   ],
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Fly",
+     "rating": "12",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Regeneration",
+     "ref": "E0-T-044"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Magic Resistance"
+    },
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Acuité visuelle",
+    "Aura démoniaque",
+    "Coups assommants",
+    "Coups précis",
+    "Maîtrise (armes lourdes, armes paralysantes, fléaux)",
+    "Parade éclair",
+    "Puissance imparable",
+    "Armure de Khorne",
+    "Assaut frénétique",
+    "Charge sauvage",
+    "Devoir de rendement",
+    "Fouet",
+    "Hache de Khorne",
+    "Monstrueuse puissance",
+    "Mutations du Chaos",
+    "Rugissement",
+    "Compétence V2 : Lire/écrire"
+   ],
+   "fatePoints": 3,
+   "keywords": [
+    "demon-de-khorne"
+   ],
+   "nameFrSource": "L29 p.260",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "monstrous",
+    "animal": false,
+    "reference": "démon majeur, L06 p. 360 (Monstrueuse)"
+   }
+  },
+  {
+   "id": "E0-P-1115",
+   "book": "L29",
+   "page": 262,
+   "physicalPage": 264,
+   "kind": "profile",
+   "blockKey": "L29:264:0",
+   "name": "Grand immonde",
+   "nameFr": "Grand immonde",
+   "stats": {
+    "M": 4,
+    "CC": 84,
+    "CT": null,
+    "F": 65,
+    "E": 68,
+    "I": 43,
+    "Ag": 43,
+    "Dex": 43,
+    "Int": 89,
+    "FM": 89,
+    "Soc": 45
+   },
+   "wounds": 208,
+   "size": "monstrous",
+   "armour": {
+    "toughnessBonus": 6,
+    "ap": 5
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 84,
+     "damage": 21
+    },
+    {
+     "name": "Dents",
+     "value": 84,
+     "damage": 21
+    },
+    {
+     "name": "Flail",
+     "value": 84,
+     "damage": 22
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 45
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 55
+    },
+    {
+     "name": "Lore (démonologie)",
+     "nameFr": "Savoir (démonologie)",
+     "value": 109
+    },
+    {
+     "name": "Lore (magie)",
+     "nameFr": "Savoir (magie)",
+     "value": 109
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 89
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 85
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 89
+    },
+    {
+     "name": "Language (magick)",
+     "nameFr": "Langue (magick)",
+     "value": 89
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 89
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 63
+    }
+   ],
+   "traits": [
+    {
+     "name": "Spellcaster",
+     "param": "Nurgle",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Petty Magic (deux au choix)"
+    },
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Éloquence",
+    "Magie noire",
+    "Magie vulgaire (Chaos)",
+    "Maîtrise (fléaux)",
+    "Orateur né",
+    "Puissance imparable",
+    "Chair corrosive",
+    "Chair putréfiée",
+    "Couvée de nurglings",
+    "Infecté",
+    "Mucus persistant",
+    "Mutations du Chaos",
+    "Peste",
+    "Pestilence ambiante",
+    "Torrent de corruption",
+    "Compétence V2 : Baratin",
+    "Compétence V2 : Langue (six au choix)",
+    "Compétence V2 : Lire/écrire",
+    "Compétence V2 : Sens de la magie"
+   ],
+   "spells": {
+    "Domaine de Nurgle": [
+     "Flot de Corruption",
+     "Inflammation suppurée",
+     "Miasme de pestilence"
+    ]
+   },
+   "fatePoints": 3,
+   "keywords": [
+    "demon-de-nurgle"
+   ],
+   "nameFrSource": "L29 p.262",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "monstrous",
+    "animal": false,
+    "reference": "démon majeur, L06 p. 360 (Monstrueuse)"
+   }
+  },
+  {
+   "id": "E0-P-1116",
+   "book": "L29",
+   "page": 265,
+   "physicalPage": 267,
+   "kind": "profile",
+   "blockKey": "L29:267:0",
+   "name": "Gardien des secrets",
+   "nameFr": "Gardien des secrets",
+   "stats": {
+    "M": 6,
+    "CC": 86,
+    "CT": null,
+    "F": 77,
+    "E": 77,
+    "I": 89,
+    "Ag": 89,
+    "Dex": 89,
+    "Int": 89,
+    "FM": 89,
+    "Soc": 66
+   },
+   "wounds": 232,
+   "size": "monstrous",
+   "armour": {
+    "toughnessBonus": 7,
+    "ap": 5
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 86,
+     "damage": 24
+    },
+    {
+     "name": "Cornes",
+     "value": 86,
+     "damage": 25
+    },
+    {
+     "name": "Langue perforante",
+     "value": 86,
+     "damage": 24
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 86
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 66
+    },
+    {
+     "name": "Lore (démonologie)",
+     "nameFr": "Savoir (démonologie)",
+     "value": 99
+    },
+    {
+     "name": "Lore (magie)",
+     "nameFr": "Savoir (magie)",
+     "value": 89
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 89
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 89
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 89
+    },
+    {
+     "name": "Hypnotism",
+     "nameFr": "Hypnotisme",
+     "value": 109
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 97
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 89
+    },
+    {
+     "name": "Language (magick)",
+     "nameFr": "Langue (magick)",
+     "value": 89
+    }
+   ],
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Slaanesh",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Contortionist"
+    },
+    {
+     "name": "Linguistics"
+    },
+    {
+     "name": "Petty Magic (deux au choix)"
+    },
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Acuité visuelle",
+    "Aura démoniaque",
+    "Coups précis",
+    "Éloquence",
+    "Étiquette",
+    "Incantation de bataille",
+    "Magie noire",
+    "Magie vulgaire (Chaos)",
+    "Orateur né",
+    "Parade éclair",
+    "Puissance imparable",
+    "Armure du Chaos",
+    "Attaques déchirantes",
+    "Aura de Slaanesh",
+    "Domination",
+    "Musc soporifique",
+    "Mutations du Chaos",
+    "Compétence V2 : Connaissances générales (quatre au choix)",
+    "Compétence V2 : Expression artistique (deux au choix)",
+    "Compétence V2 : Langue (quatre au choix)",
+    "Compétence V2 : Lire/écrire",
+    "Compétence V2 : Sens de la magie",
+    "Compétence V2 : Torture +20%"
+   ],
+   "spells": {
+    "Domaine de Slaanesh": [
+     "Consentement",
+     "De la douleur le plaisir",
+     "Fantasmagorie"
+    ]
+   },
+   "fatePoints": 3,
+   "keywords": [
+    "demon-de-slaanesh"
+   ],
+   "nameFrSource": "L29 p.265",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "monstrous",
+    "animal": false,
+    "reference": "démon majeur, L06 p. 360 (Monstrueuse)"
+   }
+  },
+  {
+   "id": "E0-P-1117",
+   "book": "L29",
+   "page": 267,
+   "physicalPage": 269,
+   "kind": "profile",
+   "blockKey": "L29:269:0",
+   "name": "Duc du changement",
+   "nameFr": "Duc du changement",
+   "stats": {
+    "M": 6,
+    "CC": 62,
+    "CT": null,
+    "F": 64,
+    "E": 63,
+    "I": 76,
+    "Ag": 76,
+    "Dex": 76,
+    "Int": 90,
+    "FM": 94,
+    "Soc": 30
+   },
+   "wounds": 216,
+   "size": "monstrous",
+   "armour": {
+    "toughnessBonus": 6,
+    "ap": 2
+   },
+   "attacks": [
+    {
+     "name": "Bec",
+     "value": 62,
+     "damage": 20
+    }
+   ],
+   "skills": [
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 30
+    },
+    {
+     "name": "Lore (démonologie)",
+     "nameFr": "Savoir (démonologie)",
+     "value": 100
+    },
+    {
+     "name": "Lore (magie)",
+     "nameFr": "Savoir (magie)",
+     "value": 110
+    },
+    {
+     "name": "Lore (stratégie/tactique)",
+     "nameFr": "Savoir (stratégie/tactique)",
+     "value": 110
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 76
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 90
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 104
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 96
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 64
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 90
+    },
+    {
+     "name": "Language (magick)",
+     "nameFr": "Langue (magick)",
+     "value": 90
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 30
+    }
+   ],
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Tzeentch",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Fly",
+     "rating": "18",
+     "ref": "E0-T-023"
+    },
+    {
+     "name": "Unstable",
+     "ref": "E0-T-062"
+    },
+    {
+     "name": "Size",
+     "param": "Monstrous",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Petty Magic (quatre au choix)"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Aura démoniaque",
+    "Dur en affaires",
+    "Harmonie aethyrique",
+    "Magie noire",
+    "Magie vulgaire (Chaos)",
+    "Projectile puissant",
+    "Puissance imparable",
+    "Annihilateur magique",
+    "Arme du chaos",
+    "Carapace de plumes",
+    "Chaos contrôlé",
+    "Mutations du Chaos",
+    "Regard tétanisant",
+    "Volonté de Tzeentch",
+    "Compétence V2 : Alphabet secret (deux au choix)",
+    "Compétence V2 : Connaissances académiques (deux au choix)",
+    "Compétence V2 : Connaissances générales (six au choix)",
+    "Compétence V2 : Langage secret (deux au choix)",
+    "Compétence V2 : Langue (six au choix)",
+    "Compétence V2 : Sens de la magie +20%",
+    "Compétence V2 : Torture",
+    "Arme V2 : arme du Chaos"
+   ],
+   "spells": {
+    "Domaine de Tzeentch": [
+     "Don de Tzeentch",
+     "Trahison de Tzeentch",
+     "Transformation de Tzeentch"
+    ]
+   },
+   "fatePoints": 3,
+   "keywords": [
+    "demon-de-tzeentch"
+   ],
+   "nameFrSource": "L29 p.267",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "monstrous",
+    "animal": false,
+    "reference": "démon majeur, L06 p. 360 (Monstrueuse)"
+   }
+  }
+ ]
+}

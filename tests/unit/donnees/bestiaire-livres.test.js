@@ -32,7 +32,7 @@ for (const item of index.books) {
       assert.equal(profile.page, entry.page, profile.id);
       assert.deepEqual(validateBestiaryRecord(profile), [], `${profile.id} ${profile.name}`);
       for (const ability of profile.abilities || []) assert.ok(inventory.traits.some(trait => trait.id === ability), `${profile.id} → ${ability}`);
-      if (profile.nameFr) assert.ok(['proposition'].includes(profile.nameFrSource) || /^L(05|27|28) p\.\d+$/.test(profile.nameFrSource), `${profile.id} source du nom français`);
+      if (profile.nameFr) assert.ok(['proposition'].includes(profile.nameFrSource) || /^L(05|27|28|29|30) p\.\d+$/.test(profile.nameFrSource), `${profile.id} source du nom français`);
       assert.ok(!('_dropped' in profile), 'aucun résidu de génération');
     }
     const counts = { profile: 0, template: 0, 'pregenerated-character': 0 };
