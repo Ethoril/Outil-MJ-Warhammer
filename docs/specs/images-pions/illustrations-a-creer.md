@@ -12,11 +12,12 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 | `ennemis/demons` | 23 | 23 |
 | `ennemis/morts-vivants` | 13 | 13 |
 | `ennemis/reprouves` | 2 | 2 |
+| `ennemis/vampires` | 1 | 1 |
 | `monstres` | 22 | 22 |
 | Individus nommés (`pnj/<livre>`, `pj`) | 12 | 12 |
 | `bestiaire/forme-bestiale` | 0 | — |
 | `monstres/transformation-kadon` | 9 | — |
-| **Total** | **82** | **73** |
+| **Total** | **83** | **74** |
 
 ## Créatures génériques
 
@@ -78,6 +79,12 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 | --- | --- | --- | --- | ---: | --- |
 | `ennemis/reprouves/aspirant-champion-de-tchar.webp` | Aspirant champion de Tchar | Aspirant champion de Tchar | L29 p.164 | 1 |  |
 | `ennemis/reprouves/maraudeur-kurgan.webp` | Maraudeur Kurgan | Maraudeur Kurgan | L29 p.165 | 1 |  |
+
+### `ennemis/vampires` (1)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `ennemis/vampires/vampires-lahmianes.webp` | Vampires lahmianes | Vampires lahmianes | L27 p.114 | 1 |  |
 
 ### `monstres` (22)
 

@@ -18,6 +18,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { bonus, convertStats, woundsV5 } from './lib/bestiary-v2.mjs';
+import { v2Record } from './lib/bestiary-v2-record.mjs';
 
 const BOOK = 'L27';
 const ADDED_ON = '2026-11-11';
@@ -88,10 +89,29 @@ const profiles = V2.map(entry => {
   perPage.set(entry.page, index + 1);
   return record(entry, id, index);
 });
+// Profils non animaux (décisions du MJ du 14/11, Q7 et Q13 à Q19) : même règle que les livres V2 (tools/lib/bestiary-v2-record.mjs),
+// transcription relue sur l'image de la page (noms et chiffres seulement).
+const NON_ANIMALS = [
+  {
+    printedTitle: 'VAMPIRES LAHMIANES', page: 114, physicalPage: 116, size: 'average', keywords: ['vampire', 'mort-vivant'], folder: 'ennemis/vampires',
+    ref: 'Vampire L06 p. 343 (Moyenne)', main: ['61%', '40%', '60%', '60%', '69%', '48%', '70%', '69%'], secondary: ['2', '20', '6', '6', '6', '1', '0', '0'],
+    skills: 'Charisme +20%, Commandement, Commérage +20%, Connaissances académiques (arts, généalogie/héraldique, histoire, nécromancie, philosophie), Connaissances générales (trois au choix), Déguisement +20%, Déplacement silencieux, Dissimulation, Équitation, Esquive, Évaluation +20%, Expression artistique (deux au choix), Filature, Focalisation, Fouille, Langage mystique (magick), Langue (trois au choix), Lire/écrire, Marchandage +20%, Perception +10%, Préparation de poisons +10%, Sens de la magie, Torture',
+    talents: 'Armes naturelles, Effrayant, Éloquence, Étiquette, Intrigant, Magie noire, Magie commune (occulte), Maîtrise (armes de parade), Mort-vivant, Sens aiguisés, Sur ses gardes, Vision nocturne',
+    rules: ['Apparence humaine', 'Domination', 'Malédiction des vampires', 'Nécromancien-né', 'Vampirisme'],
+    weapons: 'crocs, griffes, arme à une main, main gauche', armourPoints: 'tête 0, bras 0, corps 0, jambes 0', addedOn: '2026-11-14'
+  }
+];
+for (const entry of NON_ANIMALS) {
+  const index = perPage.get(entry.page) ?? 0;
+  perPage.set(entry.page, index + 1);
+  const profile = v2Record(entry, previous.get(entry.printedTitle) ?? `E0-P-${String(next++).padStart(3, '0')}`, `${BOOK}:${entry.page}:${index}`, BOOK);
+  profiles.push(Object.assign(profile, { addedOn: entry.addedOn }));
+}
 for (const profile of profiles) {
   const traitsUsed = profile.traits.map(trait => trait.name);
   inventory.profiles.push({ name: profile.name.toUpperCase(), book: BOOK, page: profile.page, physicalPage: profile.physicalPage, kind: 'profile',
-    traitsUsed, count: traitsUsed.length, abilityRefs: [], sourceNote: SOURCE_NOTE, id: profile.id, blockKey: profile.blockKey, addedOn: ADDED_ON });
+    traitsUsed, count: traitsUsed.length, abilityRefs: [], sourceNote: SOURCE_NOTE, id: profile.id, blockKey: profile.blockKey, addedOn: profile.addedOn || ADDED_ON });
+  delete profile.addedOn;
 }
 inventory.coverage.push({ book: BOOK, profilePagesPhysical: [...new Set(profiles.map(p => p.physicalPage))], rulePagesPrinted: [], entries: profiles.length,
   profiles: profiles.length, templates: 0, pregeneratedCharacters: 0,
@@ -105,5 +125,6 @@ writeFileSync(`js/data/bestiary/${BOOK}.json`, `${JSON.stringify(book, null, 1)}
 const index = JSON.parse(readFileSync('js/data/bestiary/index.json', 'utf8'));
 index.books = index.books.filter(row => row.book !== BOOK);
 index.books.push({ book: BOOK, file: `${BOOK}.json`, title: TITLE, edition: 'V5', counts: { profiles: profiles.length, templates: 0, pregenerated: 0 } });
+index.books.sort((a, b) => a.book.localeCompare(b.book));
 writeFileSync('js/data/bestiary/index.json', `${JSON.stringify(index, null, 1)}\n`);
 console.log(profiles.map(p => `${p.id} ${p.nameFr} M${p.stats.M} B${p.wounds} ${p.attacks.map(a => `${a.name} ${a.value}/${a.damage}`).join(', ')}`).join('\n'));

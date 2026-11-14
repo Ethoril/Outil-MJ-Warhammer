@@ -547,6 +547,199 @@
    ],
    "nameFrSource": "L27 p.120",
    "sourceEdition": "V2"
+  },
+  {
+   "id": "E0-P-1141",
+   "book": "L27",
+   "page": 114,
+   "physicalPage": 116,
+   "kind": "profile",
+   "blockKey": "L27:114:0",
+   "name": "Vampires lahmianes",
+   "nameFr": "Vampires lahmianes",
+   "stats": {
+    "M": 6,
+    "CC": 61,
+    "CT": 40,
+    "F": 60,
+    "E": 60,
+    "I": 69,
+    "Ag": 69,
+    "Dex": 69,
+    "Int": 48,
+    "FM": 70,
+    "Soc": 69
+   },
+   "wounds": 25,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 6
+   },
+   "attacks": [
+    {
+     "name": "Crocs",
+     "value": 61,
+     "damage": 9
+    },
+    {
+     "name": "Griffes",
+     "value": 61,
+     "damage": 9
+    },
+    {
+     "name": "Hand Weapon",
+     "value": 61,
+     "damage": 10
+    },
+    {
+     "name": "Main Gauche",
+     "value": 61,
+     "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 89
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 69
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 89
+    },
+    {
+     "name": "Lore (arts)",
+     "nameFr": "Savoir (arts)",
+     "value": 48
+    },
+    {
+     "name": "Lore (généalogie/héraldique)",
+     "nameFr": "Savoir (généalogie/héraldique)",
+     "value": 48
+    },
+    {
+     "name": "Lore (histoire)",
+     "nameFr": "Savoir (histoire)",
+     "value": 48
+    },
+    {
+     "name": "Lore (nécromancie)",
+     "nameFr": "Savoir (nécromancie)",
+     "value": 48
+    },
+    {
+     "name": "Lore (philosophie)",
+     "nameFr": "Savoir (philosophie)",
+     "value": 48
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 69
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 69
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 69
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 68
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 70
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 79
+    },
+    {
+     "name": "Language (magick)",
+     "nameFr": "Langue (magick)",
+     "value": 48
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 89
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Schemer"
+    },
+    {
+     "name": "Acute Sense"
+    }
+   ],
+   "specialRules": [
+    "Éloquence",
+    "Étiquette",
+    "Magie noire",
+    "Magie commune (occulte)",
+    "Maîtrise (armes de parade)",
+    "Sur ses gardes",
+    "Apparence humaine",
+    "Domination",
+    "Malédiction des vampires",
+    "Nécromancien-né",
+    "Vampirisme",
+    "Compétence V2 : Connaissances générales (trois au choix)",
+    "Compétence V2 : Déguisement +20%",
+    "Compétence V2 : Expression artistique (deux au choix)",
+    "Compétence V2 : Filature",
+    "Compétence V2 : Langue (trois au choix)",
+    "Compétence V2 : Lire/écrire",
+    "Compétence V2 : Préparation de poisons +10%",
+    "Compétence V2 : Sens de la magie",
+    "Compétence V2 : Torture"
+   ],
+   "keywords": [
+    "vampire",
+    "mort-vivant"
+   ],
+   "nameFrSource": "L27 p.114",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false,
+    "reference": "Vampire L06 p. 343 (Moyenne)"
+   }
   }
  ]
 }

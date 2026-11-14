@@ -770,7 +770,7 @@ const byFr = name => book.profiles.find(profile => profile.nameFr === name);
 
 test('L27 Bestiaire du Vieux Monde (V2, règle maison 11/11/2026) : 6 montures et le Rapace, convertis en V5', () => {
   assert.equal(book.sourceEdition, 'V2');
-  assert.deepEqual(book.profiles.map(profile => profile.nameFr), ['Cheval de guerre', 'Cheval de selle', 'Coursier elfique', 'Destrier', 'Destrier du Chaos', 'Poney', 'Rapace']);
+  assert.deepEqual(book.profiles.map(profile => profile.nameFr), ['Cheval de guerre', 'Cheval de selle', 'Coursier elfique', 'Destrier', 'Destrier du Chaos', 'Poney', 'Rapace', 'Vampires lahmianes']);
   assert.deepEqual(book.profiles.flatMap(profile => validateBestiaryRecord(profile)), []);
   // M et caractéristiques V2 repris ; CT 0 % absente ; Soc 0 % → 10 ; I 15 pour un cheval ; Blessures selon la formule V5.
   assert.deepEqual(byFr('Destrier').stats, { M: 8, CC: 30, CT: null, F: 45, E: 45, I: 15, Ag: 30, Dex: null, Int: 10, FM: 10, Soc: 10 });
@@ -786,7 +786,15 @@ test('L27 Bestiaire du Vieux Monde (V2, règle maison 11/11/2026) : 6 montures e
 });
 
 test('L27 : les six montures sont déclarables comme montures, pas le Rapace', () => {
-  for (const profile of book.profiles) assert.equal(isMountCandidate(profile), profile.nameFr !== 'Rapace', profile.nameFr);
+  for (const profile of book.profiles) assert.equal(isMountCandidate(profile), !['Rapace', 'Vampires lahmianes'].includes(profile.nameFr), profile.nameFr);
+});
+
+test('L27 : Vampires lahmianes (p. 114), règle du 14/11 : Dex = Ag, I = Ag, Taille Moyenne, Blessures V5', () => {
+  const lahmian = byFr('Vampires lahmianes');
+  assert.deepEqual(lahmian.stats, { M: 6, CC: 61, CT: 40, F: 60, E: 60, I: 69, Ag: 69, Dex: 69, Int: 48, FM: 70, Soc: 69 });
+  assert.equal(lahmian.wounds, 6 + 12 + 7);
+  assert.equal(lahmian.nameFrSource, 'L27 p.114');
+  assert.ok(lahmian.traits.some(trait => trait.name === 'Undead'));
 });
 });
 

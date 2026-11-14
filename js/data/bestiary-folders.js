@@ -98,7 +98,7 @@ export const BESTIARY_FOLDERS = Object.freeze([
     ]) }),
   Object.freeze({ id: 'ennemis/vampires', parent: 'ennemis', label: 'Vampires',
     profiles: Object.freeze([
-      'E0-P-099', 'E0-P-100', 'E0-P-926'
+      'E0-P-099', 'E0-P-100', 'E0-P-926', 'E0-P-1141'
     ]) }),
   Object.freeze({ id: 'ennemis/vampires-pirates', parent: 'ennemis', label: 'Vampires pirates',
     profiles: Object.freeze([
