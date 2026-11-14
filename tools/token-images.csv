@@ -78,6 +78,7 @@ maps/tokens/bestiaire/ours.webp;Ours;E0-P-194;Ours;L05 p.315;exact;profil V4 du 
 maps/tokens/bestiaire/pigeon.webp;Pigeon;E0-P-199;Pigeon;L05 p.316;exact;profil V4 du Livre de base FR (absent de L06), ajouté par T12
 maps/tokens/bestiaire/pliodon.webp;Pliodon;E0-P-304;Pliodon;L07 p.179;exact;
 maps/tokens/bestiaire/poney.webp;Poney;E0-P-990;Poney;L27 p.119;exact;
+maps/tokens/bestiaire/poneys-de-guerre.webp;Poneys de guerre;E0-P-1094;Poneys de guerre;L29 p.166;exact;
 maps/tokens/bestiaire/python-des-marais-d-amaxon.webp;Python des marais d’Amaxon;E0-P-290;Python des marais d’Amaxon;L07 p.172;exact;
 maps/tokens/bestiaire/rainette-lustrienne.webp;Rainette lustrienne;E0-P-282;Rainette lustrienne;L07 p.170;exact;
 maps/tokens/bestiaire/rat-geant.webp;Rat géant;E0-P-075;Rat géant;L06 p.326;exact;
@@ -104,21 +105,32 @@ maps/tokens/destriers/destrier-empire-reiksguard.webp;Destrier impérial (Reiksg
 maps/tokens/destriers/destrier-kislev-lancier-aile.webp;Destrier kislévite (lancier ailé);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, lancier ailé) — choix manuel sur la monture
 maps/tokens/destriers/destrier-kislev-legion-griffon.webp;Destrier kislévite (Légion du Griffon);;;;aucun;pas un profil du bestiaire (destrier caparaçonné, Légion du Griffon) — choix manuel sur la monture
 maps/tokens/elysia.webp;Elysia;;;;aucun;pas un profil du bestiaire (PJ)
+maps/tokens/ennemis/demons/arme-animee.webp;Arme animée;E0-P-1095;Arme animée;L29 p.196;exact;
+maps/tokens/ennemis/demons/betes-de-nurgle.webp;Bêtes de Nurgle;E0-P-1099;Bêtes de Nurgle;L29 p.241;exact;
 maps/tokens/ennemis/demons/changelin-de-tzeentch.webp;Changelin de Tzeentch;E0-P-551|E0-P-689;Changelin de Tzeentch | Changeling de Tzeentch;L18 p.85 | L21 p.56;exact;Changelin de Tzeentch (L18 p.85) et Changeling de Tzeentch (L21 p.56)
 maps/tokens/ennemis/demons/demon-mineur-de-tzeentch.webp;Démon mineur de Tzeentch;E0-P-1002;Démon mineur de Tzeentch;L28 p.43;exact;
-maps/tokens/ennemis/demons/demonette-slaanesh.webp;Démonette de Slaanesh;E0-P-108;Démonette de Slaanesh;L06 p.350;exact;
+maps/tokens/ennemis/demons/demonette-slaanesh.webp;Démonette de Slaanesh;E0-P-108|E0-P-1103;Démonette de Slaanesh | Démonettes;L06 p.350 | L29 p.245;approché;Démonette de Slaanesh (L06 p.350) et Démonettes (L29 p.245, même créature)
+maps/tokens/ennemis/demons/diablotins.webp;Diablotins;E0-P-1110;Diablotins;L29 p.250;exact;
 maps/tokens/ennemis/demons/disque-bibliotheque-de-tzeentch.webp;Disque-bibliothèque de Tzeentch;E0-P-534;Disque-bibliothèque de Tzeentch;L17 p.213;exact;
-maps/tokens/ennemis/demons/furie-du-chaos.webp;Furie du Chaos;E0-P-788;Furie du Chaos;L23 p.84;exact;
-maps/tokens/ennemis/demons/horreur-bleue.webp;Horreur bleue;E0-P-790;Horreur bleue;L23 p.85;exact;
-maps/tokens/ennemis/demons/horreur-tzeentch.webp;Horreur de Tzeentch;E0-P-789;Horreur rose;L23 p.85;approché;Horreur rose (L23 p.85) — l’Horreur bleue reste sans image
-maps/tokens/ennemis/demons/khorne-buveur-de-sang.webp;Buveur de sang de Khorne;;;;aucun;aucun profil de Buveur de sang (Bloodthirster) au bestiaire
-maps/tokens/ennemis/demons/khorne-chien-de-sang.webp;Chien de sang de Khorne;;;;aucun;aucun profil de Chien de chair (Flesh Hound) au bestiaire
-maps/tokens/ennemis/demons/nurgle-grand-immonde.webp;Grand Immonde de Nurgle;;;;aucun;aucun profil de Grand Immonde (Great Unclean One) au bestiaire
-maps/tokens/ennemis/demons/nurgle-nurglings.webp;Nurglings;;;;aucun;aucun profil de Nurglings au bestiaire
-maps/tokens/ennemis/demons/portepeste-nurgle.webp;Portepeste de Nurgle;;;;aucun;aucun profil de Portepeste (Plaguebearer) au bestiaire — Uthl’Kritchnaak, héraut exalté de Nurgle (L07 p.61), est un individu nommé
-maps/tokens/ennemis/demons/sanguinaire-khorne.webp;Sanguinaire de Khorne;E0-P-107|E0-P-843;Sanguinaire de Khorne | Bloodletters;L06 p.349 | L24 p.35;approché;Sanguinaire de Khorne (L06) et Bloodletters (L24 p.35, même créature)
-maps/tokens/ennemis/demons/slaanesh-bete-de-slaanesh.webp;Bête de Slaanesh;;;;aucun;aucun profil de Bête de Slaanesh (Fiend) au bestiaire
-maps/tokens/ennemis/demons/tzeentch-incendiaire.webp;Incendiaire de Tzeentch;E0-P-665;Lance-flammes de Tzeentch;L21 p.21;nom anglais;Lance-flammes de Tzeentch (Flamers of Tzeentch, L21 p.21)
+maps/tokens/ennemis/demons/disques-de-tzeentch.webp;Disques de Tzeentch;E0-P-1105;Disques de Tzeentch;L29 p.246;exact;
+maps/tokens/ennemis/demons/duc-du-changement.webp;Duc du changement;E0-P-1117;Duc du changement;L29 p.267;exact;
+maps/tokens/ennemis/demons/furie-du-chaos.webp;Furie du Chaos;E0-P-788|E0-P-1111;Furie du Chaos | Gargouilles du Chaos;L23 p.84 | L29 p.251;approché;Furie du Chaos (L23 p.84) et Gargouilles du Chaos (L29 p.251, même créature — Chaos Furies)
+maps/tokens/ennemis/demons/gardien-des-secrets.webp;Gardien des secrets;E0-P-1116;Gardien des secrets;L29 p.265;exact;
+maps/tokens/ennemis/demons/horreur-bleue.webp;Horreur bleue;E0-P-790|E0-P-1107;Horreur bleue | Horreurs bleues;L23 p.85 | L29 p.248;approché;Horreur bleue (L23 p.85) et Horreurs bleues (L29 p.248, même créature)
+maps/tokens/ennemis/demons/horreur-tzeentch.webp;Horreur de Tzeentch;E0-P-789|E0-P-1106;Horreur rose | Horreurs roses;L23 p.85 | L29 p.247;approché;Horreur rose (L23 p.85) et Horreurs roses (L29 p.247, même créature)
+maps/tokens/ennemis/demons/hurleurs-de-tzeentch.webp;Hurleurs de Tzeentch;E0-P-1108;Hurleurs de Tzeentch;L29 p.248;exact;
+maps/tokens/ennemis/demons/juggernauts.webp;Juggernauts;E0-P-1097;Juggernauts;L29 p.239;exact;
+maps/tokens/ennemis/demons/khorne-buveur-de-sang.webp;Buveur de sang de Khorne;E0-P-1114;Buveur de sang;L29 p.260;exact;
+maps/tokens/ennemis/demons/khorne-chien-de-sang.webp;Chien de sang de Khorne;E0-P-1096;Chiens de Khorne;L29 p.239;exact;
+maps/tokens/ennemis/demons/le-demon-du-catalogue.webp;Le démon du catalogue;E0-P-1071;Le démon du catalogue;L29 p.87;exact;
+maps/tokens/ennemis/demons/montures-de-slaanesh.webp;Montures de Slaanesh;E0-P-1104;Montures de Slaanesh;L29 p.246;exact;
+maps/tokens/ennemis/demons/montures-demoniaques.webp;Montures démoniaques;E0-P-1112;Montures démoniaques;L29 p.251;exact;
+maps/tokens/ennemis/demons/nurgle-grand-immonde.webp;Grand Immonde de Nurgle;E0-P-1115;Grand immonde;L29 p.262;exact;
+maps/tokens/ennemis/demons/nurgle-nurglings.webp;Nurglings;E0-P-1100;Nurglings;L29 p.242;exact;
+maps/tokens/ennemis/demons/portepeste-nurgle.webp;Portepeste de Nurgle;E0-P-1101;Portepestes;L29 p.243;exact;
+maps/tokens/ennemis/demons/sanguinaire-khorne.webp;Sanguinaire de Khorne;E0-P-107|E0-P-843|E0-P-1098;Sanguinaire de Khorne | Bloodletters | Sanguinaires de Khorne;L06 p.349 | L24 p.35 | L29 p.240;approché;Sanguinaire de Khorne (L06 p.349), Bloodletters (L24 p.35) et Sanguinaires de Khorne (L29 p.240, même créature)
+maps/tokens/ennemis/demons/slaanesh-bete-de-slaanesh.webp;Bête de Slaanesh;E0-P-1102;Bêtes de Slaanesh;L29 p.244;exact;
+maps/tokens/ennemis/demons/tzeentch-incendiaire.webp;Incendiaire de Tzeentch;E0-P-665|E0-P-1109;Lance-flammes de Tzeentch | Incendiaires de Tzeentch;L21 p.21 | L29 p.249;approché;Lance-flammes de Tzeentch (L21 p.21) et Incendiaires de Tzeentch (L29 p.249, même créature)
 maps/tokens/ennemis/elfes-noirs/destrier-noir.webp;Destrier noir;E0-P-315;Destrier noir;L09 p.45;exact;
 maps/tokens/ennemis/elfes-noirs/dragon-de-l-enfer-juvenile.webp;Dragon de l’Enfer juvénile;E0-P-321;Dragon de l’Enfer juvénile;L09 p.49;exact;
 maps/tokens/ennemis/elfes-noirs/dragon-de-l-enfer.webp;Dragon de l’Enfer;E0-P-322;Dragon de l’Enfer;L09 p.49;exact;
@@ -177,20 +189,31 @@ maps/tokens/ennemis/hommes-lezards/terradon.webp;Terradon;E0-P-300;Terradon;L07 
 maps/tokens/ennemis/hommes-lezards/troglodon.webp;Troglodon;E0-P-306;Troglodon;L07 p.180;exact;
 maps/tokens/ennemis/hommes-lezards/unicorne-saurien.webp;Unicorne saurien;E0-P-296|E0-P-050;Unicorne saurien | Cornu One;L07 p.175 | L11 p.80;approché;doublon FR/EN fusionné : Unicorne saurien (L07) et Cornu One (L11)
 maps/tokens/ennemis/morts-vivants/banshee.webp;Banshee;E0-P-098;Banshee;L06 p.342;exact;
+maps/tokens/ennemis/morts-vivants/bastethi-supremes.webp;Bastethi suprêmes;E0-P-1126;Bastethi suprêmes;L30 p.99;exact;
+maps/tokens/ennemis/morts-vivants/bastethi.webp;Bastethi;E0-P-1125;Bastethi;L30 p.98;exact;
 maps/tokens/ennemis/morts-vivants/bone-hydra.webp;Hydre d’os (Bone Hydra);E0-P-914;Bone Hydra;L25 p.146;exact;
+maps/tokens/ennemis/morts-vivants/cauchemars.webp;Cauchemars;E0-P-1130;Cauchemars;L30 p.101;exact;
 maps/tokens/ennemis/morts-vivants/champion-zombie.webp;Champion zombie;E0-P-568;Champion zombie;L18 p.117;exact;
 maps/tokens/ennemis/morts-vivants/charogne.webp;Charogne;E0-P-757|E0-P-984;Charogne | Carrion (oiseaux morts-vivants);L22 p.120 | L26 p.118;approché;Charogne (L22 p.120) fusionné avec Carrion (L26 p.118)
 maps/tokens/ennemis/morts-vivants/colosse-necrofex.webp;Colosse nécrofex;E0-P-693;Colosse nécrofex;L21 p.64;exact;
 maps/tokens/ennemis/morts-vivants/cranes-volants-de-la-mort.webp;Crânes volants de la mort;E0-P-565|E0-P-567|E0-P-713|E0-P-758;Crânes volants de la mort | Crânes volants de la mort (version renforcée) | Crânes volants de la mort | Crânes volants de la mort;L18 p.117 | L18 p.117 | L21 p.118 | L22 p.120;approché;regroupe Crânes volants de la mort (L18, L21, L22) et la variante renforcée (L18 p.117)
 maps/tokens/ennemis/morts-vivants/fantome.webp;Fantôme;E0-P-096|E0-P-838;Fantôme | Restless fantôme;L06 p.341 | L24 p.34;approché;Fantôme (L06 p.341) fusionné avec Restless fantôme (L24 p.34)
+maps/tokens/ennemis/morts-vivants/gardiens-des-tombes.webp;Gardiens des tombes;E0-P-1127;Gardiens des tombes;L30 p.99;exact;
+maps/tokens/ennemis/morts-vivants/generaux-revenants.webp;Généraux revenants;E0-P-1131;Généraux revenants;L30 p.101;exact;
 maps/tokens/ennemis/morts-vivants/ghast-des-cryptes.webp;Ghast des cryptes;E0-P-373;Ghast des cryptes;L10 p.68;exact;
 maps/tokens/ennemis/morts-vivants/goule.webp;Goule;E0-P-091;Goule de crypte;L06 p.338;approché;Goule de crypte (L06)
 maps/tokens/ennemis/morts-vivants/homme-rapiece.webp;Homme rapiécé;E0-P-375;Homme rapiécé;L10 p.74;exact;
 maps/tokens/ennemis/morts-vivants/horreur-des-cryptes.webp;Horreur des cryptes;E0-P-374;Horreur des cryptes;L10 p.68;exact;
 maps/tokens/ennemis/morts-vivants/liche-pestilentielle.webp;Liche pestilentielle;E0-P-612;Liche pestilentielle;L19 p.157;exact;
 maps/tokens/ennemis/morts-vivants/loup-funeste.webp;Loup funeste;E0-P-095;Loup funeste;L06 p.341;exact;
+maps/tokens/ennemis/morts-vivants/momies.webp;Momies;E0-P-1133;Momies;L30 p.102;exact;
 maps/tokens/ennemis/morts-vivants/mournguls.webp;Mournguls;E0-P-690;Mournguls;L21 p.61;exact;
+maps/tokens/ennemis/morts-vivants/nains-morts-vivants.webp;Nains morts-vivants;E0-P-1132;Nains morts-vivants;L30 p.102;exact;
+maps/tokens/ennemis/morts-vivants/residus.webp;Résidus;E0-P-1137;Résidus;L30 p.113;exact;
 maps/tokens/ennemis/morts-vivants/revenant.webp;Revenant;E0-P-060;Undead chevalier (Wight);L11 p.93;nom anglais;Chevalier mort-vivant (Wight, L11 p.93) : Wight = Revenant
+maps/tokens/ennemis/morts-vivants/revenants-elfes.webp;Revenants elfes;E0-P-1138;Revenants elfes;L30 p.114;exact;
+maps/tokens/ennemis/morts-vivants/sacrifies.webp;Sacrifiés;E0-P-1139;Sacrifiés;L30 p.114;exact;
+maps/tokens/ennemis/morts-vivants/soldats-squelettes.webp;Soldats squelettes;E0-P-1128;Soldats squelettes;L30 p.100;exact;
 maps/tokens/ennemis/morts-vivants/sorciere-squelette.webp;Sorcière squelette;E0-P-371;Sorcière squelette;L10 p.51;exact;
 maps/tokens/ennemis/morts-vivants/spectre-de-cairn.webp;Spectre de cairn;E0-P-097;Spectre de cairn;L06 p.342;exact;
 maps/tokens/ennemis/morts-vivants/spectre.webp;Spectre;E0-P-599;Spectre;L19 p.117;exact;Spectre générique (L19 p.117) — distinct du Spectre de cairn (L06) et des Spectres de sorcière (L21)
@@ -199,6 +222,7 @@ maps/tokens/ennemis/morts-vivants/squelette.webp;Squelette;E0-P-093;Squelette;L0
 maps/tokens/ennemis/morts-vivants/squelettes-sans-tete.webp;Squelettes sans tête;E0-P-571|E0-P-570;Squelettes sans tête | Champions squelettes sans tête;L18 p.119 | L18 p.119;approché;Squelettes sans tête et Champions squelettes sans tête (L18 p.119)
 maps/tokens/ennemis/morts-vivants/terreur-abyssale.webp;Terreur abyssale;E0-P-756|E0-P-712;Terreur abyssale | Cauchemar ailé;L22 p.120 | L21 p.118;approché;Terreur abyssale (L22 p.120) fusionné avec Cauchemar ailé (L21 p.118)
 maps/tokens/ennemis/morts-vivants/zombi.webp;Zombi;E0-P-094|E0-P-566|E0-P-715;Zombie | Zombie | Les Zombies du Seigneur des tombes;L06 p.340 | L18 p.117 | L21 p.118;approché;Zombie (L06, L18) et les Zombies du Seigneur des tombes (L21)
+maps/tokens/ennemis/morts-vivants/zombies-momifies.webp;Zombies momifiés;E0-P-1134;Zombies momifiés;L30 p.102;exact;
 maps/tokens/ennemis/ogres/goinfre-ogre.webp;Goinfre ogre;E0-P-506;Goinfre ogre;L16 p.83;exact;
 maps/tokens/ennemis/ogres/mournfang.webp;Mournfang;E0-P-415;Mournfang;L12 p.19;exact;
 maps/tokens/ennemis/ogres/ogre-crache-plomb.webp;Ogre crache-plomb;E0-P-1057;Ogre crache-plomb;L90 p.2;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
@@ -212,6 +236,7 @@ maps/tokens/ennemis/orcs/orc-archer.webp;Orc archer;E0-P-429;Holg Stuntysticker 
 maps/tokens/ennemis/orcs/orc-guerrier.webp;Orc guerrier;E0-P-090|E0-P-397|E0-P-428;Orc | De base Orc | Hagblad – Orc Soldier;L06 p.337 | L12 p.10 | L12 p.50;approché;Orc (L06), Orc de base (L12) — Hagblad, soldat orc (L12, individu nommé)
 maps/tokens/ennemis/orcs/orc-kostaud.webp;Orc kostaud;E0-P-1058;Orc kostaud;L90 p.3;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
 maps/tokens/ennemis/orcs/orque-sauvage.webp;Orque sauvage;E0-P-308|E0-P-398;Orque sauvage | De base sauvage Orc;L07 p.182 | L12 p.10;approché;Orque sauvage (L07 p.182) fusionné avec De base sauvage Orc (L12 p.10)
+maps/tokens/ennemis/reprouves/aspirant-champion-de-tchar.webp;Aspirant champion de Tchar;E0-P-1092;Aspirant champion de Tchar;L29 p.164;exact;
 maps/tokens/ennemis/reprouves/cultiste-chaos.webp;Cultiste du Chaos;E0-P-104|E0-P-657|E0-P-554|E0-P-556;Cultiste | Cultiste humain | Croc-Jaune cultistes | Croc-Jaune cultistes;L06 p.347 | L20 p.218 | L18 p.97 | L18 p.97;approché;Cultiste (L06), Cultiste humain (L20), Croc-Jaune cultistes (L18)
 maps/tokens/ennemis/reprouves/cultiste-novice-des-crocs-jaunes.webp;Cultiste novice des Crocs-Jaunes;E0-P-739;Cultiste novice des Crocs-Jaunes;L22 p.62;exact;
 maps/tokens/ennemis/reprouves/cultistes-de-la-main-pourpre-7.webp;Cultistes de la Main pourpre (7);E0-P-997;Cultistes de la Main pourpre (7);L28 p.28;exact;
@@ -219,13 +244,14 @@ maps/tokens/ennemis/reprouves/cultists-de-jade-sceptre-or-2.webp;Cultistes du Sc
 maps/tokens/ennemis/reprouves/enfant-de-chaos.webp;Enfant du Chaos;E0-P-664;Enfant de Chaos;L21 p.20;exact;Child of Chaos / Enfant du Chaos (L21 p.20)
 maps/tokens/ennemis/reprouves/guerrier-du-chaos.webp;Guerrier du Chaos;E0-P-106|E0-P-705|E0-P-706;Guerrier du Chaos | Zurn la Couronne sanglante — Guerrier du Chaos | Ulfhednar le Destructeur — Guerrier du Chaos;L06 p.348 | L21 p.84 | L21 p.84;approché;exact : Guerrier du Chaos (L06) — approché : Zurn la Couronne sanglante et Ulfhednar le Destructeur, guerriers du Chaos (L21, individus nommés)
 maps/tokens/ennemis/reprouves/magus-du-culte-de-la-main-pourpre.webp;Magus du culte de la Main pourpre;E0-P-998;Magus du culte de la Main pourpre;L28 p.28;exact;
+maps/tokens/ennemis/reprouves/maraudeur-kurgan.webp;Maraudeur Kurgan;E0-P-1093;Maraudeur Kurgan;L29 p.165;exact;
 maps/tokens/ennemis/reprouves/miliciens-khorne-cultistes-argent-1.webp;Miliciens — Cultistes de Khorne (Argent 1);E0-P-840;Miliciens — Khorne cultistes (Argent 1);L24 p.35;exact;
 maps/tokens/ennemis/reprouves/nurgle-cultists-sorcier-argent-3.webp;Cultiste de Nurgle (Argent 3);E0-P-859;Nurgle Cultists & sorcier (Argent 3);L24 p.52;exact;Nurgle Cultists & sorcier (L24 p.52)
 maps/tokens/ennemis/reprouves/reprouve-mute.webp;Réprouvé muté;E0-P-105;Mutant;L06 p.347;approché;Mutant (L06)
 maps/tokens/ennemis/reprouves/roi-de-la-peste.webp;Roi de la Peste;E0-P-745;Roi de la Peste;L22 p.77;exact;Blightking (L22 p.77)
 maps/tokens/ennemis/reprouves/wayward-moon-cultiste.webp;Cultiste de la Lune dévoyée (Wayward Moon);E0-P-044;Wayward Moon cultiste;L11 p.70;exact;
 maps/tokens/ennemis/rois-des-tombes/roi-des-tombes-khemri.webp;Roi des Tombes de Khemri;;;;aucun;aucun profil de Roi des Tombes au bestiaire
-maps/tokens/ennemis/rois-des-tombes/ushabti-khemri.webp;Ushabti de Khemri;;;;aucun;aucun profil d’Ushabti au bestiaire
+maps/tokens/ennemis/rois-des-tombes/ushabti-khemri.webp;Ushabti de Khemri;E0-P-1129;Ushabti;L30 p.101;exact;
 maps/tokens/ennemis/skavens/briseur-d-os-rat-ogre.webp;Briseur d’os, rat-ogre;E0-P-737|E0-P-024;Briseur d’os, rat-ogre | Rat Ogre Bonebreaker;L22 p.52 | L11 p.41;approché;doublon FR/EN fusionné : Briseur d’os, rat-ogre (L22) et Rat Ogre Bonebreaker (L11)
 maps/tokens/ennemis/skavens/clan-moulder-unique-experiment.webp;Clan Moulder Unique Experiment;E0-P-026;Clan Moulder Unique Experiment;L11 p.41;exact;
 maps/tokens/ennemis/skavens/clan-skryre-prototype.webp;Clan Skryre ‘prototype’;E0-P-062;Clan Skryre ‘prototype’;L11 p.95;exact;
@@ -248,7 +274,7 @@ maps/tokens/ennemis/skavens/vermine-de-choc.webp;Vermine de choc;E0-P-110;Vermin
 maps/tokens/ennemis/vampires-pirates/capitaine-vampire-pirate.webp;Capitaine vampire pirate;E0-P-1059;Capitaine vampire pirate;L90 p.4;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
 maps/tokens/ennemis/vampires-pirates/zombie-flibustier.webp;Zombie flibustier;E0-P-1060;Zombie flibustier;L90 p.5;exact;profil maison L90 (décision du MJ du 13/11/2026, T17)
 maps/tokens/ennemis/vampires/comte-vampire-von-carstein.webp;Comte vampire von Carstein;E0-P-099|E0-P-926;Vampire | Vampire noble;L06 p.343 | L26 p.21;approché;vampire générique : Vampire (L06), Vampire noble (L26)
-maps/tokens/ennemis/vampires/vampire-lahmiane.webp;Vampire lahmiane;;;;aucun;aucun profil de Lahmiane au bestiaire
+maps/tokens/ennemis/vampires/vampire-lahmiane.webp;Vampire lahmiane;E0-P-1141;Vampires lahmianes;L27 p.114;exact;
 maps/tokens/ennemis/vampires/varghulf.webp;Varghulf;E0-P-100;Varghulf;L06 p.344;exact;
 maps/tokens/erich-echarpe-violette.webp;Erich, écharpe violette;E0-P-1061;Erich, écharpe violette — Cultiste de la Main pourpre;L90 p.6;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
 maps/tokens/franz-bourse-mauve.webp;Franz, bourse mauve;E0-P-1062;Franz, bourse mauve — Cultiste de la Main pourpre;L90 p.7;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
@@ -260,15 +286,19 @@ maps/tokens/karl-cape-violette.webp;Karl, cape violette;E0-P-1064;Karl, cape vio
 maps/tokens/kurt-filets.webp;Kurt, filets;E0-P-1065;Kurt, filets — Cultiste de la Main pourpre;L90 p.10;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
 maps/tokens/magus.webp;Magus;;;;aucun;Magus de la Main pourpre (L28 p.28) : l’image automatique du profil E0-P-998 est ennemis/reprouves/magus-du-culte-de-la-main-pourpre.webp (outil d’images du MJ) ; celle-ci reste au choix (Q12)
 maps/tokens/monstres/aigle-geant.webp;Aigle géant;E0-P-038|E0-P-489|E0-P-742;Aigle géant | Aigle géant | Aigle géant;L11 p.63 | L14 p.82 | L22 p.73;exact;
+maps/tokens/monstres/amalgames.webp;Amalgames;E0-P-1074;Amalgames;L29 p.117;exact;
 maps/tokens/monstres/amoebae.webp;Amoebae;E0-P-027|E0-P-958;Amoebae | Amibes;L11 p.45 | L26 p.85;approché;Amoebae (L11 p.45) fusionné avec Amibes (L26 p.85)
-maps/tokens/monstres/amphisbaena.webp;Amphisbaena;E0-P-029;Amphisbaena;L11 p.47;exact;
+maps/tokens/monstres/amphisbaena.webp;Amphisbaena;E0-P-029|E0-P-1075;Amphisbaena | Amphisbènes;L11 p.47 | L29 p.118;approché;Amphisbaena (L11 p.47) et Amphisbènes (L29 p.118, même créature)
 maps/tokens/monstres/arachnarok-araignee.webp;Arachnarok araignée;E0-P-004;Arachnarok araignée;L11 p.13;exact;
+maps/tokens/monstres/baisers-de-jouvence.webp;Baisers de jouvence;E0-P-1076;Baisers de jouvence;L29 p.119;exact;
+maps/tokens/monstres/basilics.webp;Basilics;E0-P-1077;Basilics;L29 p.119;exact;
 maps/tokens/monstres/bete-des-marais.webp;Bête des marais;E0-P-083|E0-P-527;Bête des marais | Bête des marais;L06 p.331 | L17 p.179;exact;
 maps/tokens/monstres/carcasse-de-mouton.webp;Carcasse de mouton;E0-P-674;Carcasse de mouton;L21 p.25;exact;
 maps/tokens/monstres/carcasse-de-porc.webp;Carcasse de porc;E0-P-673;Carcasse de porc;L21 p.25;exact;
 maps/tokens/monstres/carcasse-de-vache.webp;Carcasse de vache;E0-P-672;Carcasse de vache;L21 p.25;exact;
 maps/tokens/monstres/carrosse-anime.webp;Carrosse animé;E0-P-669;Carrosse animé;L21 p.24;exact;
-maps/tokens/monstres/chimera.webp;Chimera;E0-P-042;Chimera;L11 p.67;exact;
+maps/tokens/monstres/chien-du-chaos.webp;Chien du Chaos;E0-P-1072;Chien du Chaos;L29 p.111;exact;
+maps/tokens/monstres/chimera.webp;Chimera;E0-P-042|E0-P-1078;Chimera | Chimères;L11 p.67 | L29 p.120;approché;Chimera (L11 p.67) et Chimères (L29 p.120, même créature)
 maps/tokens/monstres/cockatrice.webp;Cockatrice;E0-P-041;Cockatrice;L11 p.65;exact;
 maps/tokens/monstres/creatures-magiques-elementaire-incarne-de-mort.webp;Créatures magiques — Élémentaire incarné de mort;E0-P-525;Créatures magiques — Élémentaire incarné de mort;L17 p.175;exact;
 maps/tokens/monstres/demigriffon.webp;Demigriffon;E0-P-081|E0-P-459;Demigriffon | Monture demigriffon;L06 p.329 | L13 p.109;approché;Demigriffon (L06) et Monture demigriffon (L13)
@@ -277,17 +307,23 @@ maps/tokens/monstres/dragon-de-magma.webp;Dragon de magma;E0-P-507;Dragon de mag
 maps/tokens/monstres/dragon-de-tessons.webp;Dragon de tessons;E0-P-058;Dragon de tessons;L11 p.90;exact;
 maps/tokens/monstres/dragon-des-mers.webp;Dragon des mers;E0-P-323;Dragon des mers;L09 p.50;exact;
 maps/tokens/monstres/dragon.webp;Dragon;E0-P-082|E0-P-017;Dragon | Dragons des forêts;L06 p.330 | L11 p.30;approché;exact : Dragon (L06) — approché : Dragons des forêts (L11 p.30)
+maps/tokens/monstres/dragons-du-chaos.webp;Dragons du Chaos;E0-P-1079;Dragons du Chaos;L29 p.121;exact;
+maps/tokens/monstres/dragons-ogres.webp;Dragons-ogres;E0-P-1080;Dragons-ogres;L29 p.122;exact;
 maps/tokens/monstres/dread-maw.webp;Dread Maw;E0-P-012;Dread Maw;L11 p.23;exact;
 maps/tokens/monstres/elementaire-de-mer.webp;Élémentaire de mer;E0-P-909;Élémentaire de mer;L25 p.142;exact;
 maps/tokens/monstres/elementaire-incarne-de-betes.webp;Élémentaire incarné de bêtes;E0-P-526|E0-P-597;Élémentaire incarné de bêtes | Le Peaussier sanglant;L17 p.176 | L19 p.115;approché;fusionné avec Le Peaussier sanglant (L19 p.115), Élémentaire incarné de bêtes unique
 maps/tokens/monstres/elementaire-incarne-de-feu.webp;Élémentaire incarné de feu;E0-P-524;Élémentaire incarné de feu;L17 p.174;exact;
 maps/tokens/monstres/ettins-maudits.webp;Ettins maudits;E0-P-691;Ettins maudits;L21 p.62;exact;
+maps/tokens/monstres/fanges-du-chaos.webp;Fanges du Chaos;E0-P-1082;Fanges du Chaos;L29 p.122;exact;
+maps/tokens/monstres/gardiens-runiques.webp;Gardiens runiques;E0-P-1135;Gardiens runiques;L30 p.112;exact;
 maps/tokens/monstres/gargantuan.webp;Gargantuan;E0-P-910;Gargantuan;L25 p.143;exact;
 maps/tokens/monstres/geant-loup.webp;Géant loup;E0-P-417;Géant loup;L12 p.19;exact;
 maps/tokens/monstres/geant.webp;Géant;E0-P-084;Géant;L06 p.332;exact;
 maps/tokens/monstres/golem-construct.webp;Golem (construct);E0-P-515;Golem (construct);L17 p.30;exact;
 maps/tokens/monstres/griffon.webp;Griffon;E0-P-085|E0-P-011;Griffon | Griffon;L06 p.332 | L11 p.21;exact;
 maps/tokens/monstres/hydre-de-guerre.webp;Hydre de guerre;E0-P-319;Hydre de guerre;L09 p.47;exact;
+maps/tokens/monstres/incarceres.webp;Incarcérés;E0-P-1136;Incarcérés;L30 p.113;exact;
+maps/tokens/monstres/jabberwocks.webp;Jabberwocks;E0-P-1083;Jabberwocks;L29 p.124;exact;
 maps/tokens/monstres/kraken.webp;Kraken;E0-P-488;Kraken;L14 p.82;exact;
 maps/tokens/monstres/leech-wyrm.webp;Leech Wyrm;E0-P-915;Leech Wyrm;L25 p.146;exact;
 maps/tokens/monstres/les-betes-de-la-ferme.webp;Les bêtes de la ferme;E0-P-807;Les bêtes de la ferme;L23 p.106;exact;
@@ -298,6 +334,7 @@ maps/tokens/monstres/mobilier-anime-grand.webp;Mobilier animé, grand;E0-P-668;M
 maps/tokens/monstres/mobilier-anime-moyen.webp;Mobilier animé, moyen;E0-P-670;Mobilier animé, moyen;L21 p.24;exact;
 maps/tokens/monstres/mobilier-anime-petit.webp;Mobilier animé, petit;E0-P-671;Mobilier animé, petit;L21 p.24;exact;
 maps/tokens/monstres/naiades.webp;Naïades;E0-P-961;Naïades;L26 p.88;exact;
+maps/tokens/monstres/nuees-du-chagrin.webp;Nuées du chagrin;E0-P-1084;Nuées du chagrin;L29 p.124;exact;
 maps/tokens/monstres/pegase.webp;Pégase;E0-P-087;Pégase;L06 p.334;exact;
 maps/tokens/monstres/phenix-coeur-de-givre.webp;Phénix cœur-de-givre;E0-P-491;Phénix cœur-de-givre;L14 p.84;exact;
 maps/tokens/monstres/phenix-fleche-de-flamme.webp;Phénix flèche-de-flamme;E0-P-490;Phénix flèche-de-flamme;L14 p.83;exact;
@@ -305,8 +342,12 @@ maps/tokens/monstres/pieuvre-des-tourbieres.webp;Pieuvre des tourbières;E0-P-07
 maps/tokens/monstres/preyton.webp;Preyton;E0-P-037;Preyton;L11 p.61;exact;
 maps/tokens/monstres/purple-skullback-araignee.webp;Purple Skullback araignée;E0-P-452;Purple Skullback araignée;L12 p.99;exact;
 maps/tokens/monstres/roc-plume-vive.webp;Roc plume-vive;E0-P-253|E0-P-478;Roc plume-vive | Roc plume-vive;L07 p.89 | L14 p.47;exact;
+maps/tokens/monstres/sanglebouc.webp;Sanglebouc;E0-P-1073;Sanglebouc;L29 p.111;exact;
 maps/tokens/monstres/sangsues-geantes.webp;Sangsues géantes;E0-P-960;Sangsues géantes;L26 p.86;exact;
+maps/tokens/monstres/shaggoths.webp;Shaggoths;E0-P-1081;Shaggoths;L29 p.122;exact;
 maps/tokens/monstres/skin-loup.webp;Skin loup;E0-P-045;Skin loup;L11 p.70;exact;
+maps/tokens/monstres/soyeuses.webp;Soyeuses;E0-P-1085;Soyeuses;L29 p.125;exact;
+maps/tokens/monstres/squigs-des-tombes.webp;Squigs des tombes;E0-P-1140;Squigs des tombes;L30 p.115;exact;
 maps/tokens/monstres/syreen.webp;Syreen;E0-P-912|E0-P-056|E0-P-251;Syreen | Siren | L’Épouse de la saumure — Sirène et sorcière;L25 p.145 | L11 p.86 | L07 p.75;approché;fusion Syreen (L25 p.145), Siren (L11 p.86) et L’Épouse de la saumure (L07 p.75)
 maps/tokens/monstres/things-from-dead-wood.webp;Things From Dead Wood;E0-P-022;Things From Dead Wood;L11 p.37;exact;
 maps/tokens/monstres/triton.webp;Triton;E0-P-918;Triton;L25 p.149;exact;
@@ -314,7 +355,12 @@ maps/tokens/monstres/troll-des-rivieres-megere.webp;Troll des rivières mégère
 maps/tokens/monstres/troll-des-rivieres.webp;Troll des rivières;E0-P-030|E0-P-963;Troll des rivières | Trolls des rivières;L11 p.49 | L26 p.89;approché;exact : Troll des rivières (L11) — approché : Trolls des rivières (L26) — le gabarit de L12 n’est pas une créature
 maps/tokens/monstres/troll.webp;Troll;E0-P-088|E0-P-403;Troll | Troll commun de base;L06 p.335 | L12 p.15;approché;Troll (L06 p.335) et Troll commun de base (L12 p.15)
 maps/tokens/monstres/ver-aveugle-pale.webp;Ver aveugle pâle;E0-P-277;Ver aveugle pâle;L07 p.169;exact;
+maps/tokens/monstres/vers-des-breches.webp;Vers des brèches;E0-P-1086;Vers des brèches;L29 p.126;exact;
+maps/tokens/monstres/vers-des-marais.webp;Vers des marais;E0-P-1087;Vers des marais;L29 p.126;exact;
+maps/tokens/monstres/vers-fouettards.webp;Vers fouettards;E0-P-1088;Vers fouettards;L29 p.127;exact;
+maps/tokens/monstres/vers-solaires.webp;Vers solaires;E0-P-1089;Vers solaires;L29 p.127;exact;
 maps/tokens/monstres/wyvern.webp;Wyvern;E0-P-019;Wyvern;L11 p.32;exact;
+maps/tokens/monstres/ymir.webp;Ymir;E0-P-1091;Ymir;L29 p.148;exact;
 maps/tokens/otto-gants-pourpres.webp;Otto, gants pourpres;E0-P-1066;Otto, gants pourpres — Cultiste de la Main pourpre;L90 p.11;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
 maps/tokens/peuples/elfes/elfe-haut-et-sylvain.webp;Elfe (haut et sylvain);E0-P-066;Elfe (haut et sylvain);L06 p.320;exact;
 maps/tokens/peuples/elfes/rejeton-de-mathlann-sentinelle.webp;Rejeton de Mathlann — Sentinelle;E0-P-474;Rejeton de Mathlann — Sentinelle;L14 p.31;exact;
@@ -904,6 +950,18 @@ maps/tokens/pnj/l28/swelt-tunger-artisan-humain-ancien-voleur-argent-1.webp;Swel
 maps/tokens/pnj/l28/tiasmara-flarett-cuisinier-halfling-argent-2.webp;Tiasmara Flarett — Cuisinier halfling (Argent 2);E0-P-996;Tiasmara Flarett — Cuisinier halfling (Argent 2);L28 p.24;exact;
 maps/tokens/pnj/l28/uli-breitner-proprietaire-marchand-humain-anciennement-recrue-et-entremetteur-argent-5.webp;Uli Breitner, propriétaire — Marchand humain, anciennement recrue et entremetteur (Argent 5);E0-P-993;Uli Breitner, propriétaire — Marchand humain, anciennement recrue et entremetteur (Argent 5);L28 p.23;exact;
 maps/tokens/pnj/l28/ulrich-schutzmann-capitaine-de-la-garde-or-1.webp;Ulrich Schutzmann — Capitaine de la garde (Or 1);E0-P-1039;Ulrich Schutzmann — Capitaine de la garde (Or 1);L28 p.124;exact;
+maps/tokens/pnj/l29/herman-schmidt-enfant-du-chaos.webp;Herman Schmidt, enfant du Chaos;E0-P-1070;Herman Schmidt, enfant du Chaos;L29 p.60;exact;
+maps/tokens/pnj/l29/herman-schmidt.webp;Herman Schmidt;E0-P-1069;Herman Schmidt;L29 p.60;exact;
+maps/tokens/pnj/l29/knute-alsgaard.webp;Knute Alsgaard;E0-P-1090;Knute Alsgaard;L29 p.141;exact;
+maps/tokens/pnj/l29/marie-la-sanguinaire.webp;Marie la Sanguinaire;E0-P-1068;Marie la Sanguinaire;L29 p.23;exact;
+maps/tokens/pnj/l29/zhthy-hl.webp;Zhthy'hl;E0-P-1113;Zhthy'hl;L29 p.256;exact;
+maps/tokens/pnj/l30/artilli-levrellian.webp;Artilli Levrellian;E0-P-1118;Artilli Levrellian;L30 p.14;exact;
+maps/tokens/pnj/l30/ernst-helmuth.webp;Ernst Helmuth;E0-P-1122;Ernst Helmuth;L30 p.24;exact;
+maps/tokens/pnj/l30/fatandira.webp;Fatandira;E0-P-1119;Fatandira;L30 p.15;exact;
+maps/tokens/pnj/l30/karitamen-le-scarabee-de-la-mort.webp;Karitamen, le Scarabée de la Mort;E0-P-1124;Karitamen, le Scarabée de la Mort;L30 p.90;exact;
+maps/tokens/pnj/l30/mir-haflok.webp;Mir Haflok;E0-P-1120;Mir Haflok;L30 p.16;exact;
+maps/tokens/pnj/l30/phrenesay.webp;Phrenesay;E0-P-1123;Phrenesay;L30 p.72;exact;
+maps/tokens/pnj/l30/strykssen.webp;Strykssen;E0-P-1121;Strykssen;L30 p.17;exact;
 maps/tokens/shaman-bray.webp;Chamane bray;E0-P-121;Swilegrakk — Chamane-bray (Lanceur de sorts);L06 p.355;nom anglais;Swilegrakk — Chamane-bray (Bray-Shaman, L06 p.355, individu nommé, seul profil de chamane bray)
 maps/tokens/vaurien-fils-ulric.webp;Vaurien, Fils d’Ulric;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Fils d’Ulric)
 maps/tokens/wilhelm-ceinture-lie-de-vin.webp;Wilhelm, ceinture lie-de-vin;E0-P-1067;Wilhelm, ceinture lie-de-vin — Cultiste de la Main pourpre;L90 p.12;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
