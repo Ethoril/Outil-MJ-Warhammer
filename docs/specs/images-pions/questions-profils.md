@@ -224,3 +224,14 @@ Démoniaque, Effrayant, Terrifiant, Instabilité, Mort-vivant, Volonté de fer, 
 - **Traits** : table validée (Effrayant → Peur, Terrifiant → Terreur, Vision nocturne, Vol, Frénésie, Mort-vivant, Éthéré, Instabilité → Instable, Nuée, Régénération, Stupidité → Stupide). **Sorts** : mots du MJ, « pour tout ce qui est sort on ira chercher des sorts proches dans le corpus existant si possible » ; à défaut de sort proche, le nom imprimé reste en règle spéciale.
 - **Compétences** : table validée, et ajouter les équivalences sous un autre nom (Déplacement silencieux → Discrétion, Commérage → Ragot, Charisme → Charme…), liste à soumettre au MJ.
 - **Restent à valider** quand les profils seront transcrits : les Tailles proposées par créature, le n des armes naturelles, la liste des sorts rapprochés, la liste des équivalences de compétences.
+
+## Validation des listes de T16 par le MJ (14/11/2026, par sélecteurs)
+
+- **Tailles proposées** : validées (Monstrueuse : les 4 démons majeurs ; Énorme : Chimères, Dragons du Chaos, Shaggoths, Vers des marais ; Grande, Petite et Moyenne comme proposé).
+- **Armes naturelles** : validées (morsure, dents, crocs, bec 3 ; griffes 3 ; cornes, défenses, sabots 4 ; pince 6 ; autres 3 ; un « BF–1 » imprimé se retranche).
+- **Sorts**, corrigés :
+  - Sombre savoir (Chaos) → le domaine de Nurgle, Slaanesh ou Tzeentch selon l'allégeance de la créature ; Démonologie si elle n'en a pas.
+  - Magie mineure (au choix) → lanceur de sorts avec les sorts mineurs du catalogue, à piocher en séance.
+  - Dissipation et Silence (Karitamen) → sorts d'effet voisin du catalogue, tous domaines confondus ; rapprochement à soumettre au MJ.
+  - Sombre savoir de Nurgle, Slaanesh, Tzeentch, Nécromancie : validé (sorts du domaine).
+- **Compétences sous un autre nom** : validées. Pour celles restées sans équivalent (Torture, Baratin, Filature, Déguisement, Lire/écrire, Sens de la magie, Préparation de poisons), mots du MJ : « ceux que tu ne retrouves pas ressemblent à des talents pour beaucoup » ; les chercher parmi les talents V5 du catalogue.
