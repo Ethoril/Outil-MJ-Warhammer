@@ -58,6 +58,8 @@ export const V5_WEAPONS = Object.freeze({
   'Hand Weapon': { bonus: 4 }, Sword: { bonus: 4 }, Dagger: { bonus: 2 }, Knuckledusters: { bonus: 2 }, Flail: { bonus: 4 },
   'Military Flail': { bonus: 5 }, Halberd: { bonus: 5 }, Spear: { bonus: 4 }, Lance: { bonus: 6 }, Greataxe: { bonus: 6 },
   Warhammer: { bonus: 6 }, Zweihander: { bonus: 5 },
+  // Décision du MJ du 14/11 : « arme à deux mains » sans précision = arme V5 à BF + 6.
+  'Two-Handed Weapon': { bonus: 6 },
   Bow: { ranged: true, bonus: 4, sb: true, range: 50 }, Longbow: { ranged: true, bonus: 4, sb: true, range: 60 },
   Shortbow: { ranged: true, bonus: 3, sb: true, range: 40 }, Crossbow: { ranged: true, bonus: 9, range: 50 },
   'Heavy Crossbow': { ranged: true, bonus: 10, range: 60 }, Sling: { ranged: true, bonus: 6, range: 40 },
@@ -70,7 +72,7 @@ export const V2_WEAPONS = Object.freeze({
   "fléau d'armes": 'Military Flail', hallebarde: 'Halberd', lance: 'Spear', 'lance de cavalerie': 'Lance', 'hache à deux mains': 'Greataxe',
   'grande hache': 'Greataxe', 'marteau de guerre': 'Warhammer', zweihänder: 'Zweihander', 'épée à deux mains': 'Zweihander',
   arc: 'Bow', 'arc long': 'Longbow', 'arc court': 'Shortbow', arbalète: 'Crossbow', 'arbalète lourde': 'Heavy Crossbow', fronde: 'Sling',
-  javeline: 'Javelin', 'hache de lancer': 'Throwing Axe'
+  javeline: 'Javelin', 'hache de lancer': 'Throwing Axe', 'arme à deux mains': 'Two-Handed Weapon'
 });
 const fold = text => String(text).normalize('NFC').toLowerCase().replace(/[’`]/g, "'").replace(/\s+/g, ' ').trim();
 
@@ -110,16 +112,44 @@ export const V2_SKILLS = Object.freeze({
   perception: ['Perception', 'Perception', 'I'], esquive: ['Dodge', 'Esquive', 'Ag'], intimidation: ['Intimidate', 'Intimidation', 'F'],
   escalade: ['Climb', 'Escalade', 'F'], natation: ['Swim', 'Natation', 'F'], commandement: ['Leadership', 'Commandement', 'Soc'],
   marchandage: ['Haggle', 'Marchandage', 'Soc'], pistage: ['Track', 'Pistage', 'I'], évaluation: ['Evaluate', 'Évaluation', 'Int'],
-  langue: ['Language', 'Langue', 'Int']
+  langue: ['Language', 'Langue', 'Int'], escamotage: ['Sleight of Hand', 'Escamotage', 'Dex'], orientation: ['Navigation', 'Orientation', 'I'],
+  focalisation: ['Channelling', 'Focalisation', 'FM'], dressage: ['Animal Training', 'Dressage', 'Int'], crochetage: ['Pick Lock', 'Crochetage', 'Dex'],
+  métier: ['Trade', 'Métier', 'Dex'], hypnotisme: ['Hypnotism', 'Hypnotisme', 'FM']
 });
 
-/** « Perception +20% », « Langue (reikspiel) » → compétence V5, ou null (non homonyme : reste en règle spéciale). */
-export function skillOf(printed, stats) {
+/**
+ * Validation du MJ du 14/11 : compétences V2 qui existent en V5 sous un autre nom (compétence présente au glossaire du bestiaire,
+ * `SKILL_GROUP_FR` de tools/lib/bestiary-glossary.mjs). Deux compétences V2 rendues par la même compétence V5 : la plus haute valeur reste.
+ */
+export const V2_SKILLS_RENAMED = Object.freeze({
+  'déplacement silencieux': ['Stealth', 'Discrétion', 'Ag'], dissimulation: ['Stealth', 'Discrétion', 'Ag'], commérage: ['Gossip', 'Ragot', 'Soc'],
+  charisme: ['Charm', 'Charme', 'Soc'], soins: ['Heal', 'Guérison', 'Int'], "conduite d'attelages": ['Drive', 'Conduite d’attelage', 'Ag'],
+  équitation: ['Ride', 'Chevaucher', 'Ag'], survie: ['Outdoor Survival', 'Survie en extérieur', 'Int'],
+  "résistance à l'alcool": ['Consume Alcohol', 'Résistance à l’alcool', 'E'], 'connaissances académiques': ['Lore', 'Savoir', 'Int'],
+  'connaissances générales': ['Lore', 'Savoir', 'Int'], 'langage mystique': ['Language', 'Langue', 'Int'],
+  'expression artistique': ['Entertain', 'Divertissement', 'Soc'], 'alphabet secret': ['Secret Signs', 'Signes secrets', 'Int'],
+  'soins des animaux': ['Animal Care', 'Soin aux animaux', 'Int'], 'charme animal': ['Charm Animal', 'Emprise sur les animaux', 'FM'],
+  jeu: ['Gamble', 'Pari', 'Int'], fouille: ['Perception', 'Perception', 'I']
+});
+
+/**
+ * « Perception +20% », « Langue (reikspiel) », « Connaissances académiques (démonologie +20%, magie +20%) » → compétences V5 (une par
+ * spécialisation) ; [] si la compétence n'a pas d'équivalent (elle reste en règle spéciale). Une spécialisation « au choix » est écartée.
+ */
+export function skillsOf(printed, stats) {
   const found = /^(.+?)(?:\s*\(([^)]*)\))?\s*(?:\+(\d+)\s?%)?$/.exec(String(printed).normalize('NFC').trim());
-  if (!found) return null;
-  const entry = V2_SKILLS[fold(found[1])];
-  if (!entry || stats[entry[2]] === null) return null;
+  if (!found) return [];
+  const entry = V2_SKILLS[fold(found[1])] || V2_SKILLS_RENAMED[fold(found[1])];
+  if (!entry || stats[entry[2]] === null) return [];
   const [name, nameFr, carac] = entry;
-  const spec = found[2] ? ` (${found[2]})` : '';
-  return { name: `${name}${spec}`, nameFr: `${nameFr}${spec}`, value: stats[carac] + Number(found[3] || 0) };
+  const base = Number(found[3] || 0);
+  const specs = found[2] ? found[2].split(/,\s*/).filter(spec => !/au choix|autres?\b/.test(spec)) : [null];
+  return specs.map(spec => {
+    const part = spec === null ? null : /^(.*?)\s*(?:\+(\d+)\s?%)?$/.exec(spec.trim());
+    const label = part ? ` (${part[1]})` : '';
+    return { name: `${name}${label}`, nameFr: `${nameFr}${label}`, value: stats[carac] + base + Number(part?.[2] || 0) };
+  });
 }
+
+/** Une seule compétence (premier élément de `skillsOf`), ou null. */
+export const skillOf = (printed, stats) => skillsOf(printed, stats)[0] || null;

@@ -37,6 +37,7 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
   - Dague → BF + 2
   - Hallebarde → BF + 5
   - Hache à deux mains → BF + 6
+  - Arme à deux mains sans précision → BF + 6 (décision du MJ du 14/11)
   - Arc → BF + 4, portée 50
   - Arbalète → +9, portée 50
   - Javeline → BF + 3, portée BF × 3
@@ -44,19 +45,23 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
 - **Arme naturelle** (griffes, morsure, cornes…) : BF + n, avec le n de la créature V5 la plus proche (liste à valider).
 - **Valeur d'attaque** : CC en mêlée, CT à distance.
 - **Grandes créatures** (L06 p. 360), en mêlée seulement : Grande et Énorme +BF, Monstrueuse +2 × BF.
-- Une arme sans équivalent V5 (bouclier, arme à deux mains sans précision…) reste en règle spéciale.
+- Une arme sans équivalent V5 (bouclier…) reste en règle spéciale.
 
 ## Compétences, talents, Traits et règles
 
 - **Compétence V2 homonyme d'une compétence V5** : valeur = caractéristique V5 qui la gouverne + bonus V2 (« Perception +10 % » → I + 10).
   - Homonymes retenus : Perception, Esquive, Intimidation, Escalade, Natation, Commandement, Marchandage, Pistage, Évaluation, Langue.
-  - Les autres compétences V2 (Charisme, Commérage, Déplacement silencieux…) restent en règles spéciales.
+  - Aussi homonymes : Escamotage, Orientation, Focalisation, Dressage, Crochetage, Métier, Hypnotisme.
+  - **Sous un autre nom** (validation du MJ du 14/11, compétence V5 présente au glossaire de l'outil ; liste à valider) : Déplacement silencieux et Dissimulation → Discrétion ; Commérage → Ragot ; Charisme → Charme ; Soins → Guérison ; Conduite d'attelages → Conduite d'attelage ; Équitation → Chevaucher ; Survie → Survie en extérieur ; Résistance à l'alcool ; Connaissances académiques et Connaissances générales → Savoir ; Langage mystique → Langue ; Expression artistique → Divertissement ; Alphabet secret → Signes secrets ; Soins des animaux → Soin aux animaux ; Charme animal → Emprise sur les animaux ; Jeu → Pari ; Fouille → Perception.
+  - Deux compétences V2 rendues par la même compétence V5 : la plus haute valeur reste. Une spécialisation « au choix » est écartée.
+  - Les autres compétences V2 (Torture, Baratin…) restent en règles spéciales.
 - **Talent V2 homonyme exact d'un Trait V5** (liste à valider) :
   - Effrayant → Peur ; Terrifiant → Terreur ;
   - Vision nocturne → Vision nocturne ; Vol → Vol ; Frénésie → Frénésie ;
   - Mort-vivant → Mort-vivant ; Éthéré → Éthéré ;
   - Instabilité → Instable ; Nuée → Nuée ; Régénération → Régénération ; Stupidité → Stupide.
 - **Talent V2 homonyme exact d'un talent du catalogue V5** : ce talent (Ambidextre, Volonté de fer, Sans peur…).
+- **Sorts** (mots du MJ du 14/11) : le sort le plus proche du catalogue de l'outil (même nom ou même effet, même domaine) ; à défaut, le nom imprimé reste en règle spéciale. Liste des rapprochements à valider.
 - **Tout le reste** (Aura démoniaque, Écailles, Mutations du Chaos, règles propres à la créature…) : règle spéciale. Seul le nom imprimé est gardé, jamais le texte du livre.
 - Points de Destin (PD) repris. Mag et PF ignorés.
 

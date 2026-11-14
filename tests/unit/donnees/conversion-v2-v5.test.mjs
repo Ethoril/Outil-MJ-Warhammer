@@ -2,7 +2,7 @@
 // imprimés : un démon, un démon majeur, un mort-vivant, un PNJ humanoïde, une créature volante, et une monture de L27 (règle du 11/11).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { convertStats, v2Movement, v2Value, woundsV5, meleeDamage, weaponAttack, naturalAttack, traitOf, skillOf } from '../../../tools/lib/bestiary-v2.mjs';
+import { convertStats, v2Movement, v2Value, woundsV5, meleeDamage, weaponAttack, naturalAttack, traitOf, skillOf, skillsOf } from '../../../tools/lib/bestiary-v2.mjs';
 
 const v2 = values => values.map(v2Value);
 
@@ -33,10 +33,17 @@ test('PNJ humanoïde (Marie la Sanguinaire, p. 23) : compétences homonymes sur 
   const stats = convertStats(v2(['48%', '28%', '51%', '45%', '53%', '50%', '56%', '41%']), { M: 4 });
   assert.deepEqual(skillOf('Perception +10%', stats), { name: 'Perception', nameFr: 'Perception', value: 63 });
   assert.deepEqual(skillOf('Langue (tiléen)', stats), { name: 'Language (tiléen)', nameFr: 'Langue (tiléen)', value: 50 });
-  assert.equal(skillOf('Charisme', stats), null);
+  assert.equal(skillOf('Torture', stats), null, 'sans équivalent V5 : règle spéciale');
   assert.deepEqual(weaponAttack('arme à une main (couperet de boucher)', { stats, size: 'average' }), { name: 'Hand Weapon', value: 48, damage: 9 });
   assert.deepEqual(weaponAttack('deux javelines', { stats, size: 'average' }), { name: 'Javelin', value: 28, damage: 8, rangeYards: 15 });
   assert.equal(weaponAttack('bouclier', { stats, size: 'average' }), null);
+  // Validation du MJ du 14/11 : arme à deux mains sans précision = BF + 6 ; compétences rapprochées sous un autre nom.
+  assert.deepEqual(weaponAttack('arme à deux mains', { stats, size: 'average' }), { name: 'Two-Handed Weapon', value: 48, damage: 11 });
+  assert.deepEqual(weaponAttack('arme à deux mains (hache à deux mains)', { stats, size: 'average' }), { name: 'Greataxe', value: 48, damage: 11 });
+  assert.deepEqual(skillOf('Charisme', stats), { name: 'Charm', nameFr: 'Charme', value: 41 });
+  assert.deepEqual(skillsOf('Connaissances générales (Empire, Norsca +10%)', stats).map(skill => [skill.nameFr, skill.value]), [['Savoir (Empire)', 50], ['Savoir (Norsca)', 60]]);
+  assert.deepEqual(skillsOf('Langue (langage sombre, plus trois autres au choix)', stats).map(skill => skill.nameFr), ['Langue (langage sombre)']);
+  assert.deepEqual(skillsOf('Torture', stats), []);
 });
 
 test('créature volante (Disques de Tzeentch, p. 246) : M au sol et Vol entre parenthèses ; arme naturelle en BF + n', () => {
