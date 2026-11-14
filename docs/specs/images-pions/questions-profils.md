@@ -216,3 +216,11 @@ Démoniaque, Effrayant, Terrifiant, Instabilité, Mort-vivant, Volonté de fer, 
 - **Q19 Carrières et prétirés** : ni les 44 carrières ni les 6 prétirés n'entrent au bestiaire.
 - **Profils maison (T17)** : armes validées telles quelles.
 - **Appariement des images** : pas urgent ; passe finale quand la création d'images sera terminée.
+
+## Validation des tables de conversion V2 → V5 par le MJ (14/11/2026, par sélecteurs)
+
+- **Armes de mêlée** : table validée (arme à une main BF+4, épée BF+4, dague BF+2, coup-de-poing BF+2, fléau BF+4, fléau d'armes BF+5, hallebarde BF+5, lance BF+4, lance de cavalerie BF+6, hache à deux mains BF+6, marteau de guerre BF+6, épée à deux mains BF+5 ; Grande ou Énorme +BF, Monstrueuse +2 × BF). **Changement** : une « arme à deux mains » sans précision devient une arme V5 à BF+6 au lieu de rester en règle spéciale. Le bouclier reste en règle spéciale.
+- **Armes à distance** : table validée telle quelle.
+- **Traits** : table validée (Effrayant → Peur, Terrifiant → Terreur, Vision nocturne, Vol, Frénésie, Mort-vivant, Éthéré, Instabilité → Instable, Nuée, Régénération, Stupidité → Stupide). **Sorts** : mots du MJ, « pour tout ce qui est sort on ira chercher des sorts proches dans le corpus existant si possible » ; à défaut de sort proche, le nom imprimé reste en règle spéciale.
+- **Compétences** : table validée, et ajouter les équivalences sous un autre nom (Déplacement silencieux → Discrétion, Commérage → Ragot, Charisme → Charme…), liste à soumettre au MJ.
+- **Restent à valider** quand les profils seront transcrits : les Tailles proposées par créature, le n des armes naturelles, la liste des sorts rapprochés, la liste des équivalences de compétences.
