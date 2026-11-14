@@ -202,3 +202,17 @@ Démoniaque, Effrayant, Terrifiant, Instabilité, Mort-vivant, Volonté de fer, 
 1. Carrières exclues du bestiaire ; prétirés inclus comme prétirés (genre existant).
 2. Carrières et prétirés exclus.
 3. Les deux inclus (carrières en gabarits).
+
+## Réponses du MJ du 14/11/2026
+
+- **Q11 Fils d'Ulric** : pas de profil ; images au sélecteur.
+- **Q12 Main pourpre** : apparier les 8 images ; le Magus, et sept profils individuels de cultistes tirés du bloc imprimé (L28 p. 28).
+- **Q13 Taille et Blessures** : réponse 1 (Taille V4/V5 de la même créature, sinon proposée et à valider ; formule V5 étendue à Énorme et Monstrueuse).
+- **Q14 Dextérité** : réponse 2 (Dex = Ag, I = Ag).
+- **Q15 Valeurs à 0 % ou « — »** : réponse 1 (absentes, comme le Zombie V5 ; Soc 0 → 10 réservé aux animaux).
+- **Q16 Attaques** : réponse 1 (armes V5 de même nom, armes naturelles en BF + n comme la créature V5 la plus proche ; liste à valider).
+- **Q17 Vol** : réponse 2 (Vol de la créature V4/V5 la plus proche, sinon valeur entre parenthèses = Vol (n)).
+- **Q18 Talents et règles V2** : réponse 1 (table de correspondance pour les homonymes sûrs, à valider ; le reste en règles spéciales imprimées).
+- **Q19 Carrières et prétirés** : ni les 44 carrières ni les 6 prétirés n'entrent au bestiaire.
+- **Profils maison (T17)** : armes validées telles quelles.
+- **Appariement des images** : pas urgent ; passe finale quand la création d'images sera terminée.

@@ -98,6 +98,15 @@ Cadrage du 13/11/2026, sur `42d6965` (prod 3.47.1). Origine : [docs/CONSTAT_IMAG
 - **CA37.** Les variantes de troupe illustrées sans profil imprimé (Gobelin archer, Ogre crache-plomb, Orc kostaud) reçoivent un profil maison : caractéristiques du profil de base, armes adaptées, marqué décision du MJ. Capitaine vampire pirate et Zombie flibustier : profils maison copiés du Vampire et du Zombie de L06.
 - **CA38.** La bibliothèque d'images grossit pendant le chantier (274 images le 13/11 après-midi) : la table et la liste se régénèrent au fil de l'eau, sans nombre d'images figé dans la spec.
 
+### S13 — Décisions du MJ du 14/11/2026
+
+- **Appariement reporté.** La création d'images est encore en cours : associer les images nouvelles aux profils n'est pas urgent et se fait en une passe finale, bibliothèque stabilisée, après tout le reste. D'ici là on crée les profils et on les classe ; la table suit ce que l'outil d'images du MJ régénère.
+- **Conversion V2 → V5** (CA36), réponses aux questions Q13 à Q19 de `questions-profils.md` : Taille de la même créature V4/V5 sinon proposée et validée, Blessures par la formule V5 étendue à Énorme et Monstrueuse ; Dex = Ag et I = Ag ; toute valeur à 0 % ou « — » absente (Soc 0 → 10 réservé aux animaux) ; armes V2 → armes V5 de même nom, armes naturelles en BF + n comme la créature V5 la plus proche (liste à valider) ; Vol de la créature V5 proche, sinon valeur entre parenthèses = Vol (n) ; table de correspondance des Traits pour les homonymes sûrs, le reste en règles spéciales imprimées ; ni carrières ni prétirés au bestiaire.
+- **Main pourpre** : le Magus et sept profils individuels de cultistes (caractéristiques du bloc imprimé L28 p. 28), chacun avec son image. **Fils d'Ulric, Fausse Hydre** : pas de profil. **Profils maison** : armes validées.
+- **CA39.** Un profil copié du bestiaire prend son nom français quand il existe, sinon le nom anglais ; la Bibliothèque de bestiaire affiche et trie par le nom français d'abord, et la recherche trouve toujours les deux noms.
+- **CA40.** Prendre ou quitter une Forme bestiale n'est pas une blessure : la carte ne dessine pas de sang sur le pion à cette occasion.
+- Le sélecteur propose toute la bibliothèque (formes et PJ compris) ; une créature ajoutée au combat sans passer par la réserve, ou invoquée, reçoit aussi son image automatique.
+
 ## Hors périmètre
 
 - Relever le plafond de 24 Kio ou le cumul de 512 Kio par campagne des images embarquées.
