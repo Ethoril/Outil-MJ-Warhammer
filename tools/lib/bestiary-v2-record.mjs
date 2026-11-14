@@ -3,7 +3,7 @@
  * tools/build-bestiary-v2-books.mjs (L29, L30) et tools/build-bestiary-l27.mjs (profils non animaux de L27).
  */
 import { readFileSync } from 'node:fs';
-import { bonus, convertStats, v2Movement, v2Value, woundsV5, weaponAttack, naturalAttack, traitOf, skillsOf, talentRename, skillAsTalent, SIZE_LABEL } from './bestiary-v2.mjs';
+import { bonus, convertStats, v2Movement, v2Value, woundsV5, weaponAttack, naturalAttack, traitOf, skillsOf, talentRename, skillAsTalent, V2_SPELLS, SIZE_LABEL } from './bestiary-v2.mjs';
 import { validateBestiaryRecord } from '../../js/core/bestiary-profiles.js';
 
 const fold = text => String(text).normalize('NFC').toLowerCase().replace(/[’`]/g, "'").replace(/\s+/g, ' ').trim();
@@ -78,6 +78,16 @@ export function v2Record(entry, id, blockKey, book) {
     if (fold(base) === 'magie mineure' && /au choix/.test(spec || '')) {
       traits.push(trait('Spellcaster', { param: `Magie mineure, ${spec}` }));
       spells['Sort Mineur'] = spellsOf('Sort Mineur');
+      continue;
+    }
+    // Magie mineure aux sorts nommés (Karitamen : dissipation, silence) : lanceur de ces sorts, rapprochés du catalogue (MJ, 14/11).
+    const named = fold(base) === 'magie mineure' && spec ? spec.split(/,\s*/).map(name => V2_SPELLS[fold(name)]) : [];
+    if (named.length && named.every(Boolean)) {
+      traits.push(trait('Spellcaster', { param: `Magie mineure (${spec})` }));
+      for (const name of named) {
+        const spell = snapshot.magic.spells.find(item => item.nom === name);
+        spells[spell.type] = [...(spells[spell.type] || []), spell.nom];
+      }
       continue;
     }
     const renamed = talentRename(base);

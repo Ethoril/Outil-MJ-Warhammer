@@ -2,7 +2,7 @@
 // imprimés : un démon, un démon majeur, un mort-vivant, un PNJ humanoïde, une créature volante, et une monture de L27 (règle du 11/11).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { convertStats, v2Movement, v2Value, woundsV5, meleeDamage, weaponAttack, naturalAttack, traitOf, skillOf, skillsOf, talentRename, skillAsTalent } from '../../../tools/lib/bestiary-v2.mjs';
+import { convertStats, v2Movement, v2Value, woundsV5, meleeDamage, weaponAttack, naturalAttack, traitOf, skillOf, skillsOf, talentRename, skillAsTalent, V2_SPELLS } from '../../../tools/lib/bestiary-v2.mjs';
 
 const v2 = values => values.map(v2Value);
 
@@ -50,6 +50,7 @@ test('PNJ humanoïde (Marie la Sanguinaire, p. 23) : compétences homonymes sur 
   assert.equal(talentRename('Troublant'), null, 'sans équivalent sûr : règle spéciale');
   assert.equal(skillAsTalent('Baratin'), 'Baratiner');
   assert.equal(skillAsTalent('Torture'), null);
+  assert.deepEqual(V2_SPELLS, { dissipation: 'Drain de Magie', silence: 'Silence' });
   assert.deepEqual(skillsOf('Préparation de poisons +10%', stats), [{ name: 'Trade (Poisoner)', nameFr: 'Métier (Empoisonneur)', value: 63 }]);
 });
 

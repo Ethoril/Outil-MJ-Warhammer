@@ -1223,6 +1223,11 @@
      "ref": "E0-T-022"
     },
     {
+     "name": "Spellcaster",
+     "param": "Magie mineure (dissipation, silence)",
+     "ref": "E0-T-048"
+    },
+    {
      "name": "Undead",
      "ref": "E0-T-061"
     },
@@ -1254,9 +1259,6 @@
      "name": "Savvy"
     },
     {
-     "name": "Petty Magic (dissipation, silence)"
-    },
-    {
      "name": "Fast Hands"
     },
     {
@@ -1282,6 +1284,12 @@
     "Arme V2 : crosse"
    ],
    "spells": {
+    "Domaine de Haute Magie": [
+     "Drain de Magie"
+    ],
+    "Uglu - Gris - Domaine de l'Ombre": [
+     "Silence"
+    ],
     "Domaine de la Nécromancie": [
      "Crâne hurlant",
      "L’appel de Vanhel",

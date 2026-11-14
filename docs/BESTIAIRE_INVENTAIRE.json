@@ -26316,13 +26316,14 @@
       "kind": "profile",
       "traitsUsed": [
         "Fear",
+        "Spellcaster",
         "Undead",
         "Spellcaster",
         "Terror",
         "Night Vision",
         "Size"
       ],
-      "count": 6,
+      "count": 7,
       "abilityRefs": [],
       "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
       "id": "E0-P-1124",

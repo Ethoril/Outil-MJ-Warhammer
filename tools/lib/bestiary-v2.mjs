@@ -171,6 +171,9 @@ export const V2_TALENTS_RENAMED = Object.freeze({
 export const V2_SKILLS_AS_TALENTS = Object.freeze({
   baratin: 'Baratiner', 'lire/écrire': 'Lire/Écrire', 'sens de la magie': 'Perception de la Magie', déguisement: 'Maître en déguisement', filature: 'Discret'
 });
+/** Sorts mineurs V2 nommés → sort du catalogue de l'outil le plus proche (validation du MJ du 14/11, Karitamen). */
+export const V2_SPELLS = Object.freeze({ dissipation: 'Drain de Magie', silence: 'Silence' });
+
 export const talentRename = printed => V2_TALENTS_RENAMED[fold(printed).replace(/\s*\(.*\)\s*$/, '')] || null;
 export const skillAsTalent = printed => V2_SKILLS_AS_TALENTS[fold(printed).replace(/\s*\(.*\)\s*$/, '').replace(/\s*\+\d+\s?%$/, '')] || null;
 

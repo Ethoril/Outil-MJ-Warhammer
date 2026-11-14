@@ -71,7 +71,7 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
   - Sombre savoir (Nurgle, Slaanesh, Tzeentch, Nécromancie) → Trait Lanceur de sorts et les sorts du domaine du catalogue.
   - Sombre savoir (Chaos) → le domaine du dieu de la créature d'après le livre, sinon la Démonologie.
   - Magie mineure (« au choix ») → Lanceur de sorts avec tous les sorts mineurs du catalogue, à choisir en séance.
-  - Magie mineure aux sorts nommés (Karitamen : dissipation, silence) → talent Magie mineure ; rapprochement des sorts en attente de validation.
+  - Magie mineure aux sorts nommés → Lanceur de sorts de ces sorts, rapprochés du catalogue (validation du 14/11, Karitamen) : Dissipation → Drain de Magie (Haute Magie) ; Silence → Silence (domaine de l'Ombre).
   - Magie noire, Magie vulgaire, Magie commune, Magie vivante → règles spéciales.
 - **Tout le reste** (Aura démoniaque, Écailles, Mutations du Chaos, règles propres à la créature…) : règle spéciale. Seul le nom imprimé est gardé, jamais le texte du livre.
 - Points de Destin (PD) repris. Mag et PF ignorés.

@@ -235,3 +235,9 @@ Démoniaque, Effrayant, Terrifiant, Instabilité, Mort-vivant, Volonté de fer, 
   - Dissipation et Silence (Karitamen) → sorts d'effet voisin du catalogue, tous domaines confondus ; rapprochement à soumettre au MJ.
   - Sombre savoir de Nurgle, Slaanesh, Tzeentch, Nécromancie : validé (sorts du domaine).
 - **Compétences sous un autre nom** : validées. Pour celles restées sans équivalent (Torture, Baratin, Filature, Déguisement, Lire/écrire, Sens de la magie, Préparation de poisons), mots du MJ : « ceux que tu ne retrouves pas ressemblent à des talents pour beaucoup » ; les chercher parmi les talents V5 du catalogue.
+
+## Validation des derniers rapprochements de T16 (14/11/2026, par sélecteurs)
+
+- **Karitamen** : « Dissipation » → Drain de Magie (Haute Magie) ; « Silence » → Silence (domaine de l'Ombre). Il devient lanceur de ces deux sorts, à la place du talent « Magie mineure (dissipation, silence) ».
+- **Talents et compétences V2 rapprochés de talents V5** : liste validée telle quelle, y compris ce qui reste en règle spéciale (Torture, Troublant, Puissance imparable, Parade éclair, Lutte, Maîtrise (…), Sain d'esprit, Sur ses gardes, Code de la rue, Projectile puissant, Méditation, Magie noire, Magie vulgaire, Magie commune).
+- T16 clos.
