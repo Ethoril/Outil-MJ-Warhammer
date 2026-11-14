@@ -4,7 +4,7 @@
  * fiche en lecture seule, ajout au combat (un ou plusieurs exemplaires) et copie dans la Réserve. Les données se chargent
  * à la demande, livre par livre.
  */
-import { BESTIARY_STAT_KEYS, armourDetailNamesZones, bestiarySpellLines, buildParticipantFromBestiary, buildReserveProfileFromBestiary, filterBestiary, unvaluedSkillNames } from '../core/bestiary-profiles.js';
+import { BESTIARY_STAT_KEYS, armourDetailNamesZones, bestiaryDisplayName, bestiarySpellLines, buildParticipantFromBestiary, buildReserveProfileFromBestiary, filterBestiary, unvaluedSkillNames } from '../core/bestiary-profiles.js';
 import { UNCLASSIFIED_FOLDER, createFolderIndex, folderLabelPath, folderOfProfile, folderView } from '../core/bestiary-folder-tree.js';
 import { sharedBestiaryLoader } from '../core/bestiary-loader.js';
 import { keywordMatches, keywordTree } from '../core/creature-keywords.js';
@@ -30,12 +30,14 @@ function folderIcon() {
   return svg;
 }
 
+/** Nom court d'un profil, français d'abord (S13, CA39) : libellés des contrôles et messages. */
+const shortName = record => String(record.nameFr ?? '').trim() || record.name;
 const printed = value => (value === null || value === undefined ? '—' : String(value));
 
 /** Fiche lecture seule : valeurs imprimées telles quelles. */
 export function renderBestiarySheet(record, referential) {
   const sheet = el('div', null, 'bestiary-sheet');
-  sheet.append(el('p', `${record.name}${record.nameFr ? ` — ${record.nameFr}` : ''} · ${record.book} p. ${record.page} · ${KIND_LABELS[record.kind] || record.kind}${record.edition ? ` · ${record.edition}` : ''}`, 'muted'));
+  sheet.append(el('p', `${bestiaryDisplayName(record)} · ${record.book} p. ${record.page} · ${KIND_LABELS[record.kind] || record.kind}${record.edition ? ` · ${record.edition}` : ''}`, 'muted'));
   const line = (label, value) => { if (value) sheet.append(el('p', `${label} : ${value}`)); };
   if (record.kind === 'template') {
     line('Modificateurs', Object.entries(record.modifiers || {}).map(([key, value]) => `${key} ${value > 0 ? '+' : ''}${value}`).join(', '));
@@ -93,18 +95,18 @@ export function createBestiaryLibrary({ container, store, loader = sharedBestiar
       const result = await store.addParticipant(new Participant(participant));
       if (result === false || result?.ok === false) throw result?.error || new Error('Ajout au combat impossible.');
     }
-    notify(`${count > 1 ? `${count} exemplaires de ` : ''}${record.name} ajouté${count > 1 ? 's' : ''} au combat (banc).`);
+    notify(`${count > 1 ? `${count} exemplaires de ` : ''}${shortName(record)} ajouté${count > 1 ? 's' : ''} au combat (banc).`);
   }
 
   async function copyToReserve(record) {
     const result = await store.addProfile(new Profile(buildReserveProfileFromBestiary(record.id, { library, group: 'Bestiaire' })));
     if (result === false || result?.ok === false) throw result?.error || new Error('Copie dans la Réserve impossible.');
-    notify(`${record.name} copié dans la Réserve (groupe Bestiaire).`);
+    notify(`${shortName(record)} copié dans la Réserve (groupe Bestiaire).`);
   }
 
   function row(record, { showFolder = false } = {}) {
     const item = el('div', null, 'item'), left = el('div'), right = el('div', null, 'row');
-    left.append(el('strong', record.nameFr ? `${record.name} — ${record.nameFr}` : record.name), el('span', ` ${record.book} p. ${record.page} · ${KIND_LABELS[record.kind] || record.kind}`, 'muted'));
+    left.append(el('strong', bestiaryDisplayName(record)), el('span', ` ${record.book} p. ${record.page} · ${KIND_LABELS[record.kind] || record.kind}`, 'muted'));
     if (showFolder) {
       // Résultat d'une recherche à plat : son dossier, qui s'ouvre d'un clic.
       const folderId = folderOfProfile(folderIndex, record), label = folderLabelPath(folderIndex, folderId);
@@ -116,15 +118,15 @@ export function createBestiaryLibrary({ container, store, loader = sharedBestiar
       left.append(line);
     }
     const sheetHolder = el('div'); sheetHolder.hidden = true; sheetHolder.style.width = '100%';
-    const sheetButton = el('button', 'Fiche', 'ghost'); sheetButton.type = 'button'; sheetButton.setAttribute('aria-expanded', 'false'); sheetButton.setAttribute('aria-label', `Fiche de ${record.name}`);
+    const sheetButton = el('button', 'Fiche', 'ghost'); sheetButton.type = 'button'; sheetButton.setAttribute('aria-expanded', 'false'); sheetButton.setAttribute('aria-label', `Fiche de ${shortName(record)}`);
     sheetButton.onclick = () => {
       if (!sheetHolder.firstChild) sheetHolder.append(renderBestiarySheet(record, store.getKeywordReferential()));
       sheetHolder.hidden = !sheetHolder.hidden; sheetButton.setAttribute('aria-expanded', String(!sheetHolder.hidden));
     };
     right.append(sheetButton);
     if (record.kind !== 'template') {
-      const count = el('input'); count.type = 'number'; count.min = '1'; count.max = '20'; count.value = '1'; count.style.width = '56px'; count.setAttribute('aria-label', `Nombre d’exemplaires de ${record.name}`);
-      const camp = el('select'); camp.setAttribute('aria-label', `Camp de ${record.name}`);
+      const count = el('input'); count.type = 'number'; count.min = '1'; count.max = '20'; count.value = '1'; count.style.width = '56px'; count.setAttribute('aria-label', `Nombre d’exemplaires de ${shortName(record)}`);
+      const camp = el('select'); camp.setAttribute('aria-label', `Camp de ${shortName(record)}`);
       for (const [value, label] of Object.entries(CAMP_LABELS)) camp.append(new Option(label, value));
       camp.value = 'ennemi';
       const combat = el('button', 'Ajouter au combat'); combat.type = 'button';

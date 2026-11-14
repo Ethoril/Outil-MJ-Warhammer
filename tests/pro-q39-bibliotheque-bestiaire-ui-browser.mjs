@@ -39,14 +39,16 @@ try {
   await library.locator('summary').click();
   await page.locator('#bestiary-library-body .bestiary-folder').first().waitFor({ state: 'visible' }); // racine : les dossiers (images des pions, T14)
   await page.getByLabel('Nom du profil').fill('Stegadon');
-  const row = page.locator('#bestiary-library-body .item').filter({ has: page.locator('strong', { hasText: /^Stegadon\b/ }) }).first();
+  // Nom français d'abord (images des pions, S13, CA39) : le Stégadon de L07 s'affiche « Stégadon » seul (même nom aux accents près).
+  const row = page.locator('#bestiary-library-body .item').filter({ has: page.locator('strong', { hasText: /^Stégadon$/ }) }).filter({ hasText: 'L07' }).first();
   await row.waitFor({ state: 'visible' });
-  await row.getByRole('button', { name: /Fiche de Stegadon/ }).click();
-  check(/Blessures/.test(await row.locator('.bestiary-sheet').innerText()), 'la fiche du Stegadon s’ouvre');
+  await row.getByRole('button', { name: /Fiche de Stégadon/ }).click();
+  check(/Blessures/.test(await row.locator('.bestiary-sheet').innerText()), 'la fiche du Stégadon s’ouvre');
+  check(/^Stégadon · L07/.test(await row.locator('.bestiary-sheet p').first().innerText()), 'la fiche donne le nom français d’abord');
   await row.getByRole('button', { name: 'Ajouter au combat' }).click();
   await page.locator('#tab-combat').click();
   await page.locator('.workspace-bench').waitFor({ state: 'visible', timeout: 5000 });
-  check(/Stegadon/.test(await page.locator('.workspace-bench').innerText()), 'le Stegadon est au banc de Jouer');
+  check(/Stégadon/.test(await page.locator('.workspace-bench').innerText()), 'le Stégadon est au banc de Jouer, sous son nom français');
   await page.locator('#tab-library').click();
   check(await library.isVisible(), 'la bibliothèque reste atteignable après un retour sur Jouer');
   check(pageErrors.length === 0, 'aucune exception de page : ' + pageErrors.join(' | '));

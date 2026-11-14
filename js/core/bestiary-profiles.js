@@ -53,6 +53,18 @@ export function validateBestiaryRecord(record, referential = activeReferential()
   return errors;
 }
 
+const nameCollator = new Intl.Collator('fr', { sensitivity: 'base' });
+
+/**
+ * Nom affiché d'un profil de bestiaire, français d'abord (S13, CA39) : « Loup — Wolf » ; un seul nom quand l'autre manque
+ * ou qu'ils sont identiques (accents et casse ignorés).
+ */
+export function bestiaryDisplayName(record) {
+  const fr = String(record?.nameFr ?? '').trim(), en = String(record?.name ?? '').trim();
+  if (!fr) return en;
+  return !en || nameCollator.compare(fr, en) === 0 ? fr : `${fr} — ${en}`;
+}
+
 /** Profils d'un livre : filtre par mot-clé (descendants compris), le MJ pouvant avoir ajouté des termes au référentiel. */
 export function filterBestiary(profiles, { keyword = null, text = '', kinds = null } = {}, { matches } = {}) {
   const wanted = String(text || '').trim().toLowerCase();
@@ -215,18 +227,19 @@ function f2hProfileActions(record) {
 
 /**
  * Participant ordinaire d'un profil de bestiaire (valeurs imprimées, jamais recalculées : ni BF, ni Taille, ni armure ajoutés).
- * `options.library` : profils chargés (un livre ou plusieurs) ; `index` : rang d'exemplaire (suffixe du nom) ; `nameFr` : nom français ;
+ * `options.library` : profils chargés (un livre ou plusieurs) ; `index` : rang d'exemplaire (suffixe du nom) ; `nameFr` : nom français
+ * quand il existe (par défaut, S13 CA39 ; `false` garde le nom anglais imprimé) ;
  * `includeOptional` : attaques et pièces d'armure facultatives. Les gabarits ne sont pas des créatures : refus.
  */
 export function buildParticipantFromBestiary(id, options = {}) {
-  const { library, camp = 'neutre', zone = 'bench', index = null, nameFr = false, includeOptional = false, idFactory = uid } = options;
+  const { library, camp = 'neutre', zone = 'bench', index = null, nameFr = true, includeOptional = false, idFactory = uid } = options;
   if (!Array.isArray(library)) throw new Error('bibliothèque de profils requise');
   const record = library.find(profile => profile.id === id);
   if (!record) throw new Error(`profil de bestiaire inconnu : ${id}`);
   if (record.kind === 'template') throw new Error('un gabarit n’est pas une créature : l’appliquer à un profil');
   const errors = validateBestiaryRecord(record);
   if (errors.length) throw new Error(`profil de bestiaire incohérent (${id}) : ${errors.join(' ; ')}`);
-  const base = nameFr && record.nameFr ? record.nameFr : record.name;
+  const base = nameFr && isText(record.nameFr) ? record.nameFr.trim() : record.name;
   const wounds = isInt(record.wounds) ? record.wounds : null;
   const traits = (record.traits || []).filter(trait => isText(trait?.name));
   const { zones: armor, reminder: armourReminder } = printedArmour(record.armour, includeOptional);

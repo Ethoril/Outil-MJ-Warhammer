@@ -62,7 +62,7 @@ try {
   await page.getByLabel('Nom du profil').fill('');
   await page.getByLabel('Mot-clé').selectOption('mort-vivant');
   await page.waitForFunction(() => [...document.querySelectorAll('.item strong')].some(node => /^Zombie/.test(node.textContent)));
-  assert.equal(await page.locator('.item strong', { hasText: /^Human\b/ }).count(), 0);
+  assert.equal(await page.locator('.item strong', { hasText: /^Humain\b/ }).count(), 0);
   // Gabarit : fiche seule, aucun bouton d'ajout.
   await page.getByLabel('Mot-clé').selectOption('');
   await page.getByLabel('Genre').selectOption('template');
@@ -75,12 +75,17 @@ try {
   assert.equal(await page.evaluate(() => document.activeElement?.textContent), 'Ennemis', 'le focus va sur le dossier courant');
   assert.equal(await page.locator('.bestiary-folders').getAttribute('aria-label'), 'Sous-dossiers de Ennemis');
   assert.match(await page.getByRole('status').innerText(), /^Ennemis : \d+ profils dans \d+ dossiers\.$/);
-  await page.getByRole('button', { name: /^Hommes-bêtes, 8 profils$/ }).focus();
+  // Aucun nombre figé : le bestiaire grandit (autres sessions) ; le compteur de la tuile fait foi.
+  const beastmen = page.getByRole('button', { name: /^Hommes-bêtes, \d+ profils?$/ });
+  const beastmenCount = Number((await beastmen.getAttribute('aria-label')).match(/(\d+) profil/)[1]);
+  await beastmen.focus();
   await page.keyboard.press('Enter');
   await page.waitForFunction(() => document.querySelector('.bestiary-crumbs [aria-current]')?.textContent === 'Hommes-bêtes');
-  assert.equal(await page.getByRole('status').innerText(), 'Ennemis › Hommes-bêtes : 8 profils.');
-  assert.equal(await page.locator('.item').count(), 8);
-  assert.ok(await page.locator('.item strong', { hasText: /^Gor\b/ }).count() > 0);
+  assert.equal(await page.getByRole('status').innerText(), `Ennemis › Hommes-bêtes : ${beastmenCount} profil${beastmenCount > 1 ? 's' : ''}.`);
+  assert.equal(await page.locator('.item').count(), Math.min(beastmenCount, 100));
+  assert.ok(await page.locator('.item strong', { hasText: /^Gor$/ }).count() > 0, 'un seul nom quand français et anglais sont identiques');
+  const shown = await page.locator('.item strong').allInnerTexts();
+  assert.deepEqual(shown, [...shown].sort(new Intl.Collator('fr', { sensitivity: 'base', numeric: true }).compare), 'tri par nom français');
   assert.equal(await page.locator('.bestiary-row-folder').count(), 0, 'pas de dossier par ligne hors recherche');
   assert.deepEqual(await crumbs.getByRole('button').allInnerTexts(), ['Tout le bestiaire', 'Ennemis']);
   await crumbs.getByRole('button', { name: 'Ennemis' }).click();
@@ -97,14 +102,16 @@ try {
   const everywhere = await page.locator('.bestiary-row-folder').evaluateAll(nodes => nodes.map(node => node.getAttribute('aria-label')));
   assert.ok(everywhere.length > inEnemies.length && everywhere.includes('Ouvrir le dossier Bestiaire'), everywhere.join(', '));
   // Le dossier d'un résultat s'ouvre d'un clic ; ajout à la réserve depuis ce dossier.
-  await page.locator('.item').filter({ has: page.locator('strong', { hasText: /^Giant Rat\b/ }) }).first().getByRole('button', { name: 'Ouvrir le dossier Bestiaire' }).click();
+  await page.locator('.item').filter({ has: page.locator('strong', { hasText: /^Rat géant — Giant Rat$/ }) }).first().getByRole('button', { name: 'Ouvrir le dossier Bestiaire' }).click();
   await page.waitForFunction(() => document.querySelector('.bestiary-crumbs [aria-current]')?.textContent === 'Bestiaire');
   await page.getByLabel('Nom du profil').fill('');
   await page.waitForFunction(() => /^Bestiaire : \d+ profils\.$/.test(document.querySelector('[role="status"]').textContent));
-  const wolfRow = page.locator('.item').filter({ has: page.locator('strong', { hasText: /^Wolf\b/ }) }).first();
+  // Nom français d'abord (S13, CA39) : la ligne « Loup — Wolf », le profil copié s'appelle « Loup ».
+  const wolfRow = page.locator('.item').filter({ has: page.locator('strong', { hasText: /^Loup — Wolf$/ }) }).first();
   await wolfRow.getByRole('button', { name: 'Copier dans la réserve' }).click();
   await page.waitForFunction(() => window.store.listProfiles().length === 2);
-  assert.ok(await page.evaluate(() => window.store.listProfiles().some(p => p.name === 'Wolf' && p.group === 'Bestiaire')));
+  assert.ok(await page.evaluate(() => window.store.listProfiles().some(p => p.name === 'Loup' && p.group === 'Bestiaire')));
+  assert.ok((await page.evaluate(() => window.messages.map(([m]) => m))).includes('Loup copié dans la Réserve (groupe Bestiaire).'));
   // Un profil sans classement (module non régénéré) apparaît dans « À classer », à la racine.
   const unclassified = await page.evaluate(async () => {
     const { BESTIARY_FOLDERS } = await import('/js/data/bestiary-folders.js');

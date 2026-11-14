@@ -50,9 +50,11 @@ export function folderPath(index, id) {
 /** Libellé complet (« Ennemis › Hommes-bêtes »). */
 export const folderLabelPath = (index, id) => folderPath(index, id).map(item => item.label).join(PATH_SEPARATOR);
 
-/** Tri d'affichage des profils : nom anglais (affiché en premier), puis nom français, livre et page. */
+const sortName = profile => String(profile.nameFr || '').trim() || profile.name || '';
+
+/** Tri d'affichage des profils : nom français (affiché en premier, S13 CA39), à défaut l'anglais, puis nom anglais, livre et page. */
 export function sortProfiles(profiles) {
-  return [...profiles].sort((a, b) => collator.compare(a.name || '', b.name || '') || collator.compare(a.nameFr || '', b.nameFr || '')
+  return [...profiles].sort((a, b) => collator.compare(sortName(a), sortName(b)) || collator.compare(a.name || '', b.name || '')
     || collator.compare(a.book || '', b.book || '') || (a.page || 0) - (b.page || 0));
 }
 
