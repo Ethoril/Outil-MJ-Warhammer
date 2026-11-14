@@ -299,6 +299,17 @@
    }
   },
   {
+   "book": "L30",
+   "file": "L30.json",
+   "title": "Le Seigneur liche (WJDR V2, converti en V5)",
+   "edition": "V5",
+   "counts": {
+    "profiles": 23,
+    "templates": 0,
+    "pregenerated": 0
+   }
+  },
+  {
    "book": "L90",
    "file": "L90.json",
    "title": "Maison (MJ) — profils de décision du MJ",

@@ -44,7 +44,8 @@ const displayFr = title => {
 
 function attacksOf(entry, stats, rules) {
   const attacks = [];
-  for (const part of list(entry.weapons).flatMap(item => item.split(/\s+(?:et|ou)\s+(?![^(]*\))/))) {
+  // Les munitions (« 10 carreaux », « 10 flèches ») accompagnent l'arme : ce ne sont pas des attaques.
+  for (const part of list(entry.weapons).flatMap(item => item.split(/\s+(?:et|ou)\s+(?![^(]*\))/)).filter(item => !/^\d+\s+(?:carreaux|flèches|balles|traits)\b/i.test(item))) {
     const text = part.replace(/\s*\((?:dégâts[^)]*)\)/, '');
     let attack = weaponAttack(text, { stats, size: entry.size });
     for (let words = text.split(' '); !attack && words.length > 1; words = words.slice(0, -1)) attack = weaponAttack(words.slice(0, -1).join(' '), { stats, size: entry.size });
@@ -64,7 +65,8 @@ function attacksOf(entry, stats, rules) {
 
 function record(entry, id, blockKey, book) {
   const movement = v2Movement(entry.secondary[4]);
-  const stats = convertStats(entry.main.map(v2Value), { M: movement.M, animal: Boolean(entry.animal) });
+  // Mouvement imprimé aléatoire (« 1–10 », Squigs des tombes) : M de la créature V5 la plus proche (`M` du choix de conversion).
+  const stats = convertStats(entry.main.map(v2Value), { M: entry.M ?? movement.M, animal: Boolean(entry.animal) });
   const rules = [];
   const traits = [];
   const talents = [];

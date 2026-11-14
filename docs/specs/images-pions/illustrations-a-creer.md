@@ -10,12 +10,13 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 | --- | ---: | ---: |
 | `bestiaire` | 1 | 1 |
 | `ennemis/demons` | 23 | 23 |
+| `ennemis/morts-vivants` | 13 | 13 |
 | `ennemis/reprouves` | 2 | 2 |
-| `monstres` | 19 | 19 |
-| Individus nommés (`pnj/<livre>`, `pj`) | 5 | 5 |
+| `monstres` | 22 | 22 |
+| Individus nommés (`pnj/<livre>`, `pj`) | 12 | 12 |
 | `bestiaire/forme-bestiale` | 0 | — |
 | `monstres/transformation-kadon` | 9 | — |
-| **Total** | **59** | **50** |
+| **Total** | **82** | **73** |
 
 ## Créatures génériques
 
@@ -53,6 +54,24 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 | `ennemis/demons/portepestes.webp` | Portepestes | Portepestes | L29 p.243 | 1 |  |
 | `ennemis/demons/sanguinaires-de-khorne.webp` | Sanguinaires de Khorne | Sanguinaires de Khorne | L29 p.240 | 1 |  |
 
+### `ennemis/morts-vivants` (13)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `ennemis/morts-vivants/bastethi.webp` | Bastethi | Bastethi | L30 p.98 | 1 |  |
+| `ennemis/morts-vivants/bastethi-supremes.webp` | Bastethi suprêmes | Bastethi suprêmes | L30 p.99 | 1 |  |
+| `ennemis/morts-vivants/cauchemars.webp` | Cauchemars | Cauchemars | L30 p.101 | 1 |  |
+| `ennemis/morts-vivants/gardiens-des-tombes.webp` | Gardiens des tombes | Gardiens des tombes | L30 p.99 | 1 |  |
+| `ennemis/morts-vivants/generaux-revenants.webp` | Généraux revenants | Généraux revenants | L30 p.101 | 1 |  |
+| `ennemis/morts-vivants/momies.webp` | Momies | Momies | L30 p.102 | 1 |  |
+| `ennemis/morts-vivants/nains-morts-vivants.webp` | Nains morts-vivants | Nains morts-vivants | L30 p.102 | 1 |  |
+| `ennemis/morts-vivants/residus.webp` | Résidus | Résidus | L30 p.113 | 1 |  |
+| `ennemis/morts-vivants/revenants-elfes.webp` | Revenants elfes | Revenants elfes | L30 p.114 | 1 |  |
+| `ennemis/morts-vivants/sacrifies.webp` | Sacrifiés | Sacrifiés | L30 p.114 | 1 |  |
+| `ennemis/morts-vivants/soldats-squelettes.webp` | Soldats squelettes | Soldats squelettes | L30 p.100 | 1 |  |
+| `ennemis/morts-vivants/ushabti.webp` | Ushabti | Ushabti | L30 p.101 | 1 |  |
+| `ennemis/morts-vivants/zombies-momifies.webp` | Zombies momifiés | Zombies momifiés | L30 p.102 | 1 |  |
+
 ### `ennemis/reprouves` (2)
 
 | Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
@@ -60,7 +79,7 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 | `ennemis/reprouves/aspirant-champion-de-tchar.webp` | Aspirant champion de Tchar | Aspirant champion de Tchar | L29 p.164 | 1 |  |
 | `ennemis/reprouves/maraudeur-kurgan.webp` | Maraudeur Kurgan | Maraudeur Kurgan | L29 p.165 | 1 |  |
 
-### `monstres` (19)
+### `monstres` (22)
 
 | Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
 | --- | --- | --- | --- | ---: | --- |
@@ -73,11 +92,14 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 | `monstres/dragons-du-chaos.webp` | Dragons du Chaos | Dragons du Chaos | L29 p.121 | 1 |  |
 | `monstres/dragons-ogres.webp` | Dragons-ogres | Dragons-ogres | L29 p.122 | 1 |  |
 | `monstres/fanges-du-chaos.webp` | Fanges du Chaos | Fanges du Chaos | L29 p.122 | 1 |  |
+| `monstres/gardiens-runiques.webp` | Gardiens runiques | Gardiens runiques | L30 p.112 | 1 |  |
+| `monstres/incarceres.webp` | Incarcérés | Incarcérés | L30 p.113 | 1 |  |
 | `monstres/jabberwocks.webp` | Jabberwocks | Jabberwocks | L29 p.124 | 1 |  |
 | `monstres/nuees-du-chagrin.webp` | Nuées du chagrin | Nuées du chagrin | L29 p.124 | 1 |  |
 | `monstres/sanglebouc.webp` | Sanglebouc | Sanglebouc | L29 p.111 | 1 |  |
 | `monstres/shaggoths.webp` | Shaggoths | Shaggoths | L29 p.122 | 1 |  |
 | `monstres/soyeuses.webp` | Soyeuses | Soyeuses | L29 p.125 | 1 |  |
+| `monstres/squigs-des-tombes.webp` | Squigs des tombes | Squigs des tombes | L30 p.115 | 1 |  |
 | `monstres/vers-des-breches.webp` | Vers des brèches | Vers des brèches | L29 p.126 | 1 |  |
 | `monstres/vers-des-marais.webp` | Vers des marais | Vers des marais | L29 p.126 | 1 |  |
 | `monstres/vers-fouettards.webp` | Vers fouettards | Vers fouettards | L29 p.127 | 1 |  |
@@ -97,6 +119,18 @@ PNJ de scénario, monstres uniques et PJ prétirés, par livre de première appa
 | `pnj/l29/herman-schmidt-enfant-du-chaos.webp` | Herman Schmidt, enfant du Chaos | Herman Schmidt, enfant du Chaos | L29 p.60 | 1 |  |
 | `pnj/l29/knute-alsgaard.webp` | Knute Alsgaard | Knute Alsgaard | L29 p.141 | 1 |  |
 | `pnj/l29/zhthy-hl.webp` | Zhthy'hl | Zhthy'hl | L29 p.256 | 1 |  |
+
+### L30 — Le Seigneur liche (WJDR V2, converti en V5) (7)
+
+| Fichier proposé | Nom français | Nom anglais | Pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `pnj/l30/artilli-levrellian.webp` | Artilli Levrellian | Artilli Levrellian | L30 p.14 | 1 |  |
+| `pnj/l30/fatandira.webp` | Fatandira | Fatandira | L30 p.15 | 1 |  |
+| `pnj/l30/mir-haflok.webp` | Mir Haflok | Mir Haflok | L30 p.16 | 1 |  |
+| `pnj/l30/strykssen.webp` | Strykssen | Strykssen | L30 p.17 | 1 |  |
+| `pnj/l30/ernst-helmuth.webp` | Ernst Helmuth | Ernst Helmuth | L30 p.24 | 1 |  |
+| `pnj/l30/phrenesay.webp` | Phrenesay | Phrenesay | L30 p.72 | 1 |  |
+| `pnj/l30/karitamen-le-scarabee-de-la-mort.webp` | Karitamen, le Scarabée de la Mort | Karitamen, le Scarabée de la Mort | L30 p.90 | 1 |  |
 
 ## `bestiaire/forme-bestiale`
 

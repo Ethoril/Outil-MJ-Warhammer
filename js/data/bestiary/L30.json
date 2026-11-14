@@ -1,0 +1,2514 @@
+{
+ "schemaVersion": 1,
+ "book": "L30",
+ "title": "Le Seigneur liche (WJDR V2, converti en V5)",
+ "edition": "V5",
+ "sourceEdition": "V2",
+ "source": {
+  "corpusId": "L30",
+  "sha256": "283c1f2bea4565d2269f9110b8b75853eb29fc0366280fc51eedf4c97ef9ca22"
+ },
+ "conversionNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+ "profiles": [
+  {
+   "id": "E0-P-1118",
+   "book": "L30",
+   "page": 14,
+   "physicalPage": 16,
+   "kind": "profile",
+   "blockKey": "L30:16:0",
+   "name": "Artilli Levrellian",
+   "nameFr": "Artilli Levrellian",
+   "stats": {
+    "M": 4,
+    "CC": 61,
+    "CT": 52,
+    "F": 53,
+    "E": 54,
+    "I": 52,
+    "Ag": 52,
+    "Dex": 52,
+    "Int": 51,
+    "FM": 44,
+    "Soc": 60
+   },
+   "wounds": 19,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 5,
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Crossbow",
+     "value": 52,
+     "damage": 9,
+     "rangeYards": 50
+    },
+    {
+     "name": "Sword",
+     "value": 61,
+     "damage": 9
+    },
+    {
+     "name": "Swordbreaker",
+     "value": 61,
+     "damage": 6
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 60
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 80
+    },
+    {
+     "name": "Lore (stratégie/tactique)",
+     "nameFr": "Savoir (stratégie/tactique)",
+     "value": 61
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 70
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "value": 51
+    },
+    {
+     "name": "Lore (Principautés Frontalières)",
+     "nameFr": "Savoir (Principautés Frontalières)",
+     "value": 61
+    },
+    {
+     "name": "Lore (Tilée)",
+     "nameFr": "Savoir (Tilée)",
+     "value": 61
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 62
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 72
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 51
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 53
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 51
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 61
+    },
+    {
+     "name": "Language (tiléen)",
+     "nameFr": "Langue (tiléen)",
+     "value": 61
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 60
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 53
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 62
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 51
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Schemer"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Chance",
+    "Combat de rue",
+    "Coups assommants",
+    "Désarmement",
+    "Éloquence",
+    "Étiquette",
+    "Grand voyageur",
+    "Maîtrise (armes lourdes, armes de parade)",
+    "Orateur né",
+    "Parade éclair",
+    "Sur ses gardes",
+    "Compétence V2 : Baratin",
+    "Compétence V2 : Langage secret (langage de bataille) +10%",
+    "Compétence V2 : Lire/écrire",
+    "Arme V2 : bouclier"
+   ],
+   "fatePoints": 1,
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L30 p.14",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1119",
+   "book": "L30",
+   "page": 15,
+   "physicalPage": 17,
+   "kind": "profile",
+   "blockKey": "L30:17:0",
+   "name": "Fatandira",
+   "nameFr": "Fatandira",
+   "stats": {
+    "M": 5,
+    "CC": 51,
+    "CT": 65,
+    "F": 47,
+    "E": 60,
+    "I": 46,
+    "Ag": 46,
+    "Dex": 46,
+    "Int": 43,
+    "FM": 47,
+    "Soc": 51
+   },
+   "wounds": 20,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 6,
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "value": 51,
+     "damage": 8
+    },
+    {
+     "name": "Spear",
+     "value": 51,
+     "damage": 8
+    },
+    {
+     "name": "Crossbow",
+     "value": 65,
+     "damage": 9,
+     "rangeYards": 50
+    }
+   ],
+   "skills": [
+    {
+     "name": "Secret Signs (rôdeur)",
+     "nameFr": "Signes secrets (rôdeur)",
+     "value": 43
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 51
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 61
+    },
+    {
+     "name": "Lore (stratégie/tactique)",
+     "nameFr": "Savoir (stratégie/tactique)",
+     "value": 43
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "value": 43
+    },
+    {
+     "name": "Lore (Principautés Frontalières)",
+     "nameFr": "Savoir (Principautés Frontalières)",
+     "value": 53
+    },
+    {
+     "name": "Lore (Tilée)",
+     "nameFr": "Savoir (Tilée)",
+     "value": 43
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 46
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 46
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 56
+    },
+    {
+     "name": "Entertain (danseur)",
+     "nameFr": "Divertissement (danseur)",
+     "value": 51
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 56
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 47
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 43
+    },
+    {
+     "name": "Language (arabien)",
+     "nameFr": "Langue (arabien)",
+     "value": 43
+    },
+    {
+     "name": "Language (tiléen)",
+     "nameFr": "Langue (tiléen)",
+     "value": 43
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 51
+    },
+    {
+     "name": "Navigation",
+     "nameFr": "Orientation",
+     "value": 46
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 60
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 43
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Rapid Reload"
+    },
+    {
+     "name": "Orientation"
+    }
+   ],
+   "specialRules": [
+    "Adresse au tir",
+    "Camouflage rural",
+    "Coups précis",
+    "Course à pied",
+    "Désarmement",
+    "Force accrue",
+    "Grand voyageur",
+    "Maîtrise (arbalètes, armes de jet)",
+    "Parade éclair",
+    "Résistance accrue",
+    "Sur ses gardes",
+    "Tir de précision",
+    "Tir en puissance",
+    "Compétence V2 : Langage secret (langage de bataille +10%, langage des rôdeurs)",
+    "Arme V2 : bouclier"
+   ],
+   "fatePoints": 1,
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L30 p.15",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1120",
+   "book": "L30",
+   "page": 16,
+   "physicalPage": 18,
+   "kind": "profile",
+   "blockKey": "L30:18:0",
+   "name": "Mir Haflok",
+   "nameFr": "Mir Haflok",
+   "stats": {
+    "M": 4,
+    "CC": 53,
+    "CT": 32,
+    "F": 52,
+    "E": 50,
+    "I": 51,
+    "Ag": 51,
+    "Dex": 51,
+    "Int": 52,
+    "FM": 49,
+    "Soc": 58
+   },
+   "wounds": 19,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 5,
+    "ap": 5
+   },
+   "attacks": [
+    {
+     "name": "Flail",
+     "value": 53,
+     "damage": 9
+    },
+    {
+     "name": "Lance",
+     "value": 53,
+     "damage": 11
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 68
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 58
+    },
+    {
+     "name": "Lore (généalogie/héraldique)",
+     "nameFr": "Savoir (généalogie/héraldique)",
+     "value": 52
+    },
+    {
+     "name": "Lore (histoire)",
+     "nameFr": "Savoir (histoire)",
+     "value": 52
+    },
+    {
+     "name": "Lore (stratégie/tactique)",
+     "nameFr": "Savoir (stratégie/tactique)",
+     "value": 52
+    },
+    {
+     "name": "Lore (théologie)",
+     "nameFr": "Savoir (théologie)",
+     "value": 62
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "value": 52
+    },
+    {
+     "name": "Animal Training",
+     "nameFr": "Dressage",
+     "value": 52
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 61
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 61
+    },
+    {
+     "name": "Language (classique)",
+     "nameFr": "Langue (classique)",
+     "value": 52
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 72
+    },
+    {
+     "name": "Language (tiléen)",
+     "nameFr": "Langue (tiléen)",
+     "value": 52
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 61
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 52
+    },
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 52
+    }
+   ],
+   "traits": [
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Gregarious"
+    }
+   ],
+   "specialRules": [
+    "Éloquence",
+    "Étiquette",
+    "Force accrue",
+    "Maîtrise (armes de cavalerie, armes lourdes, fléaux)",
+    "Réflexes éclair",
+    "Compétence V2 : Langage secret (langage de bataille)",
+    "Compétence V2 : Lire/écrire",
+    "Arme V2 : bouclier"
+   ],
+   "fatePoints": 2,
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "L30 p.16",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1121",
+   "book": "L30",
+   "page": 17,
+   "physicalPage": 19,
+   "kind": "profile",
+   "blockKey": "L30:19:0",
+   "name": "Strykssen",
+   "nameFr": "Strykssen",
+   "stats": {
+    "M": 4,
+    "CC": 52,
+    "CT": 39,
+    "F": 48,
+    "E": 49,
+    "I": 52,
+    "Ag": 52,
+    "Dex": 52,
+    "Int": 43,
+    "FM": 46,
+    "Soc": 54
+   },
+   "wounds": 16,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4,
+    "detail": "tête 0, bras 0, corps 3, jambes 0"
+   },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "value": 52,
+     "damage": 6
+    },
+    {
+     "name": "Sword",
+     "value": 52,
+     "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Secret Signs (voleur)",
+     "nameFr": "Signes secrets (voleur)",
+     "value": 43
+    },
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 54
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 64
+    },
+    {
+     "name": "Lore (démonologie)",
+     "nameFr": "Savoir (démonologie)",
+     "value": 43
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "value": 43
+    },
+    {
+     "name": "Lore (Principautés Frontalières)",
+     "nameFr": "Savoir (Principautés Frontalières)",
+     "value": 43
+    },
+    {
+     "name": "Lore (Tilée)",
+     "nameFr": "Savoir (Tilée)",
+     "value": 43
+    },
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 52
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 48
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 52
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 52
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 43
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 62
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 48
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 43
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 53
+    },
+    {
+     "name": "Language (tiléen)",
+     "nameFr": "Langue (tiléen)",
+     "value": 43
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 54
+    }
+   ],
+   "traits": [
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Hardy"
+    },
+    {
+     "name": "Warrior Born"
+    },
+    {
+     "name": "Mimic"
+    },
+    {
+     "name": "Schemer"
+    }
+   ],
+   "specialRules": [
+    "Acuité auditive",
+    "Calcul mental",
+    "Camouflage urbain",
+    "Coups précis",
+    "Éloquence",
+    "Force accrue",
+    "Fuite",
+    "Grand voyageur",
+    "Maîtrise (fléaux)",
+    "Réflexes éclair",
+    "Rompu au Chaos",
+    "Mutations du Chaos",
+    "Garou",
+    "Oreille supplémentaire",
+    "Soif de sang",
+    "Compétence V2 : Baratin",
+    "Compétence V2 : Déguisement +10%",
+    "Compétence V2 : Langage secret (langage des voleurs) +10%"
+   ],
+   "keywords": [
+    "mutant"
+   ],
+   "nameFrSource": "L30 p.17",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1122",
+   "book": "L30",
+   "page": 24,
+   "physicalPage": 26,
+   "kind": "profile",
+   "blockKey": "L30:26:0",
+   "name": "Ernst Helmuth",
+   "nameFr": "Ernst Helmuth",
+   "stats": {
+    "M": 5,
+    "CC": 42,
+    "CT": 34,
+    "F": 36,
+    "E": 38,
+    "I": 59,
+    "Ag": 59,
+    "Dex": 59,
+    "Int": 66,
+    "FM": 33,
+    "Soc": 85
+   },
+   "wounds": 12,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "value": 42,
+     "damage": 5
+    },
+    {
+     "name": "Main Gauche",
+     "value": 42,
+     "damage": 5
+    },
+    {
+     "name": "Rapier",
+     "value": 42,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 90
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 95
+    },
+    {
+     "name": "Lore (démonologie)",
+     "nameFr": "Savoir (démonologie)",
+     "value": 76
+    },
+    {
+     "name": "Lore (magie)",
+     "nameFr": "Savoir (magie)",
+     "value": 66
+    },
+    {
+     "name": "Lore (philosophie)",
+     "nameFr": "Savoir (philosophie)",
+     "value": 66
+    },
+    {
+     "name": "Lore (Empire)",
+     "nameFr": "Savoir (Empire)",
+     "value": 76
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 59
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 43
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 36
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 66
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 66
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 76
+    },
+    {
+     "name": "Language (tiléen)",
+     "nameFr": "Langue (tiléen)",
+     "value": 66
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 58
+    }
+   ],
+   "traits": [
+    {
+     "name": "Spellcaster",
+     "param": "Slaanesh",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Menacing"
+    },
+    {
+     "name": "Acute Sense"
+    },
+    {
+     "name": "Gregarious"
+    }
+   ],
+   "specialRules": [
+    "Code de la rue",
+    "Dur en affaires",
+    "Éloquence",
+    "Étiquette",
+    "Harmonie aethyrique",
+    "Intelligent",
+    "Magie commune (Chaos)",
+    "Magie noire",
+    "Maîtrise (armes d'escrime, armes de parade)",
+    "Réflexes éclair",
+    "Résistance aux maladies",
+    "Résistance aux poisons",
+    "Rompu au Chaos",
+    "Mutations du Chaos",
+    "Rapide",
+    "Séduisant",
+    "Télépathie",
+    "Don de Slaanesh (sadomasochiste)",
+    "Compétence V2 : Baratin",
+    "Compétence V2 : Déguisement",
+    "Compétence V2 : Lire/écrire",
+    "Compétence V2 : Sens de la magie"
+   ],
+   "spells": {
+    "Domaine de Slaanesh": [
+     "Consentement",
+     "De la douleur le plaisir",
+     "Fantasmagorie"
+    ]
+   },
+   "keywords": [
+    "mutant"
+   ],
+   "nameFrSource": "L30 p.24",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1123",
+   "book": "L30",
+   "page": 72,
+   "physicalPage": 74,
+   "kind": "profile",
+   "blockKey": "L30:74:0",
+   "name": "Phrenesay",
+   "nameFr": "Phrenesay",
+   "stats": {
+    "M": 8,
+    "CC": 44,
+    "CT": null,
+    "F": 45,
+    "E": 52,
+    "I": 40,
+    "Ag": 40,
+    "Dex": null,
+    "Int": 10,
+    "FM": 28,
+    "Soc": 10
+   },
+   "wounds": 32,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 5
+   },
+   "attacks": [
+    {
+     "name": "Sabots",
+     "value": 44,
+     "damage": 12
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 50
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "specialRules": [
+    "Coups précis"
+   ],
+   "keywords": [
+    "mort-vivant",
+    "cheval"
+   ],
+   "nameFrSource": "L30 p.72",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": true,
+    "reference": "Cheval de guerre L27 p. 117 (Grande)"
+   }
+  },
+  {
+   "id": "E0-P-1124",
+   "book": "L30",
+   "page": 90,
+   "physicalPage": 92,
+   "kind": "profile",
+   "blockKey": "L30:92:0",
+   "name": "Karitamen, le Scarabée de la Mort",
+   "nameFr": "Karitamen, le Scarabée de la Mort",
+   "stats": {
+    "M": 4,
+    "CC": 66,
+    "CT": 45,
+    "F": 55,
+    "E": 58,
+    "I": 39,
+    "Ag": 39,
+    "Dex": 39,
+    "Int": 67,
+    "FM": 71,
+    "Soc": 64
+   },
+   "wounds": 22,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 5,
+    "detail": "tête 3, bras 0, corps 3, jambes 0"
+   },
+   "attacks": [
+    {
+     "name": "Flail",
+     "value": 66,
+     "damage": 9
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 64
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 84
+    },
+    {
+     "name": "Lore (astronomie)",
+     "nameFr": "Savoir (astronomie)",
+     "value": 67
+    },
+    {
+     "name": "Lore (droit)",
+     "nameFr": "Savoir (droit)",
+     "value": 67
+    },
+    {
+     "name": "Lore (généalogie/héraldique)",
+     "nameFr": "Savoir (généalogie/héraldique)",
+     "value": 77
+    },
+    {
+     "name": "Lore (histoire)",
+     "nameFr": "Savoir (histoire)",
+     "value": 67
+    },
+    {
+     "name": "Lore (nécromancie)",
+     "nameFr": "Savoir (nécromancie)",
+     "value": 77
+    },
+    {
+     "name": "Lore (stratégie/tactique)",
+     "nameFr": "Savoir (stratégie/tactique)",
+     "value": 87
+    },
+    {
+     "name": "Lore (théologie)",
+     "nameFr": "Savoir (théologie)",
+     "value": 77
+    },
+    {
+     "name": "Lore (Nehekhara)",
+     "nameFr": "Savoir (Nehekhara)",
+     "value": 67
+    },
+    {
+     "name": "Lore (Principautés Frontalières)",
+     "nameFr": "Savoir (Principautés Frontalières)",
+     "value": 67
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 39
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 71
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 59
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Language (haut nehekharéen)",
+     "nameFr": "Langue (haut nehekharéen)",
+     "value": 67
+    },
+    {
+     "name": "Language (classique)",
+     "nameFr": "Langue (classique)",
+     "value": 67
+    },
+    {
+     "name": "Language (nehekharéen)",
+     "nameFr": "Langue (nehekharéen)",
+     "value": 67
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 67
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Nécromancie",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Petty Magic (dissipation, silence)"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Iron Will"
+    }
+   ],
+   "specialRules": [
+    "Intelligent",
+    "Magie commune (occulte)",
+    "Magie noire",
+    "Maîtrise (fléaux)",
+    "Méditation",
+    "Projectile puissant",
+    "Sain d'esprit",
+    "Aura d'autorité",
+    "Domination",
+    "Malédiction",
+    "Nécromancie supérieure",
+    "Pouvoirs du Roi des Tombes",
+    "Compétence V2 : Sens de la magie",
+    "Arme V2 : Lames de l'Honorable Trépas",
+    "Arme V2 : crosse"
+   ],
+   "spells": {
+    "Domaine de la Nécromancie": [
+     "Crâne hurlant",
+     "L’appel de Vanhel",
+     "Réanimation",
+     "Relever les morts"
+    ]
+   },
+   "fatePoints": 1,
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "L30 p.90",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1125",
+   "book": "L30",
+   "page": 98,
+   "physicalPage": 100,
+   "kind": "profile",
+   "blockKey": "L30:100:0",
+   "name": "Bastethi",
+   "nameFr": "Bastethi",
+   "stats": {
+    "M": 7,
+    "CC": 36,
+    "CT": null,
+    "F": 41,
+    "E": 45,
+    "I": 28,
+    "Ag": 28,
+    "Dex": null,
+    "Int": 8,
+    "FM": 79,
+    "Soc": 10
+   },
+   "wounds": 19,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 36,
+     "damage": 7
+    },
+    {
+     "name": "Crocs",
+     "value": 36,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 48
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 28
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 28
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Bond brutal"
+   ],
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "L30 p.98",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": true,
+    "reference": "Chat sauvage L11 p. 82 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1126",
+   "book": "L30",
+   "page": 99,
+   "physicalPage": 101,
+   "kind": "profile",
+   "blockKey": "L30:101:0",
+   "name": "Bastethi suprêmes",
+   "nameFr": "Bastethi suprêmes",
+   "stats": {
+    "M": 5,
+    "CC": 20,
+    "CT": null,
+    "F": 18,
+    "E": 21,
+    "I": 55,
+    "Ag": 55,
+    "Dex": 55,
+    "Int": 12,
+    "FM": 89,
+    "Soc": 12
+   },
+   "wounds": 13,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "attacks": [
+    {
+     "name": "Griffes",
+     "value": 20,
+     "damage": 4
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 65
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 28
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 65
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 55
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Chance",
+    "Magie noire",
+    "Béni des dieux",
+    "Maître des morts"
+   ],
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "L30 p.99",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1127",
+   "book": "L30",
+   "page": 99,
+   "physicalPage": 101,
+   "kind": "profile",
+   "blockKey": "L30:101:1",
+   "name": "Gardiens des tombes",
+   "nameFr": "Gardiens des tombes",
+   "stats": {
+    "M": 4,
+    "CC": 38,
+    "CT": 33,
+    "F": 42,
+    "E": 45,
+    "I": 36,
+    "Ag": 36,
+    "Dex": 36,
+    "Int": 24,
+    "FM": 36,
+    "Soc": 15
+   },
+   "wounds": 15,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4,
+    "ap": 1
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 38,
+     "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 46
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 56
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "specialRules": [
+    "Parade éclair",
+    "Lame sépulcrale",
+    "Arme V2 : bouclier"
+   ],
+   "keywords": [
+    "mort-vivant",
+    "squelette"
+   ],
+   "nameFrSource": "L30 p.99",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1128",
+   "book": "L30",
+   "page": 100,
+   "physicalPage": 102,
+   "kind": "profile",
+   "blockKey": "L30:102:0",
+   "name": "Soldats squelettes",
+   "nameFr": "Soldats squelettes",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": 20,
+    "F": 30,
+    "E": 30,
+    "I": 25,
+    "Ag": 25,
+    "Dex": 25,
+    "Int": 15,
+    "FM": 28,
+    "Soc": 12
+   },
+   "wounds": 11,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3,
+    "detail": "tête 2, bras 2, corps 2, jambes 0"
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "value": 20,
+     "damage": 7,
+     "rangeYards": 50
+    },
+    {
+     "name": "Hand Weapon",
+     "value": 25,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 25
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 25
+    },
+    {
+     "name": "Language (nehekharéen)",
+     "nameFr": "Langue (nehekharéen)",
+     "value": 15
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "keywords": [
+    "mort-vivant",
+    "squelette"
+   ],
+   "nameFrSource": "L30 p.100",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false,
+    "reference": "Squelette L06 p. 339 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1129",
+   "book": "L30",
+   "page": 101,
+   "physicalPage": 103,
+   "kind": "profile",
+   "blockKey": "L30:103:0",
+   "name": "Ushabti",
+   "nameFr": "Ushabti",
+   "stats": {
+    "M": 5,
+    "CC": 46,
+    "CT": null,
+    "F": 55,
+    "E": 38,
+    "I": 25,
+    "Ag": 25,
+    "Dex": 25,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 22,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 3,
+    "ap": 5
+   },
+   "attacks": [
+    {
+     "name": "Two-Handed Weapon",
+     "value": 46,
+     "damage": 16
+    },
+    {
+     "name": "Poings",
+     "value": 46,
+     "damage": 13
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "specialRules": [
+    "Coups précis",
+    "Maîtrise (armes lourdes)",
+    "Créature artificielle",
+    "Dénué de conscience",
+    "Monstrueuse puissance"
+   ],
+   "keywords": [
+    "mort-vivant",
+    "artificiel"
+   ],
+   "nameFrSource": "L30 p.101",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1130",
+   "book": "L30",
+   "page": 101,
+   "physicalPage": 103,
+   "kind": "profile",
+   "blockKey": "L30:103:1",
+   "name": "Cauchemars",
+   "nameFr": "Cauchemars",
+   "stats": {
+    "M": 8,
+    "CC": 24,
+    "CT": null,
+    "F": 40,
+    "E": 40,
+    "I": 25,
+    "Ag": 25,
+    "Dex": null,
+    "Int": null,
+    "FM": null,
+    "Soc": 10
+   },
+   "wounds": 24,
+   "size": "large",
+   "armour": {
+    "toughnessBonus": 4
+   },
+   "attacks": [
+    {
+     "name": "Sabots",
+     "value": 24,
+     "damage": 12
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Large",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "specialRules": [
+    "Dénué de conscience",
+    "Lent"
+   ],
+   "keywords": [
+    "mort-vivant",
+    "cheval"
+   ],
+   "nameFrSource": "L30 p.101",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "large",
+    "animal": true,
+    "reference": "Cheval de guerre L27 p. 117 (Grande)"
+   }
+  },
+  {
+   "id": "E0-P-1131",
+   "book": "L30",
+   "page": 101,
+   "physicalPage": 103,
+   "kind": "profile",
+   "blockKey": "L30:103:2",
+   "name": "Généraux revenants",
+   "nameFr": "Généraux revenants",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 35,
+    "F": 45,
+    "E": 45,
+    "I": 30,
+    "Ag": 30,
+    "Dex": 30,
+    "Int": 25,
+    "FM": 35,
+    "Soc": 20
+   },
+   "wounds": 15,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 4,
+    "ap": 5
+   },
+   "attacks": [],
+   "skills": [
+    {
+     "name": "Lore (stratégie/tactique)",
+     "nameFr": "Savoir (stratégie/tactique)",
+     "value": 45
+    },
+    {
+     "name": "Language (nehekharéen)",
+     "nameFr": "Langue (nehekharéen)",
+     "value": 25
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 30
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Lame spectrale",
+    "Compétence V2 : Lire/écrire +20%",
+    "Arme V2 : lame spectrale",
+    "Arme V2 : bouclier"
+   ],
+   "keywords": [
+    "mort-vivant",
+    "revenant"
+   ],
+   "nameFrSource": "L30 p.101",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1132",
+   "book": "L30",
+   "page": 102,
+   "physicalPage": 104,
+   "kind": "profile",
+   "blockKey": "L30:104:0",
+   "name": "Nains morts-vivants",
+   "nameFr": "Nains morts-vivants",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": null,
+    "F": 35,
+    "E": 35,
+    "I": 10,
+    "Ag": 10,
+    "Dex": 10,
+    "Int": 26,
+    "FM": 33,
+    "Soc": 21
+   },
+   "wounds": 12,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 25,
+     "damage": 7
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Assujettis",
+    "Inflammable",
+    "Lent"
+   ],
+   "keywords": [
+    "mort-vivant",
+    "nain"
+   ],
+   "nameFrSource": "L30 p.102",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1133",
+   "book": "L30",
+   "page": 102,
+   "physicalPage": 104,
+   "kind": "profile",
+   "blockKey": "L30:104:1",
+   "name": "Momies",
+   "nameFr": "Momies",
+   "stats": {
+    "M": 4,
+    "CC": 44,
+    "CT": null,
+    "F": 45,
+    "E": 52,
+    "I": 40,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": 10,
+    "FM": 28,
+    "Soc": null
+   },
+   "wounds": 16,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 5
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 44,
+     "damage": 8
+    }
+   ],
+   "skills": [
+    {
+     "name": "Lore (généalogie/héraldique)",
+     "nameFr": "Savoir (généalogie/héraldique)",
+     "value": 10
+    },
+    {
+     "name": "Lore (histoire)",
+     "nameFr": "Savoir (histoire)",
+     "value": 20
+    },
+    {
+     "name": "Lore (nécromancie)",
+     "nameFr": "Savoir (nécromancie)",
+     "value": 20
+    },
+    {
+     "name": "Ride",
+     "nameFr": "Chevaucher",
+     "value": 50
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 10
+    },
+    {
+     "name": "Language (nehekharéen)",
+     "nameFr": "Langue (nehekharéen)",
+     "value": 10
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 40
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Coups assommants",
+    "Maîtrise (armes lourdes, fléaux)",
+    "Inflammable",
+    "Volonté millénaire",
+    "Compétence V2 : Lire/écrire +20%"
+   ],
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "L30 p.102",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1134",
+   "book": "L30",
+   "page": 102,
+   "physicalPage": 104,
+   "kind": "profile",
+   "blockKey": "L30:104:2",
+   "name": "Zombies momifiés",
+   "nameFr": "Zombies momifiés",
+   "stats": {
+    "M": 4,
+    "CC": 25,
+    "CT": null,
+    "F": 35,
+    "E": 35,
+    "I": 10,
+    "Ag": 10,
+    "Dex": 10,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 9,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Dagger",
+     "value": 25,
+     "damage": 5
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Dénué de conscience",
+    "Inflammable",
+    "Lent"
+   ],
+   "keywords": [
+    "mort-vivant",
+    "zombie"
+   ],
+   "nameFrSource": "L30 p.102",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false,
+    "reference": "Zombie L06 p. 340 (Moyenne)"
+   }
+  },
+  {
+   "id": "E0-P-1135",
+   "book": "L30",
+   "page": 112,
+   "physicalPage": 114,
+   "kind": "profile",
+   "blockKey": "L30:114:0",
+   "name": "Gardiens runiques",
+   "nameFr": "Gardiens runiques",
+   "stats": {
+    "M": 2,
+    "CC": 33,
+    "CT": null,
+    "F": 64,
+    "E": 64,
+    "I": 11,
+    "Ag": 11,
+    "Dex": 11,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 18,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 6,
+    "ap": 3
+   },
+   "attacks": [
+    {
+     "name": "Fers de poing",
+     "value": 33,
+     "damage": 9
+    }
+   ],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike Mighty Blow"
+    }
+   ],
+   "specialRules": [
+    "Caparaçon",
+    "Création runique",
+    "Dénué de conscience",
+    "Grands fers",
+    "Vigilance"
+   ],
+   "keywords": [
+    "artificiel"
+   ],
+   "nameFrSource": "L30 p.112",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1136",
+   "book": "L30",
+   "page": 113,
+   "physicalPage": 115,
+   "kind": "profile",
+   "blockKey": "L30:115:0",
+   "name": "Incarcérés",
+   "nameFr": "Incarcérés",
+   "stats": {
+    "M": 4,
+    "CC": 41,
+    "CT": null,
+    "F": 31,
+    "E": 32,
+    "I": 33,
+    "Ag": 33,
+    "Dex": 33,
+    "Int": 12,
+    "FM": 69,
+    "Soc": 10
+   },
+   "wounds": 15,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [],
+   "skills": [
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 79
+    },
+    {
+     "name": "Language (démoniaque)",
+     "nameFr": "Langue (démoniaque)",
+     "value": 12
+    },
+    {
+     "name": "Language (langage sombre)",
+     "nameFr": "Langue (langage sombre)",
+     "value": 12
+    }
+   ],
+   "traits": [
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Magie noire",
+    "Sombre savoir (Chaos)",
+    "Dément",
+    "Langage du Chaos",
+    "Mutations du Chaos",
+    "Compétence V2 : Sens de la magie +30%"
+   ],
+   "keywords": [
+    "chaos"
+   ],
+   "nameFrSource": "L30 p.113",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1137",
+   "book": "L30",
+   "page": 113,
+   "physicalPage": 115,
+   "kind": "profile",
+   "blockKey": "L30:115:1",
+   "name": "Résidus",
+   "nameFr": "Résidus",
+   "stats": {
+    "M": 6,
+    "CC": 23,
+    "CT": null,
+    "F": 30,
+    "E": 20,
+    "I": 40,
+    "Ag": 40,
+    "Dex": 40,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 7,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 2
+   },
+   "attacks": [],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Dénué de conscience",
+    "Folie",
+    "Invisibilité"
+   ],
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "L30 p.113",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1138",
+   "book": "L30",
+   "page": 114,
+   "physicalPage": 116,
+   "kind": "profile",
+   "blockKey": "L30:116:0",
+   "name": "Revenants elfes",
+   "nameFr": "Revenants elfes",
+   "stats": {
+    "M": 5,
+    "CC": 50,
+    "CT": 55,
+    "F": 35,
+    "E": 35,
+    "I": 60,
+    "Ag": 60,
+    "Dex": 60,
+    "Int": 45,
+    "FM": 55,
+    "Soc": 40
+   },
+   "wounds": 14,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3,
+    "ap": 3
+   },
+   "attacks": [],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 40
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 60
+    },
+    {
+     "name": "Language (eltharin)",
+     "nameFr": "Langue (eltharin)",
+     "value": 45
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Acuité visuelle",
+    "Lame spectrale elfique",
+    "Mine mortelle",
+    "Peur des elfes morts",
+    "Arme V2 : lame spectrale elfique",
+    "Arme V2 : bouclier"
+   ],
+   "keywords": [
+    "mort-vivant",
+    "elfe"
+   ],
+   "nameFrSource": "L30 p.114",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1139",
+   "book": "L30",
+   "page": 114,
+   "physicalPage": 116,
+   "kind": "profile",
+   "blockKey": "L30:116:1",
+   "name": "Sacrifiés",
+   "nameFr": "Sacrifiés",
+   "stats": {
+    "M": 6,
+    "CC": 44,
+    "CT": null,
+    "F": 33,
+    "E": 33,
+    "I": 46,
+    "Ag": 46,
+    "Dex": 46,
+    "Int": null,
+    "FM": null,
+    "Soc": null
+   },
+   "wounds": 9,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [],
+   "skills": [],
+   "traits": [
+    {
+     "name": "Ethereal",
+     "ref": "E0-T-021"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Swarm",
+     "ref": "E0-T-053"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Écorchage",
+    "Dénué de conscience"
+   ],
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "L30 p.114",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   }
+  },
+  {
+   "id": "E0-P-1140",
+   "book": "L30",
+   "page": 115,
+   "physicalPage": 117,
+   "kind": "profile",
+   "blockKey": "L30:117:0",
+   "name": "Squigs des tombes",
+   "nameFr": "Squigs des tombes",
+   "stats": {
+    "M": 4,
+    "CC": 42,
+    "CT": null,
+    "F": 45,
+    "E": 51,
+    "I": 49,
+    "Ag": 49,
+    "Dex": null,
+    "Int": 4,
+    "FM": 21,
+    "Soc": 5
+   },
+   "wounds": 16,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 5
+   },
+   "attacks": [
+    {
+     "name": "Dents",
+     "value": 42,
+     "damage": 7
+    }
+   ],
+   "skills": [
+    {
+     "name": "Stealth",
+     "nameFr": "Discrétion",
+     "value": 49
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 49
+    }
+   ],
+   "traits": [
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "specialRules": [
+    "Troublant",
+    "Crocs puissants",
+    "Déplacements aléatoires",
+    "Fouissage",
+    "Mutations du Chaos"
+   ],
+   "keywords": [
+    "squig"
+   ],
+   "nameFrSource": "L30 p.115",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": true,
+    "reference": "Squig des cavernes L06 p. 329 (Moyenne, M 4 : M imprimé « 1–10 »)"
+   }
+  }
+ ]
+}

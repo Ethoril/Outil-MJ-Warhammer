@@ -41,6 +41,8 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
   - Arc → BF + 4, portée 50
   - Arbalète → +9, portée 50
   - Javeline → BF + 3, portée BF × 3
+  - Rapière BF + 4, main gauche BF + 2, brise-épée BF + 1, lance d'arçon = lance de cavalerie BF + 6 (mêmes noms en V5).
+  - Les munitions (« 10 carreaux ») accompagnent l'arme et ne sont pas des attaques.
   - Liste complète : `V2_WEAPONS`.
 - **Arme naturelle** (griffes, morsure, cornes…) : BF + n, avec le n de la créature V5 la plus proche (liste à valider).
 - **Valeur d'attaque** : CC en mêlée, CT à distance.

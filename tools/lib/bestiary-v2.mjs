@@ -60,6 +60,7 @@ export const V5_WEAPONS = Object.freeze({
   Warhammer: { bonus: 6 }, Zweihander: { bonus: 5 },
   // Décision du MJ du 14/11 : « arme à deux mains » sans précision = arme V5 à BF + 6.
   'Two-Handed Weapon': { bonus: 6 },
+  Rapier: { bonus: 4 }, 'Main Gauche': { bonus: 2 }, Swordbreaker: { bonus: 1 },
   Bow: { ranged: true, bonus: 4, sb: true, range: 50 }, Longbow: { ranged: true, bonus: 4, sb: true, range: 60 },
   Shortbow: { ranged: true, bonus: 3, sb: true, range: 40 }, Crossbow: { ranged: true, bonus: 9, range: 50 },
   'Heavy Crossbow': { ranged: true, bonus: 10, range: 60 }, Sling: { ranged: true, bonus: 6, range: 40 },
@@ -72,7 +73,8 @@ export const V2_WEAPONS = Object.freeze({
   "fléau d'armes": 'Military Flail', hallebarde: 'Halberd', lance: 'Spear', 'lance de cavalerie': 'Lance', 'hache à deux mains': 'Greataxe',
   'grande hache': 'Greataxe', 'marteau de guerre': 'Warhammer', zweihänder: 'Zweihander', 'épée à deux mains': 'Zweihander',
   arc: 'Bow', 'arc long': 'Longbow', 'arc court': 'Shortbow', arbalète: 'Crossbow', 'arbalète lourde': 'Heavy Crossbow', fronde: 'Sling',
-  javeline: 'Javelin', 'hache de lancer': 'Throwing Axe', 'arme à deux mains': 'Two-Handed Weapon'
+  javeline: 'Javelin', 'hache de lancer': 'Throwing Axe', 'arme à deux mains': 'Two-Handed Weapon',
+  rapière: 'Rapier', 'main gauche': 'Main Gauche', 'brise-épée': 'Swordbreaker', "lance d'arçon": 'Lance'
 });
 const fold = text => String(text).normalize('NFC').toLowerCase().replace(/[’`]/g, "'").replace(/\s+/g, ' ').trim();
 

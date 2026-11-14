@@ -26332,6 +26332,427 @@
       "id": "E0-P-1117",
       "blockKey": "L29:269:0",
       "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Artilli Levrellian",
+      "book": "L30",
+      "page": 14,
+      "physicalPage": 16,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1118",
+      "blockKey": "L30:16:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Fatandira",
+      "book": "L30",
+      "page": 15,
+      "physicalPage": 17,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1119",
+      "blockKey": "L30:17:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Mir Haflok",
+      "book": "L30",
+      "page": 16,
+      "physicalPage": 18,
+      "kind": "profile",
+      "traitsUsed": [
+        "Size"
+      ],
+      "count": 1,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1120",
+      "blockKey": "L30:18:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Strykssen",
+      "book": "L30",
+      "page": 17,
+      "physicalPage": 19,
+      "kind": "profile",
+      "traitsUsed": [
+        "Frenzy",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1121",
+      "blockKey": "L30:19:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Ernst Helmuth",
+      "book": "L30",
+      "page": 24,
+      "physicalPage": 26,
+      "kind": "profile",
+      "traitsUsed": [
+        "Spellcaster",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1122",
+      "blockKey": "L30:26:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Phrenesay",
+      "book": "L30",
+      "page": 72,
+      "physicalPage": 74,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1123",
+      "blockKey": "L30:74:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Karitamen, le Scarabée de la Mort",
+      "book": "L30",
+      "page": 90,
+      "physicalPage": 92,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Spellcaster",
+        "Terror",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 6,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1124",
+      "blockKey": "L30:92:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Bastethi",
+      "book": "L30",
+      "page": 98,
+      "physicalPage": 100,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1125",
+      "blockKey": "L30:100:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Bastethi suprêmes",
+      "book": "L30",
+      "page": 99,
+      "physicalPage": 101,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1126",
+      "blockKey": "L30:101:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Gardiens des tombes",
+      "book": "L30",
+      "page": 99,
+      "physicalPage": 101,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1127",
+      "blockKey": "L30:101:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Soldats squelettes",
+      "book": "L30",
+      "page": 100,
+      "physicalPage": 102,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1128",
+      "blockKey": "L30:102:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Ushabti",
+      "book": "L30",
+      "page": 101,
+      "physicalPage": 103,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1129",
+      "blockKey": "L30:103:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Cauchemars",
+      "book": "L30",
+      "page": 101,
+      "physicalPage": 103,
+      "kind": "profile",
+      "traitsUsed": [
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 3,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1130",
+      "blockKey": "L30:103:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Généraux revenants",
+      "book": "L30",
+      "page": 101,
+      "physicalPage": 103,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1131",
+      "blockKey": "L30:103:2",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Nains morts-vivants",
+      "book": "L30",
+      "page": 102,
+      "physicalPage": 104,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1132",
+      "blockKey": "L30:104:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Momies",
+      "book": "L30",
+      "page": 102,
+      "physicalPage": 104,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1133",
+      "blockKey": "L30:104:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Zombies momifiés",
+      "book": "L30",
+      "page": 102,
+      "physicalPage": 104,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1134",
+      "blockKey": "L30:104:2",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Gardiens runiques",
+      "book": "L30",
+      "page": 112,
+      "physicalPage": 114,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1135",
+      "blockKey": "L30:114:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Incarcérés",
+      "book": "L30",
+      "page": 113,
+      "physicalPage": 115,
+      "kind": "profile",
+      "traitsUsed": [
+        "Terror",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1136",
+      "blockKey": "L30:115:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Résidus",
+      "book": "L30",
+      "page": 113,
+      "physicalPage": 115,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Ethereal",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 5,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1137",
+      "blockKey": "L30:115:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Revenants elfes",
+      "book": "L30",
+      "page": 114,
+      "physicalPage": 116,
+      "kind": "profile",
+      "traitsUsed": [
+        "Fear",
+        "Undead",
+        "Night Vision",
+        "Size"
+      ],
+      "count": 4,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1138",
+      "blockKey": "L30:116:0",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Sacrifiés",
+      "book": "L30",
+      "page": 114,
+      "physicalPage": 116,
+      "kind": "profile",
+      "traitsUsed": [
+        "Ethereal",
+        "Undead",
+        "Terror",
+        "Night Vision",
+        "Swarm",
+        "Size"
+      ],
+      "count": 6,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1139",
+      "blockKey": "L30:116:1",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "name": "Squigs des tombes",
+      "book": "L30",
+      "page": 115,
+      "physicalPage": 117,
+      "kind": "profile",
+      "traitsUsed": [
+        "Night Vision",
+        "Size"
+      ],
+      "count": 2,
+      "abilityRefs": [],
+      "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
+      "id": "E0-P-1140",
+      "blockKey": "L30:117:0",
+      "addedOn": "2026-11-14"
     }
   ],
   "counts": {
@@ -27561,6 +27982,34 @@
       "rulePagesPrinted": [],
       "entries": 50,
       "profiles": 50,
+      "templates": 0,
+      "pregeneratedCharacters": 0,
+      "method": "Profils V2 transcrits et contrôlés contre la couche texte du PDF, convertis par tools/build-bestiary-v2-books.mjs.",
+      "addedOn": "2026-11-14"
+    },
+    {
+      "book": "L30",
+      "profilePagesPhysical": [
+        16,
+        17,
+        18,
+        19,
+        26,
+        74,
+        92,
+        100,
+        101,
+        102,
+        103,
+        104,
+        114,
+        115,
+        116,
+        117
+      ],
+      "rulePagesPrinted": [],
+      "entries": 23,
+      "profiles": 23,
       "templates": 0,
       "pregeneratedCharacters": 0,
       "method": "Profils V2 transcrits et contrôlés contre la couche texte du PDF, convertis par tools/build-bestiary-v2-books.mjs.",

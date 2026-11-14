@@ -29,7 +29,8 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-807', 'E0-P-909', 'E0-P-910', 'E0-P-912', 'E0-P-913', 'E0-P-915', 'E0-P-916', 'E0-P-917',
       'E0-P-918', 'E0-P-960', 'E0-P-961', 'E0-P-963', 'E0-P-1055', 'E0-P-1072', 'E0-P-1073', 'E0-P-1074',
       'E0-P-1075', 'E0-P-1076', 'E0-P-1077', 'E0-P-1078', 'E0-P-1079', 'E0-P-1080', 'E0-P-1081', 'E0-P-1082',
-      'E0-P-1083', 'E0-P-1084', 'E0-P-1085', 'E0-P-1086', 'E0-P-1087', 'E0-P-1088', 'E0-P-1089', 'E0-P-1091'
+      'E0-P-1083', 'E0-P-1084', 'E0-P-1085', 'E0-P-1086', 'E0-P-1087', 'E0-P-1088', 'E0-P-1089', 'E0-P-1091',
+      'E0-P-1135', 'E0-P-1136', 'E0-P-1140'
     ]) }),
   Object.freeze({ id: 'ennemis', parent: null, label: 'Ennemis',
     profiles: Object.freeze([]) }),
@@ -69,7 +70,9 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-091', 'E0-P-093', 'E0-P-094', 'E0-P-095', 'E0-P-096', 'E0-P-097', 'E0-P-098', 'E0-P-371',
       'E0-P-373', 'E0-P-374', 'E0-P-375', 'E0-P-060', 'E0-P-565', 'E0-P-566', 'E0-P-567', 'E0-P-568',
       'E0-P-570', 'E0-P-571', 'E0-P-599', 'E0-P-612', 'E0-P-690', 'E0-P-693', 'E0-P-712', 'E0-P-713',
-      'E0-P-714', 'E0-P-715', 'E0-P-756', 'E0-P-757', 'E0-P-758', 'E0-P-838', 'E0-P-914', 'E0-P-984'
+      'E0-P-714', 'E0-P-715', 'E0-P-756', 'E0-P-757', 'E0-P-758', 'E0-P-838', 'E0-P-914', 'E0-P-984',
+      'E0-P-1125', 'E0-P-1126', 'E0-P-1127', 'E0-P-1128', 'E0-P-1129', 'E0-P-1130', 'E0-P-1131', 'E0-P-1132',
+      'E0-P-1133', 'E0-P-1134', 'E0-P-1137', 'E0-P-1138', 'E0-P-1139'
     ]) }),
   Object.freeze({ id: 'ennemis/ogres', parent: 'ennemis', label: 'Ogres',
     profiles: Object.freeze([
@@ -285,6 +288,10 @@ export const BESTIARY_FOLDERS = Object.freeze([
   Object.freeze({ id: 'pnj/l29', parent: 'pnj', label: 'L29 — Le Tome de la Corruption (WJDR V2, converti en V5)',
     profiles: Object.freeze([
       'E0-P-1068', 'E0-P-1069', 'E0-P-1070', 'E0-P-1090', 'E0-P-1113'
+    ]) }),
+  Object.freeze({ id: 'pnj/l30', parent: 'pnj', label: 'L30 — Le Seigneur liche (WJDR V2, converti en V5)',
+    profiles: Object.freeze([
+      'E0-P-1118', 'E0-P-1119', 'E0-P-1120', 'E0-P-1121', 'E0-P-1122', 'E0-P-1123', 'E0-P-1124'
     ]) }),
   Object.freeze({ id: 'pj', parent: null, label: 'PJ prétirés',
     profiles: Object.freeze([
