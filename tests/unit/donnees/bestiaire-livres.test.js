@@ -885,12 +885,14 @@ describe('bestiaire L90 (T17, profils maison du MJ)', () => {
 const read = path => JSON.parse(readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8'));
 const book = read('js/data/bestiary/L90.json');
 const l06 = read('js/data/bestiary/L06.json');
+const printed = [...l06.profiles, ...read('js/data/bestiary/L28.json').profiles];
 
-test('L90 : cinq profils maison, copies exactes d’un profil imprimé de L06, seules les armes changent', () => {
+test('L90 : profils maison, copies exactes d’un profil imprimé (L06, L28), seules les armes et l’équipement changent', () => {
   assert.equal(book.house, true);
-  assert.deepEqual(book.profiles.map(profile => profile.nameFr), ['Gobelin archer', 'Ogre crache-plomb', 'Orc kostaud', 'Capitaine vampire pirate', 'Zombie flibustier']);
+  assert.deepEqual(book.profiles.slice(0, 5).map(profile => profile.nameFr), ['Gobelin archer', 'Ogre crache-plomb', 'Orc kostaud', 'Capitaine vampire pirate', 'Zombie flibustier']);
   for (const profile of book.profiles) {
-    const source = l06.profiles.find(item => item.id === profile.houseProfile.basedOn.id);
+    const source = printed.find(item => item.id === profile.houseProfile.basedOn.id);
+    if (profile.houseProfile.question === 'Q12') continue;
     assert.match(profile.houseProfile.decision, /^Décision du MJ du 13\/11\/2026$/);
     for (const field of ['stats', 'wounds', 'skills', 'traits', 'optionalTraits', 'armour', 'keywords']) assert.deepEqual(profile[field], source[field], `${profile.id} ${field}`);
   }
@@ -899,5 +901,26 @@ test('L90 : cinq profils maison, copies exactes d’un profil imprimé de L06, s
   assert.deepEqual(leadbelcher.attacks.at(-1), { name: 'Leadbelcher Gun', value: 20, damage: 12, rangeYards: 12, qualities: ['Impale'] });
   assert.deepEqual(bigUn.attacks[0], { name: 'Choppa', value: 40, damage: 8 });
   assert.deepEqual([captain.attacks, zombie.attacks], [l06.profiles.find(item => item.id === 'E0-P-099').attacks, l06.profiles.find(item => item.id === 'E0-P-094').attacks]);
+});
+});
+
+describe('bestiaire L90 (Q12, cultistes de la Main pourpre)', () => {
+const read = path => JSON.parse(readFileSync(new URL(`../../../${path}`, import.meta.url), 'utf8'));
+const book = read('js/data/bestiary/L90.json');
+const group = read('js/data/bestiary/L28.json').profiles.find(profile => profile.id === 'E0-P-997');
+
+test('Q12 : sept cultistes, caractéristiques du bloc imprimé L28 p. 28, répartition des armes du livre (4 arbalètes, 2 haches, 1 filet)', () => {
+  const cultists = book.profiles.filter(profile => profile.houseProfile.question === 'Q12');
+  assert.equal(cultists.length, 7);
+  for (const profile of cultists) {
+    assert.deepEqual([profile.stats, profile.wounds, profile.skills], [group.stats, group.wounds, group.skills], profile.id);
+    assert.equal(profile.houseProfile.basedOn.id, 'E0-P-997');
+    assert.match(profile.houseProfile.nameByMJ, /donnés par le MJ/);
+    assert.ok(profile.trappings.includes('vêtement violet'));
+  }
+  const arms = cultists.map(profile => profile.attacks.map(attack => attack.name).join('+'));
+  assert.equal(arms.filter(arm => arm === 'Arbalète+Gourdin ou Hache').length, 4);
+  assert.equal(arms.filter(arm => arm === 'Hache').length, 2);
+  assert.equal(arms.filter(arm => arm === 'Filet+Massue').length, 1);
 });
 });

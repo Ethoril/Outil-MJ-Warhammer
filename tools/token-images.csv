@@ -250,15 +250,15 @@ maps/tokens/ennemis/vampires-pirates/zombie-flibustier.webp;Zombie flibustier;E0
 maps/tokens/ennemis/vampires/comte-vampire-von-carstein.webp;Comte vampire von Carstein;E0-P-099|E0-P-926;Vampire | Vampire noble;L06 p.343 | L26 p.21;approché;vampire générique : Vampire (L06), Vampire noble (L26)
 maps/tokens/ennemis/vampires/vampire-lahmiane.webp;Vampire lahmiane;;;;aucun;aucun profil de Lahmiane au bestiaire
 maps/tokens/ennemis/vampires/varghulf.webp;Varghulf;E0-P-100;Varghulf;L06 p.344;exact;
-maps/tokens/erich-echarpe-violette.webp;Erich, écharpe violette;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
-maps/tokens/franz-bourse-mauve.webp;Franz, bourse mauve;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/erich-echarpe-violette.webp;Erich, écharpe violette;E0-P-1061;Erich, écharpe violette — Cultiste de la Main pourpre;L90 p.6;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
+maps/tokens/franz-bourse-mauve.webp;Franz, bourse mauve;E0-P-1062;Franz, bourse mauve — Cultiste de la Main pourpre;L90 p.7;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
 maps/tokens/guetteur-fils-ulric.webp;Guetteur, Fils d’Ulric;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Fils d’Ulric)
-maps/tokens/hans-plume-verte.webp;Hans, plume violette;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/hans-plume-verte.webp;Hans, plume violette;E0-P-1063;Hans, plume violette — Cultiste de la Main pourpre;L90 p.8;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
 maps/tokens/hellaya.webp;Hellaya;;;;aucun;pas un profil du bestiaire (PJ)
 maps/tokens/hydre.webp;Fausse Hydre;;;;aucun;pas un profil du bestiaire (monstre unique de campagne selon le catalogue de la carte) — l’Hydre de guerre porte monstres/hydre-de-guerre.webp
-maps/tokens/karl-cape-violette.webp;Karl, cape violette;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
-maps/tokens/kurt-filets.webp;Kurt, filets;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
-maps/tokens/magus.webp;Magus;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/karl-cape-violette.webp;Karl, cape violette;E0-P-1064;Karl, cape violette — Cultiste de la Main pourpre;L90 p.9;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
+maps/tokens/kurt-filets.webp;Kurt, filets;E0-P-1065;Kurt, filets — Cultiste de la Main pourpre;L90 p.10;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
+maps/tokens/magus.webp;Magus;;;;aucun;Magus de la Main pourpre (L28 p.28) : l’image automatique du profil E0-P-998 est ennemis/reprouves/magus-du-culte-de-la-main-pourpre.webp (outil d’images du MJ) ; celle-ci reste au choix (Q12)
 maps/tokens/monstres/aigle-geant.webp;Aigle géant;E0-P-038|E0-P-489|E0-P-742;Aigle géant | Aigle géant | Aigle géant;L11 p.63 | L14 p.82 | L22 p.73;exact;
 maps/tokens/monstres/amoebae.webp;Amoebae;E0-P-027|E0-P-958;Amoebae | Amibes;L11 p.45 | L26 p.85;approché;Amoebae (L11 p.45) fusionné avec Amibes (L26 p.85)
 maps/tokens/monstres/amphisbaena.webp;Amphisbaena;E0-P-029;Amphisbaena;L11 p.47;exact;
@@ -315,7 +315,7 @@ maps/tokens/monstres/troll-des-rivieres.webp;Troll des rivières;E0-P-030|E0-P-9
 maps/tokens/monstres/troll.webp;Troll;E0-P-088|E0-P-403;Troll | Troll commun de base;L06 p.335 | L12 p.15;approché;Troll (L06 p.335) et Troll commun de base (L12 p.15)
 maps/tokens/monstres/ver-aveugle-pale.webp;Ver aveugle pâle;E0-P-277;Ver aveugle pâle;L07 p.169;exact;
 maps/tokens/monstres/wyvern.webp;Wyvern;E0-P-019;Wyvern;L11 p.32;exact;
-maps/tokens/otto-gants-pourpres.webp;Otto, gants pourpres;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/otto-gants-pourpres.webp;Otto, gants pourpres;E0-P-1066;Otto, gants pourpres — Cultiste de la Main pourpre;L90 p.11;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
 maps/tokens/peuples/elfes/elfe-haut-et-sylvain.webp;Elfe (haut et sylvain);E0-P-066;Elfe (haut et sylvain);L06 p.320;exact;
 maps/tokens/peuples/elfes/rejeton-de-mathlann-sentinelle.webp;Rejeton de Mathlann — Sentinelle;E0-P-474;Rejeton de Mathlann — Sentinelle;L14 p.31;exact;
 maps/tokens/peuples/elfes/rejeton-de-mathlann.webp;Rejeton de Mathlann;E0-P-473;Rejeton de Mathlann;L14 p.31;exact;
@@ -906,5 +906,5 @@ maps/tokens/pnj/l28/uli-breitner-proprietaire-marchand-humain-anciennement-recru
 maps/tokens/pnj/l28/ulrich-schutzmann-capitaine-de-la-garde-or-1.webp;Ulrich Schutzmann — Capitaine de la garde (Or 1);E0-P-1039;Ulrich Schutzmann — Capitaine de la garde (Or 1);L28 p.124;exact;
 maps/tokens/shaman-bray.webp;Chamane bray;E0-P-121;Swilegrakk — Chamane-bray (Lanceur de sorts);L06 p.355;nom anglais;Swilegrakk — Chamane-bray (Bray-Shaman, L06 p.355, individu nommé, seul profil de chamane bray)
 maps/tokens/vaurien-fils-ulric.webp;Vaurien, Fils d’Ulric;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Fils d’Ulric)
-maps/tokens/wilhelm-ceinture-lie-de-vin.webp;Wilhelm, ceinture lie-de-vin;;;;aucun;pas un profil du bestiaire (PNJ de campagne, Main pourpre)
+maps/tokens/wilhelm-ceinture-lie-de-vin.webp;Wilhelm, ceinture lie-de-vin;E0-P-1067;Wilhelm, ceinture lie-de-vin — Cultiste de la Main pourpre;L90 p.12;exact;cultiste de la Main pourpre (L28 p.28) ; prénom et signe donnés par le MJ (Q12)
 maps/tokens/wren.webp;Wren;;;;aucun;pas un profil du bestiaire (PJ)

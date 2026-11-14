@@ -274,7 +274,7 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-1036', 'E0-P-1037', 'E0-P-1038', 'E0-P-1039', 'E0-P-1040', 'E0-P-1041', 'E0-P-1042', 'E0-P-1043',
       'E0-P-1044', 'E0-P-1045', 'E0-P-1046', 'E0-P-1047', 'E0-P-1048', 'E0-P-1049', 'E0-P-1050', 'E0-P-1051',
       'E0-P-1052', 'E0-P-1053', 'E0-P-1054', 'E0-P-992', 'E0-P-993', 'E0-P-994', 'E0-P-995', 'E0-P-996',
-      'E0-P-999'
+      'E0-P-999', 'E0-P-1061', 'E0-P-1062', 'E0-P-1063', 'E0-P-1064', 'E0-P-1065', 'E0-P-1066', 'E0-P-1067'
     ]) }),
   Object.freeze({ id: 'pj', parent: null, label: 'PJ prétirés',
     profiles: Object.freeze([

@@ -750,6 +750,626 @@
    "notes": [
     "Profil maison (Décision du MJ du 13/11/2026, Q6) : copie de Zombie (L06 p. 340)."
    ]
+  },
+  {
+   "id": "E0-P-1061",
+   "book": "L90",
+   "page": 6,
+   "physicalPage": 6,
+   "kind": "profile",
+   "blockKey": "L90:6:0",
+   "name": "Erich, écharpe violette — Cultiste de la Main pourpre",
+   "nameFr": "Erich, écharpe violette — Cultiste de la Main pourpre",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 44,
+    "F": 36,
+    "E": 39,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 29,
+    "Int": 39,
+    "FM": 37,
+    "Soc": 26
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Arbalète",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Gourdin ou Hache",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 64
+    }
+   ],
+   "trappings": [
+    "vêtement violet",
+    "tatouage de main violette caché sous les vêtements",
+    "arbalète",
+    "gourdin ou hache",
+    "écharpe violette (signe donné par le MJ)"
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 14/11/2026",
+    "question": "Q12",
+    "basedOn": {
+     "id": "E0-P-997",
+     "book": "L28",
+     "page": 28,
+     "name": "Cultistes de la Main pourpre (7)"
+    },
+    "weapon": "arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes)",
+    "nameByMJ": "prénom et signe distinctif (« écharpe violette ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 14/11/2026, Q12) : copie de Cultistes de la Main pourpre (7) (L28 p. 28) ; arme : arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes) ; prénom et signe distinctif (« écharpe violette ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes."
+   ]
+  },
+  {
+   "id": "E0-P-1062",
+   "book": "L90",
+   "page": 7,
+   "physicalPage": 7,
+   "kind": "profile",
+   "blockKey": "L90:7:0",
+   "name": "Franz, bourse mauve — Cultiste de la Main pourpre",
+   "nameFr": "Franz, bourse mauve — Cultiste de la Main pourpre",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 44,
+    "F": 36,
+    "E": 39,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 29,
+    "Int": 39,
+    "FM": 37,
+    "Soc": 26
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Arbalète",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Gourdin ou Hache",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 64
+    }
+   ],
+   "trappings": [
+    "vêtement violet",
+    "tatouage de main violette caché sous les vêtements",
+    "arbalète",
+    "gourdin ou hache",
+    "bourse mauve (signe donné par le MJ)"
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 14/11/2026",
+    "question": "Q12",
+    "basedOn": {
+     "id": "E0-P-997",
+     "book": "L28",
+     "page": 28,
+     "name": "Cultistes de la Main pourpre (7)"
+    },
+    "weapon": "arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes)",
+    "nameByMJ": "prénom et signe distinctif (« bourse mauve ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 14/11/2026, Q12) : copie de Cultistes de la Main pourpre (7) (L28 p. 28) ; arme : arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes) ; prénom et signe distinctif (« bourse mauve ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes."
+   ]
+  },
+  {
+   "id": "E0-P-1063",
+   "book": "L90",
+   "page": 8,
+   "physicalPage": 8,
+   "kind": "profile",
+   "blockKey": "L90:8:0",
+   "name": "Hans, plume violette — Cultiste de la Main pourpre",
+   "nameFr": "Hans, plume violette — Cultiste de la Main pourpre",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 44,
+    "F": 36,
+    "E": 39,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 29,
+    "Int": 39,
+    "FM": 37,
+    "Soc": 26
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Arbalète",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Gourdin ou Hache",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 64
+    }
+   ],
+   "trappings": [
+    "vêtement violet",
+    "tatouage de main violette caché sous les vêtements",
+    "arbalète",
+    "gourdin ou hache",
+    "plume violette (signe donné par le MJ)"
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 14/11/2026",
+    "question": "Q12",
+    "basedOn": {
+     "id": "E0-P-997",
+     "book": "L28",
+     "page": 28,
+     "name": "Cultistes de la Main pourpre (7)"
+    },
+    "weapon": "arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes)",
+    "nameByMJ": "prénom et signe distinctif (« plume violette ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 14/11/2026, Q12) : copie de Cultistes de la Main pourpre (7) (L28 p. 28) ; arme : arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes) ; prénom et signe distinctif (« plume violette ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes."
+   ]
+  },
+  {
+   "id": "E0-P-1064",
+   "book": "L90",
+   "page": 9,
+   "physicalPage": 9,
+   "kind": "profile",
+   "blockKey": "L90:9:0",
+   "name": "Karl, cape violette — Cultiste de la Main pourpre",
+   "nameFr": "Karl, cape violette — Cultiste de la Main pourpre",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 44,
+    "F": 36,
+    "E": 39,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 29,
+    "Int": 39,
+    "FM": 37,
+    "Soc": 26
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Hache",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 64
+    }
+   ],
+   "trappings": [
+    "vêtement violet",
+    "tatouage de main violette caché sous les vêtements",
+    "hache",
+    "cape violette (signe donné par le MJ)"
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 14/11/2026",
+    "question": "Q12",
+    "basedOn": {
+     "id": "E0-P-997",
+     "book": "L28",
+     "page": 28,
+     "name": "Cultistes de la Main pourpre (7)"
+    },
+    "weapon": "hache (L28 p. 28 : deux cultistes)",
+    "nameByMJ": "prénom et signe distinctif (« cape violette ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 14/11/2026, Q12) : copie de Cultistes de la Main pourpre (7) (L28 p. 28) ; arme : hache (L28 p. 28 : deux cultistes) ; prénom et signe distinctif (« cape violette ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes."
+   ]
+  },
+  {
+   "id": "E0-P-1065",
+   "book": "L90",
+   "page": 10,
+   "physicalPage": 10,
+   "kind": "profile",
+   "blockKey": "L90:10:0",
+   "name": "Kurt, filets — Cultiste de la Main pourpre",
+   "nameFr": "Kurt, filets — Cultiste de la Main pourpre",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 44,
+    "F": 36,
+    "E": 39,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 29,
+    "Int": 39,
+    "FM": 37,
+    "Soc": 26
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Filet",
+     "damage": 0,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Massue",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 64
+    }
+   ],
+   "trappings": [
+    "vêtement violet",
+    "tatouage de main violette caché sous les vêtements",
+    "massue",
+    "filet barbelé",
+    "filets (signe donné par le MJ)"
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 14/11/2026",
+    "question": "Q12",
+    "basedOn": {
+     "id": "E0-P-997",
+     "book": "L28",
+     "page": 28,
+     "name": "Cultistes de la Main pourpre (7)"
+    },
+    "weapon": "massue et filet barbelé (L28 p. 28 : un cultiste)",
+    "nameByMJ": "prénom et signe distinctif (« filets ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 14/11/2026, Q12) : copie de Cultistes de la Main pourpre (7) (L28 p. 28) ; arme : massue et filet barbelé (L28 p. 28 : un cultiste) ; prénom et signe distinctif (« filets ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes."
+   ]
+  },
+  {
+   "id": "E0-P-1066",
+   "book": "L90",
+   "page": 11,
+   "physicalPage": 11,
+   "kind": "profile",
+   "blockKey": "L90:11:0",
+   "name": "Otto, gants pourpres — Cultiste de la Main pourpre",
+   "nameFr": "Otto, gants pourpres — Cultiste de la Main pourpre",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 44,
+    "F": 36,
+    "E": 39,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 29,
+    "Int": 39,
+    "FM": 37,
+    "Soc": 26
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Arbalète",
+     "damage": 9,
+     "trait": "Ranged",
+     "rangeYards": 60,
+     "ranged": true
+    },
+    {
+     "name": "Gourdin ou Hache",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 64
+    }
+   ],
+   "trappings": [
+    "vêtement violet",
+    "tatouage de main violette caché sous les vêtements",
+    "arbalète",
+    "gourdin ou hache",
+    "gants pourpres (signe donné par le MJ)"
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 14/11/2026",
+    "question": "Q12",
+    "basedOn": {
+     "id": "E0-P-997",
+     "book": "L28",
+     "page": 28,
+     "name": "Cultistes de la Main pourpre (7)"
+    },
+    "weapon": "arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes)",
+    "nameByMJ": "prénom et signe distinctif (« gants pourpres ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 14/11/2026, Q12) : copie de Cultistes de la Main pourpre (7) (L28 p. 28) ; arme : arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes) ; prénom et signe distinctif (« gants pourpres ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes."
+   ]
+  },
+  {
+   "id": "E0-P-1067",
+   "book": "L90",
+   "page": 12,
+   "physicalPage": 12,
+   "kind": "profile",
+   "blockKey": "L90:12:0",
+   "name": "Wilhelm, ceinture lie-de-vin — Cultiste de la Main pourpre",
+   "nameFr": "Wilhelm, ceinture lie-de-vin — Cultiste de la Main pourpre",
+   "stats": {
+    "M": 4,
+    "CC": 43,
+    "CT": 44,
+    "F": 36,
+    "E": 39,
+    "I": 33,
+    "Ag": 35,
+    "Dex": 29,
+    "Int": 39,
+    "FM": 37,
+    "Soc": 26
+   },
+   "wounds": 12,
+   "attacks": [
+    {
+     "name": "Hache",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 45
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 54
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 45
+    },
+    {
+     "name": "Ranged (Crossbow)",
+     "nameFr": "Projectiles (Arbalète)",
+     "value": 54
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 64
+    }
+   ],
+   "trappings": [
+    "vêtement violet",
+    "tatouage de main violette caché sous les vêtements",
+    "hache",
+    "ceinture lie-de-vin (signe donné par le MJ)"
+   ],
+   "keywords": [
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 14/11/2026",
+    "question": "Q12",
+    "basedOn": {
+     "id": "E0-P-997",
+     "book": "L28",
+     "page": 28,
+     "name": "Cultistes de la Main pourpre (7)"
+    },
+    "weapon": "hache (L28 p. 28 : deux cultistes)",
+    "nameByMJ": "prénom et signe distinctif (« ceinture lie-de-vin ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 14/11/2026, Q12) : copie de Cultistes de la Main pourpre (7) (L28 p. 28) ; arme : hache (L28 p. 28 : deux cultistes) ; prénom et signe distinctif (« ceinture lie-de-vin ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes."
+   ]
   }
  ]
 }

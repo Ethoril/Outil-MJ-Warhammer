@@ -8,17 +8,20 @@
  * (`addedOn: "2026-11-13"`, identifiants stables).
  * L90 et non un code de corpus : le validateur et les générateurs ne lisent que des livres « L » suivis de chiffres.
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { validateBestiaryRecord } from '../js/core/bestiary-profiles.js';
 
 const BOOK = 'L90';
 const TITLE = 'Maison (MJ) — profils de décision du MJ';
 const ADDED_ON = '2026-11-13';
 const DECISION = 'Décision du MJ du 13/11/2026';
+const DECISION_Q12 = 'Décision du MJ du 14/11/2026';
 const SOURCE_NOTE = 'L90 : profil maison, copie d’un profil imprimé du bestiaire avec armes adaptées (décision du MJ du 13/11/2026), hors corpus.';
 
-const l06 = JSON.parse(readFileSync('js/data/bestiary/L06.json', 'utf8'));
-const base = id => structuredClone(l06.profiles.find(profile => profile.id === id));
+// Profils copiables : tous les livres imprimés du bestiaire (L06, L28…), jamais L90 lui-même.
+const printed = readdirSync('js/data/bestiary').filter(file => /^L\d+\.json$/.test(file) && file !== `${BOOK}.json`)
+  .flatMap(file => JSON.parse(readFileSync(`js/data/bestiary/${file}`, 'utf8')).profiles);
+const base = id => structuredClone(printed.find(profile => profile.id === id));
 
 /** Fiches maison : profil copié, noms, adaptation des armes (source de chaque arme), question d'origine. */
 const HOUSE = [
@@ -43,14 +46,37 @@ const HOUSE = [
     adapt: record => { record.attacks = [{ name: 'Choppa', value: 40, damage: 8 }, ...record.attacks.filter(attack => attack.name !== 'Hand Weapon')]; }
   },
   { key: 'vampire-pirate-captain', name: 'Capitaine vampire pirate', nameFr: 'Capitaine vampire pirate', from: 'E0-P-099', question: 'Q6', weapon: null, adapt: () => {} },
-  { key: 'zombie-buccaneer', name: 'Zombie flibustier', nameFr: 'Zombie flibustier', from: 'E0-P-094', question: 'Q6', weapon: null, adapt: () => {} }
+  { key: 'zombie-buccaneer', name: 'Zombie flibustier', nameFr: 'Zombie flibustier', from: 'E0-P-094', question: 'Q6', weapon: null, adapt: () => {} },
+  // Q12 (réponse du MJ du 14/11/2026) : les sept cultistes de la Main pourpre (L28 p. 28), un profil chacun, aux caractéristiques du bloc imprimé.
+  // Du livre : caractéristiques, compétences, vêtement violet et tatouage caché de tous, répartition des armes (quatre arbalètes avec gourdin
+  // ou hache, deux haches, une massue avec un filet barbelé). Du MJ (images de la bibliothèque) : prénom, signe distinctif, et quel cultiste
+  // porte quelle arme (lue sur l'image ; Erich, dont l'arme ne se voit pas, est le quatrième arbalétrier).
+  ...[
+    ['erich', 'Erich', 'écharpe violette', 'crossbow'], ['franz', 'Franz', 'bourse mauve', 'crossbow'], ['hans', 'Hans', 'plume violette', 'crossbow'],
+    ['karl', 'Karl', 'cape violette', 'axe'], ['kurt', 'Kurt', 'filets', 'net'], ['otto', 'Otto', 'gants pourpres', 'crossbow'],
+    ['wilhelm', 'Wilhelm', 'ceinture lie-de-vin', 'axe']
+  ].map(([key, first, sign, arm]) => ({
+    key: `purple-hand-${key}`, name: `${first}, ${sign} — Cultiste de la Main pourpre`, nameFr: `${first}, ${sign} — Cultiste de la Main pourpre`, from: 'E0-P-997', question: 'Q12',
+    nameByMJ: `prénom et signe distinctif (« ${sign} ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes`,
+    weapon: { crossbow: 'arbalète et gourdin ou hache (L28 p. 28 : quatre cultistes)', axe: 'hache (L28 p. 28 : deux cultistes)', net: 'massue et filet barbelé (L28 p. 28 : un cultiste)' }[arm],
+    adapt: record => {
+      const printed = Object.fromEntries(record.attacks.map(attack => [attack.name, attack]));
+      record.attacks = {
+        crossbow: [printed['Arbalète'], printed['Gourdin ou Hache']],
+        axe: [{ ...printed['Gourdin ou Hache'], name: 'Hache' }],
+        net: [printed['Filet'], { ...printed['Gourdin ou Hache'], name: 'Massue' }]
+      }[arm];
+      record.trappings = ['vêtement violet', 'tatouage de main violette caché sous les vêtements', ...{ crossbow: ['arbalète', 'gourdin ou hache'], axe: ['hache'], net: ['massue', 'filet barbelé'] }[arm], `${sign} (signe donné par le MJ)`];
+    }
+  }))
 ];
 
 const inventory = JSON.parse(readFileSync('docs/BESTIAIRE_INVENTAIRE.json', 'utf8'));
 const previous = new Map(inventory.profiles.filter(row => row.book === BOOK).map(row => [row.blockKey, row.id]));
 inventory.profiles = inventory.profiles.filter(row => row.book !== BOOK);
 inventory.coverage = inventory.coverage.filter(row => row.book !== BOOK);
-let next = Math.max(...inventory.profiles.map(row => Number(row.id.slice(5)))) + 1;
+// Les identifiants déjà donnés à L90 restent réservés : une fiche ajoutée prend le suivant de tout l'inventaire.
+let next = Math.max(...inventory.profiles.map(row => Number(row.id.slice(5))), ...[...previous.values()].map(id => Number(id.slice(5)))) + 1;
 
 const profiles = HOUSE.map((entry, index) => {
   const source = base(entry.from);
@@ -61,8 +87,8 @@ const profiles = HOUSE.map((entry, index) => {
     name: entry.name, nameFr: entry.nameFr, nameFrSource: 'proposition'
   };
   entry.adapt(record);
-  record.houseProfile = { decision: DECISION, question: entry.question, basedOn: { id: source.id, book: source.book, page: source.page, name: source.name }, ...(entry.weapon ? { weapon: entry.weapon } : {}) };
-  record.notes = [...(source.notes || []), `Profil maison (${DECISION}, ${entry.question}) : copie de ${source.nameFr} (${source.book} p. ${source.page})${entry.weapon ? ` ; arme : ${entry.weapon}` : ''}.`];
+  record.houseProfile = { decision: entry.question === 'Q12' ? DECISION_Q12 : DECISION, question: entry.question, basedOn: { id: source.id, book: source.book, page: source.page, name: source.name }, ...(entry.weapon ? { weapon: entry.weapon } : {}), ...(entry.nameByMJ ? { nameByMJ: entry.nameByMJ } : {}) };
+  record.notes = [...(source.notes || []), `Profil maison (${record.houseProfile.decision}, ${entry.question}) : copie de ${source.nameFr} (${source.book} p. ${source.page})${entry.weapon ? ` ; arme : ${entry.weapon}` : ''}${entry.nameByMJ ? ` ; ${entry.nameByMJ}` : ''}.`];
   const problems = validateBestiaryRecord(record);
   if (problems.length) throw new Error(`${record.id} ${record.name} : ${problems.join(' ; ')}`);
   return record;
