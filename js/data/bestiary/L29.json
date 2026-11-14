@@ -97,6 +97,11 @@
      "value": 63
     },
     {
+     "name": "Trade (Poisoner)",
+     "nameFr": "Métier (Empoisonneur)",
+     "value": 53
+    },
+    {
      "name": "Heal",
      "nameFr": "Guérison",
      "value": 70
@@ -112,23 +117,30 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Super Numerate"
+    },
+    {
      "name": "Surgery"
+    },
+    {
+     "name": "Savvy"
     },
     {
      "name": "Menacing"
     },
     {
+     "name": "Resistant (Maladie)"
+    },
+    {
      "name": "Gregarious"
+    },
+    {
+     "name": "Read/Write"
     }
    ],
    "specialRules": [
-    "Calcul mental",
-    "Intelligent",
     "Lutte",
     "Maîtrise (fléaux)",
-    "Résistance aux maladies",
-    "Compétence V2 : Lire/écrire",
-    "Compétence V2 : Préparation de poisons",
     "Compétence V2 : Torture"
    ],
    "keywords": [
@@ -247,13 +259,19 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
      "name": "Mimic"
+    },
+    {
+     "name": "Very Resilient"
     }
    ],
    "specialRules": [
-    "Force accrue",
-    "Fuite",
-    "Résistance accrue",
     "Mutations du Chaos"
    ],
    "keywords": [
@@ -564,6 +582,9 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Rover"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
@@ -571,7 +592,6 @@
     }
    ],
    "specialRules": [
-    "Camouflage rural",
     "Troublant",
     "Charge de sanglebouc",
     "Mutations du Chaos",
@@ -641,12 +661,14 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Strike Mighty Blow"
     }
    ],
    "specialRules": [
     "Aura démoniaque (cf. page 240)",
-    "Coups assommants",
     "Absorption",
     "Mutations du Chaos",
     "Dénué de conscience",
@@ -827,18 +849,22 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Lightning Reflexes"
+    },
+    {
      "name": "Fearless"
     },
     {
      "name": "Acute Sense"
+    },
+    {
+     "name": "Shadow"
     }
    ],
    "specialRules": [
-    "Réflexes éclair",
     "De lait et de miel",
     "Mutations du Chaos",
-    "Obsession",
-    "Compétence V2 : Filature"
+    "Obsession"
    ],
    "keywords": [
     "monstre",
@@ -926,6 +952,15 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Vue)"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
+     "name": "Resistant (Poison)"
+    },
+    {
      "name": "Fearless"
     },
     {
@@ -933,10 +968,7 @@
     }
    ],
    "specialRules": [
-    "Acuité visuelle",
-    "Coups précis",
     "Écailles (3)",
-    "Résistance aux poisons",
     "Morsure venimeuse",
     "Mutations du Chaos",
     "Regard pétrifiant"
@@ -1193,6 +1225,15 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Vue)"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
@@ -1200,9 +1241,6 @@
     }
    ],
    "specialRules": [
-    "Acuité visuelle",
-    "Coups assommants",
-    "Coups précis",
     "Écailles (5)",
     "Puissance imparable",
     "Sain d'esprit",
@@ -1321,10 +1359,14 @@
     }
    ],
    "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Resistant (Poison)"
+    }
+   ],
    "specialRules": [
     "Écailles (2)",
     "Maîtrise (armes lourdes)",
-    "Résistance au poison",
     "Sain d'esprit",
     "Absorption d'éclairs",
     "Compétence V2 : Langue (deux au choix)"
@@ -1445,19 +1487,25 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
+    },
+    {
+     "name": "Resistant (Poison)"
     },
     {
      "name": "Iron Will"
     }
    ],
    "specialRules": [
-    "Coups assommants",
-    "Coups précis",
     "Écailles (4)",
     "Maîtrise (armes lourdes)",
     "Puissance imparable",
-    "Résistance au poison",
     "Absorption d'éclairs",
     "Monstrueuse puissance",
     "Compétence V2 : Connaissances générales (trois au choix)",
@@ -1629,6 +1677,9 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
@@ -1636,7 +1687,6 @@
     }
    ],
    "specialRules": [
-    "Coups précis",
     "Déconcerté par la douleur",
     "Morsure venimeuse",
     "Mutations du Chaos"
@@ -1818,11 +1868,13 @@
      "name": "Contortionist"
     },
     {
+     "name": "Scale Sheer Surface"
+    },
+    {
      "name": "Acute Sense"
     }
    ],
    "specialRules": [
-    "Grimpeur chevronné",
     "Filaments",
     "Venin"
    ],
@@ -2221,21 +2273,37 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Etiquette"
+    },
+    {
+     "name": "Very Resilient"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
      "name": "Gregarious"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Read/Write"
     }
    ],
    "specialRules": [
-    "Acuité auditive",
     "Code de la rue",
-    "Coups assommants",
-    "Dur en affaires",
-    "Étiquette",
-    "Résistance accrue",
     "Sain d'esprit",
-    "Sang-froid",
-    "Compétence V2 : Baratin",
-    "Compétence V2 : Lecture sur les lèvres",
-    "Compétence V2 : Lire/Écrire"
+    "Compétence V2 : Lecture sur les lèvres"
    ],
    "keywords": [
     "humain"
@@ -2332,14 +2400,20 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Rover"
+    },
+    {
+     "name": "Scale Sheer Surface"
+    },
+    {
      "name": "Acute Sense"
+    },
+    {
+     "name": "Shadow"
     }
    ],
    "specialRules": [
-    "Camouflage rural",
-    "Grimpeur chevronné (cf. page 117)",
-    "Mutations du Chaos",
-    "Compétence V2 : Filature"
+    "Mutations du Chaos"
    ],
    "keywords": [
     "monstre",
@@ -2495,10 +2569,16 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
      "name": "Hardy"
+    },
+    {
+     "name": "Seasoned Traveller"
     },
     {
      "name": "Warrior Born"
@@ -2507,17 +2587,19 @@
      "name": "Menacing"
     },
     {
+     "name": "Very Resilient"
+    },
+    {
+     "name": "Coolheaded"
+    },
+    {
      "name": "Orientation"
     }
    ],
    "specialRules": [
-    "Coups précis",
     "Élu du Chaos (cf. page 176)",
-    "Grand voyageur",
     "Maîtrise (armes de cavalerie, fléaux)",
-    "Résistance accrue",
     "Rompu au Chaos (cf. page 69)",
-    "Sang-froid",
     "Mutations du Chaos",
     "Récompenses du Chaos",
     "Don de Tchar",
@@ -2634,19 +2716,23 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Hardy"
     },
     {
      "name": "Warrior Born"
     },
     {
+     "name": "Very Resilient"
+    },
+    {
      "name": "Orientation"
     }
    ],
    "specialRules": [
-    "Coups précis",
     "Maîtrise (armes de cavalerie)",
-    "Résistance accrue",
     "Rompu au Chaos (cf. page 69)",
     "Mutations du Chaos",
     "Arme V2 : bouclier"
@@ -2718,15 +2804,17 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Fleet-footed"
+    },
+    {
      "name": "Hardy"
     },
     {
      "name": "Acute Sense"
     }
-   ],
-   "specialRules": [
-    "Acuité auditive",
-    "Course à pied"
    ],
    "keywords": [
     "cheval"
@@ -2894,6 +2982,9 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Rover"
+    },
+    {
      "name": "Fearless"
     },
     {
@@ -2902,7 +2993,6 @@
    ],
    "specialRules": [
     "Aura démoniaque",
-    "Camouflage rural",
     "Collier de Khorne",
     "Mutations du Chaos"
    ],
@@ -2994,6 +3084,15 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
@@ -3004,10 +3103,7 @@
     }
    ],
    "specialRules": [
-    "Acuité auditive",
     "Aura démoniaque",
-    "Coups assommants",
-    "Coups précis",
     "Assoiffé de sang",
     "Mutations du Chaos",
     "Piétinement"
@@ -3429,12 +3525,14 @@
      "name": "Ambidextrous"
     },
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Iron Will"
     }
    ],
    "specialRules": [
     "Aura démoniaque",
-    "Coups précis",
     "Mutations du Chaos",
     "Peste",
     "Torrent de corruption"
@@ -3539,6 +3637,15 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Vue)"
+    },
+    {
+     "name": "Rover"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Fearless"
     },
     {
@@ -3546,10 +3653,7 @@
     }
    ],
    "specialRules": [
-    "Acuité visuelle",
     "Aura démoniaque",
-    "Camouflage rural",
-    "Coups précis",
     "Écailles (2)",
     "Langue",
     "Musc",
@@ -3750,17 +3854,21 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
      "name": "Acute Sense"
     },
     {
      "name": "Iron Will"
+    },
+    {
+     "name": "Magical Sense"
     }
    ],
    "specialRules": [
-    "Acuité auditive",
     "Aura démoniaque",
-    "Mutations du Chaos",
-    "Compétence V2 : Sens de la magie"
+    "Mutations du Chaos"
    ],
    "keywords": [
     "demon-de-slaanesh"
@@ -3869,12 +3977,14 @@
     },
     {
      "name": "Acute Sense"
+    },
+    {
+     "name": "Magical Sense"
     }
    ],
    "specialRules": [
     "Aura démoniaque",
-    "Mutations du Chaos",
-    "Compétence V2 : Sens de la magie"
+    "Mutations du Chaos"
    ],
    "keywords": [
     "demon-de-tzeentch"
@@ -4151,13 +4261,17 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Vue)"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Acute Sense"
     }
    ],
    "specialRules": [
-    "Acuité visuelle",
     "Aura démoniaque",
-    "Coups assommants",
     "Dénué de conscience",
     "Mutations du Chaos"
    ],
@@ -4319,6 +4433,11 @@
    ],
    "traits": [
     {
+     "name": "Spellcaster",
+     "param": "Magie mineure, une au choix",
+     "ref": "E0-T-048"
+    },
+    {
      "name": "Night Vision",
      "ref": "E0-T-041"
     },
@@ -4339,9 +4458,6 @@
     },
     {
      "name": "Schemer"
-    },
-    {
-     "name": "Petty Magic (une au choix)"
     },
     {
      "name": "Fearless"
@@ -4365,6 +4481,35 @@
     "Compétence V2 : Langue (deux au choix)",
     "Compétence V2 : Torture"
    ],
+   "spells": {
+    "Sort Mineur": [
+     "Alerte",
+     "Amitié animale",
+     "Bruits",
+     "Choc",
+     "Conservation",
+     "Coup de vent",
+     "Créer un petit animal",
+     "Drain",
+     "Éblouissant",
+     "En catimini",
+     "Feux follets",
+     "Flamme magique",
+     "Fléchette",
+     "Lumière",
+     "Pas léger",
+     "Protection contre la pluie",
+     "Purification de l'eau",
+     "Repères",
+     "Secousse",
+     "Serrure ouverte",
+     "Source",
+     "Sommeil",
+     "Murmures",
+     "Tendre l'oreille",
+     "Putréfaction"
+    ]
+   },
    "keywords": [
     "demon"
    ],
@@ -4547,6 +4692,12 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
@@ -4557,9 +4708,7 @@
     }
    ],
    "specialRules": [
-    "Acuité auditive",
     "Aura démoniaque",
-    "Coups précis",
     "Troublant",
     "Mutations du Chaos"
    ],
@@ -4800,7 +4949,19 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Acute Sense (Vue)"
+    },
+    {
      "name": "Ambidextrous"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Strike to Injure"
     },
     {
      "name": "Strike Mighty Blow"
@@ -4813,14 +4974,13 @@
     },
     {
      "name": "Iron Will"
+    },
+    {
+     "name": "Read/Write"
     }
    ],
    "specialRules": [
-    "Acuité auditive",
-    "Acuité visuelle",
     "Aura démoniaque",
-    "Coups assommants",
-    "Coups précis",
     "Maîtrise (armes lourdes, armes paralysantes, fléaux)",
     "Parade éclair",
     "Puissance imparable",
@@ -4832,8 +4992,7 @@
     "Hache de Khorne",
     "Monstrueuse puissance",
     "Mutations du Chaos",
-    "Rugissement",
-    "Compétence V2 : Lire/écrire"
+    "Rugissement"
    ],
    "fatePoints": 3,
    "keywords": [
@@ -4952,6 +5111,11 @@
    "traits": [
     {
      "name": "Spellcaster",
+     "param": "Magie mineure, deux au choix",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Spellcaster",
      "param": "Nurgle",
      "ref": "E0-T-048"
     },
@@ -4982,22 +5146,32 @@
      "name": "Strike Mighty Blow"
     },
     {
-     "name": "Petty Magic (deux au choix)"
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Master Orator"
     },
     {
      "name": "Acute Sense"
     },
     {
      "name": "Iron Will"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Magical Sense"
     }
    ],
    "specialRules": [
     "Aura démoniaque",
-    "Éloquence",
     "Magie noire",
     "Magie vulgaire (Chaos)",
     "Maîtrise (fléaux)",
-    "Orateur né",
     "Puissance imparable",
     "Chair corrosive",
     "Chair putréfiée",
@@ -5008,12 +5182,36 @@
     "Peste",
     "Pestilence ambiante",
     "Torrent de corruption",
-    "Compétence V2 : Baratin",
-    "Compétence V2 : Langue (six au choix)",
-    "Compétence V2 : Lire/écrire",
-    "Compétence V2 : Sens de la magie"
+    "Compétence V2 : Langue (six au choix)"
    ],
    "spells": {
+    "Sort Mineur": [
+     "Alerte",
+     "Amitié animale",
+     "Bruits",
+     "Choc",
+     "Conservation",
+     "Coup de vent",
+     "Créer un petit animal",
+     "Drain",
+     "Éblouissant",
+     "En catimini",
+     "Feux follets",
+     "Flamme magique",
+     "Fléchette",
+     "Lumière",
+     "Pas léger",
+     "Protection contre la pluie",
+     "Purification de l'eau",
+     "Repères",
+     "Secousse",
+     "Serrure ouverte",
+     "Source",
+     "Sommeil",
+     "Murmures",
+     "Tendre l'oreille",
+     "Putréfaction"
+    ],
     "Domaine de Nurgle": [
      "Flot de Corruption",
      "Inflammation suppurée",
@@ -5141,6 +5339,11 @@
     },
     {
      "name": "Spellcaster",
+     "param": "Magie mineure, deux au choix",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Spellcaster",
      "param": "Slaanesh",
      "ref": "E0-T-048"
     },
@@ -5165,35 +5368,50 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Acute Sense (Vue)"
+    },
+    {
      "name": "Ambidextrous"
     },
     {
      "name": "Contortionist"
     },
     {
+     "name": "Strike to Injure"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Etiquette"
+    },
+    {
      "name": "Linguistics"
     },
     {
-     "name": "Petty Magic (deux au choix)"
+     "name": "Master Orator"
     },
     {
      "name": "Acute Sense"
     },
     {
      "name": "Iron Will"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Magical Sense"
     }
    ],
    "specialRules": [
-    "Acuité auditive",
-    "Acuité visuelle",
     "Aura démoniaque",
-    "Coups précis",
-    "Éloquence",
-    "Étiquette",
     "Incantation de bataille",
     "Magie noire",
     "Magie vulgaire (Chaos)",
-    "Orateur né",
     "Parade éclair",
     "Puissance imparable",
     "Armure du Chaos",
@@ -5205,11 +5423,36 @@
     "Compétence V2 : Connaissances générales (quatre au choix)",
     "Compétence V2 : Expression artistique (deux au choix)",
     "Compétence V2 : Langue (quatre au choix)",
-    "Compétence V2 : Lire/écrire",
-    "Compétence V2 : Sens de la magie",
     "Compétence V2 : Torture +20%"
    ],
    "spells": {
+    "Sort Mineur": [
+     "Alerte",
+     "Amitié animale",
+     "Bruits",
+     "Choc",
+     "Conservation",
+     "Coup de vent",
+     "Créer un petit animal",
+     "Drain",
+     "Éblouissant",
+     "En catimini",
+     "Feux follets",
+     "Flamme magique",
+     "Fléchette",
+     "Lumière",
+     "Pas léger",
+     "Protection contre la pluie",
+     "Purification de l'eau",
+     "Repères",
+     "Secousse",
+     "Serrure ouverte",
+     "Source",
+     "Sommeil",
+     "Murmures",
+     "Tendre l'oreille",
+     "Putréfaction"
+    ],
     "Domaine de Slaanesh": [
      "Consentement",
      "De la douleur le plaisir",
@@ -5337,6 +5580,11 @@
     },
     {
      "name": "Spellcaster",
+     "param": "Magie mineure, quatre au choix",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Spellcaster",
      "param": "Tzeentch",
      "ref": "E0-T-048"
     },
@@ -5372,10 +5620,10 @@
      "name": "Strike Mighty Blow"
     },
     {
-     "name": "Schemer"
+     "name": "Dealmaker"
     },
     {
-     "name": "Petty Magic (quatre au choix)"
+     "name": "Schemer"
     },
     {
      "name": "Fast Hands"
@@ -5385,11 +5633,13 @@
     },
     {
      "name": "Iron Will"
+    },
+    {
+     "name": "Magical Sense"
     }
    ],
    "specialRules": [
     "Aura démoniaque",
-    "Dur en affaires",
     "Harmonie aethyrique",
     "Magie noire",
     "Magie vulgaire (Chaos)",
@@ -5407,11 +5657,37 @@
     "Compétence V2 : Connaissances générales (six au choix)",
     "Compétence V2 : Langage secret (deux au choix)",
     "Compétence V2 : Langue (six au choix)",
-    "Compétence V2 : Sens de la magie +20%",
     "Compétence V2 : Torture",
     "Arme V2 : arme du Chaos"
    ],
    "spells": {
+    "Sort Mineur": [
+     "Alerte",
+     "Amitié animale",
+     "Bruits",
+     "Choc",
+     "Conservation",
+     "Coup de vent",
+     "Créer un petit animal",
+     "Drain",
+     "Éblouissant",
+     "En catimini",
+     "Feux follets",
+     "Flamme magique",
+     "Fléchette",
+     "Lumière",
+     "Pas léger",
+     "Protection contre la pluie",
+     "Purification de l'eau",
+     "Repères",
+     "Secousse",
+     "Serrure ouverte",
+     "Source",
+     "Sommeil",
+     "Murmures",
+     "Tendre l'oreille",
+     "Putréfaction"
+    ],
     "Domaine de Tzeentch": [
      "Don de Tzeentch",
      "Trahison de Tzeentch",

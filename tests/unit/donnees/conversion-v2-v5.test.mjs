@@ -2,7 +2,7 @@
 // imprimés : un démon, un démon majeur, un mort-vivant, un PNJ humanoïde, une créature volante, et une monture de L27 (règle du 11/11).
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { convertStats, v2Movement, v2Value, woundsV5, meleeDamage, weaponAttack, naturalAttack, traitOf, skillOf, skillsOf } from '../../../tools/lib/bestiary-v2.mjs';
+import { convertStats, v2Movement, v2Value, woundsV5, meleeDamage, weaponAttack, naturalAttack, traitOf, skillOf, skillsOf, talentRename, skillAsTalent } from '../../../tools/lib/bestiary-v2.mjs';
 
 const v2 = values => values.map(v2Value);
 
@@ -44,6 +44,13 @@ test('PNJ humanoïde (Marie la Sanguinaire, p. 23) : compétences homonymes sur 
   assert.deepEqual(skillsOf('Connaissances générales (Empire, Norsca +10%)', stats).map(skill => [skill.nameFr, skill.value]), [['Savoir (Empire)', 50], ['Savoir (Norsca)', 60]]);
   assert.deepEqual(skillsOf('Langue (langage sombre, plus trois autres au choix)', stats).map(skill => skill.nameFr), ['Langue (langage sombre)']);
   assert.deepEqual(skillsOf('Torture', stats), []);
+  // Validation du MJ du 14/11 (listes de T16) : talents V2 sous un autre nom, compétences V2 qui sont des talents V5.
+  assert.deepEqual(talentRename('Coups précis'), ['Frappe blessante', null]);
+  assert.deepEqual(talentRename('Résistance aux poisons'), ['Résistance', 'Poison']);
+  assert.equal(talentRename('Troublant'), null, 'sans équivalent sûr : règle spéciale');
+  assert.equal(skillAsTalent('Baratin'), 'Baratiner');
+  assert.equal(skillAsTalent('Torture'), null);
+  assert.deepEqual(skillsOf('Préparation de poisons +10%', stats), [{ name: 'Trade (Poisoner)', nameFr: 'Métier (Empoisonneur)', value: 63 }]);
 });
 
 test('créature volante (Disques de Tzeentch, p. 246) : M au sol et Vol entre parenthèses ; arme naturelle en BF + n', () => {

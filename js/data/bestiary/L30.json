@@ -158,28 +158,46 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Luck"
+    },
+    {
+     "name": "Strike to Stun"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Etiquette"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
      "name": "Schemer"
+    },
+    {
+     "name": "Master Orator"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Read/Write"
     }
    ],
    "specialRules": [
-    "Acuité auditive",
-    "Chance",
     "Combat de rue",
-    "Coups assommants",
     "Désarmement",
-    "Éloquence",
-    "Étiquette",
-    "Grand voyageur",
     "Maîtrise (armes lourdes, armes de parade)",
-    "Orateur né",
     "Parade éclair",
     "Sur ses gardes",
-    "Compétence V2 : Baratin",
     "Compétence V2 : Langage secret (langage de bataille) +10%",
-    "Compétence V2 : Lire/écrire",
     "Arme V2 : bouclier"
    ],
    "fatePoints": 1,
@@ -351,10 +369,28 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Rover"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
+     "name": "Fleet-footed"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
      "name": "Rapid Reload"
+    },
+    {
+     "name": "Very Resilient"
     },
     {
      "name": "Orientation"
@@ -362,15 +398,9 @@
    ],
    "specialRules": [
     "Adresse au tir",
-    "Camouflage rural",
-    "Coups précis",
-    "Course à pied",
     "Désarmement",
-    "Force accrue",
-    "Grand voyageur",
     "Maîtrise (arbalètes, armes de jet)",
     "Parade éclair",
-    "Résistance accrue",
     "Sur ses gardes",
     "Tir de précision",
     "Tir en puissance",
@@ -523,20 +553,30 @@
      "name": "Strike Mighty Blow"
     },
     {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Etiquette"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
      "name": "Warrior Born"
     },
     {
+     "name": "Lightning Reflexes"
+    },
+    {
      "name": "Gregarious"
+    },
+    {
+     "name": "Read/Write"
     }
    ],
    "specialRules": [
-    "Éloquence",
-    "Étiquette",
-    "Force accrue",
     "Maîtrise (armes de cavalerie, armes lourdes, fléaux)",
-    "Réflexes éclair",
     "Compétence V2 : Langage secret (langage de bataille)",
-    "Compétence V2 : Lire/écrire",
     "Arme V2 : bouclier"
    ],
    "fatePoints": 2,
@@ -696,10 +736,31 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Acute Sense (Ouïe)"
+    },
+    {
+     "name": "Super Numerate"
+    },
+    {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     },
     {
      "name": "Hardy"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Very Strong"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Seasoned Traveller"
     },
     {
      "name": "Warrior Born"
@@ -709,26 +770,25 @@
     },
     {
      "name": "Schemer"
+    },
+    {
+     "name": "Lightning Reflexes"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Master of Disguise"
     }
    ],
    "specialRules": [
-    "Acuité auditive",
-    "Calcul mental",
     "Camouflage urbain",
-    "Coups précis",
-    "Éloquence",
-    "Force accrue",
-    "Fuite",
-    "Grand voyageur",
     "Maîtrise (fléaux)",
-    "Réflexes éclair",
     "Rompu au Chaos",
     "Mutations du Chaos",
     "Garou",
     "Oreille supplémentaire",
     "Soif de sang",
-    "Compétence V2 : Baratin",
-    "Compétence V2 : Déguisement +10%",
     "Compétence V2 : Langage secret (langage des voleurs) +10%"
    ],
    "keywords": [
@@ -872,38 +932,60 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Etiquette"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
      "name": "Menacing"
+    },
+    {
+     "name": "Lightning Reflexes"
+    },
+    {
+     "name": "Resistant (Maladie)"
+    },
+    {
+     "name": "Resistant (Poison)"
     },
     {
      "name": "Acute Sense"
     },
     {
      "name": "Gregarious"
+    },
+    {
+     "name": "Blather"
+    },
+    {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Magical Sense"
     }
    ],
    "specialRules": [
     "Code de la rue",
-    "Dur en affaires",
-    "Éloquence",
-    "Étiquette",
     "Harmonie aethyrique",
-    "Intelligent",
     "Magie commune (Chaos)",
     "Magie noire",
     "Maîtrise (armes d'escrime, armes de parade)",
-    "Réflexes éclair",
-    "Résistance aux maladies",
-    "Résistance aux poisons",
     "Rompu au Chaos",
     "Mutations du Chaos",
     "Rapide",
     "Séduisant",
     "Télépathie",
-    "Don de Slaanesh (sadomasochiste)",
-    "Compétence V2 : Baratin",
-    "Compétence V2 : Déguisement",
-    "Compétence V2 : Lire/écrire",
-    "Compétence V2 : Sens de la magie"
+    "Don de Slaanesh (sadomasochiste)"
    ],
    "spells": {
     "Domaine de Slaanesh": [
@@ -985,11 +1067,11 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     }
-   ],
-   "specialRules": [
-    "Coups précis"
    ],
    "keywords": [
     "mort-vivant",
@@ -1169,6 +1251,9 @@
      "name": "Ambidextrous"
     },
     {
+     "name": "Savvy"
+    },
+    {
      "name": "Petty Magic (dissipation, silence)"
     },
     {
@@ -1176,10 +1261,12 @@
     },
     {
      "name": "Iron Will"
+    },
+    {
+     "name": "Magical Sense"
     }
    ],
    "specialRules": [
-    "Intelligent",
     "Magie commune (occulte)",
     "Magie noire",
     "Maîtrise (fléaux)",
@@ -1191,7 +1278,6 @@
     "Malédiction",
     "Nécromancie supérieure",
     "Pouvoirs du Roi des Tombes",
-    "Compétence V2 : Sens de la magie",
     "Arme V2 : Lames de l'Honorable Trépas",
     "Arme V2 : crosse"
    ],
@@ -1380,8 +1466,12 @@
     }
    ],
    "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Luck"
+    }
+   ],
    "specialRules": [
-    "Chance",
     "Magie noire",
     "Béni des dieux",
     "Maître des morts"
@@ -1633,11 +1723,13 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Strike to Injure"
+    },
+    {
      "name": "Strike Mighty Blow"
     }
    ],
    "specialRules": [
-    "Coups précis",
     "Maîtrise (armes lourdes)",
     "Créature artificielle",
     "Dénué de conscience",
@@ -1792,9 +1884,13 @@
     }
    ],
    "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Read/Write"
+    }
+   ],
    "specialRules": [
     "Lame spectrale",
-    "Compétence V2 : Lire/écrire +20%",
     "Arme V2 : lame spectrale",
     "Arme V2 : bouclier"
    ],
@@ -1971,12 +2067,18 @@
     }
    ],
    "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Strike to Stun"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
    "specialRules": [
-    "Coups assommants",
     "Maîtrise (armes lourdes, fléaux)",
     "Inflammable",
-    "Volonté millénaire",
-    "Compétence V2 : Lire/écrire +20%"
+    "Volonté millénaire"
    ],
    "keywords": [
     "mort-vivant"
@@ -2177,6 +2279,11 @@
    ],
    "traits": [
     {
+     "name": "Spellcaster",
+     "param": "Chaos",
+     "ref": "E0-T-048"
+    },
+    {
      "name": "Terror",
      "ref": "E0-T-057"
     },
@@ -2187,14 +2294,25 @@
     }
    ],
    "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Magical Sense"
+    }
+   ],
    "specialRules": [
     "Magie noire",
-    "Sombre savoir (Chaos)",
     "Dément",
     "Langage du Chaos",
-    "Mutations du Chaos",
-    "Compétence V2 : Sens de la magie +30%"
+    "Mutations du Chaos"
    ],
+   "spells": {
+    "Domaine de la Démonologie": [
+     "Destruction de Démon Mineur",
+     "Détection de démon",
+     "Manifestation de Démon Mineur",
+     "Octogramme"
+    ]
+   },
    "keywords": [
     "chaos"
    ],
@@ -2344,8 +2462,12 @@
     }
    ],
    "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Acute Sense (Vue)"
+    }
+   ],
    "specialRules": [
-    "Acuité visuelle",
     "Lame spectrale elfique",
     "Mine mortelle",
     "Peur des elfes morts",

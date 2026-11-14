@@ -677,6 +677,11 @@
      "name": "Haggle",
      "nameFr": "Marchandage",
      "value": 89
+    },
+    {
+     "name": "Trade (Poisoner)",
+     "nameFr": "Métier (Empoisonneur)",
+     "value": 79
     }
    ],
    "traits": [
@@ -701,15 +706,31 @@
    "optionalTraits": [],
    "talents": [
     {
+     "name": "Public Speaker"
+    },
+    {
+     "name": "Etiquette"
+    },
+    {
      "name": "Schemer"
     },
     {
      "name": "Acute Sense"
+    },
+    {
+     "name": "Master of Disguise"
+    },
+    {
+     "name": "Shadow"
+    },
+    {
+     "name": "Read/Write"
+    },
+    {
+     "name": "Magical Sense"
     }
    ],
    "specialRules": [
-    "Éloquence",
-    "Étiquette",
     "Magie noire",
     "Magie commune (occulte)",
     "Maîtrise (armes de parade)",
@@ -720,13 +741,8 @@
     "Nécromancien-né",
     "Vampirisme",
     "Compétence V2 : Connaissances générales (trois au choix)",
-    "Compétence V2 : Déguisement +20%",
     "Compétence V2 : Expression artistique (deux au choix)",
-    "Compétence V2 : Filature",
     "Compétence V2 : Langue (trois au choix)",
-    "Compétence V2 : Lire/écrire",
-    "Compétence V2 : Préparation de poisons +10%",
-    "Compétence V2 : Sens de la magie",
     "Compétence V2 : Torture"
    ],
    "keywords": [

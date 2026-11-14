@@ -131,7 +131,9 @@ export const V2_SKILLS_RENAMED = Object.freeze({
   'connaissances générales': ['Lore', 'Savoir', 'Int'], 'langage mystique': ['Language', 'Langue', 'Int'],
   'expression artistique': ['Entertain', 'Divertissement', 'Soc'], 'alphabet secret': ['Secret Signs', 'Signes secrets', 'Int'],
   'soins des animaux': ['Animal Care', 'Soin aux animaux', 'Int'], 'charme animal': ['Charm Animal', 'Emprise sur les animaux', 'FM'],
-  jeu: ['Gamble', 'Pari', 'Int'], fouille: ['Perception', 'Perception', 'I']
+  jeu: ['Gamble', 'Pari', 'Int'], fouille: ['Perception', 'Perception', 'I'],
+  // Validation du MJ du 14/11 : Préparation de poisons = Métier (Empoisonneur).
+  'préparation de poisons': ['Trade (Poisoner)', 'Métier (Empoisonneur)', 'Dex']
 });
 
 /**
@@ -152,6 +154,25 @@ export function skillsOf(printed, stats) {
     return { name: `${name}${label}`, nameFr: `${nameFr}${label}`, value: stats[carac] + base + Number(part?.[2] || 0) };
   });
 }
+
+/**
+ * Validation du MJ du 14/11 (listes de T16) : talents V2 rendus par un talent V5 du catalogue sous un autre nom (équivalents sûrs), et
+ * compétences V2 sans compétence V5 qui sont des talents V5. Valeur : [nom du catalogue (nom français), précision imposée ou null].
+ */
+export const V2_TALENTS_RENAMED = Object.freeze({
+  'coups précis': ['Frappe blessante', null], 'coups assommants': ['Frappe assommante', null], 'acuité auditive': ['Sens aiguisé', 'Ouïe'],
+  'acuité visuelle': ['Sens aiguisé', 'Vue'], 'résistance accrue': ['Très résistant', null], 'force accrue': ['Très fort', null],
+  'réflexes éclair': ['Réflexes foudroyants', null], 'dur en affaires': ['Négociateur', null], étiquette: ['Savoir-vivre', null],
+  'sang-froid': ['Imperturbable', null], 'grimpeur chevronné': ['Grimpeur', null], éloquence: ['Orateur', null], 'orateur né': ['Grand orateur', null],
+  'calcul mental': ['Doué en calcul', null], intelligent: ['Perspicace', null], 'résistance aux maladies': ['Résistance', 'Maladie'],
+  'résistance aux poisons': ['Résistance', 'Poison'], 'résistance au poison': ['Résistance', 'Poison'], 'course à pied': ['Véloce', null],
+  'grand voyageur': ['Voyageur aguerri', null], chance: ['Chanceux', null], 'camouflage rural': ['Nomade', null], fuite: ['Fuite !', null]
+});
+export const V2_SKILLS_AS_TALENTS = Object.freeze({
+  baratin: 'Baratiner', 'lire/écrire': 'Lire/Écrire', 'sens de la magie': 'Perception de la Magie', déguisement: 'Maître en déguisement', filature: 'Discret'
+});
+export const talentRename = printed => V2_TALENTS_RENAMED[fold(printed).replace(/\s*\(.*\)\s*$/, '')] || null;
+export const skillAsTalent = printed => V2_SKILLS_AS_TALENTS[fold(printed).replace(/\s*\(.*\)\s*$/, '').replace(/\s*\+\d+\s?%$/, '')] || null;
 
 /** Une seule compétence (premier élément de `skillsOf`), ou null. */
 export const skillOf = (printed, stats) => skillsOf(printed, stats)[0] || null;

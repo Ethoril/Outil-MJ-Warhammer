@@ -26049,11 +26049,12 @@
       "physicalPage": 252,
       "kind": "profile",
       "traitsUsed": [
+        "Spellcaster",
         "Night Vision",
         "Unstable",
         "Size"
       ],
-      "count": 3,
+      "count": 4,
       "abilityRefs": [],
       "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
       "id": "E0-P-1110",
@@ -26148,12 +26149,13 @@
       "kind": "profile",
       "traitsUsed": [
         "Spellcaster",
+        "Spellcaster",
         "Terror",
         "Night Vision",
         "Unstable",
         "Size"
       ],
-      "count": 5,
+      "count": 6,
       "abilityRefs": [],
       "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
       "id": "E0-P-1115",
@@ -26169,12 +26171,13 @@
       "traitsUsed": [
         "Frenzy",
         "Spellcaster",
+        "Spellcaster",
         "Terror",
         "Night Vision",
         "Unstable",
         "Size"
       ],
-      "count": 6,
+      "count": 7,
       "abilityRefs": [],
       "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
       "id": "E0-P-1116",
@@ -26190,13 +26193,14 @@
       "traitsUsed": [
         "Frenzy",
         "Spellcaster",
+        "Spellcaster",
         "Terror",
         "Night Vision",
         "Fly",
         "Unstable",
         "Size"
       ],
-      "count": 7,
+      "count": 8,
       "abilityRefs": [],
       "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
       "id": "E0-P-1117",
@@ -26537,10 +26541,11 @@
       "physicalPage": 115,
       "kind": "profile",
       "traitsUsed": [
+        "Spellcaster",
         "Terror",
         "Size"
       ],
-      "count": 2,
+      "count": 3,
       "abilityRefs": [],
       "sourceNote": "L30 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
       "id": "E0-P-1136",

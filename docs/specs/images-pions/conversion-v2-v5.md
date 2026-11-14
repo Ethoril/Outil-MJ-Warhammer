@@ -56,14 +56,23 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
   - Aussi homonymes : Escamotage, Orientation, Focalisation, Dressage, Crochetage, Métier, Hypnotisme.
   - **Sous un autre nom** (validation du MJ du 14/11, compétence V5 présente au glossaire de l'outil ; liste à valider) : Déplacement silencieux et Dissimulation → Discrétion ; Commérage → Ragot ; Charisme → Charme ; Soins → Guérison ; Conduite d'attelages → Conduite d'attelage ; Équitation → Chevaucher ; Survie → Survie en extérieur ; Résistance à l'alcool ; Connaissances académiques et Connaissances générales → Savoir ; Langage mystique → Langue ; Expression artistique → Divertissement ; Alphabet secret → Signes secrets ; Soins des animaux → Soin aux animaux ; Charme animal → Emprise sur les animaux ; Jeu → Pari ; Fouille → Perception.
   - Deux compétences V2 rendues par la même compétence V5 : la plus haute valeur reste. Une spécialisation « au choix » est écartée.
-  - Les autres compétences V2 (Torture, Baratin…) restent en règles spéciales.
+  - Préparation de poisons → Métier (Empoisonneur).
+  - **Compétences V2 qui sont des talents V5** (validation du 14/11) : Baratin → Baratiner ; Lire/écrire → Lire/Écrire ; Sens de la magie → Perception de la Magie ; Déguisement → Maître en déguisement ; Filature → Discret.
+  - Reste en règle spéciale : Torture, et les spécialisations « au choix ».
 - **Talent V2 homonyme exact d'un Trait V5** (liste à valider) :
   - Effrayant → Peur ; Terrifiant → Terreur ;
   - Vision nocturne → Vision nocturne ; Vol → Vol ; Frénésie → Frénésie ;
   - Mort-vivant → Mort-vivant ; Éthéré → Éthéré ;
   - Instabilité → Instable ; Nuée → Nuée ; Régénération → Régénération ; Stupidité → Stupide.
 - **Talent V2 homonyme exact d'un talent du catalogue V5** : ce talent (Ambidextre, Volonté de fer, Sans peur…).
-- **Sorts** (mots du MJ du 14/11) : le sort le plus proche du catalogue de l'outil (même nom ou même effet, même domaine) ; à défaut, le nom imprimé reste en règle spéciale. Liste des rapprochements à valider.
+- **Talent V2 sous un autre nom** (équivalents sûrs, validation du 14/11) : Coups précis → Frappe blessante ; Coups assommants → Frappe assommante ; Acuité auditive / visuelle → Sens aiguisé (Ouïe / Vue) ; Résistance accrue → Très résistant ; Force accrue → Très fort ; Réflexes éclair → Réflexes foudroyants ; Dur en affaires → Négociateur ; Étiquette → Savoir-vivre ; Sang-froid → Imperturbable ; Grimpeur chevronné → Grimpeur ; Éloquence → Orateur ; Orateur né → Grand orateur ; Calcul mental → Doué en calcul ; Intelligent → Perspicace ; Résistance aux maladies / aux poisons → Résistance (Maladie / Poison) ; Course à pied → Véloce ; Grand voyageur → Voyageur aguerri ; Chance → Chanceux ; Camouflage rural → Nomade ; Fuite → Fuite !
+  - Restent en règles spéciales : Troublant, Puissance imparable, Parade éclair, Lutte, Maîtrise (…), Sain d'esprit, Sur ses gardes, Code de la rue, Projectile puissant, Méditation.
+- **Sorts** (validation du 14/11) :
+  - Sombre savoir (Nurgle, Slaanesh, Tzeentch, Nécromancie) → Trait Lanceur de sorts et les sorts du domaine du catalogue.
+  - Sombre savoir (Chaos) → le domaine du dieu de la créature d'après le livre, sinon la Démonologie.
+  - Magie mineure (« au choix ») → Lanceur de sorts avec tous les sorts mineurs du catalogue, à choisir en séance.
+  - Magie mineure aux sorts nommés (Karitamen : dissipation, silence) → talent Magie mineure ; rapprochement des sorts en attente de validation.
+  - Magie noire, Magie vulgaire, Magie commune, Magie vivante → règles spéciales.
 - **Tout le reste** (Aura démoniaque, Écailles, Mutations du Chaos, règles propres à la créature…) : règle spéciale. Seul le nom imprimé est gardé, jamais le texte du livre.
 - Points de Destin (PD) repris. Mag et PF ignorés.
 

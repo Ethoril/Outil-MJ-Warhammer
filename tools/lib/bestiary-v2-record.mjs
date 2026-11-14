@@ -3,7 +3,7 @@
  * tools/build-bestiary-v2-books.mjs (L29, L30) et tools/build-bestiary-l27.mjs (profils non animaux de L27).
  */
 import { readFileSync } from 'node:fs';
-import { bonus, convertStats, v2Movement, v2Value, woundsV5, weaponAttack, naturalAttack, traitOf, skillsOf, SIZE_LABEL } from './bestiary-v2.mjs';
+import { bonus, convertStats, v2Movement, v2Value, woundsV5, weaponAttack, naturalAttack, traitOf, skillsOf, talentRename, skillAsTalent, SIZE_LABEL } from './bestiary-v2.mjs';
 import { validateBestiaryRecord } from '../../js/core/bestiary-profiles.js';
 
 const fold = text => String(text).normalize('NFC').toLowerCase().replace(/[’`]/g, "'").replace(/\s+/g, ' ').trim();
@@ -15,7 +15,7 @@ const trait = (name, extra = {}) => ({ name, ...extra, ref: traitRef.get(name) }
 const snapshot = JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8'));
 const singular = text => fold(text).split(' ').map(word => word.replace(/s$/, '')).join(' ');
 const TALENTS = new Map(snapshot.talents.entries.filter(entry => entry.nom && entry.englishName).map(entry => [singular(entry.nom), entry.englishName]));
-const DOMAINS = { nurgle: 'Domaine de Nurgle', slaanesh: 'Domaine de Slaanesh', tzeentch: 'Domaine de Tzeentch', 'nécromancie': 'Domaine de la Nécromancie' };
+const DOMAINS = { nurgle: 'Domaine de Nurgle', slaanesh: 'Domaine de Slaanesh', tzeentch: 'Domaine de Tzeentch', 'nécromancie': 'Domaine de la Nécromancie', 'démonologie': 'Domaine de la Démonologie' };
 const spellsOf = type => snapshot.magic.spells.filter(spell => spell.type === type).map(spell => spell.nom);
 
 /** Armes naturelles : n de la créature V5 la plus proche (liste à valider) ; un modificateur V2 imprimé « (BF–1) » s'y ajoute. */
@@ -70,10 +70,21 @@ export function v2Record(entry, id, blockKey, book) {
     const traitName = traitOf(base);
     if (traitName === 'Fly') { traits.push(trait('Fly', { rating: String(entry.fly ?? movement.fly ?? '') || undefined })); continue; }
     if (traitName) { traits.push(trait(traitName)); continue; }
-    const lore = fold(base) === 'sombre savoir' && DOMAINS[fold(spec || '')];
+    // Sombre savoir (Chaos) : le domaine du dieu de la créature (`god` du choix de conversion), sinon la Démonologie (MJ, 14/11).
+    const loreKey = fold(spec || '') === 'chaos' ? (entry.god || 'démonologie') : fold(spec || '');
+    const lore = fold(base) === 'sombre savoir' && DOMAINS[loreKey];
     if (lore) { traits.push(trait('Spellcaster', { param: spec })); spells[lore] = spellsOf(lore); continue; }
-    const talent = TALENTS.get(singular(base));
-    if (talent) talents.push({ name: spec ? `${talent} (${spec})` : talent });
+    // Magie mineure « au choix » : lanceur de sorts avec les sorts mineurs du catalogue, à choisir en séance (MJ, 14/11).
+    if (fold(base) === 'magie mineure' && /au choix/.test(spec || '')) {
+      traits.push(trait('Spellcaster', { param: `Magie mineure, ${spec}` }));
+      spells['Sort Mineur'] = spellsOf('Sort Mineur');
+      continue;
+    }
+    const renamed = talentRename(base);
+    const talent = renamed ? TALENTS.get(singular(renamed[0])) : TALENTS.get(singular(base));
+    // Un renvoi de page imprimé (« (cf. page 117) ») n'est pas une précision du talent.
+    const talentSpec = renamed ? renamed[1] : (spec && !/^cf./.test(spec) ? spec : null);
+    if (talent) talents.push({ name: talentSpec ? `${talent} (${talentSpec})` : talent });
     else rules.push(item.replace(/\*+$/, ''));
   }
   for (const title of entry.rules.filter(rule => !/^Perspective d.Éradication/i.test(rule))) {
@@ -85,6 +96,10 @@ export function v2Record(entry, id, blockKey, book) {
   const skills = new Map();
   for (const item of list(entry.skills)) {
     const found = skillsOf(item, stats);
+    // Compétence V2 qui est un talent V5 (Baratin, Lire/écrire, Déguisement…) : le talent, une seule fois.
+    const asTalent = found.length ? null : skillAsTalent(item);
+    const talentName = asTalent && TALENTS.get(singular(asTalent));
+    if (talentName) { if (!talents.some(talent => talent.name === talentName)) talents.push({ name: talentName }); continue; }
     if (!found.length) rules.push(`Compétence V2 : ${item}`);
     for (const skill of found) if (!skills.has(skill.name) || skills.get(skill.name).value < skill.value) skills.set(skill.name, skill);
   }
