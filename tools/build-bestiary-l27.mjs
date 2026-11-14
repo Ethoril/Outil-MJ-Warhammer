@@ -17,6 +17,7 @@
  * - Vol du Rapace : M 2 au sol, Vol (100) comme le Pigeon de Forme bestiale.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
+import { bonus, convertStats, woundsV5 } from './lib/bestiary-v2.mjs';
 
 const BOOK = 'L27';
 const ADDED_ON = '2026-11-11';
@@ -31,10 +32,7 @@ const T = Object.freeze({
   skittish: { name: 'Skittish', ref: 'E0-T-047' }, trained: param => ({ name: 'Trained', param, ref: 'E0-T-060' })
 });
 const BARDING = [{ name: 'Light Armour', ap: 1, optional: true }, { name: 'Medium Armour', ap: 3, optional: true }];
-const bonus = value => Math.floor(value / 10);
-const SIZE_FACTOR = { average: 1, large: 2 };
-const woundsV5 = (stats, size) => size === 'small' ? 2 * bonus(stats.E)
-  : (bonus(stats.F) + 2 * bonus(stats.E) + bonus(stats.FM ?? 0)) * SIZE_FACTOR[size];
+// Règle de conversion V2 → V5 : tools/lib/bestiary-v2.mjs (bonus, Blessures selon la Taille, caractéristiques).
 
 /** Profils V2 du livre : CC, CT, F, E, Ag, Int, FM, Soc ; A, M ; bonus V2 de Perception (+10 % → 10). */
 const V2 = [
@@ -56,8 +54,7 @@ const V2 = [
 
 function record(entry, id, index) {
   const [CC, CT, F, E, Ag, Int, FM, Soc] = entry.v2;
-  const I = entry.horse ? 15 : Ag;
-  const stats = { M: entry.M, CC, CT: CT || null, F, E, I, Ag, Dex: null, Int, FM, Soc: Soc || 10 };
+  const stats = convertStats(entry.v2, { M: entry.M, animal: true, horse: entry.horse });
   const sizeLabel = { small: 'Small', average: 'Average', large: 'Large' }[entry.size];
   const attacks = [];
   if (entry.horse && entry.A >= 1) attacks.push({ name: 'Hooves', value: CC, damage: bonus(F) + 8, qualities: ['Pummel'] });
@@ -65,7 +62,7 @@ function record(entry, id, index) {
     attacks.push({ name: 'Talons', value: CC, damage: bonus(F) + 2 });
     if (entry.A >= 2) attacks.push({ name: 'Beak', value: CC, damage: bonus(F) + 2, free: 'momentum' });
   }
-  const skills = [{ name: 'Perception', nameFr: 'Perception', value: I + entry.perception }];
+  const skills = [{ name: 'Perception', nameFr: 'Perception', value: stats.I + entry.perception }];
   if (entry.dodge) skills.unshift({ name: 'Dodge', nameFr: 'Esquive', value: Ag });
   const traits = [T.bestial, ...(entry.fly ? [T.fly(entry.fly)] : []), T.size(sizeLabel), ...(entry.skittish ? [T.skittish] : []),
     ...(entry.trained ? [T.trained(entry.trained)] : []), ...(entry.extraTraits || [])];
