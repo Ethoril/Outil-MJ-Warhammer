@@ -29,15 +29,23 @@ export function splitsOf(prev = {}, next = {}) {
 /**
  * Effets éphémères d'un changement d'état (contrat §9), après le `token.state` qui les porte :
  * `fx.wound` à chaque baisse de PV, `fx.death` au passage à mort. La cause vient de l'état, avec `blood` par défaut. Un pion qui apparaît
- * ne joue rien.
+ * ne joue rien. `formChanged` : le participant prend ou quitte une forme (Forme bestiale, Transformation de Kadon) ; ses PV
+ * passent aux Blessures de la forme ou reviennent à celles d'origine moins les dégâts déjà subis (et déjà saignés) : ce n'est
+ * pas une blessure, pas de `fx.wound` (images des pions, CA40).
  */
-export function effectsOf(prev, next) {
+export function effectsOf(prev, next, { formChanged = false } = {}) {
   if (!prev || !next) return [];
   const effects = [];
   const lost = (prev.hp?.current ?? 0) - (next.hp?.current ?? 0);
-  if (lost > 0) effects.push(['fx.wound', { ref: next.ref, hpLost: lost, maxHp: next.hp.max, target: 'self' }]);
+  if (lost > 0 && !formChanged) effects.push(['fx.wound', { ref: next.ref, hpLost: lost, maxHp: next.hp.max, target: 'self' }]);
   if (next.dead && !prev.dead) effects.push(['fx.death', { ref: next.ref, cause: next.deathCause || 'blood' }]);
   return effects;
+}
+
+/** Forme portée par un participant (`kind:nom`), `''` hors forme : un changement entre deux lectures est une prise ou un retour. */
+export function formSignatureOf(participant) {
+  const form = participant?.extensions?.v5?.beastForm;
+  return form && typeof form === 'object' ? `${form.kind || 'beast'}:${form.name ?? form.beastProfile?.name ?? ''}` : '';
 }
 
 /**
@@ -52,6 +60,7 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
   onRan = () => {}, setTimer = (fn, ms) => setTimeout(fn, ms), clearTimer = id => clearTimeout(id) }) {
   let seq = 0;
   let states = {};
+  let forms = {};
   let roster = '[]';
   let lastSeen = 0;
   let lastPing = -Infinity;
@@ -74,7 +83,11 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
   };
   const setStatus = next => { if (next !== status) { status = next; onStatus(next); emitPlacement(); } };
   const send = (type, payload = {}) => channel.postMessage({ v: MAP_LINK_VERSION, type, seq: ++seq, at: now(), from: 'outil-mj', payload });
-  const read = () => tokenStatesOf(getParticipants() || [], { maxHpOf, imageUrlOf, formImageUrlOf, colorOf });
+  const read = (participants = getParticipants() || []) => tokenStatesOf(participants, { maxHpOf, imageUrlOf, formImageUrlOf, colorOf });
+  /** Formes par `ref`, gardées à côté des états sans être envoyées (CA40). */
+  const formsOf = participants => Object.fromEntries(participants.map(participant => [mapRefOf(participant), formSignatureOf(participant)]));
+  /** Relit la scène : états envoyés et formes de chaque pion. */
+  const readScene = () => { const participants = getParticipants() || []; return [read(participants), formsOf(participants)]; };
   /** Liste des PJ (`mj.roster`, §3), émise quand elle change ou sur demande. */
   const sendRoster = (force = false) => {
     const characters = pjRosterOf(states), text = JSON.stringify(characters);
@@ -92,16 +105,18 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
 
   /** Relit la scène et émet les changements (à brancher sur `Bus.on('combat')`). */
   function refresh() {
-    const next = read();
+    const [next, nextForms] = readScene();
     for (const split of splitsOf(states, next)) send('mount.split', split);
     for (const ref of diffTokenStates(states, next)) {
       if (!next[ref]) { if (!ref.startsWith('pj:')) { send('token.remove', { ref }); placed.delete(ref); } }
       else {
         send(states[ref] ? 'token.state' : 'token.add', next[ref]);
-        for (const [type, payload] of effectsOf(states[ref], next[ref])) send(type, payload);
+        const formChanged = (forms[ref] ?? '') !== (nextForms[ref] ?? '');
+        for (const [type, payload] of effectsOf(states[ref], next[ref], { formChanged })) send(type, payload);
       }
     }
     states = next;
+    forms = nextForms;
     sendRoster();
     sendEngagements();
     emitPlacement();
@@ -109,7 +124,7 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
 
   /** Instantané complet, en réponse à `map.hello`. */
   function snapshot() {
-    states = read();
+    [states, forms] = readScene();
     send('mj.snapshot', { tokens: Object.values(states) });
     sendRoster(true);
     sendEngagements(true);
@@ -206,7 +221,7 @@ export function createMapLink({ channel, getParticipants, maxHpOf = () => null, 
   }
 
   channel.onmessage = event => onMessage(event?.data ?? event);
-  states = read();
+  [states, forms] = readScene();
   send('mj.hello');
   return { refresh, snapshot, tick, onMessage, requestMount, queryDistance, on, placement: placementView,
     isPlaced: participant => isRefPlaced(mapRefOf(participant), states, placed), status: () => status, close: () => channel.close?.() };

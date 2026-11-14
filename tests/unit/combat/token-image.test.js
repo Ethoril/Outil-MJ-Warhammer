@@ -202,6 +202,7 @@ test('CA17-CA18 de bout en bout : sort réellement lancé, envoi à la transform
     assert.deepEqual(sentFormImages(), [path, null], 'CA18 : null au retour, la carte retrouve l’image d’avant');
     const back = channel.sent.slice(sentBefore).find(m => m.type === 'token.state' && m.payload.ref === ref);
     assert.equal(back.payload.imageUrl, null, 'imageUrl d’un PJ toujours non envoyé');
+    assert.deepEqual(channel.sent.filter(m => m.type === 'fx.wound'), [], 'CA40 : ni la prise ni le retour ne sont des blessures (30 → 13 → 30 PV)');
   }
 });
 
