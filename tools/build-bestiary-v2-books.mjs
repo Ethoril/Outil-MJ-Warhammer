@@ -7,6 +7,7 @@
  */
 import { readFileSync, writeFileSync } from 'node:fs';
 import { v2Record } from './lib/bestiary-v2-record.mjs';
+import { mountCountOf } from '../js/core/mounts.js';
 import { slug } from './build-token-images.mjs';
 
 const BOOKS = {
@@ -43,7 +44,7 @@ for (const book of process.argv.slice(2)) {
     profiles: profiles.length, templates: 0, pregeneratedCharacters: 0, method: 'Profils V2 transcrits et contrôlés contre la couche texte du PDF, convertis par tools/build-bestiary-v2-books.mjs.', addedOn: ADDED_ON });
   writeFileSync(`js/data/bestiary/${book}.json`, `${JSON.stringify({ schemaVersion: 1, book, title: meta.title, edition: 'V5', sourceEdition: 'V2', source: { corpusId: book, sha256: meta.sha256 }, conversionNote: note, profiles }, null, 1)}\n`);
   const index = JSON.parse(readFileSync('js/data/bestiary/index.json', 'utf8'));
-  index.books = [...index.books.filter(row => row.book !== book), { book, file: `${book}.json`, title: meta.title, edition: 'V5', counts: { profiles: profiles.length, templates: 0, pregenerated: 0 } }]
+  index.books = [...index.books.filter(row => row.book !== book), { book, file: `${book}.json`, title: meta.title, edition: 'V5', counts: { profiles: profiles.length, templates: 0, pregenerated: 0, mounts: mountCountOf(profiles) } }]
     .sort((a, b) => a.book.localeCompare(b.book));
   writeFileSync('js/data/bestiary/index.json', `${JSON.stringify(index, null, 1)}\n`);
   // Classement : une ligne par créature absente du fichier (dossier choisi par créature), lignes existantes intactes.

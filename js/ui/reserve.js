@@ -11,7 +11,7 @@ import { createKeywordPicker } from './keyword-picker.js';
 import { exportProfilesJson } from '../core/json-profile-export.js';
 import { buildReserveProfileFromBestiary } from '../core/bestiary-profiles.js';
 import { sharedBestiaryLoader } from '../core/bestiary-loader.js';
-import { declaredMountOf, isMountCandidate } from '../core/mounts.js';
+import { declaredMountOf, isMountCandidate, mountBookIds } from '../core/mounts.js';
 import { syncTokenColorSelect } from './token-color-options.js';
 import { normalizeLibraryImage, tokenImageOf, shownTokenImageOf } from '../core/token-image.js';
 import { createTokenLibraryPicker, tokenImageCaption, tokenImageDisplaySrc, tokenThumbnail, setImageSrc } from './token-image-picker.js';
@@ -105,13 +105,19 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   }
 
   // Monture du profil : animal du bestiaire (Dressé (Monture) par défaut, tout le bestiaire sur demande), copié en profil de bibliothèque.
-  let mountSection = null, mountSubjectId = null, bestiaryProfiles = null;
-  // Tous les livres restent chargés : l'index ne dit pas quels livres contiennent une créature Dressé (Monture), et la recherche
-  // porte sur les noms de tout le bestiaire. Le chargeur partagé évite seulement de relire les livres déjà chargés ailleurs.
+  let mountSection = null, mountSubjectId = null;
+  // L'index dit quels livres contiennent une monture (`counts.mounts`, même critère que isMountCandidate) : la recherche par défaut
+  // ne charge que ceux-là ; un livre dont l'entrée n'a pas le champ (index plus ancien) reste chargé. « Tout le bestiaire » charge tout.
+  // Le chargeur partagé évite de relire les livres déjà chargés ailleurs.
   const bestiaryLoader = sharedBestiaryLoader();
-  const loadBestiary = () => bestiaryProfiles || (bestiaryProfiles = bestiaryLoader.index()
-    .then(books => bestiaryLoader.load(books.map(book => book.book))).then(rows => rows.filter(row => row.kind === 'profile' || !row.kind))
-    .catch(error => { bestiaryProfiles = null; throw error; }));
+  const bestiaryCache = { mounts: null, all: null };
+  const loadBestiary = all => {
+    const key = all ? 'all' : 'mounts';
+    return bestiaryCache[key] || (bestiaryCache[key] = bestiaryLoader.index()
+      .then(books => bestiaryLoader.load(all ? books.map(book => book.book) : mountBookIds(books)))
+      .then(rows => rows.filter(row => row.kind === 'profile' || !row.kind))
+      .catch(error => { bestiaryCache[key] = null; throw error; }));
+  };
   function ensureMountSection() {
     const f = DOM.reserve.form;
     if (!f || mountSection) return;
@@ -141,7 +147,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
       if (!mountSubjectId) return;
       const wanted = normalizeSearchText(text.value || '');
       if (!wanted && !all.checked) return;
-      loadBestiary().then(rows => {
+      loadBestiary(all.checked).then(rows => {
         results.textContent = '';
         const found = rows.filter(row => (all.checked || isMountCandidate(row)) && (!wanted || [row.name, row.nameFr].some(value => normalizeSearchText(value || '').includes(wanted)))).slice(0, 24);
         if (!found.length) { results.append(Object.assign(document.createElement('span'), { className: 'muted', textContent: all.checked ? 'Aucune créature.' : 'Aucune monture dressée : cochez « tout le bestiaire ».' })); return; }

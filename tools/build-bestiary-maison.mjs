@@ -10,6 +10,7 @@
  */
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { validateBestiaryRecord } from '../js/core/bestiary-profiles.js';
+import { mountCountOf } from '../js/core/mounts.js';
 import { slug } from './build-token-images.mjs';
 
 const BOOK = 'L90';
@@ -138,7 +139,7 @@ writeFileSync('docs/BESTIAIRE_INVENTAIRE.json', `${JSON.stringify(inventory, nul
 
 writeFileSync(`js/data/bestiary/${BOOK}.json`, `${JSON.stringify({ schemaVersion: 1, book: BOOK, title: TITLE, edition: 'V5', house: true, source: { corpusId: null, sha256: null }, conversionNote: SOURCE_NOTE, profiles }, null, 1)}\n`);
 const index = JSON.parse(readFileSync('js/data/bestiary/index.json', 'utf8'));
-index.books = [...index.books.filter(row => row.book !== BOOK), { book: BOOK, file: `${BOOK}.json`, title: TITLE, edition: 'V5', counts: { profiles: profiles.length, templates: 0, pregenerated: 0 } }]
+index.books = [...index.books.filter(row => row.book !== BOOK), { book: BOOK, file: `${BOOK}.json`, title: TITLE, edition: 'V5', counts: { profiles: profiles.length, templates: 0, pregenerated: 0, mounts: mountCountOf(profiles) } }]
   .sort((a, b) => a.book.localeCompare(b.book));
 writeFileSync('js/data/bestiary/index.json', `${JSON.stringify(index, null, 1)}\n`);
 console.log(profiles.map(profile => `${profile.id} ${profile.nameFr} ← ${profile.houseProfile.basedOn.id} ; ${profile.attacks.map(attack => `${attack.name} ${attack.value}/+${attack.damage}`).join(', ')}`).join('\n'));

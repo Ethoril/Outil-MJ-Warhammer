@@ -19,6 +19,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { bonus, convertStats, woundsV5 } from './lib/bestiary-v2.mjs';
 import { v2Record } from './lib/bestiary-v2-record.mjs';
+import { mountCountOf } from '../js/core/mounts.js';
 
 const BOOK = 'L27';
 const ADDED_ON = '2026-11-11';
@@ -124,7 +125,7 @@ writeFileSync(`js/data/bestiary/${BOOK}.json`, `${JSON.stringify(book, null, 1)}
 
 const index = JSON.parse(readFileSync('js/data/bestiary/index.json', 'utf8'));
 index.books = index.books.filter(row => row.book !== BOOK);
-index.books.push({ book: BOOK, file: `${BOOK}.json`, title: TITLE, edition: 'V5', counts: { profiles: profiles.length, templates: 0, pregenerated: 0 } });
+index.books.push({ book: BOOK, file: `${BOOK}.json`, title: TITLE, edition: 'V5', counts: { profiles: profiles.length, templates: 0, pregenerated: 0, mounts: mountCountOf(profiles) } });
 index.books.sort((a, b) => a.book.localeCompare(b.book));
 writeFileSync('js/data/bestiary/index.json', `${JSON.stringify(index, null, 1)}\n`);
 console.log(profiles.map(p => `${p.id} ${p.nameFr} M${p.stats.M} B${p.wounds} ${p.attacks.map(a => `${a.name} ${a.value}/${a.damage}`).join(', ')}`).join('\n'));

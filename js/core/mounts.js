@@ -30,6 +30,12 @@ export function isMountCandidate(record) {
   });
 }
 
+/** Montures d'un livre du bestiaire, comptées comme l'onglet Monture de la Réserve (profils seulement) : `counts.mounts` de l'index. */
+export const mountCountOf = records => (records || []).filter(row => (row.kind === 'profile' || !row.kind) && isMountCandidate(row)).length;
+
+/** Livres de l'index à charger pour chercher des montures : ceux qui en signalent, et ceux dont l'entrée n'a pas le champ (absence = « peut en contenir »). */
+export const mountBookIds = books => (books || []).filter(book => !Number.isFinite(book?.counts?.mounts) || book.counts.mounts > 0).map(book => book.book);
+
 const RIDE_NAMES = ['chevaucher', 'equitation', 'ride'];
 /** Le cartouche propose « À pied / Monté » : monture liée ou déclarée, déjà monté, ou compétence Chevaucher. */
 export function canRide(participant) {

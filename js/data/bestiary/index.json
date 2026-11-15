@@ -9,7 +9,8 @@
    "counts": {
     "profiles": 15,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 1
    }
   },
   {
@@ -20,7 +21,8 @@
    "counts": {
     "profiles": 12,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -31,7 +33,8 @@
    "counts": {
     "profiles": 13,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -42,7 +45,8 @@
    "counts": {
     "profiles": 22,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -53,7 +57,8 @@
    "counts": {
     "profiles": 2,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -64,7 +69,8 @@
    "counts": {
     "profiles": 53,
     "templates": 7,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 8
    }
   },
   {
@@ -75,7 +81,8 @@
    "counts": {
     "profiles": 68,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 11
    }
   },
   {
@@ -86,7 +93,8 @@
    "counts": {
     "profiles": 38,
     "templates": 15,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 6
    }
   },
   {
@@ -97,7 +105,8 @@
    "counts": {
     "profiles": 29,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 1
    }
   },
   {
@@ -108,7 +117,8 @@
    "counts": {
     "profiles": 62,
     "templates": 0,
-    "pregenerated": 6
+    "pregenerated": 6,
+    "mounts": 13
    }
   },
   {
@@ -119,7 +129,8 @@
    "counts": {
     "profiles": 49,
     "templates": 15,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 6
    }
   },
   {
@@ -130,7 +141,8 @@
    "counts": {
     "profiles": 9,
     "templates": 6,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 3
    }
   },
   {
@@ -141,7 +153,8 @@
    "counts": {
     "profiles": 20,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 1
    }
   },
   {
@@ -152,7 +165,8 @@
    "counts": {
     "profiles": 23,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -163,7 +177,8 @@
    "counts": {
     "profiles": 21,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -174,7 +189,8 @@
    "counts": {
     "profiles": 30,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -185,7 +201,8 @@
    "counts": {
     "profiles": 40,
     "templates": 1,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -196,7 +213,8 @@
    "counts": {
     "profiles": 45,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -207,7 +225,8 @@
    "counts": {
     "profiles": 58,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 1
    }
   },
   {
@@ -218,7 +237,8 @@
    "counts": {
     "profiles": 43,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 5
    }
   },
   {
@@ -229,7 +249,8 @@
    "counts": {
     "profiles": 55,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 5
    }
   },
   {
@@ -240,7 +261,8 @@
    "counts": {
     "profiles": 81,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -251,7 +273,8 @@
    "counts": {
     "profiles": 28,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -262,7 +285,8 @@
    "counts": {
     "profiles": 62,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -273,7 +297,8 @@
    "counts": {
     "profiles": 8,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 6
    }
   },
   {
@@ -284,7 +309,8 @@
    "counts": {
     "profiles": 64,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 1
    }
   },
   {
@@ -295,7 +321,8 @@
    "counts": {
     "profiles": 50,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -306,7 +333,8 @@
    "counts": {
     "profiles": 23,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   },
   {
@@ -317,7 +345,8 @@
    "counts": {
     "profiles": 33,
     "templates": 0,
-    "pregenerated": 0
+    "pregenerated": 0,
+    "mounts": 0
    }
   }
  ]

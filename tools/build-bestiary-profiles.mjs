@@ -23,6 +23,7 @@ import { proposeFrenchName } from './lib/bestiary-names-glossary.mjs';
 import { TRAIT_ALIASES } from './lib/bestiary-complement-data.mjs';
 import { validateBestiaryRecord } from '../js/core/bestiary-profiles.js';
 import { BASE_REFERENTIAL, resolveKeyword } from '../js/core/creature-keywords.js';
+import { mountCountOf } from '../js/core/mounts.js';
 
 const BOOKS = {
   L01: ['Archives of the Empire 2', 'V4'], L02: ['Archives of the Empire 3', 'V4'], L03: ['Archives of the Empire Volume 1', 'V4'], L04: ['Deft Steps, Light Fingers', 'V4'],
@@ -192,7 +193,7 @@ for (const book of ids) {
   const output = { schemaVersion: 1, book, title: BOOKS[book][0], edition: BOOKS[book][1], source: { corpusId: book, sha256: meta?.sha256 || null }, profiles: records };
   writeOrCompare(`${OUT}/${book}.json`, `${JSON.stringify(output, null, 1)}\n`, book);
   if (!CHECK) writeFileSync(`tmp/divin/bestiary-ecarts-${book}.json`, `${JSON.stringify({ dropped, unverifiedSkills: records.flatMap(record => (record.skills || []).filter(skill => skill.frUnverified).map(skill => `${record.id} ${skill.name}`)), droppedTraits: dropped.flatMap(row => row.traits.map(name => `${row.id} ${name}`)), withoutKeywords: records.filter(record => !record.keywords?.length).map(record => `${record.id} ${record.name}`) }, null, 1)}\n`);
-  const counts = { profiles: records.filter(r => r.kind === 'profile').length, templates: records.filter(r => r.kind === 'template').length, pregenerated: records.filter(r => r.kind === 'pregenerated-character').length };
+  const counts = { profiles: records.filter(r => r.kind === 'profile').length, templates: records.filter(r => r.kind === 'template').length, pregenerated: records.filter(r => r.kind === 'pregenerated-character').length, mounts: mountCountOf(records) };
   indexFile.books = [...indexFile.books.filter(item => item.book !== book), { book, file: `${book}.json`, title: BOOKS[book][0], edition: BOOKS[book][1], counts }].sort((a, b) => a.book.localeCompare(b.book));
   console.log(`${book} : ${records.length} profils (${counts.profiles} profils, ${counts.templates} gabarits, ${counts.pregenerated} prétirés), ${missing.filter(entry => !MANUAL_BLOCKS[entry.id]).length} sans bloc`);
 }
