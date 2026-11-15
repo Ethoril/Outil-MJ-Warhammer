@@ -67,6 +67,6 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque tâche est un bri
 
 ## Clôture
 
-- [ ] **T10 — Recette locale.** `node tools/serve-liaison.mjs` : loup du bestiaire (auto), PNJ avec image choisie > 24 Kio, monture avec destrier nommé, PJ en Forme bestiale des deux vents puis retour. Captures à l'appui.
+- [x] **T10 — Recette locale.** `node tools/serve-liaison.mjs` : loup du bestiaire (auto), PNJ avec image choisie > 24 Kio, monture avec destrier nommé, PJ en Forme bestiale des deux vents puis retour. Captures à l'appui.
   CA : 1, 5, 7, 15, 17, 18. Après : T6, T8, T9.
 - [ ] **T11 — Convergence.** Suite complète des deux dépôts, `verifier` sur spec + plan, notes de version (README, `docs/SUIVI_EVOLUTION.md`), `node tools/bump-version.mjs`. Publication des deux dépôts seulement après feu vert du MJ **et** versionnement des images par le MJ.

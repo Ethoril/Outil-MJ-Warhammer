@@ -10,6 +10,20 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.48.0 — Images des pions depuis la bibliothèque de Map Display, bestiaire en dossiers, trois livres ajoutés (15/11/2026, non publiée)
+
+Cadrage, décisions du MJ et tâches : `docs/specs/images-pions/` (`spec.md` CA1 à CA40, `questions-profils.md`). Publication en attente du feu vert du MJ, du versionnement des images de `maps/tokens/` (le garde-fou de la carte bloque tant qu’une image manque) et de la passe finale d’appariement.
+
+- **Images des pions.** Une créature du bestiaire arrive sur la carte avec son image automatique (table `js/data/token-images.js`, générée depuis `tools/token-images.csv`), y compris ajoutée au combat sans passer par la réserve ou invoquée. Le MJ peut choisir une image de la bibliothèque sur tout profil de réserve et sur une monture (champ facultatif `tokenLibraryImage`, sans migration) ; elle l’emporte sur l’automatique et s’exclut avec l’image importée. Vignettes dans la réserve ; un PJ n’envoie toujours pas d’image.
+- **Formes bestiales.** `formImageUrl` au contrat de liaison : le pion prend l’image de la bête selon le vent (`-bete`, `-vie`) et retrouve la sienne au retour, PJ compris. Prendre ou quitter une forme n’est plus lu comme une blessure par la carte.
+- **Carte.** Chemin de bibliothèque accepté dans `imageUrl`, règle du chemin unique dans l’outil, le générateur et la carte ; le site publié embarque les images de la table ; garde-fou `tests/tokenImages.test.mjs` ; un pion délié perd son image de forme.
+- **Bibliothèque de bestiaire.** Navigation par dossiers (`js/data/bestiary-folders.js`, classement `tools/token-images-categories.csv`), fil d’Ariane, filtres bornés au dossier ; nom français d’abord, à l’affichage, au tri et à la copie en réserve.
+- **Bestiaire.** Ours et Pigeon (L05) ; L28 *Le Pouvoir derrière le Trône* (64 profils, extracteur étendu au français) ; L29 *Tome de la Corruption* (50) et L30 *Le Seigneur liche* (23), V2 convertis par la règle unique `tools/lib/bestiary-v2.mjs` (`docs/specs/images-pions/conversion-v2-v5.md`, tables validées par le MJ) ; Vampires lahmianes (L27) ; L90 « Maison (MJ) » : cinq profils de décision du MJ et les sept cultistes de la Main pourpre.
+- **Illustrations à créer.** `node tools/list-missing-token-images.mjs` écrit `docs/specs/images-pions/illustrations-a-creer.md`, par dossiers.
+- Outils : `build-token-images`, `list-missing-token-images`, `build-bestiary-folders`, `recopier-donnees-communes` (table et contrat recopiés dans la carte), chacun avec `--check`.
+- Restes connus : appariement des images nouvelles reporté à la fin de la création d’images du MJ ; appariements douteux relevés par la contre-vérification à relire alors (faucon, von Carstein, individus nommés sur image générique) ; une perte de PV enregistrée dans le même rafraîchissement qu’un retour de forme n’envoie pas de sang (aucun parcours réel trouvé) ; L06, L13, L23, L24 ne se régénèrent pas à l’identique (antérieur au chantier).
+- Preuves : suite unitaire 6258 + 200 ; carte 816 verts, 2 sautés ; recette locale `tmp/recette-images-pions/RAPPORT.md` (10 scénarios conformes) ; deux contre-vérifications indépendantes, constats clos. Socle navigateur non relancé en entier après les dernières corrections de données.
+
 ## 3.47.2 — Reliquat de l’audit du 08/11 tranché le 13/11 : accessibilité gardée par un parcours, Campagne, bestiaire, hygiène des tests (13/11/2026)
 
 Rien de visible à la table.
