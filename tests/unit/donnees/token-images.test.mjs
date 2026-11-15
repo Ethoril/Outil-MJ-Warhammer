@@ -116,7 +116,7 @@ test('illustrations à créer : chaque profil sans image y figure une fois, aucu
   assert.deepEqual([...listes].sort(), attendus);
   for (const e of missing.entries) assert.match(e.file, /^[a-z0-9-]+(\/[a-z0-9-]+)*\/[a-z0-9-]+\.webp$/);
   assert.equal(missing.forms.length, 0, 'les 9 bêtes de Forme bestiale ont leurs deux images');
-  assert.equal(missing.kadon.length, 9);
+  assert.equal(missing.kadon.length, 0, 'les 9 monstres de Transformation de Kadon ont leur image');
 });
 
 test('classement : une ligne par créature du bestiaire, appariée ou non (CA33)', () => {

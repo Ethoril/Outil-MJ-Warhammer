@@ -986,3 +986,15 @@ maps/tokens/pnj/l24/allrella-slaanesh-cultiste-argent-1.webp;Allrella — Slaane
 maps/tokens/pnj/l24/elphoise-slaanesh-cultiste-argent-1.webp;Elphoise — Slaanesh cultiste (Argent 1);E0-P-1160;Elphoise — Slaanesh cultiste (Argent 1);L90 p.31;exact;profil individuel L90 (décision du MJ du 15/11/2026), copie du profil de groupe E0-P-827 (L24 p.21) ; pion individuel d'Elphoise, compagne d'Allrella (E0-P-827, L24 p.21)
 maps/tokens/pnj/l24/helga-slaanesh-cultiste-argent-1.webp;Helga — Slaanesh cultiste (Argent 1);E0-P-1161;Helga — Slaanesh cultiste (Argent 1);L90 p.32;exact;profil individuel L90 (décision du MJ du 15/11/2026), copie du profil de groupe E0-P-827 (L24 p.21) ; pion individuel d'Helga, compagne d'Allrella (E0-P-827, L24 p.21)
 maps/tokens/pnj/l24/taggees-espions-or-2.webp;Taggees — Espions (Or 2);E0-P-872;Taggees — Espions (Or 2);L24 p.67;exact;pion individuel d'un espion-assassin Taggee solitaire (remplace l'image de groupe 3 personnages)
+maps/tokens/bestiaire/gris-montagne-faucon.webp;Gris montagne faucon;E0-P-039;Gris montagne faucon;L11 p.63;exact;
+maps/tokens/ennemis/vampires/vampire.webp;Vampire;E0-P-099;Vampire;L06 p.343;exact;
+maps/tokens/ennemis/vampires/vampire-noble.webp;Vampire noble;E0-P-926;Vampire noble;L26 p.21;exact;
+maps/tokens/monstres/transformation-kadon/pieuvre-des-marais.webp;Pieuvre des marais (Transformation de Kadon);;;;aucun;kadon : bog-octopus, L06 p.328
+maps/tokens/monstres/transformation-kadon/demi-griffon.webp;Demi-griffon (Transformation de Kadon);;;;aucun;kadon : demigryph, L06 p.329
+maps/tokens/monstres/transformation-kadon/dragon.webp;Dragon (Transformation de Kadon);;;;aucun;kadon : dragon, L06 p.330
+maps/tokens/monstres/transformation-kadon/bete-des-fanges.webp;Bête des fanges (Transformation de Kadon);;;;aucun;kadon : fenbeast, L06 p.331
+maps/tokens/monstres/transformation-kadon/geant.webp;Géant (Transformation de Kadon);;;;aucun;kadon : giant, L06 p.332
+maps/tokens/monstres/transformation-kadon/griffon.webp;Griffon (Transformation de Kadon);;;;aucun;kadon : griffon, L06 p.332
+maps/tokens/monstres/transformation-kadon/manticore.webp;Manticore (Transformation de Kadon);;;;aucun;kadon : manticore, L06 p.333
+maps/tokens/monstres/transformation-kadon/pegase.webp;Pégase (Transformation de Kadon);;;;aucun;kadon : pegasus, L06 p.334
+maps/tokens/monstres/transformation-kadon/troll.webp;Troll (Transformation de Kadon);;;;aucun;kadon : troll, L06 p.335
