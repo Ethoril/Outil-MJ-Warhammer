@@ -89,6 +89,10 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-739', 'E0-P-745', 'E0-P-840', 'E0-P-859', 'E0-P-870', 'E0-P-997', 'E0-P-998', 'E0-P-1092',
       'E0-P-1093'
     ]) }),
+  Object.freeze({ id: 'ennemis/rois-des-tombes', parent: 'ennemis', label: 'Rois des Tombes',
+    profiles: Object.freeze([
+      'E0-P-1162'
+    ]) }),
   Object.freeze({ id: 'ennemis/skavens', parent: 'ennemis', label: 'Skavens',
     profiles: Object.freeze([
       'E0-P-109', 'E0-P-110', 'E0-P-111', 'E0-P-023', 'E0-P-024', 'E0-P-025', 'E0-P-026', 'E0-P-061',
@@ -174,7 +178,8 @@ export const BESTIARY_FOLDERS = Object.freeze([
     profiles: Object.freeze([
       'E0-P-364', 'E0-P-365', 'E0-P-366', 'E0-P-367', 'E0-P-368', 'E0-P-370', 'E0-P-372', 'E0-P-376',
       'E0-P-377', 'E0-P-378', 'E0-P-379', 'E0-P-380', 'E0-P-381', 'E0-P-382', 'E0-P-383', 'E0-P-384',
-      'E0-P-385', 'E0-P-386', 'E0-P-387', 'E0-P-388', 'E0-P-389', 'E0-P-390', 'E0-P-391', 'E0-P-392'
+      'E0-P-385', 'E0-P-386', 'E0-P-387', 'E0-P-388', 'E0-P-389', 'E0-P-390', 'E0-P-391', 'E0-P-392',
+      'E0-P-1142'
     ]) }),
   Object.freeze({ id: 'pnj/l11', parent: 'pnj', label: 'L11 — The Imperial Zoo',
     profiles: Object.freeze([
@@ -235,7 +240,8 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-658', 'E0-P-659', 'E0-P-660', 'E0-P-661', 'E0-P-662', 'E0-P-663', 'E0-P-675', 'E0-P-676',
       'E0-P-678', 'E0-P-679', 'E0-P-680', 'E0-P-681', 'E0-P-682', 'E0-P-683', 'E0-P-684', 'E0-P-686',
       'E0-P-688', 'E0-P-694', 'E0-P-695', 'E0-P-696', 'E0-P-697', 'E0-P-698', 'E0-P-699', 'E0-P-700',
-      'E0-P-703', 'E0-P-705', 'E0-P-706', 'E0-P-709', 'E0-P-710', 'E0-P-711'
+      'E0-P-703', 'E0-P-705', 'E0-P-706', 'E0-P-709', 'E0-P-710', 'E0-P-711', 'E0-P-1143', 'E0-P-1144',
+      'E0-P-1145'
     ]) }),
   Object.freeze({ id: 'pnj/l22', parent: 'pnj', label: 'L22 — The Horned Rat Companion',
     profiles: Object.freeze([
@@ -249,7 +255,8 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-775', 'E0-P-776', 'E0-P-777', 'E0-P-778', 'E0-P-779', 'E0-P-780', 'E0-P-781', 'E0-P-782',
       'E0-P-783', 'E0-P-784', 'E0-P-785', 'E0-P-786', 'E0-P-787', 'E0-P-791', 'E0-P-793', 'E0-P-794',
       'E0-P-795', 'E0-P-796', 'E0-P-797', 'E0-P-799', 'E0-P-802', 'E0-P-803', 'E0-P-805', 'E0-P-806',
-      'E0-P-808', 'E0-P-809', 'E0-P-810', 'E0-P-811', 'E0-P-812', 'E0-P-813'
+      'E0-P-808', 'E0-P-809', 'E0-P-810', 'E0-P-811', 'E0-P-812', 'E0-P-813', 'E0-P-1146', 'E0-P-1148',
+      'E0-P-1149', 'E0-P-1150', 'E0-P-1151', 'E0-P-1152'
     ]) }),
   Object.freeze({ id: 'pnj/l24', parent: 'pnj', label: 'L24 — Rough Nights & Hard Days',
     profiles: Object.freeze([
@@ -259,7 +266,8 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-856', 'E0-P-858', 'E0-P-860', 'E0-P-866', 'E0-P-867', 'E0-P-868', 'E0-P-869', 'E0-P-871',
       'E0-P-872', 'E0-P-873', 'E0-P-874', 'E0-P-875', 'E0-P-876', 'E0-P-877', 'E0-P-878', 'E0-P-879',
       'E0-P-880', 'E0-P-881', 'E0-P-882', 'E0-P-883', 'E0-P-884', 'E0-P-885', 'E0-P-886', 'E0-P-887',
-      'E0-P-888', 'E0-P-889', 'E0-P-890', 'E0-P-891', 'E0-P-892', 'E0-P-893'
+      'E0-P-888', 'E0-P-889', 'E0-P-890', 'E0-P-891', 'E0-P-892', 'E0-P-893', 'E0-P-1155', 'E0-P-1156',
+      'E0-P-1157', 'E0-P-1158', 'E0-P-1159', 'E0-P-1160', 'E0-P-1161'
     ]) }),
   Object.freeze({ id: 'pnj/l25', parent: 'pnj', label: 'L25 — Sea of Claws',
     profiles: Object.freeze([
@@ -272,7 +280,7 @@ export const BESTIARY_FOLDERS = Object.freeze([
       'E0-P-940', 'E0-P-941', 'E0-P-942', 'E0-P-943', 'E0-P-944', 'E0-P-945', 'E0-P-946', 'E0-P-947',
       'E0-P-948', 'E0-P-949', 'E0-P-950', 'E0-P-951', 'E0-P-952', 'E0-P-954', 'E0-P-955', 'E0-P-956',
       'E0-P-957', 'E0-P-964', 'E0-P-965', 'E0-P-966', 'E0-P-968', 'E0-P-972', 'E0-P-973', 'E0-P-982',
-      'E0-P-983'
+      'E0-P-983', 'E0-P-1147', 'E0-P-1153', 'E0-P-1154'
     ]) }),
   Object.freeze({ id: 'pnj/l28', parent: 'pnj', label: 'L28 — Le Pouvoir derrière le Trône (Ennemi Intérieur 3)',
     profiles: Object.freeze([

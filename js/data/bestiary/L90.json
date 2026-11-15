@@ -1370,6 +1370,2440 @@
    "notes": [
     "Profil maison (Décision du MJ du 14/11/2026, Q12) : copie de Cultistes de la Main pourpre (7) (L28 p. 28) ; arme : hache (L28 p. 28 : deux cultistes) ; prénom et signe distinctif (« ceinture lie-de-vin ») donnés par le MJ (image de la bibliothèque) ; le livre ne nomme pas les cultistes."
    ]
+  },
+  {
+   "id": "E0-P-1142",
+   "book": "L90",
+   "page": 13,
+   "physicalPage": 13,
+   "kind": "profile",
+   "blockKey": "L90:13:0",
+   "name": "Hendrik Vogel — Clerc humain",
+   "nameFr": "Hendrik Vogel — Clerc humain",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 38,
+    "F": 33,
+    "E": 33,
+    "I": 31,
+    "Ag": 32,
+    "Dex": 32,
+    "Int": 35,
+    "FM": 30,
+    "Soc": 36
+   },
+   "wounds": 12,
+   "armour": {
+    "toughnessBonus": 3
+   },
+   "attacks": [
+    {
+     "name": "Unarmed",
+     "value": 36,
+     "damage": 3
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 35
+    },
+    {
+     "name": "Evaluate",
+     "nameFr": "Évaluation",
+     "value": 39
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 37
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 39
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 39
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 32
+    },
+    {
+     "name": "Language (Reikspiel)",
+     "nameFr": "Langue (Reikspiel)",
+     "value": 65
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 37
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    }
+   ],
+   "talents": [
+    {
+     "name": "Briber"
+    },
+    {
+     "name": "Dealmaker"
+    },
+    {
+     "name": "Iron Jaw"
+    }
+   ],
+   "trappings": [
+    "Lodgings",
+    "Two Sets of Clothes",
+    "Ledger"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-387",
+     "book": "L10",
+     "page": 90,
+     "name": "Otto and Hendrik Vogel — Human Clerk"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Otto et Hendrik Vogel — Clercs humains (L10 p. 90) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1143",
+   "book": "L90",
+   "page": 14,
+   "physicalPage": 14,
+   "kind": "profile",
+   "blockKey": "L90:14:0",
+   "name": "Frère Rolf — Moine humain (Bronze 4)",
+   "nameFr": "Frère Rolf — Moine humain (Bronze 4)",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 29,
+    "F": 30,
+    "E": 40,
+    "I": 27,
+    "Ag": 30,
+    "Dex": 42,
+    "Int": 37,
+    "FM": 35,
+    "Soc": 42
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 35
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 45
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 32
+    },
+    {
+     "name": "Lore (Theology)",
+     "nameFr": "Savoir (Théologie)",
+     "value": 47
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 32
+    },
+    {
+     "name": "Pray",
+     "nameFr": "Prière",
+     "value": 47
+    },
+    {
+     "name": "Research",
+     "nameFr": "Recherche",
+     "value": 32
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Ulricans",
+     "ref": "E0-T-081"
+    }
+   ],
+   "talents": [
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Read/Write"
+    }
+   ],
+   "trappings": [
+    "Robes",
+    "Hand Weapon (Sword)",
+    "Hammer Pendant",
+    "Backpack with Food",
+    "Drink",
+    "Formal Robes",
+    "3/5 each"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-662",
+     "book": "L21",
+     "page": 12,
+     "name": "Brother Martin and Brother Rolf — Human Monks (Nuns) (Brass 4)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Frère Martin et frère Rolf — Moines humains (Nuns) (Bronze 4) (L21 p. 12) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1144",
+   "book": "L90",
+   "page": 15,
+   "physicalPage": 15,
+   "kind": "profile",
+   "blockKey": "L90:15:0",
+   "name": "Esmer — Sergent humain (Argent 1)",
+   "nameFr": "Esmer — Sergent humain (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 40,
+    "F": 34,
+    "E": 42,
+    "I": 40,
+    "Ag": 31,
+    "Dex": 32,
+    "Int": 30,
+    "FM": 47,
+    "Soc": 27
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 2,
+    "detail": "Mail shirt"
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Halberd",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 41
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 48
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 52
+    },
+    {
+     "name": "Charm (Sebastian only)",
+     "nameFr": "Charme (Sebastian only)",
+     "frUnverified": true,
+     "value": 41
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 41
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 52
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 40
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 37
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 32
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 39
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 43
+    },
+    {
+     "name": "Language (Battle Tongue)",
+     "nameFr": "Langue (Bataille)",
+     "value": 36
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 32
+    },
+    {
+     "name": "Lore (Ostland)",
+     "nameFr": "Savoir (Ostland)",
+     "frUnverified": true,
+     "value": 33
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 60
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 40
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 43
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 58
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 37
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Etiquette (Soldiers)"
+    }
+   ],
+   "trappings": [
+    "Sword",
+    "Halberd",
+    "Bow",
+    "Uniform",
+    "Grey surcoat",
+    "Hat with sergeant badge"
+   ],
+   "starred": [
+    "Soc"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-686",
+     "book": "L21",
+     "page": 42,
+     "name": "Sebastian, Esmer, Jozef — Human Sergeants (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Sebastian, Esmer, Jozef — Sergents humains (Argent 1) (L21 p. 42) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1145",
+   "book": "L90",
+   "page": 16,
+   "physicalPage": 16,
+   "kind": "profile",
+   "blockKey": "L90:16:0",
+   "name": "Jozef — Sergent humain (Argent 1)",
+   "nameFr": "Jozef — Sergent humain (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 40,
+    "CT": 40,
+    "F": 34,
+    "E": 42,
+    "I": 40,
+    "Ag": 31,
+    "Dex": 32,
+    "Int": 30,
+    "FM": 47,
+    "Soc": 27
+   },
+   "wounds": 15,
+   "armour": {
+    "ap": 2,
+    "detail": "Mail shirt"
+   },
+   "attacks": [
+    {
+     "name": "Bow",
+     "damage": 6,
+     "trait": "Ranged",
+     "ranged": true
+    },
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Halberd",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 41
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 48
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 52
+    },
+    {
+     "name": "Charm (Sebastian only)",
+     "nameFr": "Charme (Sebastian only)",
+     "frUnverified": true,
+     "value": 41
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 41
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 52
+    },
+    {
+     "name": "Gamble",
+     "nameFr": "Pari",
+     "value": 40
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 37
+    },
+    {
+     "name": "Haggle",
+     "nameFr": "Marchandage",
+     "value": 32
+    },
+    {
+     "name": "Heal",
+     "nameFr": "Guérison",
+     "value": 39
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 43
+    },
+    {
+     "name": "Language (Battle Tongue)",
+     "nameFr": "Langue (Bataille)",
+     "value": 36
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 32
+    },
+    {
+     "name": "Lore (Ostland)",
+     "nameFr": "Savoir (Ostland)",
+     "frUnverified": true,
+     "value": 33
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 60
+    },
+    {
+     "name": "Melee (Polearm)",
+     "nameFr": "Corps à corps (Armes d’hast)",
+     "value": 60
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 40
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 43
+    },
+    {
+     "name": "Ranged (Bow)",
+     "nameFr": "Projectiles (Arc)",
+     "value": 58
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 37
+    }
+   ],
+   "talents": [
+    {
+     "name": "Combat Aware"
+    },
+    {
+     "name": "War Leader"
+    },
+    {
+     "name": "Etiquette (Soldiers)"
+    }
+   ],
+   "trappings": [
+    "Sword",
+    "Halberd",
+    "Bow",
+    "Uniform",
+    "Grey surcoat",
+    "Hat with sergeant badge"
+   ],
+   "starred": [
+    "Soc"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-686",
+     "book": "L21",
+     "page": 42,
+     "name": "Sebastian, Esmer, Jozef — Human Sergeants (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Sebastian, Esmer, Jozef — Sergents humains (Argent 1) (L21 p. 42) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1146",
+   "book": "L90",
+   "page": 17,
+   "physicalPage": 17,
+   "kind": "profile",
+   "blockKey": "L90:17:0",
+   "name": "Les Jumeaux — Jumeau 2",
+   "nameFr": "Les Jumeaux — Jumeau 2",
+   "stats": {
+    "M": 3,
+    "CC": 40,
+    "CT": 25,
+    "F": 10,
+    "E": 30,
+    "I": 40,
+    "Ag": 35,
+    "Dex": 25,
+    "Int": 18,
+    "FM": 30,
+    "Soc": 21
+   },
+   "wounds": 6,
+   "size": "little",
+   "attacks": [
+    {
+     "name": "Bite",
+     "damage": 2,
+     "trait": "Bite"
+    },
+    {
+     "name": "Claw",
+     "damage": 3,
+     "trait": "Creature Weapons"
+    },
+    {
+     "name": "Weapon",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Bite",
+     "rating": "+2",
+     "ref": "E0-T-006"
+    },
+    {
+     "name": "Creature Weapons",
+     "rating": "+3",
+     "param": "Claw",
+     "ref": "E0-T-288"
+    },
+    {
+     "name": "Frenzy",
+     "ref": "E0-T-024"
+    },
+    {
+     "name": "Fury",
+     "ref": "E0-T-078"
+    },
+    {
+     "name": "Hardy",
+     "ref": "E0-T-079"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Little",
+     "ref": "E0-T-045"
+    }
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-806",
+     "book": "L23",
+     "page": 105,
+     "name": "The Twins"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Les Jumeaux (L23 p. 105) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1147",
+   "book": "L90",
+   "page": 18,
+   "physicalPage": 18,
+   "kind": "profile",
+   "blockKey": "L90:18:0",
+   "name": "Hannes — Pilleur de tombes humain (Bronze 2)",
+   "nameFr": "Hannes — Pilleur de tombes humain (Bronze 2)",
+   "stats": {
+    "M": 4,
+    "CC": 37,
+    "CT": 34,
+    "F": 36,
+    "E": 35,
+    "I": 42,
+    "Ag": 32,
+    "Dex": 40,
+    "Int": 28,
+    "FM": 33,
+    "Soc": 29
+   },
+   "wounds": 12,
+   "armour": {
+    "detail": "Leather Jack 1"
+   },
+   "attacks": [
+    {
+     "name": "Crowbar and Shovel",
+     "damage": 4,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 42
+    },
+    {
+     "name": "Cool",
+     "nameFr": "Calme",
+     "value": 37
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 40
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 40
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 33
+    },
+    {
+     "name": "Intuition",
+     "nameFr": "Intuition",
+     "value": 50
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 50
+    },
+    {
+     "name": "Stealth (Rural)",
+     "nameFr": "Discrétion (Rurale)",
+     "value": 41
+    }
+   ],
+   "talents": [
+    {
+     "name": "Alley Cat"
+    },
+    {
+     "name": "Doomed"
+    },
+    {
+     "name": "Flee!"
+    },
+    {
+     "name": "Night Vision"
+    }
+   ],
+   "trappings": [
+    "Crowbar",
+    "Hooded Cloak",
+    "Tarpaulin",
+    "Hammer and 2d10 Coffin Nails",
+    "Dead Body"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-932",
+     "book": "L26",
+     "page": 40,
+     "name": "Hans and Hannes — Human Grave Robbers (Brass 2)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Hans et Hannes — Pilleurs de tombes humains (Bronze 2) (L26 p. 40) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1148",
+   "book": "L90",
+   "page": 19,
+   "physicalPage": 19,
+   "kind": "profile",
+   "blockKey": "L90:19:0",
+   "name": "Little Anders — Cocher (Argent 1)",
+   "nameFr": "Little Anders — Cocher (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 35,
+    "F": 35,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 35,
+    "Soc": 30
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Whip",
+     "damage": 5,
+     "trait": "Ranged",
+     "rangeYards": 6,
+     "ranged": true
+    },
+    {
+     "name": "Daggers",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 40
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 40
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 35
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 35
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 40
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 40
+    }
+   ],
+   "talents": [
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Stone Soup"
+    }
+   ],
+   "trappings": [
+    "Clothes",
+    "Daggers",
+    "Whip",
+    "1d10 silver shillings"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-813",
+     "book": "L23",
+     "page": 112,
+     "name": "Big Anders, Little Anders, Bertoldo, Ivan, Magda, and Mikhail — Coachmen (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Big Anders, Little Anders, Bertoldo, Ivan, Magda et Mikhail — Cochers (Argent 1) (L23 p. 112) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1149",
+   "book": "L90",
+   "page": 20,
+   "physicalPage": 20,
+   "kind": "profile",
+   "blockKey": "L90:20:0",
+   "name": "Bertoldo — Cocher (Argent 1)",
+   "nameFr": "Bertoldo — Cocher (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 35,
+    "F": 35,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 35,
+    "Soc": 30
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Whip",
+     "damage": 5,
+     "trait": "Ranged",
+     "rangeYards": 6,
+     "ranged": true
+    },
+    {
+     "name": "Daggers",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 40
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 40
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 35
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 35
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 40
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 40
+    }
+   ],
+   "talents": [
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Stone Soup"
+    }
+   ],
+   "trappings": [
+    "Clothes",
+    "Daggers",
+    "Whip",
+    "1d10 silver shillings"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-813",
+     "book": "L23",
+     "page": 112,
+     "name": "Big Anders, Little Anders, Bertoldo, Ivan, Magda, and Mikhail — Coachmen (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Big Anders, Little Anders, Bertoldo, Ivan, Magda et Mikhail — Cochers (Argent 1) (L23 p. 112) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1150",
+   "book": "L90",
+   "page": 21,
+   "physicalPage": 21,
+   "kind": "profile",
+   "blockKey": "L90:21:0",
+   "name": "Ivan — Cocher (Argent 1)",
+   "nameFr": "Ivan — Cocher (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 35,
+    "F": 35,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 35,
+    "Soc": 30
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Whip",
+     "damage": 5,
+     "trait": "Ranged",
+     "rangeYards": 6,
+     "ranged": true
+    },
+    {
+     "name": "Daggers",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 40
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 40
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 35
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 35
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 40
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 40
+    }
+   ],
+   "talents": [
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Stone Soup"
+    }
+   ],
+   "trappings": [
+    "Clothes",
+    "Daggers",
+    "Whip",
+    "1d10 silver shillings"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-813",
+     "book": "L23",
+     "page": 112,
+     "name": "Big Anders, Little Anders, Bertoldo, Ivan, Magda, and Mikhail — Coachmen (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Big Anders, Little Anders, Bertoldo, Ivan, Magda et Mikhail — Cochers (Argent 1) (L23 p. 112) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1151",
+   "book": "L90",
+   "page": 22,
+   "physicalPage": 22,
+   "kind": "profile",
+   "blockKey": "L90:22:0",
+   "name": "Magda — Cocher (Argent 1)",
+   "nameFr": "Magda — Cocher (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 35,
+    "F": 35,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 35,
+    "Soc": 30
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Whip",
+     "damage": 5,
+     "trait": "Ranged",
+     "rangeYards": 6,
+     "ranged": true
+    },
+    {
+     "name": "Daggers",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 40
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 40
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 35
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 35
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 40
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 40
+    }
+   ],
+   "talents": [
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Stone Soup"
+    }
+   ],
+   "trappings": [
+    "Clothes",
+    "Daggers",
+    "Whip",
+    "1d10 silver shillings"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-813",
+     "book": "L23",
+     "page": 112,
+     "name": "Big Anders, Little Anders, Bertoldo, Ivan, Magda, and Mikhail — Coachmen (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Big Anders, Little Anders, Bertoldo, Ivan, Magda et Mikhail — Cochers (Argent 1) (L23 p. 112) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1152",
+   "book": "L90",
+   "page": 23,
+   "physicalPage": 23,
+   "kind": "profile",
+   "blockKey": "L90:23:0",
+   "name": "Mikhail — Cocher (Argent 1)",
+   "nameFr": "Mikhail — Cocher (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 30,
+    "CT": 35,
+    "F": 35,
+    "E": 40,
+    "I": 30,
+    "Ag": 35,
+    "Dex": 30,
+    "Int": 30,
+    "FM": 35,
+    "Soc": 30
+   },
+   "wounds": 14,
+   "attacks": [
+    {
+     "name": "Whip",
+     "damage": 5,
+     "trait": "Ranged",
+     "rangeYards": 6,
+     "ranged": true
+    },
+    {
+     "name": "Daggers",
+     "damage": 6,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Animal Care",
+     "nameFr": "Soin aux animaux",
+     "value": 40
+    },
+    {
+     "name": "Athletics",
+     "nameFr": "Athlétisme",
+     "value": 40
+    },
+    {
+     "name": "Charm Animal",
+     "nameFr": "Emprise sur les animaux",
+     "value": 40
+    },
+    {
+     "name": "Climb",
+     "nameFr": "Escalade",
+     "value": 40
+    },
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 45
+    },
+    {
+     "name": "Drive",
+     "nameFr": "Conduite d’attelage",
+     "value": 35
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 50
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 35
+    },
+    {
+     "name": "Lore (Local)",
+     "nameFr": "Savoir (Local)",
+     "value": 35
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 35
+    },
+    {
+     "name": "Outdoor Survival",
+     "nameFr": "Survie en extérieur",
+     "value": 35
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 35
+    },
+    {
+     "name": "Ranged (Entangling)",
+     "nameFr": "Projectiles (Entraves)",
+     "value": 40
+    },
+    {
+     "name": "Ride (Horse)",
+     "nameFr": "Chevaucher (Cheval)",
+     "value": 40
+    }
+   ],
+   "talents": [
+    {
+     "name": "Seasoned Traveller"
+    },
+    {
+     "name": "Stone Soup"
+    }
+   ],
+   "trappings": [
+    "Clothes",
+    "Daggers",
+    "Whip",
+    "1d10 silver shillings"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-813",
+     "book": "L23",
+     "page": 112,
+     "name": "Big Anders, Little Anders, Bertoldo, Ivan, Magda, and Mikhail — Coachmen (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Big Anders, Little Anders, Bertoldo, Ivan, Magda et Mikhail — Cochers (Argent 1) (L23 p. 112) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1153",
+   "book": "L90",
+   "page": 24,
+   "physicalPage": 24,
+   "kind": "profile",
+   "blockKey": "L90:24:0",
+   "name": "Karl Dampfer — Matelot fluvial (Argent 1)",
+   "nameFr": "Karl Dampfer — Matelot fluvial (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": 35,
+    "F": 35,
+    "E": 31,
+    "I": 34,
+    "Ag": 39,
+    "Dex": 33,
+    "Int": 27,
+    "FM": 25,
+    "Soc": 33
+   },
+   "wounds": 11,
+   "armour": {
+    "ap": 1,
+    "detail": "Leather Jack"
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Crossbow",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 36
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 44
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 34
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 36
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 44
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 42
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 40
+    }
+   ],
+   "talents": [
+    {
+     "name": "Strong Back"
+    }
+   ],
+   "trappings": [
+    "Crossbow with 12 bolts",
+    "Hand Weapon (Sword)",
+    "Leather Jack",
+    "2d10 Silver Shillings Each"
+   ],
+   "starred": [
+    "wounds"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-925",
+     "book": "L26",
+     "page": 21,
+     "name": "Reiner and Karl Dampfer and Hans Vollrat — Human Boat-Hands (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Reiner et Karl Dampfer et Hans Vollrat — Matelots fluviaux (Argent 1) (L26 p. 21) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1154",
+   "book": "L90",
+   "page": 25,
+   "physicalPage": 25,
+   "kind": "profile",
+   "blockKey": "L90:25:0",
+   "name": "Hans Vollrat — Matelot fluvial (Argent 1)",
+   "nameFr": "Hans Vollrat — Matelot fluvial (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 33,
+    "CT": 35,
+    "F": 35,
+    "E": 31,
+    "I": 34,
+    "Ag": 39,
+    "Dex": 33,
+    "Int": 27,
+    "FM": 25,
+    "Soc": 33
+   },
+   "wounds": 11,
+   "armour": {
+    "ap": 1,
+    "detail": "Leather Jack"
+   },
+   "attacks": [
+    {
+     "name": "Sword",
+     "damage": 7,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Crossbow",
+     "damage": 9,
+     "trait": "Ranged",
+     "ranged": true
+    }
+   ],
+   "skills": [
+    {
+     "name": "Consume Alcohol",
+     "nameFr": "Résistance à l’alcool",
+     "value": 36
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 44
+    },
+    {
+     "name": "Endurance",
+     "nameFr": "Résistance",
+     "value": 34
+    },
+    {
+     "name": "Gossip",
+     "nameFr": "Ragot",
+     "value": 36
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 36
+    },
+    {
+     "name": "Row",
+     "nameFr": "Ramer",
+     "value": 44
+    },
+    {
+     "name": "Sail",
+     "nameFr": "Voile",
+     "value": 42
+    },
+    {
+     "name": "Swim",
+     "nameFr": "Natation",
+     "value": 40
+    }
+   ],
+   "talents": [
+    {
+     "name": "Strong Back"
+    }
+   ],
+   "trappings": [
+    "Crossbow with 12 bolts",
+    "Hand Weapon (Sword)",
+    "Leather Jack",
+    "2d10 Silver Shillings Each"
+   ],
+   "starred": [
+    "wounds"
+   ],
+   "keywords": [
+    "humain"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-925",
+     "book": "L26",
+     "page": 21,
+     "name": "Reiner and Karl Dampfer and Hans Vollrat — Human Boat-Hands (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Reiner et Karl Dampfer et Hans Vollrat — Matelots fluviaux (Argent 1) (L26 p. 21) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1155",
+   "book": "L90",
+   "page": 26,
+   "physicalPage": 26,
+   "kind": "profile",
+   "blockKey": "L90:26:0",
+   "name": "Reiner — Espion (Argent 3)",
+   "nameFr": "Reiner — Espion (Argent 3)",
+   "stats": {
+    "M": 4,
+    "CC": 42,
+    "CT": 36,
+    "F": 32,
+    "E": 29,
+    "I": 34,
+    "Ag": 41,
+    "Dex": 33,
+    "Int": 29,
+    "FM": 39,
+    "Soc": 37
+   },
+   "wounds": 10,
+   "attacks": [
+    {
+     "name": "Throwing Knife",
+     "damage": 5,
+     "trait": "Ranged",
+     "rangeYards": 6,
+     "ranged": true
+    },
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Entertain (Act)",
+     "nameFr": "Divertissement (Act)",
+     "frUnverified": true,
+     "value": 48
+    },
+    {
+     "name": "Melee (Basic)",
+     "nameFr": "Corps à corps (Base)",
+     "value": 52
+    },
+    {
+     "name": "Sleight of Hand",
+     "nameFr": "Escamotage",
+     "value": 46
+    },
+    {
+     "name": "Stealth (Urban)",
+     "nameFr": "Discrétion (Urbaine)",
+     "value": 51
+    }
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-852",
+     "book": "L24",
+     "page": 49,
+     "name": "Brocks and Reiner — Spies (Silver 3)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Brocks et Reiner — Espions (Argent 3) (L24 p. 49) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1156",
+   "book": "L90",
+   "page": 27,
+   "physicalPage": 27,
+   "kind": "profile",
+   "blockKey": "L90:27:0",
+   "name": "Bart — Smuggler (Bronze 3)",
+   "nameFr": "Bart — Smuggler (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 31,
+    "F": 43,
+    "E": 45,
+    "I": 44,
+    "Ag": 38,
+    "Dex": 36,
+    "Int": 28,
+    "FM": 45,
+    "Soc": 28
+   },
+   "wounds": 16,
+   "attacks": [
+    {
+     "name": "Bone Clubs",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "trappings": [
+    "Face Paint",
+    "Morrian Vestments"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-820",
+     "book": "L24",
+     "page": 18,
+     "name": "Gunni, Bart, and Hans-Frederick — Smugglers (Brass 3)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Gunni, Bart, et Hans-Frederick — Smugglers (Bronze 3) (L24 p. 18) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1157",
+   "book": "L90",
+   "page": 28,
+   "physicalPage": 28,
+   "kind": "profile",
+   "blockKey": "L90:28:0",
+   "name": "Hans-Frederick — Smuggler (Bronze 3)",
+   "nameFr": "Hans-Frederick — Smuggler (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 31,
+    "F": 43,
+    "E": 45,
+    "I": 44,
+    "Ag": 38,
+    "Dex": 36,
+    "Int": 28,
+    "FM": 45,
+    "Soc": 28
+   },
+   "wounds": 16,
+   "attacks": [
+    {
+     "name": "Bone Clubs",
+     "damage": 8,
+     "trait": "Weapon"
+    }
+   ],
+   "trappings": [
+    "Face Paint",
+    "Morrian Vestments"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-820",
+     "book": "L24",
+     "page": 18,
+     "name": "Gunni, Bart, and Hans-Frederick — Smugglers (Brass 3)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Gunni, Bart, et Hans-Frederick — Smugglers (Bronze 3) (L24 p. 18) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1158",
+   "book": "L90",
+   "page": 29,
+   "physicalPage": 29,
+   "kind": "profile",
+   "blockKey": "L90:29:0",
+   "name": "Larz — Voyou (Bronze 3)",
+   "nameFr": "Larz — Voyou (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 33,
+    "F": 53,
+    "E": 43,
+    "I": 42,
+    "Ag": 41,
+    "Dex": 29,
+    "Int": 27,
+    "FM": 43,
+    "Soc": 28
+   },
+   "wounds": 17,
+   "armour": {
+    "ap": 1,
+    "detail": "Leathers"
+   },
+   "attacks": [
+    {
+     "name": "Club",
+     "damage": 9,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Knuckledusters",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 56
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Nobles",
+     "ref": "E0-T-081"
+    }
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-825",
+     "book": "L24",
+     "page": 20,
+     "name": "Mho, Larz, and 'Curls' — Thugs (Brass 3)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Mho, Larz, et 'Curls' — Voyous (Bronze 3) (L24 p. 20) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1159",
+   "book": "L90",
+   "page": 30,
+   "physicalPage": 30,
+   "kind": "profile",
+   "blockKey": "L90:30:0",
+   "name": "'Curls' — Voyou (Bronze 3)",
+   "nameFr": "'Curls' — Voyou (Bronze 3)",
+   "stats": {
+    "M": 4,
+    "CC": 50,
+    "CT": 33,
+    "F": 53,
+    "E": 43,
+    "I": 42,
+    "Ag": 41,
+    "Dex": 29,
+    "Int": 27,
+    "FM": 43,
+    "Soc": 28
+   },
+   "wounds": 17,
+   "armour": {
+    "ap": 1,
+    "detail": "Leathers"
+   },
+   "attacks": [
+    {
+     "name": "Club",
+     "damage": 9,
+     "trait": "Weapon"
+    },
+    {
+     "name": "Knuckledusters",
+     "damage": 7,
+     "trait": "Weapon"
+    }
+   ],
+   "skills": [
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 56
+    },
+    {
+     "name": "Melee (Brawling)",
+     "nameFr": "Corps à corps (Bagarre)",
+     "value": 60
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Nobles",
+     "ref": "E0-T-081"
+    }
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-825",
+     "book": "L24",
+     "page": 20,
+     "name": "Mho, Larz, and 'Curls' — Thugs (Brass 3)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Mho, Larz, et 'Curls' — Voyous (Bronze 3) (L24 p. 20) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1160",
+   "book": "L90",
+   "page": 31,
+   "physicalPage": 31,
+   "kind": "profile",
+   "blockKey": "L90:31:0",
+   "name": "Elphoise — Slaanesh cultiste (Argent 1)",
+   "nameFr": "Elphoise — Slaanesh cultiste (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 31,
+    "F": 39,
+    "E": 51,
+    "I": 25,
+    "Ag": 32,
+    "Dex": 43,
+    "Int": 45,
+    "FM": 41,
+    "Soc": 43
+   },
+   "wounds": 17,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Warriors",
+     "ref": "E0-T-081"
+    }
+   ],
+   "keywords": [
+    "slaanesh",
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-827",
+     "book": "L24",
+     "page": 21,
+     "name": "Allrella, Elphoise, and Helga — Slaanesh Cultists (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Allrella, Elphoise, et Helga — Slaanesh cultistes (Argent 1) (L24 p. 21) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1161",
+   "book": "L90",
+   "page": 32,
+   "physicalPage": 32,
+   "kind": "profile",
+   "blockKey": "L90:32:0",
+   "name": "Helga — Slaanesh cultiste (Argent 1)",
+   "nameFr": "Helga — Slaanesh cultiste (Argent 1)",
+   "stats": {
+    "M": 4,
+    "CC": 34,
+    "CT": 31,
+    "F": 39,
+    "E": 51,
+    "I": 25,
+    "Ag": 32,
+    "Dex": 43,
+    "Int": 45,
+    "FM": 41,
+    "Soc": 43
+   },
+   "wounds": 17,
+   "attacks": [
+    {
+     "name": "Dagger",
+     "damage": 5,
+     "trait": "Weapon"
+    }
+   ],
+   "traits": [
+    {
+     "name": "Prejudice",
+     "param": "Warriors",
+     "ref": "E0-T-081"
+    }
+   ],
+   "keywords": [
+    "slaanesh",
+    "cultiste"
+   ],
+   "nameFrSource": "proposition",
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-827",
+     "book": "L24",
+     "page": 21,
+     "name": "Allrella, Elphoise, and Helga — Slaanesh Cultists (Silver 1)"
+    },
+    "nameByMJ": "pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ"
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Allrella, Elphoise, et Helga — Slaanesh cultistes (Argent 1) (L24 p. 21) ; pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ."
+   ]
+  },
+  {
+   "id": "E0-P-1162",
+   "book": "L90",
+   "page": 33,
+   "physicalPage": 33,
+   "kind": "profile",
+   "blockKey": "L90:33:0",
+   "name": "Roi des Tombes de Khemri",
+   "nameFr": "Roi des Tombes de Khemri",
+   "stats": {
+    "M": 4,
+    "CC": 66,
+    "CT": 45,
+    "F": 55,
+    "E": 58,
+    "I": 39,
+    "Ag": 39,
+    "Dex": 39,
+    "Int": 67,
+    "FM": 71,
+    "Soc": 64
+   },
+   "wounds": 22,
+   "size": "average",
+   "armour": {
+    "toughnessBonus": 5,
+    "detail": "tête 3, bras 0, corps 3, jambes 0"
+   },
+   "attacks": [
+    {
+     "name": "Hand Weapon",
+     "value": 66,
+     "damage": 9
+    }
+   ],
+   "skills": [
+    {
+     "name": "Charm",
+     "nameFr": "Charme",
+     "value": 64
+    },
+    {
+     "name": "Leadership",
+     "nameFr": "Commandement",
+     "value": 84
+    },
+    {
+     "name": "Lore (astronomie)",
+     "nameFr": "Savoir (astronomie)",
+     "value": 67
+    },
+    {
+     "name": "Lore (droit)",
+     "nameFr": "Savoir (droit)",
+     "value": 67
+    },
+    {
+     "name": "Lore (généalogie/héraldique)",
+     "nameFr": "Savoir (généalogie/héraldique)",
+     "value": 77
+    },
+    {
+     "name": "Lore (histoire)",
+     "nameFr": "Savoir (histoire)",
+     "value": 67
+    },
+    {
+     "name": "Lore (nécromancie)",
+     "nameFr": "Savoir (nécromancie)",
+     "value": 77
+    },
+    {
+     "name": "Lore (stratégie/tactique)",
+     "nameFr": "Savoir (stratégie/tactique)",
+     "value": 87
+    },
+    {
+     "name": "Lore (théologie)",
+     "nameFr": "Savoir (théologie)",
+     "value": 77
+    },
+    {
+     "name": "Lore (Nehekhara)",
+     "nameFr": "Savoir (Nehekhara)",
+     "value": 67
+    },
+    {
+     "name": "Lore (Principautés Frontalières)",
+     "nameFr": "Savoir (Principautés Frontalières)",
+     "value": 67
+    },
+    {
+     "name": "Dodge",
+     "nameFr": "Esquive",
+     "value": 39
+    },
+    {
+     "name": "Channelling",
+     "nameFr": "Focalisation",
+     "value": 71
+    },
+    {
+     "name": "Perception",
+     "nameFr": "Perception",
+     "value": 59
+    },
+    {
+     "name": "Intimidate",
+     "nameFr": "Intimidation",
+     "value": 65
+    },
+    {
+     "name": "Language (haut nehekharéen)",
+     "nameFr": "Langue (haut nehekharéen)",
+     "value": 67
+    },
+    {
+     "name": "Language (classique)",
+     "nameFr": "Langue (classique)",
+     "value": 67
+    },
+    {
+     "name": "Language (nehekharéen)",
+     "nameFr": "Langue (nehekharéen)",
+     "value": 67
+    },
+    {
+     "name": "Language (reikspiel)",
+     "nameFr": "Langue (reikspiel)",
+     "value": 67
+    }
+   ],
+   "traits": [
+    {
+     "name": "Fear",
+     "ref": "E0-T-022"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Magie mineure (dissipation, silence)",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Undead",
+     "ref": "E0-T-061"
+    },
+    {
+     "name": "Spellcaster",
+     "param": "Nécromancie",
+     "ref": "E0-T-048"
+    },
+    {
+     "name": "Terror",
+     "ref": "E0-T-057"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
+    },
+    {
+     "name": "Size",
+     "param": "Average",
+     "ref": "E0-T-045"
+    }
+   ],
+   "optionalTraits": [],
+   "talents": [
+    {
+     "name": "Ambidextrous"
+    },
+    {
+     "name": "Savvy"
+    },
+    {
+     "name": "Fast Hands"
+    },
+    {
+     "name": "Iron Will"
+    },
+    {
+     "name": "Magical Sense"
+    }
+   ],
+   "specialRules": [
+    "Magie commune (occulte)",
+    "Magie noire",
+    "Maîtrise (fléaux)",
+    "Méditation",
+    "Projectile puissant",
+    "Sain d'esprit",
+    "Aura d'autorité",
+    "Domination",
+    "Malédiction",
+    "Nécromancie supérieure",
+    "Pouvoirs du Roi des Tombes",
+    "Armes imprimées : lames de l'Honorable Trépas, crosse et fléau (équivalents d'armes à une main de qualité exceptionnelle), rendues par une seule arme à une main (décision du MJ du 14/11)"
+   ],
+   "spells": {
+    "Domaine de Haute Magie": [
+     "Drain de Magie"
+    ],
+    "Uglu - Gris - Domaine de l'Ombre": [
+     "Silence"
+    ],
+    "Domaine de la Nécromancie": [
+     "Crâne hurlant",
+     "L’appel de Vanhel",
+     "Réanimation",
+     "Relever les morts"
+    ]
+   },
+   "fatePoints": 1,
+   "keywords": [
+    "mort-vivant"
+   ],
+   "nameFrSource": "proposition",
+   "sourceEdition": "V2",
+   "conversion": {
+    "size": "average",
+    "animal": false
+   },
+   "houseProfile": {
+    "decision": "Décision du MJ du 15/11/2026",
+    "question": "T18",
+    "basedOn": {
+     "id": "E0-P-1124",
+     "book": "L30",
+     "page": 90,
+     "name": "Karitamen, le Scarabée de la Mort"
+    }
+   },
+   "notes": [
+    "Profil maison (Décision du MJ du 15/11/2026, T18) : copie de Karitamen, le Scarabée de la Mort (L30 p. 90)."
+   ]
   }
  ]
 }

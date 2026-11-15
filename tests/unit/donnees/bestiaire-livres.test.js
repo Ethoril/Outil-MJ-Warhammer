@@ -900,7 +900,7 @@ test('L90 : profils maison, copies exactes d’un profil imprimé (L06, L28), se
   assert.deepEqual(book.profiles.slice(0, 5).map(profile => profile.nameFr), ['Gobelin archer', 'Ogre crache-plomb', 'Orc kostaud', 'Capitaine vampire pirate', 'Zombie flibustier']);
   for (const profile of book.profiles) {
     const source = printed.find(item => item.id === profile.houseProfile.basedOn.id);
-    if (profile.houseProfile.question === 'Q12') continue;
+    if (['Q12', 'T18'].includes(profile.houseProfile.question)) continue;
     assert.match(profile.houseProfile.decision, /^Décision du MJ du 13\/11\/2026$/);
     for (const field of ['stats', 'wounds', 'skills', 'traits', 'optionalTraits', 'armour', 'keywords']) assert.deepEqual(profile[field], source[field], `${profile.id} ${field}`);
   }
@@ -930,6 +930,22 @@ test('Q12 : sept cultistes, caractéristiques du bloc imprimé L28 p. 28, répar
   assert.equal(arms.filter(arm => arm === 'Arbalète+Gourdin ou Hache').length, 4);
   assert.equal(arms.filter(arm => arm === 'Hache').length, 2);
   assert.equal(arms.filter(arm => arm === 'Filet+Massue').length, 1);
+});
+test('T18 (décision du MJ du 15/11) : un profil par personne pour les profils de groupe, et le Roi des Tombes de Khemri copie de Karitamen', () => {
+  const all = readdirSync(new URL('../../../js/data/bestiary/', import.meta.url)).filter(name => /^L\d+\.json$/.test(name) && name !== 'L90.json')
+    .flatMap(name => read(`js/data/bestiary/${name}`).profiles);
+  const people = book.profiles.filter(profile => profile.houseProfile.question === 'T18');
+  assert.equal(people.length, 21);
+  for (const profile of people) {
+    const source = all.find(item => item.id === profile.houseProfile.basedOn.id);
+    assert.equal(profile.houseProfile.decision, 'Décision du MJ du 15/11/2026');
+    for (const field of ['stats', 'wounds', 'skills', 'traits', 'attacks', 'armour', 'keywords']) assert.deepEqual(profile[field], source[field], `${profile.id} ${field}`);
+  }
+  const king = people.find(profile => profile.nameFr === 'Roi des Tombes de Khemri');
+  assert.equal(king.houseProfile.basedOn.id, 'E0-P-1124');
+  assert.deepEqual(king.spells, all.find(item => item.id === 'E0-P-1124').spells);
+  assert.equal(people.filter(profile => profile !== king).length, 20);
+  assert.ok(people.every(profile => profile === king || profile.houseProfile.nameByMJ));
 });
 test('L28, L29, L30 : écarts de fidélité corrigés (Traits collés, malus de groupe, tables de décisions du MJ du 14/11)', () => {
   const byName = (book, pattern) => read(`js/data/bestiary/${book}.json`).profiles.find(profile => pattern.test(profile.nameFr));

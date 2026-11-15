@@ -10,12 +10,14 @@
  */
 import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { validateBestiaryRecord } from '../js/core/bestiary-profiles.js';
+import { slug } from './build-token-images.mjs';
 
 const BOOK = 'L90';
 const TITLE = 'Maison (MJ) — profils de décision du MJ';
 const ADDED_ON = '2026-11-13';
 const DECISION = 'Décision du MJ du 13/11/2026';
 const DECISION_Q12 = 'Décision du MJ du 14/11/2026';
+const DECISION_T18 = 'Décision du MJ du 15/11/2026';
 const SOURCE_NOTE = 'L90 : profil maison, copie d’un profil imprimé du bestiaire avec armes adaptées (décision du MJ du 13/11/2026), hors corpus.';
 
 // Profils copiables : tous les livres imprimés du bestiaire (L06, L28…), jamais L90 lui-même.
@@ -24,6 +26,18 @@ const printed = readdirSync('js/data/bestiary').filter(file => /^L\d+\.json$/.te
 const base = id => structuredClone(printed.find(profile => profile.id === id));
 
 /** Fiches maison : profil copié, noms, adaptation des armes (source de chaque arme), question d'origine. */
+// T18 (décision du MJ du 15/11/2026, appariement final des images) : un profil par personne pour les profils de groupe imprimés ; mêmes
+// caractéristiques, compétences, Traits et armes que le profil de groupe, nom = celui que le CSV des images donne à la personne.
+const INDIVIDUALS = [
+  ['Hendrik Vogel — Clerc humain', 'E0-P-387'], ['Frère Rolf — Moine humain (Bronze 4)', 'E0-P-662'],
+  ['Esmer — Sergent humain (Argent 1)', 'E0-P-686'], ['Jozef — Sergent humain (Argent 1)', 'E0-P-686'], ['Les Jumeaux — Jumeau 2', 'E0-P-806'],
+  ['Hannes — Pilleur de tombes humain (Bronze 2)', 'E0-P-932'], ['Little Anders — Cocher (Argent 1)', 'E0-P-813'], ['Bertoldo — Cocher (Argent 1)', 'E0-P-813'],
+  ['Ivan — Cocher (Argent 1)', 'E0-P-813'], ['Magda — Cocher (Argent 1)', 'E0-P-813'], ['Mikhail — Cocher (Argent 1)', 'E0-P-813'],
+  ['Karl Dampfer — Matelot fluvial (Argent 1)', 'E0-P-925'], ['Hans Vollrat — Matelot fluvial (Argent 1)', 'E0-P-925'], ['Reiner — Espion (Argent 3)', 'E0-P-852'],
+  ['Bart — Smuggler (Bronze 3)', 'E0-P-820'], ['Hans-Frederick — Smuggler (Bronze 3)', 'E0-P-820'], ['Larz — Voyou (Bronze 3)', 'E0-P-825'],
+  ["'Curls' — Voyou (Bronze 3)", 'E0-P-825'], ['Elphoise — Slaanesh cultiste (Argent 1)', 'E0-P-827'], ['Helga — Slaanesh cultiste (Argent 1)', 'E0-P-827']
+];
+
 const HOUSE = [
   {
     key: 'goblin-archer', name: 'Goblin Archer', nameFr: 'Gobelin archer', from: 'E0-P-089', question: 'Q2',
@@ -68,7 +82,14 @@ const HOUSE = [
       }[arm];
       record.trappings = ['vêtement violet', 'tatouage de main violette caché sous les vêtements', ...{ crossbow: ['arbalète', 'gourdin ou hache'], axe: ['hache'], net: ['massue', 'filet barbelé'] }[arm], `${sign} (signe donné par le MJ)`];
     }
-  }))
+  })),
+  ...INDIVIDUALS.map(([name, from]) => ({
+    key: `individual-${name}`, name, nameFr: name, from, question: 'T18', decision: DECISION_T18, weapon: null,
+    nameByMJ: 'pion individuel d’une personne du profil de groupe imprimé (un pion = un personnage), nom donné par la bibliothèque d’images du MJ',
+    adapt: () => {}
+  })),
+  // T18 : le Roi des Tombes de Khemri est une copie de Karitamen (L30 p. 90) ; Karitamen garde son propre pion.
+  { key: 'roi-des-tombes-khemri', name: 'Roi des Tombes de Khemri', nameFr: 'Roi des Tombes de Khemri', from: 'E0-P-1124', question: 'T18', decision: DECISION_T18, weapon: null, folder: 'ennemis/rois-des-tombes', adapt: () => {} }
 ];
 
 const inventory = JSON.parse(readFileSync('docs/BESTIAIRE_INVENTAIRE.json', 'utf8'));
@@ -87,12 +108,24 @@ const profiles = HOUSE.map((entry, index) => {
     name: entry.name, nameFr: entry.nameFr, nameFrSource: 'proposition'
   };
   entry.adapt(record);
-  record.houseProfile = { decision: entry.question === 'Q12' ? DECISION_Q12 : DECISION, question: entry.question, basedOn: { id: source.id, book: source.book, page: source.page, name: source.name }, ...(entry.weapon ? { weapon: entry.weapon } : {}), ...(entry.nameByMJ ? { nameByMJ: entry.nameByMJ } : {}) };
+  record.houseProfile = { decision: entry.decision || (entry.question === 'Q12' ? DECISION_Q12 : DECISION), question: entry.question, basedOn: { id: source.id, book: source.book, page: source.page, name: source.name }, ...(entry.weapon ? { weapon: entry.weapon } : {}), ...(entry.nameByMJ ? { nameByMJ: entry.nameByMJ } : {}) };
   record.notes = [...(source.notes || []), `Profil maison (${record.houseProfile.decision}, ${entry.question}) : copie de ${source.nameFr} (${source.book} p. ${source.page})${entry.weapon ? ` ; arme : ${entry.weapon}` : ''}${entry.nameByMJ ? ` ; ${entry.nameByMJ}` : ''}.`];
   const problems = validateBestiaryRecord(record);
   if (problems.length) throw new Error(`${record.id} ${record.name} : ${problems.join(' ; ')}`);
   return record;
 });
+
+// Classement (tools/token-images-categories.csv) : un profil individuel de T18 va dans pnj/<livre d'origine>, le Roi des Tombes dans son dossier.
+const categoriesPath = 'tools/token-images-categories.csv';
+const [categoriesHead, ...categoryRows] = readFileSync(categoriesPath, 'utf8').split('\n').filter(Boolean);
+const categoryKeys = new Set(categoryRows.map(row => row.split(';')[0]));
+profiles.forEach((profile, index) => {
+  if (HOUSE[index].question !== 'T18' || categoryKeys.has(slug(profile.nameFr))) return;
+  const folder = HOUSE[index].folder || `pnj/${profile.houseProfile.basedOn.book.toLowerCase()}`;
+  categoryRows.push([slug(profile.nameFr), folder, folder.startsWith('pnj/') ? 'oui' : 'non', ''].join(';'));
+});
+const rowKey = row => row.split(';')[0];
+writeFileSync(categoriesPath, `${[categoriesHead, ...categoryRows.sort((a, b) => (rowKey(a) < rowKey(b) ? -1 : rowKey(a) > rowKey(b) ? 1 : 0))].join('\n')}\n`);
 
 for (const profile of profiles) {
   const traitsUsed = (profile.traits || []).map(trait => trait.name);

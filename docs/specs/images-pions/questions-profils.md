@@ -249,3 +249,10 @@ Démoniaque, Effrayant, Terrifiant, Instabilité, Mort-vivant, Volonté de fer, 
 - **Fatandira (L30 p. 15)** : arbalète à répétition au lieu d'une Arbalète ; absente du Livre de base V5, valeurs imprimées de L09 (dégâts 8, portée 45, Empaleuse, Répétition 3, Recharge 9), ajoutées à la table d'armes de la règle.
 - **Karitamen (L30 p. 90)** : une Arme à une main à BF + 4 à la place du Fléau ; ses trois armes nommées restent citées en règle spéciale ; il garde ses deux sorts.
 - **Lames spectrales (Généraux revenants L30 p. 101, Revenants elfes L30 p. 114)** : attaque de mêlée à BF + 5, marquée « décision du MJ » dans la règle (le V2 imprime BF + 2) ; effets de la lame en règle spéciale.
+
+## Appariement final des images (décisions du MJ du 15/11/2026)
+
+- **Un profil par personne** pour les profils de groupe : vingt profils individuels dans L90 (Hendrik Vogel ; frère Rolf ; Esmer et Jozef ; le second Jumeau ; Little Anders, Bertoldo, Ivan, Magda, Mikhail ; Bart et Hans-Frederick ; Larz et « Curls » ; Elphoise et Helga ; Reiner l'espion ; Karl Dampfer et Hans Vollrat ; Hannes). Mêmes caractéristiques, compétences, Traits et armes que le profil de groupe imprimé (source citée dans `houseProfile.basedOn`), nom tel que la bibliothèque d'images le libelle, classés dans `pnj/<livre d'origine>`, chacun avec son image. Le profil de groupe reste, avec le pion du premier.
+- **Roi des Tombes de Khemri** : profil maison L90, copie de Karitamen (E0-P-1124, L30 p. 90) ; image `ennemis/rois-des-tombes/roi-des-tombes-khemri.webp`, dossier `ennemis/rois-des-tombes`. Karitamen garde son propre pion.
+- **Faucon** : `bestiaire/faucon.webp` ne couvre plus le Faucon gris des montagnes (Grey Mountain Hawk, L11 p. 63, créature Grande) ; il retourne dans la liste des illustrations à créer.
+- **Comte vampire von Carstein** : « on va refaire une image soit de von carstein soit de vampire générique » ; l'image ne couvre plus le Vampire (L06 p. 343) ni le Vampire noble (L26 p. 21), qui retournent dans la liste des illustrations à créer.
