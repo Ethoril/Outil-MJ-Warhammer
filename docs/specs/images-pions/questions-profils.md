@@ -241,3 +241,11 @@ Démoniaque, Effrayant, Terrifiant, Instabilité, Mort-vivant, Volonté de fer, 
 - **Karitamen** : « Dissipation » → Drain de Magie (Haute Magie) ; « Silence » → Silence (domaine de l'Ombre). Il devient lanceur de ces deux sorts, à la place du talent « Magie mineure (dissipation, silence) ».
 - **Talents et compétences V2 rapprochés de talents V5** : liste validée telle quelle, y compris ce qui reste en règle spéciale (Torture, Troublant, Puissance imparable, Parade éclair, Lutte, Maîtrise (…), Sain d'esprit, Sur ses gardes, Code de la rue, Projectile puissant, Méditation, Magie noire, Magie vulgaire, Magie commune).
 - T16 clos.
+
+## Décisions du MJ du 14/11/2026 sur les derniers écarts (consignées le 15/11)
+
+- **Squigs des tombes (L30 p. 115)** : M 4 conservé, plus une règle spéciale rappelant le Mouvement aléatoire imprimé « 1–10 ».
+- **Classement « animal » des créatures V2** (Dex absente, Soc 0 → 10) : conservé, sauf Baisers de jouvence (L29) et Bastethi (L30), qui deviennent non-animaux (Dex = Ag, Sociabilité 0 absente). Liste validée dans `conversion-v2-v5.md`.
+- **Fatandira (L30 p. 15)** : arbalète à répétition au lieu d'une Arbalète ; absente du Livre de base V5, valeurs imprimées de L09 (dégâts 8, portée 45, Empaleuse, Répétition 3, Recharge 9), ajoutées à la table d'armes de la règle.
+- **Karitamen (L30 p. 90)** : une Arme à une main à BF + 4 à la place du Fléau ; ses trois armes nommées restent citées en règle spéciale ; il garde ses deux sorts.
+- **Lames spectrales (Généraux revenants L30 p. 101, Revenants elfes L30 p. 114)** : attaque de mêlée à BF + 5, marquée « décision du MJ » dans la règle (le V2 imprime BF + 2) ; effets de la lame en règle spéciale.

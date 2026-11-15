@@ -359,8 +359,7 @@ export const PROFILES = Object.freeze([
    "monstre",
    "chaos"
   ],
-  "folder": "monstres",
-  "animal": true
+  "folder": "monstres"
  },
  {
   "printedTitle": "BASILICS",
@@ -566,8 +565,8 @@ export const PROFILES = Object.freeze([
  },
  {
   "printedTitle": "FANGES DU CHAOS",
-  "page": 122,
-  "physicalPage": 124,
+  "page": 123,
+  "physicalPage": 125,
   "main": [
    "36%",
    "0%",
@@ -1948,7 +1947,7 @@ export const PROFILES = Object.freeze([
    "0",
    "3"
   ],
-  "skills": "Charisme +20%, Commandement, Connaissances académiques (démonologie +10%, magie), Connaissances générales (quatre au choix), Esquive, Expression artistique (deux au choix), Focalisation, Fouille, Hypnotisme +20%, Intimidation +20%, Langage mystique (démoniaque, magick), Langue (quatre au choix), Lire/écrire, Perception, Sens de la magie, Torture +20%",
+  "skills": "Charisme +20%, Commandement, Connaissances académiques (démonologie +10%, magie), Connaissances générales (quatre au choix), Esquive, Expression artistique (deux au choix), Focalisation, Fouille, Hypnotisme +20%, Intimidation +20%, Langage secret (démoniaque, magick), Langue (quatre au choix), Lire/écrire, Perception, Sens de la magie, Torture +20%",
   "talents": "Acuité auditive, Acuité visuelle, Ambidextre, Armes naturelles, Aura démoniaque, Contorsionniste, Coups précis, Éloquence, Étiquette, Frénésie, Incantation de bataille, Linguistique, Magie mineure (deux au choix), Magie noire, Magie vulgaire (Chaos), Orateur né, Parade éclair, Puissance imparable, Sens aiguisés, Sombre savoir (Slaanesh), Terrifiant, Vision nocturne, Volonté de fer",
   "rules": [
    "Armure du Chaos",

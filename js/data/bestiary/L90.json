@@ -220,7 +220,7 @@
     {
      "name": "Leadbelcher Gun",
      "value": 20,
-     "damage": 12,
+     "damage": 8,
      "rangeYards": 12,
      "qualities": [
       "Impale"
@@ -282,10 +282,10 @@
      "page": 324,
      "name": "Ogre"
     },
-    "weapon": "Leadbelcher Gun (L01 p. 29 : 2M, portée BF × 3, dégâts BF + 4, Empaleuse) ; dégâts 12 comme l’Arme à une main du profil (BF + 4), portée 12, valeur = CT 20"
+    "weapon": "Leadbelcher Gun (L01 p. 29 : 2M, portée BF × 3, dégâts BF + 4, Empaleuse) ; dégâts 8 (BF 4 + 4, sans bonus de Taille au tir, L06 p. 360), portée 12, valeur = CT 20"
    },
    "notes": [
-    "Profil maison (Décision du MJ du 13/11/2026, Q3) : copie de Ogre (L06 p. 324) ; arme : Leadbelcher Gun (L01 p. 29 : 2M, portée BF × 3, dégâts BF + 4, Empaleuse) ; dégâts 12 comme l’Arme à une main du profil (BF + 4), portée 12, valeur = CT 20."
+    "Profil maison (Décision du MJ du 13/11/2026, Q3) : copie de Ogre (L06 p. 324) ; arme : Leadbelcher Gun (L01 p. 29 : 2M, portée BF × 3, dégâts BF + 4, Empaleuse) ; dégâts 8 (BF 4 + 4, sans bonus de Taille au tir, L06 p. 360), portée 12, valeur = CT 20."
    ]
   },
   {

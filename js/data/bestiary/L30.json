@@ -251,10 +251,15 @@
      "damage": 8
     },
     {
-     "name": "Crossbow",
+     "name": "Repeater Crossbow",
      "value": 65,
-     "damage": 9,
-     "rangeYards": 50
+     "damage": 8,
+     "rangeYards": 45,
+     "qualities": [
+      "Impale",
+      "Repeater 3",
+      "Reload 9"
+     ]
     }
    ],
    "skills": [
@@ -1115,7 +1120,7 @@
    },
    "attacks": [
     {
-     "name": "Flail",
+     "name": "Hand Weapon",
      "value": 66,
      "damage": 9
     }
@@ -1280,8 +1285,7 @@
     "Malédiction",
     "Nécromancie supérieure",
     "Pouvoirs du Roi des Tombes",
-    "Arme V2 : Lames de l'Honorable Trépas",
-    "Arme V2 : crosse"
+    "Armes imprimées : lames de l'Honorable Trépas, crosse et fléau (équivalents d'armes à une main de qualité exceptionnelle), rendues par une seule arme à une main (décision du MJ du 14/11)"
    ],
    "spells": {
     "Domaine de Haute Magie": [
@@ -1325,7 +1329,7 @@
     "E": 45,
     "I": 28,
     "Ag": 28,
-    "Dex": null,
+    "Dex": 28,
     "Int": 8,
     "FM": 79,
     "Soc": 10
@@ -1394,7 +1398,7 @@
    "sourceEdition": "V2",
    "conversion": {
     "size": "average",
-    "animal": true,
+    "animal": false,
     "reference": "Chat sauvage L11 p. 82 (Moyenne)"
    }
   },
@@ -1854,7 +1858,13 @@
     "toughnessBonus": 4,
     "ap": 5
    },
-   "attacks": [],
+   "attacks": [
+    {
+     "name": "Lame spectrale",
+     "value": 40,
+     "damage": 9
+    }
+   ],
    "skills": [
     {
      "name": "Lore (stratégie/tactique)",
@@ -1899,7 +1909,7 @@
    ],
    "specialRules": [
     "Lame spectrale",
-    "Arme V2 : lame spectrale",
+    "Lame spectrale : attaque de mêlée à BF + 5 (décision du MJ du 14/11 ; le V2 imprime BF + 2), effets de la lame ci-dessus",
     "Arme V2 : bouclier"
    ],
    "keywords": [
@@ -2427,7 +2437,13 @@
     "toughnessBonus": 3,
     "ap": 3
    },
-   "attacks": [],
+   "attacks": [
+    {
+     "name": "Lame spectrale elfique",
+     "value": 50,
+     "damage": 8
+    }
+   ],
    "skills": [
     {
      "name": "Charm",
@@ -2479,7 +2495,7 @@
     "Lame spectrale elfique",
     "Mine mortelle",
     "Peur des elfes morts",
-    "Arme V2 : lame spectrale elfique",
+    "Lame spectrale elfique : attaque de mêlée à BF + 5 (décision du MJ du 14/11 ; le V2 imprime BF + 2), effets de la lame ci-dessus",
     "Arme V2 : bouclier"
    ],
    "keywords": [
@@ -2623,6 +2639,7 @@
    ],
    "optionalTraits": [],
    "specialRules": [
+    "Mouvement aléatoire imprimé : 1–10",
     "Troublant",
     "Crocs puissants",
     "Déplacements aléatoires",

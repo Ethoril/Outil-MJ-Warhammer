@@ -34,10 +34,10 @@ const HOUSE = [
   {
     key: 'ogre-leadbelcher', name: 'Ogre Leadbelcher', nameFr: 'Ogre crache-plomb', from: 'E0-P-072', question: 'Q3',
     // Leadbelcher Gun (Archives of the Empire 2, L01 p. 29) : 2M, portée BF × 3, dégâts BF + 4, Empaleuse, Poudre noire.
-    // Dégâts : même formule que l'Arme à une main du même profil (BF + 4), imprimée 12 (L06 p. 324). Portée : BF 4 × 3 = 12 mètres.
+    // Dégâts : BF + 4 imprimés = 4 + 4 = 8. Pas de bonus de Taille au tir (L06 p. 360 : les modificateurs de Taille ne s'appliquent pas aux attaques à distance). Portée : BF 4 × 3 = 12 mètres.
     // Valeur : CT 20, le profil n'imprimant pas de compétence de Projectiles.
-    weapon: 'Leadbelcher Gun (L01 p. 29 : 2M, portée BF × 3, dégâts BF + 4, Empaleuse) ; dégâts 12 comme l’Arme à une main du profil (BF + 4), portée 12, valeur = CT 20',
-    adapt: record => { record.attacks.push({ name: 'Leadbelcher Gun', value: record.stats.CT, damage: 12, rangeYards: 3 * Math.floor(record.stats.F / 10), qualities: ['Impale'] }); }
+    weapon: 'Leadbelcher Gun (L01 p. 29 : 2M, portée BF × 3, dégâts BF + 4, Empaleuse) ; dégâts 8 (BF 4 + 4, sans bonus de Taille au tir, L06 p. 360), portée 12, valeur = CT 20',
+    adapt: record => { record.attacks.push({ name: 'Leadbelcher Gun', value: record.stats.CT, damage: Math.floor(record.stats.F / 10) + 4, rangeYards: 3 * Math.floor(record.stats.F / 10), qualities: ['Impale'] }); }
   },
   {
     key: 'orc-big-un', name: 'Orc Big ’Un', nameFr: 'Orc kostaud', from: 'E0-P-090', question: 'Q4',

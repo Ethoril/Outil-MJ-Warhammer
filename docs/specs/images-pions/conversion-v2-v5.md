@@ -11,6 +11,7 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
   - Soc 0 → 10, comme le Cheval V5 ;
   - Initiative 15 pour un cheval, sinon égale à l'Agilité.
 - Les autres (humanoïdes, démons, morts-vivants, monstres) : Dex = Ag et I = Ag.
+- **Liste validée des animaux** (décision du MJ du 14/11, champ `animal` de la transcription) : les montures et bêtes de L27 ; L29 : Chien du Chaos, Sanglebouc, Amalgames, Amphisbènes, Basilics, Chimères, Fanges du Chaos, Jabberwocks, Nuées du chagrin, Soyeuses, Vers des brèches, Vers des marais, Vers fouettards, Vers solaires, Poneys de guerre ; L30 : Phrenesay, Cauchemars, Squigs des tombes. **Non-animaux** : Baisers de jouvence (L29) et Bastethi (L30), Dex = Ag et Sociabilité 0 absente.
 
 ## Taille et Blessures
 
@@ -28,6 +29,7 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
 ## Mouvement et vol
 
 - « M 1 (15) » : M = 1 au sol.
+- Mouvement imprimé aléatoire (« 1–10 », Squigs des tombes, L30 p. 115) : M de la créature V5 la plus proche (Squig des cavernes, M 4), plus une règle spéciale « Mouvement aléatoire imprimé : 1–10 » (décision du MJ du 14/11).
 - Vol : celui de la créature V4 ou V5 la plus proche quand elle existe, sinon Vol (15), la valeur entre parenthèses.
 
 ## Attaques
@@ -40,6 +42,7 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
   - Arme à deux mains sans précision → BF + 6 (décision du MJ du 14/11)
   - Arc → BF + 4, portée 50
   - Arbalète → +9, portée 50
+  - Arbalète à répétition → dégâts 8, portée 45, Empaleuse, Répétition 3, Recharge 9 : absente du Livre de base V5 (L06 p. 293-295), valeurs imprimées de la « Repeater Crossbow and Bolts » des elfes noirs (L09 p. 44), décision du MJ du 14/11 (Fatandira, L30 p. 15)
   - Javeline → BF + 3, portée BF × 3
   - Rapière BF + 4, main gauche BF + 2, brise-épée BF + 1, lance d'arçon = lance de cavalerie BF + 6 (mêmes noms en V5).
   - Les munitions (« 10 carreaux ») accompagnent l'arme et ne sont pas des attaques.
@@ -48,6 +51,9 @@ Une seule règle, dans `tools/lib/bestiary-v2.mjs`, pour tous les livres V2 : le
 - **Valeur d'attaque** : CC en mêlée, CT à distance.
 - **Grandes créatures** (L06 p. 360), en mêlée seulement : Grande et Énorme +BF, Monstrueuse +2 × BF.
 - Une arme sans équivalent V5 (bouclier…) reste en règle spéciale.
+- **Choix propres à un profil** (décisions du MJ du 14/11, champs `weaponsV5`, `customAttacks`, `weaponRules` de la transcription) :
+  - Karitamen (L30 p. 90) : une Arme à une main (BF + 4) à la place du Fléau ; les lames de l'Honorable Trépas, la crosse et le fléau restent cités en règle spéciale. Il garde ses deux sorts (Drain de Magie, Silence).
+  - Lame spectrale (Généraux revenants L30 p. 101, Revenants elfes L30 p. 114) : attaque de mêlée à BF + 5, **décision du MJ** (le V2 imprime BF + 2) ; les effets de la lame restent en règle spéciale.
 
 ## Compétences, talents, Traits et règles
 

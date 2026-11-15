@@ -35,18 +35,27 @@ const displayFr = title => {
 
 function attacksOf(entry, stats, rules) {
   const attacks = [];
+  // Choix du MJ propres à un profil : armes lues à la place des armes imprimées (`weaponsV5`), attaques de mêlée à BF + n (`customAttacks`),
+  // règles qui disent ce choix (`weaponRules`), les armes imprimées restant citées.
+  for (const custom of entry.customAttacks || []) attacks.push(naturalAttack(custom.name, { stats, size: entry.size, naturalBonus: custom.bonus, melee: stats.CC ?? stats.CT }));
+  rules.push(...(entry.weaponRules || []));
   // Les munitions (« 10 carreaux », « 10 flèches ») accompagnent l'arme : ce ne sont pas des attaques.
-  for (const part of list(entry.weapons).flatMap(item => item.split(/\s+(?:et|ou)\s+(?![^(]*\))/)).filter(item => !/^\d+\s+(?:carreaux|flèches|balles|traits)\b/i.test(item))) {
+  // Le malus imprimé « (BF–2) » ou « (dégâts BF–1) » vaut pour tout le groupe (« griffes et dents (BF–2) », Nurglings L29 p. 242) :
+  // lu sur l'élément entier avant de le couper en « et » / « ou ».
+  const groups = list(entry.weaponsV5 ?? entry.weapons).flatMap(item => {
+    const modifier = /\((?:dégâts\s+)?BF\s*[–-]\s*(\d)\)/.exec(item)?.[1];
+    return item.replace(/\s*\((?:dégâts\s+)?BF\s*[–-]\s*\d\)/, '').split(/\s+(?:et|ou)\s+(?![^(]*\))/).map(part => ({ part, modifier: Number(modifier || 0) }));
+  });
+  for (const { part, modifier } of groups.filter(({ part }) => !/^\d+\s+(?:carreaux|flèches|balles|traits)\b/i.test(part))) {
     const text = part.replace(/\s*\((?:dégâts[^)]*)\)/, '');
     let attack = weaponAttack(text, { stats, size: entry.size });
     for (let words = text.split(' '); !attack && words.length > 1; words = words.slice(0, -1)) attack = weaponAttack(words.slice(0, -1).join(' '), { stats, size: entry.size });
     if (attack) { attacks.push(attack); continue; }
     const natural = NATURAL.find(([pattern]) => pattern.test(fold(text)));
     if (natural && !/bouclier/.test(fold(text))) {
-      const modifier = /\(BF\s*[–-]\s*(\d)\)/.exec(text);
       const name = text.replace(/\s*\(.*\)\s*$/, '').trim();
       // Sans CC (Vers fouettards : 0 %), l'arme naturelle frappe à la CT imprimée.
-      attacks.push(naturalAttack(name.charAt(0).toUpperCase() + name.slice(1), { stats, size: entry.size, naturalBonus: natural[1] - Number(modifier?.[1] || 0), melee: stats.CC ?? stats.CT }));
+      attacks.push(naturalAttack(name.charAt(0).toUpperCase() + name.slice(1), { stats, size: entry.size, naturalBonus: natural[1] - modifier, melee: stats.CC ?? stats.CT }));
       continue;
     }
     rules.push(`Arme V2 : ${part}`);
@@ -59,6 +68,8 @@ export function v2Record(entry, id, blockKey, book) {
   // Mouvement imprimé aléatoire (« 1–10 », Squigs des tombes) : M de la créature V5 la plus proche (`M` du choix de conversion).
   const stats = convertStats(entry.main.map(v2Value), { M: entry.M ?? movement.M, animal: Boolean(entry.animal) });
   const rules = [];
+  // Mouvement imprimé aléatoire (« 1–10 », Squigs des tombes) : rappelé en règle spéciale, M restant celui du choix de conversion.
+  if (/^\s*\d+\s*[-–]\s*\d+/.test(entry.secondary[4])) rules.push(`Mouvement aléatoire imprimé : ${String(entry.secondary[4]).trim().replace('-', '–')}`);
   const traits = [];
   const talents = [];
   const spells = {};

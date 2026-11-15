@@ -265,6 +265,8 @@ export const PROFILES = Object.freeze([
    "Pouvoirs du Roi des Tombes"
   ],
   "weapons": "Lames de l'Honorable Trépas, crosse et fléau (équivalents d'armes à une main de qualité exceptionnelle)",
+  "weaponsV5": "arme à une main",
+  "weaponRules": ["Armes imprimées : lames de l'Honorable Trépas, crosse et fléau (équivalents d'armes à une main de qualité exceptionnelle), rendues par une seule arme à une main (décision du MJ du 14/11)"],
   "armourPoints": "tête 3, bras 0, corps 3, jambes 0",
   "size": "average",
   "keywords": [
@@ -309,7 +311,6 @@ export const PROFILES = Object.freeze([
    "mort-vivant"
   ],
   "folder": "ennemis/morts-vivants",
-  "animal": true,
   "ref": "Chat sauvage L11 p. 82 (Moyenne)"
  },
  {
@@ -536,6 +537,9 @@ export const PROFILES = Object.freeze([
    "Lame spectrale"
   ],
   "weapons": "lame spectrale et bouclier",
+  "weaponsV5": "bouclier",
+  "customAttacks": [{ "name": "Lame spectrale", "bonus": 5 }],
+  "weaponRules": ["Lame spectrale : attaque de mêlée à BF + 5 (décision du MJ du 14/11 ; le V2 imprime BF + 2), effets de la lame ci-dessus"],
   "armourPoints": "tête 5, bras 5, corps 5, jambes 5",
   "size": "average",
   "keywords": [
@@ -814,6 +818,9 @@ export const PROFILES = Object.freeze([
    "Peur des elfes morts"
   ],
   "weapons": "lame spectrale elfique et bouclier",
+  "weaponsV5": "bouclier",
+  "customAttacks": [{ "name": "Lame spectrale elfique", "bonus": 5 }],
+  "weaponRules": ["Lame spectrale elfique : attaque de mêlée à BF + 5 (décision du MJ du 14/11 ; le V2 imprime BF + 2), effets de la lame ci-dessus"],
   "armourPoints": "tête 3, bras 3, corps 3, jambes 3",
   "size": "average",
   "keywords": [

@@ -21,6 +21,7 @@ for (const book of process.argv.slice(2)) {
   if (!meta) throw new Error(`Livre V2 inconnu : ${book}`);
   const { PROFILES } = await import(meta.file);
   const previous = new Map(inventory.profiles.filter(row => row.book === book).map(row => [row.blockKey, row.id]));
+  const previousByName = new Map(inventory.profiles.filter(row => row.book === book).map(row => [row.name.normalize('NFC').toLowerCase(), row.id]));
   inventory.profiles = inventory.profiles.filter(row => row.book !== book);
   inventory.coverage = inventory.coverage.filter(row => row.book !== book);
   let next = Math.max(...inventory.profiles.map(row => Number(row.id.slice(5))), ...[...previous.values()].map(value => Number(value.slice(5)))) + 1;
@@ -29,7 +30,8 @@ for (const book of process.argv.slice(2)) {
     const index = perPage.get(entry.physicalPage) ?? 0;
     perPage.set(entry.physicalPage, index + 1);
     const blockKey = `${book}:${entry.physicalPage}:${index}`;
-    return v2Record(entry, previous.get(blockKey) || `E0-P-${String(next++).padStart(3, '0')}`, blockKey, book);
+    // Identifiant stable : par la clé de bloc, sinon par le nom (page corrigée après relecture, Fanges du Chaos).
+    return v2Record(entry, previous.get(blockKey) || previousByName.get(entry.printedTitle.normalize('NFC').toLowerCase()) || `E0-P-${String(next++).padStart(3, '0')}`, blockKey, book);
   });
   const note = `${book} : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).`;
   for (const profile of profiles) {

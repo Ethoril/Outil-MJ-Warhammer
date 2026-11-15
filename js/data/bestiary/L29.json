@@ -781,7 +781,7 @@
     "E": 11,
     "I": 60,
     "Ag": 60,
-    "Dex": null,
+    "Dex": 60,
     "Int": 35,
     "FM": 30,
     "Soc": 55
@@ -874,7 +874,7 @@
    "sourceEdition": "V2",
    "conversion": {
     "size": "small",
-    "animal": true
+    "animal": false
    }
   },
   {
@@ -1525,10 +1525,10 @@
   {
    "id": "E0-P-1082",
    "book": "L29",
-   "page": 122,
-   "physicalPage": 124,
+   "page": 123,
+   "physicalPage": 125,
    "kind": "profile",
-   "blockKey": "L29:124:2",
+   "blockKey": "L29:125:0",
    "name": "Fanges du Chaos",
    "nameFr": "Fanges du Chaos",
    "stats": {
@@ -1588,7 +1588,7 @@
     "monstre",
     "chaos"
    ],
-   "nameFrSource": "L29 p.122",
+   "nameFrSource": "L29 p.123",
    "sourceEdition": "V2",
    "conversion": {
     "size": "large",
@@ -3160,7 +3160,7 @@
     {
      "name": "Cornes",
      "value": 50,
-     "damage": 9
+     "damage": 8
     }
    ],
    "skills": [
@@ -3359,7 +3359,7 @@
     {
      "name": "Griffes",
      "value": 20,
-     "damage": 5
+     "damage": 3
     },
     {
      "name": "Dents",
@@ -5320,16 +5320,6 @@
      "name": "Intimidate",
      "nameFr": "Intimidation",
      "value": 97
-    },
-    {
-     "name": "Language (démoniaque)",
-     "nameFr": "Langue (démoniaque)",
-     "value": 89
-    },
-    {
-     "name": "Language (magick)",
-     "nameFr": "Langue (magick)",
-     "value": 89
     }
    ],
    "traits": [
@@ -5422,6 +5412,7 @@
     "Mutations du Chaos",
     "Compétence V2 : Connaissances générales (quatre au choix)",
     "Compétence V2 : Expression artistique (deux au choix)",
+    "Compétence V2 : Langage secret (démoniaque, magick)",
     "Compétence V2 : Langue (quatre au choix)",
     "Compétence V2 : Torture +20%"
    ],

@@ -61,6 +61,9 @@ export const V5_WEAPONS = Object.freeze({
   // Décision du MJ du 14/11 : « arme à deux mains » sans précision = arme V5 à BF + 6.
   'Two-Handed Weapon': { bonus: 6 },
   Rapier: { bonus: 4 }, 'Main Gauche': { bonus: 2 }, Swordbreaker: { bonus: 1 },
+  // Absente du Livre de base V5 (L06 p. 293-295) : valeurs imprimées de l'arbalète à répétition des elfes noirs (L09, « Repeater Crossbow and
+  // Bolts » : dégâts 8, portée 45, Empaleuse, Répétition 3, Recharge 9), décision du MJ du 14/11 (Fatandira, L30 p. 15).
+  'Repeater Crossbow': { ranged: true, bonus: 8, range: 45, qualities: ['Impale', 'Repeater 3', 'Reload 9'] },
   Bow: { ranged: true, bonus: 4, sb: true, range: 50 }, Longbow: { ranged: true, bonus: 4, sb: true, range: 60 },
   Shortbow: { ranged: true, bonus: 3, sb: true, range: 40 }, Crossbow: { ranged: true, bonus: 9, range: 50 },
   'Heavy Crossbow': { ranged: true, bonus: 10, range: 60 }, Sling: { ranged: true, bonus: 6, range: 40 },
@@ -73,7 +76,7 @@ export const V2_WEAPONS = Object.freeze({
   "fléau d'armes": 'Military Flail', hallebarde: 'Halberd', lance: 'Spear', 'lance de cavalerie': 'Lance', 'hache à deux mains': 'Greataxe',
   'grande hache': 'Greataxe', 'marteau de guerre': 'Warhammer', zweihänder: 'Zweihander', 'épée à deux mains': 'Zweihander',
   arc: 'Bow', 'arc long': 'Longbow', 'arc court': 'Shortbow', arbalète: 'Crossbow', 'arbalète lourde': 'Heavy Crossbow', fronde: 'Sling',
-  javeline: 'Javelin', 'hache de lancer': 'Throwing Axe', 'arme à deux mains': 'Two-Handed Weapon',
+  'arbalète à répétition': 'Repeater Crossbow', javeline: 'Javelin', 'hache de lancer': 'Throwing Axe', 'arme à deux mains': 'Two-Handed Weapon',
   rapière: 'Rapier', 'main gauche': 'Main Gauche', 'brise-épée': 'Swordbreaker', "lance d'arçon": 'Lance'
 });
 const fold = text => String(text).normalize('NFC').toLowerCase().replace(/[’`]/g, "'").replace(/\s+/g, ' ').trim();
@@ -92,7 +95,7 @@ export function weaponAttack(printed, { stats, size, melee, ranged }) {
   const sb = bonus(stats.F);
   if (weapon.ranged) {
     const damage = weapon.sb ? sb + weapon.bonus : weapon.bonus;
-    return { name: V2_WEAPONS[key], value: ranged ?? stats.CT, damage, rangeYards: weapon.range ?? sb * weapon.rangeSb };
+    return { name: V2_WEAPONS[key], value: ranged ?? stats.CT, damage, rangeYards: weapon.range ?? sb * weapon.rangeSb, ...(weapon.qualities ? { qualities: [...weapon.qualities] } : {}) };
   }
   return { name: V2_WEAPONS[key], value: melee ?? stats.CC, damage: meleeDamage(stats.F, weapon.bonus, size) };
 }

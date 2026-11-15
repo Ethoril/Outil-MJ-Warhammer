@@ -25546,8 +25546,8 @@
     {
       "name": "Fanges du Chaos",
       "book": "L29",
-      "page": 122,
-      "physicalPage": 124,
+      "page": 123,
+      "physicalPage": 125,
       "kind": "profile",
       "traitsUsed": [
         "Size"
@@ -25556,7 +25556,7 @@
       "abilityRefs": [],
       "sourceNote": "L29 : profils V2 transcrits (noms et chiffres) puis convertis en V5 par la règle maison du MJ (tools/lib/bestiary-v2.mjs, 14/11/2026).",
       "id": "E0-P-1082",
-      "blockKey": "L29:124:2",
+      "blockKey": "L29:125:0",
       "addedOn": "2026-11-14"
     },
     {
@@ -27959,6 +27959,7 @@
         122,
         123,
         124,
+        125,
         126,
         127,
         128,
