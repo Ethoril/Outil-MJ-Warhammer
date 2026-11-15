@@ -23,6 +23,25 @@ export function renderBrokenEscapeVisibilityControl({actor,value,onChange,key='f
  return box;
 }
 const hideSkills=actor=>(actor?.skills||[]).filter(s=>s.status==='resolved'&&Number.isInteger(Number(s.total??s.value))&&/discr[eé]tion|stealth|\bhide\b/i.test(s.name||s.nom||s.sourceName||''));
+/** Faits MJ envoyés à l'aperçu ; fuite engagée : les deux confirmations ne partent que cochées, la liste des engagés étant non vide. */
+export function brokenEscapeFacts(d,required){
+ const facts={};if(typeof d.before==='boolean')facts.visibleToAnyEnemy=d.before;if(typeof d.after==='boolean')facts.visibleToAnyEnemyAfter=d.after;
+ if(required==='flee'){
+  if(d.engagement==='none')facts.engagedEnemyIds=[];
+  else if(d.engagement==='selected'&&d.engaged.length){
+   facts.engagedEnemyIds=[...d.engaged];
+   if(d.engagedConfirmed===true)facts.engagedEscapeConfirmed=true;
+   if(d.freeAttacksResolved===true)facts.freeAttacksResolved=true;
+  }
+  if(d.mode)facts.moveMode=d.mode;
+ }
+ return facts;
+}
+/** Confirmations encore à cocher avant la fuite d'un personnage engagé (liste vide quand aucun ennemi engagé). */
+export function missingEngagedConfirmations(d){
+ if(d.engagement!=='selected'||!d.engaged?.length)return [];
+ return [...(d.engagedConfirmed===true?[]:['« Fuite engagée confirmée »']),...(d.freeAttacksResolved===true?[]:['« Attaques gratuites résolues »'])];
+}
 function stateOf(Store){try{return JSON.parse(Store.getFullJSON());}catch{return {};}}
 function turnOf(state){
  const clock=v5CombatActionClock(state);
@@ -42,9 +61,9 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   let d=drafts.get(actor.id);
   // Engagements durables (spec engagements CA13, CA17) : les adversaires engagés du plateau sont pré-renseignés.
   const people=Store.listParticipants?.()||[],plateau=engagedWith({participants:people},people,actor.id).filter(id=>participantCamp(people.find(row=>row.id===id))!==participantCamp(actor));
-  if(!d)d={turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,preview:null,error:'',busy:false};
-  else if(d.turnId!==turnId){Object.assign(d,{turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,hideSkillId:null,lastReceipt:null,preview:null,error:'',busy:false});}
-  else if(d.baseRevision!==revision){const hadPreview=Boolean(d.preview);Object.assign(d,{baseRevision:revision,before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,hideSkillId:null,preview:null,error:hadPreview?'La partie a changé : les faits et l’aperçu ont été invalidés; renseignez-les à nouveau.':''});}
+  if(!d)d={turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],engagedConfirmed:false,freeAttacksResolved:false,mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,preview:null,error:'',busy:false};
+  else if(d.turnId!==turnId){Object.assign(d,{turnId,baseRevision:revision,action:'flee',before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],engagedConfirmed:false,freeAttacksResolved:false,mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,hideSkillId:null,lastReceipt:null,preview:null,error:'',busy:false});}
+  else if(d.baseRevision!==revision){const hadPreview=Boolean(d.preview);Object.assign(d,{baseRevision:revision,before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],engagedConfirmed:false,freeAttacksResolved:false,mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,hideSkillId:null,preview:null,error:hadPreview?'La partie a changé : les faits et l’aperçu ont été invalidés; renseignez-les à nouveau.':''});}
   if(d.preview&&d.preview.baseRevision!==Store.getLocalRevision?.()){d.preview=null;d.error='La partie a changé : recalculez les conséquences.';}
   if(progress?.fleeCommitted&&progress.visibleToAnyEnemy===true&&!progress.sprintCommitted)d.action='sprint';
   drafts.set(actor.id,d);return d;
@@ -147,7 +166,7 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   if(required==='flee'){
    const engage=selectField(controls,'Ennemis engagés avec ce personnage',d.engagement,'engagement',[
     ['','À préciser'],['none','Aucun ennemi engagé'],['selected','Un ou plusieurs ennemis engagés']
-   ],value=>update(actor.id,d,{engagement:value,engaged:[]}));
+   ],value=>update(actor.id,d,{engagement:value,engaged:[],engagedConfirmed:false,freeAttacksResolved:false}));
    engage.dataset.brokenEscapeEngagement=actor.id;
    if(d.engagement==='selected'){
     const list=node('fieldset','workspace-broken-facts');list.dataset.brokenEscapeEngagedList=actor.id;list.append(node('legend','','Choisissez chaque ennemi engagé'));
@@ -156,10 +175,22 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
     for(const other of others){
      const label=node('label','workspace-type',other.name),check=document.createElement('input');check.type='checkbox';check.checked=d.engaged.includes(other.id);
      check.setAttribute('aria-label','Ennemi engagé : '+other.name);check.dataset.brokenEscapeEngagedId=other.id;
-     check.addEventListener('change',()=>update(actor.id,d,{engaged:check.checked?[...d.engaged,other.id]:d.engaged.filter(id=>id!==other.id)}));
+     check.addEventListener('change',()=>update(actor.id,d,{engaged:check.checked?[...d.engaged,other.id]:d.engaged.filter(id=>id!==other.id),engagedConfirmed:false,freeAttacksResolved:false}));
      label.prepend(check);list.append(label);
     }
     controls.append(list);
+    if(d.engaged.length){
+     // Fuite engagée : les deux faits que le moteur exige (v5-broken-escape.js) ; chaque case se coche explicitement.
+     const names=d.engaged.map(id=>participants.find(row=>row.id===id)?.name||id).join(', ');
+     const confirm=node('fieldset','workspace-broken-facts');confirm.dataset.brokenEscapeEngagedConfirm=actor.id;confirm.append(node('legend','','Fuite engagée'));
+     const confirmField=(key,text,aria)=>{const label=node('label','workspace-type',text),check=document.createElement('input');check.type='checkbox';check.checked=d[key];
+      check.setAttribute('aria-label',aria);check.dataset.brokenEscapeConfirm=key;check.addEventListener('change',()=>update(actor.id,d,{[key]:check.checked}));label.prepend(check);confirm.append(label);};
+     confirmField('engagedConfirmed','Fuite engagée confirmée : le MJ confirme que '+actor.name+' fuit alors qu’il est engagé avec '+names+'.','Fuite engagée confirmée avec '+names);
+     confirm.append(node('p','workspace-muted','Appliquer retire l’engagement ; chaque adversaire engagé gagne l’Élan (sauf En Bon Ordre) et '+actor.name+' gagne 1 Brisé par adversaire engagé (sauf Fuite !).'));
+     confirmField('freeAttacksResolved','Attaques gratuites résolues : les attaques gratuites de '+names+' ont été jouées.','Attaques gratuites résolues pour '+names);
+     confirm.append(node('p','workspace-muted','L’outil n’a pas d’écran dédié : jouez chaque attaque gratuite comme une attaque ordinaire de l’adversaire, avant d’appliquer la fuite.'));
+     controls.append(confirm);
+    }
    }
    selectField(controls,'Déplacement Flee',d.mode,'move-mode',[['','À préciser'],['walk','Walk'],['run','Run']],value=>update(actor.id,d,{mode:value}));
   }
@@ -176,12 +207,9 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   const buttons=node('div','workspace-resolution-row'),calc=node('button','workspace-secondary','Calculer l’aperçu');calc.type='button';calc.dataset.brokenEscapeCalculate=actor.id;
   calc.disabled=!isTurn||d.busy;
   calc.addEventListener('click',()=>{
-   const facts={};if(typeof d.before==='boolean')facts.visibleToAnyEnemy=d.before;if(typeof d.after==='boolean')facts.visibleToAnyEnemyAfter=d.after;
-   if(required==='flee'){
-    if(d.engagement==='none')facts.engagedEnemyIds=[];
-    else if(d.engagement==='selected'&&d.engaged.length)facts.engagedEnemyIds=[...d.engaged];
-    if(d.mode)facts.moveMode=d.mode;
-   }
+   const facts=brokenEscapeFacts(d,required);
+   const missing=required==='flee'?missingEngagedConfirmations(d):[];
+   if(missing.length){d.preview=null;d.error='Cochez '+missing.join(' et ')+' pour calculer la fuite.';refresh();return;}
    // T10 : réponses aux questions du Test d'Athlétisme (séquelle de zone…) et Obstiné, dans les faits du Test.
    if(required==='sprint'&&Object.keys(d.conditionContext||{}).length)facts.conditionContext={...d.conditionContext};
    const input={actorId:actor.id,action:required,facts,...(required==='sprint'&&d.roll!==''?{roll:Number(d.roll)}:{}),...(d.choice?{choice:d.choice}:{})};
