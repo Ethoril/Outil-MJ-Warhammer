@@ -108,7 +108,9 @@ const TRAIT_EN = (() => {
   map.set(foldLoose('Amure'), 'Armour');
   return map;
 })();
-const SIZE_EN = { minuscule: 'Tiny', 'très petite': 'Little', petite: 'Small', moyenne: 'Average', grande: 'Large', énorme: 'Enormous', monstrueuse: 'Monstrous' };
+// Tailles imprimées au féminin ou au masculin (« Taille (Très Petit) », Sénestre, L28 p. 110) : valeurs anglaises lues par l'outil.
+const SIZE_EN = { minuscule: 'Tiny', 'très petite': 'Little', 'très petit': 'Little', petite: 'Small', petit: 'Small', moyenne: 'Average', moyen: 'Average',
+  grande: 'Large', grand: 'Large', énorme: 'Enormous', monstrueuse: 'Monstrous', monstrueux: 'Monstrous' };
 const CORRUPTION_EN = { faible: 'Minor', modérée: 'Moderate', forte: 'Major' };
 
 function traitEnglish(item) {
@@ -132,14 +134,28 @@ const SECTION = /(^|\s)(Skills|Talents|Traits|Possessions|Mutations|Petty|Arcane
 
 /** Lignes du corps d'un bloc français, rendues en une ligne aux noms anglais (compétences, talents, Traits) ; le reste tel quel. */
 export function translateFrenchBody(bodyLines) {
-  const joined = clean(bodyLines.join(' ')).replace(/([a-zà-ÿ])- (?=[a-zà-ÿ])/g, '$1-');
+  // Une ligne qui ouvre un paragraphe titré (« Griffeur : si Sénestre… », « Attention : puisque… ») clôt la liste précédente :
+  // sans séparateur, son titre se collerait au dernier élément (« Vol 100 Griffeur »).
+  const paragraph = /^\*?\p{Lu}[\p{L}'’ -]{1,40}?\s?:\s/u;
+  const label = /^(?:Skills|Talents|Traits|Possessions|Mutations|Petty|Arcane|Tzeentch|Spells|Miracles):/;
+  // Une ligne en majuscule après une ligne qui ne finit ni par une virgule ni par une parenthèse ouverte ouvre un paragraphe de prose
+  // (« …, 2d10 pistoles d’argent » puis « Fritz possède un seau… », L28 p. 94) : marquée ¶, elle termine la liste des Possessions.
+  const prose = (line, index) => {
+    if (index === 0 || !/^\p{Lu}/u.test(line.trim()) || label.test(line.trim()) || line.trim().split(/\s+/).length < 5) return false;
+    const before = bodyLines[index - 1].trim();
+    const open = (before.match(/\(/g) || []).length > (before.match(/\)/g) || []).length;
+    return !open && !/[,(]$/.test(before) && !/\b(?:de|du|des|d[’']|la|le|les|l[’']|en|à|au|aux|et|ou|sur|pour|avec|un|une)$/i.test(before);
+  };
+  const joined = clean(bodyLines.map((line, index) => (index > 0 && paragraph.test(line.trim()) && !label.test(line.trim()) ? `, ${line}` : prose(line, index) ? `¶ ${line}` : line)).join(' '))
+    .replace(/([a-zà-ÿ])- (?=[a-zà-ÿ])/g, '$1-');
   const marks = [...joined.matchAll(SECTION)];
   if (!marks.length) return bodyLines;
   const parts = [joined.slice(0, marks[0].index)];
   marks.forEach((mark, index) => {
     const start = mark.index + mark[0].length;
-    const text = clean(joined.slice(start, index + 1 < marks.length ? marks[index + 1].index : joined.length));
+    const raw = joined.slice(start, index + 1 < marks.length ? marks[index + 1].index : joined.length);
     const label = mark[2];
+    const text = clean(label === 'Possessions' ? raw.split('¶')[0] : raw.replace(/¶/g, ''));
     const translate = { Skills: withNote(skillEnglish), Talents: withNote(talentEnglish), Traits: withNote(traitEnglish) }[label];
     parts.push(`${label}: ${translate ? splitList(text).map(translate).join(', ') : text}`);
   });

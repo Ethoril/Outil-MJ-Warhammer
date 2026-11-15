@@ -72,6 +72,19 @@ export const WOUNDS_ABSENT_IDS = Object.freeze(new Set(['E0-P-515']));
 /**
  * Noms que l'inventaire E0 a lus de travers (phrase du texte d'ambiance prise pour un titre) : le titre imprimé du bloc est rétabli (E-D18).
  */
+/**
+ * Livres français (L28) : les notes imprimées sous un profil ne sont jamais recopiées ; à leur place, un résumé d'une ligne écrit pour
+ * l'outil (noms et chiffres seulement). Un profil absent de cette table perd sa note.
+ */
+export const NOTE_SUMMARIES = Object.freeze({
+  'E0-P-998': ['Peur 2 seulement quand le sort Effrayant est actif ; sorts choisis pour la capture de « Kastor Lieberung » (L28 p. 28).'],
+  'E0-P-1010': ['Valeur marquée * : le bonus de Combat déloyal y est déjà compté.'],
+  'E0-P-1011': ['Statut marqué * : abaissé par la jeunesse de Karl et de sa bande.'],
+  'E0-P-1014': ['CT marquée * : basse parce que Snikkit est borgne.'],
+  'E0-P-1037': ['* Résistance à l’alcool : vin et brandy seulement (autres boissons : Endurance 32) ; ** Corps à corps (Armes d’hast) : avec sa canne seulement.'],
+  'E0-P-1053': ['Doppelgänger : prend l’apparence d’un humanoïde déjà rencontré (règle L28 p. 145).']
+});
+
 export const NAME_FIXES = Object.freeze({
   'E0-P-438': 'Matthogg — Ogre Bruiser',
   // Livre de base V4 FR (L05) : nom anglais du profil (le nom français vient de NAMES_FR), comme les autres livres.
@@ -217,6 +230,11 @@ export const BODY_LINE_FIXES =Object.freeze({
   'L06:331:0': [['c', '']],
   // Le Pouvoir derrière le Trône (L28) p. 95 : Marie-Astrid Platini, virgule oubliée entre deux compétences (relu sur la page).
   'L28:98:0': [['Intimidation 33, Langue (Reikspiel) 28 Marchandage 45,', 'Intimidation 33, Langue (Reikspiel) 28, Marchandage 45,']],
+  // Même livre p. 125 et p. 130 : possessions imprimées en phrase ou en longues descriptions ; seuls les noms d'objets imprimés sont gardés.
+  'L28:128:0': [['Possessions: une armure de plates laquée en noir et aux', 'Possessions: armure de plates laquée en noir,'],
+    ['attaches dorées de cérémonie, un heaume intégral laqué en', 'heaume intégral laqué en noir,'], ['noir portant les armoiries de sa famille (un poing levé dans', 'épée de cérémonie à deux mains'],
+    ['un gantelet en mailles) et une épée de cérémonie à deux', ''], ['mains dont le pommeau et la garde se terminent par trois', ''], ['opales de feu assorties', '']],
+  'L28:133:0': [['Possessions: où qu’il aille, Ar-Ulric porte sa robe et son', 'Possessions: robe, bâton de cérémonie'], ['bâton de cérémonie', '']],
   // Même livre p. 28 : Magus de la Main pourpre, le paragraphe sous l'encadré des sorts n'est pas un nom de sort (la règle reste au livre).
   'L28:31:1': [['Le Magus aura déjà lancé le sort Effrayant sur elle-même,', ''], ['bien que celui-ci s’estompe après 5 Rounds si les Personnages', ''],
     ['parviennent à laisser parler les cultistes. Un Test de Savoir', ''], ['(Magick) Intermédiaire (+0) effectué par un Personnage', ''], ['possédant le Talent Seconde vue permettra de le remarquer.', '']]

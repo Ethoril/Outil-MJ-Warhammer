@@ -1335,7 +1335,7 @@
     "bourse contenant 2d10 pistoles d’argent à la ceinture"
    ],
    "notes": [
-    "* Le bonus apporté par Combat déloyal est déjà inclus, puisque Bruno ne connaît aucune autre manière de se battre."
+    "Valeur marquée * : le bonus de Combat déloyal y est déjà compté."
    ],
    "keywords": [
     "humain"
@@ -1443,7 +1443,7 @@
     "bourse secrète contenant 8 pistoles et 17 sous de cuivre"
    ],
    "notes": [
-    "* Le fait que Karl et ses comparses soient jeunes fait baisser leur statut, qui serait plus élevé autrement."
+    "Statut marqué * : abaissé par la jeunesse de Karl et de sa bande."
    ],
    "keywords": [
     "humain"
@@ -1508,10 +1508,14 @@
      "name": "Size",
      "param": "Large",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Night Vision",
+     "ref": "E0-T-041"
     }
    ],
    "specialRules": [
-    "Vision nocturne Attention"
+    "Attention"
    ],
    "keywords": [
     "minotaure"
@@ -1711,7 +1715,8 @@
     "coupe-gorge",
     "amulette de cuivre trois fois bénie",
     "potion d’invisibilité",
-    "3 couronnes d’or en coupures diverses"
+    "3 couronnes d’or en coupures diverses",
+    "mais elle peut mettre la main sur 100 CO en une heure"
    ],
    "keywords": [
     "humain"
@@ -1800,7 +1805,7 @@
     "bouclier"
    ],
    "notes": [
-    "*Snikkit n’a qu’un œil, ce qui explique sa faible CT."
+    "CT marquée * : basse parce que Snikkit est borgne."
    ],
    "starred": [
     "CT"
@@ -1885,9 +1890,7 @@
      "ref": "E0-T-041"
     }
    ],
-   "trappings": [
-    "lui sans armure"
-   ],
+   "trappings": [],
    "keywords": [
     "skaven"
    ],
@@ -2230,7 +2233,7 @@
     "arme simple (épée, sur le mur derrière le bar)",
     "fléau (caché sous le bar)",
     "dague",
-    "mais peu de gens oseraient voler Fritz."
+    "2d10 pistoles d’argent"
    ],
    "keywords": [
     "humain"
@@ -3478,6 +3481,7 @@
     "Soc": 15
    },
    "wounds": 5,
+   "size": "small",
    "attacks": [
     {
      "name": "Weapon",
@@ -3505,7 +3509,7 @@
     },
     {
      "name": "Size",
-     "param": "Petit",
+     "param": "Small",
      "ref": "E0-T-045"
     },
     {
@@ -3711,6 +3715,7 @@
     "Soc": 10
    },
    "wounds": 1,
+   "size": "little",
    "attacks": [
     {
      "name": "Weapon",
@@ -3734,12 +3739,17 @@
     },
     {
      "name": "Size",
-     "param": "Très Petit",
+     "param": "Little",
      "ref": "E0-T-045"
+    },
+    {
+     "name": "Fly",
+     "rating": "100",
+     "ref": "E0-T-023"
     }
    ],
    "specialRules": [
-    "Vol 100 Griffeur"
+    "Griffeur"
    ],
    "keywords": [
     "bete"
@@ -4543,8 +4553,7 @@
     }
    ],
    "trappings": [
-    "habits de cour raffinés",
-    "Katarina est escortée par un détachement de 20 Chevaliers Panthères"
+    "habits de cour raffinés"
    ],
    "keywords": [
     "noble"
@@ -4706,7 +4715,7 @@
     "bourse contenant des pièces pour une valeur de 1 CO"
    ],
    "notes": [
-    "* Ne s’applique qu’au vin et au brandy, dont elle a l’habitude. Les Tests impliquant d’autres types de boissons alcoolisées sont réalisés avec son Endurance de 32. ** Ne s’applique qu’aux attaques réalisées avec sa canne."
+    "* Résistance à l’alcool : vin et brandy seulement (autres boissons : Endurance 32) ; ** Corps à corps (Armes d’hast) : avec sa canne seulement."
    ],
    "nameFrSource": "L28 p.122"
   },
@@ -5287,7 +5296,11 @@
      "name": "Combat Aware"
     }
    ],
-   "trappings": [],
+   "trappings": [
+    "armure de plates laquée en noir",
+    "heaume intégral laqué en noir",
+    "épée de cérémonie à deux mains"
+   ],
    "nameFrSource": "L28 p.125"
   },
   {
@@ -5973,8 +5986,8 @@
     }
    ],
    "trappings": [
-    "où qu’il aille",
-    "une arme t"
+    "robe",
+    "bâton de cérémonie"
    ],
    "nameFrSource": "L28 p.130"
   },
@@ -6629,7 +6642,8 @@
     "vêtements d’extérieur pratiques",
     "notamment des bottes solides et une cape épaisse et chaude",
     "couteau de chasse",
-    "arc long et carquois de 12 flèches"
+    "arc long et carquois de 12 flèches",
+    "sacoche contenant des pièces pour une valeur de 2 CO"
    ],
    "nameFrSource": "L28 p.136"
   },
@@ -7832,7 +7846,7 @@
     "sacoche contenant des pièces d’une valeur de 2 CO"
    ],
    "notes": [
-    "*Doppelgänger: un doppelgänger peut prendre la forme de toute créature humanoïde qu’il a rencontrée, d’une taille comprise entre 1 m 20 et 2 m 40. La ressemblance est telle que seuls ceux qui connaissaient très bien l’original peuvent espérer remarquer la supercherie. Il leur faudra même réussir un Test d’Intuition Difficile (-20) pour sentir que quelque chose cloche."
+    "Doppelgänger : prend l’apparence d’un humanoïde déjà rencontré (règle L28 p. 145)."
    ],
    "specialRules": [
     "Doppelgänger"
@@ -8850,7 +8864,8 @@
    ],
    "trappings": [
     "filet barbelé",
-    "arbalètes"
+    "arbalètes",
+    "armes simples (hache et gourdin)"
    ],
    "keywords": [
     "cultiste"
@@ -8943,7 +8958,7 @@
     "dague"
    ],
    "notes": [
-    "* Sort: Effrayant actif *Les sorts listés ci-dessous sont ceux que le Magus est prêt à utiliser pour la capture de Kastor Lieberung. Si les choses commencent à mal tourner pour eux ou si les Joueurs ont trop de facilités, n’hésitez pas à lui faire lancer la Tempête de feu de Tzeentch (L’Ennemi dans l’Ombre - Compagnon p. 83) sur tous les participants."
+    "Peur 2 seulement quand le sort Effrayant est actif ; sorts choisis pour la capture de « Kastor Lieberung » (L28 p. 28)."
    ],
    "spells": {
     "Petty": [
