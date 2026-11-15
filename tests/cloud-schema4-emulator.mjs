@@ -112,9 +112,16 @@ try {
     const outcome = await reload.store.registerAftermathDisease({ operationId: 'second-appareil', participantId: 'suivi:pc-patient', label: 'Fièvre', durationDays: 2 });
     assert.notEqual(outcome?.ok, false, JSON.stringify(outcome));
   } catch (error) { defects.push('second appareil, commande de soins après relecture RTDB : ' + error.message); }
+  let current = null;
+  for (let i = 0; i < 200 && current?.revision !== 2; i += 1) {
+    if (i) await new Promise(done => setTimeout(done, 25));
+    current = await ok(await raw(first.path, { token: alice.token }), 'relecture après le second appareil');
+  }
+  assert.equal(current.revision, 2, 'la commande du second appareil est écrite sur le compte');
+  assert.deepEqual(normalizeRemoteDocument(current).state.extensions.v5.aftermathRegister.diseases.map(row => row.id), ['disease:second-appareil']);
 
   // Cas 3 (refus) sur ce même document schéma 4.
-  const doc4 = { ...remote };
+  const doc4 = { ...current };
   await denied(await raw(first.path, { token: bob.token }), 'lecture par un autre UID');
   await denied(await raw(first.path), 'lecture par un invité');
   await denied(await raw(first.path, { token: bob.token, method: 'PUT', body: doc4 }), 'écriture par un autre UID');
@@ -125,7 +132,7 @@ try {
   }
   const noVersion = structuredClone(doc4.state); delete noVersion.schemaVersion;
   await denied(await raw(first.path, { token: alice.token, method: 'PUT', body: { ...doc4, revision: doc4.revision + 1, state: noVersion } }), 'schéma absent');
-  assert.deepEqual(await ok(await raw(first.path, { token: alice.token }), 'document inchangé'), remote, 'les refus ne modifient rien');
+  assert.deepEqual(await ok(await raw(first.path, { token: alice.token }), 'document inchangé'), current, 'les refus ne modifient rien');
 
   // Cas 2 : sauvegarde schéma 3 déjà sur le compte, lue, migrée, réécrite en schéma 4.
   const frozen = JSON.parse(await readFile(new URL('./fixtures/suivis-orphelins-v3.json', import.meta.url), 'utf8'));
@@ -176,7 +183,7 @@ try {
   assert.deepEqual(await ok(await raw(futurePath, { token: dave.token }), 'schéma 5 inchangé'), futureBefore, 'le document de schéma 5 n’est jamais réécrit');
 
   console.log('PASS schéma 4 : écriture et relecture (PV, États, Blessure Critique, suivi ouvert, horloge) ; schéma 3 migré puis réécrit sans perte ; autre UID/invité refusés ; schémas 0, 2, 5, absent refusés par les règles ; schéma 5 distant refusé par le client sans réécriture.');
-  // Rouge tant que la relecture RTDB (tableaux vides retirés) n'est pas réparée pour le registre de convalescence.
+  // Le registre de convalescence relu de RTDB (tableaux vides retirés) reste utilisable : lecture tolérante de v5-aftermath.js.
   assert.deepEqual(defects, [], 'défauts : ' + defects.join(' | '));
 } finally {
   for (const { store, persistence } of resources) { try { store.detachSync(); persistence.close(); } catch { /* nettoyage seulement */ } }

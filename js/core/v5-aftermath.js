@@ -19,7 +19,45 @@ function validSource(source) {
   return source.kind === 'critical' ? ID(source.criticalId) : ID(source.cause);
 }
 
-function assertState(state) {
+const isRecord = value => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+/** Listes que la base temps réel (RTDB) retire quand elles sont vides, par niveau du registre. */
+const EMPTY_LISTS = {
+  register: ['incidents', 'diseases', 'sequelae', 'receipts'], incidents: ['dailyChecks', 'treatments'], diseases: ['careLog'], sequelae: ['history'],
+  // Reçu d'une avance appliquée : rendu tel quel quand l'opération est rejouée.
+  advance: ['processedDailyChecks', 'ignoredDailyTests', 'absentIncidents']
+};
+const withLists = (row, keys) => {
+  if (!isRecord(row)) return row;
+  const absent = keys.filter(key => row[key] === undefined);
+  return absent.length ? { ...row, ...Object.fromEntries(absent.map(key => [key, []])) } : row;
+};
+const withAttempts = sequela => (isRecord(sequela?.immobilization) && sequela.immobilization.attempts === undefined
+  ? { ...sequela, immobilization: { ...sequela.immobilization, attempts: [] } } : sequela);
+
+/**
+ * Forme canonique d'un registre relu : une liste absente (retirée par RTDB, sauvegarde d'un autre appareil, compte migré)
+ * redevient la liste vide que produisent `createAftermathState` et les constructeurs de lignes. Rien d'autre n'est inventé,
+ * une valeur présente de mauvais type reste telle quelle (refusée par la validation) et l'original n'est jamais modifié.
+ */
+function canonicalState(state) {
+  if (!isRecord(state)) return state;
+  let next = withLists(state, EMPTY_LISTS.register);
+  const repair = {
+    incidents: row => withLists(row, EMPTY_LISTS.incidents),
+    diseases: row => withLists(row, EMPTY_LISTS.diseases),
+    sequelae: row => withAttempts(withLists(row, EMPTY_LISTS.sequelae)),
+    receipts: row => (row?.kind === 'advance-calendar' && row.status === 'applied' ? withLists(row, EMPTY_LISTS.advance) : row)
+  };
+  for (const [key, fix] of Object.entries(repair)) {
+    if (!Array.isArray(next[key])) continue;
+    const rows = next[key].map(fix);
+    if (rows.some((row, index) => row !== next[key][index])) next = { ...next, [key]: rows };
+  }
+  return next;
+}
+
+function assertState(value) {
+  const state = canonicalState(value);
   if (!state || typeof state !== 'object' || Array.isArray(state)
     || state.schemaVersion !== 1 || !Number.isSafeInteger(state.revision) || state.revision < 0
     || !state.calendar || state.calendar.schemaVersion !== 1
@@ -127,13 +165,13 @@ export function createAftermathState({ originDay = 0 } = {}) {
   };
 }
 
+/** Lecture d'un registre persisté ou synchronisé : forme canonique restaurée (listes vides absentes), puis validation. */
 export function validateAftermathState(state) {
-  assertState(state);
-  return clone(state);
+  return clone(assertState(state));
 }
 
-export function aftermathDate(state) {
-  assertState(state);
+export function aftermathDate(stateValue) {
+  const state = assertState(stateValue);
   const day = state.calendar.currentDay;
   return { day, dayInImperialWeek: ((day - state.calendar.originDay) % 8) + 1 };
 }
