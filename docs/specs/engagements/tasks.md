@@ -6,7 +6,7 @@
 - [x] T4 · `js/ui/workspace/plateau.js` (plateau + barre d'actions + panneau de Désengagement) à la place de `renderTrack`, CSS, `sw.js`. CA1-4, 10-14. après : T2.
 - [x] T5 · Parcours navigateur `tests/engagements-plateau-browser.mjs` ; recalage des parcours existants si un sélecteur bouge. après : T4.
 - [x] T6 · Circonstances : scène, positions, « À régler maintenant » en tête, Oui/Non/Récit. CA19-22. après : T3.
-- [ ] T7 · Suites complètes, contre-vérification (code + règles), corrections, fiches de recette, publication 3.39.0.
+- [x] T7 · Suites complètes, contre-vérification (code + règles), corrections, fiches de recette, publication 3.39.0.
 
 ## Convergence
 - Tour 1 (verifier code + verifier règles) : règles conformes ; écarts code corrigés au tour 2 (comparaison multi-cibles, forçage au changement de cible, scène par rencontre, banc, rang d'Initiative, Autres actions/Viser, Charge engagée forçable, Nuée et fuite de Brisé pré-remplies).

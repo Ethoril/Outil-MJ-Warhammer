@@ -97,6 +97,6 @@ Mise à jour du 12/11 : les lots sont menés par une seule session, dans le work
 
 ## Clôture
 
-- [ ] **T13 · Contre-vérification, documents, version** — après : T10, T11
+- [x] **T13 · Contre-vérification, documents, version** — après : T10, T11
   - Objectif : `verifier` sur `spec.md` et `plan.md` (code, puis règles) ; README, `docs/SUIVI_EVOLUTION.md`, note d'obsolescence en tête de `docs/CAMPAGNE_LOT2.md` ; suite complète ; version par `node tools/bump-version.mjs` au feu vert du MJ.
   - Acceptation : `node --test "tests/unit/**/*.test.js"` puis `node --test "tests/unit/**/*.test.mjs"`.
