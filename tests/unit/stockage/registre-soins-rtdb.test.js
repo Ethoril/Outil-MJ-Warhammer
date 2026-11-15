@@ -8,19 +8,7 @@ import { createAftermathState, validateAftermathState, registerWoundIncident, ad
   treatSurgicalIncident, closeAftermathIncident, archiveAftermathIncident, registerDisease, careForDisease, aftermathDate } from '../../../js/core/v5-aftermath.js';
 import { openSequelae, immobilizeFracture, treatTornMuscle, decideImpressiveScars, recordCharacteristicLoss, pendingSequelaDecisions } from '../../../js/core/v5-sequelae.js';
 import { playCare, storeWith, woundedPatient, healerSheet, asFollowed } from '../sequelles/soins-scenario.helper.js';
-
-/** Ce que RTDB rend d'une valeur écrite : tableaux vides, objets vides et propriétés null ou undefined retirés, récursivement. */
-function rtdb(value) {
-  if (Array.isArray(value)) {
-    const items = value.map(rtdb).filter(item => item !== undefined);
-    return items.length ? items : undefined;
-  }
-  if (value && typeof value === 'object') {
-    const entries = Object.entries(value).map(([key, item]) => [key, rtdb(item)]).filter(([, item]) => item !== undefined);
-    return entries.length ? Object.fromEntries(entries) : undefined;
-  }
-  return value === null ? undefined : value;
-}
+import { rtdb } from './rtdb.helper.js';
 /** Même valeur sans ses propriétés nulles : tableaux et objets vides gardés. */
 const withoutNulls = value => (Array.isArray(value) ? value.map(withoutNulls)
   : value && typeof value === 'object' ? Object.fromEntries(Object.entries(value).filter(([, item]) => item !== null).map(([key, item]) => [key, withoutNulls(item)])) : value);

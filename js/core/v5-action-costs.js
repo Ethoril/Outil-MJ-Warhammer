@@ -13,8 +13,21 @@ const freeze = value => { if (value && typeof value === 'object') { Object.value
 const participant = (state, actorId) => Array.isArray(state.participants) ? state.participants.find(row => row?.id === actorId) : record(state.participants) && Object.hasOwn(state.participants,actorId) ? state.participants[actorId] : null;
 const temporaryFate = actor => [actor?.extensions?.v5?.spellEffects,actor?.extensions?.v5?.divineEffects].flatMap(rows=>Array.isArray(rows)?rows:[]).reduce((sum,effect)=>sum+Math.max(0,Number(effect?.remainingTempFate)||0),0);
 const replace = (state, actor) => { if (Array.isArray(state.participants)) state.participants = state.participants.map(row => row.id === actor.id ? actor : row); else state.participants[actor.id] = actor; };
+/**
+ * Forme canonique du registre des usages relu (`extensions.v5.actionLedger`) : la base temps réel (RTDB) retire une liste vide
+ * et un `encounterId: null`. Une liste absente redevient vide et une rencontre absente redevient `null`, en copie ; rien d'autre
+ * n'est inventé, une valeur présente de mauvais type reste telle quelle (refusée par la validation) et l'original n'est pas modifié.
+ */
+export function canonicalV5ActionLedger(ledger) {
+  if (!record(ledger)) return ledger;
+  const absent = ['appliedActions', 'quotaUsage'].filter(key => ledger[key] === undefined);
+  let next = absent.length ? { ...ledger, ...Object.fromEntries(absent.map(key => [key, []])) } : ledger;
+  if (Array.isArray(next.appliedActions) && next.appliedActions.some(entry => record(entry) && entry.encounterId === undefined))
+    next = { ...next, appliedActions: next.appliedActions.map(entry => (record(entry) && entry.encounterId === undefined ? { ...entry, encounterId: null } : entry)) };
+  return next;
+}
 const ledgerOf = state => {
-  const ledger = state.v5ActionLedger ?? { appliedActions: [], quotaUsage: [] };
+  const ledger = canonicalV5ActionLedger(state.v5ActionLedger ?? { appliedActions: [], quotaUsage: [] });
   only(ledger, ['appliedActions', 'quotaUsage']);
   if (!Array.isArray(ledger.appliedActions) || !Array.isArray(ledger.quotaUsage)) throw new TypeError('Registre des usages invalide');
   const actions = new Set(), quotas = new Set();

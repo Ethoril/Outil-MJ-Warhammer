@@ -1,4 +1,5 @@
 import { applyStateChanges, createCompactStateCommand } from './commands.js';
+import { canonicalV5ActionLedger } from './v5-action-costs.js';
 
 /** Visit both sides of compact history entries using the current state as anchor. */
 function visitHistory(history, current, visit) {
@@ -57,7 +58,7 @@ export function purgeEncounterJournal(state, scope) {
   if (!state) return state;
   const linked = entry => journalEntryBelongsToEncounter(entry, scope);
   const removed = new Set((state.log || []).filter(linked).map(entry => entry.detail?.resolutionId).filter(Boolean));
-  const ledger = state.extensions?.v5?.actionLedger;
+  const ledger = canonicalV5ActionLedger(state.extensions?.v5?.actionLedger);
   const ownedClocks = new Set([scope.encounterId, ...scope.sceneIds]);
   const quotaBelongs = entry => {
     try { return ownedClocks.has(JSON.parse(entry.scopeKey)[0]); } catch { return false; }

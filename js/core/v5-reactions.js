@@ -14,9 +14,26 @@ function actionSnapshot(raw = {}) {
   const fields = ['type', 'base', 'mod', 'damage', 'damageFormula', 'attr', 'qualities', 'valuesX', 'capacity', 'extensions'];
   return { id: text(raw.id), ...Object.fromEntries(fields.filter(field => Object.hasOwn(action, field)).map(field => [field, clone(action[field])])) };
 }
+/**
+ * Forme canonique d'une opportunité relue : la base temps réel (RTDB) retire les listes vides (coûts, exemptions, quotas) et,
+ * dans l'arme figée, les propriétés nulles et les objets ou listes vides. Seuls ces champs absents reviennent à la valeur que
+ * produit `actionSnapshot` ; une valeur présente n'est jamais remplacée et l'original n'est pas modifié.
+ */
+function canonicalOpportunity(row) {
+  if (!record(row)) return row;
+  const lists = ['costs', 'exemptions', 'quotas'].filter(key => row[key] === undefined);
+  let next = lists.length ? { ...row, ...Object.fromEntries(lists.map(key => [key, []])) } : row;
+  if (record(next.action)) {
+    const snapshot = actionSnapshot(next.action);
+    const absent = Object.keys(snapshot).filter(key => !Object.hasOwn(next.action, key));
+    if (absent.length) next = { ...next, action: { ...next.action, ...Object.fromEntries(absent.map(key => [key, snapshot[key]])) } };
+  }
+  return next;
+}
 function opportunitiesOf(envelope) {
-  const list = envelope.extensions?.v5?.reactionOpportunities ?? [];
-  if (!Array.isArray(list)) throw new TypeError('Registre des réactions invalide');
+  const stored = envelope.extensions?.v5?.reactionOpportunities ?? [];
+  if (!Array.isArray(stored)) throw new TypeError('Registre des réactions invalide');
+  const list = stored.map(canonicalOpportunity);
   const ids = new Set();
   for (const row of list) {
     if (!record(row) || !text(row.id) || ids.has(row.id) || !text(row.sourceResolutionId) || !text(row.actorId) || !text(row.targetId) || !clockKnown(row)

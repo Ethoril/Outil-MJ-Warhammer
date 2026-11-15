@@ -7,6 +7,7 @@ import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Relo
 import { previewV5BrokenEscape, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from '../v5-broken-escape.js';
 import { withoutEngagements } from '../engagements.js';
 import { consumeObstinate } from '../v5-obstinate.js';
+import { canonicalV5ActionLedger } from '../v5-action-costs.js';
 
 export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews }) {
   const issuedExtractionPreviews = new Map();
@@ -17,7 +18,7 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
       if(!actorId||actorId!==envelope.combat?.currentActorId)return {ready:false,status:'blocked',error:'L’attestation de visibilité doit viser l’acteur du Tour canonique.'};
       const actor=envelope.combat?.participants?.find(row=>row.id===actorId),broken=(actor?.states||[]).some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
       if(!broken)return {ready:false,status:'blocked',error:'Le personnage ne porte pas Brisé.'};
-      const key=JSON.stringify([clock.encounterId,clock.turnId]),ledger=envelope.extensions?.v5?.actionLedger||{appliedActions:[],quotaUsage:[]};
+      const key=JSON.stringify([clock.encounterId,clock.turnId]),ledger=canonicalV5ActionLedger(envelope.extensions?.v5?.actionLedger||{appliedActions:[],quotaUsage:[]});
       const actionUsed=ledger.quotaUsage.some(row=>row.actorId===actorId&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===key&&row.used>0)||standardV5ActionSpent(envelope,actorId,clock);
       const seq=envelope.extensions?.v5?.brokenEscape?.byActorId?.[actorId];
       const sameTurn=seq?.turnId===clock.turnId;
@@ -194,7 +195,7 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
         if(draft.localRevision!==plan.baseRevision||JSON.stringify(clock)!==JSON.stringify(plan.turn))throw Object.assign(new Error('La partie ou le Tour a changé; recalculez la fuite.'),{userFacing:true});
         const actor=draft.combat?.participants?.find(row=>row.id===actorId&&row.zone==='active');
         if(!actor)throw new Error('Personnage de fuite absent.');
-        const root=draft.extensions?.v5||{},ledger=structuredClone(root.actionLedger||{appliedActions:[],quotaUsage:[]}),quotaId=plan.action==='flee'?'system:turn-move':'system:turn-action';
+        const root=draft.extensions?.v5||{},ledger=structuredClone(canonicalV5ActionLedger(root.actionLedger||{appliedActions:[],quotaUsage:[]})),quotaId=plan.action==='flee'?'system:turn-move':'system:turn-action';
         const old=ledger.quotaUsage.find(row=>row.actorId===actorId&&row.quotaId===quotaId&&row.scope==='turn'&&row.scopeKey===key);
         if(old?.used)throw Object.assign(new Error('Quota de Tour déjà dépensé; recalcul requis.'),{userFacing:true});
         const seqs=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]}),seq=seqs.byActorId?.[actorId]||{};

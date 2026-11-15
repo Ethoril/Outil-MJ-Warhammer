@@ -6,7 +6,7 @@ import { sourceActive } from './v5-talent-actions.js';
 import { v5ResourceIdentity } from './v5-resources.js';
 import { validateV5ReactionInput, registerV5ReactionOpportunities } from './v5-reactions.js';
 /** Bridge from the durable Store envelope to the pure V5 action transaction. */
-import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts } from './v5-action-costs.js';
+import { previewV5ActionCosts, prepareV5ActionState, commitV5ActionCosts, canonicalV5ActionLedger } from './v5-action-costs.js';
 import { projectV5Resources, commitV5Resources, commitV5Fate, v5CombatActionClock } from './v5-resources.js';
 import { effectiveOrder } from './turn-order.js';
 import { planNaturalAttack } from './creature-combat.js';
@@ -29,7 +29,7 @@ export function v5StoreActionState(envelope) {
   return { revision: envelope.localRevision || 0,
     ...(Number.isSafeInteger(envelope.combat?.round) && envelope.combat.round > 0 ? { round: envelope.combat.round } : {}),
     participants: projectV5Resources(envelope, envelope.combat?.participants || []),
-    v5ActionLedger: clone(envelope.extensions?.v5?.actionLedger || { appliedActions: [], quotaUsage: [] }),
+    v5ActionLedger: clone(canonicalV5ActionLedger(envelope.extensions?.v5?.actionLedger || { appliedActions: [], quotaUsage: [] })),
     appliedResolutionIds: [...(envelope.appliedResolutionIds || [])] };
 }
 function authorNextTurnEnd(envelope, actorId) {
