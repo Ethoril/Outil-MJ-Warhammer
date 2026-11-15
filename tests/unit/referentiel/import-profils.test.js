@@ -529,6 +529,9 @@ test('B1 tous les profils de tous les livres (hors gabarits) se construisent', a
       built += 1;
     }
   }
-  assert.equal(built, 1041); // 882 + L27 (6 montures et le Rapace du Bestiaire V2, 11/11/2026) + L05 (Ours et Pigeon, T12 du 13/11/2026) + L28 (64 profils, T15) + L90 (5 profils maison, T17, et 7 cultistes de la Main pourpre, Q12) + L29 (50 profils V2 convertis, T16) + L30 (23) + Vampires lahmianes (L27)
+  // Invariant qui tient quand le bestiaire grossit : tous les profils non gabarits annoncés par l'index se construisent (aucun nombre figé).
+  const index = JSON.parse(readFileSync(new URL('../../../js/data/bestiary/index.json', import.meta.url), 'utf8'));
+  assert.equal(built, index.books.reduce((sum, book) => sum + book.counts.profiles + book.counts.pregenerated, 0));
+  assert.ok(built > 0);
 });
 });

@@ -906,7 +906,7 @@ test('L90 : profils maison, copies exactes d’un profil imprimé (L06, L28), se
   }
   const [archer, leadbelcher, bigUn, captain, zombie] = book.profiles;
   assert.ok(archer.attacks.every(attack => !attack.optional));
-  assert.deepEqual(leadbelcher.attacks.at(-1), { name: 'Leadbelcher Gun', value: 20, damage: 12, rangeYards: 12, qualities: ['Impale'] });
+  assert.deepEqual(leadbelcher.attacks.at(-1), { name: 'Leadbelcher Gun', value: 20, damage: 8, rangeYards: 12, qualities: ['Impale'] });
   assert.deepEqual(bigUn.attacks[0], { name: 'Choppa', value: 40, damage: 8 });
   assert.deepEqual([captain.attacks, zombie.attacks], [l06.profiles.find(item => item.id === 'E0-P-099').attacks, l06.profiles.find(item => item.id === 'E0-P-094').attacks]);
 });
@@ -930,5 +930,35 @@ test('Q12 : sept cultistes, caractéristiques du bloc imprimé L28 p. 28, répar
   assert.equal(arms.filter(arm => arm === 'Arbalète+Gourdin ou Hache').length, 4);
   assert.equal(arms.filter(arm => arm === 'Hache').length, 2);
   assert.equal(arms.filter(arm => arm === 'Filet+Massue').length, 1);
+});
+test('L28, L29, L30 : écarts de fidélité corrigés (Traits collés, malus de groupe, tables de décisions du MJ du 14/11)', () => {
+  const byName = (book, pattern) => read(`js/data/bestiary/${book}.json`).profiles.find(profile => pattern.test(profile.nameFr));
+  const traitNames = profile => profile.traits.map(item => item.name);
+  // L28 p. 110 et p. 67 : Vol 100 et Vision nocturne imprimés comme Traits, pas collés au titre du paragraphe suivant.
+  const falcon = byName('L28', /Sénestre/);
+  assert.deepEqual(falcon.traits.find(item => item.name === 'Fly'), { name: 'Fly', rating: '100', ref: 'E0-T-023' });
+  assert.ok(traitNames(byName('L28', /minotaure/i)).includes('Night Vision'));
+  assert.ok(read('js/data/bestiary/L28.json').profiles.every(profile => !['Très Petit', 'Petit'].includes(profile.traits?.find(item => item.name === 'Size')?.param)));
+  // L29 : un malus imprimé « (BF–n) » vaut pour chaque arme du groupe.
+  assert.equal(byName('L29', /Sanguinaires de Khorne/).attacks.find(attack => attack.name === 'Cornes').damage, 8);
+  const nurglings = byName('L29', /Nurglings/).attacks;
+  assert.deepEqual([nurglings.find(attack => attack.name === 'Griffes').damage, nurglings.find(attack => attack.name === 'Dents').damage], [3, 3]);
+  assert.equal(byName('L29', /Fanges du Chaos/).page, 123);
+  assert.ok(byName('L29', /Gardien des secrets/).specialRules.includes('Compétence V2 : Langage secret (démoniaque, magick)'));
+  // L30 : décisions du MJ du 14/11.
+  assert.ok(byName('L30', /Squigs des tombes/).specialRules.includes('Mouvement aléatoire imprimé : 1–10'));
+  assert.equal(byName('L30', /Squigs des tombes/).stats.M, 4);
+  for (const pattern of [/Baisers de jouvence/, /^Bastethi$/]) {
+    const profile = byName(pattern.source.includes('Baisers') ? 'L29' : 'L30', pattern);
+    assert.equal(profile.conversion.animal, false);
+    assert.equal(profile.stats.Dex, profile.stats.Ag);
+  }
+  assert.deepEqual(byName('L30', /Fatandira/).attacks.at(-1), { name: 'Repeater Crossbow', value: 65, damage: 8, rangeYards: 45, qualities: ['Impale', 'Repeater 3', 'Reload 9'] });
+  const karitamen = byName('L30', /Karitamen/);
+  assert.deepEqual(karitamen.attacks, [{ name: 'Hand Weapon', value: 66, damage: 9 }]);
+  assert.deepEqual(Object.values(karitamen.spells).flat().filter(name => ['Drain de Magie', 'Silence'].includes(name)).sort(), ['Drain de Magie', 'Silence']);
+  assert.equal(byName('L30', /Généraux revenants/).attacks[0].damage, 4 + 5);
+  assert.equal(byName('L30', /Revenants elfes/).attacks[0].damage, 3 + 5);
+  assert.ok(byName('L30', /Revenants elfes/).specialRules.some(rule => /décision du MJ/.test(rule)));
 });
 });
