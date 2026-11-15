@@ -24,7 +24,7 @@ export const TOKEN_IMAGES = [{ path: 'maps/tokens/bestiaire/loup.webp', label: '
 
 **Profil de réserve** : champ facultatif `tokenLibraryImage` (chemin relatif commençant par `maps/tokens/`, sans `..`, extension image, ≤ 200 caractères). Absent = aucun choix, lu au point de lecture ; **pas de migration**, le schéma reste en version 4. Exclusif de `tokenImage` à l'enregistrement du formulaire. La monture d'un profil est elle-même un profil (`monture-<id>`) : même champ, même résolution.
 
-**Participant sous Forme bestiale** : `extensions.v5.beastForm.wind` (`'beasts'` | `'jade'`), écrit à la transformation. Absent (transformation en cours avant mise à jour) = `beasts`. `kind: 'kadon'` n'envoie pas d'image de forme (hors périmètre).
+**Participant sous Forme bestiale** : `extensions.v5.beastForm.wind` (`'beasts'` | `'jade'`), écrit à la transformation. Absent (transformation en cours avant mise à jour) = `beasts`. `kind: 'kadon'` : hors périmètre au départ ; depuis le 15/11/2026 (images créées par le MJ), envoie l'image du monstre (`form: { monster }` dans la table, dossier `monstres/transformation-kadon/`, une seule image sans vent).
 
 **Contrat de liaison** (`docs/CONTRAT_LIAISON_MAP_DISPLAY.md` et sa copie `rpg-map-display/docs/CONTRAT-LIAISON-OUTIL-MJ.md`, à garder identiques) :
 - §4/§6 `imageUrl` : `data:` ≤ 24 Kio, **ou chemin relatif sous `maps/tokens/`**, ou `null`. Vaut aussi pour `rider.imageUrl`.

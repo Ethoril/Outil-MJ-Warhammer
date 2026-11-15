@@ -105,6 +105,7 @@ Cadrage du 13/11/2026, sur `42d6965` (prod 3.47.1). Origine : [docs/CONSTAT_IMAG
 - **Main pourpre** : le Magus et sept profils individuels de cultistes (caractéristiques du bloc imprimé L28 p. 28), chacun avec son image. **Fils d'Ulric, Fausse Hydre** : pas de profil. **Profils maison** : armes validées.
 - **CA39.** Un profil copié du bestiaire prend son nom français quand il existe, sinon le nom anglais ; la Bibliothèque de bestiaire affiche et trie par le nom français d'abord, et la recherche trouve toujours les deux noms.
 - **CA40.** Prendre ou quitter une Forme bestiale n'est pas une blessure : la carte ne dessine pas de sang sur le pion à cette occasion.
+- **CA41.** (15/11/2026, images créées par le MJ) Sous la Transformation de Kadon, le pion prend l'image du monstre (`maps/tokens/monstres/transformation-kadon/`, une image par monstre, sans variante de vent) et retrouve la sienne à la fin, comme pour la Forme bestiale. Un monstre sans image laisse le pion inchangé.
 - Le sélecteur propose toute la bibliothèque (formes et PJ compris) ; une créature ajoutée au combat sans passer par la réserve, ou invoquée, reçoit aussi son image automatique.
 
 ## Hors périmètre
@@ -114,5 +115,4 @@ Cadrage du 13/11/2026, sur `42d6965` (prod 3.47.1). Origine : [docs/CONSTAT_IMAG
 - Images des PJ : la carte reste maîtresse (sauf S6).
 - Changer l'image d'un pion déjà posé à la main sur la carte, hors liaison.
 - Ajouter une image aux fiches du bestiaire consultées hors réserve.
-- L'autre sort de transformation (Dragon, Géant, Griffon, Troll…) : pas de changement de pion tant que le MJ n'a pas fait d'images dédiées (décision du 13/11).
 - Choix automatique d'un destrier selon l'origine du cavalier.

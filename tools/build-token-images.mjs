@@ -8,17 +8,19 @@
 //
 // Options : --csv <fichier> et --out <fichier> remplacent les emplacements par défaut.
 // Refuse (code 1) un chemin invalide, un chemin ou un profil cité deux fois, un profil inconnu du bestiaire,
-// une image de forme bestiale dont la bête n'existe pas dans REIKLAND_BEASTS.
+// une image de forme bestiale dont la bête n'existe pas dans REIKLAND_BEASTS, une image de Kadon dont le monstre n'existe pas
+// dans KADON_MONSTERS.
 import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { REIKLAND_BEASTS } from '../js/data/v5-transformation-bestiary.js';
+import { REIKLAND_BEASTS, KADON_MONSTERS } from '../js/data/v5-transformation-bestiary.js';
 import { normalizeLibraryImage } from '../js/core/token-library-path.js';
 
 export const CSV = 'tools/token-images.csv';
 export const OUT = 'js/data/token-images.js';
 export const ROOT_GROUP = 'racine';
 const FORM_DIR = 'maps/tokens/bestiaire/forme-bestiale/';
+const KADON_DIR = 'maps/tokens/monstres/transformation-kadon/';
 const WINDS = Object.freeze({ bete: 'beasts', vie: 'jade' });
 const racineOutil = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -40,8 +42,14 @@ export function parseCsv(text) {
   });
 }
 
-/** Clé de REIKLAND_BEASTS et vent d'une image de forme bestiale, ou null hors du dossier forme-bestiale. */
-function formOf(path, beasts) {
+/** Forme d'une image : bête de REIKLAND_BEASTS et vent (dossier forme-bestiale), monstre de KADON_MONSTERS (dossier transformation-kadon), sinon null. */
+function formOf(path, beasts, monsters) {
+  if (path.startsWith(KADON_DIR)) {
+    const name = path.slice(KADON_DIR.length).replace(/\.[a-z]+$/, '');
+    const monster = Object.keys(monsters).find(key => slug(monsters[key].name) === name);
+    if (!monster) throw new Error(`forme de Kadon de monstre inconnu (« ${name} » absent de KADON_MONSTERS) : ${path}`);
+    return { monster };
+  }
   if (!path.startsWith(FORM_DIR)) return null;
   const match = /^([a-z0-9-]+)-(bete|vie)\.[a-z]+$/.exec(path.slice(FORM_DIR.length));
   if (!match) throw new Error(`forme bestiale sans suffixe -bete ou -vie : ${path}`);
@@ -51,7 +59,7 @@ function formOf(path, beasts) {
 }
 
 /** Lignes lues → entrées de la table, triées par chemin ; lève une erreur en français au premier défaut. */
-export function buildTable(rows, { profileIds = null, beasts = REIKLAND_BEASTS } = {}) {
+export function buildTable(rows, { profileIds = null, beasts = REIKLAND_BEASTS, monsters = KADON_MONSTERS } = {}) {
   const paths = new Set();
   const cited = new Map();
   const entries = rows.map(({ number = '?', path, label, profiles }) => {
@@ -65,7 +73,7 @@ export function buildTable(rows, { profileIds = null, beasts = REIKLAND_BEASTS }
       cited.set(id, path);
     }
     const parts = path.split('/').slice(2);
-    return { path, label, group: parts.length > 1 ? parts[0] : ROOT_GROUP, profiles: [...profiles], form: formOf(path, beasts) };
+    return { path, label, group: parts.length > 1 ? parts[0] : ROOT_GROUP, profiles: [...profiles], form: formOf(path, beasts, monsters) };
   });
   return entries.sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0));
 }
@@ -74,7 +82,7 @@ export function buildTable(rows, { profileIds = null, beasts = REIKLAND_BEASTS }
 export function renderModule(entries) {
   const q = JSON.stringify;
   const lines = entries.map(({ path, label, group, profiles, form }) => {
-    const formText = form ? `Object.freeze({ beast: ${q(form.beast)}, wind: ${q(form.wind)} })` : 'null';
+    const formText = !form ? 'null' : form.monster ? `Object.freeze({ monster: ${q(form.monster)} })` : `Object.freeze({ beast: ${q(form.beast)}, wind: ${q(form.wind)} })`;
     return `  Object.freeze({ path: ${q(path)}, label: ${q(label)}, group: ${q(group)}, profiles: Object.freeze([${profiles.map(q).join(', ')}]), form: ${formText} })`;
   });
   return [
@@ -82,7 +90,8 @@ export function renderModule(entries) {
     '// Régénérer : node tools/build-token-images.mjs',
     '// Images de la bibliothèque de Map Display (maps/tokens/) et profils du bestiaire qui les reçoivent d’office.',
     '// group : premier dossier sous maps/tokens/ (« racine » pour un fichier à la racine) ; form : bête de Forme bestiale',
-    '// (clé de REIKLAND_BEASTS) et vent (beasts = Vent des Bêtes, jade = Vent de Jade), sinon null.',
+    '// (clé de REIKLAND_BEASTS) et vent (beasts = Vent des Bêtes, jade = Vent de Jade), ou monstre de Transformation de Kadon',
+    '// (monster : clé de KADON_MONSTERS), sinon null.',
     'export const TOKEN_IMAGES = Object.freeze([',
     lines.join(',\n'),
     ']);',

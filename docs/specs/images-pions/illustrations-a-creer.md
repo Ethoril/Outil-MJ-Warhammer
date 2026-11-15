@@ -27,6 +27,6 @@ Aucune : chaque bête a ses deux images.
 
 ## `monstres/transformation-kadon`
 
-Monstres de la Transformation de Kadon (Livre de base pp. 328-335) sans image dédiée. Le pion ne change pas sous cette transformation tant que ces images n’existent pas (hors périmètre du chantier).
+Monstres de la Transformation de Kadon (Livre de base pp. 328-335) sans image dédiée. Tant qu’une image manque, le pion ne change pas sous cette forme.
 
 Aucun : chaque monstre a son image.

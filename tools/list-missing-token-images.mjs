@@ -79,7 +79,7 @@ export function buildMissing({ books, table = TOKEN_IMAGES, categories, beasts =
   if (unclassified.length) {
     throw new Error(`${unclassified.length} créature(s) sans image absente(s) de ${CATEGORIES} : ${unclassified.join(', ')}`);
   }
-  const formPaths = new Set(table.filter(image => image.form).map(image => `${image.form.beast}:${image.form.wind}`));
+  const formPaths = new Set(table.filter(image => image.form?.beast).map(image => `${image.form.beast}:${image.form.wind}`));
   const forms = Object.entries(beasts).flatMap(([beast, { name, page }]) => [['beasts', 'bete', 'Vent des Bêtes'], ['jade', 'vie', 'Vent de Jade']]
     .filter(([wind]) => !formPaths.has(`${beast}:${wind}`))
     .map(([wind, suffix, windName]) => ({ beast, name, page, wind, windName, file: `${FORM_DIR}/${slug(name)}-${suffix}.webp` })));
@@ -138,7 +138,7 @@ export function renderMarkdown({ entries, forms, kadon }, { titles = {} } = {}) 
     out.push(row(['Fichier proposé', 'Bête', 'Clé', 'Vent', 'Page']), row(['---', '---', '---', '---', '---:']));
     for (const f of forms) out.push(row([`\`${f.file}\``, f.name, f.beast, f.windName, f.page]));
   } else out.push('Aucune : chaque bête a ses deux images.');
-  out.push('', `## \`${KADON_DIR}\``, '', 'Monstres de la Transformation de Kadon (Livre de base pp. 328-335) sans image dédiée. Le pion ne change pas sous cette transformation tant que ces images n’existent pas (hors périmètre du chantier).', '');
+  out.push('', `## \`${KADON_DIR}\``, '', 'Monstres de la Transformation de Kadon (Livre de base pp. 328-335) sans image dédiée. Tant qu’une image manque, le pion ne change pas sous cette forme.', '');
   if (kadon.length) {
     out.push(row(['Fichier proposé', 'Monstre', 'Clé', 'Page']), row(['---', '---', '---', '---:']));
     for (const k of kadon) out.push(row([`\`${k.file}\``, k.name, k.monster, k.page]));

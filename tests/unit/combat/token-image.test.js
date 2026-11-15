@@ -107,7 +107,7 @@ test('participant sans profil de Réserve (ajouté depuis le bestiaire) : sa pro
 
 // S6 — Formes bestiales (T8, CA17-CA19) : image de forme selon la bête et le vent du sort lancé, champ `formImageUrl` séparé.
 const { formImageOf } = await import('../../../js/core/token-image.js');
-const { BEAST_PROFILES, applyBeastForm, revertBeastForm } = await import('../../../js/core/v5-magic-arbitrations.js');
+const { BEAST_PROFILES, KADON_PROFILES, applyBeastForm, revertBeastForm } = await import('../../../js/core/v5-magic-arbitrations.js');
 const { createMapLink } = await import('../../../js/core/map-link.js');
 const { sanitizeParticipant } = await import('../../../js/core/sanitize.js');
 const mage = (id = 'mage', extra = {}) => ({ id, name: id, kind: 'PJ', camp: 'pj', hp: 30, maxHp: 30, fortune: 2, zone: 'active', init: 50,
@@ -145,13 +145,29 @@ test('vent absent (transformation commencée avant cette version) lu au point de
   assert.equal(formImageOf(bad), 'maps/tokens/bestiaire/forme-bestiale/ours-bete.webp', 'valeur inconnue lue comme absente');
 });
 
-test('CA19 et hors périmètre : null hors forme, pour Kadon et pour une bête sans image dans ce vent', () => {
+test('Transformation de Kadon : image du monstre, sans vent ; null sans image ou pour un monstre saisi à la main', () => {
+  const kadonForm = profile => applyBeastForm(mage(), profile, { kind: 'kadon', durationRounds: 5 }).participant;
+  for (const [key, profile] of Object.entries(KADON_PROFILES)) {
+    const form = kadonForm(profile);
+    assert.equal(form.extensions.v5.beastForm.kind, 'kadon');
+    assert.equal(formImageOf(form), TOKEN_IMAGES.find(row => row.form?.monster === key).path, key);
+  }
+  const troll = kadonForm(KADON_PROFILES.troll);
+  assert.equal(formImageOf(troll), 'maps/tokens/monstres/transformation-kadon/troll.webp');
+  assert.equal(formImageOf(troll, TOKEN_IMAGES.filter(row => !row.form?.monster)), null, 'monstre sans image : pion inchangé');
+  assert.equal(formImageOf(kadonForm({ ...KADON_PROFILES.troll, name: 'Troll maison' })), null, 'profil saisi hors monstres du livre');
+  assert.equal(formImageOf(revertBeastForm(troll).participant), null, 'forme quittée : plus d’image de forme');
+  const state = tokenStatesOf([troll], { formImageUrlOf: participant => formImageOf(participant) });
+  assert.equal(Object.values(state)[0].formImageUrl, 'maps/tokens/monstres/transformation-kadon/troll.webp', 'part dans token.state, PJ compris');
+});
+
+test('CA19 : null hors forme et pour une bête sans image dans ce vent ; Kadon ne lit pas les images de Forme bestiale', () => {
   assert.equal(formImageOf(mage()), null);
   assert.equal(formImageOf(null), null);
   assert.equal(formImageOf(undefined), null);
   const kadon = transformed('wolf');
   kadon.extensions.v5.beastForm.kind = 'kadon';
-  assert.equal(formImageOf(kadon), null, 'Transformation de Kadon : pas d’image de forme');
+  assert.equal(formImageOf(kadon), null, 'une bête du Reikland n’est pas un monstre de Kadon');
   const onlyBeastsWolf = TOKEN_IMAGES.filter(row => row.form?.beast === 'wolf' && row.form.wind === 'beasts');
   assert.equal(formImageOf(transformed('wolf'), onlyBeastsWolf), 'maps/tokens/bestiaire/forme-bestiale/loup-bete.webp');
   assert.equal(formImageOf(transformed('wolf', { isJade: true }), onlyBeastsWolf), null, 'pas de variante Jade : pion inchangé');

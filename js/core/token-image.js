@@ -6,7 +6,7 @@
  * Ne dépend pas de models.js (qui importe d'ici `normalizeLibraryImage`).
  */
 import { TOKEN_IMAGES } from '../data/token-images.js';
-import { REIKLAND_BEASTS } from '../data/v5-transformation-bestiary.js';
+import { REIKLAND_BEASTS, KADON_MONSTERS } from '../data/v5-transformation-bestiary.js';
 import { normalizeLibraryImage } from './token-library-path.js';
 
 // Règle unique du chemin de bibliothèque, partagée avec le générateur de la table.
@@ -78,17 +78,22 @@ export function searchTokenImages(query, table = TOKEN_IMAGES, { limit = Infinit
 
 // Forme bestiale (S6) : la forme garde le profil de la bête (copie de REIKLAND_BEASTS[clé]), pas sa clé ; on la retrouve par le nom.
 const BEAST_KEY_BY_NAME = new Map(Object.entries(REIKLAND_BEASTS).map(([key, beast]) => [beast.name, key]));
+const MONSTER_KEY_BY_NAME = new Map(Object.entries(KADON_MONSTERS).map(([key, monster]) => [monster.name, key]));
 /** Vent d'une Forme bestiale : `wind` écrit à la transformation, sinon `isJade` (déjà enregistré avant), sinon Vent des Bêtes. */
 const formWindOf = form => (form.wind === 'beasts' || form.wind === 'jade' ? form.wind : form.isJade === true ? 'jade' : 'beasts');
 
 /**
- * Image de forme (`formImageUrl`, contrat §4) d'un participant sous Forme bestiale : celle de la table pour sa bête et le vent
- * du sort lancé. `null` hors forme, pour la Transformation de Kadon (hors périmètre) et pour une bête sans image dans ce vent
- * (CA19 : le pion reste inchangé).
+ * Image de forme (`formImageUrl`, contrat §4) d'un participant transformé : sous Forme bestiale, celle de la table pour sa bête
+ * et le vent du sort lancé ; sous Transformation de Kadon, celle de son monstre (une seule image, sans vent ; décision du
+ * 15/11/2026). `null` hors forme et pour une bête ou un monstre sans image (CA19 : le pion reste inchangé).
  */
 export function formImageOf(participant, table = TOKEN_IMAGES) {
   const form = participant?.extensions?.v5?.beastForm;
-  if (!form || typeof form !== 'object' || form.kind === 'kadon') return null;
+  if (!form || typeof form !== 'object') return null;
+  if (form.kind === 'kadon') {
+    const monster = MONSTER_KEY_BY_NAME.get(form.beastProfile?.name ?? form.name);
+    return (monster && normalizeLibraryImage((table || []).find(item => item?.form?.monster === monster)?.path)) || null;
+  }
   const beast = BEAST_KEY_BY_NAME.get(form.beastProfile?.name ?? form.name);
   if (!beast) return null;
   const wind = formWindOf(form);

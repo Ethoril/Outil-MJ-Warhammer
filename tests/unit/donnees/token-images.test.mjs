@@ -9,7 +9,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { TOKEN_IMAGES } from '../../../js/data/token-images.js';
-import { REIKLAND_BEASTS } from '../../../js/data/v5-transformation-bestiary.js';
+import { REIKLAND_BEASTS, KADON_MONSTERS } from '../../../js/data/v5-transformation-bestiary.js';
 import { buildTable, parseCsv, isLibraryPath, slug } from '../../../tools/build-token-images.mjs';
 import { generate, buildMissing, parseCategories, loadBestiary } from '../../../tools/list-missing-token-images.mjs';
 
@@ -37,7 +37,7 @@ test('un profil n’a qu’une image automatique (CA22)', () => {
 });
 
 test('formes bestiales : des bêtes connues, chacune par paire des deux vents', () => {
-  const formes = TOKEN_IMAGES.filter(image => image.form);
+  const formes = TOKEN_IMAGES.filter(image => image.form?.beast);
   assert.ok(formes.length > 0);
   for (const { form, path } of formes) {
     assert.ok(Object.hasOwn(REIKLAND_BEASTS, form.beast), `bête inconnue : ${form.beast}`);
@@ -48,6 +48,16 @@ test('formes bestiales : des bêtes connues, chacune par paire des deux vents', 
   const cles = new Set(formes.map(({ form }) => form.beast));
   assert.equal(formes.length, cles.size * 2);
   for (const cle of cles) assert.deepEqual(formes.filter(({ form }) => form.beast === cle).map(({ form }) => form.wind).sort(), ['beasts', 'jade']);
+});
+
+test('Transformation de Kadon : une image par monstre connu, sans vent', () => {
+  const kadon = TOKEN_IMAGES.filter(image => image.form?.monster);
+  assert.deepEqual(kadon.map(({ form }) => form.monster).sort(), Object.keys(KADON_MONSTERS).sort());
+  for (const { form, path, profiles } of kadon) {
+    assert.deepEqual(Object.keys(form), ['monster']);
+    assert.match(path, /^maps\/tokens\/monstres\/transformation-kadon\/[a-z0-9-]+\.webp$/);
+    assert.deepEqual([...profiles], [], 'image de forme : aucun profil du bestiaire ne la reçoit d’office');
+  }
 });
 
 test('chemins valides, uniques, triés ; groupe = premier dossier ; une entrée par ligne du CSV', () => {
@@ -64,7 +74,7 @@ test('chemins valides, uniques, triés ; groupe = premier dossier ; une entrée 
     const parties = image.path.split('/').slice(2);
     assert.equal(image.group, parties.length > 1 ? parties[0] : 'racine');
     assert.ok(image.label.trim());
-    if (!image.path.includes('/forme-bestiale/')) assert.equal(image.form, null);
+    if (!image.path.includes('/forme-bestiale/') && !image.path.includes('/transformation-kadon/')) assert.equal(image.form, null);
     assert.ok(Object.isFrozen(image) && Object.isFrozen(image.profiles));
   }
   assert.ok(Object.isFrozen(TOKEN_IMAGES));
@@ -85,6 +95,8 @@ test('générateur : refuse chemin invalide, profil cité deux fois, profil inco
   assert.throws(() => construire(entete + 'maps/tokens/a.webp;A;Z;;;;\n'), /profil inconnu/);
   assert.throws(() => construire(entete + 'maps/tokens/bestiaire/forme-bestiale/licorne-bete.webp;L;;;;;\n'), /forme/);
   assert.throws(() => construire(entete + 'maps/tokens/bestiaire/forme-bestiale/loup.webp;L;;;;;\n'), /forme/);
+  assert.throws(() => construire(entete + 'maps/tokens/monstres/transformation-kadon/licorne.webp;L;;;;;\n'), /Kadon/);
+  assert.deepEqual(construire(entete + 'maps/tokens/monstres/transformation-kadon/bete-des-fanges.webp;B;;;;;\n')[0].form, { monster: 'fenbeast' });
   assert.throws(() => construire(entete + 'maps/tokens/a.webp;A;;;;;\nmaps/tokens/a.webp;A;;;;;\n'), /deux fois/);
   const table = construire('﻿' + entete + 'maps/tokens/b.webp;Bé;B;;;;\r\nmaps/tokens/bestiaire/forme-bestiale/rat-geant-vie.webp;Rat;;;;;\r\n');
   assert.deepEqual(table, [
