@@ -8,12 +8,27 @@ Sources : le bestiaire (`js/data/bestiary/`), la table des images (`js/data/toke
 
 | Dossier | Illustrations | Profils couverts |
 | --- | ---: | ---: |
+| `bestiaire` | 1 | 1 |
+| `ennemis/vampires` | 2 | 2 |
 | Individus nommés (`pnj/<livre>`, `pj`) | 0 | 0 |
 | `bestiaire/forme-bestiale` | 0 | — |
 | `monstres/transformation-kadon` | 9 | — |
-| **Total** | **9** | **0** |
+| **Total** | **12** | **3** |
 
 ## Créatures génériques
+
+### `bestiaire` (1)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `bestiaire/gris-montagne-faucon.webp` | Gris montagne faucon | Grey Mountain Hawk | L11 p.63 | 1 | image à créer (faucon.webp ne le couvre plus, décision du MJ du 15/11) |
+
+### `ennemis/vampires` (2)
+
+| Fichier proposé | Nom français | Nom anglais | Livres et pages | Profils | Note |
+| --- | --- | --- | --- | ---: | --- |
+| `ennemis/vampires/vampire.webp` | Vampire | Vampire | L06 p.343 | 1 | image à créer (von Carstein ou vampire générique, décision du MJ du 15/11) |
+| `ennemis/vampires/vampire-noble.webp` | Vampire noble | Vampire Noble | L26 p.21 | 1 | image à créer (von Carstein ou vampire générique, décision du MJ du 15/11) |
 
 ## Individus nommés
 
