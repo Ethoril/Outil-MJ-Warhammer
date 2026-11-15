@@ -261,7 +261,8 @@ export function buildRecord(extracted, entry, context) {
   const uniqueTalents = talents.filter((talent, index) => talents.findIndex(other => other.name === talent.name && other.rank === talent.rank) === index);
   if (extracted.talents?.length || traitTalents.length) record.talents = uniqueTalents;
   const trims = TRAPPING_TRIMS[entry.id] || [];
-  if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).map(item => item.replace(/^and\s+(?=[A-Z])/, '')).map(item => trims.find(name => item.startsWith(`${name} `)) ?? item).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item));
+  // Yards du livre = mètres, même valeur (décision du MJ du 31/10, Q7) : « 10 yards of Rope » (L13 p. 113) devient « 10 metres of Rope ».
+  if (extracted.trappings?.length) record.trappings = joinTrappings(extracted.trappings, TRAPPING_JOINS[entry.id]).map(item => item.replace(/^and\s+(?=[A-Z])/, '')).map(item => trims.find(name => item.startsWith(`${name} `)) ?? item).filter(item => isTrappingName(item) || (TRAPPING_JOINS[entry.id] || []).includes(item)).map(item => item.replace(/\byard(s?)\b/g, 'metre$1'));
   const printedNotes = [...(extracted.notes || []), ...(OPTIONAL_NOTES[entry.id] || []).map(text => `Option: ${text}`)];
   if (printedNotes.length) record.notes = printedNotes;
   if (Number.isInteger(extracted.fatePoints)) record.fatePoints = extracted.fatePoints;

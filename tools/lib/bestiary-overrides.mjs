@@ -162,6 +162,49 @@ export const ARMOUR_DETAIL = Object.freeze({
   'E0-P-575': 'Helm 2, Plate 3'
 });
 
+/**
+ * Livre de base V5 (L06) : le PDF du corpus est la v2 (empreinte de `source.sha256`), le bestiaire publié suit la v3 (lot v3 du 30/10/2026,
+ * d9b6a11 et 4c8ad35 : valeurs relues sur les pages 320-356 de la v3, page du profil). Ces valeurs n'étaient écrites que dans
+ * js/data/bestiary/L06.json ; elles sont appliquées ici après la lecture de la v2.
+ * `set` : chemin dans la fiche → valeur ; `removeTraits` : Trait retiré ; `rating` : niveau ajouté à un Trait (liste imprimée ou facultative) ;
+ * `addOptional` : Trait facultatif inséré à son rang alphabétique.
+ */
+const GRIM = Object.freeze({ name: 'Grim', ref: 'E0-T-026' });
+export const V3_PATCHES = Object.freeze({
+  // Dwarf, Crossbow and Bolts : portée 40 ; High Elf or Wood Elf, Longbow and Elf Arrows : +8 (p. 320).
+  'E0-P-065': { set: { 'attacks.1.rangeYards': 40 } },
+  'E0-P-066': { set: { 'attacks.1.damage': 8 } },
+  // Ogre (p. 324) : plus de Fear.
+  'E0-P-072': { removeTraits: ['Fear'] },
+  // Grosses créatures : dégâts des griffes, talons ou armes relevés ; Grim facultatif sur les neuf profils (pp. 328-346).
+  'E0-P-079': { addOptional: [GRIM] },
+  'E0-P-082': { set: { 'attacks.0.damage': 22 }, addOptional: [GRIM] },
+  'E0-P-084': { set: { 'attacks.0.damage': 22 }, addOptional: [GRIM] },
+  'E0-P-085': { set: { 'attacks.0.damage': 19 }, addOptional: [GRIM] },
+  'E0-P-086': { set: { 'attacks.0.damage': 19 }, addOptional: [GRIM] },
+  'E0-P-088': { addOptional: [GRIM] },
+  'E0-P-099': { rating: { Fear: '2' }, addOptional: [GRIM] },
+  'E0-P-100': { addOptional: [GRIM] },
+  'E0-P-103': { addOptional: [GRIM] },
+  // Niveaux de Fear : Skeleton, Zombie, Dire Wolf, Ghost, Vampire (facultatif) et Daemonette 2, Bloodletter 3.
+  'E0-P-093': { rating: { Fear: '2' } },
+  'E0-P-094': { rating: { Fear: '2' } },
+  'E0-P-095': { rating: { Fear: '2' } },
+  'E0-P-096': { rating: { Fear: '2' } },
+  'E0-P-107': { rating: { Fear: '3' } },
+  'E0-P-108': { rating: { Fear: '2' } },
+  // Gabarits (pp. 353-354) : Lieutenant remplace Leader ; Commander et Spellcaster Lord relevés (Int +30, FM reste +20).
+  'E0-P-115': { set: { name: 'Lieutenant', nameFr: 'Lieutenant', 'modifiers.CC': 20, 'modifiers.CT': 20, 'modifiers.F': 20, 'modifiers.E': 20, 'modifiers.I': 20, 'modifiers.Ag': 20, 'modifiers.FM': 20, 'modifiers.Soc': 10 } },
+  'E0-P-116': { set: { 'modifiers.CC': 30, 'modifiers.CT': 30, 'modifiers.E': 20, 'modifiers.I': 30, 'modifiers.Ag': 20, 'modifiers.FM': 30 } },
+  'E0-P-118': { set: { 'modifiers.Int': 30 } },
+  // Ungrakk (p. 355), Dextérité 35 imprimée.
+  'E0-P-120': { set: {
+    'stats.CC': 65, 'stats.CT': 60, 'stats.E': 60, 'stats.I': 60, 'stats.Ag': 55, 'stats.Dex': 35, 'stats.FM': 60, wounds: 23, 'armour.toughnessBonus': 6,
+    'attacks.0.value': 85, 'attacks.1.value': 65,
+    'skills.0.value': 80, 'skills.1.value': 75, 'skills.3.value': 55, 'skills.4.value': 55, 'skills.5.value': 85, 'skills.6.value': 85, 'skills.7.value': 80
+  } }
+});
+
 /** Équipement dont un objet est suivi d'un mot ou d'une phrase de la colonne voisine : l'objet est coupé après le nom donné (L16 p. 45 : « Restorative Brew Once the preparations… », p. 90 : « Pair of Swords y »). */
 export const TRAPPING_TRIMS = Object.freeze({
   'E0-P-502': ['Restorative Brew'],

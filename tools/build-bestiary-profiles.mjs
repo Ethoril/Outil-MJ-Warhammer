@@ -1,19 +1,22 @@
 /**
  * Génère les profils de bestiaire d'un ou plusieurs livres : js/data/bestiary/<livre>.json + index.json.
  *   node tools/build-bestiary-profiles.mjs L06 [L11 …]
+ *   node tools/build-bestiary-profiles.mjs --check [L06 …]   n'écrit rien ; code 1 en nommant chaque livre dont la régénération diffère
+ *                                                           du fichier publié (sans livre : tous), ou dont le PDF manque ou a changé
  * Source : texte des PDF (hors dépôt, extraction par colonnes) + inventaire (identifiants, noms, capacités). Valeurs imprimées telles
  * quelles. Les écarts de lecture (texte voisin écarté, nom français non vérifié) sont écrits dans tmp/divin/ pour relecture.
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { extractProfiles, corpusBooks } from './lib/bestiary-extract.mjs';
 import { assignInventoryIds } from './lib/bestiary-ids.mjs';
 import { buildRecord } from './lib/bestiary-record.mjs';
-import { TEMPLATE_IDS, NAME_FIXES, WOUNDS_ABSENT_IDS, ARMOUR_DETAIL, NOTE_SUMMARIES } from './lib/bestiary-overrides.mjs';
+import { TEMPLATE_IDS, NAME_FIXES, WOUNDS_ABSENT_IDS, ARMOUR_DETAIL, NOTE_SUMMARIES, V3_PATCHES } from './lib/bestiary-overrides.mjs';
 import { MANUAL_BLOCKS, PARTIAL_BOOKS } from './lib/bestiary-manual.mjs';
 import { KEYWORDS_MANUAL } from './lib/bestiary-keywords-manual.mjs';
 import { parsePregenerated } from './lib/bestiary-pregen.mjs';
 import { cleanSkills } from './lib/bestiary-record.mjs';
-import { execFileSync } from 'node:child_process';
+import { execFileSync, spawnSync } from 'node:child_process';
 import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
 import { NAMES_FR } from './lib/bestiary-names-fr.mjs';
 import { proposeFrenchName } from './lib/bestiary-names-glossary.mjs';
@@ -32,8 +35,27 @@ const BOOKS = {
 };
 const outFlag = process.argv.find(arg => arg.startsWith('--out='));
 const OUT = outFlag ? outFlag.slice(6) : 'js/data/bestiary';
-const ids = process.argv.slice(2).filter(arg => !arg.startsWith('--out='));
-if (!ids.length) { console.error('usage : node tools/build-bestiary-profiles.mjs L06 [L11 …]'); process.exit(2); }
+const CHECK = process.argv.includes('--check');
+const named = process.argv.slice(2).filter(arg => !arg.startsWith('--out=') && arg !== '--check');
+const ids = CHECK && !named.length ? Object.keys(BOOKS) : named;
+if (!ids.length) { console.error('usage : node tools/build-bestiary-profiles.mjs [--check] L06 [L11 …]'); process.exit(2); }
+// --check : la régénération doit redonner les fichiers publiés à l'octet près. Une source absente ou changée n'est jamais un succès.
+const drifted = [];
+function writeOrCompare(path, text, label) {
+  if (!CHECK) { writeFileSync(path, text); return; }
+  let current = null;
+  try { current = readFileSync(path, 'utf8'); } catch { /* fichier absent : écart */ }
+  if (current !== text) drifted.push(label);
+}
+if (CHECK) {
+  const missing = [];
+  if (spawnSync('pdftotext', ['-v']).error) missing.push('pdftotext introuvable (Poppler)');
+  for (const book of corpusBooks().filter(item => ids.includes(item.id))) {
+    if (!existsSync(book.path)) missing.push(`${book.id} : PDF absent (${book.path})`);
+    else if (createHash('sha256').update(readFileSync(book.path)).digest('hex') !== book.sha256) missing.push(`${book.id} : PDF différent du manifeste (${book.path})`);
+  }
+  if (missing.length) { console.error(`Contrôle impossible, source manquante :\n${missing.join('\n')}`); process.exit(1); }
+}
 
 const inventory = JSON.parse(readFileSync('docs/BESTIAIRE_INVENTAIRE.json', 'utf8'));
 const printedFr = new Map(inventory.profiles.filter(entry => entry.nameFrPrinted).map(entry => [entry.id, entry]));
@@ -79,10 +101,32 @@ function applyFrenchName(record) {
   else if (record.kind !== 'pregenerated-character') { record.nameFr = proposeFrenchName(record.name); record.nameFrSource = 'proposition'; }
   else { record.nameFr = record.name; record.nameFrSource = 'proposition'; }
 }
+// Valeurs de la v3 du Livre de base V5 portées sur la lecture de la v2 (V3_PATCHES).
+function applyV3Patch(record) {
+  const patch = V3_PATCHES[record.id];
+  if (!patch) return;
+  for (const [path, value] of Object.entries(patch.set || {})) {
+    const keys = path.split('.');
+    const parent = keys.slice(0, -1).reduce((node, key) => node[key], record);
+    parent[keys.at(-1)] = value;
+  }
+  if (patch.removeTraits) record.traits = record.traits.filter(trait => !patch.removeTraits.includes(trait.name));
+  for (const [name, rating] of Object.entries(patch.rating || {})) {
+    for (const list of [record.traits, record.optionalTraits].filter(Boolean)) {
+      const index = list.findIndex(trait => trait.name === name);
+      if (index < 0) continue;
+      const { rating: _printed, ...rest } = list[index];
+      list[index] = { name, rating, ...rest };
+    }
+  }
+  for (const trait of patch.addOptional || []) {
+    const index = record.optionalTraits.findIndex(other => other.name.localeCompare(trait.name) > 0);
+    record.optionalTraits.splice(index < 0 ? record.optionalTraits.length : index, 0, { ...trait });
+  }
+}
 const context = { canonical, traitRefs, traitFr, displayName, referential: BASE_REFERENTIAL };
 
-mkdirSync(OUT + '', { recursive: true });
-mkdirSync('tmp/divin', { recursive: true });
+if (!CHECK) { mkdirSync(OUT + '', { recursive: true }); mkdirSync('tmp/divin', { recursive: true }); }
 let indexFile = { schemaVersion: 1, books: [] };
 try { indexFile = JSON.parse(readFileSync(OUT + '/index.json', 'utf8')); } catch { /* premier livre */ }
 const manifest = corpusBooks();
@@ -108,6 +152,7 @@ for (const book of ids) {
     dropped.push({ id: record.id, ...record._dropped });
     delete record._dropped;
     applyFrenchName(record);
+    applyV3Patch(record);
     records.push(record);
   }
   const talentDictionary = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8')).talents.entries.map(item => item.englishName).filter(Boolean));
@@ -145,10 +190,12 @@ for (const book of ids) {
   if (problems.length) { console.error(problems.join('\n')); process.exitCode = 1; }
   const meta = manifest.find(item => item.id === book);
   const output = { schemaVersion: 1, book, title: BOOKS[book][0], edition: BOOKS[book][1], source: { corpusId: book, sha256: meta?.sha256 || null }, profiles: records };
-  writeFileSync(`${OUT}/${book}.json`,`${JSON.stringify(output, null, 1)}\n`);
-  writeFileSync(`tmp/divin/bestiary-ecarts-${book}.json`, `${JSON.stringify({ dropped, unverifiedSkills: records.flatMap(record => (record.skills || []).filter(skill => skill.frUnverified).map(skill => `${record.id} ${skill.name}`)), droppedTraits: dropped.flatMap(row => row.traits.map(name => `${row.id} ${name}`)), withoutKeywords: records.filter(record => !record.keywords?.length).map(record => `${record.id} ${record.name}`) }, null, 1)}\n`);
+  writeOrCompare(`${OUT}/${book}.json`, `${JSON.stringify(output, null, 1)}\n`, book);
+  if (!CHECK) writeFileSync(`tmp/divin/bestiary-ecarts-${book}.json`, `${JSON.stringify({ dropped, unverifiedSkills: records.flatMap(record => (record.skills || []).filter(skill => skill.frUnverified).map(skill => `${record.id} ${skill.name}`)), droppedTraits: dropped.flatMap(row => row.traits.map(name => `${row.id} ${name}`)), withoutKeywords: records.filter(record => !record.keywords?.length).map(record => `${record.id} ${record.name}`) }, null, 1)}\n`);
   const counts = { profiles: records.filter(r => r.kind === 'profile').length, templates: records.filter(r => r.kind === 'template').length, pregenerated: records.filter(r => r.kind === 'pregenerated-character').length };
   indexFile.books = [...indexFile.books.filter(item => item.book !== book), { book, file: `${book}.json`, title: BOOKS[book][0], edition: BOOKS[book][1], counts }].sort((a, b) => a.book.localeCompare(b.book));
   console.log(`${book} : ${records.length} profils (${counts.profiles} profils, ${counts.templates} gabarits, ${counts.pregenerated} prétirés), ${missing.filter(entry => !MANUAL_BLOCKS[entry.id]).length} sans bloc`);
 }
-writeFileSync(OUT + '/index.json', `${JSON.stringify(indexFile, null, 1)}\n`);
+writeOrCompare(OUT + '/index.json', `${JSON.stringify(indexFile, null, 1)}\n`, 'index.json');
+if (CHECK && drifted.length) { console.error(`Régénération différente du fichier publié : ${drifted.join(', ')}`); process.exitCode = 1; }
+else if (CHECK) console.log(`Régénération identique aux fichiers publiés : ${ids.join(', ')}`);
