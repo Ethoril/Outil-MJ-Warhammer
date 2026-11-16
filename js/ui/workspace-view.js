@@ -2,6 +2,7 @@ import {createDivinePanel} from './v5-divine-panel.js';
 import {createV5CorruptionPanel} from './v5-corruption-panel.js';
 import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.js';
 import {createV5PursuitPanel} from './v5-pursuit-panel.js';
+import {openV5PursuitDialog,renderScenePursuitEntry} from './v5-pursuit-dialog.js';
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
 import { familiarOfOf, FAMILIAR_HEALING_SOURCES } from '../core/familiars.js';
@@ -2418,6 +2419,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return row;
   }
 
+  // Poursuite de scène (D8, D17) : la modale s'ouvre sur la rencontre en cours ; le bouton est grisé, avec son motif, sans deux participants.
+  const scenePursuitEntry=()=>renderScenePursuitEntry({Store,onOpen:()=>{openV5PursuitDialog({Store}).catch(error=>import('./toast.js').then(({showToast})=>showToast(userMessage(error,'La poursuite de scène est indisponible : réessayez.'),'error')));}});
   function renderCenter(context) {
     const center = play.center;
     center.replaceChildren();
@@ -2507,13 +2510,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       prepare.dataset.workspaceAction = 'begin-encounter';
       prepare.disabled = !callbacks.beginEncounter;
       if (!callbacks.beginEncounter) prepare.title = 'Action indisponible';
-      empty.append(prepare, node('p', 'workspace-muted', 'ou ajoutez un profil depuis le panneau Profils'));
+      empty.append(prepare, node('p', 'workspace-muted', 'ou ajoutez un profil depuis le panneau Profils'), scenePursuitEntry());
       center.appendChild(empty);
       const prepared = encounterList({ compact: true });
       if (prepared.list) center.append(rubric('Rencontres préparées'), prepared.list);
       center.appendChild(tableRules());
       return;
     }
+    center.appendChild(scenePursuitEntry());
     const duel = node('div', 'workspace-duel');
     duel.append(renderSheet(context.actor, 'actor', context), renderSheet(context.target, 'target', context));
     center.appendChild(duel);

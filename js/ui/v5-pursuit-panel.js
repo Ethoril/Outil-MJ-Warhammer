@@ -25,21 +25,131 @@ export function pursuitStartInput({ roles = {}, movement = {}, side = '', pair =
     ...(pair.pursuerId && pair.preyId ? { pair: { pursuerId: pair.pursuerId, preyId: pair.preyId } } : {}) };
 }
 
+// --- Rendus partagés avec la modale de l'écran Jouer (v5-pursuit-dialog.js) : aucune écriture, tout passe par les rappels reçus. ---
+export const nameIn = (participants, id) => participants.find(row => row.id === id)?.name || id;
+export function selectField(parent, label, key, value, options, change) {
+  const wrap = node('label', 'workspace-type', label), select = document.createElement('select');
+  select.setAttribute('aria-label', label); select.dataset[key[0]] = key[1];
+  options.forEach(row => select.append(new Option(row[1], row[0])));
+  select.value = value ?? ''; select.addEventListener('change', () => change(select.value)); wrap.append(select); parent.append(wrap); return select;
+}
+
+/** Compétence (menu) et jet d100 (champ) d'un Test ; `d` : { skill, roll } ; `update(patch)` reçoit le changement. */
+export function renderTestInputs(box, { person, d, skills, update, focusKey = 'pursuit-test-roll-' + person.id }) {
+  const id = person.id;
+  selectField(box, 'Compétence du Test', ['pursuitTestSkill', id], d.skill, skills, value => update({ skill: value, beneficiaryId: null }));
+  const label = node('label', 'workspace-type', 'Jet d’' + d.skill + ' (d100)'), input = document.createElement('input');
+  input.type = 'number'; input.min = '1'; input.max = '100'; input.step = '1'; input.inputMode = 'numeric'; input.value = d.roll;
+  input.setAttribute('aria-label', 'Jet du Test de ' + person.name); input.dataset.pursuitTestRoll = id; input.dataset.focusKey = focusKey;
+  input.addEventListener('input', () => update({ roll: input.value, beneficiaryId: null })); label.append(input); box.append(label);
+}
+
+/** Lignes d'un Test calculé : compétence, jet, DR, puis détail du calcul. `t` : { skill, score, roll, sl, success, detail }. */
+export function renderTestResult(shown, t) {
+  shown.append(node('p', '', `${t.skill} ${t.score ?? '—'} · jet ${t.roll} · ${signed(t.sl)} DR · ${t.success ? 'réussite' : 'échec'}.`));
+  for (const line of t.detail || []) shown.append(node('p', 'workspace-formula-notes', line));
+}
+
+/** Obstiné et questions d'État avant le Test ; `needsInput` : ce que le moteur attend encore ; `onContext(next)` reçoit le contexte modifié. */
+export function renderTestPrompts(box, { person, context, onContext, needsInput = [], obstinateStatus }) {
+  const id = person.id;
+  const obstinate = renderObstinateChoice(person, context?.preRollTalent, value => { const next = { ...(context || {}) }; if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent; onContext(next); },
+    { focusKey: 'pursuit-pre-roll-talent-' + id, status: obstinateStatus });
+  if (obstinate) box.append(obstinate);
+  const rows = needsInput.filter(item => item && typeof item === 'object').map(item => ({ ...item, answerAt: '' }));
+  const questions = renderTestQuestions(rows, { root: context || {}, onChange: onContext, subjectOf: () => person, title: 'À préciser avant le Test', focusPrefix: 'pursuit-' + id, answeredAt: [''] });
+  if (questions) box.append(questions);
+}
+
+/** Trois cases de facteurs favorables ; `editable` : cases modifiables ; `onToggle(key, checked)`. */
+export function renderFactorsBox({ id, obstacleSide, factors = {}, groupSize, editable, onToggle }) {
+  const box = node('fieldset', 'workspace-broken-facts'); box.dataset.pursuitFactors = id; box.append(node('legend', '', 'Facteurs favorables'));
+  const preyCamp = obstacleSide === 'prey';
+  const labels = { won: 'Test de poursuite gagné', speed: 'Son membre le plus lent est plus rapide que le plus rapide d’en face',
+    terrain: preyCamp ? 'Terrain dense ou bondé, avec des cachettes (jugement du MJ)' : 'Terrain dégagé, sans cachettes (jugement du MJ)' };
+  for (const key of FACTOR_KEYS) {
+    const label = node('label', 'workspace-pursuit-check', labels[key]), check = document.createElement('input');
+    check.type = 'checkbox'; check.checked = factors[key] === true; check.disabled = !editable;
+    check.setAttribute('aria-label', labels[key]); check.dataset.pursuitFactor = key;
+    check.addEventListener('change', () => onToggle(key, check.checked));
+    label.prepend(check); box.append(label);
+  }
+  const count = FACTOR_KEYS.filter(key => factors[key] === true).length;
+  box.append(node('p', 'workspace-muted', `L’outil coche les deux premiers selon le Test et les Mouvements ; vous cochez le terrain. ${count}/3 facteur(s) : ${obstacleCountRequired(groupSize, count)} Obstacle(s) à franchir sur ${groupSize} personnage(s).`));
+  return box;
+}
+
+/** Intitulé, compétences possibles et résultat d'un Obstacle dans `box` ; rend true si son Test est déjà joué. */
+export function renderObstacleSummary(box, entry, name, participants) {
+  box.append(node('strong', '', 'Obstacle de ' + name));
+  if (!entry) box.append(node('p', 'workspace-muted', 'Pas encore d’obstacle.'));
+  else {
+    box.append(node('p', '', entry.obstacle.label + (entry.d10 ? ` (d10 = ${entry.d10})` : ' (obstacle libre du MJ)')));
+    box.append(node('p', 'workspace-muted', 'Compétences possibles : ' + entry.obstacle.skills.map(skill => skill.label + (skill.use ? ' (' + skill.use + ')' : '')).join(', ') + '.'));
+  }
+  if (!entry?.test) return false;
+  const t = entry.test, ally = entry.beneficiaryId ? ' Avantage à ' + nameIn(participants, entry.beneficiaryId) + '.' : '';
+  box.append(node('p', 'workspace-broken-status', `${t.success ? 'Franchit' : 'Ne franchit pas'} son Obstacle : ${t.skill}, jet ${t.roll} → ${signed(t.sl)} DR.${t.astonishing ? ' Réussite éclatante.' : ''}${ally}`));
+  return true;
+}
+
+/** Tirage au d10 et obstacle libre du MJ ; `free` : { label, skills } conservé par l'appelant ; `onDraw()`, `onFree({ label, skills[] })`. */
+export function renderObstacleControls(box, { id, name, entry, free, onDraw, onFree }) {
+  const draw = button(entry ? 'Tirer un autre obstacle' : 'Tirer l’obstacle', 'workspace-secondary'); draw.dataset.pursuitDraw = id;
+  draw.setAttribute('aria-label', (entry ? 'Tirer un autre obstacle pour ' : 'Tirer l’obstacle de ') + name);
+  draw.addEventListener('click', onDraw);
+  box.append(draw);
+  const details = node('details', 'workspace-pursuit-free');
+  details.append(node('summary', '', 'Obstacle libre du MJ'));
+  for (const [prop, text, key] of [['label', 'Intitulé de l’obstacle de ' + name, 'pursuitFreeLabel'], ['skills', 'Compétences admises, séparées par des virgules', 'pursuitFreeSkills']]) {
+    const label = node('label', 'workspace-type', text), input = document.createElement('input');
+    input.type = 'text'; input.value = free[prop]; input.setAttribute('aria-label', text + (prop === 'skills' ? ' pour ' + name : '')); input.dataset[key] = id;
+    input.addEventListener('input', () => { free[prop] = input.value; }); label.append(input); details.append(label);
+  }
+  const place = button('Poser cet obstacle libre', 'workspace-secondary'); place.dataset.pursuitFreeApply = id;
+  place.addEventListener('click', () => onFree({ label: free.label, skills: free.skills.split(/[,;]/).map(skill => skill.trim()).filter(Boolean) }));
+  details.append(place); box.append(details);
+}
+
+/** Issue de la poursuite et, si `onEnd(kind, participantId?)` est fourni, les boutons de fin (D6, D15). `outcome` : issue du moteur avec `partial`. */
+export function renderOutcomeBox({ id, outcome: out, preyIds, participants, endApplied = [], onEnd = null }) {
+  const box = node('div', 'workspace-broken-proof'); box.setAttribute('role', 'status'); box.dataset.pursuitOutcome = id;
+  box.append(node('strong', '', out.kind === 'caught' ? 'Fuyard rattrapé' : out.kind === 'escaped' ? 'Fuyard échappé' : 'Poursuite abandonnée sans issue'));
+  box.append(node('p', 'workspace-muted', 'Motif : ' + out.label + '.'));
+  const partial = out.partial;
+  if (partial) {
+    box.append(node('p', '', 'Ont franchi leur Obstacle : ' + partial.crossedIds.map(who => nameIn(participants, who)).join(', ') + '.'));
+    if (partial.canEscapeAnyway) box.append(node('p', 'workspace-muted', 'Chacun peut encore s’échapper en abandonnant les autres : « Retirer de la rencontre ».'));
+    if (partial.canContinueAlone) box.append(node('p', 'workspace-muted', 'Rappel : chacun peut continuer seul, avec une seule occasion d’attaquer ou de retenir le fuyard le plus lent. L’outil n’y ajoute aucun automatisme.'));
+  }
+  if (!onEnd) return box;
+  const buttons = node('div', 'workspace-pursuit-row');
+  if (out.kind === 'caught') {
+    const engage = button('Engager au plateau', 'workspace-primary'); engage.dataset.pursuitEndApply = 'engage';
+    const done = endApplied.includes('engage'); engage.disabled = done; if (done) engage.title = 'Déjà engagés';
+    engage.addEventListener('click', () => { if (!engage.disabled) onEnd('engage'); });
+    buttons.append(engage);
+  }
+  const leaving = (out.kind === 'escaped' ? preyIds : partial?.canEscapeAnyway ? partial.crossedIds : []).filter(who => participants.some(row => row.id === who));
+  for (const who of leaving) {
+    const remove = button(leaving.length === 1 ? 'Retirer de la rencontre' : 'Retirer de la rencontre : ' + nameIn(participants, who), 'workspace-secondary');
+    remove.dataset.pursuitEndApply = 'remove'; remove.dataset.pursuitEndPrey = who;
+    remove.addEventListener('click', () => onEnd('remove', who));
+    buttons.append(remove);
+  }
+  if (buttons.children.length) box.append(buttons);
+  return box;
+}
+
 export function createV5PursuitPanel({ Store, refresh = () => {} } = {}) {
   const launches = new Map(), tests = new Map(), frees = new Map();
   let testsTurn = null, abandonKind = '', notice = '';
-  const nameIn = (participants, id) => participants.find(row => row.id === id)?.name || id;
   const run = async work => {
     notice = '';
     try { const result = await work(); if (result?.status === 'error') throw Error(result.reason); } catch (error) { notice = error?.message || 'Action non enregistrée.'; }
     refresh();
   };
-  const field = (parent, label, key, value, options, change) => {
-    const wrap = node('label', 'workspace-type', label), select = document.createElement('select');
-    select.setAttribute('aria-label', label); select.dataset[key[0]] = key[1];
-    options.forEach(row => select.append(new Option(row[1], row[0])));
-    select.value = value ?? ''; select.addEventListener('change', () => change(select.value)); wrap.append(select); parent.append(wrap); return select;
-  };
+  const field = selectField;
 
   // --- Lancement, depuis le panneau du Brisé ---------------------------------------------------------------------------
   function launchOf(actorId) {
@@ -112,11 +222,7 @@ export function createV5PursuitPanel({ Store, refresh = () => {} } = {}) {
     const box = node('div', 'workspace-broken-attestation'); box.dataset.pursuitTest = id; box.dataset.pursuitTestKind = kind;
     box.append(node('strong', '', kind === 'pursuit' ? 'Test de poursuite de ' + person.name : 'Test d’Obstacle de ' + person.name + ' : ' + row.obstacle.label));
     const skills = kind === 'pursuit' ? PURSUIT_TEST_SKILLS.map(skill => [skill.label, skill.label]) : row.obstacle.skills.map(skill => [skill.label, skill.label + (skill.use ? ' (' + skill.use + ')' : '')]);
-    field(box, 'Compétence du Test', ['pursuitTestSkill', id], d.skill, skills, value => update({ skill: value, beneficiaryId: null }));
-    const label = node('label', 'workspace-type', 'Jet d’' + d.skill + ' (d100)'), input = document.createElement('input');
-    input.type = 'number'; input.min = '1'; input.max = '100'; input.step = '1'; input.inputMode = 'numeric'; input.value = d.roll;
-    input.setAttribute('aria-label', 'Jet du Test de ' + person.name); input.dataset.pursuitTestRoll = id; input.dataset.focusKey = 'pursuit-test-roll-' + id;
-    input.addEventListener('input', () => update({ roll: input.value, beneficiaryId: null })); label.append(input); box.append(label);
+    renderTestInputs(box, { person, d, skills, update });
     const calc = button('Calculer l’aperçu', 'workspace-secondary'); calc.dataset.pursuitTestCalculate = id; calc.addEventListener('click', calculate);
     const apply = button(kind === 'pursuit' ? 'Appliquer le Test de poursuite' : 'Appliquer le Test d’Obstacle', 'workspace-primary'); apply.dataset.pursuitTestApply = id;
     apply.disabled = d.busy || !d.preview?.ready;
@@ -134,8 +240,7 @@ export function createV5PursuitPanel({ Store, refresh = () => {} } = {}) {
     if (preview?.ready) {
       const t = preview.test;
       shown.append(node('p', 'workspace-broken-status', 'Aperçu : aucun effet appliqué.'));
-      shown.append(node('p', '', `${t.skill} ${t.score ?? '—'} · jet ${t.roll} · ${signed(t.sl)} DR · ${t.success ? 'réussite' : 'échec'}.`));
-      for (const line of t.detail || []) shown.append(node('p', 'workspace-formula-notes', line));
+      renderTestResult(shown, t);
       if (kind === 'obstacle' && t.astonishing) {
         shown.append(node('p', 'workspace-broken-status', 'Réussite éclatante (+5 DR) : l’Avantage peut aller au Test d’un autre membre du groupe.'));
         if (preview.beneficiaryOptions.length) field(shown, 'Réussite éclatante : Avantage à', ['pursuitBeneficiary', id], d.beneficiaryId, [['', 'Personne'], ...preview.beneficiaryOptions.map(option => [option.id, option.name])], value => { d.beneficiaryId = value || null; calculate(); });
@@ -144,92 +249,29 @@ export function createV5PursuitPanel({ Store, refresh = () => {} } = {}) {
       box.append(shown);
     } else if (d.error) { shown.append(node('p', 'workspace-field-error', d.error)); box.append(shown); }
     const set = next => { d.context = next; d.preview = null; calculate(); };
-    const obstinate = renderObstinateChoice(person, d.context?.preRollTalent, value => { const next = { ...(d.context || {}) }; if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent; set(next); },
-      { focusKey: 'pursuit-pre-roll-talent-' + id, status: Store.getObstinateStatus?.(id) });
-    if (obstinate) box.append(obstinate);
-    const rows = (preview && !preview.ready ? preview.needsInput || [] : []).filter(item => item && typeof item === 'object').map(item => ({ ...item, answerAt: '' }));
-    const questions = renderTestQuestions(rows, { root: d.context || {}, onChange: set, subjectOf: () => person, title: 'À préciser avant le Test', focusPrefix: 'pursuit-' + id, answeredAt: [''] });
-    if (questions) box.append(questions);
+    renderTestPrompts(box, { person, context: d.context, onContext: set, needsInput: preview && !preview.ready ? preview.needsInput || [] : [], obstinateStatus: Store.getObstinateStatus?.(id) });
     return box;
   }
 
   // --- Facteurs favorables et Obstacles --------------------------------------------------------------------------------
   function renderFactors(pursuit, ev, live) {
-    const box = node('fieldset', 'workspace-broken-facts'); box.dataset.pursuitFactors = pursuit.id; box.append(node('legend', '', 'Facteurs favorables'));
-    const preyCamp = pursuit.obstacleSide === 'prey', factors = pursuit.factors || {};
-    const labels = { won: 'Test de poursuite gagné', speed: 'Son membre le plus lent est plus rapide que le plus rapide d’en face',
-      terrain: preyCamp ? 'Terrain dense ou bondé, avec des cachettes (jugement du MJ)' : 'Terrain dégagé, sans cachettes (jugement du MJ)' };
-    for (const key of FACTOR_KEYS) {
-      const label = node('label', 'workspace-pursuit-check', labels[key]), check = document.createElement('input');
-      check.type = 'checkbox'; check.checked = factors[key] === true; check.disabled = !live || ev.pending !== 'obstacles';
-      check.setAttribute('aria-label', labels[key]); check.dataset.pursuitFactor = key;
-      check.addEventListener('change', () => run(() => Store.setPursuitFactors({ [key]: check.checked })));
-      label.prepend(check); box.append(label);
-    }
-    const count = FACTOR_KEYS.filter(key => factors[key] === true).length, group = groupOf(pursuit);
-    box.append(node('p', 'workspace-muted', `L’outil coche les deux premiers selon le Test et les Mouvements ; vous cochez le terrain. ${count}/3 facteur(s) : ${obstacleCountRequired(group.length, count)} Obstacle(s) à franchir sur ${group.length} personnage(s).`));
-    return box;
+    return renderFactorsBox({ id: pursuit.id, obstacleSide: pursuit.obstacleSide, factors: pursuit.factors, groupSize: groupOf(pursuit).length, editable: live && ev.pending === 'obstacles',
+      onToggle: (key, checked) => run(() => Store.setPursuitFactors({ [key]: checked })) });
   }
   function renderObstacle(pursuit, id, participants, live) {
     const entry = pursuit.obstacles.find(row => row.participantId === id), name = nameIn(participants, id);
     const box = node('div', 'workspace-broken-proof'); box.dataset.pursuitObstacle = id;
-    box.append(node('strong', '', 'Obstacle de ' + name));
-    if (!entry) box.append(node('p', 'workspace-muted', 'Pas encore d’obstacle.'));
-    else {
-      box.append(node('p', '', entry.obstacle.label + (entry.d10 ? ` (d10 = ${entry.d10})` : ' (obstacle libre du MJ)')));
-      box.append(node('p', 'workspace-muted', 'Compétences possibles : ' + entry.obstacle.skills.map(skill => skill.label + (skill.use ? ' (' + skill.use + ')' : '')).join(', ') + '.'));
-    }
-    if (entry?.test) {
-      const t = entry.test, ally = entry.beneficiaryId ? ' Avantage à ' + nameIn(participants, entry.beneficiaryId) + '.' : '';
-      box.append(node('p', 'workspace-broken-status', `${t.success ? 'Franchit' : 'Ne franchit pas'} son Obstacle : ${t.skill}, jet ${t.roll} → ${signed(t.sl)} DR.${t.astonishing ? ' Réussite éclatante.' : ''}${ally}`));
-      return box;
-    }
-    if (!live) return box;
-    const draw = button(entry ? 'Tirer un autre obstacle' : 'Tirer l’obstacle', 'workspace-secondary'); draw.dataset.pursuitDraw = id;
-    draw.setAttribute('aria-label', (entry ? 'Tirer un autre obstacle pour ' : 'Tirer l’obstacle de ') + name);
-    draw.addEventListener('click', () => run(() => Store.setPursuitObstacle(id, {})));
-    box.append(draw);
+    if (renderObstacleSummary(box, entry, name, participants) || !live) return box;
     if (!frees.has(id)) frees.set(id, { label: '', skills: '' });
-    const free = frees.get(id), details = node('details', 'workspace-pursuit-free');
-    details.append(node('summary', '', 'Obstacle libre du MJ'));
-    for (const [prop, text, key] of [['label', 'Intitulé de l’obstacle de ' + name, 'pursuitFreeLabel'], ['skills', 'Compétences admises, séparées par des virgules', 'pursuitFreeSkills']]) {
-      const label = node('label', 'workspace-type', text), input = document.createElement('input');
-      input.type = 'text'; input.value = free[prop]; input.setAttribute('aria-label', text + (prop === 'skills' ? ' pour ' + name : '')); input.dataset[key] = id;
-      input.addEventListener('input', () => { free[prop] = input.value; }); label.append(input); details.append(label);
-    }
-    const place = button('Poser cet obstacle libre', 'workspace-secondary'); place.dataset.pursuitFreeApply = id;
-    place.addEventListener('click', () => run(async () => { await Store.setPursuitObstacle(id, { label: free.label, skills: free.skills.split(/[,;]/).map(skill => skill.trim()).filter(Boolean) }); frees.delete(id); }));
-    details.append(place); box.append(details);
+    renderObstacleControls(box, { id, name, entry, free: frees.get(id), onDraw: () => run(() => Store.setPursuitObstacle(id, {})),
+      onFree: spec => run(async () => { await Store.setPursuitObstacle(id, spec); frees.delete(id); }) });
     return box;
   }
 
   // --- Issue ---------------------------------------------------------------------------------------------------------
   function renderOutcome(pursuit, participants) {
-    const out = pursuit.outcome, box = node('div', 'workspace-broken-proof'); box.setAttribute('role', 'status'); box.dataset.pursuitOutcome = pursuit.id;
-    box.append(node('strong', '', out.kind === 'caught' ? 'Fuyard rattrapé' : out.kind === 'escaped' ? 'Fuyard échappé' : 'Poursuite abandonnée sans issue'));
-    box.append(node('p', 'workspace-muted', 'Motif : ' + out.label + '.'));
-    const partial = out.partial;
-    if (partial) {
-      box.append(node('p', '', 'Ont franchi leur Obstacle : ' + partial.crossedIds.map(id => nameIn(participants, id)).join(', ') + '.'));
-      if (partial.canEscapeAnyway) box.append(node('p', 'workspace-muted', 'Chacun peut encore s’échapper en abandonnant les autres : « Retirer de la rencontre ».'));
-      if (partial.canContinueAlone) box.append(node('p', 'workspace-muted', 'Rappel : chacun peut continuer seul, avec une seule occasion d’attaquer ou de retenir le fuyard le plus lent. L’outil n’y ajoute aucun automatisme.'));
-    }
-    const buttons = node('div', 'workspace-pursuit-row');
-    if (out.kind === 'caught') {
-      const engage = button('Engager au plateau', 'workspace-primary'); engage.dataset.pursuitEndApply = 'engage';
-      const done = (pursuit.endApplied || []).includes('engage'); engage.disabled = done; if (done) engage.title = 'Déjà engagés';
-      engage.addEventListener('click', () => { if (!engage.disabled) run(() => Store.applyPursuitEnd('engage')); });
-      buttons.append(engage);
-    }
-    const leaving = (out.kind === 'escaped' ? pursuit.preyIds : partial?.canEscapeAnyway ? partial.crossedIds : []).filter(id => participants.some(row => row.id === id));
-    for (const id of leaving) {
-      const remove = button(leaving.length === 1 ? 'Retirer de la rencontre' : 'Retirer de la rencontre : ' + nameIn(participants, id), 'workspace-secondary');
-      remove.dataset.pursuitEndApply = 'remove'; remove.dataset.pursuitEndPrey = id;
-      remove.addEventListener('click', () => run(() => Store.applyPursuitEnd('remove', { participantId: id })));
-      buttons.append(remove);
-    }
-    if (buttons.children.length) box.append(buttons);
-    return box;
+    return renderOutcomeBox({ id: pursuit.id, outcome: pursuit.outcome, preyIds: pursuit.preyIds, participants, endApplied: pursuit.endApplied || [],
+      onEnd: (kind, participantId) => run(() => Store.applyPursuitEnd(kind, participantId ? { participantId } : {})) });
   }
 
   // --- Panneau : poursuite en cours ou terminée --------------------------------------------------------------------------

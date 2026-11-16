@@ -1810,6 +1810,15 @@ dialog.v5-effect-dialog { inset:auto; top:50%; left:50%; right:auto; bottom:auto
 .workspace-pursuit-obstacles,.workspace-pursuit-free { display:grid; gap:8px; min-width:0; }
 .workspace-pursuit .workspace-broken-proof,.workspace-pursuit-launch { display:grid; gap:8px; }
 .workspace-pursuit h4,.workspace-pursuit p { margin:0; }
+.workspace-pursuit-entry { display:grid; gap:6px; justify-items:start; min-width:0; }
+.workspace-pursuit-entry p { margin:0; }
+.workspace-pursuit-scene,.workspace-pursuit-dialog-body { display:grid; gap:10px; min-width:0; }
+.workspace-pursuit-scene h4,.workspace-pursuit-scene p { margin:0; }
+.workspace-pursuit-scene .workspace-broken-attestation,.workspace-pursuit-scene .workspace-broken-proof { display:grid; gap:8px; min-width:0; }
+.workspace-pursuit-dialog-body { padding:16px; }
+.workspace-pursuit-dialog > h2 { margin:0; padding:16px 16px 0; }
+dialog.tool-sheet.workspace-pursuit-dialog { position:fixed; inset:auto; top:50%; left:50%; right:auto; bottom:auto; transform:translate(-50%,-50%); margin:0; padding:0; width:min(760px,calc(100vw - 32px)); max-width:calc(100vw - 32px); height:auto; max-height:calc(100dvh - 32px); display:block; overflow:auto; box-sizing:border-box; border:1px solid var(--border); border-radius:var(--radius); }
+dialog.workspace-pursuit-dialog::backdrop { background:rgba(0,0,0,.4); }
 @media(max-width:600px) { .workspace-broken-escape-controls > *, .workspace-broken-attestation > * { width:100%; box-sizing:border-box; } .workspace-broken-facts > label { width:auto; } }
 
 .workspace-divine p { margin:0; }
