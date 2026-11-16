@@ -10,6 +10,18 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.49.0 — Monture d’un PJ déclarée sur sa fiche en ligne (publiée le 16/11/2026)
+
+Cadrage et décisions du MJ du 16/11/2026 : `docs/specs/monture-depuis-fiche/spec.md`. Publiée avec les fiches 2.41.0 (champ « Monture », fonction `executeFicheCommand` redéployée).
+
+- **Sur la fiche.** Le joueur choisit sa monture au bureau parmi les animaux « dressés comme monture » du bestiaire, avec un nom facultatif : `monture: null | { espece, nom }`, où `espece` est l’identifiant du profil dans le bestiaire. Champ absent = l’outil ne touche à rien ; `null` = retrait explicite.
+- **Liste partagée.** `js/data/montures-fiches.js`, générée depuis le bestiaire par `node tools/build-fiche-mounts.mjs` (`--check`) et recopiée dans les fiches par `node tools/recopier-donnees-communes.mjs`. 68 montures au 16/11.
+- **« Mettre à jour les PJ ».** L’outil lit la monture, crée ou met à jour le profil `monture-<id>` (même construction que la déclaration à la main, `buildMountProfile` dans `js/core/mounts.js`) et l’annonce dans l’aperçu : création, nouvelle déclaration d’un profil existant, renommage, remplacement, retrait, désaccord, clé inconnue.
+- **Qui l’emporte.** La fiche quand son champ a changé depuis la dernière lecture ; sinon l’outil garde la sienne et l’aperçu le signale, y compris quand la fiche dit « aucune monture ». Le nom ne suit la fiche que si elle a changé. Même espèce : le profil n’est pas reconstruit (image choisie, PV et retouches gardés), y compris après un retrait.
+- La monture ne part pas dans « Envoyer aux fiches ». L’image du pion reste choisie dans la Réserve.
+- Restes connus : quelques montures n’ont pas de nom français dans le bestiaire, et la liste contient un individu nommé et un profil de groupe ; si l’espèce change alors que l’ancienne monture est en combat, son pion reste dans la rencontre (comme pour un changement à la main).
+- Preuves : suite unitaire à la fusion (voir ci-dessous) ; `tests/unit/combat/montures-fiche.test.js` (16) ; parcours `tests/monture-fiche-browser.mjs` par l’interface réelle, sans réseau ; contre-vérification indépendante des deux dépôts, constats corrigés. Non vérifié : la carte « Monture » du bureau des fiches dans un navigateur.
+
 ## 3.48.1 — Petits restes classés le 15/11 : relecture du compte, fuite d’un Brisé engagé, bestiaire verrouillé (publiée le 15/11/2026)
 
 Seize petits restes et sujets en sommeil tranchés par le MJ le 15/11/2026 (classés ou à traiter). Cette version livre les petits lots.
@@ -21,7 +33,7 @@ Seize petits restes et sujets en sommeil tranchés par le MJ le 15/11/2026 (clas
 - **Onglet des montures.** L’index dit combien de montures contient chaque livre (`counts.mounts`) ; l’onglet charge 14 livres au lieu de 29, tous si « tout le bestiaire » est coché.
 - **Référentiel.** Équipement rafraîchi depuis la feuille du 15/11 : seul l’effet de « Précise » change (+1 DR à tout Test réussi pour attaquer). Magie et talents intacts.
 - Classés par le MJ, à ne plus proposer : découpage des gros fichiers (`ARCH-01`, `02`, `11`), barres d’état des pions de la carte, limites de la Comète et de la convalescence, tache de sang du cas théorique, PNJ nommés sans image propre, note de « Pointue » dans la feuille.
-- Restes connus, décidés « à traiter » : poursuite selon le Livre de base V5 p. 158-159 (le code actuel à distance de 1 à 10 n’est pas cette règle), avec une vraie attaque gratuite à la fuite et l’Élan dépensé par adversaire ; monture d’un PJ lue depuis sa fiche ; miracles narratifs en simple rappel. Les registres d’usages et de réactions sont prouvés avec une imitation de la base, pas sur l’émulateur.
+- Restes connus, décidés « à traiter » : poursuite selon le Livre de base V5 p. 158-159 (le code actuel à distance de 1 à 10 n’est pas cette règle), avec une vraie attaque gratuite à la fuite et l’Élan dépensé par adversaire ; monture d’un PJ lue depuis sa fiche (livrée en 3.49.0) ; miracles narratifs en simple rappel. Les registres d’usages et de réactions sont prouvés avec une imitation de la base, pas sur l’émulateur.
 - Preuves : suite unitaire 6285 + 202 (un garde-fou de registre corrigé ensuite) ; socle navigateur 16/16 ; parcours `tests/brise-engage-fuite-browser.mjs` ; émulateurs verts ; onglet des montures vu dans le navigateur.
 
 ## 3.48.0 — Images des pions depuis la bibliothèque de Map Display, bestiaire en dossiers, trois livres ajoutés (publiée le 15/11/2026)
