@@ -2,14 +2,14 @@ import { v5StoreActionClock } from '../v5-store-action.js';
 import { previewV5SecondaryTest, secondaryTestDetail } from '../v5-test-modifiers.js';
 import { previewV5ProjectileExtraction } from '../v5-weapon-qualities.js';
 import { cloneValue, uid } from '../models.js';
-import { recordV5ActionUsage, standardV5ActionSpent, previewV5PaviseDeploymentFrom, fleeFreeAttacksOf, fleeFreeAttackRefusal, recordFleeFreeAttack } from '../store/v5-action-guards.js';
+import { recordV5ActionUsage, standardV5ActionSpent, previewV5PaviseDeploymentFrom, fleeFreeAttacksOf, fleeFreeAttackRefusal, declaredFleeEngagedIds, recordFleeFreeAttack } from '../store/v5-action-guards.js';
 import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Reload, V5_RELOAD_REASON_LABELS } from '../v5-reloading.js';
 import { previewV5BrokenEscape, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from '../v5-broken-escape.js';
 import { withoutEngagements } from '../engagements.js';
 import { consumeObstinate } from '../v5-obstinate.js';
 import { canonicalV5ActionLedger } from '../v5-action-costs.js';
 
-export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews }) {
+export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews, declaredFleeEngaged = new Map() }) {
   const issuedExtractionPreviews = new Map();
   return {
     confirmBrokenEscapeVisibility({actorId,visibleToAnyEnemy}={}) {
@@ -166,12 +166,20 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
       const pendingIds = engagedEnemyIds.filter(id => !playedIds.includes(id) && !passedIds.includes(id));
       return { playedIds, passedIds, pendingIds, complete: pendingIds.length === 0 };
     },
+    /**
+     * Adversaires que le MJ coche comme engagés dans le panneau du Brisé (CA21), en plus du plateau : retenus pour le Tour courant, en
+     * mémoire seulement (rien n'est écrit), pour ouvrir ou passer leur attaque gratuite.
+     */
+    declareFleeEngagedEnemies(brokenId, enemyIds = []) {
+      declaredFleeEngaged.set(brokenId, { turnId: v5StoreActionClock(currentEnvelope()).turnId, ids: [...enemyIds] });
+    },
     /** L'adversaire engagé renonce à son attaque gratuite contre le Brisé qui fuit ; une ligne au journal, annulable. */
     passFleeFreeAttack(brokenId, enemyId) {
-      const refusal = fleeFreeAttackRefusal(currentEnvelope(), enemyId, brokenId);
+      const declared = envelope => declaredFleeEngagedIds(declaredFleeEngaged, envelope, brokenId);
+      const refusal = fleeFreeAttackRefusal(currentEnvelope(), enemyId, brokenId, declared(currentEnvelope()));
       if (refusal) throw Object.assign(new Error(refusal), { userFacing: true });
       return api.executeCommand('v5-flee-free-attack-pass', draft => {
-        const again = fleeFreeAttackRefusal(draft, enemyId, brokenId);
+        const again = fleeFreeAttackRefusal(draft, enemyId, brokenId, declared(draft));
         if (again) throw Object.assign(new Error(again), { userFacing: true });
         recordFleeFreeAttack(draft, brokenId, enemyId, 'passed');
         const name = id => draft.combat.participants.find(row => row.id === id)?.name || id;

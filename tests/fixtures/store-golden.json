@@ -167,6 +167,7 @@
    "previewV5WeaponReload/0",
    "applyV5WeaponReload/1",
    "getFleeFreeAttacks/1",
+   "declareFleeEngagedEnemies/1",
    "passFleeFreeAttack/2",
    "previewBrokenEscape/0",
    "applyBrokenEscape/1",
@@ -1900,6 +1901,11 @@
     "state": "68c8ab7d431c0e71"
    },
    {
+    "label": "sweep declareFleeEngagedEnemies",
+    "result": "0f7d52c75e67041d",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
     "label": "sweep passFleeFreeAttack",
     "error": "Error: Attaque gratuite de fuite : le combattant du Tour doit être Brisé.",
     "state": "68c8ab7d431c0e71"
@@ -2849,6 +2855,7 @@
    "previewV5WeaponReload/0",
    "applyV5WeaponReload/1",
    "getFleeFreeAttacks/1",
+   "declareFleeEngagedEnemies/1",
    "passFleeFreeAttack/2",
    "previewBrokenEscape/0",
    "applyBrokenEscape/1",
@@ -4579,6 +4586,11 @@
    {
     "label": "sweep getFleeFreeAttacks",
     "result": "f55e1c0c5e8d0c40",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep declareFleeEngagedEnemies",
+    "result": "0f7d52c75e67041d",
     "state": "4bd34c4c9a63fc31"
    },
    {

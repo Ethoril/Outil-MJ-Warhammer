@@ -35,11 +35,11 @@ const fighter = (id, camp, extra = {}) => ({ id, name: id, kind: camp === 'ennem
   caracs: { CC: 50, CT: 40, F: 30, E: 30, I: 40, Ag: 40, Dex: 40, Int: 40, FM: 40, Soc: 40, M: 4 }, skills: [athletics()], talents: [], equipment: [], traits: [], states: [],
   armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: {} }, ...extra });
 // Ordre du Tour : runner (60, Brisé), foe1 (40), foe2 (30).
-async function setup({ engaged = false, friend = false, score = 50 } = {}) {
+async function setup({ engaged = false, friend = false, score = 50, runner = {}, foe1 = {} } = {}) {
   const store = createStore({ storage: null, persistence: memoryPersistence() }); await store.ready;
   const snapshot = { schemaVersion: 3, reserve: [], log: [], diceLines: [], extensions: { v5: { turnIndex: 1, combatId: 'combat-l5' } },
     combat: { round: 1, currentActorId: 'runner', order: ['runner', 'foe1', 'foe2', ...(friend ? ['friend'] : [])], participants: [
-      fighter('runner', 'pj', { initiative: 60, skills: [athletics(score)], states: [{ id: 'b1', key: 'brise', name: 'Brisé', level: 1 }] }), fighter('foe1', 'ennemi', { initiative: 40 }), fighter('foe2', 'ennemi', { initiative: 30 }),
+      fighter('runner', 'pj', { initiative: 60, skills: [athletics(score)], states: [{ id: 'b1', key: 'brise', name: 'Brisé', level: 1 }], ...runner }), fighter('foe1', 'ennemi', { initiative: 40, ...foe1 }), fighter('foe2', 'ennemi', { initiative: 30 }),
       ...(friend ? [fighter('friend', 'pj', { initiative: 20 })] : [])] } };
   snapshot.extensions.v5.gameClock = createGameClock(snapshot);
   await store.loadFromJSON(snapshot);
@@ -125,6 +125,47 @@ test('assistant : le Test de poursuite du Tour se calcule puis s’applique, con
   assert.match(textOf(ctx.view.pursuit), /runner \(fuyard\) : Test de Athlétisme, jet 30/);
   // Le Brisé fuyard qui a joué son Test peut finir son Tour (D20) : le panneau le dit.
   assert.match(textOf(ctx.view.broken), /vaut pour la fuite et le Sprint/);
+}));
+
+test('Mouvement nul : signalé près de son champ, au lancement comme dans l’assistant, la paire attend le MJ (D22)', () => withDom(async () => {
+  const ctx = await setup({ foe1: { states: [{ id: 's1', key: 'surpris', name: 'Surpris', level: 1 }] } });
+  await seeFleeing(ctx);
+  assert.match(textOf(byData(ctx.view.broken, 'pursuitMovementIssue', 'foe1')), /Mouvement nul/);
+  assert.equal(byData(ctx.view.broken, 'pursuitMovementIssue', 'foe2'), null);
+  await ctx.fire(byData(ctx.view.broken, 'pursuitStart', 'runner'));
+  assert.equal(ctx.store.getPursuit().status, 'active', 'la poursuite ne se clôt pas au lancement');
+  assert.match(textOf(byData(ctx.view.pursuit, 'pursuitMovementIssue', 'foe1')), /Mouvement nul/);
+  assert.match(textOf(ctx.view.pursuit), /paire en attente des Mouvements/);
+  assert.equal(byData(ctx.view.pursuit, 'pursuitTest', 'runner'), null, 'pas de Test sans paire');
+  // D21 : le fuyard Brisé d'une poursuite en cours n'a plus à fuir, Test fait ou non.
+  assert.match(textOf(ctx.view.broken), /Test fait ou non/);
+  const movement = byData(ctx.view.pursuit, 'pursuitMovement', 'foe1');
+  movement.value = '4';
+  await ctx.fire(movement, 'change');
+  assert.equal(byData(ctx.view.pursuit, 'pursuitMovementIssue', 'foe1'), null);
+  assert.ok(byData(ctx.view.pursuit, 'pursuitTest', 'runner'), 'paire établie : le Test du fuyard se joue');
+}));
+
+test('Bon marcheur : le Test de poursuite pose la question du terrain, la réponse donne le bonus (CA11)', () => withDom(async () => {
+  const ctx = await setup({ runner: { talents: [{ id: 'talent-striding-gait', status: 'resolved', rank: 1, specialization: 'Forêt' }] } });
+  await seeFleeing(ctx);
+  await ctx.fire(byData(ctx.view.broken, 'pursuitStart', 'runner'));
+  const roll = byData(ctx.view.pursuit, 'pursuitTestRoll', 'runner');
+  roll.value = '30';
+  await ctx.fire(roll, 'input');
+  await ctx.fire(byData(ctx.view.pursuit, 'pursuitTestCalculate', 'runner'));
+  const terrain = byData(ctx.view.pursuit, 'pursuitTestChoice', 'terrain');
+  assert.ok(terrain, 'la question du terrain a son champ');
+  assert.deepEqual(terrain.options.map(row => row.value), ['', 'Forêt', 'none']);
+  terrain.value = 'Forêt';
+  await ctx.fire(terrain, 'change');
+  assert.match(textOf(byData(ctx.view.pursuit, 'pursuitTestPreview', 'runner')), /jet 30 · \+4 DR/);
+  assert.equal(byData(ctx.view.pursuit, 'pursuitTestChoice', 'terrain').value, 'Forêt', 'la réponse reste corrigeable');
+  const plain = await setup();
+  await seeFleeing(plain);
+  await plain.fire(byData(plain.view.broken, 'pursuitStart', 'runner'));
+  await plain.fire(byData(plain.view.pursuit, 'pursuitTestCalculate', 'runner'));
+  assert.equal(byData(plain.view.pursuit, 'pursuitTestChoice'), null, 'sans le talent, aucune question');
 }));
 
 test('assistant : un jet manquant bloque l’aperçu avec son motif', () => withDom(async () => {

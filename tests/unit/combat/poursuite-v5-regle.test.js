@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   PURSUIT_CATCH_DR, PURSUIT_SOURCE, pursuitMovementOf, pickPursuitPair, movementVerdict, suggestFactors, obstacleCountRequired,
-  drawObstacle, freeObstacle, evaluatePursuit, pursuitOpposition, pursuitObstacleSide
+  drawObstacle, freeObstacle, evaluatePursuit, pursuitOpposition, pursuitObstacleSide, pursuitMovementIssues
 } from '../../../js/core/v5-pursuit.js';
 import { PURSUIT_OBSTACLES } from '../../../js/data/v5-pursuit-obstacles.js';
 
@@ -24,6 +24,33 @@ test('Mouvement compté : courant, monture pour un cavalier monté, null si inco
   assert.equal(pursuitMovementOf(rider, [horse, rider]), 9);
   assert.equal(pursuitMovementOf(rider, [rider]), null);
   assert.equal(pursuitMovementOf({ id: 'x', caracs: {} }), null);
+});
+
+test('Mouvement compté non arrondi : moitié exacte pour À terre et Sonné, M impair (D14, D22)', () => {
+  assert.equal(pursuitMovementOf(person('a', 5, { states: [{ name: 'À terre', level: 1 }] })), 2.5);
+  assert.equal(pursuitMovementOf(person('a', 5, { states: [{ name: 'Sonné', level: 1 }] })), 2.5);
+  assert.equal(pursuitMovementOf(person('a', 7, { states: [{ key: 'sonne', name: 'Sonné', level: 1 }] })), 3.5);
+  assert.equal(pursuitMovementOf(person('a', 5)), 5);
+  assert.equal(pursuitMovementOf(person('a', 4, { states: [{ name: 'Surpris', level: 1 }] })), 0, 'Surpris : aucun Mouvement');
+  // Fuyard À terre M5 (2,5) contre poursuivant M4 : 4 n'atteint pas le double de 2,5.
+  const prone = pursuitMovementOf(person('f', 5, { states: [{ name: 'À terre', level: 1 }] }));
+  assert.equal(movementVerdict({ preyIds: ['f'], pursuerIds: ['p'], movement: { f: prone, p: 4 } }), null);
+});
+
+test('Mouvement inconnu ou nul : ni verdict de Mouvement double ni paire automatique, l’état le signale (D22)', () => {
+  assert.equal(movementVerdict({ preyIds: ['a', 'b'], pursuerIds: ['c'], movement: { a: null, b: 8, c: 4 } }), null, 'un camp au Mouvement en partie inconnu');
+  assert.equal(movementVerdict({ preyIds: ['f'], pursuerIds: ['p'], movement: { f: 4, p: 0 } }), null, 'poursuivant sans Mouvement');
+  assert.equal(pickPursuitPair({ preyIds: ['a', 'b'], pursuerIds: ['c'], movement: { a: null, b: 8, c: 4 } }), null);
+  assert.equal(pickPursuitPair({ preyIds: ['f'], pursuerIds: ['p'], movement: { f: 4, p: 0 } }), null);
+  assert.deepEqual(pickPursuitPair({ preyIds: ['a', 'b'], pursuerIds: ['c'], movement: { a: null, b: 8, c: 4 }, override: { pursuerId: 'c', preyId: 'b' } }),
+    { pursuerId: 'c', preyId: 'b', forced: true }, 'la paire du MJ reste possible');
+  assert.deepEqual(pursuitMovementIssues({ preyIds: ['a', 'b'], pursuerIds: ['c'], movement: { a: null, b: 8, c: 0 } }).map(row => [row.participantId, row.reason]),
+    [['a', 'unknown'], ['c', 'zero']]);
+  const waiting = evaluatePursuit(base({ preyIds: ['a', 'b'], movement: { a: null, b: 8, p1: 4 }, opposed: opposed(9, 0) }));
+  assert.equal(waiting.outcome, null, 'même un écart de 6 DR attend le Mouvement');
+  assert.equal(waiting.pending, 'movement');
+  assert.deepEqual(waiting.movementIssues.map(row => row.participantId), ['a']);
+  assert.match(waiting.movementIssues[0].label, /inconnu/);
 });
 
 test('paire : plus rapide poursuivant contre plus lent fuyard, correction du MJ (CA1, D10)', () => {

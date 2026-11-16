@@ -1,8 +1,8 @@
 import { d10 } from '../core/dice.js';
-import { PURSUIT_TEST_SKILLS, pursuitMovementOf, pickPursuitPair, pursuitObstacleSide, drawObstacle, freeObstacle, previewPursuitTest, previewObstacleTest } from '../core/v5-pursuit.js';
+import { PURSUIT_TEST_SKILLS, pursuitMovementOf, pursuitMovementIssues, pickPursuitPair, pursuitObstacleSide, drawObstacle, freeObstacle, previewPursuitTest, previewObstacleTest } from '../core/v5-pursuit.js';
 import { userMessage } from './messages.js';
 import { node, button } from './resolution-panel/dom.js';
-import { nameIn, selectField, renderTestInputs, renderTestResult, renderTestPrompts, renderFactorsBox, renderObstacleSummary, renderObstacleControls, renderOutcomeBox } from './v5-pursuit-panel.js';
+import { nameIn, appendMovementIssue, selectField, renderTestInputs, renderTestResult, renderTestPrompts, renderFactorsBox, renderObstacleSummary, renderObstacleControls, renderOutcomeBox } from './v5-pursuit-panel.js';
 /** Modale de poursuite de scène, écran Jouer (Livre de base V5, p. 158-159 ; docs/specs/poursuite-v5, lot L6). Résolue d'un bloc (D8) : aucune
  * Action, aucun Round, rien de conservé hors de la modale ; seul « Valider » écrit (une entrée d'historique, une ligne de journal). Aucune
  * règle ici : le moteur (v5-pursuit.js) et le Store décident, la modale recueille les saisies du MJ et montre l'issue. Un aperçu n'écrit rien.
@@ -42,6 +42,7 @@ export function createScenePursuitForm({ Store, refresh = () => {}, close = () =
     const override = preyIds.includes(d.pair.preyId) && pursuerIds.includes(d.pair.pursuerId) ? d.pair : null;
     const movement = Object.fromEntries([...preyIds, ...pursuerIds].map(id => [id, counted(id)]));
     const pair = preyIds.length && pursuerIds.length ? pickPursuitPair({ preyIds, pursuerIds, movement, override }) : null;
+    const movementIssues = pursuitMovementIssues({ preyIds, pursuerIds, movement });
     const personOf = id => people.find(row => row.id === id);
 
     // Aperçu du bloc : une saisie de jet vide n'est pas envoyée (le Test attend), les autres le sont avec leur compétence et leur contexte.
@@ -74,6 +75,7 @@ export function createScenePursuitForm({ Store, refresh = () => {}, close = () =
         field.setAttribute('aria-label', 'Mouvement de ' + person.name + ' (vide : celui calculé par l’outil)');
         field.dataset.pursuitSceneMovement = person.id; field.dataset.focusKey = 'pursuit-scene-movement-' + person.id;
         field.addEventListener('input', () => change({ movement: { ...d.movement, [person.id]: field.value } })); label.append(field); row.append(label);
+        appendMovementIssue(row, movementIssues, person.id);
       }
       camps.append(row);
     }
@@ -108,7 +110,7 @@ export function createScenePursuitForm({ Store, refresh = () => {}, close = () =
         } else shown.append(node('p', 'workspace-field-error', out.error || 'Informations requises pour calculer.'));
         box.append(shown);
       }
-      renderTestPrompts(box, { person, context: state.context, onContext: next => update({ context: next }), needsInput: out && !out.ready ? out.needsInput || [] : [], obstinateStatus: Store.getObstinateStatus?.(id) });
+      renderTestPrompts(box, { person, context: state.context, onContext: next => update({ context: next }), needsInput: out && !out.ready ? out.needsInput || [] : [], choices: out?.choices || [], obstinateStatus: Store.getObstinateStatus?.(id) });
       return box;
     };
     if (pair) {

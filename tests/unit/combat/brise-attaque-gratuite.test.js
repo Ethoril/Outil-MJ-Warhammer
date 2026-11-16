@@ -9,14 +9,16 @@ const fighter = (id, camp, extra = {}) => ({ id, name: id, kind: camp === 'ennem
   caracs: { CC: 50, CT: 40, F: 30, E: 30, I: 40, Ag: 40, Dex: 40, Int: 40, FM: 40, Soc: 40, M: 4 }, skills: [], talents: [], equipment: [], traits: [], states: [],
   armor: { head: 0, body: 0, arms: 0, legs: 0 }, extensions: { v5: {} }, ...extra });
 const broken = [{ id: 'b1', key: 'brise', name: 'Brisé', level: 1 }];
-// Ordre du Tour : runner (60, Brisé), foe1 (40), foe2 (30).
+// Ordre du Tour : runner (60, Brisé), foe1 (40), foe2 (30), foe3 (25), friend (20). runner est engagé avec foe1 et foe2 au plateau.
 async function fixture({ runner = {} } = {}) {
   const store = createStore({ storage: null, persistence: memoryPersistence() }); await store.ready;
   const snapshot = { schemaVersion: 3, reserve: [], log: [], diceLines: [], extensions: { v5: { turnIndex: 1, combatId: 'combat-l4' } },
-    combat: { round: 1, currentActorId: 'runner', order: ['runner', 'foe1', 'foe2'], participants: [fighter('runner', 'pj', { initiative: 60, states: broken, ...runner }),
-      fighter('foe1', 'ennemi', { initiative: 40 }), fighter('foe2', 'ennemi', { initiative: 30 })] } };
+    combat: { round: 1, currentActorId: 'runner', order: ['runner', 'foe1', 'foe2', 'foe3', 'friend'], participants: [fighter('runner', 'pj', { initiative: 60, states: broken, ...runner }),
+      fighter('foe1', 'ennemi', { initiative: 40 }), fighter('foe2', 'ennemi', { initiative: 30 }), fighter('foe3', 'ennemi', { initiative: 25 }), fighter('friend', 'pj', { initiative: 20 })] } };
   snapshot.extensions.v5.gameClock = createGameClock(snapshot);
   await store.loadFromJSON(snapshot);
+  await store.engageParticipants('runner', 'foe1');
+  await store.engageParticipants('runner', 'foe2');
   return store;
 }
 const attack = (store, actorId, targetId, id, v5 = { kind: 'melee', extraAttack: true, context: { freeAttackTalent: 'flee-free-attack' } }) => store.previewResolution({ resolutionId: id, actorId, targetId, roll: 20,
@@ -57,6 +59,25 @@ test('attaque gratuite refusée hors de son cadre : cible non Brisée, Brisé lu
   const flee = store.previewBrokenEscape({ actorId: 'runner', action: 'flee', facts: fleeFacts({ freeAttacksResolved: true }) });
   assert.equal((await store.applyBrokenEscape(flee)).status, 'applied');
   assert.equal(attack(store, 'foe1', 'runner', 'x4').ready, false, 'après la fuite, plus d’attaque gratuite');
+});
+
+test('attaque gratuite réservée aux adversaires engagés : ni un allié du Brisé, ni un adversaire non engagé (CA21)', async () => {
+  const store = await fixture();
+  await store.engageParticipants('runner', 'friend');
+  const ally = attack(store, 'friend', 'runner', 'ally-1');
+  assert.equal(ally.ready, false, 'même engagé au plateau, un allié n’a pas d’attaque gratuite');
+  assert.match(ally.error, /camp|adversaire/);
+  await assert.rejects(async () => store.passFleeFreeAttack('runner', 'friend'), /camp|adversaire/);
+  const loose = attack(store, 'foe3', 'runner', 'loose-1');
+  assert.equal(loose.ready, false, 'foe3 n’est pas engagé avec le Brisé');
+  assert.match(loose.error, /engagé/);
+  await assert.rejects(async () => store.passFleeFreeAttack('runner', 'foe3'), /engagé/);
+  // Le MJ coche foe3 comme engagé dans le panneau du Brisé : même source que l'écran, l'attaque gratuite lui est ouverte.
+  store.declareFleeEngagedEnemies('runner', ['foe1', 'foe2', 'foe3']);
+  assert.equal(attack(store, 'foe3', 'runner', 'loose-2').ready, true);
+  await store.passFleeFreeAttack('runner', 'foe3');
+  store.declareFleeEngagedEnemies('runner', ['friend']);
+  assert.equal(attack(store, 'friend', 'runner', 'ally-2').ready, false, 'cocher un allié ne lui ouvre rien');
 });
 
 test('liste jouée ou passée, puis fuite engagée appliquée ; Élan dépensé selon la liste (CA22, CA23)', async () => {

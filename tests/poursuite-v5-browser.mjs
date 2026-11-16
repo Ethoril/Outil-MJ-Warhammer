@@ -7,7 +7,7 @@ import { engagedWith } from '../js/core/engagements.js';
 
 // Poursuite en combat selon le Livre de base V5 p. 158-159 (spec docs/specs/poursuite-v5, CA25) : un Brisé engagé fuit (attaques gratuites
 // jouées ou passées, Élan dépensé par l'une), la poursuite se lance depuis son panneau, le poursuivant fait son Test à son Tour et le fuyard
-// Brisé au sien (D20 : son Tour peut se terminer), le Test opposé est serré donc un Obstacle est tiré et tenté au Round suivant, la poursuite
+// Brisé au sien (D21 : poursuite en cours, son Tour peut se terminer), le Test opposé est serré donc un Obstacle est tiré et tenté au Round suivant, la poursuite
 // finit, « Engager au plateau » engage le fuyard rattrapé. ↶ et ↷ sur un Test appliqué, journal, rechargement en cours de poursuite.
 // Tout passe par l'interface ; le Store ne prépare que la rencontre et ne sert qu'à lire l'état.
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -120,10 +120,9 @@ try {
   assert.equal(await actor.locator('[data-pursuit-launch]').count(), 0, 'plus de lancement une fois la poursuite en cours');
   assert.match(logText(value), /Poursuite lancée : Prêtresse poursuivi\(s\) par Orc, Gobelin ; Test opposé de Orc contre Prêtresse/);
 
-  // --- Round 1, Tour de la Prêtresse (fuyard Brisé) : sans Test, son Tour ne peut pas finir ; avec, il le peut (D20) ------------------
-  await advance();
-  await page.waitForTimeout(400);
-  assert.deepEqual(turnOf(await state()), { round: 1, actor: 'priest' }, 'Sprint non fait et aucun Test de poursuite : le Tour du Brisé ne finit pas');
+  // --- Round 1, Tour de la Prêtresse (fuyard Brisé) : poursuite en cours, plus de fuite ni de Sprint à faire, Test fait ou non (D21) ----
+  const freed = 'Fuyard d’une poursuite en cours : la poursuite vaut pour la fuite et le Sprint, le Tour peut se terminer, Test fait ou non.';
+  await actor.getByText(freed).waitFor();
   const preyTest = panel.locator('[data-pursuit-test="priest"][data-pursuit-test-kind="pursuit"]');
   await preyTest.getByLabel('Compétence du Test', { exact: true }).selectOption('Athlétisme');
   await preyTest.locator('[data-pursuit-test-roll="priest"]').fill('30');
@@ -134,7 +133,7 @@ try {
   value = await until(next => next.extensions.v5.pursuit.opposed.prey, 'le Test du fuyard est enregistré');
   assert.equal(value.extensions.v5.pursuit.opposed.prey.sl, 3);
   assert.equal(value.extensions.v5.pursuit.opposed.netSl, null, 'la paire n’est comparée qu’une fois les deux Tests faits');
-  await actor.getByText('Son Test de poursuite de ce Tour vaut pour la fuite et le Sprint : le Tour peut se terminer.').waitFor();
+  await actor.getByText(freed).waitFor();
   await advance();
   await until(next => turnOf(next).actor === 'orc', 'le Tour du Brisé se termine après son Test de poursuite');
 

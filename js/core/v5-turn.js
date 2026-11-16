@@ -2,7 +2,7 @@ import {wrathForcedPrayerGate} from './v5-divine-prayer-caps.js';
 /** Pure V5 turn transition; every die is an explicit input and all actors share one commit. */
 import {expireDivineEffects} from './v5-divine-engine.js';
 import { withExpiredEngagements } from './store/api-engagements.js';
-import { pursuitTestThisTurn } from './store/api-pursuit.js';
+import { pursuitFreesBrokenPrey } from './store/api-pursuit.js';
 import {refreshEffectLayers} from './v5-magic-effects.js';
 import { effectiveOrder, nextTurn } from './turn-order.js';
 import { advanceV5Effects, acquireV5Conditions } from './v5-effects.js';
@@ -23,7 +23,7 @@ function brokenEscapeTurnGate(state){
  const sequence=state.extensions?.v5?.brokenEscape?.byActorId?.[actor.id];
  if(sequence?.turnId===turnId&&sequence.factsCommitted===true&&sequence.visibleToAnyEnemy===false)return null;
  if(sequence?.turnId===turnId&&sequence.fleeCommitted===true&&sequence.sprintCommitted===true)return null;
- if(pursuitTestThisTurn(state,actor.id,turnId))return null;
+ if(pursuitFreesBrokenPrey(state,actor.id,turnId))return null;
  const key=JSON.stringify([encounterId,turnId]),ledger=state.extensions?.v5?.actionLedger||{quotaUsage:[]};
  const actionSpent=(ledger.quotaUsage||[]).some(row=>row.actorId===actor.id&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===key&&row.used>0)||(state.extensions?.v5?.standardTurnActions||[]).some(row=>row.actorId===actor.id&&row.encounterId===encounterId&&row.turnId===turnId);
  if(actionSpent&&!(sequence?.turnId===turnId&&sequence?.fleeCommitted))return {status:'blocked',code:'DIV-BROKEN-MIDTURN-01',error:'Une Action a été dépensée avant Move (Flee) : décision MJ explicite requise pour cette occurrence.',needsInput:[{field:'decision.DIV-BROKEN-MIDTURN-01',label:'Décision MJ explicite requise; aucune Action supplémentaire ni report automatique.'}]};

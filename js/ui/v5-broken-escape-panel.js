@@ -2,7 +2,7 @@ import {participantCamp} from '../core/encounters.js';
 import {v5CombatActionClock} from '../core/v5-resources.js';
 import { engagedWith } from '../core/engagements.js';
 import { renderTestQuestions, renderObstinateChoice, renderSourceDetail } from './test-questions.js';
-import { pursuitTestThisTurn } from '../core/store/api-pursuit.js';
+import { pursuitFreesBrokenPrey } from '../core/store/api-pursuit.js';
 /** Interface MJ de la séquence obligatoire de Brisé (L06 p.163, 185–186).
  * Les faits restent locaux jusqu’au commit d’un reçu Store.
  */
@@ -69,6 +69,8 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   else if(d.baseRevision!==revision){const hadPreview=Boolean(d.preview);Object.assign(d,{freeAutoKey:null,baseRevision:revision,before:null,after:null,engagement:plateau.length?'selected':null,engaged:[...plateau],engagedConfirmed:false,freeAttacksResolved:false,mode:null,roll:'',choice:null,conditionContext:{},attestValue:null,hideSkillId:null,preview:null,error:hadPreview?'La partie a changé : les faits et l’aperçu ont été invalidés; renseignez-les à nouveau.':''});}
   if(d.preview&&d.preview.baseRevision!==Store.getLocalRevision?.()){d.preview=null;d.error='La partie a changé : recalculez les conséquences.';}
   if(progress?.fleeCommitted&&progress.visibleToAnyEnemy===true&&!progress.sprintCommitted)d.action='sprint';
+  // Les adversaires cochés ici (plateau compris) sont ceux dont le Store accepte l'attaque gratuite (CA21).
+  Store.declareFleeEngagedEnemies?.(actor.id,d.engagement==='selected'?d.engaged:[]);
   // Attaques gratuites de la fuite engagée : « résolues » se coche seule quand tous les adversaires engagés ont joué ou passé (CA23) ; le MJ peut la décocher.
   if(d.engagement==='selected'&&d.engaged.length&&Store.getFleeFreeAttacks){
    const free=Store.getFleeFreeAttacks(actor.id,d.engaged),key=JSON.stringify([[...d.engaged].sort(),free.playedIds,free.passedIds]);
@@ -141,8 +143,10 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   section.append(node('p','workspace-muted','Round '+(clock.round||'—')+' · Tour de '+(currentActor?.name||'à établir')));
   const isTurn=clock.actorId===actor.id&&actor.zone==='active';
   if(!isTurn)section.append(node('p','workspace-muted',actor.zone==='active'?'Le Tour actuel appartient à '+(clock.actorId||'un autre combattant')+'.':'Ce personnage n’est pas actif dans la rencontre.'));
-  // D20 : un fuyard Brisé qui a fait son Test de poursuite ou d'Obstacle ce Tour est quitte de la fuite et du Sprint.
-  if(pursuitTestThisTurn(whole,actor.id,clock.turnId))section.append(node('p','workspace-broken-status','Son Test de poursuite de ce Tour vaut pour la fuite et le Sprint : le Tour peut se terminer.'));
+  // D20, D21 : le fuyard Brisé d'une poursuite en cours est quitte de la fuite et du Sprint, Test fait ou non ; le Tour où son Test l'a terminée aussi.
+  if(pursuitFreesBrokenPrey(whole,actor.id,clock.turnId))section.append(node('p','workspace-broken-status',whole.extensions?.v5?.pursuit?.status==='active'
+   ?'Fuyard d’une poursuite en cours : la poursuite vaut pour la fuite et le Sprint, le Tour peut se terminer, Test fait ou non.'
+   :'Son Test de poursuite de ce Tour vaut pour la fuite et le Sprint : le Tour peut se terminer.'));
   if(!progress?.fleeCommitted){
    const attestation=node('div','workspace-broken-attestation');
    attestation.append(node('strong','','Fait canonique de visibilité pour ce Tour'));

@@ -49,10 +49,30 @@ test('poursuite : seules Athlétisme, Conduite, Chevaucher et Natation sont admi
   assert.equal(prey(person('q'), { role: 'autre' }).ready, false, 'rôle : proie ou poursuivant');
 });
 
-test('poursuite : compétence absente de la fiche, la Caractéristique seule fait le score', () => {
-  const out = previewPursuitTest(person('q'), { skill: 'Natation', roll: 25, role: 'prey' });
+test('poursuite : compétence de base absente de la fiche, la Caractéristique seule fait le score ; avancée absente, refusée (D23)', () => {
+  const out = previewPursuitTest(person('q'), { skill: 'Chevaucher', roll: 25, role: 'prey' });
   assert.equal(out.ready, true);
-  assert.equal(out.score, 40, 'Natation : Force 40');
+  assert.equal(out.score, 40, 'Chevaucher : Agilité 40');
+  const swim = previewPursuitTest(person('q'), { skill: 'Natation', roll: 25, role: 'prey' });
+  assert.equal(swim.ready, false, 'Natation est une compétence avancée');
+  assert.match(swim.error, /avancée.*autre compétence/);
+  assert.equal(previewPursuitTest(person('q', { skills: [skill('Natation', 'F', 55)] }), { skill: 'Natation', roll: 25, role: 'prey' }).score, 55);
+});
+
+test('Obstacle : même règle des compétences absentes ; raccord exact des noms, meilleure spécialité (D23)', () => {
+  const crowd = drawObstacle(5), passer = drawObstacle(4), alley = drawObstacle(7);
+  const drinker = person('q', { skills: [skill('Résistance à l’alcool', 'E', 70)] });
+  const tough = previewObstacleTest(drinker, { obstacle: crowd, skill: 'Résistance', roll: 25, role: 'prey' });
+  assert.equal(tough.ready, true);
+  assert.equal(tough.score, 40, '« Résistance » n’attrape pas « Résistance à l’alcool » : Endurance 40');
+  const fencer = person('q', { skills: [skill('Corps à corps (Base)', 'CC', 45), skill('Corps à corps (Escrime)', 'CC', 60)] });
+  assert.equal(previewObstacleTest(fencer, { obstacle: passer, skill: 'Corps à corps', roll: 25, role: 'prey' }).score, 60, 'meilleure spécialité');
+  const sneak = person('q', { skills: [skill('Discrétion (Urbaine)', 'Ag', 55)] });
+  assert.equal(previewObstacleTest(sneak, { obstacle: alley, skill: 'Discrétion', roll: 25, role: 'prey' }).score, 55);
+  assert.equal(previewObstacleTest(person('q'), { obstacle: alley, skill: 'Discrétion', roll: 25, role: 'prey' }).score, 40, 'Discrétion de base : Agilité');
+  const tracking = previewObstacleTest(person('q'), { obstacle: alley, skill: 'Pistage', roll: 25, role: 'prey' });
+  assert.equal(tracking.ready, false, 'Pistage est avancée');
+  assert.match(tracking.error, /avancée.*autre compétence/);
 });
 
 // --- CA6 / CA7 : États, restrictions ------------------------------------------------------------------------------------
@@ -120,6 +140,22 @@ test('poursuite : Grandes enjambées joue par la poursuite et le terrain choisi'
   // Hors poursuite, le même terrain ne donne pas le bonus de poursuite (preuve que `pursuit` est transmis).
   const outside = previewPursuitTest(walker, { skill: 'Athlétisme', roll: 25, role: 'prey', context: { terrain: 'Forêt', pursuit: false } });
   assert.equal(sl(outside), sl(prey(walker, { context: { terrain: 'Forêt' } })), '`pursuit` est imposé par la poursuite');
+});
+
+test('Bon marcheur : sans terrain, le Test pose la question au MJ et la réponse joue ; sans le talent, aucune question (CA11)', () => {
+  const amount = contractAmount('talent-striding-gait', 'modifySL-actor');
+  const walker = person('q', { talents: [talent('talent-striding-gait', { specialization: 'Forêt' })] });
+  const asked = prey(walker);
+  assert.equal(asked.ready, false, 'le +2 DR ne se perd plus en silence');
+  const question = asked.needsInput.find(row => row.field === 'terrain');
+  assert.ok(question);
+  assert.deepEqual(question.options.map(row => row.value), ['Forêt', 'none']);
+  assert.equal(sl(prey(walker, { context: { terrain: 'Forêt' } })), sl(prey(person('q'))) + amount);
+  assert.equal(sl(prey(walker, { context: { terrain: 'none' } })), sl(prey(person('q'))));
+  assert.equal(prey(walker, { context: { terrain: 'Forêt' } }).choices[0].value, 'Forêt', 'la réponse reste corrigeable');
+  assert.equal(prey(person('q')).ready, true);
+  assert.deepEqual(prey(person('q')).choices, []);
+  assert.ok(previewObstacleTest(walker, { obstacle: drawObstacle(1), skill: 'Athlétisme', roll: 25, role: 'prey' }).needsInput.some(row => row.field === 'terrain'), 'Test d’Obstacle aussi');
 });
 
 // --- Test d'Obstacle ----------------------------------------------------------------------------------------------------

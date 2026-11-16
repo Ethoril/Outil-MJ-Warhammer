@@ -5200,13 +5200,15 @@
     "titleFr": "Résoudre une poursuite V5",
     "summary": "Voir C0 pour l’opposition initiale, les facteurs, les obstacles et les issues de poursuite des pp.158-159.",
     "mechanic": "procedure",
-    "status": "absent",
+    "status": "assiste",
     "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L06-074",
     "toolRef": [
-      "js/core/v5-broken-escape.js#resolvePursuitActorTest"
+      "js/core/v5-pursuit.js#evaluatePursuit",
+      "js/core/store/api-pursuit.js#startPursuit",
+      "js/core/store/api-pursuit.js#previewScenePursuit"
     ],
     "v5Proposal": null,
-    "notes": "Fonctions de calcul spécialisées présentes, mais flux général de poursuite non repéré dans Store/UI. Domaine déjà inventorié, pas de duplication.",
+    "notes": "Flux complet (spec docs/specs/poursuite-v5) : moteur pur v5-pursuit.js (paire, 6 DR, Mouvement double, facteurs, Obstacles, issue), commandes du Store en combat dans les Tours et hors combat d’un bloc, panneau du Brisé et modale de l’écran Jouer ; le MJ saisit les jets. Domaine déjà inventorié, pas de duplication.",
     "domain": "Voyage et environnement",
     "selectorEligible": false,
     "selectorExclusionReason": "Pur renvoi à une règle déjà portée par l’inventaire cité ; éviter une deuxième décision F1."
@@ -35368,11 +35370,9 @@
     "mechanic": "procedure",
     "status": "absent",
     "coveredBy": "docs/COURAGE_BRISE_INVENTAIRE.json#C0-L13-009",
-    "toolRef": [
-      "js/core/v5-broken-escape.js#resolveV5PursuitStep"
-    ],
+    "toolRef": [],
     "v5Proposal": null,
-    "notes": "Fonction pure V5 pour un seul couple, pas d’appel UI/Store trouvé ; elle termine au-delà de dix, L13 à dix inclus. Ne pas promouvoir la couverture de la variante.",
+    "notes": "L’ancienne échelle de distance (resolveV5PursuitStep) est retirée au profit de la poursuite du Livre de base V5 (js/core/v5-pursuit.js, sans distance) ; la variante à distance de L13 n’est pas portée. Ne pas promouvoir la couverture de la variante.",
     "domain": "Poursuites",
     "selectorEligible": false,
     "selectorExclusionReason": "Clause précise déjà portée par cet inventaire ; pas de second choix F1."

@@ -1,6 +1,6 @@
 import { participantCamp } from '../core/encounters.js';
 import { v5CombatActionClock } from '../core/v5-resources.js';
-import { PURSUIT_TEST_SKILLS, pursuitMovementOf, pickPursuitPair, pursuitObstacleSide, evaluatePursuit, obstacleCountRequired } from '../core/v5-pursuit.js';
+import { PURSUIT_TEST_SKILLS, pursuitMovementOf, pursuitMovementIssues, pickPursuitPair, pursuitObstacleSide, evaluatePursuit, obstacleCountRequired } from '../core/v5-pursuit.js';
 import { node, button } from './resolution-panel/dom.js';
 import { renderTestQuestions, renderObstinateChoice } from './test-questions.js';
 /** Interface MJ de la poursuite en combat (Livre de base V5, p. 158-159 ; docs/specs/poursuite-v5, lot L5). Aucune règle ici :
@@ -27,6 +27,14 @@ export function pursuitStartInput({ roles = {}, movement = {}, side = '', pair =
 
 // --- Rendus partagés avec la modale de l'écran Jouer (v5-pursuit-dialog.js) : aucune écriture, tout passe par les rappels reçus. ---
 export const nameIn = (participants, id) => participants.find(row => row.id === id)?.name || id;
+
+/** D22 : signalement du moteur (`pursuitMovementIssues`) sous le champ de Mouvement du participant concerné. */
+export function appendMovementIssue(parent, issues, id) {
+  const issue = (issues || []).find(row => row.participantId === id);
+  if (!issue) return;
+  const text = node('p', 'workspace-field-error', issue.label + ' : ni Mouvement double ni paire automatique avant.');
+  text.dataset.pursuitMovementIssue = id; parent.append(text);
+}
 export function selectField(parent, label, key, value, options, change) {
   const wrap = node('label', 'workspace-type', label), select = document.createElement('select');
   select.setAttribute('aria-label', label); select.dataset[key[0]] = key[1];
@@ -50,12 +58,24 @@ export function renderTestResult(shown, t) {
   for (const line of t.detail || []) shown.append(node('p', 'workspace-formula-notes', line));
 }
 
-/** Obstiné et questions d'État avant le Test ; `needsInput` : ce que le moteur attend encore ; `onContext(next)` reçoit le contexte modifié. */
-export function renderTestPrompts(box, { person, context, onContext, needsInput = [], obstinateStatus }) {
+/**
+ * Obstiné et questions d'État avant le Test ; `needsInput` : ce que le moteur attend encore ; `choices` : questions à choix du moteur
+ * (Bon marcheur : terrain de la poursuite), corrigeables une fois répondues ; `onContext(next)` reçoit le contexte modifié.
+ */
+export function renderTestPrompts(box, { person, context, onContext, needsInput = [], choices = [], obstinateStatus }) {
   const id = person.id;
   const obstinate = renderObstinateChoice(person, context?.preRollTalent, value => { const next = { ...(context || {}) }; if (value === 'strong-minded') next.preRollTalent = value; else delete next.preRollTalent; onContext(next); },
     { focusKey: 'pursuit-pre-roll-talent-' + id, status: obstinateStatus });
   if (obstinate) box.append(obstinate);
+  const asked = [...choices, ...needsInput.filter(item => Array.isArray(item?.options))].filter((row, index, list) => list.findIndex(other => other.field === row.field) === index);
+  for (const row of asked) {
+    const label = node('label', 'workspace-type workspace-test-question', row.label), select = document.createElement('select');
+    select.setAttribute('aria-label', row.label); select.dataset.pursuitTestChoice = row.field; select.dataset.focusKey = 'pursuit-choice-' + row.field + '-' + id;
+    select.append(new Option('À préciser', ''), ...row.options.map(option => new Option(option.label, option.value)));
+    select.value = context?.[row.field] ?? '';
+    select.addEventListener('change', () => { const next = { ...(context || {}) }; if (select.value === '') delete next[row.field]; else next[row.field] = select.value; onContext(next); });
+    label.append(select); box.append(label);
+  }
   const rows = needsInput.filter(item => item && typeof item === 'object').map(item => ({ ...item, answerAt: '' }));
   const questions = renderTestQuestions(rows, { root: context || {}, onChange: onContext, subjectOf: () => person, title: 'À préciser avant le Test', focusPrefix: 'pursuit-' + id, answeredAt: [''] });
   if (questions) box.append(questions);
@@ -166,6 +186,7 @@ export function createV5PursuitPanel({ Store, refresh = () => {} } = {}) {
     const preyIds = active.filter(row => roles[row.id] === 'prey').map(row => row.id), pursuerIds = active.filter(row => roles[row.id] === 'pursuer').map(row => row.id);
     const computed = id => pursuitMovementOf(active.find(row => row.id === id), participants);
     const counted = id => (String(d.movement[id] ?? '').trim() !== '' && Number.isFinite(Number(d.movement[id])) ? Number(d.movement[id]) : computed(id));
+    const launchIssues = pursuitMovementIssues({ preyIds, pursuerIds, movement: Object.fromEntries([...preyIds, ...pursuerIds].map(id => [id, counted(id)])) });
     for (const person of active) {
       const row = node('div', 'workspace-pursuit-row');
       field(row, 'Rôle de ' + person.name, ['pursuitRole', person.id], roles[person.id], [['', 'Hors de la poursuite'], ['prey', 'Fuyard'], ['pursuer', 'Poursuivant']],
@@ -177,6 +198,7 @@ export function createV5PursuitPanel({ Store, refresh = () => {} } = {}) {
         input.dataset.pursuitLaunchMovement = person.id; input.dataset.focusKey = 'pursuit-launch-movement-' + person.id;
         input.addEventListener('input', () => change({ movement: { ...d.movement, [person.id]: input.value } }));
         label.append(input); row.append(label);
+        appendMovementIssue(row, launchIssues, person.id);
       }
       box.append(row);
     }
@@ -249,7 +271,7 @@ export function createV5PursuitPanel({ Store, refresh = () => {} } = {}) {
       box.append(shown);
     } else if (d.error) { shown.append(node('p', 'workspace-field-error', d.error)); box.append(shown); }
     const set = next => { d.context = next; d.preview = null; calculate(); };
-    renderTestPrompts(box, { person, context: d.context, onContext: set, needsInput: preview && !preview.ready ? preview.needsInput || [] : [], obstinateStatus: Store.getObstinateStatus?.(id) });
+    renderTestPrompts(box, { person, context: d.context, onContext: set, needsInput: preview && !preview.ready ? preview.needsInput || [] : [], choices: preview?.choices || [], obstinateStatus: Store.getObstinateStatus?.(id) });
     return box;
   }
 
@@ -291,18 +313,20 @@ export function createV5PursuitPanel({ Store, refresh = () => {} } = {}) {
       input.setAttribute('aria-label', `Mouvement de ${name(id)} (${role})`); input.dataset.pursuitMovement = id; input.dataset.focusKey = 'pursuit-movement-' + id;
       input.addEventListener('change', () => { if (input.value !== '') run(() => Store.setPursuitMovement(id, Number(input.value))); });
       label.append(input); moves.append(label);
+      if (live) appendMovementIssue(moves, ev.movementIssues, id);
     }
     card.append(moves);
     const { pair, opposed } = pursuit;
-    card.append(node('p', '', `Test opposé : ${name(pair.pursuerId)} (poursuivant) contre ${name(pair.preyId)} (fuyard).`));
-    for (const [role, id, text] of [['pursuer', pair.pursuerId, 'poursuivant'], ['prey', pair.preyId, 'fuyard']]) {
+    if (!pair) card.append(node('p', 'workspace-muted', 'Test opposé : paire en attente des Mouvements inconnus ou nuls (à saisir ci-dessus).'));
+    else card.append(node('p', '', `Test opposé : ${name(pair.pursuerId)} (poursuivant) contre ${name(pair.preyId)} (fuyard).`));
+    for (const [role, id, text] of pair ? [['pursuer', pair.pursuerId, 'poursuivant'], ['prey', pair.preyId, 'fuyard']] : []) {
       const t = opposed[role];
       card.append(node('p', t ? '' : 'workspace-muted', t ? `${name(id)} (${text}) : Test de ${t.skill}, jet ${t.roll} → ${signed(t.sl)} DR, ${t.success ? 'réussite' : 'échec'}.` : `${name(id)} (${text}) : Test de poursuite à jouer pendant son Tour.`));
     }
     if (opposed.netSl !== null) card.append(node('p', 'workspace-broken-status', `Test opposé : ${opposed.winner === 'pursuer' ? 'les poursuivants l’emportent' : 'les fuyards l’emportent'} (${signed(opposed.netSl)} DR).`));
     const turnActor = participants.find(row => row.id === turnActorId);
     if (live && turnActor) {
-      const role = pair.pursuerId === turnActorId ? 'pursuer' : pair.preyId === turnActorId ? 'prey' : null, row = pursuit.obstacles.find(item => item.participantId === turnActorId);
+      const role = pair?.pursuerId === turnActorId ? 'pursuer' : pair?.preyId === turnActorId ? 'prey' : null, row = pursuit.obstacles.find(item => item.participantId === turnActorId);
       if (role && !opposed[role]) card.append(testForm('pursuit', turnActor, null));
       else if (ev.pending === 'obstacles' && row && !row.test) card.append(testForm('obstacle', turnActor, row));
       else if (ev.pending === 'obstacles' && group.includes(turnActorId) && !row) card.append(node('p', 'workspace-muted', `Tirez d’abord l’obstacle de ${turnActor.name} (ci-dessous).`));

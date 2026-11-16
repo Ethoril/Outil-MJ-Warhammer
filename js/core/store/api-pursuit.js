@@ -8,7 +8,7 @@ import { withEngagement } from '../engagements.js';
 import { consumeObstinate } from '../v5-obstinate.js';
 import { recordV5ActionUsage, brokenEscapeActionSpent, combatActionBlock } from './v5-action-guards.js';
 import { engagementLogEntry } from './api-engagements.js';
-import { PURSUIT_SOURCE, pursuitMovementOf, pickPursuitPair, pursuitObstacleSide, pursuitOpposition, suggestFactors, drawObstacle, freeObstacle,
+import { PURSUIT_SOURCE, pursuitMovementOf, pursuitMovementIssues, pickPursuitPair, pursuitObstacleSide, pursuitOpposition, suggestFactors, drawObstacle, freeObstacle,
   evaluatePursuit, previewPursuitTest as previewPursuitCheck, previewObstacleTest as previewObstacleCheck } from '../v5-pursuit.js';
 
 const FACTOR_KEYS = ['won', 'speed', 'terrain'];
@@ -52,6 +52,10 @@ function movementOf(state, ids, corrected = {}) {
 
 const ruleState = pursuit => ({ preyIds: pursuit.preyIds, pursuerIds: pursuit.pursuerIds, movement: pursuit.movement, obstacleSide: pursuit.obstacleSide,
   opposed: pursuit.opposed, factors: pursuit.factors || {}, obstacles: pursuit.obstacles });
+/** D22 : une ligne par Mouvement inconnu ou nul, qui attend la saisie du MJ. */
+const movementLines = (state, pursuit) => pursuitMovementIssues(pursuit)
+  .map(issue => `Poursuite · ${nameOf(state, issue.participantId)} : ${issue.label} ; ni Mouvement double ni paire automatique avant.`);
+const pairText = (state, pair) => (pair ? `Test opposé de ${nameOf(state, pair.pursuerId)} contre ${nameOf(state, pair.preyId)}` : 'paire du Test opposé en attente des Mouvements');
 
 /** Issue en mots, avec l'issue partielle (D15) : qui a franchi, ce qu'il peut encore faire. */
 function outcomeText(state, outcome) {
@@ -94,6 +98,15 @@ export function pursuitTestThisTurn(state, actorId, turnId) {
     .some(test => test?.participantId === actorId && test.turnId === turnId);
 }
 
+/**
+ * D21 : un Brisé fuyard d'une poursuite en cours n'a plus à fuir ni à sprinter, Test fait ou non ; son Tour se termine. Il le peut aussi
+ * le Tour où son propre Test a terminé la poursuite (D20). Abandonnée ou finie avant ce Tour, l'obligation revient.
+ */
+export function pursuitFreesBrokenPrey(state, actorId, turnId) {
+  const pursuit = pursuitOf(state);
+  return (pursuit?.status === 'active' && pursuit.preyIds?.includes(actorId)) || pursuitTestThisTurn(state, actorId, turnId);
+}
+
 /** Abandon d'une poursuite en cours sans issue (D18), avec une ligne au journal ; une poursuite déjà finie s'efface sans bruit. */
 export function withAbandonedPursuit(state, why) {
   const pursuit = pursuitOf(state);
@@ -101,6 +114,45 @@ export function withAbandonedPursuit(state, why) {
   const { pursuit: _gone, ...v5 } = state.extensions.v5;
   const next = { ...state, extensions: { ...state.extensions, v5 } };
   return pursuit.status === 'active' ? withLines(next, [`Poursuite abandonnée sans issue : ${why}.`]) : next;
+}
+
+/** D24 : scène qui porte la poursuite donnée (mise en pause) ; `pursuit` nul : scène sans poursuite (reprise, une seule copie). */
+export function withScenePursuit(scene, pursuit) {
+  const { pursuit: _old, ...v5 } = scene?.extensions?.v5 || {};
+  return { ...scene, extensions: { ...(scene?.extensions || {}), v5: pursuit ? { ...v5, pursuit } : v5 } };
+}
+/** D24 : extensions de l'enveloppe sans la poursuite, partie avec sa scène. */
+export function withoutScenePursuit(extensions) {
+  const { pursuit: _gone, ...v5 } = extensions?.v5 || {};
+  return { ...(extensions || {}), v5 };
+}
+
+/** Le participant prend part à une poursuite en cours. */
+export function pursuitInvolves(state, id) {
+  const pursuit = pursuitOf(state);
+  return pursuit?.status === 'active' && [...pursuit.preyIds, ...pursuit.pursuerIds].includes(id);
+}
+
+/**
+ * Participant retiré de la rencontre ou mis au banc pendant une poursuite en cours : il sort du compte de son camp (réussites exigées
+ * recalculées, paire refaite s'il en était et que le Test opposé n'est pas comparé), avec une ligne au journal. Son camp vide, la
+ * poursuite est abandonnée sans issue (D18). À appeler avant de retirer le participant (son nom sert au journal).
+ */
+export function withoutPursuitParticipant(state, id, why) {
+  if (!pursuitInvolves(state, id)) return state;
+  const pursuit = cloneValue(pursuitOf(state)), name = nameOf(state, id), prey = pursuit.preyIds.includes(id);
+  pursuit.preyIds = pursuit.preyIds.filter(other => other !== id);
+  pursuit.pursuerIds = pursuit.pursuerIds.filter(other => other !== id);
+  if (!pursuit.preyIds.length || !pursuit.pursuerIds.length) return withAbandonedPursuit(state, `${name} ${why}, son camp est vide`);
+  const { [id]: _gone, ...movement } = pursuit.movement;
+  pursuit.movement = movement;
+  pursuit.obstacles = pursuit.obstacles.filter(row => row.participantId !== id);
+  if (pursuit.opposed.netSl === null && [pursuit.pair?.pursuerId, pursuit.pair?.preyId].includes(id)) {
+    pursuit.pair = pickPursuitPair(pursuit);
+    for (const role of ['pursuer', 'prey']) if (pursuit.opposed[role] && pursuit.opposed[role].participantId !== pursuit.pair?.[role + 'Id']) pursuit.opposed[role] = null;
+  }
+  const settled = settle(state, pursuit);
+  return withLines(withPursuit(state, settled.pursuit), [`Poursuite · ${name} ${why} : sort du camp des ${prey ? 'fuyards' : 'poursuivants'}.`, ...settled.lines], id);
 }
 
 export function createPursuitApi({ api, currentEnvelope }) {
@@ -157,30 +209,36 @@ export function createPursuitApi({ api, currentEnvelope }) {
       if (!obstacleSide) throw userError('Aucun PJ dans la poursuite : désignez le camp qui franchit les Obstacles.');
       if (override && (!pursuerIds.includes(override.pursuerId) || !preyIds.includes(override.preyId))) throw userError('Paire corrigée : un poursuivant contre un fuyard de la poursuite.');
       const pair = pickPursuitPair({ preyIds, pursuerIds, movement, override });
-      return command('pursuit-start', pair.pursuerId, draft => {
+      return command('pursuit-start', pair?.pursuerId ?? pursuerIds[0], draft => {
         const pursuit = { id: uid(), mode: 'combat', status: 'active', source: PURSUIT_SOURCE, startedRound: draft.combat?.round || 0,
           scopeKey: v5StoreActionClock(draft).encounterId || null, preyIds: [...preyIds], pursuerIds: [...pursuerIds], movement, obstacleSide, pair,
-          opposed: { pursuer: null, prey: null, netSl: null, winner: null }, factors: null, obstacles: [], outcome: null, endApplied: [] };
+          opposed: { pursuer: null, prey: null, netSl: null, winner: null }, factors: null, factorsTouched: [], obstacles: [], outcome: null, endApplied: [] };
         const settled = settle(draft, pursuit);
-        return { pursuit: settled.pursuit, lines: [`Poursuite lancée : ${namesOf(draft, preyIds)} poursuivi(s) par ${namesOf(draft, pursuerIds)} ; Test opposé de ${nameOf(draft, pair.pursuerId)} contre ${nameOf(draft, pair.preyId)} (${PURSUIT_SOURCE}).`, ...settled.lines] };
+        return { pursuit: settled.pursuit, lines: [`Poursuite lancée : ${namesOf(draft, preyIds)} poursuivi(s) par ${namesOf(draft, pursuerIds)} ; ${pairText(draft, pair)} (${PURSUIT_SOURCE}).`,
+          ...movementLines(draft, pursuit), ...settled.lines] };
       });
     },
-    /** Mouvement corrigé par le MJ (D14) : la paire est recalculée tant que le Test opposé n'est pas commencé ; le Mouvement double peut trancher. */
+    /**
+     * Mouvement corrigé par le MJ (D14) : la paire est recalculée tant que le Test opposé n'est pas commencé ; le Mouvement double peut trancher.
+     * Le facteur « Mouvement » déduit suit la correction tant que le MJ n'a pas touché sa case (D13).
+     */
     setPursuitMovement(participantId, value) {
       const state = currentEnvelope(), current = activePursuit(state);
       if (![...current.preyIds, ...current.pursuerIds].includes(participantId)) throw userError('Ce personnage ne prend pas part à la poursuite.');
       movementOf(state, [participantId], { [participantId]: value });
       return command('pursuit-movement', participantId, (draft, pursuit) => {
         pursuit.movement = { ...pursuit.movement, [participantId]: value };
-        if (!pursuit.pair.forced && !pursuit.opposed.pursuer && !pursuit.opposed.prey) pursuit.pair = pickPursuitPair(pursuit);
+        if (!pursuit.pair?.forced && !pursuit.opposed.pursuer && !pursuit.opposed.prey) pursuit.pair = pickPursuitPair(pursuit);
+        if (pursuit.factors && !(pursuit.factorsTouched || []).includes('speed')) pursuit.factors = { ...pursuit.factors, speed: suggestFactors(ruleState(pursuit)).speed };
         const settled = settle(draft, pursuit);
-        return { pursuit: settled.pursuit, lines: [`Poursuite · Mouvement de ${nameOf(draft, participantId)} : ${value} (MJ).`, ...settled.lines] };
+        return { pursuit: settled.pursuit, lines: [`Poursuite · Mouvement de ${nameOf(draft, participantId)} : ${value} (MJ).`, ...movementLines(draft, pursuit), ...settled.lines] };
       });
     },
     previewPursuitTest({ participantId, skill, roll, context = {} } = {}) {
       const state = currentEnvelope(), pursuit = pursuitOf(state);
       const block = turnBlock(state, pursuit, participantId);
       if (block) return block;
+      if (!pursuit.pair) return blocked('Paire du Test opposé en attente : saisissez d’abord les Mouvements inconnus ou nuls.');
       const role = pursuit.pair.pursuerId === participantId ? 'pursuer' : pursuit.pair.preyId === participantId ? 'prey' : null;
       if (!role) return blocked('Seule la paire (poursuivant le plus rapide, fuyard le plus lent) fait le Test de poursuite.');
       if (pursuit.opposed[role]) return blocked('Test de poursuite déjà joué.');
@@ -188,7 +246,7 @@ export function createPursuitApi({ api, currentEnvelope }) {
       if (!out.ready) return notReady(out);
       const turnId = v5StoreActionClock(state).turnId;
       return issue({ ready: true, kind: 'pursuit-test', baseRevision: state.localRevision || 0, pursuitId: pursuit.id, participantId, role, turnId,
-        context: cloneValue(context), test: testRow(out, participantId, { turnId, round: state.combat?.round || 0 }) });
+        context: cloneValue(context), choices: out.choices || [], test: testRow(out, participantId, { turnId, round: state.combat?.round || 0 }) });
     },
     /** Une entrée d'historique : Test, Action du Tour, Obstiné, comparaison de la paire et fin éventuelle (CA13, CA15). */
     applyPursuitTest(supplied) {
@@ -217,6 +275,7 @@ export function createPursuitApi({ api, currentEnvelope }) {
       if (!obstaclesOpen(current)) throw userError('Les facteurs favorables se règlent après le Test de poursuite.');
       return command('pursuit-factors', null, (draft, pursuit) => {
         pursuit.factors = { ...pursuit.factors, ...patch };
+        pursuit.factorsTouched = [...new Set([...(pursuit.factorsTouched || []), ...Object.keys(patch)])];
         const checked = FACTOR_KEYS.filter(key => pursuit.factors[key] === true), settled = settle(draft, pursuit);
         return { pursuit: settled.pursuit, lines: [`Poursuite · facteurs favorables : ${checked.map(key => FACTOR_LABELS[key]).join(', ') || 'aucun'} (${checked.length}/3).`, ...settled.lines] };
       });
@@ -255,7 +314,7 @@ export function createPursuitApi({ api, currentEnvelope }) {
         return blocked(out.astonishing ? 'Le bénéficiaire de l’Avantage se choisit parmi les alliés de la poursuite.' : 'L’Avantage à un autre demande une Réussite éclatante.');
       const turnId = v5StoreActionClock(state).turnId;
       return issue({ ready: true, kind: 'obstacle-test', baseRevision: state.localRevision || 0, pursuitId: pursuit.id, participantId, turnId,
-        context: cloneValue(context), beneficiaryOptions: out.beneficiaryOptions, beneficiaryId, test: testRow(out, participantId, { turnId, round: state.combat?.round || 0 }) });
+        context: cloneValue(context), choices: out.choices || [], beneficiaryOptions: out.beneficiaryOptions, beneficiaryId, test: testRow(out, participantId, { turnId, round: state.combat?.round || 0 }) });
     },
     applyObstacleTest(supplied) {
       const plan = cloneValue(supplied), refused = checkIssued(plan, 'de Test d’Obstacle');
@@ -294,6 +353,8 @@ export function createPursuitApi({ api, currentEnvelope }) {
       const state = currentEnvelope(), stored = pursuitOf(state);
       const source = scenePlan ? appliedScenes.get(scenePlan.previewId) : stored?.status === 'ended' ? stored : null;
       if (!source) throw userError(scenePlan ? 'Poursuite hors combat non validée.' : 'Aucune poursuite terminée.');
+      if (scenePlan && !(state.extensions?.v5?.scenePursuitReceipts || []).includes(scenePlan.previewId))
+        throw userError('Poursuite hors combat annulée (↶) : validez-la de nouveau.');
       const outcome = source.outcome;
       if (kind === 'engage') {
         if (outcome?.kind !== 'caught') throw userError('Seul un fuyard rattrapé s’engage avec ses poursuivants.');
@@ -314,9 +375,9 @@ export function createPursuitApi({ api, currentEnvelope }) {
       if (!allowed.includes(id)) throw userError(outcome.kind === 'escaped' ? `${nameOf(state, id)} n’est pas un fuyard de cette poursuite.` : `${nameOf(state, id)} n’a pas franchi son Obstacle : il reste rattrapé.`);
       return api.removeParticipant(id);
     },
-    /** Entrée de l'écran Jouer (D17) : grisée sans participants de la rencontre en cours, avec son motif. */
+    /** Entrée de l'écran Jouer (D17) : grisée sans participants actifs de la rencontre en cours, avec son motif. */
     scenePursuitAvailability() {
-      const count = people(currentEnvelope()).length;
+      const count = people(currentEnvelope()).filter(row => row.zone === 'active').length;
       return count >= 2 ? { available: true, reason: null }
         : { available: false, reason: count ? 'Un seul participant dans la rencontre en cours : il en faut deux pour une poursuite.' : 'Aucun participant dans la rencontre en cours.' };
     },
@@ -338,8 +399,8 @@ export function createPursuitApi({ api, currentEnvelope }) {
       const plan = { kind: 'scene-pursuit', baseRevision: state.localRevision || 0, preyIds: [...preyIds], pursuerIds: [...pursuerIds], movement, obstacleSide, pair,
         opposed: { pursuer: null, prey: null, netSl: null, winner: null }, factors: null, obstacles: [] };
       for (const role of ['pursuer', 'prey']) {
+        if (!pair || !tests[role]) continue;
         const spec = tests[role], id = role === 'pursuer' ? pair.pursuerId : pair.preyId;
-        if (!spec) continue;
         const out = previewPursuitCheck(personOf(state, id), { ...spec, role });
         if (!out.ready) { errors.push(`${nameOf(state, id)} : ${notReady(out).error}`); continue; }
         plan.opposed[role] = testRow(out, id);
@@ -370,7 +431,8 @@ export function createPursuitApi({ api, currentEnvelope }) {
         contexts.push({ participantId: spec.participantId, context: cloneValue(spec.context || {}) });
       }
       const evaluation = evaluatePursuit(ruleState(plan));
-      const pending = { opposed: 'Test de poursuite des deux côtés à saisir.', 'obstacle-side': 'Aucun PJ : désignez le camp qui franchit les Obstacles.',
+      const pending = { movement: evaluation.movementIssues.map(issue => `${nameOf(state, issue.participantId)} : ${issue.label}.`).join(' '),
+        opposed: 'Test de poursuite des deux côtés à saisir.', 'obstacle-side': 'Aucun PJ : désignez le camp qui franchit les Obstacles.',
         obstacles: `Obstacles : ${evaluation.crossedIds.length} franchi(s) sur ${evaluation.required} exigé(s), d’autres Tests à jouer.` }[evaluation.pending];
       Object.assign(plan, { contexts, evaluation, ready: evaluation.outcome !== null, error: evaluation.outcome ? null : errors[0] || pending || null, errors });
       return plan.ready ? issue(plan) : plan;
@@ -384,7 +446,10 @@ export function createPursuitApi({ api, currentEnvelope }) {
         if ((draft.localRevision || 0) !== plan.baseRevision) throw userError('La partie a changé ; recalculez la poursuite.');
         for (const row of plan.contexts) consumeObstinate(draft, personOf(draft, row.participantId), row.context);
         const opposed = plan.opposed.netSl === null ? '' : ` Test opposé : ${signed(plan.opposed.netSl)} DR.`;
-        return withLines(draft, [`Poursuite hors combat : ${namesOf(draft, plan.preyIds)} poursuivi(s) par ${namesOf(draft, plan.pursuerIds)}.${opposed} Issue : ${outcomeText(draft, outcome)}`], plan.pair.preyId);
+        const next = withLines(draft, [`Poursuite hors combat : ${namesOf(draft, plan.preyIds)} poursuivi(s) par ${namesOf(draft, plan.pursuerIds)}.${opposed} Issue : ${outcomeText(draft, outcome)}`], plan.pair?.preyId ?? null);
+        // Reçu de la validation, dans l'état annulable (le journal ne l'est pas) : ↶ le retire, et les boutons de fin le constatent.
+        const receipts = [...(draft.extensions?.v5?.scenePursuitReceipts || []), plan.previewId].slice(-20);
+        return { ...next, extensions: { ...(next.extensions || {}), v5: { ...(next.extensions?.v5 || {}), scenePursuitReceipts: receipts } } };
       });
       issued.delete(plan.previewId);
       return finish(saved, () => {

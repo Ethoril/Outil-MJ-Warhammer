@@ -6,6 +6,8 @@ import { assertDivineWrathConditionsKept } from '../v5-effects.js';
 import { isMiscastConditionLocked } from '../v5-magic-miscasts.js';
 import { rebaseMagicLayers } from '../v5-magic-effects.js';
 import { consumeObstinate } from '../v5-obstinate.js';
+import { participantCamp } from '../encounters.js';
+import { engagedWith } from '../engagements.js';
 
 export function grappleTurnGateBlock(envelope,input,actor){
  if(input.v5?.context?.isAction===false||input.reactionId||input.v5?.reactionId||input.v5?.context?.reaction===true)return null;
@@ -126,12 +128,23 @@ export function fleeFreeAttacksOf(envelope,brokenId,clock=v5StoreActionClock(env
  const row=envelope.extensions?.v5?.brokenEscape?.freeAttacksByActorId?.[brokenId];
  return row&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId?{playedIds:[...(row.playedIds||[])],passedIds:[...(row.passedIds||[])]}:{playedIds:[],passedIds:[]};
 }
-/** Motif du refus de l'attaque gratuite (ou de son abandon) de `enemyId` contre le Brisé du Tour ; null si elle est permise. */
-export function fleeFreeAttackRefusal(envelope,enemyId,brokenId){
+/** Adversaires que le MJ a cochés comme engagés dans le panneau du Brisé pour ce Tour (`declared` : mémoire de l'écran, non enregistrée). */
+export function declaredFleeEngagedIds(declared,envelope,brokenId){
+ const row=declared?.get(brokenId);
+ return row&&row.turnId===v5StoreActionClock(envelope).turnId?[...row.ids]:[];
+}
+/**
+ * Motif du refus de l'attaque gratuite (ou de son abandon) de `enemyId` contre le Brisé du Tour ; null si elle est permise. Seul un
+ * adversaire (autre camp) engagé avec le Brisé y a droit (CA21) : engagé au plateau, ou coché par le MJ dans le panneau (`declaredIds`).
+ */
+export function fleeFreeAttackRefusal(envelope,enemyId,brokenId,declaredIds=[]){
  const clock=v5StoreActionClock(envelope),participants=envelope.combat?.participants||[],broken=participants.find(row=>row.id===envelope.combat?.currentActorId);
  if(!clock.encounterId||!clock.turnId||!isBrokenEscapeActor(broken))return 'Attaque gratuite de fuite : le combattant du Tour doit être Brisé.';
  if(brokenId!==broken.id)return 'Attaque gratuite de fuite : elle vise le Brisé dont c’est le Tour.';
- if(enemyId===broken.id||!participants.some(row=>row.id===enemyId&&row.zone==='active'))return 'Attaque gratuite de fuite : un adversaire actif autre que le Brisé.';
+ const enemy=participants.find(row=>row.id===enemyId&&row.zone==='active');
+ if(enemyId===broken.id||!enemy)return 'Attaque gratuite de fuite : un adversaire actif autre que le Brisé.';
+ if(participantCamp(enemy)===participantCamp(broken))return 'Attaque gratuite de fuite : réservée aux adversaires du Brisé, pas à son camp.';
+ if(!engagedWith(envelope.combat,participants,broken.id).includes(enemyId)&&!declaredIds.includes(enemyId))return 'Attaque gratuite de fuite : cet adversaire n’est pas engagé avec le Brisé (plateau des engagements ou case du panneau du Brisé).';
  const seq=envelope.extensions?.v5?.brokenEscape?.byActorId?.[broken.id];
  if(seq?.turnId===clock.turnId&&seq.fleeCommitted)return 'Attaque gratuite de fuite : le Brisé a déjà fui ce Tour.';
  const list=fleeFreeAttacksOf(envelope,broken.id,clock);
@@ -147,10 +160,10 @@ export function withFleeFreeAttackCosts(input){
  const quotas=(v5.quotas||[]).some(row=>row.id===FLEE_FREE_ATTACK_QUOTA.id)?[...v5.quotas]:[...(v5.quotas||[]),{...FLEE_FREE_ATTACK_QUOTA}];
  return {...input,v5:{...v5,extraAttack:true,costs,exemptions,quotas}};
 }
-export function fleeFreeAttackInputRefusal(envelope,input){
+export function fleeFreeAttackInputRefusal(envelope,input,declaredIds=[]){
  const actorId=input.actorId||input.actor?.id,targetId=input.targetId||input.target?.id;
  if(!['attack','attaque'].includes(String(input.action?.type||'').toLowerCase())||input.v5?.kind!=='melee')return 'Attaque gratuite de fuite : une attaque de mêlée.';
- return fleeFreeAttackRefusal(envelope,actorId,targetId);
+ return fleeFreeAttackRefusal(envelope,actorId,targetId,declaredIds);
 }
 /** Inscrit l'attaque jouée ('played') ou passée ('passed') dans le Tour courant du Brisé. */
 export function recordFleeFreeAttack(envelope,brokenId,enemyId,status){

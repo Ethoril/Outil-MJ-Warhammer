@@ -119,6 +119,7 @@ import {
   FLEE_FREE_ATTACK,
   isFleeFreeAttack,
   fleeFreeAttackInputRefusal,
+  declaredFleeEngagedIds,
   withFleeFreeAttackCosts,
   recordFleeFreeAttack,
   isV5ActionUse,
@@ -178,7 +179,7 @@ import { createDivineApi } from './store/api-divine.js';
 import { createAftermathApi } from './store/api-aftermath.js';
 import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 import { createEngagementsApi, engageAfterMeleeAttack, withExpiredEngagements } from './store/api-engagements.js';
-import { createPursuitApi, withAbandonedPursuit, pursuitTestThisTurn } from './store/api-pursuit.js';
+import { createPursuitApi, withAbandonedPursuit, pursuitFreesBrokenPrey, pursuitInvolves, withoutPursuitParticipant, withScenePursuit, withoutScenePursuit } from './store/api-pursuit.js';
 import { withoutEngagements } from './engagements.js';
 
 
@@ -214,6 +215,8 @@ export function createStore({ storage = safeLocalStorage(), sync = null, persist
   let pendingCommandType = null;
   let orderMode = ORDER_MODES.AUTOMATIC;
   const issuedBrokenEscapePreviews = new Map();
+  // Adversaires cochés comme engagés dans le panneau du Brisé (spec poursuite-v5, CA21) : mémoire de l'écran, par Tour, non enregistrée.
+  const declaredFleeEngaged = new Map();
   const issuedPaviseDeploymentPreviews = new Map();
   let localRevision = 0;
   // Remonte vérifiée par la carte (liaison RPG Map Display, contrat §8.2) : `({ rider, mount }) => Promise<{ ok, message? }>`.
@@ -2011,8 +2014,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       const linked = familiarLinksOf(participant).length > 0 || Boolean(participant.extensions?.v5?.familiarOf)
         || participant.extensions?.v5?.mounted === true
         || Array.from(combat.participants.values()).some(item => item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id);
-      if (persistence || linked || followed) return api.executeCommand('remove-participant', initial => {
-        const draft = planEncounterEnd(initial, { participantIds: [id], keepIds: keep ? [id] : [] }).envelope;
+      if (persistence || linked || followed || pursuitInvolves(currentEnvelope(), id)) return api.executeCommand('remove-participant', initial => {
+        const draft = planEncounterEnd(withoutPursuitParticipant(initial, id, 'retiré de la rencontre'), { participantIds: [id], keepIds: keep ? [id] : [] }).envelope;
         const stripLinks = item => {
           if (item.extensions?.v5?.familiarOf?.masterId === id) return withV5(item, v5 => {
             const { familiarOf, ...rest } = v5;
@@ -2068,10 +2071,11 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if (!canMutate()) return false;
       const p = combat.participants.get(id);
       if (!p) return;
-      if (persistence) {
+      if (persistence || (patch?.zone === 'bench' && pursuitInvolves(currentEnvelope(), id))) {
         const capturedPatch = JSON.parse(JSON.stringify(patch || {}));
-        return api.executeCommand('update-participant', draft => {
-          assertEditRevision(expectedLocalRevision, draft.localRevision);
+        return api.executeCommand('update-participant', initial => {
+          assertEditRevision(expectedLocalRevision, initial.localRevision);
+          const draft = capturedPatch.zone === 'bench' ? withoutPursuitParticipant(initial, id, 'mis au banc') : initial;
           let participants = (draft.combat?.participants || []).map(item => item.id === id ? momentumAfterChange(item, assertMiscastConditionsKept(item, { ...item, ...capturedPatch, ...pickBaseLayers(item, capturedPatch) })) : item);
           if (capturedPatch.zone === 'bench') participants = withoutEngagements({ participants: dismountLinkedRiders(participants.map(item => item.id === id ? clearMountedRelation(item) : item), id) }, id).participants;
           return { ...draft, combat: { ...draft.combat, participants } };
@@ -2808,7 +2812,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if (zone === 'active' && p.extensions?.sensor === true) throw Object.assign(new Error(`${p.name} est un capteur : il reste au banc, hors de l’ordre du combat.`), { code: 'SENSOR_NOT_COMBATANT', userFacing: true });
       if(zone==='active'&&p.zone!=='active'&&stateExtensions?.v5?.combatInitiativeInitialized===true&&!p.extensions?.v5?.combatInitiative?.initialized)
         throw Object.assign(new Error('Un combattant activé doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
-      if (persistence) return api.executeCommand('move-participant', draft => {
+      if (persistence || (zone === 'bench' && pursuitInvolves(currentEnvelope(), id))) return api.executeCommand('move-participant', initial => {
+        const draft = zone === 'bench' ? withoutPursuitParticipant(initial, id, 'mis au banc') : initial;
         let participants = (draft.combat?.participants || []).map(item => item.id === id ? { ...item, zone } : item);
         // Au banc, le participant quitte sa monture et libère ses cavaliers (comme updateParticipant).
         if (zone === 'bench') participants = withoutEngagements({ participants: dismountLinkedRiders(participants.map(item => item.id === id ? clearMountedRelation(item) : item), id) }, id).participants;
@@ -3240,7 +3245,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if (!canMutate()) return false;
       const current=currentEnvelope(),actor=current.combat?.participants?.find(row=>row.id===current.combat?.currentActorId),keyActor=actor?.id,seq=current.extensions?.v5?.brokenEscape?.byActorId?.[keyActor];
       const carriesBroken=(actor?.states||[]).some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
-      const sequenceCompletedThisTurn=seq?.turnId===v5StoreActionClock(current).turnId&&seq?.fleeCommitted&&seq?.sprintCommitted||pursuitTestThisTurn(current,keyActor,v5StoreActionClock(current).turnId);
+      const sequenceCompletedThisTurn=seq?.turnId===v5StoreActionClock(current).turnId&&seq?.fleeCommitted&&seq?.sprintCommitted||pursuitFreesBrokenPrey(current,keyActor,v5StoreActionClock(current).turnId);
       if(carriesBroken&&seq?.visibleToAnyEnemy!==false&&!sequenceCompletedThisTurn){
         const clock=v5StoreActionClock(current),ledger=current.extensions?.v5?.actionLedger||{quotaUsage:[]},actionSpent=standardV5ActionSpent(current,keyActor,clock)||(ledger.quotaUsage||[]).some(row=>row.actorId===keyActor&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===JSON.stringify([clock.encounterId,clock.turnId])&&row.used>0),fleeThisTurn=seq?.turnId===clock.turnId&&seq?.fleeCommitted;
         const midturn=actionSpent&&!fleeThisTurn;
@@ -4208,8 +4213,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if (!activeScene) throw new Error('Aucune scène active');
       return api.executeCommand('suspend-scene', draft => ({
         ...closeV5ReactionOpportunities(draft), activeScene: null,
-        extensions: withoutCombatInitiativeResolution(draft.extensions),
-        suspendedScenes: [...(draft.suspendedScenes || []), suspendScene({ ...draft.activeScene, participants: (draft.activeScene.participants || []).map(participant => withMomentum(participant, false)) })],
+        extensions: withoutScenePursuit(withoutCombatInitiativeResolution(draft.extensions)),
+        // La poursuite suit sa scène (spec poursuite-v5, D24) : rangée avec elle, rendue à la reprise.
+        suspendedScenes: [...(draft.suspendedScenes || []), suspendScene({ ...withScenePursuit(draft.activeScene, draft.extensions?.v5?.pursuit), participants: (draft.activeScene.participants || []).map(participant => withMomentum(participant, false)) })],
         combat: { ...draft.combat, round: 0, currentActorId: null, order: [], participants: [] },
         encounters: (draft.encounters || []).map(item => item.id === draft.activeScene.encounterId ? { ...item, status: 'suspended' } : item)
       }));
@@ -4230,10 +4236,12 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           delete v5.combatInitiativeResolution;
           delete v5.orderRound;
         }
+        if(scene.extensions?.v5?.pursuit)v5.pursuit=scene.extensions.v5.pursuit;
+        else delete v5.pursuit;
         return {
           ...draft,
           extensions:{...(draft.extensions||{}),v5},
-          activeScene: resumeScene(scene, { activeScene: draft.activeScene || null }),
+          activeScene: resumeScene(withScenePursuit(scene, null), { activeScene: draft.activeScene || null }),
           suspendedScenes: (draft.suspendedScenes || []).filter(item => item.id !== id),
           encounters: (draft.encounters || []).map(item => item.id === scene.encounterId ? { ...item, status: 'active' } : item)
         };
@@ -4247,7 +4255,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
 
   Object.assign(api, createEngagementsApi({ api, currentEnvelope }));
   Object.assign(api, createPursuitApi({ api, currentEnvelope }));
-  Object.assign(api, createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews }), {
+  Object.assign(api, createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews, declaredFleeEngaged }), {
     previewResolution(input = {}) {
       const snapshot=currentEnvelope();
       input=structuredClone(input);
@@ -4272,7 +4280,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         input.v5={...input.v5,kind:'test',context:{...input.v5.context,isAction:false},costs:[...(input.v5.costs||[]).filter(row=>row.id!=='combat:trip:momentum'),{id:'combat:trip:momentum',resource:'momentum',amount:1}]};
       }
       if(isFleeFreeAttack(input)){
-        const refusal=fleeFreeAttackInputRefusal(snapshot,input);
+        const refusal=fleeFreeAttackInputRefusal(snapshot,input,declaredFleeEngagedIds(declaredFleeEngaged,snapshot,input.targetId||input.target?.id));
         if(refusal)return {ready:false,status:'requires-input',error:refusal,unresolved:[refusal],baseRevision:localRevision,input:structuredClone(input)};
         input=withFleeFreeAttackCosts(input);
       }
@@ -4469,7 +4477,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           const actionBlock=brokenEscapeActionBlock(draft,actorId);
           if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
         }
-        const fleeFreeAttack=isFleeFreeAttack(preview.input),fleeRefusal=fleeFreeAttack&&fleeFreeAttackInputRefusal(draft,preview.input);
+        const fleeFreeAttack=isFleeFreeAttack(preview.input),fleeRefusal=fleeFreeAttack&&fleeFreeAttackInputRefusal(draft,preview.input,declaredFleeEngagedIds(declaredFleeEngaged,draft,preview.input.targetId||preview.input.target?.id));
         if(fleeRefusal)throw Object.assign(new Error(fleeRefusal),{code:'RESOLUTION_MANUAL'});
         let result;
         try { result = applyV5StoreAction(preview, draft, state => applyActionResolution(preview, state)); }

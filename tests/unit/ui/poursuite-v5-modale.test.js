@@ -196,6 +196,18 @@ test('plusieurs poursuivants : la paire du Test opposé se corrige, les Mouvemen
   assert.ok(byData(ctx.view.form, 'pursuitTest', 'foe1'), 'paire corrigée par le MJ');
 }));
 
+test('Mouvement inconnu : signalé près de son champ, aucune issue tant que le MJ ne l’a pas saisi (D22)', () => withDom(async () => {
+  const unknown = fighter('foe1', 'ennemi', { caracs: { CC: 50, CT: 40, F: 30, E: 30, I: 40, Ag: 40, Dex: 40, Int: 40, FM: 40, Soc: 40 } });
+  const ctx = await setup([fighter('runner', 'pj'), unknown, fighter('foe2', 'ennemi')]);
+  await choose(ctx);
+  assert.match(textOf(byData(ctx.view.form, 'pursuitMovementIssue', 'foe1')), /Mouvement inconnu/);
+  assert.equal(byData(ctx.view.form, 'pursuitTest'), null, 'pas de paire automatique, pas de Test');
+  assert.match(textOf(byData(ctx.view.form, 'pursuitSceneStatus')), /foe1.*Mouvement inconnu/);
+  await ctx.set(byData(ctx.view.form, 'pursuitSceneMovement', 'foe1'), '4', 'input');
+  assert.equal(byData(ctx.view.form, 'pursuitMovementIssue', 'foe1'), null);
+  assert.ok(byData(ctx.view.form, 'pursuitTest', 'foe1'));
+}));
+
 test('une validation refusée par le Store laisse la modale ouverte avec son motif', () => withDom(async () => {
   const ctx = await setup();
   await choose(ctx);
