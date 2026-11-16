@@ -173,6 +173,7 @@ import { createDivineApi } from './store/api-divine.js';
 import { createAftermathApi } from './store/api-aftermath.js';
 import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 import { createEngagementsApi, engageAfterMeleeAttack, withExpiredEngagements } from './store/api-engagements.js';
+import { createPursuitApi, withAbandonedPursuit } from './store/api-pursuit.js';
 import { withoutEngagements } from './engagements.js';
 
 
@@ -3058,6 +3059,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if(!plan.ready)return {ok:false,status:'requires-input',needsInput:plan.needsInput};
       const command=api.executeCommand('initialize-combat-initiative',draft=>{
         if(draft.localRevision!==expected)throw Object.assign(new Error('Le combat a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
+        if(staging?.kind==='restart-scene'||staging?.kind==='restart-free')draft=withAbandonedPursuit(draft,'combat recommencé');
         let sourceScene=scenePreview?.scene||staging?.scene||null;
         let sourceParticipants=sourceScene?.participants||staging?.participants||draft.combat?.participants||[];
         if(staging?.kind==='add-active-participant-pre-round'){
@@ -3703,7 +3705,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     endEncounter({ keepIds = [] } = {}) {
       if (!canMutate()) return false;
       return api.executeCommand('reset-combat', draft => {
-        const plan = planEncounterEnd(draft, { keepIds });
+        const plan = planEncounterEnd(withAbandonedPursuit(draft, 'combat terminé'), { keepIds });
         const base = plan.envelope;
         const notes = [
           plan.created.length ? `personnage(s) suivi(s) : ${plan.created.map(row => row.name).join(', ')}` : '',
@@ -4158,7 +4160,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         updated.extensions=extensions;
         return updated;
       };
-      return api.executeCommand('restart-combat', draft => {
+      return api.executeCommand('restart-combat', initial => {
+        const draft = withAbandonedPursuit(initial, 'combat recommencé');
         const current = draft.activeScene?.status === 'active' ? draft.activeScene : null;
         if (!current) {
           return {
@@ -4238,6 +4241,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
   };
 
   Object.assign(api, createEngagementsApi({ api, currentEnvelope }));
+  Object.assign(api, createPursuitApi({ api, currentEnvelope }));
   Object.assign(api, createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews }), {
     previewResolution(input = {}) {
       const snapshot=currentEnvelope();

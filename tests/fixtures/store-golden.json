@@ -145,6 +145,20 @@
    "getSceneCircumstances/0",
    "setSceneCircumstances/0",
    "setParticipantPosition/1",
+   "getPursuit/0",
+   "startPursuit/0",
+   "setPursuitMovement/2",
+   "previewPursuitTest/0",
+   "applyPursuitTest/1",
+   "setPursuitFactors/0",
+   "setPursuitObstacle/1",
+   "previewObstacleTest/0",
+   "applyObstacleTest/1",
+   "endPursuit/0",
+   "applyPursuitEnd/1",
+   "scenePursuitAvailability/0",
+   "previewScenePursuit/0",
+   "applyScenePursuit/1",
    "confirmBrokenEscapeVisibility/0",
    "previewV5ProjectileExtraction/0",
    "applyV5ProjectileExtraction/1",
@@ -1774,6 +1788,76 @@
     "state": "68c8ab7d431c0e71"
    },
    {
+    "label": "sweep getPursuit",
+    "result": "74234e98afe7498f",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep startPursuit",
+    "error": "Error: Fuyards et poursuivants : deux camps distincts, chacun d’au moins un personnage.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep setPursuitMovement",
+    "error": "Error: Aucune poursuite en cours.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep previewPursuitTest",
+    "result": "c01bab287172ee61",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep applyPursuitTest",
+    "error": "Error: Aperçu de Test de poursuite absent ou modifié ; recalculez.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep setPursuitFactors",
+    "error": "Error: Aucune poursuite en cours.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep setPursuitObstacle",
+    "error": "Error: Aucune poursuite en cours.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep previewObstacleTest",
+    "result": "c01bab287172ee61",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep applyObstacleTest",
+    "error": "Error: Aperçu de Test d’Obstacle absent ou modifié ; recalculez.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep endPursuit",
+    "error": "Error: Aucune poursuite en cours.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep applyPursuitEnd",
+    "error": "Error: Aucune poursuite terminée.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep scenePursuitAvailability",
+    "result": "b6c1928ada4a4566",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep previewScenePursuit",
+    "result": "5fd3b9c3b180a702",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep applyScenePursuit",
+    "error": "Error: Aperçu de poursuite hors combat absent ou modifié ; recalculez.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
     "label": "sweep confirmBrokenEscapeVisibility",
     "result": "b7d3ad04c3a38476",
     "state": "68c8ab7d431c0e71"
@@ -2731,6 +2815,20 @@
    "getSceneCircumstances/0",
    "setSceneCircumstances/0",
    "setParticipantPosition/1",
+   "getPursuit/0",
+   "startPursuit/0",
+   "setPursuitMovement/2",
+   "previewPursuitTest/0",
+   "applyPursuitTest/1",
+   "setPursuitFactors/0",
+   "setPursuitObstacle/1",
+   "previewObstacleTest/0",
+   "applyObstacleTest/1",
+   "endPursuit/0",
+   "applyPursuitEnd/1",
+   "scenePursuitAvailability/0",
+   "previewScenePursuit/0",
+   "applyScenePursuit/1",
    "confirmBrokenEscapeVisibility/0",
    "previewV5ProjectileExtraction/0",
    "applyV5ProjectileExtraction/1",
@@ -4357,6 +4455,76 @@
    {
     "label": "sweep setParticipantPosition",
     "error": "Error: Combattant introuvable.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep getPursuit",
+    "result": "74234e98afe7498f",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep startPursuit",
+    "error": "Error: Fuyards et poursuivants : deux camps distincts, chacun d’au moins un personnage.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep setPursuitMovement",
+    "error": "Error: Aucune poursuite en cours.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep previewPursuitTest",
+    "result": "c01bab287172ee61",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep applyPursuitTest",
+    "error": "Error: Aperçu de Test de poursuite absent ou modifié ; recalculez.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep setPursuitFactors",
+    "error": "Error: Aucune poursuite en cours.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep setPursuitObstacle",
+    "error": "Error: Aucune poursuite en cours.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep previewObstacleTest",
+    "result": "c01bab287172ee61",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep applyObstacleTest",
+    "error": "Error: Aperçu de Test d’Obstacle absent ou modifié ; recalculez.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep endPursuit",
+    "error": "Error: Aucune poursuite en cours.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep applyPursuitEnd",
+    "error": "Error: Aucune poursuite terminée.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep scenePursuitAvailability",
+    "result": "b6c1928ada4a4566",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep previewScenePursuit",
+    "result": "5fd3b9c3b180a702",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep applyScenePursuit",
+    "error": "Error: Aperçu de poursuite hors combat absent ou modifié ; recalculez.",
     "state": "4bd34c4c9a63fc31"
    },
    {

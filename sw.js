@@ -61,6 +61,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/workspace/plateau.js',
   './js/ui/dice-buttons.js',
   './js/core/store/api-engagements.js',
+  './js/core/store/api-pursuit.js',
   './js/core/bestiary-templates.js',
   './js/core/creature-abilities.js',
   './js/core/creature-senses.js',
