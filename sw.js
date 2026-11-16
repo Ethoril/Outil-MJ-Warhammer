@@ -67,6 +67,7 @@ const ASSETS_TO_CACHE = [
   './js/data/donnees-communes.js',
   './js/data/token-images.js',
   './js/data/bestiary-folders.js',
+  './js/data/montures-fiches.js',
   './js/core/token-image.js',
   './js/core/token-library-path.js',
   './js/ui/token-image-picker.js',

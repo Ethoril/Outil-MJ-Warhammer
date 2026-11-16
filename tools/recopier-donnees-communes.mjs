@@ -3,7 +3,8 @@
 // en fins de ligne LF :
 //   - js/data/donnees-communes.js (espèces, constantes de liaison) → carte et fiches ;
 //   - js/data/token-images.js (table des images de la bibliothèque de la carte) → carte seulement ;
-//   - docs/CONTRAT_LIAISON_MAP_DISPLAY.md (contrat de liaison) → carte seulement, copie « docs/CONTRAT-LIAISON-OUTIL-MJ.md ».
+//   - docs/CONTRAT_LIAISON_MAP_DISPLAY.md (contrat de liaison) → carte seulement, copie « docs/CONTRAT-LIAISON-OUTIL-MJ.md » ;
+//   - js/data/montures-fiches.js (montures proposées sur la fiche, généré par tools/build-fiche-mounts.mjs) → fiches seulement.
 //
 //   node tools/recopier-donnees-communes.mjs            écrit les copies
 //   node tools/recopier-donnees-communes.mjs --check    n'écrit rien ; code 1 si une copie manque ou a dérivé
@@ -17,6 +18,7 @@ import { fileURLToPath } from 'node:url';
 export const SOURCE = 'js/data/donnees-communes.js';
 export const SOURCE_TOKEN_IMAGES = 'js/data/token-images.js';
 export const SOURCE_CONTRAT = 'docs/CONTRAT_LIAISON_MAP_DISPLAY.md';
+export const SOURCE_MONTURES = 'js/data/montures-fiches.js';
 export const DEPOTS_PAR_DEFAUT = Object.freeze({
   carte: 'E:/rpg-map-display',
   fiches: 'E:/Projet Warhammer Ennemi Intérieur/ennemi-interieur-wfrp4'
@@ -30,7 +32,8 @@ export const COPIES = Object.freeze({
 export const RECOPIES = Object.freeze([
   Object.freeze({ source: SOURCE, copies: COPIES }),
   Object.freeze({ source: SOURCE_TOKEN_IMAGES, copies: Object.freeze({ carte: 'js/core/token-images.js' }) }),
-  Object.freeze({ source: SOURCE_CONTRAT, copies: Object.freeze({ carte: 'docs/CONTRAT-LIAISON-OUTIL-MJ.md' }) })
+  Object.freeze({ source: SOURCE_CONTRAT, copies: Object.freeze({ carte: 'docs/CONTRAT-LIAISON-OUTIL-MJ.md' }) }),
+  Object.freeze({ source: SOURCE_MONTURES, copies: Object.freeze({ fiches: 'js/data/montures-fiches.js' }) })
 ]);
 
 const racineOutil = resolve(dirname(fileURLToPath(import.meta.url)), '..');

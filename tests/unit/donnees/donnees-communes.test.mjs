@@ -89,11 +89,12 @@ test('script de recopie : table des images et contrat vont dans la carte seuleme
   const depots = { carte: join(tmp, 'carte'), fiches: join(tmp, 'fiches') };
   for (const dossier of Object.values(depots)) mkdirSync(dossier);
   assert.equal(recopier({ depots }).ok, true);
-  const copiesCarte = Object.fromEntries(RECOPIES.map(r => [r.source, join(depots.carte, r.copies.carte)]));
+  const copiesCarte = Object.fromEntries(RECOPIES.filter(r => r.copies.carte).map(r => [r.source, join(depots.carte, r.copies.carte)]));
   assert.equal(readFileSync(copiesCarte[SOURCE_TOKEN_IMAGES], 'utf8'), readFileSync(new URL(SOURCE_TOKEN_IMAGES, racine), 'utf8'));
   assert.equal(readFileSync(copiesCarte[SOURCE_CONTRAT], 'utf8'), readFileSync(new URL(SOURCE_CONTRAT, racine), 'utf8'), 'contrat octet pour octet');
   assert.equal(existsSync(join(depots.fiches, 'js/core/token-images.js')), false, 'rien de plus dans le dépôt des fiches');
   assert.equal(existsSync(join(depots.fiches, 'docs')), false);
+  assert.equal(existsSync(join(depots.carte, 'js/data/montures-fiches.js')), false, 'les montures des fiches ne vont pas dans la carte');
   assert.equal(recopier({ depots, check: true }).ok, true);
   // La table est régénérée dans l'outil : la copie de la carte n'est plus à jour.
   writeFileSync(copiesCarte[SOURCE_TOKEN_IMAGES], readFileSync(copiesCarte[SOURCE_TOKEN_IMAGES], 'utf8') + '// ancienne\n');
