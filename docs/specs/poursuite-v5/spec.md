@@ -105,6 +105,7 @@ Cadrage du 16/11/2026, sur `07d74b8` (prod 3.48.1). Matière : rapport du premie
 - **D17. Participants hors combat.** Seulement les participants de la rencontre en cours, même non lancée ; sans participant, l'entrée de l'écran Jouer est grisée avec son motif.
 - **D18. Rencontre terminée ou recommencée.** Une poursuite en cours est abandonnée sans issue, avec une ligne au journal.
 - **D19. Vocabulaire.** À l'écran, le mot de l'outil : « Réussite éclatante » (+5 DR), pas « Réussite stupéfiante » (choix de cadrage, pas une décision du MJ).
+- **D20. Fuyard Brisé en poursuite (16/11, après le lot L3).** Tant qu'un Brisé est le fuyard d'une poursuite en cours, son Test de poursuite ou d'Obstacle du Tour vaut pour son obligation de fuite et de Sprint : le Tour peut se terminer. Une Action par Test, comme D5.
 - **Rang des talents (levé par relecture, 16/11).** Le livre (p. 120 et 124) donne à Fuite ! et à Impitoyable « +1 DR » aux Tests de poursuite, sans notion de rang. Le contrat (+1 DR en tout) est donc juste ; l'ancien code (+1 par rang) ne l'était pas. Mesuré au lot L2 : rangs 1, 2 et 3 donnent le même +1.
 - **Table d10.** Le MJ la relira après le lot L1 ; ses corrections s'appliqueront en retouche de la donnée.
 
