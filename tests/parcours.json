@@ -157,6 +157,7 @@
     "lot5-g-base-5-browser.mjs": {"famille":"ticket","chantier":"lot5"},
     "lot6-a-browser.mjs": {"famille":"ticket","chantier":"lot6"},
     "lot6-c-browser.mjs": {"famille":"ticket","chantier":"lot6"},
+    "monture-fiche-browser.mjs": {"famille":"ticket","chantier":"monture-depuis-fiche"},
     "pro-q28-maitre-a-bord-ui-browser.mjs": {"famille":"ticket","chantier":"pro"},
     "pro-q29-tailles-ui-browser.mjs": {"famille":"ticket","chantier":"pro"},
     "pro-q31-banc-rappels-ui-browser.mjs": {"famille":"ticket","chantier":"pro"},
