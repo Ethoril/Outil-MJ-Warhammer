@@ -99,6 +99,15 @@ Cadrage du 16/11/2026, sur `07d74b8` (prod 3.48.1). Matière : rapport du premie
 - **D14. Mouvement compté.** Le Mouvement courant calculé par l'outil (États et modificateurs compris, celui de la monture pour un cavalier monté), corrigeable par le MJ dans l'écran. Vaut pour le choix de la paire, le facteur de Mouvement et la règle du Mouvement double.
 - **D15. Issue partielle.** Quand le groupe perd, le journal nomme ceux qui ont franchi leur Obstacle. Un fuyard qui s'échappe quand même reçoit le bouton « Retirer de la rencontre » ; un poursuivant qui continue seul reçoit un simple rappel de son unique occasion d'attaquer ou de retenir le fuyard le plus lent, sans automatisme.
 
+## Décisions du MJ (16/11/2026, points à trancher du plan)
+
+- **D16. Égalité au Test de poursuite.** Le poursuivant l'emporte, comme l'initiateur des autres Tests opposés de l'outil ; il reçoit le facteur « Test de poursuite gagné ».
+- **D17. Participants hors combat.** Seulement les participants de la rencontre en cours, même non lancée ; sans participant, l'entrée de l'écran Jouer est grisée avec son motif.
+- **D18. Rencontre terminée ou recommencée.** Une poursuite en cours est abandonnée sans issue, avec une ligne au journal.
+- **D19. Vocabulaire.** À l'écran, le mot de l'outil : « Réussite éclatante » (+5 DR), pas « Réussite stupéfiante » (choix de cadrage, pas une décision du MJ).
+- **En attente.** Rang des talents Fuite ! et Impitoyable : suivre le contrat ; le lot L2 mesure si un talent à plusieurs rangs y perd un point et le rapporte avant toute décision.
+- **Table d10.** Le MJ la relira après le lot L1 ; ses corrections s'appliqueront en retouche de la donnée.
+
 ## Règle relue le 16/11/2026 (R1 à R3 levés)
 
 Source : Livre de base V5 (v3, identique à la v2 sur ce passage), « Pursuits », p. 158-159. Résumé en mots à nous ; en cas d'écart avec les critères ci-dessus, cette section fait foi.
