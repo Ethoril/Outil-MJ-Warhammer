@@ -56,6 +56,8 @@ const ASSETS_TO_CACHE = [
   './js/core/creature-size.js',
   './js/core/outnumbering.js',
   './js/core/engagements.js',
+  './js/core/v5-pursuit.js',
+  './js/data/v5-pursuit-obstacles.js',
   './js/ui/workspace/plateau.js',
   './js/ui/dice-buttons.js',
   './js/core/store/api-engagements.js',
