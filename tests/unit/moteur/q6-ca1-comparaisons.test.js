@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { buildCombatTest } from '../../../js/core/v5-combat-rules.js';
 import { previewMountedSecondaryTest } from '../../../js/core/resolution.js';
-import { resolveV5PursuitStep } from '../../../js/core/v5-broken-escape.js';
+import { previewPursuitTest } from '../../../js/core/v5-pursuit.js';
 import { previewSupplementalEquipment } from '../../../js/core/v5-supplemental-equipment.js';
 import { resoluteException } from '../../../js/core/v5-talent-replacements.js';
 import { getReferenceCatalogue } from '../../../js/core/reference-catalog.js';
@@ -64,12 +64,12 @@ test('CA1 F2 : Chevaucher de désarçonnement et Test de compétence du plateau'
 test('CA1 F3 : poursuite et Test d’Athlétisme du plateau', () => {
   const actor=subject(); actor.skills=[{ id:'ath', name:'Athlétisme', carac:'Ag', status:'resolved', total:50 }];
   const primary=pivot(actor,'Athlétisme','Ag',{ involvesMovement:true, runningOrHiding:true });
-  const other={ ...subject(), id:'other', states:[], talents:[], extensions:{v5:{}}, skills:actor.skills };
-  const secondary=resolveV5PursuitStep({ quarry:actor, pursuer:other, initialDistance:5, quarryRoll:30, pursuerRoll:30, quarryContext:context });
+  const run=who=>previewPursuitTest(who,{ skill:'Athlétisme', roll:30, role:'prey', context });
+  const secondary=run(actor);
   assert.equal(secondary.ready,true,secondary.error);
-  assert.equal(secondary.quarryTest.sl,primary.sl);
+  assert.equal(secondary.test.sl,primary.sl);
   assert.equal(primary.sl,3);
-  assertWitnesses(actor,'Athlétisme','Ag',{ involvesMovement:true, runningOrHiding:true },who=>resolveV5PursuitStep({quarry:who,pursuer:other,initialDistance:5,quarryRoll:30,pursuerRoll:30,quarryContext:context}).quarryTest.sl);
+  assertWitnesses(actor,'Athlétisme','Ag',{ involvesMovement:true, runningOrHiding:true },who=>run(who).test.sl);
 });
 
 test('CA1 F7 : résistance à la Warp Blade et Test de Résistance du plateau', () => {

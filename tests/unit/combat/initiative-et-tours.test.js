@@ -12,7 +12,7 @@ import { wrathActionSpent } from '../../../js/core/v5-divine-prayer-caps.js';
 import { previewV5Turn } from '../../../js/core/v5-turn.js';
 import { createV5TimedEffect } from '../../../js/core/v5-effects.js';
 import { createHistory, recordCommand, MAX_HISTORY_COMMANDS, DEFAULT_HISTORY_MAX_BYTES } from '../../../js/core/history.js';
-import { previewV5BrokenEscape, previewV5FleeTalentDisengageMove, resolveV5PursuitStep } from '../../../js/core/v5-broken-escape.js';
+import { previewV5BrokenEscape, previewV5FleeTalentDisengageMove } from '../../../js/core/v5-broken-escape.js';
 
 describe('Ordre des tours E08', () => {
 const participants = [
@@ -2266,43 +2266,6 @@ test('C02 — Talent Fuite ! (C0-L06-024) : Mouvement supplémentaire en courant
   assert.equal(allowed.ready, true);
   assert.equal(allowed.extraMoveDistance, 16, 'Course = 4 × M (16 yards)');
   assert.equal(allowed.moveMode, 'run');
-});
-
-test('C02 — Poursuite V5 (C0-L06-074, C0-L06-023, C0-L06-044) : échelle 1-10, bonus Fuite ! proie et Acharné poursuivant', () => {
-  const quarry = makeActor('quarry', {
-    athletics: 50,
-    talents: [{ id: 'talent-flee', name: 'Fuite !', status: 'resolved', rank: 1 }]
-  });
-  const pursuer = makeActor('pursuer', {
-    athletics: 50,
-    talents: [{ id: 'talent-relentless', name: 'Impitoyable', status: 'resolved', rank: 1 }]
-  });
-
-  // Proie réussit avec 21 (DR +3 + 1 Fuite ! = +4), poursuivant rate avec 72 (DR -2 + 1 Impitoyable = -1) -> écart +5
-  const escaped = resolveV5PursuitStep({
-    quarry,
-    pursuer,
-    initialDistance: 7,
-    quarryRoll: 21,
-    pursuerRoll: 72
-  });
-  assert.equal(escaped.ready, true);
-  assert.equal(escaped.quarrySlBonus, 1);
-  assert.equal(escaped.pursuerSlBonus, 1);
-  assert.equal(escaped.nextDistance, 12);
-  assert.equal(escaped.outcome, 'escaped', 'Distance > 10 met fin à la poursuite par évasion');
-
-  // Proie rattrapée si distance tombe à 0 ou moins
-  const caught = resolveV5PursuitStep({
-    quarry: makeActor('slow-quarry', { athletics: 40 }),
-    pursuer,
-    initialDistance: 2,
-    quarryRoll: 85,
-    pursuerRoll: 15
-  });
-  assert.equal(caught.ready, true);
-  assert.equal(caught.nextDistance, 0);
-  assert.equal(caught.outcome, 'caught');
 });
 });
 

@@ -1,7 +1,9 @@
 // Poursuite selon le Livre de base V5, p. 158-159. Module pur : aucune écriture, aucune mutation des entrées. La règle est
-// ici ; le calcul des Tests (poursuite, Obstacle) viendra au-dessus (docs/specs/poursuite-v5).
+// ici, avec le calcul des Tests (poursuite, Obstacle) par le calcul commun des Tests secondaires (docs/specs/poursuite-v5).
 import { rangeCellsOf } from './map-link-state.js';
 import { resolveV5Opposition } from './v5-roll.js';
+import { effectiveSkillScore } from './v5-magic-talents.js';
+import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 import { PURSUIT_OBSTACLES } from '../data/v5-pursuit-obstacles.js';
 
 /** Écart de DR au Test opposé qui met fin à la poursuite (le MJ a dit 6 ; la v3 du livre pourrait donner 5). */
@@ -131,4 +133,68 @@ export function evaluatePursuit(state = {}) {
   const label = `${crossedIds.length} Obstacle(s) franchi(s) sur ${required} exigé(s)`;
   const partial = !groupWins && crossedIds.length > 0 ? { crossedIds, canEscapeAnyway: preyGroup, canContinueAlone: !preyGroup } : null;
   return withOpposition({ outcome: { kind, reason: 'obstacles', label }, required, crossedIds, partial });
+}
+
+// --- Tests (CA6, CA7, CA10, CA11) ---------------------------------------------------------------------------------------
+
+/** Compétences du Test de poursuite (V5 p. 158) : préfixe replié, libellé, Caractéristique si la fiche ne porte pas la compétence. */
+export const PURSUIT_TEST_SKILLS = Object.freeze([
+  { prefix: 'athletisme', label: 'Athlétisme', carac: 'Ag' }, { prefix: 'conduite', label: 'Conduite', carac: 'Ag' },
+  { prefix: 'chevaucher', label: 'Chevaucher', carac: 'Ag' }, { prefix: 'natation', label: 'Natation', carac: 'F' }
+].map(row => Object.freeze(row)));
+
+const waiting = (error, field) => ({ ready: false, error, needsInput: [{ field, label: error }], unresolved: [error] });
+const rollError = roll => (Number.isInteger(roll) && roll >= 1 && roll <= 100 ? null : 'Fournir le jet d100 du Test.');
+const skillRowOf = (actor, name) => {
+  const wanted = fold(name), rows = (actor?.skills || []).filter(row => row?.status === 'resolved' && Number.isInteger(row.total ?? row.value));
+  const label = row => fold(row.name || row.nom);
+  return rows.find(row => label(row) === wanted) || rows.find(row => label(row).startsWith(wanted)) || null;
+};
+
+/**
+ * Test calculé par le calcul commun. Les talents de poursuite (Fuite !, Impitoyable, Grandes enjambées) ne sont lus que par leurs
+ * contrats, via `context.pursuit` et `context.pursuitRole` : aucun modificateur manuel (CA11). Rend le résultat de
+ * `previewV5SecondaryTest` (non prêt : `needsInput`, `restrictions`, `blocked`) plus `skill`, `score`, `test`, `detail`.
+ */
+function pursuitSecondary(actor, { skillName, skillRow, fallback = null, roll, context }) {
+  const base = skillRow ? skillRow.total ?? skillRow.value : fallback ? Number(actor?.caracs?.[fallback.carac]) : NaN;
+  if (!Number.isFinite(base)) return waiting(`Compétence ${skillName} introuvable sur la fiche.`, 'skill');
+  const carac = skillRow?.carac || fallback?.carac || 'Ag';
+  const label = skillRow?.name || skillRow?.nom || skillName;
+  const secondary = previewV5SecondaryTest(actor, { score: effectiveSkillScore(actor, base, carac), roll, kind: 'test',
+    test: { characteristic: carac, skill: label, isAction: true }, context });
+  if (!secondary.ready) return secondary;
+  return { ...secondary, skill: label, score: secondary.result.score, test: secondary.result, detail: secondaryTestDetail(secondary) };
+}
+
+/**
+ * Test de poursuite d'un personnage (CA6, CA7). `input` : { skill, roll, role: 'prey'|'pursuer', context? }. La poursuite implique un
+ * mouvement ; seule la proie fuit : une proie Brisée n'a pas de pénalité, un poursuivant Brisé subit le malus sans question (MJ 09/11 CA32).
+ * Inconscient et Surpris bloquent (`blocked`, `restrictions`) ; une question d'État sans réponse reste dans `needsInput`.
+ */
+export function previewPursuitTest(actor, { skill: skillName, roll, role, context = {} } = {}) {
+  if (role !== 'prey' && role !== 'pursuer') return waiting('Rôle de poursuite : proie ou poursuivant.', 'role');
+  const entry = PURSUIT_TEST_SKILLS.find(row => row.prefix === fold(skillName));
+  if (!entry) return waiting('Compétence de poursuite : Athlétisme, Conduite, Chevaucher ou Natation.', 'skill');
+  const invalidRoll = rollError(roll);
+  if (invalidRoll) return waiting(invalidRoll, 'roll');
+  return pursuitSecondary(actor, { skillName: entry.label, skillRow: skillRowOf(actor, entry.prefix), fallback: entry, roll,
+    context: { ...context, pursuit: true, pursuitRole: role, involvesMovement: true, runningOrHiding: role === 'prey' } });
+}
+
+/**
+ * Test d'Obstacle d'un personnage (CA10). `input` : { obstacle, skill, roll, role?, context?, allies? }, `skill` parmi celles de
+ * l'obstacle. Un Obstacle n'est pas toujours un déplacement : les questions d'État restent posées au MJ (`context`). Une Réussite
+ * éclatante (+5 DR, V5 resultTier) rend `astonishing` et `beneficiaryOptions` : les alliés de la poursuite (D11), l'intéressé exclu.
+ */
+export function previewObstacleTest(actor, { obstacle, skill: skillName, roll, role, context = {}, allies = [] } = {}) {
+  const entry = (obstacle?.skills || []).find(row => fold(row.label) === fold(skillName) || row.prefix === fold(skillName));
+  if (!entry) return waiting('Compétence non admise pour cet obstacle.', 'skill');
+  const invalidRoll = rollError(roll);
+  if (invalidRoll) return waiting(invalidRoll, 'roll');
+  const out = pursuitSecondary(actor, { skillName: entry.label, skillRow: skillRowOf(actor, entry.prefix), roll,
+    context: { pursuit: true, ...(role ? { pursuitRole: role } : {}), ...context } });
+  if (!out.ready) return out;
+  const astonishing = out.test.resultTier?.id === 'success-5-plus';
+  return { ...out, astonishing, beneficiaryOptions: astonishing ? allies.filter(row => row?.id !== actor?.id).map(row => ({ id: row.id, name: row.name })) : [] };
 }
