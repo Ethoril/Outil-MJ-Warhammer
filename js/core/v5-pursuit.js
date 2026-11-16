@@ -8,6 +8,7 @@ import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers
 import { applicableV5TalentTestFields } from './v5-talent-tests.js';
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { PURSUIT_OBSTACLES } from '../data/v5-pursuit-obstacles.js';
+import { CARAC_BY_LOWER } from './carac-keys.js';
 
 /** Écart de DR au Test opposé qui met fin à la poursuite (le MJ a dit 6 ; la v3 du livre pourrait donner 5). */
 export const PURSUIT_CATCH_DR = 6;
@@ -173,12 +174,11 @@ export const PURSUIT_TEST_SKILLS = Object.freeze([
 const waiting = (error, field) => ({ ready: false, error, needsInput: [{ field, label: error }], unresolved: [error] });
 const rollError = roll => (Number.isInteger(roll) && roll >= 1 && roll <= 100 ? null : 'Fournir le jet d100 du Test.');
 const foldName = value => fold(value).replace(/[’‘`]/g, "'");
-const CARAC_KEYS = { cc: 'CC', ct: 'CT', f: 'F', e: 'E', i: 'I', ag: 'Ag', dex: 'Dex', int: 'Int', fm: 'FM', soc: 'Soc' };
 /** Compétence du catalogue de l'outil (D23) : nom replié sans spécialité, de base ou avancée, Caractéristique ; null si inconnue. */
 function catalogSkillOf(prefix) {
   const generic = getReferenceCatalogue().skills.filter(row => !row.specialization), name = row => foldName(row.nom || row.name);
   const entry = generic.find(row => name(row) === prefix) || generic.find(row => name(row).startsWith(prefix + ' '));
-  return entry ? { name: name(entry), basic: entry.basic === true, carac: CARAC_KEYS[entry.carac] || null } : null;
+  return entry ? { name: name(entry), basic: entry.basic === true, carac: CARAC_BY_LOWER[String(entry.carac ?? '').toLowerCase()] || null } : null;
 }
 /**
  * Meilleure ligne de fiche de la compétence `base` : nom exact ou suivi d'une spécialité entre parenthèses (« Résistance » n'attrape pas
