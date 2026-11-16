@@ -105,7 +105,7 @@ Cadrage du 16/11/2026, sur `07d74b8` (prod 3.48.1). Matière : rapport du premie
 - **D17. Participants hors combat.** Seulement les participants de la rencontre en cours, même non lancée ; sans participant, l'entrée de l'écran Jouer est grisée avec son motif.
 - **D18. Rencontre terminée ou recommencée.** Une poursuite en cours est abandonnée sans issue, avec une ligne au journal.
 - **D19. Vocabulaire.** À l'écran, le mot de l'outil : « Réussite éclatante » (+5 DR), pas « Réussite stupéfiante » (choix de cadrage, pas une décision du MJ).
-- **En attente.** Rang des talents Fuite ! et Impitoyable : suivre le contrat ; le lot L2 mesure si un talent à plusieurs rangs y perd un point et le rapporte avant toute décision.
+- **Rang des talents (levé par relecture, 16/11).** Le livre (p. 120 et 124) donne à Fuite ! et à Impitoyable « +1 DR » aux Tests de poursuite, sans notion de rang. Le contrat (+1 DR en tout) est donc juste ; l'ancien code (+1 par rang) ne l'était pas. Mesuré au lot L2 : rangs 1, 2 et 3 donnent le même +1.
 - **Table d10.** Le MJ la relira après le lot L1 ; ses corrections s'appliqueront en retouche de la donnée.
 
 ## Règle relue le 16/11/2026 (R1 à R3 levés)
