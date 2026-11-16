@@ -167,47 +167,19 @@ Chaque lot est vérifiable par tests unitaires ; il peut s'arrêter après n'imp
 
 Ordre recommandé : L0, L1, L2, L3, L4, puis L6, puis les lots à question (L5, L7, L8, L9).
 
-## 6. Questions ouvertes pour le MJ
+## 6. Décisions du MJ (16/11/2026)
 
-**Q1. Que faire des 60 miracles « assistés » et de leurs 88 clauses résiduelles ?** Exemples : Œil de l'aigle (clauses `eagle-control`, `eagle-sight`, `eagle-intangible`), Frostbite (`endurance-test`).
-- a) Hors chantier, à reprendre plus tard. **Recommandé** : le lot est déjà gros, et le compte « une soixantaine » désigne les rappels purs.
-- b) Les inclure dès maintenant, famille par famille.
+- **Q1. Miracles « assistés » (60 miracles, 88 clauses résiduelles) : inclus dans le chantier**, famille par famille. Cela modifie le périmètre du §3 (ils n'en sont plus exclus), le garde-fou CA2 et le découpage du §5 : l'inventaire et le classement des 88 clauses restent à faire avant le plan, et les lots à compléter.
+- **Q2. Effets de monde (F6, 28) :** rappel enrichi, sans calcul (durée suivie, portée et cible affichées, libellé court sur le participant).
+- **Q3. Conscience × 7 (F7) :** le rappel est gardé, la décision R33 tient.
+- **Q4. Test imposé à la cible (F2) :** le MJ saisit le jet de la cible.
+- **Q5. Maladies et poisons :** pas de registre ; Récupération (Rhya), Récupération (Shallya) et Bitter Catharsis restent en rappel. Le lot L8 se réduit à Unblemished Innocence.
+- **Q6. Corruption :** le MJ indique que l'outil suit déjà la Corruption. Constaté dans le code le 16/11/2026 : le champ `corruption` fait partie de l'envoi aux fiches (`js/ui/fiche-writeback-view.js`). Unblemished Innocence se branche donc sur ce suivi existant, sans nouveau compteur ; le point d'accroche exact est à repérer au plan.
+- **Q7. Martyr, Light of Stasis, Still the Winds :** oui, on touche aux moteurs partagés, en lots isolés et en dernier (L5, L7), chacun avec ses tests de non-régression.
+- **Q9. Péché de profit (Handrich) :** rappel du Péché au résultat, attribué à la main par le MJ.
+- **Q10. Valeurs chiffrées :** relecture ciblée, dans le livre, des seules valeurs chiffrées du lot, avant de coder.
 
-**Q2. Les 28 effets de monde (F6) : ils restent un rappel, ou on les enrichit ?**
-- a) Rappel pur, comme aujourd'hui.
-- b) Rappel enrichi : durée suivie (déjà possible quand elle est calendaire), portée et cible affichées, libellé court et lisible sur la fiche du participant, sans calcul. **Recommandé**.
-- c) Mécanisme dédié par prière (coût élevé, gain faible pour la table).
+Choix technique de Claude, hors décision du MJ :
+- **Q8. Moteur d'effets unifié :** ne pas attendre ; les effets neufs s'écrivent dans les types de `v5-divine-grammar.js`.
 
-**Q3. Conscience × 7 (F7) : on relit la décision R33 qui la garde en rappel ?** (`docs/divin/DIVIN_RESERVE_DECISIONS.md`, R33 « Conscience et Convalescence : narratives ».)
-- a) Garder le rappel. **Recommandé** : décision déjà prise, faute de modèle moteur.
-- b) Proposer un Test de Calme Accessible (+2 DR) quand le MJ signale qu'un commandement est rompu, avec honte et Action non effectuée en cas d'échec. Les Solkan portent deux clauses de plus, à lire dans le livre.
-
-**Q4. Test imposé à la cible (F2) : qui lance les dés ?**
-- a) Le MJ saisit le jet de la cible, comme pour les Obstacles de la poursuite (D4). **Recommandé** : cohérent avec le reste de l'outil.
-- b) L'outil tire le jet de la cible.
-
-**Q5. Maladies et poisons (Récupération ×2, Bitter Catharsis) : créer un registre ?** Le contrat de Récupération exige d'identifier l'instance de maladie et sa durée restante (`docs/divin/DIVIN_CLAUSES_BENEDICTIONS.md`) ; l'outil n'a pas ce registre, à vérifier dans le code.
-- a) Laisser ces trois prières en rappel. **Recommandé** tant qu'aucun autre chantier ne demande le registre.
-- b) Créer un registre léger (nom, jours restants, cible) saisi par le MJ.
-
-**Q6. Corruption (Unblemished Innocence) : l'outil suit-il la Corruption ?** À vérifier dans le code.
-- a) Rappel si aucun suivi n'existe. **Recommandé**.
-- b) Ajouter un compteur de Corruption par session, saisi par le MJ.
-
-**Q7. Dégâts interceptés (Martyr), stase (Light of Stasis), magie dissipée (Still the Winds) : accepte-t-on de toucher aux moteurs de dégâts, de Tour et de magie partagés ?** Le risque de régression est réel : 162 des 216 fichiers de test touchent ces moteurs (mesure de `docs/PROPOSITION_MOTEUR_EFFETS_UNIFIE.md`, 02/11).
-- a) Oui, mais en lots isolés et en dernier (L5, L7). **Recommandé**.
-- b) Non : ces trois prières restent en rappel.
-
-**Q8. Faut-il attendre le moteur d'effets unifié (U8) ?** Les effets neufs s'écrivent dans le vocabulaire actuel ; le schéma commun n'est pas supposé prêt (statut d'U8 à vérifier).
-- a) Ne pas attendre ; écrire dans les types de `v5-divine-grammar.js`. **Recommandé**.
-- b) Attendre U8 pour F2 à F5, et ne faire que F1 d'ici là.
-
-**Q9. Les cinq miracles de Handrich portent « après le Test » et « Péché de profit » (clauses `after-test`, `profit-sin`).** L'outil automatise-t-il l'attribution de Péchés ?
-- a) Rappel de Péché au résultat, attribué à la main. **Recommandé** (c'est le fonctionnement actuel de la table de Courroux).
-- b) Ajouter un Péché automatique, avec confirmation du MJ.
-
-**Q10. Vérification des valeurs chiffrées dans les livres.** Plusieurs contrats citent une source « V4 EN » ou « WFRP 4e » (champ `source.edition`) ; le contrat lit les yards comme des mètres. Avant chaque lot : relecture de la page citée, ou confiance dans la transcription déjà « vérifiée au PDF » ?
-- a) Relecture ciblée des seules valeurs chiffrées du lot. **Recommandé**.
-- b) Confiance dans la transcription existante.
-
-Pas de `plan.md` ni de `tasks.md` tant que ces questions sont ouvertes.
+Reste à faire avant `plan.md` et `tasks.md` : l'inventaire des 88 clauses des miracles assistés (conséquence de Q1).

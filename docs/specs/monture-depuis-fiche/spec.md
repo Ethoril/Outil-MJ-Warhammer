@@ -105,47 +105,17 @@ Les critères marqués **(Qn)** dépendent d'une question ouverte et seront ajus
 
 Outil : 150 à 250 lignes de code, ~120 de tests, une demi-journée. Fiches : 120 à 180 lignes, ~80 de tests, une demi-journée. Deux dépôts, donc deux publications ; la fonction `executeFicheCommand` se redéploie séparément.
 
-## Questions ouvertes
+## Décisions du MJ (16/11/2026)
 
-Aucune n'est tranchée par ce cadrage. L'option recommandée est celle du rapport.
+Les huit questions du cadrage sont tranchées.
 
-1. **Qui choisit la monture sur la fiche ?**
-   - A. Le joueur, depuis son bureau, comme son familier (le MJ peut corriger par le même écran). **Recommandé.**
-   - B. Le MJ seulement ; le joueur la voit sans pouvoir la changer.
-   - C. Le joueur propose en texte libre, le MJ valide dans l'outil.
+1. **Qui choisit la monture sur la fiche :** le joueur, depuis son bureau, comme son familier ; le MJ peut corriger par le même écran.
+2. **Animaux proposés :** tous les animaux « dressés comme monture » du bestiaire (68 profils au 15/11/2026), et non la liste courte de sept. La liste est partagée par `donnees-communes.js` et contrôlée par `--check`, pas recopiée à la main des deux côtés (choix technique de Claude, pour éviter la dérive).
+3. **Fiche et outil en désaccord :** la fiche gagne quand elle a changé depuis la dernière mise à jour ; sinon l'outil garde la sienne, avec un avertissement dans l'aperçu.
+4. **Nom propre :** oui, facultatif ; sans nom, l'outil affiche le nom du bestiaire.
+5. **PV et état d'une séance à l'autre :** non, comme aujourd'hui ; la fiche ne dit que l'espèce et le nom.
+6. **Retrait sur la fiche :** l'outil retire la monture du profil à la prochaine mise à jour, après confirmation dans l'aperçu. Convention retenue pour lever le conflit signalé par le cadrage (choix technique de Claude) : champ **absent** = l'outil ne touche à rien (fiche jamais renseignée) ; champ présent et **`null`** = retrait explicite. Les critères CA1 et CA2 se lisent avec cette convention.
+7. **Application mobile :** affichage seul en résumé (une ligne) ; la saisie se fait au bureau.
+8. **Image du pion :** elle reste choisie dans l'outil (Réserve).
 
-2. **Quels animaux le joueur peut-il choisir ?**
-   - A. Une courte liste fermée : Cheval et les six montures du Bestiaire du Vieux Monde (7 entrées), extensible ensuite. **Recommandé.**
-   - B. Tous les animaux « dressés comme monture » du bestiaire (68 profils), liste copiée sur le site.
-   - C. Texte libre, que l'outil essaie de rapprocher puis le MJ tranche.
-
-   Sous-point technique (impacte A et B, pas une question de fond) : liste partagée par `donnees-communes.js` (contrôlée par `--check`, recommandé) ou recopiée à la main des deux côtés (risque de dérive, comme `FAMILIER_ESPECES`).
-
-3. **Si la fiche et l'outil disent deux choses différentes, qui gagne ?**
-   - A. La fiche dès qu'elle a changé depuis la dernière mise à jour ; sinon l'outil, avec un avertissement dans l'aperçu. **Recommandé.**
-   - B. Toujours la fiche (comme pour le familier).
-   - C. Toujours l'outil ; la fiche n'est qu'un souhait.
-   - D. Le MJ choisit à chaque mise à jour.
-
-4. **La monture a-t-elle un nom propre ?**
-   - A. Oui, facultatif (« Tonnerre »), sinon le nom du bestiaire. **Recommandé.**
-   - B. Non, juste l'espèce.
-
-5. **Les PV et l'état de la monture se suivent-ils d'une séance à l'autre ?**
-   - A. Non, comme aujourd'hui : l'outil seul les gère ; la fiche ne dit que l'espèce et le nom. **Recommandé.**
-   - B. Oui, avec un personnage persistant pour la monture (chantier à part, plus gros).
-
-6. **Si le joueur retire la monture sur sa fiche :**
-   - A. L'outil la retire du profil à la prochaine mise à jour, avec confirmation dans l'aperçu. **Recommandé.**
-   - B. L'outil garde sa monture ; le retrait ne se fait que dans l'outil.
-
-   Note de cadrage : la règle « fiche sans champ ou `null` = l'outil ne touche à rien » (CA1, CA2) et l'option A ci-dessus se conflictuent si `null` signifie « retrait ». À arbitrer avec la réponse : absence du champ = ne rien faire, `null` explicite = retrait, ou autre convention.
-
-7. **Application mobile des fiches :**
-   - A. Affichage seul en résumé (une ligne), saisie au bureau, comme le familier. **Recommandé.**
-   - B. Saisie aussi sur mobile (chantier mobile plus large).
-   - C. Rien sur mobile.
-
-8. **L'image du pion de la monture** reste choisie dans l'outil (Réserve) et non sur la fiche :
-   - A. Oui. **Recommandé.**
-   - B. Le joueur choisit aussi son image (hors périmètre actuel, la carte ne l'attend pas).
+Les critères d'acceptation marqués comme dépendant d'une question se lisent désormais avec ces réponses. Rien n'a été revérifié dans le dépôt des fiches depuis le rapport du 15/11/2026 : à faire au moment du plan.

@@ -86,18 +86,16 @@ Cadrage du 16/11/2026, sur `07d74b8` (prod 3.48.1). Matière : rapport du premie
 - **CA24.** Tests unitaires dans `tests/unit/` : moteur (CA1-CA11), commandes du Store (CA13-CA16), attaque gratuite (CA21-CA23). Les anciens tests de `resolveV5PursuitStep` sont réécrits ou retirés avec justification (échelle 1-10 disparue).
 - **CA25.** Un parcours navigateur sous `timeout 120` : combat, Brisé engagé fuit avec attaques gratuites, poursuite sur deux Rounds avec un obstacle, fin et bouton ; plus un parcours de la modale hors combat. Les parcours existants du Brisé et des engagements restent verts.
 
-## Questions ouvertes
+## Décisions du MJ (16/11/2026)
 
-Aucune n'est tranchée ici.
+- **D9. Test opposé en combat (ex-Q2).** Chacun à son Tour : le poursuivant fait son Test à son Tour, le fuyard répond à son propre Tour ; l'outil compare la paire une fois les deux Tests faits. Une Action par Test, rien de gratuit.
+- **D10. Plusieurs poursuivants ou fuyards (ex-Q3).** Le MJ saisit tous les participants ; l'outil choisit la paire (le plus rapide contre le plus lent).
+- **D11. Avantage d'une Réussite stupéfiante (ex-Q5).** Le MJ choisit le bénéficiaire dans la liste des alliés de la poursuite.
 
-**Q1. Texte exact du livre (p. 158-159).** La table d10 des Obstacles, le calcul du « Mouvement double » (Mouvement de base ou après modificateurs ?) et le plafond des facteurs favorables ne sont pas dans la matière fournie ni dans le rapport. *Options :* (a) le MJ fournit le texte ou la table ; (b) Claude relit le PDF du corpus avant le plan. *Recommandé : b*, puis le MJ relit la table saisie.
+## Points à lever par relecture du livre (pas des questions au MJ)
 
-**Q2. Ordre des Tests quand la poursuite s'étale sur les Rounds (D5).** Chacun joue dans son Tour ; il reste à fixer ce qu'est « un Test opposé » quand les deux camps ne jouent pas au même moment. *Options :* (a) le poursuivant joue son Test à son Tour, le fuyard répond (Test opposé) à son propre Tour suivant, la paire est comparée une fois les deux faits ; (b) le Test du fuyard est joué en réaction, hors de son Action ; (c) la poursuite se compte par manche, les deux jets à la suite dans l'ordre d'Initiative. *Recommandé : a*, la plus proche de D5 (une Action par Test, rien de gratuit).
+À faire avant le plan, par relecture du PDF du Livre de base V5 p. 158-159 ; le MJ relit ensuite la table saisie.
 
-**Q3. Plusieurs poursuivants ou fuyards.** La règle compare le plus rapide au plus lent. *Options :* (a) tous les participants sont saisis, l'outil choisit la paire (CA1) ; (b) un seul couple par poursuite. *Recommandé : a* (cohérent avec D1 et avec « fuyard rattrapé : l'engager avec ses poursuivants »).
-
-**Q4. Un Test d'Obstacle raté ou un personnage qui n'a plus d'Action.** Que devient-il : il est distancé (mis hors poursuite), ou il subit seulement une pénalité sur le Test opposé suivant ? *Options :* (a) suivre le texte du livre une fois relu (Q1) ; (b) pénalité en DR sur le prochain Test. *Recommandé : a*.
-
-**Q5. Qui désigne l'« autre » qui reçoit l'Avantage d'une Réussite stupéfiante ?** *Options :* (a) le MJ choisit dans une liste des alliés de la poursuite ; (b) l'outil l'attribue au suivant dans l'ordre d'Initiative. *Recommandé : a*.
-
-**Q6. Seuil de 6 ou 5 DR.** Le rapport mentionne une version 3 du livre à 5 DR. Le MJ a dit 6 ; confirmer que le texte relu en Q1 ne dit pas 5. *Recommandé :* garder 6 sauf contradiction du livre relu.
+- **R1 (ex-Q1).** Texte exact : table d10 des Obstacles, calcul du « Mouvement double » (Mouvement de base ou après modificateurs), plafond des facteurs favorables.
+- **R2 (ex-Q4).** Sort d'un personnage qui rate son Test d'Obstacle ou n'a plus d'Action : suivre le texte du livre.
+- **R3 (ex-Q6).** Seuil de fin immédiate : 6 DR, sauf si le texte relu dit autre chose ; dans ce cas, le signaler au MJ avant de coder.
