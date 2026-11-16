@@ -92,10 +92,43 @@ Cadrage du 16/11/2026, sur `07d74b8` (prod 3.48.1). Matière : rapport du premie
 - **D10. Plusieurs poursuivants ou fuyards (ex-Q3).** Le MJ saisit tous les participants ; l'outil choisit la paire (le plus rapide contre le plus lent).
 - **D11. Avantage d'une Réussite stupéfiante (ex-Q5).** Le MJ choisit le bénéficiaire dans la liste des alliés de la poursuite.
 
-## Points à lever par relecture du livre (pas des questions au MJ)
+## Décisions du MJ (16/11/2026, après relecture du livre)
 
-À faire avant le plan, par relecture du PDF du Livre de base V5 p. 158-159 ; le MJ relit ensuite la table saisie.
+- **D12. Qui franchit les Obstacles.** Le camp des PJ seulement, comme dans le livre ; l'autre camp ne fait que le Test de poursuite. Sans aucun PJ dans la poursuite, le MJ désigne le camp qui franchit les Obstacles.
+- **D13. Facteurs favorables.** L'outil coche les deux facteurs déductibles (Test de poursuite gagné ; son membre le plus lent plus rapide que le plus rapide d'en face), le MJ coche le terrain ; chaque case reste modifiable. Remplace la saisie libre de CA4.
+- **D14. Mouvement compté.** Le Mouvement courant calculé par l'outil (États et modificateurs compris, celui de la monture pour un cavalier monté), corrigeable par le MJ dans l'écran. Vaut pour le choix de la paire, le facteur de Mouvement et la règle du Mouvement double.
+- **D15. Issue partielle.** Quand le groupe perd, le journal nomme ceux qui ont franchi leur Obstacle. Un fuyard qui s'échappe quand même reçoit le bouton « Retirer de la rencontre » ; un poursuivant qui continue seul reçoit un simple rappel de son unique occasion d'attaquer ou de retenir le fuyard le plus lent, sans automatisme.
 
-- **R1 (ex-Q1).** Texte exact : table d10 des Obstacles, calcul du « Mouvement double » (Mouvement de base ou après modificateurs), plafond des facteurs favorables.
-- **R2 (ex-Q4).** Sort d'un personnage qui rate son Test d'Obstacle ou n'a plus d'Action : suivre le texte du livre.
-- **R3 (ex-Q6).** Seuil de fin immédiate : 6 DR, sauf si le texte relu dit autre chose ; dans ce cas, le signaler au MJ avant de coder.
+## Règle relue le 16/11/2026 (R1 à R3 levés)
+
+Source : Livre de base V5 (v3, identique à la v2 sur ce passage), « Pursuits », p. 158-159. Résumé en mots à nous ; en cas d'écart avec les critères ci-dessus, cette section fait foi.
+
+- **Test de poursuite.** Au début, le poursuivant au Mouvement le plus élevé fait un Test opposé contre le fuyard au Mouvement le plus bas. D'ordinaire Athlétisme, sinon Conduite, Chevaucher ou Natation selon la situation. Avec montures ou véhicules, on prend leur Mouvement.
+- **Fin immédiate (R3).** Un camp gagne le Test opposé de **6 DR ou plus** : la poursuite finit en sa faveur. De même si **le membre le plus lent d'un camp a au moins le double du Mouvement du membre le plus rapide de l'autre** (CA3 se lit ainsi). Le livre ne précise pas « Mouvement de base ou modifié ».
+- **Point de vue.** La règle est écrite pour le groupe des joueurs, fuyard ou poursuivant : c'est lui qui compte ses facteurs favorables et franchit des Obstacles. Si des joueurs se poursuivent entre eux, un simple Test opposé tranche.
+- **Facteurs favorables, de 0 à 3** (CA4 se lit ainsi). Pour des fuyards : avoir gagné le Test de poursuite ; terrain dense ou bondé, avec des cachettes ; son membre le plus lent a un Mouvement supérieur au poursuivant le plus rapide. Pour des poursuivants : avoir gagné le Test de poursuite ; terrain dégagé, sans cachettes ; son membre le plus lent a un Mouvement supérieur au fuyard le plus rapide. Deux des trois se déduisent des données, seul le terrain est un jugement du MJ.
+- **Obstacles.** Chaque personnage rencontre un Obstacle (un par personnage, tiré au d10 ou choisi par le MJ, qui peut l'adapter). Aucun facteur : tout le groupe doit franchir le sien. Un ou deux : la moitié du groupe, arrondie au supérieur. Trois : un seul membre.
+- **Aides.** Une Réussite stupéfiante (+5 DR) permet de donner l'Avantage au Test d'un autre personnage. Un objet adapté (une corde pour grimper) peut donner l'Avantage, au jugement du MJ.
+- **Échec à un Obstacle (R2).** Aucune conséquence individuelle ni nouvel essai dans le texte : le personnage ne compte simplement pas parmi les réussites. Le livre ne dit rien d'un personnage sans Action (les Tours sont notre décision D5).
+- **Issue.** Le groupe gagne s'il atteint le nombre de réussites exigé, sinon il perd.
+  - Fuyards gagnants : ils s'échappent.
+  - Poursuivants gagnants : ils rattrapent et acculent le fuyard, qui ne peut pas fuir aussitôt.
+  - Fuyards perdants : rattrapés et acculés ; ceux qui ont franchi leur Obstacle peuvent encore s'échapper en abandonnant les autres.
+  - Poursuivants perdants : le fuyard s'échappe ; ceux qui ont franchi leur Obstacle peuvent continuer seuls et gagnent chacun une seule occasion d'attaquer ou de retenir le fuyard le plus lent.
+
+### Table des Obstacles (d10), à relire par le MJ
+
+| d10 | Obstacle (résumé) | Compétences d'exemple |
+|---|---|---|
+| 1 | Chariot renversé, marchandises en travers du chemin | Athlétisme (sauter), Esquive (contourner) |
+| 2 | Garde trop curieux qui veut vous arrêter | Charme, Intimidation |
+| 3 | Eau jusqu'à la poitrine : bassin, canal, ruisseau | Natation (plonger), Athlétisme (sauter) |
+| 4 | Passant agressif ou animal affolé en travers | Esquive, Corps à corps (repousser) |
+| 5 | Sol boueux ou foule compacte | Athlétisme, Résistance (forcer), Intimidation (ouvrir un passage) |
+| 6 | Terrain découvert : pure vitesse | Athlétisme, Conduite, Chevaucher |
+| 7 | Ruelle sombre ou végétation dense | Discrétion (se cacher), Pistage (garder la trace) |
+| 8 | Nid-de-poule ou racine : vous ou votre monture trébuchez | Résistance (serrer les dents), Emprise sur les animaux (calmer la monture) |
+| 9 | Changement de niveau : toits ou cimes des arbres | Athlétisme (sauter), Escalade |
+| 10 | Dédale de ruelles ou de canyons : l'autre camp est perdu de vue | Perception (le retrouver), Orientation (ne pas se perdre) |
+
+Les noms de compétences se raccordent aux clés de l'outil au moment du plan.
