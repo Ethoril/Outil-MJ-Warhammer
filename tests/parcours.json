@@ -158,6 +158,8 @@
     "lot6-a-browser.mjs": {"famille":"ticket","chantier":"lot6"},
     "lot6-c-browser.mjs": {"famille":"ticket","chantier":"lot6"},
     "monture-fiche-browser.mjs": {"famille":"ticket","chantier":"monture-depuis-fiche"},
+    "poursuite-hors-combat-browser.mjs": {"famille":"ticket","chantier":"poursuite-v5"},
+    "poursuite-v5-browser.mjs": {"famille":"ticket","chantier":"poursuite-v5"},
     "pro-q28-maitre-a-bord-ui-browser.mjs": {"famille":"ticket","chantier":"pro"},
     "pro-q29-tailles-ui-browser.mjs": {"famille":"ticket","chantier":"pro"},
     "pro-q31-banc-rappels-ui-browser.mjs": {"famille":"ticket","chantier":"pro"},
