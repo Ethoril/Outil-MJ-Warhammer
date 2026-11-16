@@ -83,6 +83,17 @@ function settle(state, pursuit) {
   return { pursuit, evaluation, lines };
 }
 
+/**
+ * D20 : le fuyard Brisé a fait pendant ce Tour son Test de poursuite ou d'Obstacle (enregistrable seulement poursuite en cours) ;
+ * ce Test vaut pour son obligation de fuite et de Sprint, et son Tour peut se terminer.
+ */
+export function pursuitTestThisTurn(state, actorId, turnId) {
+  const pursuit = pursuitOf(state);
+  if (!turnId || !pursuit?.preyIds?.includes(actorId)) return false;
+  return [pursuit.opposed?.pursuer, pursuit.opposed?.prey, ...(pursuit.obstacles || []).map(row => row.test)]
+    .some(test => test?.participantId === actorId && test.turnId === turnId);
+}
+
 /** Abandon d'une poursuite en cours sans issue (D18), avec une ligne au journal ; une poursuite déjà finie s'efface sans bruit. */
 export function withAbandonedPursuit(state, why) {
   const pursuit = pursuitOf(state);

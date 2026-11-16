@@ -262,6 +262,59 @@ test('hors combat : participants de la rencontre seulement, aperçu sans écritu
   assert.match(empty.scenePursuitAvailability().reason, /participant/);
 });
 
+const broken = { states: [{ id: 'b1', key: 'brise', name: 'Brisé', level: 1 }] };
+const turnBlocked = (result, code) => { assert.equal(result.ready, false); assert.equal(result.code, code); };
+
+test('fuyard Brisé : son Test de poursuite ou d’Obstacle du Tour vaut pour la fuite, le Tour se termine (D20)', async () => {
+  const { store, engine } = await fixture({ orc: broken });
+  await store.startPursuit(chase);
+  await testOf(store, 'gunther', 25);
+  await engine.nextTurn(); await engine.nextTurn();
+  assert.equal(store.getCombat().currentActorId, 'orc');
+  await testOf(store, 'orc', 45);
+  const ended = await engine.nextTurn();
+  assert.equal(ended.status, 'applied', ended.error);
+  assert.equal(store.getCombat().round, 2);
+  // Fuyards PJ : Test de poursuite au Round 1, Test d'Obstacle au Round 2.
+  const prey = await fixture({ gunther: broken });
+  await prey.store.startPursuit({ preyIds: ['gunther', 'aldric'], pursuerIds: ['orc'], visibleToAnyEnemy: true });
+  await testOf(prey.store, 'gunther', 45);
+  assert.equal((await prey.engine.nextTurn()).status, 'applied');
+  await prey.engine.nextTurn();
+  await testOf(prey.store, 'orc', 25);
+  await prey.engine.nextTurn();
+  await prey.store.setPursuitObstacle('gunther', { d10: 6 });
+  await obstacleOf(prey.store, 'gunther', 25, { context: { runningOrHiding: true } });
+  assert.equal((await prey.engine.nextTurn()).status, 'applied');
+  // Même garde par la commande du Store.
+  const direct = await fixture({ gunther: broken });
+  await direct.store.startPursuit({ preyIds: ['gunther'], pursuerIds: ['orc'], visibleToAnyEnemy: true });
+  await testOf(direct.store, 'gunther', 45);
+  await direct.store.nextTurn();
+  assert.equal(direct.store.getCombat().currentActorId, 'aldric');
+});
+
+test('Brisé toujours tenu de fuir : fuyard sans Test ce Tour, poursuivant Brisé, sans poursuite (D20)', async () => {
+  const late = await fixture({ orc: broken });
+  await late.store.startPursuit(chase);
+  await testOf(late.store, 'gunther', 25);
+  await late.engine.nextTurn(); await late.engine.nextTurn();
+  turnBlocked(await late.engine.nextTurn(), 'BROKEN_ESCAPE_REQUIRED');
+  await testOf(late.store, 'orc', 45);
+  await late.engine.nextTurn(); await late.engine.nextTurn(); await late.engine.nextTurn();
+  assert.equal(late.store.getCombat().currentActorId, 'orc');
+  assert.equal(late.store.getCombat().round, 2, 'Test du Round 1 : il ne vaut pas pour le Round 2');
+  turnBlocked(await late.engine.nextTurn(), 'BROKEN_ESCAPE_REQUIRED');
+  assert.throws(() => late.store.nextTurn(), /Brisé/);
+  const pursuer = await fixture({ gunther: broken });
+  await pursuer.store.startPursuit(chase);
+  await testOf(pursuer.store, 'gunther', 25);
+  turnBlocked(await pursuer.engine.nextTurn(), 'DIV-BROKEN-MIDTURN-01');
+  assert.throws(() => pursuer.store.nextTurn(), /DIV-BROKEN-MIDTURN-01/);
+  const none = await fixture({ gunther: broken });
+  turnBlocked(await none.engine.nextTurn(), 'BROKEN_ESCAPE_REQUIRED');
+});
+
 test('rencontre terminée ou recommencée : la poursuite en cours est abandonnée sans issue, avec une ligne au journal (D18)', async () => {
   const ending = await fixture();
   await ending.store.startPursuit(chase);

@@ -2,7 +2,7 @@ import { v5StoreActionClock } from '../v5-store-action.js';
 import { previewV5SecondaryTest, secondaryTestDetail } from '../v5-test-modifiers.js';
 import { previewV5ProjectileExtraction } from '../v5-weapon-qualities.js';
 import { cloneValue, uid } from '../models.js';
-import { recordV5ActionUsage, standardV5ActionSpent, previewV5PaviseDeploymentFrom } from '../store/v5-action-guards.js';
+import { recordV5ActionUsage, standardV5ActionSpent, previewV5PaviseDeploymentFrom, fleeFreeAttacksOf, fleeFreeAttackRefusal, recordFleeFreeAttack } from '../store/v5-action-guards.js';
 import { initialV5ReloadState, createV5ReloadState, beginV5Reload, advanceV5Reload, V5_RELOAD_REASON_LABELS } from '../v5-reloading.js';
 import { previewV5BrokenEscape, BROKEN_ESCAPE_SOURCE, BROKEN_ESCAPE_RULE_VERSION } from '../v5-broken-escape.js';
 import { withoutEngagements } from '../engagements.js';
@@ -159,6 +159,25 @@ export function createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEsc
       });
       return Promise.resolve(saved).then(result => result?.ok === false ? { status: 'error', reason: result.error }
         : { status: 'applied', equipmentId: plan.equipmentId, state: plan.after, result: plan.result, progress: plan.progress || null, persistence: result });
+    },
+    /** Attaques gratuites de la fuite engagée (D7, CA23) : jouées, passées, en attente parmi `engagedEnemyIds` ; complète sans attente. */
+    getFleeFreeAttacks(brokenId, engagedEnemyIds = []) {
+      const { playedIds, passedIds } = fleeFreeAttacksOf(currentEnvelope(), brokenId);
+      const pendingIds = engagedEnemyIds.filter(id => !playedIds.includes(id) && !passedIds.includes(id));
+      return { playedIds, passedIds, pendingIds, complete: pendingIds.length === 0 };
+    },
+    /** L'adversaire engagé renonce à son attaque gratuite contre le Brisé qui fuit ; une ligne au journal, annulable. */
+    passFleeFreeAttack(brokenId, enemyId) {
+      const refusal = fleeFreeAttackRefusal(currentEnvelope(), enemyId, brokenId);
+      if (refusal) throw Object.assign(new Error(refusal), { userFacing: true });
+      return api.executeCommand('v5-flee-free-attack-pass', draft => {
+        const again = fleeFreeAttackRefusal(draft, enemyId, brokenId);
+        if (again) throw Object.assign(new Error(again), { userFacing: true });
+        recordFleeFreeAttack(draft, brokenId, enemyId, 'passed');
+        const name = id => draft.combat.participants.find(row => row.id === id)?.name || id;
+        draft.log = [{ id: uid(), ts: Date.now(), kind: 'effect', actorId: enemyId, text: `${name(enemyId)} passe son attaque gratuite (fuite de ${name(brokenId)})` }, ...(draft.log || [])].slice(0, 300);
+        return draft;
+      });
     },
     previewBrokenEscape(input = {}) {
       const envelope = currentEnvelope(), actor = envelope.combat?.participants?.find(row => row.id === input.actorId && row.zone === 'active');

@@ -116,6 +116,11 @@ import {
   isBrokenEscapeActor,
   brokenEscapeActionBlock,
   detonateDueV5Bombs,
+  FLEE_FREE_ATTACK,
+  isFleeFreeAttack,
+  fleeFreeAttackInputRefusal,
+  withFleeFreeAttackCosts,
+  recordFleeFreeAttack,
   isV5ActionUse,
   isExplicitV5NonAction,
   isV5SkillTest,
@@ -173,7 +178,7 @@ import { createDivineApi } from './store/api-divine.js';
 import { createAftermathApi } from './store/api-aftermath.js';
 import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 import { createEngagementsApi, engageAfterMeleeAttack, withExpiredEngagements } from './store/api-engagements.js';
-import { createPursuitApi, withAbandonedPursuit } from './store/api-pursuit.js';
+import { createPursuitApi, withAbandonedPursuit, pursuitTestThisTurn } from './store/api-pursuit.js';
 import { withoutEngagements } from './engagements.js';
 
 
@@ -3235,7 +3240,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if (!canMutate()) return false;
       const current=currentEnvelope(),actor=current.combat?.participants?.find(row=>row.id===current.combat?.currentActorId),keyActor=actor?.id,seq=current.extensions?.v5?.brokenEscape?.byActorId?.[keyActor];
       const carriesBroken=(actor?.states||[]).some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase()));
-      const sequenceCompletedThisTurn=seq?.turnId===v5StoreActionClock(current).turnId&&seq?.fleeCommitted&&seq?.sprintCommitted;
+      const sequenceCompletedThisTurn=seq?.turnId===v5StoreActionClock(current).turnId&&seq?.fleeCommitted&&seq?.sprintCommitted||pursuitTestThisTurn(current,keyActor,v5StoreActionClock(current).turnId);
       if(carriesBroken&&seq?.visibleToAnyEnemy!==false&&!sequenceCompletedThisTurn){
         const clock=v5StoreActionClock(current),ledger=current.extensions?.v5?.actionLedger||{quotaUsage:[]},actionSpent=standardV5ActionSpent(current,keyActor,clock)||(ledger.quotaUsage||[]).some(row=>row.actorId===keyActor&&row.quotaId==='system:turn-action'&&row.scope==='turn'&&row.scopeKey===JSON.stringify([clock.encounterId,clock.turnId])&&row.used>0),fleeThisTurn=seq?.turnId===clock.turnId&&seq?.fleeCommitted;
         const midturn=actionSpent&&!fleeThisTurn;
@@ -4266,7 +4271,12 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         input.defense={...(input.defense||{}),base:athleticsScore,label:'Athlétisme',v5:{...(input.defense?.v5||{}),kind:'test',context:{...(input.defense?.v5?.context||{}),...(skill?.id?{skillId:skill.id}:{})}}};
         input.v5={...input.v5,kind:'test',context:{...input.v5.context,isAction:false},costs:[...(input.v5.costs||[]).filter(row=>row.id!=='combat:trip:momentum'),{id:'combat:trip:momentum',resource:'momentum',amount:1}]};
       }
-      const reactionCandidate=Boolean(input.v5?.reactionId||input.reactionId),ordinaryIntent=!reactionCandidate&&(isV5ActionUse(null,input)||['attack','attaque'].includes(input.action?.type)),freeAttackCandidate=input.v5?.extraAttack===true&&['divine-free-attack','reaction-strike','glorious-demise','frenzy'].includes(input.v5?.context?.freeAttackTalent);
+      if(isFleeFreeAttack(input)){
+        const refusal=fleeFreeAttackInputRefusal(snapshot,input);
+        if(refusal)return {ready:false,status:'requires-input',error:refusal,unresolved:[refusal],baseRevision:localRevision,input:structuredClone(input)};
+        input=withFleeFreeAttackCosts(input);
+      }
+      const reactionCandidate=Boolean(input.v5?.reactionId||input.reactionId),ordinaryIntent=!reactionCandidate&&(isV5ActionUse(null,input)||['attack','attaque'].includes(input.action?.type)),freeAttackCandidate=input.v5?.extraAttack===true&&['divine-free-attack','reaction-strike','glorious-demise','frenzy',FLEE_FREE_ATTACK].includes(input.v5?.context?.freeAttackTalent);
       if(ordinaryIntent&&!freeAttackCandidate){
         const block=ordinaryActionAfterCombatActionBlock(snapshot,actorForAction?.id);
         if(block)return {...block,baseRevision:localRevision,input:structuredClone(input)};
@@ -4459,6 +4469,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           const actionBlock=brokenEscapeActionBlock(draft,actorId);
           if(actionBlock)throw Object.assign(new Error(actionBlock.error),{userFacing:true,code:actionBlock.code});
         }
+        const fleeFreeAttack=isFleeFreeAttack(preview.input),fleeRefusal=fleeFreeAttack&&fleeFreeAttackInputRefusal(draft,preview.input);
+        if(fleeRefusal)throw Object.assign(new Error(fleeRefusal),{code:'RESOLUTION_MANUAL'});
         let result;
         try { result = applyV5StoreAction(preview, draft, state => applyActionResolution(preview, state)); }
         catch (error) {
@@ -4516,6 +4528,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         next.extensions??={};
         next.extensions.v5={...combatRoot,combatActions:combatState};
         engageAfterMeleeAttack(next,preview);
+        if(fleeFreeAttack)recordFleeFreeAttack(next,draft.combat.currentActorId,actorId,'played');
         if(!reaction&&!isExplicitV5NonAction(preview,preview.input||{})&&escapeActor?.states?.some(row=>['brise','broken'].includes(String(row.key||row.name||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))recordV5EscapeVisibility(next,actorId,preview.input?.brokenEscapeFacts?.visibleToAnyEnemy,preview.resolutionId);
         return next;
       });

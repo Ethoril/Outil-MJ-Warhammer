@@ -116,6 +116,50 @@ export function brokenEscapeActionBlock(envelope,actorId){
   ? {ready:false,status:'blocked',code:'BROKEN_ESCAPE_ACTION_SPENT',error:'Le quota Action du Tour est déjà dépensé pour ce personnage Brisé.'}
   : null;
 }
+// Attaque gratuite à la fuite d'un Brisé engagé (spec poursuite-v5, D7) : chaque adversaire joue ou passe la sienne pendant le Tour
+// du Brisé, avant son Flee ; elle ne prend ni son Action ni son Élan (la case « a dépensé son Élan » nourrit le moteur de fuite).
+export const FLEE_FREE_ATTACK='flee-free-attack';
+const FLEE_FREE_ATTACK_QUOTA={id:'broken-escape:flee-free-attack',scope:'turn',maximum:1};
+export const isFleeFreeAttack=input=>input?.v5?.context?.freeAttackTalent===FLEE_FREE_ATTACK;
+/** Adversaires dont l'attaque gratuite est jouée ou passée pendant ce Tour du Brisé. */
+export function fleeFreeAttacksOf(envelope,brokenId,clock=v5StoreActionClock(envelope)){
+ const row=envelope.extensions?.v5?.brokenEscape?.freeAttacksByActorId?.[brokenId];
+ return row&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId?{playedIds:[...(row.playedIds||[])],passedIds:[...(row.passedIds||[])]}:{playedIds:[],passedIds:[]};
+}
+/** Motif du refus de l'attaque gratuite (ou de son abandon) de `enemyId` contre le Brisé du Tour ; null si elle est permise. */
+export function fleeFreeAttackRefusal(envelope,enemyId,brokenId){
+ const clock=v5StoreActionClock(envelope),participants=envelope.combat?.participants||[],broken=participants.find(row=>row.id===envelope.combat?.currentActorId);
+ if(!clock.encounterId||!clock.turnId||!isBrokenEscapeActor(broken))return 'Attaque gratuite de fuite : le combattant du Tour doit être Brisé.';
+ if(brokenId!==broken.id)return 'Attaque gratuite de fuite : elle vise le Brisé dont c’est le Tour.';
+ if(enemyId===broken.id||!participants.some(row=>row.id===enemyId&&row.zone==='active'))return 'Attaque gratuite de fuite : un adversaire actif autre que le Brisé.';
+ const seq=envelope.extensions?.v5?.brokenEscape?.byActorId?.[broken.id];
+ if(seq?.turnId===clock.turnId&&seq.fleeCommitted)return 'Attaque gratuite de fuite : le Brisé a déjà fui ce Tour.';
+ const list=fleeFreeAttacksOf(envelope,broken.id,clock);
+ if([...list.playedIds,...list.passedIds].includes(enemyId))return 'Attaque gratuite de fuite déjà jouée ou passée par cet adversaire.';
+ return null;
+}
+/** Entrée d'attaque gratuite : attaque de mêlée supplémentaire, Élan exempté, une par adversaire et par Tour du Brisé (idempotent). */
+export function withFleeFreeAttackCosts(input){
+ const v5=input.v5,costs=[...(v5.costs||[])];
+ if(!costs.some(cost=>cost.resource==='momentum'))costs.push({id:'system:extra-attack-momentum',resource:'momentum',amount:1});
+ const exemptions=[...(v5.exemptions||[])];
+ for(const cost of costs.filter(row=>row.resource==='momentum'))if(!exemptions.some(row=>row.costId===cost.id&&row.sourceId===FLEE_FREE_ATTACK))exemptions.push({costId:cost.id,sourceId:FLEE_FREE_ATTACK});
+ const quotas=(v5.quotas||[]).some(row=>row.id===FLEE_FREE_ATTACK_QUOTA.id)?[...v5.quotas]:[...(v5.quotas||[]),{...FLEE_FREE_ATTACK_QUOTA}];
+ return {...input,v5:{...v5,extraAttack:true,costs,exemptions,quotas}};
+}
+export function fleeFreeAttackInputRefusal(envelope,input){
+ const actorId=input.actorId||input.actor?.id,targetId=input.targetId||input.target?.id;
+ if(!['attack','attaque'].includes(String(input.action?.type||'').toLowerCase())||input.v5?.kind!=='melee')return 'Attaque gratuite de fuite : une attaque de mêlée.';
+ return fleeFreeAttackRefusal(envelope,actorId,targetId);
+}
+/** Inscrit l'attaque jouée ('played') ou passée ('passed') dans le Tour courant du Brisé. */
+export function recordFleeFreeAttack(envelope,brokenId,enemyId,status){
+ const clock=v5StoreActionClock(envelope),root=envelope.extensions?.v5||{},escape=structuredClone(root.brokenEscape||{byActorId:{},receipts:[]}),list=fleeFreeAttacksOf(envelope,brokenId,clock);
+ list[status==='played'?'playedIds':'passedIds'].push(enemyId);
+ escape.freeAttacksByActorId={...(escape.freeAttacksByActorId||{}),[brokenId]:{encounterId:clock.encounterId,turnId:clock.turnId,...list}};
+ envelope.extensions??={};
+ envelope.extensions.v5={...root,brokenEscape:escape};
+}
 export function detonateDueV5Bombs(combat, completedActorId, completedTurnIndex){
  if(!Number.isSafeInteger(completedTurnIndex)||completedTurnIndex<1||!Array.isArray(combat?.participants))return combat;
  let changed=false;

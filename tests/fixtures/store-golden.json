@@ -166,6 +166,8 @@
    "applyV5PaviseDeployment/1",
    "previewV5WeaponReload/0",
    "applyV5WeaponReload/1",
+   "getFleeFreeAttacks/1",
+   "passFleeFreeAttack/2",
    "previewBrokenEscape/0",
    "applyBrokenEscape/1",
    "previewResolution/0",
@@ -1893,6 +1895,16 @@
     "state": "68c8ab7d431c0e71"
    },
    {
+    "label": "sweep getFleeFreeAttacks",
+    "result": "f55e1c0c5e8d0c40",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep passFleeFreeAttack",
+    "error": "Error: Attaque gratuite de fuite : le combattant du Tour doit être Brisé.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
     "label": "sweep previewBrokenEscape",
     "result": "f69a0b5e78c04bf2",
     "state": "68c8ab7d431c0e71"
@@ -2836,6 +2848,8 @@
    "applyV5PaviseDeployment/1",
    "previewV5WeaponReload/0",
    "applyV5WeaponReload/1",
+   "getFleeFreeAttacks/1",
+   "passFleeFreeAttack/2",
    "previewBrokenEscape/0",
    "applyBrokenEscape/1",
    "previewResolution/0",
@@ -4560,6 +4574,16 @@
    {
     "label": "sweep applyV5WeaponReload",
     "result": "4824b913cbcdc391",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep getFleeFreeAttacks",
+    "result": "f55e1c0c5e8d0c40",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep passFleeFreeAttack",
+    "error": "Error: Attaque gratuite de fuite : le combattant du Tour doit être Brisé.",
     "state": "4bd34c4c9a63fc31"
    },
    {
