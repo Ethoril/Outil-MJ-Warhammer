@@ -6,6 +6,8 @@ import { buildMountProfile, canRide, mountLabel } from '../../../js/core/mounts.
 import { buildReserveProfileFromBestiary } from '../../../js/core/bestiary-profiles.js';
 import { montureFicheDe } from '../../../js/data/montures-fiches.js';
 import { createStore } from '../../../js/core/store.js';
+import { planFicheWriteback } from '../../../js/core/fiche-writeback.js';
+import { mountLineOf } from '../../../js/ui/fiche-sync-view.js';
 
 // Monture déclarée sur la fiche en ligne (chantier du 16/11/2026) : lue à « Mettre à jour les PJ », selon les décisions du MJ.
 // Convention : champ `monture` absent = rien ne change ; `null` = retrait explicite.
@@ -161,11 +163,14 @@ test('CA8 : monture: null retire la monture après changement du champ, annoncé
   assert.equal(declared(store), undefined);
   assert.ok(profileOf(store, 'monture-pj'), 'le profil de la monture reste en bibliothèque');
   assert.equal(store.listParticipants().find(row => row.profileId === 'pj').extensions.v5.declaredMount, undefined);
-  // Le MJ redéclare dans l'outil : la fiche, toujours à null sans changement, n'y touche pas.
+  // Le MJ redéclare dans l'outil : la fiche, toujours à null sans changement, n'y touche pas, mais l'aperçu avertit (comme un désaccord).
   await store.setProfileMount('pj', { ...mountsOf(store), name: 'Tonnerre' });
-  assert.equal(planMountSync(fiche(null), profileOf(store)).kind, 'none');
+  const keep = planMountSync(fiche(null), profileOf(store));
+  assert.deepEqual([keep.kind, keep.key, keep.toolName, keep.declared], ['disagree', null, 'Tonnerre', undefined]);
+  assert.match(mountLineOf(keep), /n’en déclare aucune.*Tonnerre/);
   await sync(store, fiche(null));
   assert.equal(declared(store).name, 'Tonnerre');
+  assert.ok(profileOf(store, 'monture-pj'));
   // Rien à retirer : profil sans monture.
   assert.equal(planMountSync(fiche(null), { id: 'x', extensions: {} }).kind, 'none');
 });
@@ -184,12 +189,14 @@ test('CA9 : Annuler restaure la monture précédente', async () => {
   assert.equal(declared(store).name, 'Tonnerre');
 });
 
-test('CA10 : la monture ne part pas dans « Envoyer aux fiches » : WRITEBACK_FIELDS inchangé', () => {
-  const source = readFileSync(new URL('../../../js/core/fiche-sync.js', import.meta.url), 'utf8');
-  assert.match(source, /const WRITEBACK_FIELDS = Object\.freeze\(\['destin', 'fortune', 'peche', 'corruption'\]\);/);
-  const base = fiche(horse('Tonnerre'), { destin: '3', fortune: '2' }).writebackBase;
-  assert.ok(Object.keys(base.fields).every(key => ['destin', 'fortune', 'peche', 'corruption'].includes(key)));
-  assert.equal(JSON.stringify(base).includes('monture'), false);
+test('CA10 : la monture ne part pas dans « Envoyer aux fiches » : aucun plan d’envoi ne porte de ligne de monture', () => {
+  const snapshot = fiche(horse('Tonnerre'), { destin: '3', fortune: '2' });
+  // Profil dont la monture a changé depuis la lecture (déclaration de l'outil différente) et dont le Destin diffère : le plan d'envoi n'est pas vide.
+  const profile = { id: 'pj', name: 'Caelel', kind: 'PJ', caracs: {}, hp: 10, maxHp: 12, ficheSnapshot: structuredClone(snapshot),
+    extensions: { ficheId: 'caelel', v5: { fate: 5, declaredMount: { profileId: 'monture-pj', name: 'Foudre', bestiaryId: SPIDER } } } };
+  const plan = planFicheWriteback({ schemaVersion: 3, reserve: [profile], persistentCharacters: [], combat: { participants: [] }, activeScene: null, suspendedScenes: [], log: [], extensions: { v5: {} } });
+  assert.ok(plan.fiches.length > 0 && plan.fiches[0].rows.length > 0, 'le plan contient bien d’autres lignes');
+  assert.equal(/monture|mount/i.test(JSON.stringify(plan)), false);
 });
 
 test('CA11 : le profil monture-<id> construit par la fiche égale celui de setProfileMount', async () => {
@@ -200,4 +207,92 @@ test('CA11 : le profil monture-<id> construit par la fiche égale celui de setPr
   assert.deepEqual(profileOf(viaFiche, 'monture-pj'), profileOf(viaTool, 'monture-pj'));
   assert.deepEqual(declared(viaFiche), declared(viaTool));
   assert.deepEqual(buildMountProfile('pj', { ...mountsOf(viaTool), name: 'Tonnerre' }).declared, declared(viaTool));
+});
+
+test('Précision 2 : même espèce, fiche inchangée : le nom donné dans l’outil est gardé, sans avertissement', async () => {
+  const store = await table();
+  await sync(store, fiche(horse('Tonnerre')));
+  await store.setProfileMount('pj', { ...mountsOf(store), name: 'Brutus' });
+  const same = fiche(horse('Tonnerre'));
+  assert.equal(planProfileSync(same, profileOf(store), { library: store.listProfiles() }).mount.kind, 'none');
+  await sync(store, same);
+  assert.equal(declared(store).name, 'Brutus');
+  assert.equal(profileOf(store, 'monture-pj').name, 'Brutus');
+  await sync(store, fiche(horse('Foudre')));
+  assert.equal(declared(store).name, 'Foudre');
+  assert.equal(profileOf(store, 'monture-pj').name, 'Foudre');
+});
+
+test('Précision 3 : déclaration alors que monture-<id> existe : même espèce réutilisée telle quelle, autre espèce remplacée', async () => {
+  const store = await table({ inCombat: true });
+  await sync(store, fiche(horse('Tonnerre')));
+  await store.updateProfile('monture-pj', { hp: 3, tokenLibraryImage: 'maps/tokens/cheval.png', extensions: { ...profileOf(store, 'monture-pj').extensions, retouche: 'MJ' } });
+  await sync(store, fiche(null));
+  assert.equal(declared(store), undefined);
+  const again = fiche(horse('Foudre'));
+  const plan = planProfileSync(again, profileOf(store), { library: store.listProfiles() });
+  assert.deepEqual([plan.mount.kind, plan.mount.build], ['redeclare', false]);
+  assert.match(mountLineOf(plan.mount), /de nouveau déclarée/);
+  // Sans modèle fourni : rien n'est reconstruit.
+  await store.applyFicheSync([{ charId: 'caelel', profileId: 'pj', snapshot: again, links: {}, convert: {} }]);
+  const mount = profileOf(store, 'monture-pj');
+  assert.deepEqual([mount.name, mount.hp, mount.tokenLibraryImage, mount.extensions.retouche], ['Foudre', 3, 'maps/tokens/cheval.png', 'MJ']);
+  assert.deepEqual(declared(store), { profileId: 'monture-pj', name: 'Foudre', bestiaryId: HORSE });
+  assert.ok(store.listParticipants().some(row => row.profileId === 'monture-pj'), 'la monture rejoint le combat');
+  // Autre espèce : remplacée.
+  await sync(store, fiche(null));
+  await sync(store, fiche(spider('Toile')), SPIDER);
+  const replaced = profileOf(store, 'monture-pj');
+  assert.deepEqual([replaced.name, replaced.extensions.v5.bestiary.id, replaced.tokenLibraryImage], ['Toile', SPIDER, undefined]);
+});
+
+test('Précision 4 : renommage alors que le profil monture-<id> a disparu : il est recréé depuis le bestiaire', async () => {
+  const store = await table();
+  await sync(store, fiche(horse('Tonnerre')));
+  await store.removeProfile('monture-pj');
+  assert.equal(profileOf(store, 'monture-pj'), undefined);
+  const snapshot = fiche(horse('Foudre'));
+  const plan = planProfileSync(snapshot, profileOf(store), { library: store.listProfiles() });
+  assert.deepEqual([plan.mount.kind, plan.mount.build], ['rename', true]);
+  await sync(store, snapshot);
+  const mount = profileOf(store, 'monture-pj');
+  assert.equal(mount.name, 'Foudre');
+  assert.equal(mount.extensions.v5.bestiary.id, HORSE);
+});
+
+test('Précision 5 : une lecture invalide garde la monture retenue par le snapshot ; une fiche inchangée ne l’emporte pas ensuite', async () => {
+  const store = await table();
+  await sync(store, fiche(horse('Tonnerre')));
+  await store.setProfileMount('pj', { ...mountsOf(store), name: 'Brutus' });
+  await sync(store, fiche({ espece: 'cle-du-futur' }));
+  assert.deepEqual(profileOf(store).ficheSnapshot.mount, { key: HORSE, name: 'Tonnerre' });
+  const same = fiche(horse('Tonnerre'));
+  assert.equal(planProfileSync(same, profileOf(store), { library: store.listProfiles() }).mount.kind, 'none');
+  await sync(store, same);
+  assert.equal(declared(store).name, 'Brutus');
+  // Sans le champ, ni empreinte ni snapshot ne changent.
+  const bare = ficheSnapshot('caelel', fixture);
+  assert.equal(bare.source.fingerprint, fiche().source.fingerprint);
+  assert.equal(Object.hasOwn(bare, 'mount'), false);
+  await sync(store, bare);
+  assert.equal(Object.hasOwn(profileOf(store).ficheSnapshot, 'mount'), false);
+});
+
+test('Lignes d’aperçu : chaque cas nomme la monture concernée', () => {
+  const rider = (declaredMount, previous) => ({ id: 'pj', extensions: { v5: declaredMount ? { declaredMount } : {} }, ficheSnapshot: previous });
+  const tonnerre = { profileId: 'monture-pj', name: 'Tonnerre', bestiaryId: HORSE };
+  const line = (snapshot, profile, library) => mountLineOf(planMountSync(snapshot, profile, library));
+  assert.match(line(fiche(horse('Tonnerre')), rider(null, fiche()), []), /Tonnerre/);
+  assert.match(line(fiche(horse('Foudre')), rider(null, fiche(null)), [{ id: 'monture-pj', extensions: { mountFor: { bestiaryId: HORSE } } }]), /Foudre.*de nouveau déclarée/);
+  const renamed = line(fiche(horse('Foudre')), rider(tonnerre, fiche(horse('Tonnerre'))), []);
+  assert.ok(renamed.includes('Tonnerre') && renamed.includes('Foudre'));
+  const replaced = line(fiche(spider('Toile')), rider(tonnerre, fiche(horse('Tonnerre'))), []);
+  assert.ok(replaced.includes('Tonnerre') && replaced.includes('Toile'));
+  assert.match(line(fiche(null), rider(tonnerre, fiche(horse('Tonnerre')))), /Tonnerre.*retirée/);
+  const disagree = line(fiche(spider('Toile')), rider(tonnerre, fiche(spider('Toile'))), []);
+  assert.ok(disagree.includes('Tonnerre') && disagree.includes('Toile'));
+  assert.match(line(fiche(null), rider(tonnerre, fiche(null))), /n’en déclare aucune.*Tonnerre/);
+  // Clé inconnue : l'avertissement de la lecture cite la clé.
+  assert.match(fiche({ espece: 'cle-du-futur' }).warnings.find(row => row.code === 'mount-invalid').message, /cle-du-futur/);
+  assert.equal(mountLineOf({ kind: 'none' }), '');
 });

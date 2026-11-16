@@ -119,3 +119,9 @@ Les huit questions du cadrage sont tranchées.
 8. **Image du pion :** elle reste choisie dans l'outil (Réserve).
 
 Les critères d'acceptation marqués comme dépendant d'une question se lisent désormais avec ces réponses. Rien n'a été revérifié dans le dépôt des fiches depuis le rapport du 15/11/2026 : à faire au moment du plan.
+### Précisions techniques du 16/11/2026
+
+- Fiche `null` inchangée alors que l'outil a une monture : traitée comme un désaccord (rien n'est modifié), avec une ligne d'aperçu « la fiche n'en déclare aucune, l'outil garde … ».
+- Même espèce des deux côtés : le nom ne suit la fiche que si le champ `monture` de la fiche a changé depuis la dernière lecture ; sinon le nom de l'outil est gardé, sans avertissement.
+- Déclaration alors que le profil `monture-<id>` existe déjà : s'il est de la même espèce, il est réutilisé tel quel (image, PV, retouches), seule la déclaration est reposée et le nom suit la fiche ; d'une autre espèce, il est remplacé. Un renommage dont le profil a disparu le recrée depuis le bestiaire.
+- Valeur illisible ou clé inconnue (`mount-invalid`) : le snapshot du profil conserve la monture précédente, pour qu'une fiche inchangée ne l'emporte pas à la lecture valide suivante.

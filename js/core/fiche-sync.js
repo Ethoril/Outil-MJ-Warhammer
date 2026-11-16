@@ -278,25 +278,39 @@ const mountSignature =snapshot => JSON.stringify({ mount: snapshot && Object.has
 
 /**
  * Monture déclarée par la fiche face à celle du profil, sans rien écrire. Champ absent : rien. `kind` :
- * none | create | rename (même espèce, seul le nom suit) | replace | remove (`monture: null`) | disagree (l'outil garde la sienne).
- * La fiche l'emporte quand son champ a changé depuis la dernière lecture (`profile.ficheSnapshot`), sinon l'outil garde la sienne.
+ * none | create | redeclare (profil `monture-<id>` de la même espèce déjà en bibliothèque : réutilisé) | rename (même espèce, seul le nom suit)
+ * | replace | remove (`monture: null` changé) | disagree (l'outil garde la sienne ; `key` null quand la fiche n'en déclare aucune).
+ * La fiche l'emporte quand son champ a changé depuis la dernière lecture (`profile.ficheSnapshot`), sinon l'outil garde la sienne, nom compris.
+ * `library` (profils de la bibliothèque, facultatif) permet de savoir si le profil monture existe ; `build` : il faut le construire depuis le bestiaire ;
+ * `link` : la monture doit rejoindre le combat de son cavalier.
  * `declared` : nouvelle déclaration du profil (null = retrait, undefined = inchangée).
  */
-export function planMountSync(snapshot, profile) {
+export function planMountSync(snapshot, profile, library) {
   const none = { kind: 'none', declared: undefined };
   if (!snapshot || !Object.hasOwn(snapshot, 'mount')) return none;
   const current = declaredMountOf(profile);
   const changed = mountSignature(snapshot) !== mountSignature(profile?.ficheSnapshot);
   const wanted = snapshot.mount;
-  if (wanted === null) return current && changed ? { kind: 'remove', declared: null, toolName: current.name, toolLabel: montureFicheDe(current.bestiaryId)?.libelle || '' } : none;
+  const known = Array.isArray(library);
+  const existing = known ? library.find(row => row?.id === mountProfileId(profile.id)) : undefined;
+  const tool = current ? { toolName: current.name, toolLabel: montureFicheDe(current.bestiaryId)?.libelle || '' } : {};
+  if (wanted === null) {
+    if (!current) return none;
+    return changed ? { kind: 'remove', declared: null, ...tool } : { kind: 'disagree', declared: undefined, key: null, name: '', label: '', ...tool };
+  }
   const label = montureFicheDe(wanted.key)?.libelle || wanted.key;
   const name = wanted.name || label;
   const asked = { key: wanted.key, name, label };
   const declare = { profileId: mountProfileId(profile.id), name, bestiaryId: wanted.key };
-  if (!current) return { kind: 'create', declared: declare, ...asked };
-  const tool = { toolName: current.name, toolLabel: montureFicheDe(current.bestiaryId)?.libelle || '' };
-  if (current.bestiaryId === wanted.key) return current.name === name ? none : { kind: 'rename', declared: { ...current, name }, ...asked, ...tool };
-  return changed ? { kind: 'replace', declared: declare, ...asked, ...tool } : { kind: 'disagree', declared: undefined, ...asked, ...tool };
+  const sameSpecies = row => row?.extensions?.mountFor?.bestiaryId === wanted.key || row?.extensions?.v5?.bestiary?.id === wanted.key;
+  if (!current) return sameSpecies(existing) ? { kind: 'redeclare', declared: declare, build: false, link: true, ...asked }
+    : { kind: 'create', declared: declare, build: true, link: true, ...asked };
+  if (current.bestiaryId === wanted.key) {
+    if (!changed || current.name === name) return none;
+    const build = known && !existing;
+    return { kind: 'rename', declared: { ...current, name }, build, link: build, ...asked, ...tool };
+  }
+  return changed ? { kind: 'replace', declared: declare, build: true, link: true, ...asked, ...tool } : { kind: 'disagree', declared: undefined, ...asked, ...tool };
 }
 
 // Premier mot significatif d'un nom : articles, particules et mots de moins de 3 lettres sont écartés.
@@ -647,10 +661,12 @@ export function planProfileSync(snapshot, profile, choices = {}) {
   updated.extensions = { ...(profile.extensions || {}), ficheId: snapshot.charId };
   delete updated.extensions.ficheHealthWarning;
   Object.assign(updated, importFicheDurables(updated, snapshot, profile.ficheSnapshot));
-  const mount = planMountSync(snapshot, profile);
+  const mount = planMountSync(snapshot, profile, choices.library);
   if (mount.declared !== undefined) updated.extensions = withMountDeclaration(updated, mount.declared).extensions;
   // Keep latest source status, but each excluded collection retains its previous playable data.
   updated.ficheSnapshot = cloneValue(snapshot);
+  // Lecture invalide de la monture : le snapshot garde la valeur précédente, pour qu'une fiche inchangée ne l'emporte pas à la lecture valide suivante.
+  if (!Object.hasOwn(snapshot, 'mount') && (snapshot.warnings || []).some(row => row.code === 'mount-invalid') && Object.hasOwn(profile.ficheSnapshot || {}, 'mount')) updated.ficheSnapshot.mount = cloneValue(profile.ficheSnapshot.mount);
   const warnings = [...cloneValue(snapshot.warnings || []), ...equipmentWarnings];
   if (health.warning) warnings.push({ field: 'hp', code: health.warning, severity: 'warning', ...(health.warning === 'reserve-health-normalized' ? { message: 'Ancienne réserve avec PV courants : la réserve reprend le maximum de fiche ; les Blessures subies restent conservées dans les participants et personnages persistants déjà enregistrés.' } : {}), consequence: health.warning === 'old-maximum-unknown' ? 'hp-preserved' : 'signed-wounds-preserved' });
   const details = profileSyncDetails(profile, updated);
@@ -686,7 +702,7 @@ export function applyFicheSync(draft, entries) {
     const index = (next.reserve || []).findIndex(profile => profile.id === entry.profileId);
     if (index < 0 || !entry.snapshot) continue;
     const profile = next.reserve[index];
-    const plan = planProfileSync(entry.snapshot, profile, entry);
+    const plan = planProfileSync(entry.snapshot, profile, { ...entry, library: next.reserve });
     const updated = plan.updated;
     next.reserve[index] = updated;
     // Familiers de la fiche : un profil de bibliothèque chacun (profil type du bestiaire fourni par l'appelant, sinon vierge), renommé si la fiche change.
@@ -699,13 +715,13 @@ export function applyFicheSync(draft, entries) {
         extensions: { ...cloneValue(template?.extensions || {}), ficheFamiliar: { charId: entry.snapshot.charId, id: familiar.id } } });
     }
     // Monture de la fiche : profil `monture-<profil>` construit comme `setProfileMount` (profil type fourni par l'appelant, sinon vierge) ;
-    // même espèce, il n'est pas reconstruit et seul son nom suit la fiche.
+    // un profil déjà en bibliothèque (même espèce, ou simple renommage) n'est pas reconstruit : seul son nom suit la fiche.
     const mount = plan.mount;
     const mountAt = next.reserve.findIndex(row => row.id === mountProfileId(profile.id));
-    if (mount.kind === 'create' || mount.kind === 'replace') {
+    if (mount.build) {
       const built = buildMountProfile(profile.id, { template: cloneValue(entry.mountTemplate || {}), bestiaryId: mount.key, name: mount.name }).profile;
       if (mountAt >= 0) next.reserve[mountAt] = built; else next.reserve.push(built);
-    } else if (mount.kind === 'rename' && mountAt >= 0) next.reserve[mountAt] = { ...next.reserve[mountAt], name: mount.name };
+    } else if ((mount.kind === 'rename' || mount.kind === 'redeclare') && mountAt >= 0) next.reserve[mountAt] = { ...next.reserve[mountAt], name: mount.name };
     const profileActions = new Map(updated.diceLines.map(action => [action.id, action]));
     const equipmentActions = new Map(updated.diceLines.filter(sourceActionKey).map(action => [sourceActionKey(action), action]));
     const sourceCharIds = new Set([entry.snapshot.charId, ...(entry.replaceAssociation === true && profile.extensions?.ficheId ? [profile.extensions.ficheId] : [])]);

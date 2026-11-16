@@ -10,13 +10,14 @@ const KEYWORD_TYPE_LABELS = Object.freeze({ haine: 'Haine', animosite: 'Animosit
 const plural = (count, word) => `${count} ${word}${count > 1 ? 's' : ''}`;
 const mountName = (name, label) => (label && label !== name ? `« ${name} » (${label})` : `« ${name} »`);
 /** Ligne d'aperçu de la monture déclarée par la fiche (voir planMountSync) ; '' quand rien ne change. */
-function mountLineOf(mount) {
+export function mountLineOf(mount) {
   switch (mount?.kind) {
     case 'create': return `Monture : ${mountName(mount.name, mount.label)} déclarée par la fiche (profil créé depuis le bestiaire et lié en combat).`;
+    case 'redeclare': return `Monture : ${mountName(mount.name, mount.label)} de nouveau déclarée par la fiche (profil existant réutilisé, image et PV conservés).`;
     case 'rename': return `Monture : renommée ${mountName(mount.toolName, '')} → ${mountName(mount.name, '')} (profil conservé, image et PV inchangés).`;
     case 'replace': return `Monture : remplacée ${mountName(mount.toolName, mount.toolLabel)} → ${mountName(mount.name, mount.label)} (profil reconstruit depuis le bestiaire, image et PV de l’ancienne perdus).`;
     case 'remove': return `Monture : ${mountName(mount.toolName, mount.toolLabel)} retirée du profil, la fiche n’en déclare plus (le profil de la monture reste en bibliothèque).`;
-    case 'disagree': return `Monture en désaccord : la fiche porte ${mountName(mount.name, mount.label)}, l’outil garde ${mountName(mount.toolName, mount.toolLabel)} (la fiche n’a pas changé depuis la dernière lecture).`;
+    case 'disagree': return !mount.key ? `Monture : la fiche n’en déclare aucune, l’outil garde ${mountName(mount.toolName, mount.toolLabel)} (la fiche n’a pas changé depuis la dernière lecture).` : `Monture en désaccord : la fiche porte ${mountName(mount.name, mount.label)}, l’outil garde ${mountName(mount.toolName, mount.toolLabel)} (la fiche n’a pas changé depuis la dernière lecture).`;
     default: return '';
   }
 }
@@ -157,7 +158,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       card.appendChild(none);
       return card;
     }
-    const plan = planProfileSync(snapshot, profile, selection);
+    const plan = planProfileSync(snapshot, profile, { ...selection, library: getContext().profiles });
     selection.fingerprint ??= plan.precondition.profileFingerprint;
     const sourceInfo = document.createElement('p'); sourceInfo.className = 'muted';
     sourceInfo.textContent = `${selection.newProfile ? `Un profil PJ « ${profile.name} » sera créé dans la bibliothèque. ` : ''}Source : fiche ${snapshot.charId} · révision ${snapshot.source?.revision ?? 'non fournie'}.`;
@@ -345,7 +346,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
           const mountTemplates = new Map();
           for (const [charId, selection] of chosen) {
             const snapshot = snapshots.find(item => item.charId === charId), profile = profileOf(selection, charId);
-            if (!['create', 'replace'].includes(planProfileSync(snapshot, profile, selection).mount.kind)) continue;
+            if (!planProfileSync(snapshot, profile, { ...selection, library: getContext().profiles }).mount.build) continue;
             const template = await Promise.resolve(callbacks.mountProfile?.(snapshot.mount.key)).catch(() => null);
             if (!template) throw userError('Profil de la monture introuvable dans le bestiaire : réessayez.');
             mountTemplates.set(charId, template);

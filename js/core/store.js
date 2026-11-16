@@ -1886,10 +1886,10 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         let next = applyFicheSyncToDraft(draft, captured);
         // Familiers déclarés par la fiche : liés tout de suite quand le maître et le familier sont déjà en combat.
         if (next.combat?.participants) next.combat = { ...next.combat, participants: linkDeclaredFamiliars(next.combat.participants) };
-        // Monture déclarée par la fiche (création ou remplacement) : elle entre en attente, liée, avec un cavalier déjà en combat (comme setProfileMount).
+        // Monture déclarée par la fiche (création, remplacement ou nouvelle déclaration) : elle entre en attente, liée, avec un cavalier déjà en combat (comme setProfileMount).
         for (const entry of captured) {
           const before = (draft.reserve || []).find(row => row.id === entry.profileId) || entry.newProfile;
-          if (!before || !['create', 'replace'].includes(planMountSync(entry.snapshot, before).kind)) continue;
+          if (!before || !planMountSync(entry.snapshot, before, draft.reserve).link) continue;
           const id = mountProfileId(entry.profileId), people = next.combat?.participants || [];
           const riders = people.filter(row => row.profileId === entry.profileId && !people.some(other => other.id === row.extensions?.v5?.ownMountId));
           if (riders.length && (next.reserve || []).some(row => row.id === id)) { const { added, ...built } = addProfilesToDraft(next, riders.map(rider => ({ id, zone: 'bench', camp: rider.camp }))); next = built; }
