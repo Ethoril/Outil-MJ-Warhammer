@@ -131,6 +131,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/v5-divine-panel.js',
   './js/ui/v5-divine-form-model.js',
   './js/ui/v5-broken-escape-panel.js',
+  './js/ui/v5-pursuit-panel.js',
   './js/core/combat.js',
   './js/core/dice.js',
   './js/core/v5-roll.js',

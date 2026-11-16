@@ -1805,6 +1805,11 @@ dialog.v5-effect-dialog { inset:auto; top:50%; left:50%; right:auto; bottom:auto
 .workspace-broken-status { color:var(--accent,#8a0707); font-weight:700; }
 .workspace-broken-hide { display:grid; gap:8px; min-width:0; }
 .workspace-broken-hide p { margin:0; }
+.workspace-broken-escape .workspace-pursuit-check { display:flex; flex:0 1 auto; flex-direction:row; align-items:center; gap:8px; min-width:0; }
+.workspace-pursuit-row { display:flex; flex-wrap:wrap; align-items:flex-end; gap:8px 12px; min-width:0; }
+.workspace-pursuit-obstacles,.workspace-pursuit-free { display:grid; gap:8px; min-width:0; }
+.workspace-pursuit .workspace-broken-proof,.workspace-pursuit-launch { display:grid; gap:8px; }
+.workspace-pursuit h4,.workspace-pursuit p { margin:0; }
 @media(max-width:600px) { .workspace-broken-escape-controls > *, .workspace-broken-attestation > * { width:100%; box-sizing:border-box; } .workspace-broken-facts > label { width:auto; } }
 
 .workspace-divine p { margin:0; }

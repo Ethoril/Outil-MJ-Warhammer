@@ -1,6 +1,7 @@
 import {createDivinePanel} from './v5-divine-panel.js';
 import {createV5CorruptionPanel} from './v5-corruption-panel.js';
 import {createV5BrokenEscapePanel,isBrokenActor} from './v5-broken-escape-panel.js';
+import {createV5PursuitPanel} from './v5-pursuit-panel.js';
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
 import { familiarOfOf, FAMILIAR_HEALING_SOURCES } from '../core/familiars.js';
@@ -213,7 +214,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
 
   const divinePanel=createDivinePanel({Store,refresh:()=>render(),onRollChange:()=>refs.root.querySelector('[data-focus-key="roll-all-npc"]')?.dispatchEvent(new Event('refresh-npc-rolls'))});
   const corruptionPanel=createV5CorruptionPanel({Store,refresh:()=>render()});
-  const brokenEscapePanel=createV5BrokenEscapePanel({Store,refresh:()=>render(),onPrepareHide(actorId,skillId){
+  const pursuitPanel=createV5PursuitPanel({Store,refresh:()=>render()});
+  const brokenEscapePanel=createV5BrokenEscapePanel({Store,refresh:()=>render(),pursuitPanel,onPlayFreeAttack(enemyId,brokenId){
+    // Attaque gratuite de la fuite engagée (D7) : l'attaque de mêlée de l'adversaire contre le Brisé s'ouvre sans lui prendre son Action.
+    const enemy=readParticipants(Store).find(row=>row.id===enemyId&&row.zone==='active');
+    if(!enemy)return;
+    state.space='play';
+    state.actorChoice={id:enemyId,turn:turnKey(readCombat(Store))};
+    state.targetChoice=brokenId;
+    state.resolution={...emptyResolution(enemyId),type:'attack',v5Kind:'melee',extraAttack:true,v5Context:{freeAttackTalent:'flee-free-attack'}};
+    const actions=actorActions(enemy),index=actions.findIndex(row=>['attack','attaque'].includes(row.type)&&row.attr!=='CT');
+    if(index>=0)state.resolution.actionKey=actionKey(actions[index],index);
+    render('roll-attack');
+  },onPrepareHide(actorId,skillId){
     const actor=readParticipants(Store).find(row=>row.id===actorId&&row.zone==='active');
     if(!actor)return;
     state.space='play';
@@ -2506,6 +2519,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     center.appendChild(duel);
     const escapePanel=brokenEscapePanel.render(context.participants,context.actor?.id);
     if(escapePanel)center.appendChild(escapePanel);
+    const pursuitCard=pursuitPanel.render(context.participants);
+    if(pursuitCard)center.appendChild(pursuitCard);
 
     const draft = state.resolution;
     let previousWeaponAttacks = [], resolutionClock = {};
