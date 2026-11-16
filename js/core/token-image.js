@@ -41,21 +41,23 @@ export function tokenImageOf(profile, table = TOKEN_IMAGES) {
 }
 
 /**
- * Image montrée dans l'outil pour un profil : celle qui partira vers la carte. Un PJ n'envoie rien (CA16), la carte garde la sienne :
- * `{ url: null, source: 'map' }`, quelles que soient les images qu'il porte (elles restent enregistrées).
+ * Image montrée dans l'outil pour un profil : celle qui partira vers la carte. Un PJ n'envoie que l'image que le MJ a choisie
+ * (importée ou de la bibliothèque ; décision du 16/11/2026, qui amende CA16) ; sans choix, la carte garde la sienne :
+ * `{ url: null, source: 'map' }`. Pas d'image automatique pour un PJ.
  */
 export function shownTokenImageOf(profile, table = TOKEN_IMAGES) {
-  return profile?.kind === 'PJ' ? { url: null, source: 'map' } : tokenImageOf(profile, table);
+  const resolved = tokenImageOf(profile, table);
+  return profile?.kind === 'PJ' && resolved.source !== 'imported' && resolved.source !== 'chosen' ? { url: null, source: 'map' } : resolved;
 }
 
 /**
  * Image envoyée pour un participant (`imageUrlOf` de la liaison) : celle de son profil de Réserve, sinon, pour un participant
  * ajouté depuis le bestiaire sans profil, la sienne. Une monture est un profil (`monture-<id>`) : même résolution (T6).
- * Un PJ n'envoie rien, mais c'est `tokenStateOf` qui l'écarte.
+ * Un PJ n'envoie que l'image choisie dans l'outil, sinon `null` (la carte garde la sienne).
  */
 export function participantTokenImageUrl(participant, profileOf = () => null, table = TOKEN_IMAGES) {
   const profile = participant?.profileId ? profileOf(participant.profileId) : null;
-  return tokenImageOf(profile || participant, table).url;
+  return shownTokenImageOf(participant?.kind === 'PJ' ? { ...(profile || participant), kind: 'PJ' } : profile || participant, table).url;
 }
 
 /** Adresse d'une image de la bibliothèque pour les vignettes de l'outil ; `null` hors bibliothèque. */

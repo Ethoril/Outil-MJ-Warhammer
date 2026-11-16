@@ -9,9 +9,10 @@ import { parseProfileJson } from '../../../js/core/json-profile-import.js';
 
 const image = 'data:image/webp;base64,YWJj';
 const npc = { id: 'g', kind: 'PNJ', profileId: 'gob', name: 'Gobelin', hp: 8 };
-test('image de profil transmise sauf pour un PJ ou un improvisé', () => {
+test('image de profil transmise, PJ compris (16/11/2026) ; rien pour un improvisé ni pour un PJ sans image', () => {
   assert.equal(tokenStateOf(npc, [], { imageUrl: image }).imageUrl, image);
-  assert.equal(tokenStateOf({ ...npc, kind: 'PJ' }, [], { imageUrl: image }).imageUrl, null);
+  assert.equal(tokenStateOf({ ...npc, kind: 'PJ' }, [], { imageUrl: image }).imageUrl, image);
+  assert.equal(tokenStateOf({ ...npc, kind: 'PJ' }).imageUrl, null);
   assert.equal(tokenStatesOf([{ ...npc, profileId: null }], { imageUrlOf: () => null })['p:g'].imageUrl, null);
 });
 test('normalisation et aller-retour JSON', () => {

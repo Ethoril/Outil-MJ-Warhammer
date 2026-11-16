@@ -226,7 +226,7 @@ export function profileSummary(profile, {
   card.dataset.profileId = profile.id;
   const title = node('h3', '', profile.name || 'Sans-nom');
   // Vignette de l'image qui partira vers la carte, quelle que soit sa provenance (images-pions, CA12) ; absente si elle ne charge pas,
-  // et pour un PJ, qui n'envoie rien (CA16).
+  // et pour un PJ sans image choisie, qui n'envoie rien (la carte garde la sienne).
   const image = shownTokenImageOf(profile);
   const thumb = tokenThumbnail(image, { size: 48, alt: '' });
   const imageNote = tokenImageShortCaption(image);

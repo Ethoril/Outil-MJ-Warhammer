@@ -151,22 +151,33 @@ try {
  await expect(ghost.locator('img')).toHaveCount(0);
  await page.waitForTimeout(300);
  expect(libraryRequests.filter(path => path.includes('/absent/')).length, 'image absente redemandée').toBe(1);
- // Défaut 2 : un PJ ne montre ni vignette ni « image du MJ », pas de sélecteur de bibliothèque ; ses données restent.
+ // Image d'un PJ (décision du 16/11/2026) : même choix qu'un PNJ ; avec image, vignette et « image du MJ » ; sans image, la carte garde la sienne.
  const pjCard = page.locator('#workspace-prepare .workspace-profile-card').filter({ hasText: 'Elysia PJ' });
+ await expect(pjCard.locator('img.token-thumb')).toHaveAttribute('src', '../rpg-map-display/maps/tokens/destriers/destrier-bohemond.webp');
+ await expect(pjCard).toContainText('image du MJ');
+ await page.locator('#workspace-prepare').getByRole('button', { name: 'Modifier Elysia PJ' }).click();
+ dialog = page.getByRole('dialog');
+ await expect(dialog.locator('#token-image-source')).toHaveText('Destrier de Bohémond (bibliothèque, choix du MJ)');
+ await expect(dialog.locator('#token-image-preview')).toBeVisible();
+ await expect(dialog.getByRole('searchbox', { name: 'Chercher une image dans la bibliothèque de la carte' })).toBeVisible();
+ await expect(dialog.locator('#token-image-select')).toBeVisible();
+ await dialog.locator('#token-image-remove').click();
+ await expect(dialog.locator('#token-image-source')).toHaveText('Image de la carte (aucune image choisie dans l’outil)');
+ await expect(dialog.locator('#token-image-preview')).toBeHidden();
+ await dialog.locator('#btn-submit-form').click(); await expect(dialog).toBeHidden();
+ expect(await page.evaluate(async () => Object.hasOwn((await import('/js/main.js')).Store.getProfile('elysia-pj'), 'tokenLibraryImage'))).toBe(false);
  await expect(pjCard.locator('img')).toHaveCount(0);
  await expect(pjCard).not.toContainText('image du MJ');
  await page.locator('#workspace-prepare').getByRole('button', { name: 'Modifier Elysia PJ' }).click();
  dialog = page.getByRole('dialog');
- await expect(dialog.locator('#token-image-source')).toHaveText('Image de la carte : un PJ n’envoie pas d’image.');
- await expect(dialog.locator('#token-image-preview')).toBeHidden();
- await expect(dialog.getByRole('searchbox', { name: 'Chercher une image dans la bibliothèque de la carte' })).toBeHidden();
- await expect(dialog.locator('#token-image-select')).toBeHidden();
- await dialog.locator('[name=kind]').selectOption('PNJ');
- await expect(dialog.getByRole('searchbox', { name: 'Chercher une image dans la bibliothèque de la carte' })).toBeVisible();
+ const pjSearch = dialog.getByRole('searchbox', { name: 'Chercher une image dans la bibliothèque de la carte' });
+ await pjSearch.fill('destrier de bohemond');
+ await dialog.getByRole('group', { name: 'Images trouvées dans la bibliothèque' }).getByRole('button', { name: 'Destrier de Bohémond', exact: true }).click();
  await expect(dialog.locator('#token-image-source')).toHaveText('Destrier de Bohémond (bibliothèque, choix du MJ)');
- await dialog.locator('[name=kind]').selectOption('PJ');
  await dialog.locator('#btn-submit-form').click(); await expect(dialog).toBeHidden();
  expect(await page.evaluate(async () => (await import('/js/main.js')).Store.getProfile('elysia-pj').tokenLibraryImage)).toBe('maps/tokens/destriers/destrier-bohemond.webp');
+ await page.reload(); await page.locator('#tab-prepare').click();
+ await expect(page.locator('#workspace-prepare .workspace-profile-card').filter({ hasText: 'Elysia PJ' })).toContainText('image du MJ');
  // Défaut 3 : la frappe ne télécharge que les vignettes des résultats affichés, bornés.
  await page.locator('#workspace-prepare').getByRole('button', { name: 'Modifier Fantôme absent' }).click();
  dialog = page.getByRole('dialog');

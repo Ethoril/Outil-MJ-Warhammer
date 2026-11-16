@@ -28,20 +28,17 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   // exclusives ; sans elles, l'image automatique du profil du bestiaire (`imageExtensions` du profil édité).
   let tokenImage = null, tokenLibraryImage = null, imageExtensions = null;
   let imageRevision = 0;
-  // Un PJ n'envoie pas d'image (CA16) : ni aperçu, ni import, ni sélecteur, une mention ; ses images enregistrées restent, le
-  // retrait reste possible. Le type se lit dans le formulaire (il peut changer pendant l'édition).
+  // Un PJ choisit son image comme un PNJ ; sans choix, il n'envoie rien et la carte garde la sienne (décision du 16/11/2026).
+  // Le type se lit dans le formulaire (il peut changer pendant l'édition).
   function renderTokenImage() {
     const form = DOM.reserve.form;
     const resolved = shownTokenImageOf({ kind: form.querySelector('[name=kind]')?.value, tokenImage, tokenLibraryImage, extensions: imageExtensions });
-    const pj = resolved.source === 'map';
     const preview = form.querySelector('#token-image-preview');
     const remove = form.querySelector('#token-image-remove');
     const source = form.querySelector('#token-image-source');
     if (preview) setImageSrc(preview, tokenImageDisplaySrc(resolved.url));
     if (remove) remove.hidden = !(tokenImage || tokenLibraryImage);
     if (source) source.textContent = tokenImageCaption(resolved);
-    const select = form.querySelector('#token-image-select'); if (select) select.hidden = pj;
-    const picker = form.querySelector('#token-image-field .token-library-picker'); if (picker) picker.hidden = pj;
   }
   function setTokenImage(value) { tokenImage = value || null; if (tokenImage) tokenLibraryImage = null; renderTokenImage(); }
   function setLibraryImage(path) { tokenLibraryImage = normalizeLibraryImage(path) ?? null; if (tokenLibraryImage) tokenImage = null; renderTokenImage(); }
@@ -65,7 +62,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     meta.querySelector('#token-image-field').append(picker.element);
     syncTokenColorSelect(meta.querySelector('#token-color'), null);
     meta.querySelector('#token-image-select').addEventListener('click', () => input.click());
-    meta.querySelector('#token-image-remove').addEventListener('click', () => { imageRevision++; tokenLibraryImage = null; setTokenImage(null); if (btnSubmit) btnSubmit.disabled = false; const select = meta.querySelector('#token-image-select'); (select.hidden ? DOM.reserve.form.querySelector('[name=kind]') : select)?.focus(); });
+    meta.querySelector('#token-image-remove').addEventListener('click', () => { imageRevision++; tokenLibraryImage = null; setTokenImage(null); if (btnSubmit) btnSubmit.disabled = false; meta.querySelector('#token-image-select').focus(); });
     DOM.reserve.form.querySelector('[name=kind]')?.addEventListener('change', renderTokenImage);
     input.addEventListener('change', async () => {
       const file = input.files?.[0]; input.value = '';

@@ -49,10 +49,11 @@ test('CA1-CA2 : profil copié du bestiaire avant le chantier (seulement extensio
   assert.equal(tokenStatesOf([npc], { imageUrlOf: p => tokenImageOf(p.profileId === 'p-ancien' ? old : null).url })['p:n1'].imageUrl, 'maps/tokens/bestiaire/loup.webp');
 });
 
-test('CA9 et CA16 : image importée envoyée telle quelle ; un PJ n’envoie toujours rien', () => {
+test('CA9 et CA-A2 : image importée envoyée telle quelle, pour un PNJ comme pour un PJ', () => {
   const profile = { ...fromBestiary('B-LOUP'), tokenImage: imported };
   assert.equal(tokenStateOf({ id: 'g', kind: 'PNJ', name: 'G', hp: 5 }, [], { imageUrl: tokenImageOf(profile, table).url }).imageUrl, imported);
-  assert.equal(tokenStateOf({ id: 'e', kind: 'PJ', persistentCharacterId: 'c', name: 'E', hp: 5 }, [], { imageUrl: tokenImageOf(profile, table).url }).imageUrl, null);
+  assert.equal(tokenStateOf({ id: 'e', kind: 'PJ', persistentCharacterId: 'c', name: 'E', hp: 5 }, [], { imageUrl: tokenImageOf(profile, table).url }).imageUrl, imported);
+  assert.equal(tokenStateOf({ id: 'e', kind: 'PJ', persistentCharacterId: 'c', name: 'E', hp: 5 }).imageUrl, null, 'CA-A3 : sans image, null');
 });
 
 test('vignette de l’outil, libellé et recherche par nom dans la table', () => {
@@ -93,8 +94,14 @@ test('CA14-CA15 : cavalier monté, image automatique puis choisie de sa monture 
   assert.equal(states()['p:m'].imageUrl, 'maps/tokens/destriers/destrier-bohemond.webp');
   const pj = [{ ...scene[0], kind: 'PJ', persistentCharacterId: 'c1' }, scene[1]];
   const pjStates = tokenStatesOf(pj, { imageUrlOf: participant => participantTokenImageUrl(participant, id => store.getProfile(id)) });
-  assert.equal(pjStates['pj:c1'].imageUrl, null, 'un PJ monté n’envoie pas son image');
+  assert.equal(pjStates['pj:c1'].imageUrl, null, 'un PJ monté sans image choisie n’envoie pas son image');
   assert.equal(pjStates['pj:c1'].rider.imageUrl, 'maps/tokens/destriers/destrier-bohemond.webp', 'mais celle de sa monture part');
+  // CA-A5 : avec une image choisie dans l’outil, elle part sur le pion du cavalier (le médaillon, contrat §8.1) ; rider.imageUrl reste celle de la monture.
+  store.addProfile(new Profile({ id: 'pj-profil', name: 'Chevalier', kind: 'PJ', hp: 12, tokenLibraryImage: 'maps/tokens/pnj/aubergiste.webp' }));
+  const pjChosen = [{ ...pj[0], profileId: 'pj-profil' }, scene[1]];
+  const chosenStates = tokenStatesOf(pjChosen, { imageUrlOf: participant => participantTokenImageUrl(participant, id => store.getProfile(id)) });
+  assert.equal(chosenStates['pj:c1'].imageUrl, 'maps/tokens/pnj/aubergiste.webp', 'CA-A5 : le médaillon du cavalier porte l’image choisie');
+  assert.equal(chosenStates['pj:c1'].rider.imageUrl, 'maps/tokens/destriers/destrier-bohemond.webp', 'la monture garde la sienne');
   store.updateProfile(mountId, { tokenLibraryImage: null });
   assert.equal(states()['p:r'].rider.imageUrl, 'maps/tokens/bestiaire/destrier.webp', 'retrait : retour à l’automatique');
 });
@@ -178,7 +185,7 @@ test('CA19 : null hors forme et pour une bête sans image dans ce vent ; Kadon n
   assert.equal(Object.values(state)[0].formImageUrl, null, 'CA19 : formImageUrl null, la carte garde son image');
 });
 
-test('formImageUrl toujours présent dans token.state : chemin ou null, PJ compris ; imageUrl d’un PJ toujours non envoyé', () => {
+test('formImageUrl toujours présent dans token.state : chemin ou null, PJ compris ; imageUrl d’un PJ distinct de formImageUrl', () => {
   const pnj = { id: 'g', kind: 'PNJ', name: 'G', hp: 5 };
   assert.equal(tokenStateOf(pnj).formImageUrl, null);
   assert.ok(Object.hasOwn(tokenStateOf(pnj), 'formImageUrl'));
@@ -186,7 +193,7 @@ test('formImageUrl toujours présent dans token.state : chemin ou null, PJ compr
   const pj = transformed('wolf', { isJade: true }, mage('mage', { persistentCharacterId: 'c-mage' }));
   const states = tokenStatesOf([pj, pnj], { imageUrlOf: () => imported, formImageUrlOf: participant => formImageOf(participant) });
   assert.equal(states['pj:c-mage'].formImageUrl, 'maps/tokens/bestiaire/forme-bestiale/loup-vie.webp', 'CA17 : vaut pour un PJ');
-  assert.equal(states['pj:c-mage'].imageUrl, null, 'CA16 : l’image d’un PJ reste celle de la carte');
+  assert.equal(states['pj:c-mage'].imageUrl, imported, 'CA-A4 : l’image de l’outil reste dans imageUrl sous la forme, formImageUrl la recouvre');
   assert.equal(states['p:g'].formImageUrl, null);
   assert.ok(Object.hasOwn(tokenStatesOf([pnj])['p:g'], 'formImageUrl'), 'sans option, null');
 });
@@ -217,7 +224,7 @@ test('CA17-CA18 de bout en bout : sort réellement lancé, envoi à la transform
     assert.equal(store.listParticipants().find(p => p.id === 'mage').extensions.v5.beastForm, undefined);
     assert.deepEqual(sentFormImages(), [path, null], 'CA18 : null au retour, la carte retrouve l’image d’avant');
     const back = channel.sent.slice(sentBefore).find(m => m.type === 'token.state' && m.payload.ref === ref);
-    assert.equal(back.payload.imageUrl, null, 'imageUrl d’un PJ toujours non envoyé');
+    assert.equal(back.payload.imageUrl, null, 'PJ sans image choisie : imageUrl null');
     assert.deepEqual(channel.sent.filter(m => m.type === 'fx.wound'), [], 'CA40 : ni la prise ni le retour ne sont des blessures (30 → 13 → 30 PV)');
   }
 });
@@ -246,12 +253,40 @@ test('défaut 1 : une seule règle de chemin, outil et générateur alignés (pa
   for (const path of accepted) { assert.equal(normalizeLibraryImage(path), path, path); assert.equal(isLibraryPath(path), true, path); }
   for (const row of TOKEN_IMAGES) { assert.equal(normalizeLibraryImage(row.path), row.path, row.path); assert.equal(isLibraryPath(row.path), true, row.path); }
 });
-test('défaut 2 : un PJ montre l’image de la carte, pas celle qu’il porte (rien n’est envoyé), sans effacer ses données', async () => {
+test('CA-A1, CA-A3, CA-A6 : un PJ montre l’image qu’il porte comme un PNJ ; sans image choisie, celle de la carte, sans réécrire ses données', async () => {
   const { shownTokenImageOf } = await import('../../../js/core/token-image.js');
+  const { tokenImageCaption } = await import('../../../js/ui/token-image-picker.js');
   const pj = { id: 'p', kind: 'PJ', name: 'Elysia', hp: 10, tokenLibraryImage: 'maps/tokens/pnj/aubergiste.webp', tokenImage: imported };
-  assert.deepEqual(shownTokenImageOf(pj, table), { url: null, source: 'map' });
-  assert.equal(pj.tokenLibraryImage, 'maps/tokens/pnj/aubergiste.webp');
-  assert.equal(tokenStateOf({ id: 'x', kind: 'PJ', persistentCharacterId: 'c', name: 'E', hp: 5 }, [], { imageUrl: tokenImageOf(pj, table).url }).imageUrl, null);
-  assert.deepEqual(shownTokenImageOf({ ...pj, kind: 'PNJ' }, table), { url: imported, source: 'imported' });
-  assert.deepEqual(shownTokenImageOf({ ...fromBestiary('B-LOUP'), kind: 'Créature' }, table), { url: 'maps/tokens/bestiaire/loup.webp', source: 'auto' });
+  assert.deepEqual(shownTokenImageOf(pj, table), { url: imported, source: 'imported' });
+  assert.deepEqual(shownTokenImageOf({ ...pj, tokenImage: undefined }, table), { url: 'maps/tokens/pnj/aubergiste.webp', source: 'chosen' });
+  assert.deepEqual(shownTokenImageOf({ ...pj, kind: 'PNJ' }, table), shownTokenImageOf(pj, table), 'même résolution qu’un PNJ');
+  const bare = { id: 'q', kind: 'PJ', name: 'Elysia', hp: 10 };
+  assert.deepEqual(shownTokenImageOf(bare, table), { url: null, source: 'map' }, 'données existantes sans champ image');
+  assert.deepEqual(shownTokenImageOf({ ...bare, ...fromBestiary('B-LOUP') , kind: 'PJ' }, table), { url: null, source: 'map' }, 'pas d’image automatique pour un PJ');
+  assert.equal(Object.hasOwn(bare, 'tokenImage') || Object.hasOwn(bare, 'tokenLibraryImage'), false, 'rien n’est réécrit');
+  assert.equal(tokenImageCaption(shownTokenImageOf(bare, table)), 'Image de la carte (aucune image choisie dans l’outil)');
+  assert.equal(tokenImageCaption(shownTokenImageOf(pj, table)), tokenImageCaption(shownTokenImageOf({ ...pj, kind: 'PNJ' }, table)));
+  assert.doesNotMatch(tokenImageCaption({ source: 'map' }), /n’envoie pas/);
+});
+
+test('CA-A2 : participant PJ, image du profil envoyée ; retirée, null (CA-A7)', () => {
+  const participant = { id: 'x', kind: 'PJ', profileId: 'pr', persistentCharacterId: 'c', name: 'E', hp: 5 };
+  let profile = { id: 'pr', kind: 'PJ', tokenLibraryImage: 'maps/tokens/pnj/aubergiste.webp' };
+  const stateOf = () => tokenStatesOf([participant], { imageUrlOf: p => participantTokenImageUrl(p, () => profile) })['pj:c'];
+  assert.equal(stateOf().imageUrl, 'maps/tokens/pnj/aubergiste.webp');
+  profile = { id: 'pr', kind: 'PJ' };
+  assert.equal(stateOf().imageUrl, null, 'image retirée : null, la carte garde la dernière image affichée');
+});
+
+test('CA-A1 : l’image d’un PJ survit à « Mettre à jour les PJ » et à l’export puis l’import JSON', async () => {
+  const { readFileSync } = await import('node:fs');
+  const { ficheSnapshot, planProfileSync } = await import('../../../js/core/fiche-sync.js');
+  const { exportProfileJson } = await import('../../../js/core/json-profile-export.js');
+  const fiche = JSON.parse(readFileSync(new URL('../../fixtures/fiche-caelel.json', import.meta.url), 'utf8'));
+  const chosen = 'maps/tokens/pnj/aubergiste.webp';
+  const base = { id: 'pr', name: 'Caelel', kind: 'PJ', caracs: {}, hp: 5, maxHp: 5, diceLines: [], extensions: {} };
+  assert.equal(planProfileSync(ficheSnapshot('caelel', fiche), { ...base, tokenLibraryImage: chosen }, {}).updated.tokenLibraryImage, chosen);
+  assert.equal(planProfileSync(ficheSnapshot('caelel', fiche), { ...base, tokenImage: imported }, {}).updated.tokenImage, imported);
+  assert.equal(exportProfileJson({ ...base, tokenLibraryImage: chosen }).tokenLibraryImage, chosen);
+  assert.equal(exportProfileJson({ ...base, tokenImage: imported }).tokenImage, imported);
 });

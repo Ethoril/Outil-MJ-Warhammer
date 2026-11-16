@@ -67,7 +67,7 @@ export function tokenThumbnail(resolved, { size = 48, alt = '', className = 'tok
 
 /** Provenance en clair (CA12) : automatique ou choix du MJ. */
 export function tokenImageCaption(resolved) {
-  if (resolved?.source === 'map') return 'Image de la carte : un PJ n’envoie pas d’image.';
+  if (resolved?.source === 'map') return 'Image de la carte (aucune image choisie dans l’outil)';
   if (resolved?.source === 'imported') return 'Image importée (choix du MJ)';
   if (resolved?.source === 'chosen') return `${tokenImageLabelOf(resolved.url)} (bibliothèque, choix du MJ)`;
   if (resolved?.source === 'auto') return `${tokenImageLabelOf(resolved.url)} (bibliothèque, automatique)`;

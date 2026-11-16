@@ -125,7 +125,7 @@ export function tokenStateOf(participant, participants = [], { maxHp = null, ima
     camp: participantCamp(participant),
     kind: pj || isPjMount(participant, participants) ? 'pc' : 'npc',
     visionSource: pj,
-    imageUrl: pj ? null : imageUrl,
+    imageUrl: imageUrl ?? null,
     formImageUrl: formImageUrl ?? null,
     color: pj || isPjMount(participant, participants) ? normalizeTokenColor(color) ?? null : null,
     sizeCells: SIZE_CELLS[creatureSizeOf(participant).key] ?? 1,

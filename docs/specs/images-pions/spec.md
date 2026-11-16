@@ -53,7 +53,7 @@ Cadrage du 13/11/2026, sur `42d6965` (prod 3.47.1). Origine : [docs/CONSTAT_IMAG
 
 ### S5 — PJ
 
-- **CA16.** Un PJ continue de ne pas envoyer d'image : la carte garde la sienne (hors Forme bestiale, S6).
+- **CA16.** Un PJ continue de ne pas envoyer d'image : la carte garde la sienne (hors Forme bestiale, S6). *(Amendé le 16/11/2026 : un PJ envoie l'image choisie dans l'outil, sinon `null` ; voir `docs/CONTRAT_LIAISON_MAP_DISPLAY.md` §6.)*
 
 ### S6 — Formes bestiales (dernier lot)
 
@@ -112,7 +112,7 @@ Cadrage du 13/11/2026, sur `42d6965` (prod 3.47.1). Origine : [docs/CONSTAT_IMAG
 
 - Relever le plafond de 24 Kio ou le cumul de 512 Kio par campagne des images embarquées.
 - Versionner, renommer, déplacer, recadrer ou alléger les images de la bibliothèque (travail du MJ ; 5 fichiers dépassent 256 Kio).
-- Images des PJ : la carte reste maîtresse (sauf S6).
+- Images des PJ : la carte reste maîtresse (sauf S6). *(Amendé le 16/11/2026 : l'image choisie dans l'outil l'emporte ; voir CA16.)*
 - Changer l'image d'un pion déjà posé à la main sur la carte, hors liaison.
 - Ajouter une image aux fiches du bestiaire consultées hors réserve.
 - Choix automatique d'un destrier selon l'origine du cavalier.
