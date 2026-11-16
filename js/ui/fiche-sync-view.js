@@ -8,6 +8,18 @@ const MISSING = '__introuvable';
 const NEW_PROFILE = '__nouveau';
 const KEYWORD_TYPE_LABELS = Object.freeze({ haine: 'Haine', animosite: 'Animosité', prejuge: 'Préjugé', 'sans-peur': 'Sans peur' });
 const plural = (count, word) => `${count} ${word}${count > 1 ? 's' : ''}`;
+const mountName = (name, label) => (label && label !== name ? `« ${name} » (${label})` : `« ${name} »`);
+/** Ligne d'aperçu de la monture déclarée par la fiche (voir planMountSync) ; '' quand rien ne change. */
+function mountLineOf(mount) {
+  switch (mount?.kind) {
+    case 'create': return `Monture : ${mountName(mount.name, mount.label)} déclarée par la fiche (profil créé depuis le bestiaire et lié en combat).`;
+    case 'rename': return `Monture : renommée ${mountName(mount.toolName, '')} → ${mountName(mount.name, '')} (profil conservé, image et PV inchangés).`;
+    case 'replace': return `Monture : remplacée ${mountName(mount.toolName, mount.toolLabel)} → ${mountName(mount.name, mount.label)} (profil reconstruit depuis le bestiaire, image et PV de l’ancienne perdus).`;
+    case 'remove': return `Monture : ${mountName(mount.toolName, mount.toolLabel)} retirée du profil, la fiche n’en déclare plus (le profil de la monture reste en bibliothèque).`;
+    case 'disagree': return `Monture en désaccord : la fiche porte ${mountName(mount.name, mount.label)}, l’outil garde ${mountName(mount.toolName, mount.toolLabel)} (la fiche n’a pas changé depuis la dernière lecture).`;
+    default: return '';
+  }
+}
 
 /**
  * Mise à jour des PJ depuis leurs fiches : connexion, lecture, aperçu des écarts, puis application
@@ -159,7 +171,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       confirm.addEventListener('change', () => { selection.replaceAssociation = confirm.checked; render(); });
       card.appendChild(labelled(`Je confirme le remplacement de la fiche ${previousId} par ${snapshot.charId}`, confirm));
     }
-    const labels = { skills: 'Compétences', talents: 'Talents', equipment: 'Équipement', spells: 'Sorts (consultation)', prayers: 'Prières (consultation)' };
+    const labels = { mount: 'Monture', skills: 'Compétences', talents: 'Talents', equipment: 'Équipement', spells: 'Sorts (consultation)', prayers: 'Prières (consultation)' };
     const collections = document.createElement('ul');
     Object.entries(plan.collections || {}).forEach(([key, diff]) => {
       const row = document.createElement('li');
@@ -175,6 +187,8 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
         snapshot.keywordTargets?.length ? `Mots-clés : ${snapshot.keywordTargets.map(row => `${KEYWORD_TYPE_LABELS[row.id] || row.id} (${resolveKeyword(row.target)?.nameFr || row.target})`).join(', ')}` : ''].filter(Boolean).join(' · ');
       card.appendChild(declared);
     }
+    const mountLine = mountLineOf(plan.mount);
+    if (mountLine) { const info = document.createElement('p'); info.dataset.key = `monture:${snapshot.charId}`; info.textContent = mountLine; card.appendChild(info); }
     const active = (getContext().participants || []).filter(row => row.profileId === profile.id || row.extensions?.ficheId === snapshot.charId);
     active.forEach(row => {
       const health = planHealthSync(row, snapshot.woundsMax);
@@ -327,7 +341,16 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
             const familiars = snapshots.find(item => item.charId === charId)?.familiars || [];
             familiarProfiles.set(charId, familiars.length ? await Promise.resolve(callbacks.familiarProfiles?.(familiars)).catch(() => ({})) || {} : {});
           }
-          await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ ...entryOf(charId, selection), familiarProfiles: familiarProfiles.get(charId), expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
+          // Monture de la fiche (création ou remplacement) : profil type du bestiaire chargé avant l'application ; sans lui, on n'applique pas.
+          const mountTemplates = new Map();
+          for (const [charId, selection] of chosen) {
+            const snapshot = snapshots.find(item => item.charId === charId), profile = profileOf(selection, charId);
+            if (!['create', 'replace'].includes(planProfileSync(snapshot, profile, selection).mount.kind)) continue;
+            const template = await Promise.resolve(callbacks.mountProfile?.(snapshot.mount.key)).catch(() => null);
+            if (!template) throw userError('Profil de la monture introuvable dans le bestiaire : réessayez.');
+            mountTemplates.set(charId, template);
+          }
+          await callbacks.onApply?.(chosen.map(([charId, selection]) => ({ ...entryOf(charId, selection), familiarProfiles: familiarProfiles.get(charId), mountTemplate: mountTemplates.get(charId), expectedProfileFingerprint: selection.fingerprint })), { expectedLocalRevision: previewRevision });
         } catch (cause) { error = userMessage(cause, 'Mise à jour non appliquée : réessayez.'); render(); }
       });
       apply.disabled = !chosen.length || duplicate || duplicateAdoption || unconfirmedReplacement || arbitrationRequired;

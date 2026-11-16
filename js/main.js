@@ -1089,6 +1089,12 @@ async function openFicheSyncView() {
           }
           return profiles;
         },
+        // Monture déclarée par la fiche : profil type du bestiaire (livre et identifiant de la liste partagée), nom français.
+        mountProfile: async key => {
+          const { montureFicheDe } = await import('./data/montures-fiches.js');
+          const row = montureFicheDe(key);
+          return row ? buildReserveProfileFromBestiary(row.id, { library: await sharedBestiaryLoader().book(row.livre), nameFr: true }) : null;
+        },
         onApply: async (entries, options) => {
           const result = await awaitStore(requireStoreApi('applyFicheSync')(entries, options), 'Mise à jour des PJ');
           dialog.close();

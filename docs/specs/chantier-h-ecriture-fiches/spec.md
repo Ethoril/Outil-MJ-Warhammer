@@ -70,5 +70,5 @@ Cadrage du 06/11/2026, à partir de `docs/PASSATION_CHANTIER_H.md` (`f842490`). 
 - **État du matériel**, exclu comme les données de combat (décision du MJ du 06/11 soir) : disposition des armes (lâchée, cassée), rechargement, poudre et projectiles, dégâts d'armure par pièce, projectiles fichés, pavois. Ni écrit vers la fiche, ni montré dans l'aperçu.
 - Sur la fiche : monture et état monté, effets divins calendaires (plafond, malus, réprobation, suspension), Hémorragie quotidienne, reliques, livre sacré perdu, Jugement dernier, expositions de Corruption, mots-clés posés ou écartés par le MJ — ils restent dans l'outil (Q3).
 - Une zone réservée au MJ sur la fiche — décision Q6.
-- Monture lue depuis la fiche (option C, non retenue) ; Taille des PJ selon l'espèce côté outil (rappel 5, chantier à part) ; PV et Mouvement des espèces (déjà faits côté fiches).
+- Monture lue depuis la fiche (reprise et décidée le 16/11/2026 : voir `docs/specs/monture-depuis-fiche/spec.md`) ; Taille des PJ selon l'espèce côté outil (rappel 5, chantier à part) ; PV et Mouvement des espèces (déjà faits côté fiches).
 - RPG Map Display.

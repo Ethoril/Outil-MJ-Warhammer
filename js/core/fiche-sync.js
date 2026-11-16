@@ -9,6 +9,8 @@ import { rebaseMagicLayers } from './v5-magic-effects.js';
 import { especeDe } from '../data/donnees-communes.js';
 import { FAMILIAR_SYSTEMS, HOMUNCULUS_KINDS, FAMILIAR_WINDS, COMPANION_TRAITS, FAMILIAR_NAMES } from './familiars.js';
 import { CARAC_BY_LOWER } from './carac-keys.js';
+import { declaredMountOf, mountProfileId, buildMountProfile, linkDeclaredMounts } from './mounts.js';
+import { montureFicheDe } from '../data/montures-fiches.js';
 
 export const FICHE_CHAR_IDS = Object.freeze(['bhelgi', 'caelel', 'elysia', 'hellaya', 'wren']);
 
@@ -39,6 +41,19 @@ function ficheFamiliars(raw, warnings) {
     const name = typeof row.nom === 'string' && row.nom.trim() ? row.nom.trim().slice(0, 200) : homunculus ? FAMILIAR_NAMES[row.type] : COMPANION_TRAITS[row.espece].name;
     return [{ id: row.id, system: row.systeme, kind: homunculus ? row.type : 'power', wind: homunculus ? row.vent : null, species: homunculus ? null : row.espece, name, fateSacrificed: row.destinSacrifie }];
   });
+}
+/**
+ * `monture` de la fiche : `{ key, name }` (name '' sans nom propre), `null` pour un retrait explicite ; undefined si le champ est absent
+ * ou illisible (forme invalide, ou clé inconnue de l'outil : fiche plus récente) — l'outil ne touche alors à rien.
+ */
+function ficheMount(raw, warnings) {
+  if (!Object.hasOwn(raw, 'monture')) return undefined;
+  if (raw.monture === null) return null;
+  const row = raw.monture;
+  const invalid = message => { warnings.push({ field: 'mount', severity: 'warning', code: 'mount-invalid', message, consequence: 'previous-values-preserved' }); return undefined; };
+  if (!isRecord(row) || typeof row.espece !== 'string' || (row.nom != null && typeof row.nom !== 'string')) return invalid('Monture de la fiche illisible : ignorée, monture du profil conservée.');
+  if (!montureFicheDe(row.espece)) return invalid(`Monture « ${row.espece.slice(0, 40)} » inconnue de l’outil (fiche plus récente ?) : ignorée, monture du profil conservée.`);
+  return { key: row.espece, name: typeof row.nom === 'string' ? row.nom.trim().slice(0, 200) : '' };
 }
 /** `motsCles` de la fiche : `{ id, cible }` d'un type connu ; null si le champ est absent. */
 function ficheKeywordTargets(raw) {
@@ -178,6 +193,8 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
   if (familiars) snapshot.familiars = familiars.map(row => ({ ...row, profileId: ficheFamiliarProfileId(charId, row.id) }));
   const keywordTargets = ficheKeywordTargets(raw);
   if (keywordTargets) snapshot.keywordTargets = keywordTargets;
+  const mount = ficheMount(raw, warnings);
+  if (mount !== undefined) snapshot.mount = mount;
   // `fortune` (ex-`chance`) is the fiche's current resource; `destin` is its maximum.
   // Empty/missing/invalid values do not authorize a resource initialization.
   const count = key => own(raw, key) && ((typeof raw[key] === 'string' && /^\d+$/.test(raw[key])) || typeof raw[key] === 'number') && Number.isSafeInteger(Number(raw[key])) && Number(raw[key]) >= 0 ? Number(raw[key]) : null;
@@ -250,6 +267,36 @@ function importFicheDurables(subject, snapshot, previousSnapshot) {
   if (Array.isArray(snapshot?.keywordTargets)) v5.keywordTargets = cloneValue(snapshot.keywordTargets);
   if (!Object.keys(v5).some(key => JSON.stringify(v5[key]) !== JSON.stringify(subject.extensions?.v5?.[key]))) return subject;
   return { ...subject, extensions: { ...(subject.extensions || {}), v5 } };
+}
+
+/** Sujet (profil ou participant) avec sa monture déclarée remplacée (`null` la retire). */
+const withMountDeclaration = (subject, declared) => {
+  const { declaredMount, ...rest } = subject.extensions?.v5 || {};
+  return { ...subject, extensions: { ...(subject.extensions || {}), v5: declared ? { ...rest, declaredMount: cloneValue(declared) } : rest } };
+};
+const mountSignature =snapshot => JSON.stringify({ mount: snapshot && Object.hasOwn(snapshot, 'mount') ? snapshot.mount : undefined });
+
+/**
+ * Monture déclarée par la fiche face à celle du profil, sans rien écrire. Champ absent : rien. `kind` :
+ * none | create | rename (même espèce, seul le nom suit) | replace | remove (`monture: null`) | disagree (l'outil garde la sienne).
+ * La fiche l'emporte quand son champ a changé depuis la dernière lecture (`profile.ficheSnapshot`), sinon l'outil garde la sienne.
+ * `declared` : nouvelle déclaration du profil (null = retrait, undefined = inchangée).
+ */
+export function planMountSync(snapshot, profile) {
+  const none = { kind: 'none', declared: undefined };
+  if (!snapshot || !Object.hasOwn(snapshot, 'mount')) return none;
+  const current = declaredMountOf(profile);
+  const changed = mountSignature(snapshot) !== mountSignature(profile?.ficheSnapshot);
+  const wanted = snapshot.mount;
+  if (wanted === null) return current && changed ? { kind: 'remove', declared: null, toolName: current.name, toolLabel: montureFicheDe(current.bestiaryId)?.libelle || '' } : none;
+  const label = montureFicheDe(wanted.key)?.libelle || wanted.key;
+  const name = wanted.name || label;
+  const asked = { key: wanted.key, name, label };
+  const declare = { profileId: mountProfileId(profile.id), name, bestiaryId: wanted.key };
+  if (!current) return { kind: 'create', declared: declare, ...asked };
+  const tool = { toolName: current.name, toolLabel: montureFicheDe(current.bestiaryId)?.libelle || '' };
+  if (current.bestiaryId === wanted.key) return current.name === name ? none : { kind: 'rename', declared: { ...current, name }, ...asked, ...tool };
+  return changed ? { kind: 'replace', declared: declare, ...asked, ...tool } : { kind: 'disagree', declared: undefined, ...asked, ...tool };
 }
 
 // Premier mot significatif d'un nom : articles, particules et mots de moins de 3 lettres sont écartés.
@@ -600,12 +647,14 @@ export function planProfileSync(snapshot, profile, choices = {}) {
   updated.extensions = { ...(profile.extensions || {}), ficheId: snapshot.charId };
   delete updated.extensions.ficheHealthWarning;
   Object.assign(updated, importFicheDurables(updated, snapshot, profile.ficheSnapshot));
+  const mount = planMountSync(snapshot, profile);
+  if (mount.declared !== undefined) updated.extensions = withMountDeclaration(updated, mount.declared).extensions;
   // Keep latest source status, but each excluded collection retains its previous playable data.
   updated.ficheSnapshot = cloneValue(snapshot);
   const warnings = [...cloneValue(snapshot.warnings || []), ...equipmentWarnings];
   if (health.warning) warnings.push({ field: 'hp', code: health.warning, severity: 'warning', ...(health.warning === 'reserve-health-normalized' ? { message: 'Ancienne réserve avec PV courants : la réserve reprend le maximum de fiche ; les Blessures subies restent conservées dans les participants et personnages persistants déjà enregistrés.' } : {}), consequence: health.warning === 'old-maximum-unknown' ? 'hp-preserved' : 'signed-wounds-preserved' });
   const details = profileSyncDetails(profile, updated);
-  return { profileId: profile.id, charId: snapshot.charId, name: profile.name, caracs, details,
+  return { profileId: profile.id, charId: snapshot.charId, name: profile.name, caracs, details, mount,
     initiative: { old: profile.initiative, new: snapshot.initiative ?? profile.initiative },
     hp: { old: health.old, new: health.new, computable: health.computable }, health, actions, collections,
     equipmentActions, removedActions, protection: { old: profile.armorLocations || null, new: updated.armorLocations || null }, warnings,
@@ -649,6 +698,14 @@ export function applyFicheSync(draft, entries) {
         id: familiar.profileId, name: familiar.name,
         extensions: { ...cloneValue(template?.extensions || {}), ficheFamiliar: { charId: entry.snapshot.charId, id: familiar.id } } });
     }
+    // Monture de la fiche : profil `monture-<profil>` construit comme `setProfileMount` (profil type fourni par l'appelant, sinon vierge) ;
+    // même espèce, il n'est pas reconstruit et seul son nom suit la fiche.
+    const mount = plan.mount;
+    const mountAt = next.reserve.findIndex(row => row.id === mountProfileId(profile.id));
+    if (mount.kind === 'create' || mount.kind === 'replace') {
+      const built = buildMountProfile(profile.id, { template: cloneValue(entry.mountTemplate || {}), bestiaryId: mount.key, name: mount.name }).profile;
+      if (mountAt >= 0) next.reserve[mountAt] = built; else next.reserve.push(built);
+    } else if (mount.kind === 'rename' && mountAt >= 0) next.reserve[mountAt] = { ...next.reserve[mountAt], name: mount.name };
     const profileActions = new Map(updated.diceLines.map(action => [action.id, action]));
     const equipmentActions = new Map(updated.diceLines.filter(sourceActionKey).map(action => [sourceActionKey(action), action]));
     const sourceCharIds = new Set([entry.snapshot.charId, ...(entry.replaceAssociation === true && profile.extensions?.ficheId ? [profile.extensions.ficheId] : [])]);
@@ -730,8 +787,11 @@ export function applyFicheSync(draft, entries) {
     if (next.combat) {
       next.combat.participants = (next.combat.participants || []).map(subject => {
         if (subject.profileId !== profile.id) return subject;
-        touchedIds.add(subject.id); return copyFields(subject);
+        touchedIds.add(subject.id);
+        const copy = copyFields(subject);
+        return mount.declared === undefined ? copy : withMountDeclaration(copy, mount.declared);
       });
+      if (mount.declared) next.combat.participants = linkDeclaredMounts(next.combat.participants);
     }
     // ActiveScene is a mirror of combat. Copy the already-updated participant to avoid a second delta.
     const combatById = new Map((next.combat?.participants || []).map(item => [item.id, item]));

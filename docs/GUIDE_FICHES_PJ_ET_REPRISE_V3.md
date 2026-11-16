@@ -14,6 +14,8 @@ Dans la bibliothèque, ouvrir « Mettre à jour les PJ », se connecter avec le 
 
 Associer chaque fiche à un seul profil PJ. L'aperçu distingue les ajouts, changements, retraits et collections absentes ou invalides. Une collection explicitement vide autorise le retrait de ses anciennes entrées source. Une collection absente ou structurellement invalide conserve les données précédentes. Les données d'un exemplaire personnalisé restent celles déclarées par la fiche.
 
+La monture déclarée sur la fiche (champ `monture`) apparaît dans l'aperçu : création, renommage, remplacement, retrait (`monture` à `null`) ou désaccord. La fiche l'emporte quand ce champ a changé depuis la dernière lecture ; sinon l'outil garde la monture du profil et l'aperçu montre les deux valeurs. Un champ absent ne change rien ; l'application de la mise à jour vaut confirmation, et Annuler la défait.
+
 Pour chaque arme ou parade, choisir explicitement une compétence acquise. Une suggestion ne vaut pas confirmation. Une arme non liée reste consultable mais son action ne peut pas être lancée. Pour remplacer une ancienne action locale, choisir cette action dans « Rapprochement explicite ». Sans ce choix, elle reste indépendante. Ses réglages de scène sont conservés après adoption. La conversion des anciens dégâts fixes en BF + bonus demande également confirmation.
 
 Appliquer le lot une seule fois. La source et la séance sont revérifiées avant l'application ; un aperçu périmé doit être relu. L'opération est atomique et annulable. Les profils, combattants actifs, scènes suspendues et personnages persistants suivent leurs liens d'identité. Les archives restent historiques. Les états, tours, notes et réglages de scène sont conservés.

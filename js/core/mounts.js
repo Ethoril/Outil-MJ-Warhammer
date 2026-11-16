@@ -19,6 +19,18 @@ export const declaredMountOf = subject => (v5Of(subject).declaredMount?.profileI
 export const ownMountIdOf = rider => (typeof v5Of(rider).ownMountId === 'string' && v5Of(rider).ownMountId) || null;
 export const mountOfOf = mount => (typeof v5Of(mount).mountOf === 'string' && v5Of(mount).mountOf) || null;
 
+/**
+ * Déclaration et profil de bibliothèque d'une monture : `mount` = `{ template, bestiaryId, name }` (profil type du bestiaire).
+ * Rend `{ declared, profile }` ; partagé par `setProfileMount` (Réserve) et la mise à jour des PJ depuis la fiche, pour une même identité.
+ */
+export function buildMountProfile(riderProfileId, mount) {
+  const id = mountProfileId(riderProfileId);
+  const declared = { profileId: id, name: String(mount.name || mount.template.name || 'Monture').slice(0, 200), bestiaryId: mount.bestiaryId || null };
+  const profile = { caracs: {}, skills: [], talents: [], equipment: [], diceLines: [], traits: [], hp: 0, maxHp: 0, kind: 'Créature', ...mount.template, id, name: declared.name,
+    extensions: { ...(mount.template.extensions || {}), mountFor: { profileId: riderProfileId, bestiaryId: declared.bestiaryId } } };
+  return { declared, profile };
+}
+
 const TRAINED = new Set(['trained', 'dresse']);
 const MOUNT_WORDS = new Set(['mount', 'monture']);
 /** Créature du bestiaire dressée comme monture : Trait (ou Trait optionnel) Trained/Dressé dont la liste porte Mount/Monture. */

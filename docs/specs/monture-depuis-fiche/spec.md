@@ -1,6 +1,6 @@
 # Spec · Monture d'un PJ déclarée dans sa fiche en ligne, lue par l'outil
 
-Cadrage du 16/11/2026, sur `80571dc` (prod 3.48.1). Statut : **questions ouvertes, aucune décision de conception prise**. Pas de `plan.md` ni de `tasks.md` tant que les questions de la dernière section ne sont pas tranchées.
+Cadrage du 16/11/2026, sur `80571dc` (prod 3.48.1). Statut : **questions tranchées le 16/11/2026** (section « Décisions du MJ » en fin de document, qui fait foi sur tout le reste). Côté outil : la clé d'espèce écrite sur la fiche est l'identifiant du profil dans le bestiaire (par exemple `E0-P-077`), liste `js/data/montures-fiches.js` ; la fiche porte `monture: { espece, nom }`.
 
 Source de la matière : rapport de recherche `tmp/reprise-pro/cadrage-monture-rapport.md` (existant des deux dépôts). **Le dépôt des fiches n'était pas accessible pour ce cadrage** : tout ce qui le concerne (fichiers, lignes, schéma, validations) vient du rapport et n'a pas pu être revérifié ici. Les références du côté de l'outil sont celles du rapport, également non relues pour la rédaction ; à revérifier au moment du plan.
 

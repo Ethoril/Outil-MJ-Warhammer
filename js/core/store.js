@@ -149,11 +149,11 @@ import { simulateAction, applySimulation as applyActionSimulation, discardSimula
 import { deriveReminders, pendingReminders, resolveReminder } from './reminders.js';
 import { createScene, createIntention, createSceneEvent, createSceneClock, proposeSceneEvent, newlyProposedSceneEvents, resolveSceneEvent, applySceneEvent, advanceSceneClock } from './scene-events.js';
 import { sharedState, sameSharedState } from './sync-protocol.js';
-import { applyFicheSync as applyFicheSyncToDraft } from './fiche-sync.js';
+import { applyFicheSync as applyFicheSyncToDraft, planMountSync } from './fiche-sync.js';
 import { planFicheWriteback, applyWritebackSuccess, applyConflictChoice, rememberAftermathOwners } from './fiche-writeback.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
-import { declaredMountOf, linkDeclaredMounts, mountProfileId, planMountToggle, applyMountToggle } from './mounts.js';
+import { declaredMountOf, linkDeclaredMounts, mountProfileId, buildMountProfile, planMountToggle, applyMountToggle } from './mounts.js';
 import { createAftermathState, validateAftermathState, aftermathHealer, aftermathEnduranceScore, advanceAftermathCalendar } from './v5-aftermath.js';
 import { aftermathSubjects, mutableAftermathSubject, followedCharacters, followedCharacterConflicts, planEncounterEnd, planFollowedCharacterRemoval, settleAftermathSubjects, aftermathRowLabel, aftermathPlaceOf } from './aftermath-subjects.js';
 
@@ -1883,9 +1883,17 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if (applyFicheSyncToDraft(probe, captured) === probe) return { ok: true, changed: false };
       return api.executeCommand('sync-fiches', draft => {
         assertRevision(draft.localRevision);
-        const next = applyFicheSyncToDraft(draft, captured);
+        let next = applyFicheSyncToDraft(draft, captured);
         // Familiers déclarés par la fiche : liés tout de suite quand le maître et le familier sont déjà en combat.
         if (next.combat?.participants) next.combat = { ...next.combat, participants: linkDeclaredFamiliars(next.combat.participants) };
+        // Monture déclarée par la fiche (création ou remplacement) : elle entre en attente, liée, avec un cavalier déjà en combat (comme setProfileMount).
+        for (const entry of captured) {
+          const before = (draft.reserve || []).find(row => row.id === entry.profileId) || entry.newProfile;
+          if (!before || !['create', 'replace'].includes(planMountSync(entry.snapshot, before).kind)) continue;
+          const id = mountProfileId(entry.profileId), people = next.combat?.participants || [];
+          const riders = people.filter(row => row.profileId === entry.profileId && !people.some(other => other.id === row.extensions?.v5?.ownMountId));
+          if (riders.length && (next.reserve || []).some(row => row.id === id)) { const { added, ...built } = addProfilesToDraft(next, riders.map(rider => ({ id, zone: 'bench', camp: rider.camp }))); next = built; }
+        }
         return reconcileV5ResourceBindings(draft, next, captured);
       });
     },
@@ -3857,14 +3865,13 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       if (!profile) return { ok: false, reason: 'unknown-profile', message: 'Profil introuvable.' };
       if (mount && !mount.template) return { ok: false, reason: 'no-template', message: 'Profil de la monture manquant.' };
       const id = mountProfileId(profileId);
-      const declared = mount ? { profileId: id, name: String(mount.name || mount.template.name || 'Monture').slice(0, 200), bestiaryId: mount.bestiaryId || null } : null;
+      const captured = mount ? buildMountProfile(profileId, { ...mount, template: cloneValue(mount.template) }) : null;
+      const declared = captured?.declared || null;
       const declare = row => withV5(row, v5 => { const { declaredMount, ...rest } = v5; return declared ? { ...rest, declaredMount: declared } : rest; });
-      const captured = mount ? cloneValue(mount.template) : null;
       const result = api.executeCommand('set-profile-mount', draft => {
         let profiles = (draft.reserve || []).map(row => row.id === profileId ? declare(row) : row);
         if (captured) {
-          const built = { caracs: {}, skills: [], talents: [], equipment: [], diceLines: [], traits: [], hp: 0, maxHp: 0, kind: 'Créature', ...captured, id, name: declared.name,
-            extensions: { ...(captured.extensions || {}), mountFor: { profileId, bestiaryId: declared.bestiaryId } } };
+          const built = captured.profile;
           profiles = profiles.some(row => row.id === id) ? profiles.map(row => row.id === id ? built : row) : [...profiles, built];
         }
         let next = { ...draft, reserve: profiles,
