@@ -41,6 +41,8 @@ Tout est décidé par le MJ ; rien n'est codé. Ne rien reproposer de ce qui est
 
 **État du point B au 17/11 :** codé, contre-vérifié et corrigé sur la branche locale `poursuite-v5` (posée sur `image-pion-pj`, dernier commit `9caeda0`), décisions D1 à D24 dans la spec, plan et lots dans `docs/specs/poursuite-v5/`. Suite complète verte (6 389 + 210), parcours `tests/poursuite-v5-browser.mjs` et `tests/poursuite-hors-combat-browser.mjs` verts. Pas fusionné, pas de version, pas publié. Restes connus : le MJ n'a pas encore relu la table d10 de la spec ; `docs/AUDIT_REGLES.md` n'est pas régénéré (`node tools/audit/build-audit.mjs --check` échouait déjà avant le chantier sur des références sans rapport, d'après l'agent, non recontrôlé) ; le Vol à moitié exacte n'a pas de test ; la synchronisation en ligne d'une poursuite en cours n'a pas été éprouvée ; les corrections de la contre-vérification n'ont pas eu de seconde relecture indépendante.
 
+**Publié le 17/11/2026 en 3.50.0** (outil `main` `1e835a4`, carte `main` `e73afdc`) : points A et B, sur feu vert du MJ. Suite complète verte, socle navigateur 16/16, générateurs à jour, version servie vérifiée. Restes dans `docs/SUIVI_EVOLUTION.md`, entrée 3.50.0 ; la table d10 des Obstacles attend la relecture du MJ. Prochains chantiers : C (miracles narratifs) et D (Traits optionnels).
+
 **À éprouver par le MJ, sans action de notre part :** la carte « Monture » du bureau des fiches (jamais vue dans un navigateur) ; les images des pions à la table (Transformation de Kadon, nouvelles images des PJ, charge sur la tablette) ; les refontes d'octobre de la carte.
 
 ## 3. Méthode de travail, la plus économe possible
