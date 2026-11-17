@@ -25,6 +25,8 @@ import { noTestV5TalentAction } from '../v5-talent-actions.js';
 import { previewV5TalentTestModifiers } from '../v5-talent-tests.js';
 import { inferV5Kind } from '../v5-combat-rules.js';
 import { previewSupplementalEquipment } from '../v5-supplemental-equipment.js';
+import { previewV5Inflict } from '../v5-weapon-qualities.js';
+import { magicWeaponHitConditions } from '../v5-magic-combat.js';
 
 export function parseRoll(value) {
   if (typeof value === 'string' && value.trim() === '00') return 100;
@@ -70,6 +72,22 @@ export function inferredNaturalPlan(actor, action, v5) {
   const ordinary = v5?.kind !== 'ranged' && v5?.extraAttack !== true && !context.freeAttackTalent && !action.extensions?.v5?.freeAttack;
   return planNaturalAttack(actor, key, { ordinary, printedValue: /\d+\s*$/.test(String(action?.name ?? '')) || (hasOwn(action, 'damage') && action.damage !== '' && action.damage !== null && Number.isFinite(Number(action.damage))), charged: context.charged ?? v5?.charging, actorSize: naturalSizes(v5).actorSize, targetSize: naturalSizes(v5).targetSize });
 }
+/**
+ * D20 : l'attaque inflige-t-elle Enflammé à la touche ? Mêmes sources que les États posés après la touche par `previewResolution` :
+ * qualité Inflige (Enflammé), arme enchantée par un sort ou une prière (`magicWeaponHitConditions`), attaque naturelle déclarée ou
+ * inférée (Souffle de feu…). Une clause soumise aux Blessures compte : la défense sert à éviter la touche. Pure, sans tirage.
+ */
+export function attackInflictsAblaze({ actor, action, v5, attackContext } = {}) {
+  if (!actor || !isRecord(action) || !attackType(action.type)) return false;
+  const ablaze = name => foldKey(name ?? '') === 'enflamme';
+  const inflict = previewV5Inflict({ qualities: action.qualities || [], hit: true, actorStrength: actor?.caracs?.F });
+  if (inflict.ready && (inflict.conditions || [inflict.condition]).some(row => row?.key === 'enflamme')) return true;
+  const ranged = typeof attackContext?.ranged === 'boolean' ? attackContext.ranged : v5?.kind === 'ranged' ? true : v5?.kind === 'melee' ? false : undefined;
+  if (magicWeaponHitConditions(actor, action, ranged, 1).some(row => ablaze(row.name))) return true;
+  const natural = naturalPlanOf(actor, v5) || inferredNaturalPlan(actor, action, v5);
+  return Boolean(natural?.effects?.some(effect => ablaze(effect.state)));
+}
+
 export function normalizeResolutionInput(input = {}) {
   if (!isRecord(input)) throw new ResolutionError('Entrée de résolution invalide');
   const actor = isRecord(input.actor) ? clone(input.actor) : null;

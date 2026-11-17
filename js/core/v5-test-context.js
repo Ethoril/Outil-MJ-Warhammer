@@ -38,6 +38,15 @@ const STATE_LABELS = Object.freeze({
 const contextDisadvantageId = id => id === 'prone' ? 'condition:aterre:1' : id === 'besmirched' ? 'condition:souille:1'
   : /^blinded-\d+$/.test(id) ? `condition:aveugle:${Number(id.slice(8)) + 1}` : id;
 
+/**
+ * Inflammable (L07, D17, D20) : ligne −2 DR du seul Test pour éviter d'acquérir Enflammé (`avoidsCondition`), hors contexte comme en
+ * défense (Esquive ou Corps à corps opposé) ; jamais au retrait par Athlétisme, qui n'est pas un Test pour éviter. `null` sinon.
+ */
+export function flammableAvoidanceModifier(actor, avoidsCondition) {
+  if (typeof avoidsCondition !== 'string' || ALIASES.get(fold(avoidsCondition)) !== 'enflamme' || !isFlammable(actor)) return null;
+  return { id: 'trait:flammable', label: 'Inflammable : Test pour éviter Enflammé', amount: -2 };
+}
+
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
@@ -207,8 +216,8 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
   }
   disadvantageSources.push(...mix.disadvantages);
   // Inflammable (L07, D17) : −2 DR au seul Test pour éviter d'acquérir Enflammé (`avoidsCondition`), jamais au retrait par Athlétisme.
-  if (typeof context.avoidsCondition === 'string' && ALIASES.get(fold(context.avoidsCondition)) === 'enflamme' && isFlammable(actor))
-    slModifiers.push({ id: 'trait:flammable', label: 'Inflammable : Test pour éviter Enflammé', amount: -2 });
+  const flammable = flammableAvoidanceModifier(actor, context.avoidsCondition);
+  if (flammable) slModifiers.push(flammable);
 
   // MJ 09/11 CA13 : séquelles durables du calcul commun (lignes `durable`, qu'aucun plafond n'efface) ; la Caractéristique perdue
   // est rendue en `scoreDelta`, à ajouter au score du Test. Deux yeux perdus : la question de la vue, si l'appelant ne l'a pas tranchée.

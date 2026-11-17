@@ -75,9 +75,11 @@ import {
   inferredNaturalPlan,
   normalizeResolutionInput,
   normalizeCriticalRolls,
-  inferActionType
+  inferActionType,
+  attackInflictsAblaze
 } from './resolution/input.js';
-export { defaultResolutionId, naturalPlanOf, normalizeResolutionInput, inferActionType } from './resolution/input.js';
+export { defaultResolutionId, naturalPlanOf, normalizeResolutionInput, inferActionType, attackInflictsAblaze } from './resolution/input.js';
+import { flammableAvoidanceModifier } from './v5-test-context.js';
 
 import {
   creatureLocationOf,
@@ -312,6 +314,12 @@ function buildResolutionPreview(input) {
     if (!(realShield?.v5Bonus || realShield?.confirmed))
       normalized.defense = { ...normalized.defense, v5: withTraitModifier(normalized.defense.v5, { id: 'trait:shield', label: `Bouclier (${traitShield.rating}) : +1 DR en opposition`, amount: 1 }) };
   }
+  // Inflammable (D17, D20) : en combat, la défense (Esquive ou Corps à corps opposé) est le Test pour éviter Enflammé ; −2 DR au
+  // porteur contre une attaque qui inflige Enflammé. Sans défense, aucun Test, aucun modificateur.
+  const flammableDefense = normalized.defense && attackInflictsAblaze(normalized)
+    ? flammableAvoidanceModifier(normalized.target, 'enflamme') : null;
+  if (flammableDefense)
+    normalized.defense = { ...normalized.defense, v5: { ...withTraitModifier(normalized.defense.v5, flammableDefense), avoidsCondition: 'enflamme' } };
   if (traitShield?.rear) normalized.traitShieldReminder = `Bouclier (${traitShield.rating}*) : porté dans le dos, sans le bénéfice habituel ; ${traitShield.rating} PA contre une attaque venue de derrière, à appliquer à la main.`;
   const attachPrayerModifiers=(subject,skillId,settings)=>{
     if(skillId!=='skill-50_72_69_e8_72_65-base'||normalized.noTestAction)return [];

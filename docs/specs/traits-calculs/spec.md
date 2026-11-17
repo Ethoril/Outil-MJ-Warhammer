@@ -90,6 +90,7 @@ Légende : « d'office » = le moteur connaît le déclencheur, l'effet se pose 
 | D16 | Bond (question 3) | Pastille sur la fiche **et** portée de Bond envoyée à la carte : touche aussi le dépôt de la carte (`E:/rpg-map-display`), qui doit accepter le champ (contrat de liaison à étendre, carte tolérante à son absence). |
 | D18 | Increvable, Round échoué (après L1) | Un échec ajoute 0 DR au total ; il ne le fait jamais baisser. |
 | D19 | Sang corrosif, PA (après L1) | Pour chaque engagé, l'outil tire lui-même la localisation (d100, table des localisations habituelle de l'outil), sans jet manuel, et soustrait les PA de cette zone ; minimum 1. |
+| D20 | Inflammable, Test pour éviter Enflammé (17/11, précise D17) | En combat, ce Test est la défense : Esquive ou Test de Corps à corps opposé ; sans défense possible, aucun Test. Le porteur d'Inflammable qui se défend contre une attaque qui inflige Enflammé prend −2 DR sur sa défense (`avoidsCondition: 'enflamme'`). Jamais au retrait d'Enflammé par Athlétisme. |
 | D17 | Inflammable (question 4, non posée) | Recommandation de Claude retenue par défaut : −2 DR sur les seuls Tests pour éviter Enflammé, pas sur le retrait par Athlétisme. |
 
 ### Choix de Claude, à confirmer

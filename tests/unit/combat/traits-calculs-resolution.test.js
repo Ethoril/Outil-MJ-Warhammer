@@ -261,6 +261,52 @@ describe('Bouclier (n) (CA12)', () => {
   });
 });
 
+describe('Inflammable en défense contre une attaque qui inflige Enflammé (D17, D20)', () => {
+  const burning = (id, extra = {}) => {
+    const input = melee(id, extra);
+    return { ...input, action: { ...input.action, qualities: [{ id: 'inflige', parameter: 'Enflammé' }] } };
+  };
+  const flammable = () => subject('b', { traits: ['Flammable'] });
+  const flameRow = preview => preview.defenderTest.details.modifiers.filter(row => row.id === 'trait:flammable');
+
+  test('Esquive du porteur contre une attaque enflammante : −2 DR sur son DR final', () => {
+    const plain = previewResolution(burning('fla-1', { actor: subject('a'), target: subject('b'), defense: dodge }));
+    const preview = previewResolution(burning('fla-2', { actor: subject('a'), target: flammable(), defense: dodge }));
+    assert.deepEqual(flameRow(preview).map(row => [row.label, row.amount]), [['Inflammable : Test pour éviter Enflammé', -2]], JSON.stringify(preview.defenderTest.details.modifiers));
+    assert.equal(preview.defenderTest.sl, plain.defenderTest.sl - 2);
+    assert.ok(preview.weaponConditions.proposed.some(row => row.key === 'enflamme'), 'référence : la touche inflige bien Enflammé');
+  });
+
+  test('Corps à corps opposé : même −2 DR', () => {
+    const plain = previewResolution(burning('fla-3', { actor: subject('a'), target: subject('b') }));
+    const preview = previewResolution(burning('fla-4', { actor: subject('a'), target: flammable() }));
+    assert.equal(flameRow(preview).length, 1);
+    assert.equal(preview.defenderTest.sl, plain.defenderTest.sl - 2);
+  });
+
+  test('même attaque, défenseur sans Inflammable : DR inchangé, aucune ligne', () => {
+    const preview = previewResolution(burning('fla-5', { actor: subject('a'), target: subject('b'), defense: dodge }));
+    const ordinary = previewResolution(melee('fla-6', { actor: subject('a'), target: subject('b'), defense: dodge }));
+    assert.deepEqual(flameRow(preview), []);
+    assert.equal(preview.defenderTest.sl, ordinary.defenderTest.sl);
+  });
+
+  test('porteur d\'Inflammable contre une attaque ordinaire : inchangé', () => {
+    const preview = previewResolution(melee('fla-7', { actor: subject('a'), target: flammable(), defense: dodge }));
+    const plain = previewResolution(melee('fla-8', { actor: subject('a'), target: subject('b'), defense: dodge }));
+    assert.deepEqual(flameRow(preview), []);
+    assert.equal(preview.defenderTest.sl, plain.defenderTest.sl);
+  });
+
+  test('défense impossible : aucun Test, aucun modificateur', () => {
+    const input = burning('fla-9', { actor: subject('a'), target: flammable() });
+    delete input.defense;
+    const preview = previewResolution(input);
+    assert.equal(preview.defenderTest, null);
+    assert.equal(preview.test.details.modifiers.some(row => row.id === 'trait:flammable'), false);
+  });
+});
+
 describe('Sans ces Traits, rien ne change (CA24)', () => {
   test('aucun plan de Trait, aucun modificateur de Trait, aucune demande', () => {
     const preview = previewResolution(melee('none-1', { actor: subject('a'), target: subject('b') }));
