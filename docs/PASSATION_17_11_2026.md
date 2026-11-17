@@ -40,7 +40,7 @@ Détail, restes connus et preuves : `docs/SUIVI_EVOLUTION.md`, entrée 3.51.0. D
 ## 3. Ce qui reste ensuite
 
 - **Miracles narratifs** : `docs/specs/miracles-narratifs/spec.md` (69 prières en rappel, lots L0 à L9). Avant le plan : inventorier et classer les 88 clauses résiduelles des 60 miracles « assistés ».
-- **Second chantier des Traits** : nouveaux calculs. Tri fait le 17/11, quatre doutes tranchés par le MJ : [specs/traits-calculs/tri.md](specs/traits-calculs/tri.md). Suite : relecture des règles dans les livres (section 5 du tri), puis spec, plan, tâches.
+- **Second chantier des Traits** : nouveaux calculs. Tri fait le 17/11, quatre doutes tranchés par le MJ : [specs/traits-calculs/tri.md](specs/traits-calculs/tri.md). Spec écrite le 17/11 (compte Team) et questions tranchées : [specs/traits-calculs/spec.md](specs/traits-calculs/spec.md), D1 à D17. Suite : plan et tâches ; D5 et D7 à D12 sont des choix de Claude non relus par le MJ. Bond touche aussi la carte (D16).
 - **Restes de la 3.50.0** (dans `docs/SUIVI_EVOLUTION.md`) : `docs/AUDIT_REGLES.md` non régénéré ; synchronisation en ligne d'une poursuite non éprouvée ; Vol dans le Mouvement de poursuite sans test. Ne les traiter que si le MJ le demande.
 - Ne rien reproposer de ce qui est « classé » dans la mémoire `classement-restes-15-11`.
 
