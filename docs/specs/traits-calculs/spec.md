@@ -86,7 +86,7 @@ Légende : « d'office » = le moteur connaît le déclencheur, l'effet se pose 
 | D4 | Traits de terrain (Q4) | Restent en rappel. |
 | D13 | « D'office » (révise D6, 17/11) | La demande du Test ou du d10 s'ouvre d'elle-même au bon moment, **avec un bouton qui tire le dé** (comme les autres jets de l'outil) en plus de la saisie d'un résultat ; un seul ↶ annule. |
 | D14 | Sang corrosif (question 1) | Dégâts réduits par BE et PA, minimum 1. |
-| D15 | Increvable (question 2) | Lecture littérale : chaque Round, un nouveau Test de Résistance (+0) qui ne réussit qu'à 6 DR en un seul jet ; pas de cumul. |
+| D15 | Increvable (question 2, corrigée par le MJ après relecture de la règle) | Test étendu : un Test de Résistance (+0) au début de chaque Round, les DR s'additionnent ; la créature revient à 1 Blessure dès que le total atteint 6 DR, au plus en BE Rounds. |
 | D16 | Bond (question 3) | Pastille sur la fiche **et** portée de Bond envoyée à la carte : touche aussi le dépôt de la carte (`E:/rpg-map-display`), qui doit accepter le champ (contrat de liaison à étendre, carte tolérante à son absence). |
 | D17 | Inflammable (question 4, non posée) | Recommandation de Claude retenue par défaut : −2 DR sur les seuls Tests pour éviter Enflammé, pas sur le retrait par Athlétisme. |
 
@@ -119,7 +119,7 @@ Chaque CA est prouvé par un test unitaire dans `tests/unit/creatures/traits-cal
 - CA6. Instable engagé, adversaire avec Élan, porteur sans Élan : 2 Blessures directes en fin de Round, journal ; autres cas, rien ; profil L11 : rappel seul.
 - CA7. Instable ramené à 0 Blessure : une décision de mort proposée (cause `unstable`), aucune suppression.
 - CA8. Stupide actif, non guidé : au début du Round, demande du Test d'Intelligence +4 DR ; échec : marqueur « tour perdu » ; guidé, Nuée ou Immunité psychologique : aucune demande.
-- CA9. Increvable : après confirmation de mort avec « corps intact », demande d'Endurance (+0) à chaque début de Round pendant BE Rounds ; réussite seulement à 6 DR ou plus sur ce jet, sans cumul (D15) : retour à 1 Blessure ; sans la case, ou après BE Rounds : aucune demande.
+- CA9. Increvable : après confirmation de mort avec « corps intact », demande d'Endurance (+0) à chaque début de Round pendant BE Rounds ; les DR s'additionnent d'un Round à l'autre (Test étendu, D15) ; total de 6 DR atteint : retour à 1 Blessure ; le total cumulé s'affiche et ↶ le rétablit ; sans la case, ou après BE Rounds : aucune demande.
 
 **S3. Défense et riposte.**
 - CA10. Le plan de défense d'un défenseur Bestial ne propose que l'Esquive.
