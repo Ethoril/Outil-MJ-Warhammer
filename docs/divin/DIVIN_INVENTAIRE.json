@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:80ceeb3d58f1dba2a04b33324e970df1dd1a4ea49e9f579bb97a1b62c3675036",
+  "sourceFingerprint": "sha256:56d6683083ab2f95ff79427330fd39846e3587eecf015e57d3d04fb30eb3979a",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -64,8 +64,8 @@
     },
     "miraclesUpInArmsConnected": 9,
     "upInArmsByStatus": {
-      "assisted": 7,
-      "manual": 2
+      "assisted": 8,
+      "manual": 1
     }
   },
   "notes": [
@@ -9869,14 +9869,14 @@
         },
         {
           "id": "flee-exemption",
-          "mode": "manual",
-          "text": "Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163).",
+          "mode": "engine",
+          "text": "Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163) : appliqué par la Fuite du moteur.",
           "sourceRef": "v5-in-good-order"
         },
         {
           "id": "broken-from-fleeing",
-          "mode": "manual",
-          "text": "Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163) ; seul le Désengagement n’est pas concerné.",
+          "mode": "engine",
+          "text": "Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163), posé par la Fuite du moteur ; seul le Désengagement n’est pas concerné.",
           "sourceRef": "v5-in-good-order"
         },
         {
@@ -10576,7 +10576,7 @@
       "type": "miracle",
       "name": "Vindicte Vengeresse",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -10646,7 +10646,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "meleeOnly": true,
+          "everyTest": true,
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Vengeful Wrath",
         "effect": "L’indignation de Myrmidia vous emplit : pendant le miracle, vous devez charger et attaquer l’ennemi impénitent le plus proche, et vous pouvez relancer chaque Test de Mêlée une fois, le nouveau résultat tenant.",
@@ -10672,8 +10685,8 @@
         },
         {
           "id": "melee-reroll",
-          "mode": "manual",
-          "text": "Chaque Test de Mêlée du prêtre peut être relancé une fois ; le nouveau résultat tient (p.133).",
+          "mode": "engine",
+          "text": "Chaque Test de Mêlée du prêtre peut être relancé une fois, sans Point de Chance ; le nouveau résultat tient (p.133).",
           "sourceRef": "v5-vengeful-wrath"
         },
         {
@@ -10684,7 +10697,7 @@
         },
         {
           "id": "duration",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Durée : 6 Rounds (+6 Rounds par tranche de +2 DR).",
           "sourceRef": "v5-vengeful-wrath"
         }
@@ -10693,10 +10706,6 @@
         {
           "field": "unrepentant-enemy",
           "label": "Quel ennemi le MJ désigne-t-il comme impénitent dans cette scène ?"
-        },
-        {
-          "field": "rerolls",
-          "label": "Quels Tests de Mêlée du prêtre sont relancés, et quel est le nouveau résultat ?"
         }
       ]
     },
@@ -23254,6 +23263,22 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "divine-zone",
+          "appliesTo": "caster",
+          "label": "Froid de la gelée blanche",
+          "radius": {
+            "characteristic": "Soc"
+          },
+          "excludes": [],
+          "momentumLoss": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "labels": {
@@ -23270,8 +23295,8 @@
         },
         {
           "id": "momentum-loss",
-          "mode": "manual",
-          "text": "Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan.",
+          "mode": "engine",
+          "text": "Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan (présents désignés par le MJ).",
           "sourceRef": "v5-hoarfrost-s-chill"
         },
         {
@@ -23936,6 +23961,9 @@
           "hitConditions": [
             "Exténué"
           ],
+          "hitRemoveConditions": [
+            "Hémorragique"
+          ],
           "designatedWeapon": true,
           "weaponClass": "hache",
           "duration": {
@@ -23972,7 +24000,7 @@
         },
         {
           "id": "remove-bleeding",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Toute cible touchée perd ses États Hémorragique.",
           "sourceRef": "v5-winter-s-bite"
         },
@@ -24418,8 +24446,36 @@
         {
           "type": "weapon-bonus",
           "magical": true,
+          "ignoreArmour": true,
           "designatedWeapon": true,
           "weaponClass": "épée",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "imposed-test",
+          "appliesTo": "caster",
+          "label": "Épée de justice",
+          "test": {
+            "skill": "resistance",
+            "slModifier": 2
+          },
+          "subjects": "enemies",
+          "when": "manual",
+          "onFailure": [
+            {
+              "type": "condition",
+              "key": "Inconscient",
+              "level": 1,
+              "lockRounds": {
+                "characteristicBonus": "Soc"
+              }
+            }
+          ],
           "duration": {
             "value": null,
             "sourceParameter": "params.duration",
@@ -24436,7 +24492,7 @@
       "clauses": [
         {
           "id": "ignore-ap",
-          "mode": "manual",
+          "mode": "engine",
           "text": "L'épée ignore les Points d'Armure.",
           "sourceRef": "v5-sword-of-justice"
         },
@@ -24454,8 +24510,8 @@
         },
         {
           "id": "unconscious-duration",
-          "mode": "manual",
-          "text": "L'État Inconscient dure au moins Bonus de Sociabilité rounds (Bonus du prêtre présumé).",
+          "mode": "engine",
+          "text": "L'État Inconscient dure au moins Bonus de Sociabilité rounds (Bonus du prêtre présumé) : non récupérable avant.",
           "sourceRef": "v5-sword-of-justice"
         },
         {

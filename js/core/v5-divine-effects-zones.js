@@ -7,10 +7,12 @@
  * Rayon : la Caractéristique entière du prêtre, en mètres (yards = mètres), ou son Bonus (`radius.bonus`) ; inconnue ou non déclarée :
  * `null`, la zone reste valable. `suppressMagic: true` (Apaisez les vents, exclusions alors facultatives) : Incantation et Focalisation
  * refusées pour un présent, ses couches de sort suspendues (`suspendedByDivineZone`, lu par unsuppressedSpellEffects) ;
- * `syncDivineMagicSuppression` pose et lève ces marques à chaque désignation et à chaque Tour.
+ * `syncDivineMagicSuppression` pose et lève ces marques à chaque désignation et à chaque Tour. `momentumLoss: true` (Froid de la gelée
+ * blanche, L11 ; exclusions alors facultatives) : au début de chaque Round, les présents sauf le prêtre perdent l'Élan (`divineZoneMomentumLoss`).
  */
 import { psychologyTraits } from './creature-psychology.js';
 import { refreshEffectLayers } from './v5-magic-effects.js';
+import { withMomentum } from './v5-momentum-state.js';
 
 const clone = value => structuredClone(value);
 const record = value => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -25,7 +27,8 @@ export function divineZoneProblem(effect) {
   if (effect?.appliesTo !== 'caster' && effect?.casterOnly !== true) return 'divine-zone exige appliesTo "caster".';
   if (!isText(effect.label)) return 'divine-zone exige label.';
   if (effect.suppressMagic !== undefined && effect.suppressMagic !== true) return 'divine-zone : suppressMagic doit valoir true.';
-  if (!Array.isArray(effect.excludes) || (!effect.excludes.length && effect.suppressMagic !== true) || !effect.excludes.every(item => ZONE_EXCLUDES.includes(item)))
+  if (effect.momentumLoss !== undefined && effect.momentumLoss !== true) return 'divine-zone : momentumLoss doit valoir true.';
+  if (!Array.isArray(effect.excludes) || (!effect.excludes.length && effect.suppressMagic !== true && effect.momentumLoss !== true) || !effect.excludes.every(item => ZONE_EXCLUDES.includes(item)))
     return `divine-zone : excludes doit être une liste non vide parmi ${ZONE_EXCLUDES.join(', ')}.`;
   if (effect.exceptions !== undefined && (!Array.isArray(effect.exceptions) || !effect.exceptions.every(item => ZONE_EXCEPTIONS.includes(item))))
     return `divine-zone : exceptions doit être une liste parmi ${ZONE_EXCEPTIONS.join(', ')}.`;
@@ -47,7 +50,8 @@ const handler = {
     return { ...effect, radiusMeters: known ? (effect.radius.bonus ? Math.floor(value / 10) : value) : null };
   },
   buildLayer: effect => ({ zone: { label: effect.label, radius: effect.radiusMeters ?? null, members: [], excludes: clone(effect.excludes),
-    exceptions: clone(effect.exceptions || []), ...(effect.affects ? { affects: clone(effect.affects) } : {}), ...(effect.suppressMagic ? { suppressMagic: true } : {}) } })
+    exceptions: clone(effect.exceptions || []), ...(effect.affects ? { affects: clone(effect.affects) } : {}), ...(effect.suppressMagic ? { suppressMagic: true } : {}),
+    ...(effect.momentumLoss ? { momentumLoss: true } : {}) } })
 };
 export default { 'divine-zone': handler };
 
@@ -94,7 +98,7 @@ export function divineZoneAttackWarnings({ attacker, target, action, participant
 /** Textes de rappel affichés sur un participant présent dans une zone du prêtre. */
 export const divineZoneReminders = (participant, participants = []) => divineZoneOf(participant, participants).map(zone => ({
   key: `divine-zone-${zone.layerId}`,
-  text: `Dans la zone de ${zone.label} (${zone.casterName})${zone.radius ? ` · rayon ${zone.radius} m` : ''} : ${zone.suppressMagic ? 'magie dissipée, Incantation et Focalisation échouent' : zone.excludes.includes('attack') ? 'n’attaque pas' : 'aucune attaque à distance, sauf arme à poudre ou d’artillerie'}.` }));
+  text: `Dans la zone de ${zone.label} (${zone.casterName})${zone.radius ? ` · rayon ${zone.radius} m` : ''} : ${zone.suppressMagic ? 'magie dissipée, Incantation et Focalisation échouent' : zone.momentumLoss ? (zone.casterId === participant.id ? 'le prêtre garde son Élan' : 'perd l’Élan au début de chaque Round') : zone.excludes.includes('attack') ? 'n’attaque pas' : 'aucune attaque à distance, sauf arme à poudre ou d’artillerie'}.` }));
 
 /** Refus en français d'une Incantation (`cast`) ou d'une Focalisation (`channel`) pour un présent d'une zone qui suspend la magie, sinon `null`. */
 export function stilledMagicRestriction(participant, action) {
@@ -146,4 +150,21 @@ export function setDivineZoneMembersOnState(state, casterId, layerId, ids = []) 
   next.log = [{ id: `divine-zone:${layerId}:${state.localRevision || 0}`, kind: 'effect', actorId: casterId, actorName: bearer.name,
     text: `${live.zone.label} : présents dans la zone — ${names.length ? names.join(', ') : 'personne'}`, detail: { kind: 'divine-zone-members', layerId, members } }, ...(next.log || [])].slice(0, 300);
   return { ok: true, state: next, members };
+}
+
+/**
+ * Froid de la gelée blanche (début de chaque Round) : les présents d'une zone `momentumLoss`, sauf le prêtre qui la porte, perdent l'Élan.
+ * Rend `{ participants, logs }` ; la même liste quand personne ne perd d'Élan.
+ */
+export function divineZoneMomentumLoss(participants = [], { round = null } = {}) {
+  const losers = new Map();
+  for (const bearer of participants) for (const layer of zoneLayersOf(bearer).filter(row => row.zone.momentumLoss === true))
+    for (const id of layer.zone.members || []) {
+      const member = participants.find(row => row.id === id);
+      if (id !== bearer.id && member?.extensions?.v5?.hasMomentum === true && !losers.has(id)) losers.set(id, { label: layer.zone.label, casterName: nameOf(bearer) });
+    }
+  if (!losers.size) return { participants, logs: [] };
+  return { participants: participants.map(row => (losers.has(row.id) ? withMomentum(row, false) : row)),
+    logs: [...losers].map(([id, zone]) => ({ id: `divine-zone-momentum:${id}:r${round}`, kind: 'effect', actorId: id, actorName: nameOf(participants.find(row => row.id === id)),
+      text: `${nameOf(participants.find(row => row.id === id))} · ${zone.label} (${zone.casterName}) : perd l’Élan au début du Round`, detail: { kind: 'divine-zone-momentum', round } })) };
 }

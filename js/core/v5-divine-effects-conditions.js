@@ -208,22 +208,29 @@ const temporaryFortune = {
 
 // Relance gratuite (Bénédiction de Chance) : la couche porte un compteur imbriqué, consommé par la résolution (v5-store-action.js).
 // Écraser les faibles (Ulric) : relance d'attaque une fois par Round, compteur rechargé à chaque Round au lieu d'être décrémenté.
+// Vindicte vengeresse (L11) : `meleeOnly` (attaques de mêlée seulement), `everyTest` (chaque Test relancé, couche jamais consommée).
+const FREE_REROLL_FLAGS = ['perRound', 'attacksOnly', 'meleeOnly', 'everyTest'];
 const freeReroll = {
-  validate: effect => typeof effect.perRound === 'boolean' || effect.perRound === undefined
-    ? (typeof effect.attacksOnly === 'boolean' || effect.attacksOnly === undefined ? null : 'free-reroll exige attacksOnly (booléen).')
-    : 'free-reroll exige perRound (booléen).',
-  buildLayer: effect => ({ freeReroll: { remaining: 1, ...(effect.perRound ? { perRound: true } : {}), ...(effect.attacksOnly ? { attacksOnly: true } : {}) } })
+  validate(effect) {
+    const bad = FREE_REROLL_FLAGS.find(key => effect[key] !== undefined && typeof effect[key] !== 'boolean');
+    return bad ? `free-reroll exige ${bad} (booléen).` : null;
+  },
+  buildLayer: effect => ({ freeReroll: { remaining: 1, ...(effect.perRound ? { perRound: true } : {}), ...(effect.attacksOnly ? { attacksOnly: true } : {}),
+    ...(effect.meleeOnly ? { meleeOnly: true } : {}), ...(effect.everyTest ? { everyTest: true } : {}) } })
 };
 export const FREE_REROLL_SOURCE = 'divine-free-reroll';
-export const freeRerollLayers = (participant, { round, attack } = {}) => (participant?.extensions?.v5?.divineEffects || []).filter(layer => {
+export const freeRerollLayers = (participant, { round, attack, melee } = {}) => (participant?.extensions?.v5?.divineEffects || []).filter(layer => {
   if (layer?.type !== 'free-reroll' || !layer.freeReroll) return false;
   if (layer.freeReroll.attacksOnly && attack !== true) return false;
+  if (layer.freeReroll.meleeOnly && (attack !== true || melee !== true)) return false;
+  if (layer.freeReroll.everyTest) return true;
   return layer.freeReroll.perRound ? layer.freeReroll.usedRound !== round : layer.freeReroll.remaining > 0;
 });
-export function consumeFreeReroll(participant, { round, attack } = {}) {
-  // La relance rechargée chaque Round passe avant la relance unique (Chance), pour ne pas gaspiller cette dernière.
-  const layers = freeRerollLayers(participant, { round, attack }), layer = layers.find(row => row.freeReroll.perRound) || layers[0];
+export function consumeFreeReroll(participant, { round, attack, melee } = {}) {
+  // La relance de chaque Test (Vindicte) ne s'épuise pas ; puis la relance rechargée chaque Round passe avant la relance unique (Chance).
+  const layers = freeRerollLayers(participant, { round, attack, melee }), layer = layers.find(row => row.freeReroll.perRound) || layers[0];
   if (!layer) return false;
+  if (layers.some(row => row.freeReroll.everyTest)) return true;
   layer.freeReroll = layer.freeReroll.perRound
     ? { ...layer.freeReroll, usedRound: round }
     : { ...layer.freeReroll, remaining: layer.freeReroll.remaining - 1 };

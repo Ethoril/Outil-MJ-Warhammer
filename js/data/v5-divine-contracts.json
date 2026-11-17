@@ -1596,8 +1596,8 @@
         "duree": "6 Rounds",
         "effet": "Vous êtes empli de l'indignation vertueuse de Myrmidia. Tant que ce miracle est actif, vous devez charger et attaquer l'ennemi impénitent le plus proche. Vous pouvez relancer tous vos jets de compétence de Mêlée tant que le miracle est actif."
       },
-      "v5Summary": "Aucun type d’effet pour la relance de Tests ni pour la contrainte de comportement : contrat manuel. Relance : une fois par Test de Mêlée, nouveau résultat tenant (décision MJ). « Ennemi impénitent » n’est défini nulle part : désigné par le MJ à chaque scène, contrainte levée si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient (décision MJ). Portée et cible « Vous » : seule la durée peut croître.",
-      "status": "manual",
+      "v5Summary": "Relance : une fois par Test de Mêlée, nouveau résultat tenant (décision MJ) ; relance gratuite du moteur sur les attaques de mêlée seulement (décision MJ du 17/11/2026, L11). La contrainte de comportement reste un rappel. « Ennemi impénitent » n’est défini nulle part : désigné par le MJ à chaque scène, contrainte levée si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient (décision MJ). Portée et cible « Vous » : seule la durée peut croître.",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -2961,7 +2961,7 @@
     {
       "id": "divine:miracle:verena:sword-of-justice",
       "catalogueEntry": null,
-      "v5Summary": "« Fellowship Bonus Rounds » pour l'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L'État Inconscient reste au rappel MJ : la cible du miracle est le prêtre seul (portée et cible « vous »), l'adversaire frappé n'est pas un participant adressable par le moteur.",
+      "v5Summary": "« Fellowship Bonus Rounds » pour l'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L11 : l'adversaire criminel frappé est désigné par le MJ au bouton « Test imposé » (Endurance +2 DR saisie) ; échec : Inconscient verrouillé Bonus de Sociabilité du prêtre en Rounds, puis récupérable selon les règles ordinaires.",
       "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -12988,14 +12988,14 @@
         },
         {
           "id": "flee-exemption",
-          "mode": "manual",
-          "text": "Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163).",
+          "mode": "engine",
+          "text": "Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163) : appliqué par la Fuite du moteur.",
           "sourceRef": "v5-in-good-order"
         },
         {
           "id": "broken-from-fleeing",
-          "mode": "manual",
-          "text": "Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163) ; seul le Désengagement n’est pas concerné.",
+          "mode": "engine",
+          "text": "Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163), posé par la Fuite du moteur ; seul le Désengagement n’est pas concerné.",
           "sourceRef": "v5-in-good-order"
         },
         {
@@ -13735,7 +13735,7 @@
       "catalogueName": "Vindicte Vengeresse",
       "canonicalName": "Vengeful Wrath",
       "deity": "Myrmidia",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Up in arms.pdf",
         "fileSha256": "0671b27d0e947c7c5387fd4b30cda0512f9182dc811cc0275a18acc96af5fa07",
@@ -13758,7 +13758,7 @@
         "specialization": "Myrmidia"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Aucun type d’effet pour la relance de Tests ni pour la contrainte de comportement : contrat manuel. Relance : une fois par Test de Mêlée, nouveau résultat tenant (décision MJ). « Ennemi impénitent » n’est défini nulle part : désigné par le MJ à chaque scène, contrainte levée si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient (décision MJ). Portée et cible « Vous » : seule la durée peut croître.",
+      "sourceDelta": "Relance : une fois par Test de Mêlée, nouveau résultat tenant (décision MJ) ; relance gratuite du moteur sur les attaques de mêlée seulement (décision MJ du 17/11/2026, L11). La contrainte de comportement reste un rappel. « Ennemi impénitent » n’est défini nulle part : désigné par le MJ à chaque scène, contrainte levée si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient (décision MJ). Portée et cible « Vous » : seule la durée peut croître.",
       "params": {
         "range": {
           "kind": "self"
@@ -13800,7 +13800,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "free-reroll",
+          "meleeOnly": true,
+          "everyTest": true,
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Vengeful Wrath",
@@ -13827,8 +13840,8 @@
         },
         {
           "id": "melee-reroll",
-          "mode": "manual",
-          "text": "Chaque Test de Mêlée du prêtre peut être relancé une fois ; le nouveau résultat tient (p.133).",
+          "mode": "engine",
+          "text": "Chaque Test de Mêlée du prêtre peut être relancé une fois, sans Point de Chance ; le nouveau résultat tient (p.133).",
           "sourceRef": "v5-vengeful-wrath"
         },
         {
@@ -13839,7 +13852,7 @@
         },
         {
           "id": "duration",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Durée : 6 Rounds (+6 Rounds par tranche de +2 DR).",
           "sourceRef": "v5-vengeful-wrath"
         }
@@ -13848,10 +13861,6 @@
         {
           "field": "unrepentant-enemy",
           "label": "Quel ennemi le MJ désigne-t-il comme impénitent dans cette scène ?"
-        },
-        {
-          "field": "rerolls",
-          "label": "Quels Tests de Mêlée du prêtre sont relancés, et quel est le nouveau résultat ?"
         }
       ],
       "catalogueEntry": {
@@ -27073,6 +27082,22 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "divine-zone",
+          "appliesTo": "caster",
+          "label": "Froid de la gelée blanche",
+          "radius": {
+            "characteristic": "Soc"
+          },
+          "excludes": [],
+          "momentumLoss": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -27093,8 +27118,8 @@
         },
         {
           "id": "momentum-loss",
-          "mode": "manual",
-          "text": "Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan.",
+          "mode": "engine",
+          "text": "Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan (présents désignés par le MJ).",
           "sourceRef": "v5-hoarfrost-s-chill"
         },
         {
@@ -27785,6 +27810,9 @@
           "hitConditions": [
             "Exténué"
           ],
+          "hitRemoveConditions": [
+            "Hémorragique"
+          ],
           "designatedWeapon": true,
           "weaponClass": "hache",
           "duration": {
@@ -27825,7 +27853,7 @@
         },
         {
           "id": "remove-bleeding",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Toute cible touchée perd ses États Hémorragique.",
           "sourceRef": "v5-winter-s-bite"
         },
@@ -28247,7 +28275,7 @@
         "specialization": "Verena"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "« Fellowship Bonus Rounds » pour l'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L'État Inconscient reste au rappel MJ : la cible du miracle est le prêtre seul (portée et cible « vous »), l'adversaire frappé n'est pas un participant adressable par le moteur.",
+      "sourceDelta": "« Fellowship Bonus Rounds » pour l'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L11 : l'adversaire criminel frappé est désigné par le MJ au bouton « Test imposé » (Endurance +2 DR saisie) ; échec : Inconscient verrouillé Bonus de Sociabilité du prêtre en Rounds, puis récupérable selon les règles ordinaires.",
       "params": {
         "range": {
           "kind": "self"
@@ -28293,8 +28321,36 @@
         {
           "type": "weapon-bonus",
           "magical": true,
+          "ignoreArmour": true,
           "designatedWeapon": true,
           "weaponClass": "épée",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "imposed-test",
+          "appliesTo": "caster",
+          "label": "Épée de justice",
+          "test": {
+            "skill": "resistance",
+            "slModifier": 2
+          },
+          "subjects": "enemies",
+          "when": "manual",
+          "onFailure": [
+            {
+              "type": "condition",
+              "key": "Inconscient",
+              "level": 1,
+              "lockRounds": {
+                "characteristicBonus": "Soc"
+              }
+            }
+          ],
           "duration": {
             "value": null,
             "sourceParameter": "params.duration",
@@ -28315,7 +28371,7 @@
       "clauses": [
         {
           "id": "ignore-ap",
-          "mode": "manual",
+          "mode": "engine",
           "text": "L'épée ignore les Points d'Armure.",
           "sourceRef": "v5-sword-of-justice"
         },
@@ -28333,8 +28389,8 @@
         },
         {
           "id": "unconscious-duration",
-          "mode": "manual",
-          "text": "L'État Inconscient dure au moins Bonus de Sociabilité rounds (Bonus du prêtre présumé).",
+          "mode": "engine",
+          "text": "L'État Inconscient dure au moins Bonus de Sociabilité rounds (Bonus du prêtre présumé) : non récupérable avant.",
           "sourceRef": "v5-sword-of-justice"
         },
         {
@@ -28697,5 +28753,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:80ceeb3d58f1dba2a04b33324e970df1dd1a4ea49e9f579bb97a1b62c3675036"
+  "sourceFingerprint": "sha256:56d6683083ab2f95ff79427330fd39846e3587eecf015e57d3d04fb30eb3979a"
 }

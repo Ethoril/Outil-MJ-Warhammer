@@ -17,7 +17,9 @@ export const miracles = [
     params: { range: self, targets: { kind: 'special' }, duration: felRounds },
     status: 'assisted',
     effect: null,
-    effects: [{ type: 'grant-trait', traits: ['Peur (2)'], appliesTo: 'caster' }],
+    effects: [{ type: 'grant-trait', traits: ['Peur (2)'], appliesTo: 'caster' },
+      // L11 : zone de Sociabilité mètres (Caractéristique entière) ; présents désignés par le MJ, Élan perdu au début de chaque Round sauf le prêtre.
+      { type: 'divine-zone', appliesTo: 'caster', label: 'Froid de la gelée blanche', radius: { characteristic: 'Soc' }, excludes: [], momentumLoss: true }],
     targetRules: ['all-in-area-except-priest'],
     needsInput: [
       { id: 'area-radius', text: 'Rayon de la zone : le livre indique « Sociabilité mètres » (Sociabilité entière, non le Bonus); valeur à confirmer par le MJ.' },
@@ -25,7 +27,7 @@ export const miracles = [
     ],
     clauses: [
       { id: 'fear', mode: 'engine', text: 'Le prêtre cause la Peur (2) (règle p.183) pendant la durée.' },
-      { id: 'momentum-loss', mode: 'manual', text: 'Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan.' },
+      { id: 'momentum-loss', mode: 'engine', text: 'Au début de chaque Round, toutes les créatures de la zone sauf le prêtre perdent leur Élan (présents désignés par le MJ).' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
     sourceDelta: 'Cible imprimée « AoE (Sociabilité mètres) » sans « Bonus », contrairement aux autres zones; la grammaire params n\'a pas de zone en caractéristique entière, encodée en special. Peur (2) imprimée en v3 (l’ancien arbitrage Peur (1) du 21/10 ne s’applique plus) ; la perte d’Élan remplace la perte d’Avantage.'
@@ -125,7 +127,7 @@ export const miracles = [
     params: { range: self, targets: self, duration: felRounds },
     status: 'assisted',
     effect: null,
-    effects: [{ type: 'weapon-bonus', magical: true, value: 0, perSuccessLevels: { every: 1, add: 1, field: 'value' }, hitConditions: ['Exténué'], designatedWeapon: true, weaponClass: 'hache' }],
+    effects: [{ type: 'weapon-bonus', magical: true, value: 0, perSuccessLevels: { every: 1, add: 1, field: 'value' }, hitConditions: ['Exténué'], hitRemoveConditions: ['Hémorragique'], designatedWeapon: true, weaponClass: 'hache' }],
     targetRules: ['wielding-axe'],
     needsInput: [
       { id: 'axe', text: 'Le prêtre manie-t-il une hache ?' },
@@ -136,7 +138,7 @@ export const miracles = [
       { id: 'magical', mode: 'engine', text: 'La hache brandie est considérée comme Magique.' },
       { id: 'damage-plus-sl', mode: 'engine', text: '+DR Dégâts avec la hache.' },
       { id: 'fatigued', mode: 'engine', text: 'Toute cible touchée gagne un État Fatigué.' },
-      { id: 'remove-bleeding', mode: 'manual', text: 'Toute cible touchée perd ses États Hémorragique.' },
+      { id: 'remove-bleeding', mode: 'engine', text: 'Toute cible touchée perd ses États Hémorragique.' },
       { id: 'no-bleeding', shortLabel: "Aucun Hémorragique causé", mode: 'manual', text: 'La hache ne peut causer aucun État Hémorragique.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],

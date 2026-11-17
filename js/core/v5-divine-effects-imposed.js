@@ -6,7 +6,7 @@
  * - `cast` : saisie au lancement (`imposedTests.<cible>` = d100, ou `imposedTestResult.<cible>` 'success'|'failure' + `imposedTestSl.<cible>`).
  * - `round` / `turn` / `move` : demande du Tour V5 (collecteur `collectDivineRecurringEffects`, v5-divine-recurring.js).
  * - `manual` : commande `resolveDivineImposedTest` du Store (panneau divin) ; `once` : une fois par sujet et par prière.
- * Issues (vocabulaire fermé) : `condition` (État acquis), `lost-turn` (marqueur « tour perdu » de trait-effects.js, avec libellé),
+ * Issues (vocabulaire fermé) : `condition` (État acquis ; `lockRounds` : verrouillé au moins N Rounds), `lost-turn` (marqueur « tour perdu » de trait-effects.js, avec libellé),
  * `terror` (Test de Terreur des services de Psychologie : Brisé puis Peur), `frenzy` (entrée en Frénésie), `marker` (libellé porté
  * par la couche, sans calcul). `waivedBy` : fait de cible qui dispense du Test (ex. cible consentante) ; l'échec s'applique alors.
  */
@@ -35,7 +35,9 @@ export const IMPOSED_SKILLS = Object.freeze({
   willpower: { characteristic: 'FM', label: 'Volonté' }
 });
 const OUTCOMES = {
-  condition: outcome => isText(outcome.key) && (outcome.level === undefined || positive(outcome.level)),
+  // `lockRounds` (Épée de justice, L11) : l'État ne se récupère pas avant N Rounds, N = Bonus de la Caractéristique du porteur de la couche.
+  condition: outcome => isText(outcome.key) && (outcome.level === undefined || positive(outcome.level))
+    && (outcome.lockRounds === undefined || (record(outcome.lockRounds) && isText(outcome.lockRounds.characteristicBonus))),
   'lost-turn': outcome => isText(outcome.cause) && isText(outcome.label),
   terror: outcome => positive(outcome.rating),
   frenzy: () => true,
@@ -113,6 +115,23 @@ function lostTurnSince(combat, participantId, round) {
   return { round: later ? round - 1 : round, turnIndex: null };
 }
 
+// Verrou d'un État acquis (`lockRounds`) : couche propre sur le sujet, échue en fin du Round (courant + N − 1) ; l'État reste ensuite,
+// récupérable selon les règles ordinaires (« au moins N Rounds »). Rend le libellé appliqué, ou null si N ou le Round est inconnu.
+function lockAddedStates(participant, beforeIds, outcome, index, ctx) {
+  const score = Number(ctx.author?.caracs?.[outcome.lockRounds.characteristicBonus]);
+  const rounds = Number.isFinite(score) ? Math.floor(score / 10) : null;
+  if (!positive(rounds) || !positive(ctx.round)) return null;
+  const added = (participant.states || []).filter(row => !beforeIds.has(row.id));
+  if (!added.length) return null;
+  const id = `${ctx.resolutionId}:${index}:lock`;
+  for (const row of added) Object.assign(row, { divineEffectId: id, divineExecutionId: ctx.executionId ?? null, divineLock: true });
+  participant.extensions ??= {}; participant.extensions.v5 ??= {};
+  participant.extensions.v5.divineEffects = [...(participant.extensions.v5.divineEffects || []), { id, executionId: ctx.executionId ?? null, prayerId: ctx.prayerId ?? null,
+    casterId: ctx.author?.id ?? null, targetId: participant.id, type: 'imposed-test', expiry: { phase: 'endOfRound', round: ctx.round + rounds - 1, moment: 'afterEffects' },
+    lockedStateIds: added.map(row => row.id), reminder: { label: `${outcome.key} au moins ${rounds} Round(s), non récupérable avant` } }];
+  return `${outcome.key} au moins ${rounds} Round(s)`;
+}
+
 /**
  * Applique les issues à un participant (copie rendue) ; `ctx` : { prayerId, executionId, resolutionId, round, combat, author, test }.
  * Rend { participant, applied: [libellés], reminders }.
@@ -125,8 +144,13 @@ export function applyImposedOutcomes(participant, outcomes, ctx = {}) {
     if (outcome.type === 'condition') {
       const acquired = acquireV5Conditions(next, [{ name: outcome.key, level: outcome.level ?? 1, source: { kind: 'divine', prayerId: ctx.prayerId ?? null, executionId: ctx.executionId ?? null } }], { round: ctx.round });
       if (!acquired.ready) { reminders.push(`${nameOf(participant)} : État ${outcome.key} à poser à la main (données manquantes).`); continue; }
+      const beforeIds = new Set((next.states || []).map(row => row.id));
       next = acquired.participant;
       applied.push(`État ${outcome.key}`);
+      if (outcome.lockRounds) {
+        const lock = lockAddedStates(next, beforeIds, outcome, index, ctx);
+        if (lock) applied.push(lock); else reminders.push(`${nameOf(participant)} : durée minimale de l’État ${outcome.key} à suivre à la main (Bonus ou Round inconnu).`);
+      }
       continue;
     }
     if (outcome.type === 'lost-turn') {

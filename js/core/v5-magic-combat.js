@@ -71,6 +71,19 @@ export function magicWeaponHitConditions(actor,action={},ranged,wounds=0){
  return weaponBonusesFor(actor,action,ranged).filter(b=>!b.onWoundsOnly || wounds>0).flatMap(b=>(b.hitConditions||[]).map(name=>({name,spellName:b.spellName})));
 }
 
+/** Arme qui ignore les Points d'Armure de la cible (Épée de justice) : nom de la prière, sinon null. */
+export function magicWeaponIgnoresArmour(actor,action={},ranged){
+ if(!['attack','attaque'].includes(action.type))return null;
+ const bonus=weaponBonusesFor(actor,action,ranged).find(b=>b.ignoreArmour===true);
+ return bonus ? bonus.spellName || 'arme bénie' : null;
+}
+
+/** États retirés à la créature touchée (Morsure de l'hiver : Hémorragique), jamais à son porteur. */
+export function magicWeaponHitRemovals(actor,action={},ranged){
+ if(!['attack','attaque'].includes(action.type))return [];
+ return weaponBonusesFor(actor,action,ranged).flatMap(b=>(b.hitRemoveConditions||[]).map(name=>({name,spellName:b.spellName})));
+}
+
 /** Nature d'une arme enchantée (Épée enflammée de Rhuin) : l'attaque est magique, et de feu si l'arme enflamme. */
 export function magicWeaponNature(actor,action={},ranged){
  if(!['attack','attaque'].includes(action.type))return {};

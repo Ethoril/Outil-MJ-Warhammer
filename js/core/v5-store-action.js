@@ -1,5 +1,5 @@
 import {wrathPrayerBan,wrathForcedPrayerGate,validateWrathRounds} from './v5-divine-prayer-caps.js';
-import {withMomentum} from './v5-combat-rules.js';
+import {withMomentum,inferV5Kind} from './v5-combat-rules.js';
 import { psychologyTraits } from './creature-psychology.js';
 import { acquiredV5Talents,currentV5TalentHashes } from './v5-talents.js';
 import { sourceActive } from './v5-talent-actions.js';
@@ -24,6 +24,9 @@ const quotaClock = clock => {
 };
 // Même lecture que attackType() de resolution.js : « attack » ou « attaque » (fiches importées).
 const isAttackType = type => ['attack', 'attaque'].includes(String(type || '').trim().toLocaleLowerCase());
+// Portée d'une relance gratuite divine : attaque, et attaque de mêlée (Vindicte vengeresse, L11).
+const rerollScope = (input, round) => ({ round, attack: isAttackType(input?.action?.type),
+  melee: isAttackType(input?.action?.type) && (input?.v5?.kind || inferV5Kind(input?.action || {}, input?.attackContext)) === 'melee' });
 export const v5StoreActionClock = v5CombatActionClock;
 export function v5StoreActionState(envelope) {
   return { revision: envelope.localRevision || 0,
@@ -205,7 +208,10 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
       // Bénédiction de Chance (D4) : échec propre ou opposition perdue ; le Test d'origine est évalué avant la relance.
       // Jet d'origine absent ou invalide : impossible de savoir s'il est raté, la relance reste payante (pas d'erreur levée).
       const initialRoll = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
-      if (freeRerollLayers(actor, { round: state.round, attack: isAttackType(supplied.action?.type) }).length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
+      const rerollLayers = freeRerollLayers(actor, rerollScope(supplied, state.round));
+      // Vindicte vengeresse : chaque Test de Mêlée se relance gratuitement, raté ou non (le nouveau résultat tient).
+      if (rerollLayers.some(layer => layer.freeReroll.everyTest)) { freeReroll = 'every-test'; exemptions.push({ costId: 'system:fortune-reroll:1', sourceId: FREE_REROLL_SOURCE }); }
+      else if (rerollLayers.length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
         const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, fortuneRerollRolls:_contextRolls, ...plainContext } = context;
         const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, fortuneRerollRolls:_suppliedRolls, ...plainSupplied } = supplied;
         const original = previewResolution({ ...plainSupplied, resolutionId, actorId, targetId,
@@ -266,7 +272,7 @@ export function annotateV5StoreActionPreview(preview, input) {
     }
     preview = { ...preview, fortuneReroll: { active: true, used: Boolean(input.fortuneRerollRoll !== null), initialRoll: input.initialRollBeforeFortune, rerollRoll: input.fortuneRerollRoll,
       rolls:input.fortuneRerollRolls||[],
-      ...(input.freeReroll ? { free: true, reminder: 'Bénédiction de Chance : relance gratuite' } : {}) } };
+      ...(input.freeReroll ? { free: true, reminder: input.freeReroll === 'every-test' ? 'Prière : relance gratuite du Test de Mêlée' : 'Bénédiction de Chance : relance gratuite' } : {}) } };
   }
   if(input.secondaryTalentRequests?.length){
     const plans=input.secondaryTalentRequests.map(request=>previewV5ActionCosts({...request,state:input.v5State}));
@@ -309,7 +315,7 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
   }
   // Relance gratuite : exemption vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const free = preview.actionCostPlan?.request?.exemptions?.some(row => row.sourceId === FREE_REROLL_SOURCE);
-  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: current.round, attack: isAttackType(preview.input?.action?.type) }).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
+  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId), rerollScope(preview.input, current.round)).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
   // Fortune généreuse : inversion vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const reversed = preview.input?.v5?.reverseDiceApplied === true;
   const reverseActorId = preview.input?.actorId || preview.input?.actor?.id;
@@ -321,7 +327,7 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
     if (result.status !== 'applied' || (!free && !reversed && !extreme)) return result;
     // Relance gratuite et inversion des dés peuvent servir dans la même résolution : chacune consomme sa propre couche.
     const participants = clone(result.state.participants);
-    if (free) consumeFreeReroll(participants.find(p => p.id === preview.actionCostPlan.request.actorId), { round: state.round, attack: isAttackType(preview.input?.action?.type) });
+    if (free) consumeFreeReroll(participants.find(p => p.id === preview.actionCostPlan.request.actorId), rerollScope(preview.input, state.round));
     if (reversed) consumeReverseDice(participants.find(p => p.id === reverseActorId));
     if (extreme) consumeSlExtreme(participants.find(p => p.id === reverseActorId));
     return { ...result, state: { ...result.state, participants } };

@@ -65,8 +65,8 @@ export const miracles = [
     ],
     clauses: [
       { id: 'orderly-disengage', mode: 'engine', text: 'Les alliés désignés portent « En bon ordre » : Désengagement sans Élan ni attaque gratuite adverse (à appliquer par le MJ, le moteur ne gère pas le Désengagement).' },
-      { id: 'flee-exemption', mode: 'manual', text: 'Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163).' },
-      { id: 'broken-from-fleeing', mode: 'manual', text: 'Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163) ; seul le Désengagement n’est pas concerné.' },
+      { id: 'flee-exemption', mode: 'engine', text: 'Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163) : appliqué par la Fuite du moteur.' },
+      { id: 'broken-from-fleeing', mode: 'engine', text: 'Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163), posé par la Fuite du moteur ; seul le Désengagement n’est pas concerné.' },
       { id: 'area', mode: 'engine', text: 'Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en mètres (convention V5 des zones).' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Volonté en Rounds.' }
     ],
@@ -166,19 +166,20 @@ export const miracles = [
     name: 'Vindicte Vengeresse', canonicalName: 'Vengeful Wrath', printedPage: 79,
     summary: 'L’indignation de Myrmidia vous emplit : pendant le miracle, vous devez charger et attaquer l’ennemi impénitent le plus proche, et vous pouvez relancer chaque Test de Mêlée une fois, le nouveau résultat tenant.',
     params: { range: self, targets: self, duration: rounds(6) },
-    status: 'manual',
+    status: 'assisted',
+    // L11 : relance gratuite (sans Point de Chance) de chaque attaque de mêlée du prêtre, ratée ou non ; jamais un tir ni un autre Test.
+    effects: [{ type: 'free-reroll', meleeOnly: true, everyTest: true, appliesTo: 'caster' }],
     targetRules: [],
     needsInput: [
-      { id: 'unrepentant-enemy', text: 'Quel ennemi le MJ désigne-t-il comme impénitent dans cette scène ?' },
-      { id: 'rerolls', text: 'Quels Tests de Mêlée du prêtre sont relancés, et quel est le nouveau résultat ?' }
+      { id: 'unrepentant-enemy', text: 'Quel ennemi le MJ désigne-t-il comme impénitent dans cette scène ?' }
     ],
     clauses: [
       { id: 'charge-and-attack', mode: 'manual', text: 'Le prêtre doit charger puis attaquer l’ennemi impénitent le plus proche (Charge V5 p.163). On ne charge que si l’on n’est pas déjà Engagé : s’il l’est, il doit d’abord se Désengager (perdre l’Élan pour se déplacer sans pénalité, ou Test d’Esquive/Acrobaties opposé), puis il peut charger, y compris une autre cible.' },
       { id: 'unrepentant', mode: 'manual', text: 'Le MJ désigne l’ennemi impénitent à chaque scène ; la contrainte s’arrête si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient.' },
-      { id: 'melee-reroll', mode: 'manual', text: 'Chaque Test de Mêlée du prêtre peut être relancé une fois ; le nouveau résultat tient (p.133).' },
+      { id: 'melee-reroll', mode: 'engine', text: 'Chaque Test de Mêlée du prêtre peut être relancé une fois, sans Point de Chance ; le nouveau résultat tient (p.133).' },
       { id: 'no-frenzy-bonus', mode: 'manual', text: 'Aucun bonus de Frénésie : ni immunité à la Psychologie, ni attaque gratuite, ni +1 Dégât.' },
-      { id: 'duration', mode: 'manual', text: 'Durée : 6 Rounds (+6 Rounds par tranche de +2 DR).' }
+      { id: 'duration', mode: 'engine', text: 'Durée : 6 Rounds (+6 Rounds par tranche de +2 DR).' }
     ],
-    sourceDelta: 'Aucun type d’effet pour la relance de Tests ni pour la contrainte de comportement : contrat manuel. Relance : une fois par Test de Mêlée, nouveau résultat tenant (décision MJ). « Ennemi impénitent » n’est défini nulle part : désigné par le MJ à chaque scène, contrainte levée si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient (décision MJ). Portée et cible « Vous » : seule la durée peut croître.'
+    sourceDelta: 'Relance : une fois par Test de Mêlée, nouveau résultat tenant (décision MJ) ; relance gratuite du moteur sur les attaques de mêlée seulement (décision MJ du 17/11/2026, L11). La contrainte de comportement reste un rappel. « Ennemi impénitent » n’est défini nulle part : désigné par le MJ à chaque scène, contrainte levée si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient (décision MJ). Portée et cible « Vous » : seule la durée peut croître.'
   }
 ];

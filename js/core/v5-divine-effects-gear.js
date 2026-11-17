@@ -128,8 +128,9 @@ const handlers = {
       if (effect.damage !== undefined && !Number.isFinite(effect.damage)) return 'weapon-bonus : damage doit être un nombre.';
       if (effect.replaceDamageBonus !== undefined && !Number.isFinite(effect.replaceDamageBonus)) return 'weapon-bonus : replaceDamageBonus doit être un nombre.';
       if (effect.damageFrom !== undefined && !isText(effect.damageFrom)) return 'weapon-bonus : damageFrom doit nommer une caractéristique.';
-      for (const key of ['qualities', 'hitConditions', 'removeQualities']) if (effect[key] !== undefined && (!Array.isArray(effect[key]) || !effect[key].every(isText))) return `weapon-bonus : ${key} doit être une liste de textes.`;
-      return ['magical', 'qualities', 'removeQualities', 'hitConditions', 'damage', 'damageFrom', 'replaceDamageBonus', 'damageFormula', 'value'].some(key => effect[key] !== undefined) ? null : 'weapon-bonus exige au moins un bonus.';
+      if (effect.ignoreArmour !== undefined && effect.ignoreArmour !== true) return 'weapon-bonus : ignoreArmour doit valoir true.';
+      for (const key of ['qualities', 'hitConditions', 'removeQualities', 'hitRemoveConditions']) if (effect[key] !== undefined && (!Array.isArray(effect[key]) || !effect[key].every(isText))) return `weapon-bonus : ${key} doit être une liste de textes.`;
+      return ['magical', 'qualities', 'removeQualities', 'hitConditions', 'hitRemoveConditions', 'ignoreArmour', 'damage', 'damageFrom', 'replaceDamageBonus', 'damageFormula', 'value'].some(key => effect[key] !== undefined) ? null : 'weapon-bonus exige au moins un bonus.';
     },
     // Contrôle souple (A10) : l'arme désignée est demandée, sa classe (marteau, hache…) n'est jamais vérifiée ni bloquante.
     needs: (effect, { input } = {}) => effect.designatedWeapon === true && !isText(weaponFacts(input)?.equipmentId)
@@ -143,6 +144,9 @@ const handlers = {
       ...(effect.qualities?.length ? { qualities: [...effect.qualities] } : {}),
       ...(effect.removeQualities?.length ? { removeQualities: [...effect.removeQualities] } : {}),
       ...(effect.hitConditions?.length ? { hitConditions: [...effect.hitConditions] } : {}),
+      // L11 : PA de la cible ignorés (Épée de justice) et États retirés à la cible touchée (Morsure de l'hiver), lus par resolution.js.
+      ...(effect.ignoreArmour === true ? { ignoreArmour: true } : {}),
+      ...(effect.hitRemoveConditions?.length ? { hitRemoveConditions: [...effect.hitRemoveConditions] } : {}),
       ...(effect.onWoundsOnly === true ? { onWoundsOnly: true } : {}),
       ...(effect.unarmedOnly === true ? { unarmedOnly: true } : {}),
       ...(effect.ranged === true ? { ranged: true } : {}),

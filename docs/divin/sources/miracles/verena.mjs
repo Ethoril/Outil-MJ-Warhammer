@@ -77,7 +77,10 @@ export const miracles = [
     params: { range: self, targets: self, duration: felRounds },
     status: 'assisted',
     effect: null,
-    effects: [{ type: 'weapon-bonus', magical: true, designatedWeapon: true, weaponClass: 'épée' }],
+    effects: [{ type: 'weapon-bonus', magical: true, ignoreArmour: true, designatedWeapon: true, weaponClass: 'épée' },
+      // L11 : bouton du panneau divin ; le MJ choisit l'adversaire criminel frappé et saisit son Test ; échec : Inconscient verrouillé BSoc Rounds.
+      { type: 'imposed-test', appliesTo: 'caster', label: 'Épée de justice', test: { skill: 'resistance', slModifier: 2 }, subjects: 'enemies', when: 'manual',
+        onFailure: [{ type: 'condition', key: 'Inconscient', level: 1, lockRounds: { characteristicBonus: 'Soc' } }] }],
     targetRules: ['wielding-sword'],
     needsInput: [
       { id: 'sword', text: 'Le prêtre manie-t-il une épée ?' },
@@ -86,14 +89,14 @@ export const miracles = [
       { id: 'crime-on-unconscious', text: 'Nombre de crimes commis sur un adversaire rendu inconscient (Points de Péché).' }
     ],
     clauses: [
-      { id: 'ignore-ap', mode: 'manual', text: 'L\'épée ignore les Points d\'Armure.' },
+      { id: 'ignore-ap', mode: 'engine', text: 'L\'épée ignore les Points d\'Armure.' },
       { id: 'magical', mode: 'engine', text: 'L\'épée est Magique.' },
       { id: 'endurance-test', mode: 'assisted', text: 'Adversaire criminel frappé : test d\'Endurance Accessible (+2 DR), échec : État Inconscient.' },
-      { id: 'unconscious-duration', mode: 'manual', text: 'L\'État Inconscient dure au moins Bonus de Sociabilité rounds (Bonus du prêtre présumé).' },
+      { id: 'unconscious-duration', mode: 'engine', text: 'L\'État Inconscient dure au moins Bonus de Sociabilité rounds (Bonus du prêtre présumé) : non récupérable avant.' },
       { id: 'sin', shortLabel: "Péché à attribuer à la main (crime sur inconscient)", mode: 'manual', text: '+1 Point de Péché pour le prêtre par crime commis sur un adversaire inconscient.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: '« Fellowship Bonus Rounds » pour l\'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L\'État Inconscient reste au rappel MJ : la cible du miracle est le prêtre seul (portée et cible « vous »), l\'adversaire frappé n\'est pas un participant adressable par le moteur.'
+    sourceDelta: '« Fellowship Bonus Rounds » pour l\'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L11 : l\'adversaire criminel frappé est désigné par le MJ au bouton « Test imposé » (Endurance +2 DR saisie) ; échec : Inconscient verrouillé Bonus de Sociabilité du prêtre en Rounds, puis récupérable selon les règles ordinaires.'
   },
   {
     name: 'La Vérité éclatera',

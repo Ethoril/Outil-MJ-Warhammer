@@ -223,6 +223,7 @@ export function damageBreakdown(damage) {
   subtract(damage.be, 'BE');
   subtract(damage.paEffectif, damage.isInoffensive ? `PA (×${FACTEUR_INOFFENSIVE})` : 'PA');
   if (damage.isInoffensive) notes.push(`Inoffensive : PA ×${FACTEUR_INOFFENSIVE}, pas de minimum`);
+  if (damage.armourIgnored) notes.push(`PA ignorés (${damage.armourIgnored.source}) : ${damage.armourIgnored.ap} PA non comptés`);
   if (damage.isPlancher) notes.push(`minimum ${PLANCHER_TOUCHE}`);
   return { terms, total: Number(damage.finalDamage) || 0, notes };
 }

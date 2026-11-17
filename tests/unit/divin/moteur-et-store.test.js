@@ -1196,7 +1196,7 @@ const nine = [
   ['Attaque Rapide', 'Quick Strike', 'attaque-rapide', 'assisted'],
   ['Dévotion de la Guerrière', 'Shieldmaiden’s Devotion', 'devotion-de-la-guerriere', 'assisted'],
   ['Compétence Martiale', 'Skill of Combat', 'competence-martiale', 'assisted'],
-  ['Vindicte Vengeresse', 'Vengeful Wrath', 'vindicte-vengeresse', 'manual']
+  ['Vindicte Vengeresse', 'Vengeful Wrath', 'vindicte-vengeresse', 'assisted']
 ];
 const byName = name => getAllDivineContracts().find(row => row.type === 'miracle' && row.catalogueName === name);
 const LEGION = 'divine:miracle:commander-la-legion', DISMAY = 'divine:miracle:effrayer-l-ennemi', SKILL = 'divine:miracle:competence-martiale';
@@ -1233,7 +1233,7 @@ test('inventaire : plus aucun miracle bloqué, neuf miracles Up in Arms connect�
   assert.equal(inventory.counts.miraclesSupplementSourceFound, 9);
   assert.equal(inventory.counts.miraclesV4AdaptationBlocked, 0);
   assert.equal(inventory.sourceCounts.miraclesUpInArmsConnected, 9);
-  assert.deepEqual(inventory.sourceCounts.upInArmsByStatus, { assisted: 7, manual: 2 });
+  assert.deepEqual(inventory.sourceCounts.upInArmsByStatus, { assisted: 8, manual: 1 });
   assert.equal(registry.contracts.some(row => row.status === 'blocked'), false);
   assert.equal(inventory.items.filter(row => row.type === 'miracle' && row.source.document === 'Up in arms.pdf').length, 9);
 });
@@ -1367,8 +1367,9 @@ test('statuts honnêtes : un contrat manuel ne porte aucun effet appliqué, les 
 
 test('un contrat manuel Up in Arms ne produit aucun effet via le Store (rappels seulement)', async () => {
   const store = await fixture();
-  const row = byName('Vindicte Vengeresse');
-  const preview = store.previewDivineExecution(row.id, input());
+  // L11 : Vindicte vengeresse est branchée (relance de Mêlée) ; Connaître son Ennemi reste le contrat manuel d'Up in Arms.
+  const row = byName('Connaître son Ennemi');
+  const preview = store.previewDivineExecution(row.id, input({ targetIds: ['ally'], facts: { targets: { ally: { withinRange: true } } }, expiry: undefined }));
   assert.equal(preview.ready, true, JSON.stringify(preview.needsInput) + preview.error);
   assert.deepEqual(preview.preview.effects, []);
   const before = clone(person(store, 'priest').caracs);

@@ -62,11 +62,12 @@ describe('L2 — statuts et clauses', () => {
     assert.equal(modeOf(FURY, 'missile'), 'engine');
   });
 
-  test('restent en rappel : Vindicte, ignore-ap, unconscious-duration, remove-bleeding (points d’accroche hors lot)', () => {
-    assert.equal(getDivineContract(VENGEFUL).status, 'manual');
-    assert.equal(modeOf(SWORD, 'ignore-ap'), 'manual');
-    assert.equal(modeOf(SWORD, 'unconscious-duration'), 'manual');
-    assert.equal(modeOf(BITE, 'remove-bleeding'), 'manual');
+  // L11 (décision du MJ, spec §8 « Après L2 ») : ces quatre clauses sont branchées dans le dernier lot isolé.
+  test('branchées en L11 : Vindicte, ignore-ap, unconscious-duration, remove-bleeding', () => {
+    assert.equal(getDivineContract(VENGEFUL).status, 'assisted');
+    assert.equal(modeOf(SWORD, 'ignore-ap'), 'engine');
+    assert.equal(modeOf(SWORD, 'unconscious-duration'), 'engine');
+    assert.equal(modeOf(BITE, 'remove-bleeding'), 'engine');
   });
 });
 

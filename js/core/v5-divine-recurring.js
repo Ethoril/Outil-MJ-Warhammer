@@ -3,10 +3,11 @@
  * `turn` et `move` (début du Tour du porteur). Appelé par `previewV5Turn` comme les effets de Traits : les demandes vont dans
  * `requests`, les issues sont appliquées dans le même état (un commit, un ↶). Aucun dé tiré : la réponse est lue dans
  * `inputs[participantId][field]` (d100, ou `{ success, sl }`). `optional` et `move` : demande `choice` « tente-t-il ? » d'abord.
- * Un participant sans couche concernée reste tel quel (même objet).
+ * Un participant sans couche concernée reste tel quel (même objet). Début de Round : perte d'Élan des zones `momentumLoss` (L11).
  */
 import { imposedField, imposedRequest, imposedAnswer, outcomesFor, applyImposedOutcomes } from './v5-divine-effects-imposed.js';
 import { sourceActive } from './v5-talent-source.js';
+import { divineZoneMomentumLoss } from './v5-divine-effects-zones.js';
 
 const nameOf = participant => participant?.name || participant?.id || '—';
 const inPlay = participant => Boolean(participant) && (!participant.zone || participant.zone === 'active') && participant.extensions?.v5?.dead !== true;
@@ -50,5 +51,9 @@ export function collectDivineRecurringEffects({ participants = [], phase, round 
     return current;
   });
   if (changed) out.participants = next;
+  if (phase === 'startOfRound') {
+    const loss = divineZoneMomentumLoss(out.participants, { round });
+    out.participants = loss.participants; out.logs.push(...loss.logs);
+  }
   return out;
 }

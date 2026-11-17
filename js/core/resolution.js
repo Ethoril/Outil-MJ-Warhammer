@@ -1,4 +1,4 @@
-import {weaponAttackNature,magicWeaponHitConditions,magicWeaponFumbleConditions,magicWeaponBonus,magicWeaponQualities,previewMagicProtection,reactionReminders} from './v5-magic-combat.js';
+import {weaponAttackNature,magicWeaponHitConditions,magicWeaponHitRemovals,magicWeaponIgnoresArmour,magicWeaponFumbleConditions,magicWeaponBonus,magicWeaponQualities,previewMagicProtection,reactionReminders} from './v5-magic-combat.js';
 import{previewSmall}from'./v5-talent-small.js';
 import {applyAlliedShield,previewAlliedShields} from './v5-talent-shield.js';
 import {finishImmediateAttack} from './v5-talent-attacks.js';
@@ -17,7 +17,7 @@ import { actionWeaponDamage, computeDamage, evaluateWeaponDamage, strengthBonusO
 import { normalizeQualities, canonicalQualityId, isQuality } from './quality-normalization.js';
 import { bestiaryProfileStateImmunity, planBestiaryProfileAbilities } from './creature-abilities.js';
 import { applyHeadCriticals } from './creature-heads.js';
-import { acquireV5Conditions,healV5Wounds } from './v5-effects.js';
+import { acquireV5Conditions,healV5Wounds,recoverV5Condition } from './v5-effects.js';
 import { slExtremeLayers } from './v5-divine-effects-tests.js';
 import { hasArcaneMagicLore } from './v5-magic-attributes.js';
 import {divineSocialRestriction} from './v5-divine-access.js';
@@ -401,6 +401,7 @@ function buildResolutionPreview(input) {
       result.grapple.suppressOrdinaryDamage=true;
       result.damage=null;
       result.targetConditionApplication=[];
+      delete result.targetConditionRemovals;
     }
   }else if(activeGrapple&&grappleContext.grappleAction){
     const actorIsInitiator=activeGrapple.initiatorId===normalized.actor?.id;
@@ -423,6 +424,7 @@ function buildResolutionPreview(input) {
         result.damage=null;
         result.critical=null;
         result.targetConditionApplication=[];
+        delete result.targetConditionRemovals;
       }
     }
   }else if(grappleContext.grappleAction){
@@ -962,7 +964,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       }
     }
     protectionReceipts.push(protection);
-    const targetArmour = protection.ap;
+    // Épée de justice (L11) : l'arme désignée ignore les Points d'Armure ; sans couche, rien ne change.
+    const armourIgnoredBy = protection.ap !== null ? magicWeaponIgnoresArmour(actor, action, nature.ranged) : null;
+    const targetArmour = armourIgnoredBy ? 0 : protection.ap;
 
     // Souffle de Fumée (V5 p.357) : aucun dégât, ni ceux de l'action ni le NR.
     if (targetArmour !== null && !mechanicalWarnings.length && naturalPlanOf(actor, normalized.v5)?.noDamage !== true && !NO_DAMAGE_PROFILE_ABILITIES.has(action.extensions?.v5?.specialProfileAbility))     damage = computeDamage({
@@ -977,6 +981,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       damageMultiplier:normalized.combatPrelude?.small?.multiplier||1,approvedQualities:normalized.combatPrelude?.small?.approvedQualities||[]
     });
     if(damage&&blastPlan?.ready){damage={...damage,activeQualities:action.qualities,explosionUnitsDie:action.qualities.some(row=>isQuality(row,'devastatrice'))?roll%10:0};}
+    if(damage&&armourIgnoredBy)damage={...damage,armourIgnored:{ap:protection.ap,source:armourIgnoredBy}};
   }
 
   const special=previewTalentReplacement(normalized,{hit,test:actorTest,opposed,damage,location,qualityContext:v5ActionQualityContext(normalized)});
@@ -1194,6 +1199,9 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   }
   unresolved.push(...criticalReady);
   const criticalReadyPushed = criticalReady.length;
+  // Morsure de l'hiver (L11) : la cible touchée perd les États nommés par l'arme bénie (Hémorragique) qu'elle porte avant ce coup.
+  const magicHitRemovals = hit && attackType(action.type) && target && !replacement ? magicWeaponHitRemovals(actor, action, nature.ranged).map(row => ({ key: foldKey(row.name), name: row.name, spellName: row.spellName }))
+    .filter(row => (target.states || []).some(state => foldKey(state?.key || state?.name || '') === row.key)) : [];
   const magicHitStates = hit && attackType(action.type) && target && !replacement ? magicWeaponHitConditions(actor, action, nature.ranged, damage?.finalDamage || 0).map(row => ({ id: `${normalized.resolutionId}:magic-weapon:${row.name}`, key: row.name.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(), name: row.name, level: 1, source: { kind: 'magic-weapon', spellName: row.spellName } })) : [];
   // Attaque naturelle : états de la touche (Langue, Constricteur, Toile, Souffle) selon le plan du Trait ; rappels du plan joints au détail.
   const naturalPlan = naturalPlanOf(actor, normalized.v5), naturalReminders = [], { actorSize: naturalActorSize, targetSize: naturalTargetSize } = naturalSizes(normalized.v5);
@@ -1820,6 +1828,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     blastPlan,
     spreadPlan,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,familiarConditionRefusals,
+    ...(magicHitRemovals.length ? { targetConditionRemovals: magicHitRemovals } : {}),
     reminders: [...(normalized.traitShieldReminder ? [normalized.traitShieldReminder] : []),...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...psychologyTestReminder,...riposteReminders,...profileAbilityReminders,...(supplementalEquipment?.reminders||[]),...(supplementalEquipment?.unresolved||[]),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
@@ -1888,6 +1897,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     result.critical = null;
     result.defenderCritical = null;
     result.targetConditionApplication = null;
+    delete result.targetConditionRemovals;
     result.weaponConditions = null;
     result.entanglement = null;
     result.projectileLodging = null;
@@ -1913,6 +1923,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       result.critical=null;
       result.defenderCritical=null;
       result.targetConditionApplication=null;
+      delete result.targetConditionRemovals;
       result.weaponConditions=null;
       result.entanglement=null;
       result.projectileLodging=null;
@@ -2028,7 +2039,7 @@ export function applyResolution(preview, currentState) {
   // Seuls les Sonné issus des critiques à la tête sont retirés (un Sonné d'un autre critique reste).
   let toStrip = headHit?.stripStunned ? headHit.stunnedCount : 0;
   const targetConditions = rawConditions.filter(condition => !(condition.key === 'sonne' && toStrip > 0 && toStrip--));
-  if ((preview.attack || preview.tripFall || preview.trip?.conditionApplied || preview.entanglement || preview.fateSurvival) && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length || headHit || preview.lethalDeath || preview.tripFall || preview.entanglement || preview.fateSurvival)) {
+  if ((preview.attack || preview.tripFall || preview.trip?.conditionApplied || preview.entanglement || preview.fateSurvival) && preview.targetId && (preview.damage || criticalEffects.extraWounds || targetConditions.length || preview.targetConditionRemovals?.length || headHit || preview.lethalDeath || preview.tripFall || preview.entanglement || preview.fateSurvival)) {
     if (!target) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
     if (JSON.stringify(target) !== JSON.stringify(preview.input.target)) {
       return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
@@ -2067,6 +2078,8 @@ export function applyResolution(preview, currentState) {
       updated.extensions??={};
       updated.extensions.v5={...(updated.extensions.v5||{}),felidWoundDisguises:[...(updated.extensions.v5?.felidWoundDisguises||[]),{id:`${preview.resolutionId}:felid-disguise`,resolutionId:preview.resolutionId,appearance:disguise.disguiseAs,sourceRuleId:disguise.sourceRuleId,wounds:Math.max(0,Number(preview.damage?.finalDamage)||0)}].slice(-100)};
     }
+    // Morsure de l'hiver (L11) : États retirés à la cible touchée avant ceux que le coup lui inflige.
+    for (const row of preview.targetConditionRemovals || []) Object.assign(updated, recoverV5Condition(updated, row.key, { method: 'divine-removal', amount: Number.MAX_SAFE_INTEGER }).participant);
     if (targetConditions.length) {
       const receipt = acquireV5Conditions(updated, targetConditions, { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, targetId: updated.id, round: preview.input.round, source: {} });
       if (!receipt.ready) return { status: 'manual', reason: receipt.needsInput[0].label, state: clone(currentState), resolution: clone(preview) };

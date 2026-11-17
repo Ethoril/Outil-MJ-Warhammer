@@ -372,10 +372,11 @@ test('garde DIV-05 directe levée par Q14 du MJ : traits et bonus d’arme ident
   assert.doesNotThrow(() => finalizeDivineState(weapon({ magical: true }, { magical: true }), weapon({ magical: true }, { magical: true })));
 });
 
-test('Épée de justice (P4b T3) : arme magique assistée, Inconscient et PA laissés aux rappels', () => {
+// L11 (décision du MJ, spec §8 « Après L2 ») : PA ignorés et Inconscient au moins BSoc Rounds branchés (Test d'Endurance au bouton).
+test('Épée de justice (P4b T3, L11) : arme magique assistée, PA ignorés, Inconscient par Test imposé', () => {
   const contract = getDivineContract(SWORD);
   assert.equal(contract.status, 'assisted');
-  assert.deepEqual(contract.effects.map(effect => effect.type), ['weapon-bonus']);
+  assert.deepEqual(contract.effects.map(effect => effect.type), ['weapon-bonus', 'imposed-test']);
   assert.ok(!contract.effects.some(effect => effect.type === 'condition'));
 });
 
@@ -542,7 +543,7 @@ test('statuts P4b T4 : cinq miracles assistés (clause moteur), deux promus en i
   assert.equal(getDivineContract(CHILL).effects[0].appliesTo, 'caster');
   assert.deepEqual(getDivineContract(VANQUISH).effects[0].talents.map(row => row.specialization), ['Orques', 'Gobelins', 'Morts-vivants', 'Associés au Chaos']);
   assert.ok(getDivineContract(VANQUISH).clauses.some(row => row.id === 'hatred-kill' && row.mode === 'engine'), 'bonus de +2 DR calculé par la case (L6)');
-  assert.ok(getDivineContract(CHILL).clauses.some(row => row.id === 'momentum-loss' && row.mode === 'manual'), 'perte d’Élan reste un rappel');
+  assert.ok(getDivineContract(CHILL).clauses.some(row => row.id === 'momentum-loss' && row.mode === 'engine'), 'perte d’Élan tenue par le moteur (L11)');
 });
 
 test('Appel à la Fureur et Inspirant : Frénésie et Coude-à-coude posés sur la cible puis retirés', async () => {
