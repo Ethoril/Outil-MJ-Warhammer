@@ -46,7 +46,8 @@ export const miracles = [
   name: 'Vents favorables', canonicalName: 'Fair Winds', printedPage: 222,
   summary: 'Le navire cible file à sa vitesse maximale quels que soient vent, marée et courant ; tous les Tests de Navigation (Sail) pour le piloter gagnent +1 DR.',
   params: { range: { kind: 'characteristic-bonus', characteristic: 'I', unit: 'miles' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'fixed', value: 1, unit: 'hours' } },
-  status: 'manual', effect: null,
+  status: 'assisted',
+  effects: [{ type: 'test-modifier', modifiers: { Voile: 1 }, appliesTo: 'caster' }],
   targetRules: ['navire à voile', 'en ligne de vue du prêtre'],
   needsInput: [
    { id: 'vessel', text: 'Quel navire est la cible, et est-il en ligne de vue et à portée (Bonus d’Initiative miles) ?' },
@@ -54,7 +55,7 @@ export const miracles = [
   ],
   clauses: [
    { id: 'top-speed', mode: 'manual', text: 'Le navire se déplace à vitesse maximale sans tenir compte de vent, marée ni courant.' },
-   { id: 'sail-sl', mode: 'manual', text: 'Les Tests de Navigation (Sail) pour contrôler le navire gagnent +1 DR pendant la durée.' },
+   { id: 'sail-sl', mode: 'engine', text: 'Les Tests de Voile (Sail) du prêtre pour contrôler le navire gagnent +1 DR pendant la durée (LdB p.222).' },
    { id: 'sl-extension', mode: 'assisted', text: 'Par tranche de +2 DR : portée, cibles ou durée augmentées de leur valeur initiale.' }
   ],
   sourceDelta: 'Portée en Bonus d’Initiative miles (unité miles hors grammaire params, voir Encalminé).'

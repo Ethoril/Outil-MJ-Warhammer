@@ -20,9 +20,9 @@ const clausesManuelles = assistes.flatMap((c) => c.clauses
 
 // Verrou d'inventaire des miracles narratifs (CA2) : tout écart se dit en français.
 describe('Inventaire des miracles narratifs : prières en rappel', () => {
-  test('69 contrats manual : 60 miracles et 9 bénédictions', () => {
-    assert.equal(manuels.length, 69, `Nombre de contrats « manual » : ${manuels.length} au lieu de 69`);
-    assert.equal(manuels.filter((c) => c.type === 'miracle').length, 60, 'Il devrait y avoir 60 miracles en rappel');
+  test('65 contrats manual : 56 miracles et 9 bénédictions', () => {
+    assert.equal(manuels.length, 65, `Nombre de contrats « manual » : ${manuels.length} au lieu de 65`);
+    assert.equal(manuels.filter((c) => c.type === 'miracle').length, 56, 'Il devrait y avoir 56 miracles en rappel');
     assert.equal(manuels.filter((c) => c.type === 'blessing').length, 9, 'Il devrait y avoir 9 bénédictions en rappel');
   });
 
@@ -39,22 +39,23 @@ describe('Inventaire des miracles narratifs : prières en rappel', () => {
     }
   });
 
-  test('comptes par famille : F1 11, F2 6, F3 7, F4 4, F5 6, F6 28, F7 7', () => {
-    assert.deepEqual(compter(Object.values(table.contracts)), { F1: 11, F2: 6, F3: 7, F4: 4, F5: 6, F6: 28, F7: 7 });
+  test('comptes par famille : F1 7, F2 6, F3 7, F4 4, F5 6, F6 28, F7 7', () => {
+    assert.deepEqual(compter(Object.values(table.contracts)), { F1: 7, F2: 6, F3: 7, F4: 4, F5: 6, F6: 28, F7: 7 });
   });
 });
 
 describe('Inventaire des miracles narratifs : clauses des miracles assistés', () => {
   // L10 : 21 clauses requalifiées en engine (88 → 67 ; 50 → 42 contrats portant encore une clause manual).
-  test('60 contrats assisted, tous des miracles, 42 avec une clause manual', () => {
-    assert.equal(assistes.length, 60, `Nombre de contrats « assisted » : ${assistes.length} au lieu de 60`);
+  // L1 : 4 contrats passent assisted (60 → 64 ; 42 → 46), 8 clauses de rappel nommées (67 → 75).
+  test('64 contrats assisted, tous des miracles, 46 avec une clause manual', () => {
+    assert.equal(assistes.length, 64, `Nombre de contrats « assisted » : ${assistes.length} au lieu de 64`);
     assert.ok(assistes.every((c) => c.type === 'miracle'), 'Un contrat « assisted » n\'est pas un miracle');
     const avec = assistes.filter((c) => c.clauses.some((cl) => cl.mode === 'manual'));
-    assert.equal(avec.length, 42, `Contrats assistés avec clause manuelle : ${avec.length} au lieu de 42`);
+    assert.equal(avec.length, 46, `Contrats assistés avec clause manuelle : ${avec.length} au lieu de 46`);
   });
 
-  test('67 clauses manual, chacune dans la table', () => {
-    assert.equal(clausesManuelles.length, 67, `Clauses « manual » des assistés : ${clausesManuelles.length} au lieu de 67`);
+  test('75 clauses manual, chacune dans la table', () => {
+    assert.equal(clausesManuelles.length, 75, `Clauses « manual » des assistés : ${clausesManuelles.length} au lieu de 75`);
     for (const cle of clausesManuelles) {
       assert.ok(table.clauses[cle], `Clause « manual » absente de la table des familles : ${cle}`);
     }
@@ -67,7 +68,7 @@ describe('Inventaire des miracles narratifs : clauses des miracles assistés', (
     }
   });
 
-  test('comptes par famille : F1 9, F2 5, F3 3, F4 1, F5 1, F6 47, F8 1', () => {
-    assert.deepEqual(compter(Object.values(table.clauses)), { F1: 9, F2: 5, F3: 3, F4: 1, F5: 1, F6: 47, F8: 1 });
+  test('comptes par famille : F1 12, F2 5, F3 3, F4 1, F5 1, F6 52, F8 1', () => {
+    assert.deepEqual(compter(Object.values(table.clauses)), { F1: 12, F2: 5, F3: 3, F4: 1, F5: 1, F6: 52, F8: 1 });
   });
 });

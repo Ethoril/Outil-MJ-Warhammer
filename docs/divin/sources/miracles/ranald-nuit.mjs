@@ -112,16 +112,18 @@ export const miracles = [
     name: 'Se sortir d’affaire par la parole', canonicalName: 'Talk Your Way Out', printedPage: 18,
     summary: 'Le prêtre peut se tirer des situations les plus compromettantes : il gagne un bonus unique de +8 DR à un Test de Charme tenté pour échapper à une arrestation en flagrant délit.',
     params: { range: self, targets: self, duration: soc('characteristic-bonus', 'minutes') },
-    status: 'manual', effect: null,
+    status: 'assisted',
+    effects: [{ type: 'test-modifier', modifiers: { Charme: 8 }, appliesTo: 'caster' }],
     targetRules: ['prêtre uniquement'],
     needsInput: [
       { id: 'caught', text: 'Le prêtre est-il pris la main dans le sac et tente-t-il de s’en sortir par la parole ?' },
       { id: 'used', text: 'Le bonus unique de +8 DR a-t-il déjà été utilisé pendant la durée ?' }
     ],
     clauses: [
-      { id: 'charm-bonus', mode: 'manual', text: '+8 DR, une seule fois, à un Test de Charme pour se sortir d’un flagrant délit.' }
+      { id: 'charm-bonus', mode: 'engine', text: '+8 DR aux Tests de Charme du prêtre pendant la durée (Deft Steps p.18).' },
+      { id: 'one-off-caught', mode: 'manual', text: 'Le bonus est unique et ne vaut que pour échapper à une arrestation en flagrant délit : le MJ retire la prière après ce Test.' }
     ],
-    sourceDelta: 'Bonus ponctuel (un seul Test) : le test-modifier du moteur s’applique à tous les Tests de la compétence pendant la durée, donc il ne convient pas ; resté manuel.'
+    sourceDelta: 'Bonus ponctuel (un seul Test) : le test-modifier du moteur vaut pour tous les Tests de Charme pendant la durée ; le caractère unique et la condition de flagrant délit restent un rappel du MJ.'
   },
   {
     name: 'La pression retombe', canonicalName: 'The Heat Is Off', printedPage: 18,

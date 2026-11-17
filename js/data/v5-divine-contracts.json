@@ -1732,7 +1732,7 @@
       "id": "divine:miracle:manann:fair-winds",
       "catalogueEntry": null,
       "v5Summary": "Portée en Bonus d’Initiative miles (unité miles hors grammaire params, voir Encalminé).",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -1851,7 +1851,7 @@
     {
       "id": "divine:miracle:ranald:crisis-of-confidence",
       "catalogueEntry": null,
-      "v5Summary": "Le livre vise un Test « Fellowship-based » (basé sur la Sociabilité) : la liste exacte des compétences concernées n’est pas donnée, le MJ tranche. Le malus est de -20 (points de pourcentage), non des DR.",
+      "v5Summary": "Le livre vise un Test « Fellowship-based » (basé sur la Sociabilité) : la liste exacte des compétences concernées n’est pas donnée, le MJ tranche. Le malus est de -20 (points de pourcentage) : lu -2 DR (Q14). Prière instantanée : le moteur ne pose aucune couche pour un effet instantané, le malus reste un rappel pour le MJ.",
       "status": "manual",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
@@ -1881,8 +1881,8 @@
     {
       "id": "divine:miracle:ranald:the-gamemaster",
       "catalogueEntry": null,
-      "v5Summary": "Le bonus ne vaut que pour une catégorie de jeux décidée par le MJ et pour des Tests de compétence non nommés : test-modifier par clé de compétence inadapté ; manuel.",
-      "status": "manual",
+      "v5Summary": "Le livre vise « tous les Tests pour concourir » au jeu, sans nommer de compétence : lu comme la compétence Pari ; la catégorie de jeux (habileté mentale) et les autres compétences restent au MJ.",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -1971,8 +1971,8 @@
     {
       "id": "divine:miracle:ranald:talk-your-way-out",
       "catalogueEntry": null,
-      "v5Summary": "Bonus ponctuel (un seul Test) : le test-modifier du moteur s’applique à tous les Tests de la compétence pendant la durée, donc il ne convient pas ; resté manuel.",
-      "status": "manual",
+      "v5Summary": "Bonus ponctuel (un seul Test) : le test-modifier du moteur vaut pour tous les Tests de Charme pendant la durée ; le caractère unique et la condition de flagrant délit restent un rappel du MJ.",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -14919,7 +14919,7 @@
       "catalogueName": "Vents favorables",
       "canonicalName": "Fair Winds",
       "deity": "Manann",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -14986,7 +14986,21 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Voile": 1
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "hours",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "navire à voile",
@@ -15006,8 +15020,8 @@
         },
         {
           "id": "sail-sl",
-          "mode": "manual",
-          "text": "Les Tests de Navigation (Sail) pour contrôler le navire gagnent +1 DR pendant la durée.",
+          "mode": "engine",
+          "text": "Les Tests de Voile (Sail) du prêtre pour contrôler le navire gagnent +1 DR pendant la durée (LdB p.222).",
           "sourceRef": "v5-fair-winds"
         },
         {
@@ -16539,7 +16553,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le livre vise un Test « Fellowship-based » (basé sur la Sociabilité) : la liste exacte des compétences concernées n’est pas donnée, le MJ tranche. Le malus est de -20 (points de pourcentage), non des DR.",
+      "sourceDelta": "Le livre vise un Test « Fellowship-based » (basé sur la Sociabilité) : la liste exacte des compétences concernées n’est pas donnée, le MJ tranche. Le malus est de -20 (points de pourcentage) : lu -2 DR (Q14). Prière instantanée : le moteur ne pose aucune couche pour un effet instantané, le malus reste un rappel pour le MJ.",
       "params": {
         "range": {
           "kind": "characteristic-bonus",
@@ -16599,7 +16613,7 @@
         {
           "id": "forced-penalty",
           "mode": "manual",
-          "text": "Si elle doit le faire quand même : -20 à ce Test.",
+          "text": "Si elle doit le faire quand même : -20 à ce Test (lu -2 DR, Q14, à appliquer à la main).",
           "sourceRef": "v5-crisis-of-confidence"
         }
       ],
@@ -16840,7 +16854,7 @@
       "canonicalName": "The Gamemaster",
       "deity": "Ranald",
       "aspect": "Gamester",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -16865,7 +16879,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le bonus ne vaut que pour une catégorie de jeux décidée par le MJ et pour des Tests de compétence non nommés : test-modifier par clé de compétence inadapté ; manuel.",
+      "sourceDelta": "Le livre vise « tous les Tests pour concourir » au jeu, sans nommer de compétence : lu comme la compétence Pari ; la catégorie de jeux (habileté mentale) et les autres compétences restent au MJ.",
       "params": {
         "range": {
           "kind": "self"
@@ -16907,7 +16921,21 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Pari": 4
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "hours",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "prêtre uniquement"
@@ -16926,8 +16954,14 @@
         },
         {
           "id": "skill-bonus",
+          "mode": "engine",
+          "text": "+4 DR aux Tests de Pari du prêtre pendant la durée (Deft Steps p.19).",
+          "sourceRef": "v5-the-gamemaster"
+        },
+        {
+          "id": "mental-game-only",
           "mode": "manual",
-          "text": "+4 DR aux Tests du prêtre pour jouer à un jeu d’habileté mentale.",
+          "text": "Le +4 DR ne vaut que pour un jeu d’habileté mentale (ni hasard pur ni force physique) ; pour tout autre Test de jeu, le MJ applique le bonus à la main.",
           "sourceRef": "v5-the-gamemaster"
         },
         {
@@ -17629,7 +17663,7 @@
       "canonicalName": "Talk Your Way Out",
       "deity": "Ranald",
       "aspect": "Night Prowler",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -17654,7 +17688,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Bonus ponctuel (un seul Test) : le test-modifier du moteur s’applique à tous les Tests de la compétence pendant la durée, donc il ne convient pas ; resté manuel.",
+      "sourceDelta": "Bonus ponctuel (un seul Test) : le test-modifier du moteur vaut pour tous les Tests de Charme pendant la durée ; le caractère unique et la condition de flagrant délit restent un rappel du MJ.",
       "params": {
         "range": {
           "kind": "self"
@@ -17696,7 +17730,21 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Charme": 8
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "minutes",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "prêtre uniquement"
@@ -17709,8 +17757,14 @@
       "clauses": [
         {
           "id": "charm-bonus",
+          "mode": "engine",
+          "text": "+8 DR aux Tests de Charme du prêtre pendant la durée (Deft Steps p.18).",
+          "sourceRef": "v5-talk-your-way-out"
+        },
+        {
+          "id": "one-off-caught",
           "mode": "manual",
-          "text": "+8 DR, une seule fois, à un Test de Charme pour se sortir d’un flagrant délit.",
+          "text": "Le bonus est unique et ne vaut que pour échapper à une arrestation en flagrant délit : le MJ retire la prière après ce Test.",
           "sourceRef": "v5-talk-your-way-out"
         }
       ],
@@ -25286,7 +25340,7 @@
       "catalogueName": "Seigneur de la Chasse",
       "canonicalName": "Lord of the Hunt",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -25350,7 +25404,21 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Pistage": 1
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "hours",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Lord of the Hunt",
@@ -25372,8 +25440,14 @@
         },
         {
           "id": "quarry-sl",
+          "mode": "engine",
+          "text": "+1 DR aux Tests de Pistage du prêtre pendant la durée (LdB p.227).",
+          "sourceRef": "v5-lord-of-the-hunt"
+        },
+        {
+          "id": "quarry-other-tests",
           "mode": "manual",
-          "text": "+1 DR à tous les tests concernant la proie.",
+          "text": "+1 DR à tout autre Test concernant la proie : le MJ l'applique à la main.",
           "sourceRef": "v5-lord-of-the-hunt"
         }
       ],
@@ -28167,5 +28241,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:3f553036402bfb1992b383eb213cc5ea00817601d4084300962161f88c0f7473"
+  "sourceFingerprint": "sha256:c38a496b75033577e541ef4f7717790536ed3bc23744f2222e480146f65db42f"
 }
