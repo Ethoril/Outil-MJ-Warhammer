@@ -204,7 +204,9 @@ export function decideImmediateCriticalDeath(participant, { criticalId, decision
     if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = criticalDeathCause(record, { decapitated });
     next.extensions.v5.dead = true;
   }
-  return { status: decision === 'confirm' ? 'dead' : 'declined', participant: decision === 'confirm' ? withDieHard(next, { round, bodyIntact }) : next,
+  // Une tête tranchée n'est jamais un corps intact : la case d'Increvable ne compte pas.
+  const intact = bodyIntact === true && !(record.table === 'HEAD' && decapitated === true);
+  return { status: decision === 'confirm' ? 'dead' : 'declined', participant: decision === 'confirm' ? withDieHard(next, { round, bodyIntact: intact }) : next,
     record: next.extensions.v5[CRITICAL_AFTERMATH_FIELD].find(row => row.id === criticalId) };
 }
 

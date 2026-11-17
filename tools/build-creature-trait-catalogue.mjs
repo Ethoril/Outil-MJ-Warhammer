@@ -34,6 +34,10 @@ const FR_RETOUCHES = {
 const HORS_INVENTAIRE = {
   Stubborn: { ref: null, book: 'L23', page: 22, summaryFr: 'Volonté +20 ; mener la bête exige un test opposé (Monte ou Conduite contre Volonté) ; en cas d\'échec elle s\'arrête net, puis n\'avance qu\'à la moitié de l\'allure de marche.' }
 };
+/** Texte d'effet retouché : l'inventaire garde l'ancienne règle, l'outil applique une décision du MJ (spec traits-calculs, D17). */
+const RESUME_RETOUCHE = {
+  Flammable: '−2 DR aux seuls Tests pour éviter Enflammé (pas au retrait par Athlétisme) ; Blessures d’Enflammé doublées.'
+};
 /** Nature du paramètre quand la lecture des profils ne suffit pas. */
 const PARAM_FORCE = { Size: 'size', Trained: 'trained', Hatred: 'hatred', Hardy: 'none', Stubborn: 'none', Stride: 'none',
   // Le paramètre lu sur les profils est une note de profil (déclencheur, exemple), pas une précision à saisir : aucun paramètre.
@@ -75,7 +79,7 @@ export function buildCatalogue({ inventory, books }) {
     let param = PARAM_FORCE[name];
     if (!param) param = row.count && row.withRating === row.count ? 'rating' : row.count && row.withParam === row.count ? 'text' : row.withRating ? 'rating' : row.withParam ? 'text' : 'none';
     entries.push({
-      name, nameFr, nameFrSource, ref: row.ref || null, summaryFr: (extra?.summaryFr ?? item.summaryFr).trim(),
+      name, nameFr, nameFrSource, ref: row.ref || null, summaryFr: (RESUME_RETOUCHE[name] ?? extra?.summaryFr ?? item.summaryFr).trim(),
       book: extra?.book ?? item.book, page: extra?.page ?? item.page, param
     });
   }

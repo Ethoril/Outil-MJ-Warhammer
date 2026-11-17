@@ -11,6 +11,8 @@ import { previewV5Test } from './v5-roll.js';
 import { resolveV5TestModifiers } from './v5-test-modifiers.js';
 import { d100 } from './dice.js';
 import { creatureLocationOf, incidentalArmour } from './resolution/criticals.js';
+import { participantCamp } from './participant-camp.js';
+import { withMomentum } from './v5-momentum-state.js';
 
 const DIE_HARD_TARGET = 6;
 const clone = value => structuredClone(value);
@@ -22,6 +24,8 @@ const inPlay = participant => Boolean(participant) && (!participant.zone || part
 const nameOf = participant => participant?.name || participant?.id || '—';
 const hasState = (participant, key) => stateTraits(participant).some(trait => trait.key === key);
 const hasPsy = (participant, key) => psychologyTraits(participant).some(trait => trait.key === key);
+/** Côté d'un participant pour le guidage d'un Stupide : PJ et alliés ensemble, puis le camp canonique. */
+const sideOf = participant => { const camp = participantCamp(participant); return camp === 'allie' ? 'pj' : camp; };
 
 /** Élan du moteur (booléen `extensions.v5.hasMomentum`) lu comme le nombre que `planUnstableEndOfRound` attend. */
 export const momentumCount = participant => (v5Of(participant).hasMomentum === true ? 1 : 0);
@@ -129,7 +133,18 @@ export function startDieHard(participant, { round = null, bodyIntact = false } =
 
 const dieHardActive = participant => {
   const record = v5Of(participant).dieHard;
-  return Boolean(record) && !record.ended && record.roundsLeft > 0;
+  return Boolean(record) && !record.ended && record.roundsLeft > 0 && isDead(participant);
+};
+
+/**
+ * Clôture d'un suivi d'Increvable ouvert : `cancelled` si la créature n'est plus morte (relevée, PV corrigés), `expired` une fois
+ * BE Rounds écoulés depuis la mort, même passés hors de la zone active (`lastRound + roundsLeft` reste le dernier Round permis).
+ */
+const dieHardClosure = (participant, round) => {
+  const record = v5Of(participant).dieHard;
+  if (!record || record.ended) return null;
+  if (!isDead(participant)) return 'cancelled';
+  return isNum(round) && isNum(record.lastRound) && round > record.lastRound + record.roundsLeft ? 'expired' : null;
 };
 
 /**
@@ -149,6 +164,9 @@ export function advanceDieHard(participant, { round = null, test } = {}) {
     delete next.extensions.v5.dead;
     delete next.extensions.v5.deathCause;
     delete next.extensions.v5.pendingStateDeath;
+    // Une mort critique confirmée ne doit plus bloquer un nouveau décompte : le décompte repart de zéro.
+    const countdown = next.extensions.v5.criticalDeath;
+    if (countdown) next.extensions.v5.criticalDeath = { ...countdown, status: 'cancelled', cancelledAtRound: round, cancelReason: 'die-hard-revived' };
   }
   return { participant: next, total, revived };
 }
@@ -160,14 +178,20 @@ export function applyTraitPatches(participants, patches = []) {
     const index = next.findIndex(participant => participant.id === patch.participantId);
     if (index < 0) continue;
     const current = next[index];
-    if (patch.type === 'wounds') next[index] = { ...current, hp: Math.max(0, (Number(current.hp) || 0) - Math.max(0, Number(patch.amount) || 0)) };
-    else if (patch.type === 'lost-turn') next[index] = markLostTurn(current, patch);
+    if (patch.type === 'wounds') {
+      // Comme toute perte de Blessures du moteur (`advanceV5Effects`) : l'Élan tombe.
+      const hp = Math.max(0, (Number(current.hp) || 0) - Math.max(0, Number(patch.amount) || 0));
+      next[index] = hp < (Number(current.hp) || 0) ? withMomentum({ ...current, hp }, false) : { ...current, hp };
+    } else if (patch.type === 'lost-turn') next[index] = markLostTurn(current, patch);
     else if (patch.type === 'lift-lost-turn') next[index] = liftLostTurn(current, patch);
     else if (patch.type === 'state-death') {
       // Une décision de mort déjà proposée (Hémorragique, critique de feu…) garde sa cause : la première cause l'emporte.
       if (!isDead(current) && !v5Of(current).pendingStateDeath) next[index] = touchV5(current, { pendingStateDeath: clone(patch.pending) });
     } else if (patch.type === 'die-hard-start') next[index] = startDieHard(current, patch);
     else if (patch.type === 'die-hard-advance') next[index] = advanceDieHard(current, patch).participant;
+    else if (patch.type === 'die-hard-close' && v5Of(current).dieHard && !v5Of(current).dieHard.ended) {
+      next[index] = touchV5(current, { dieHard: { ...v5Of(current).dieHard, ended: patch.ended } });
+    }
   }
   return next;
 }
@@ -288,6 +312,11 @@ export function collectRoundTraitEffects({ participants = [], phase, round = nul
   }
 
   for (const person of participants) {
+    const closure = phase === 'startOfRound' ? dieHardClosure(person, round) : null;
+    if (closure) {
+      out.patches.push({ type: 'die-hard-close', participantId: person.id, ended: closure });
+      out.plans.push({ key: 'diehard', participantId: person.id, status: closure, total: v5Of(person).dieHard.total });
+    }
     if (!inPlay(person)) continue;
 
     if (phase === 'endOfRound' && hasState(person, 'unstable') && !isDead(person) && Number(person.hp) > 0) {
@@ -307,7 +336,7 @@ export function collectRoundTraitEffects({ participants = [], phase, round = nul
     if (phase === 'startOfRound') {
       // Stupide : guidé par un allié non Stupide, rien ; sinon Test d'Intelligence +4 DR, échec : tour perdu.
       if (hasPsy(person, 'stupid') && !hasState(person, 'swarm') && !hasPsy(person, 'immunePsychology') && !isDead(person) && Number(person.hp) > 0 && !v5Of(person).lostTurn) {
-        const allies = participants.some(other => other.id !== person.id && inPlay(other) && !isDead(other) && Number(other.hp) > 0 && person.camp && other.camp === person.camp && !hasPsy(other, 'stupid'));
+        const allies = participants.some(other => other.id !== person.id && inPlay(other) && !isDead(other) && Number(other.hp) > 0 && sideOf(other) === sideOf(person) && !hasPsy(other, 'stupid'));
         let guided = false, asking = false;
         if (allies) {
           const choice = traitRequest({ field: 'stupidGuided', kind: 'choice', participantId: person.id, participantName: person.name, label: `${nameOf(person)} · Stupide : un allié non Stupide le guide-t-il ?` });
@@ -334,7 +363,7 @@ export function collectRoundTraitEffects({ participants = [], phase, round = nul
 
       // Increvable : Test de Résistance (+0) à chaque début de Round, les DR s'additionnent (D15).
       const record = v5Of(person).dieHard;
-      if (dieHardActive(person) && (!isNum(record.lastRound) || round > record.lastRound)) {
+      if (!closure && dieHardActive(person) && (!isNum(record.lastRound) || round > record.lastRound)) {
         const E = Number(person.caracs?.E);
         if (!isNum(E)) { out.unresolved.push('Increvable : Endurance du participant inconnue.'); continue; }
         const request = traitRequest({ field: 'dieHardEndurance', kind: 'test', participantId: person.id, participantName: person.name,

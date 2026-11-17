@@ -158,3 +158,53 @@ describe('Increvable (CA9, D15)', () => {
     assert.deepEqual([out.requests, out.patches], [[], []]);
   });
 });
+
+describe('Correctifs de la relecture de L2', () => {
+  const dead = (extra = {}, v5 = {}) => withV5(person('d', { traits: ['Die Hard'], hp: 0, caracs: { E: 30 }, ...extra }), { dead: true, deathCause: 'wounds', ...v5 });
+  const started = (round = 2, v5 = {}) => startDieHard(dead({}, v5), { round, bodyIntact: true });
+  const relive = body => ({ ...body, hp: 8, extensions: { ...body.extensions, v5: { ...body.extensions.v5, dead: false } } });
+
+  test('Increvable sur une créature revenue à la vie : aucune demande, suivi clos en « cancelled », 6 DR sans effet', () => {
+    const body = relive(started(2));
+    const out = collectRoundTraitEffects({ participants: [body], phase: 'startOfRound', round: 3, turnIndex: 9 });
+    assert.deepEqual(out.requests, []);
+    const after = applyTraitPatches([body], out.patches)[0];
+    assert.equal(after.extensions.v5.dieHard.ended, 'cancelled');
+    const forced = advanceDieHard(body, { round: 3, test: { success: true, sl: 6 } });
+    assert.equal(forced.revived, false);
+    assert.equal(forced.participant.hp, 8);
+  });
+
+  test('Increvable ne dépasse jamais BE Rounds, même après un passage hors de la zone active', () => {
+    let body = started(2);
+    const at = (round, participant, inputs = {}) => collectRoundTraitEffects({ participants: [participant], phase: 'startOfRound', round, turnIndex: round, inputs });
+    body = applyTraitPatches([body], at(3, body, { d: { dieHardEndurance: { success: true, sl: 1 } } }).patches)[0];
+    const away = { ...body, zone: 'reserve' };
+    assert.deepEqual(at(4, away).requests, [], 'hors zone : pas de demande');
+    const returned = { ...applyTraitPatches([away], at(4, away).patches)[0], zone: 'active' };
+    assert.equal(at(5, returned).requests.length, 1, 'au Round 5, encore dans les BE Rounds');
+    assert.deepEqual(at(6, returned).requests, [], 'au Round 6, les BE (3) Rounds ouverts au Round 2 sont écoulés');
+    assert.equal(applyTraitPatches([returned], at(6, returned).patches)[0].extensions.v5.dieHard.ended, 'expired');
+  });
+
+  test('résurrection par Increvable : le décompte de mort critique confirmé est remis à zéro', () => {
+    const countdown = { id: 'cd', status: 'confirmed', dueRound: 2, toughnessBonus: 0, criticalIds: ['w1'] };
+    const body = advanceDieHard(started(2, { criticalDeath: countdown }), { round: 3, test: { success: true, sl: 6 } }).participant;
+    assert.equal(body.hp, 1);
+    assert.notEqual(body.extensions.v5.criticalDeath?.status, 'confirmed');
+  });
+
+  test('Stupide d\'un camp « allie » à côté d\'un PJ « pj » : question « guidé ? » ; un ennemi ne guide pas', () => {
+    const stupid = person('s', { camp: 'allie', traits: ['Stupid'], caracs: { E: 30, Int: 25 } });
+    assert.deepEqual(startOfRound([stupid, person('p', { camp: 'pj', kind: 'PJ' })]).requests.map(request => request.kind), ['choice']);
+    assert.deepEqual(startOfRound([stupid, person('e', { camp: 'ennemi' })]).requests.map(request => request.kind), ['test']);
+  });
+
+  test('une perte de Blessures par patch fait perdre l\'Élan ; sans perte, il reste', () => {
+    const fighter = person('a', { extensions: { v5: { hasMomentum: true } } });
+    const [after] = applyTraitPatches([fighter], [{ type: 'wounds', participantId: 'a', amount: 2 }]);
+    assert.equal(after.hp, 8);
+    assert.equal(after.extensions.v5.hasMomentum, false);
+    assert.equal(applyTraitPatches([fighter], [{ type: 'wounds', participantId: 'a', amount: 0 }])[0].extensions.v5.hasMomentum, true);
+  });
+});

@@ -590,7 +590,7 @@ export const CREATURE_TRAIT_CATALOGUE = Object.freeze([
     "nameFr": "Inflammable",
     "nameFrSource": "proposition",
     "ref": "E0-T-208",
-    "summaryFr": "Tests pour éviter Enflammé à −20 ; Blessures d’Enflammé doublées.",
+    "summaryFr": "−2 DR aux seuls Tests pour éviter Enflammé (pas au retrait par Athlétisme) ; Blessures d’Enflammé doublées.",
     "book": "L07",
     "page": 165,
     "param": "none"

@@ -9,6 +9,7 @@ import { previewV5Turn } from '../../../js/core/v5-turn.js';
 import { advanceV5Effects } from '../../../js/core/v5-effects.js';
 import { resolveV5ConditionTestContext } from '../../../js/core/v5-test-context.js';
 import { decideCriticalDeath, decideImmediateCriticalDeath, decideStateDeath } from '../../../js/core/v5-critical-aftermath.js';
+import { catalogueTraitOf } from '../../../js/data/creature-trait-catalogue.js';
 
 const person = (id, initiative, extra = {}) => ({ id, name: id.toUpperCase(), kind: 'PNJ', camp: 'monstres', zone: 'active', initiative, hp: 10, maxHp: 10,
   caracs: { E: 30, Int: 25, FM: 40, Ag: 30, I: 30 }, states: [], traits: [], extensions: { v5: {} }, ...extra });
@@ -48,10 +49,39 @@ describe('Instable en fin de Round (CA6, CA7, D10)', () => {
     assert.equal(who(store, 'u').hp, 8, '↷ rejoue');
   });
 
-  test('adversaire sans Élan : rien', async () => {
+  test('adversaire sans Élan : rien, sur un changement de Round réel', async () => {
     const { store, engine } = await open([enemy(false), unstable()], { current: 'u' });
     await turn(engine);
+    assert.equal(round(store), 2);
     assert.equal(who(store, 'u').hp, 10);
+  });
+
+  test('non engagé, ennemi avec Élan : rien', async () => {
+    const free = person('u', 40, { traits: ['Unstable'] });
+    const foe = person('e', 50, { camp: 'pj', extensions: { v5: { hasMomentum: true } } });
+    const { store, engine } = await open([foe, free], { current: 'u' });
+    await turn(engine);
+    assert.equal(round(store), 2);
+    assert.equal(who(store, 'u').hp, 10);
+  });
+
+  test('Élan relevé avant les pertes de fin de Round : l\'ennemi qui brûle et perd son Élan compte encore', async () => {
+    const burning = person('e', 50, { camp: 'pj', states: [{ id: 'f', name: 'Enflammé', key: 'enflamme', level: 1 }], extensions: { v5: { ...engaged('u'), hasMomentum: true } } });
+    const { store, engine } = await open([burning, unstable()], { current: 'u' });
+    await turn(engine, { e: { fireRoll: 9, fireArmour: 0 } });
+    assert.equal(round(store), 2);
+    assert.ok(who(store, 'e').hp < 10, 'l’ennemi a brûlé');
+    assert.notEqual(who(store, 'e').extensions.v5.hasMomentum, true, 'et perdu son Élan');
+    assert.equal(who(store, 'u').hp, 8, 'Instable lit l’Élan d’avant les pertes');
+  });
+
+  test('une décision de mort déjà proposée garde sa cause : la première cause l’emporte', async () => {
+    const proposed = person('u', 40, { hp: 2, traits: ['Unstable'], extensions: { v5: { ...engaged('e'), pendingStateDeath: { id: 'old', cause: 'blood', round: 1, phase: 'endOfRound' } } } });
+    const { store, engine } = await open([enemy(), proposed], { current: 'u' });
+    await turn(engine);
+    assert.equal(who(store, 'u').hp, 0, 'la perte d’Instable s’applique');
+    assert.equal(who(store, 'u').extensions.v5.pendingStateDeath.id, 'old');
+    assert.equal(who(store, 'u').extensions.v5.pendingStateDeath.cause, 'blood');
   });
 
   test('ramené à 0 Blessure : décision de mort de cause « unstable », aucune suppression ; confirmée, mort de cause « unstable »', async () => {
@@ -69,11 +99,12 @@ describe('Instable en fin de Round (CA6, CA7, D10)', () => {
 });
 
 describe('Stupide au début de Round (CA8)', () => {
-  const stupid = () => person('s', 50, { traits: ['Stupid'] });
-  const hero = () => person('p', 40, { camp: 'pj' });
+  // Le Stupide joue après le PJ : une levée à la fin d'un autre Tour que le sien se verrait.
+  const stupid = () => person('s', 40, { traits: ['Stupid'] });
+  const hero = () => person('p', 50, { camp: 'pj' });
 
-  test('demande du Test d\'Intelligence au changement de Round, puis tour perdu levé à la fin du Tour du porteur', async () => {
-    const { store, engine } = await open([stupid(), hero()], { current: 'p' });
+  test('demande du Test d\'Intelligence au changement de Round, puis tour perdu levé à la fin du Tour du porteur, pas avant', async () => {
+    const { store, engine } = await open([hero(), stupid()], { current: 's' });
     const asked = engine.previewNextTurn();
     assert.equal(asked.ready, false);
     const request = asked.requests.find(row => row.participantId === 's' && row.field === 'stupidIntelligence');
@@ -82,21 +113,23 @@ describe('Stupide au début de Round (CA8)', () => {
     assert.ok(request.testTarget, 'la demande porte la valeur du Test (bouton de dé, D13)');
     await turn(engine, { s: { stupidIntelligence: { success: false, sl: -2 } } });
     assert.equal(round(store), 2);
-    assert.equal(full(store).combat.currentActorId, 's');
+    assert.equal(full(store).combat.currentActorId, 'p');
     assert.equal(who(store, 's').extensions.v5.lostTurn.cause, 'stupid');
     await turn(engine);
+    assert.equal(full(store).combat.currentActorId, 's');
+    assert.equal(who(store, 's').extensions.v5.lostTurn?.cause, 'stupid', 'pas levé à la fin du Tour du PJ');
+    await turn(engine, { s: { stupidIntelligence: { success: true, sl: 0 } } });
     assert.equal(who(store, 's').extensions.v5.lostTurn, undefined, 'levé à la fin du Tour du porteur');
     await store.undo();
     assert.equal(who(store, 's').extensions.v5.lostTurn.cause, 'stupid', '↶ rétablit le marqueur');
   });
 
   test('un d100 tiré par le bouton et le résultat saisi donnent le même état (CA0)', async () => {
-    const { store, engine } = await open([stupid(), hero()], { current: 'p' });
-    const byRoll = engine.previewNextTurn({ inputs: { s: { stupidIntelligence: 99 } } });
-    const byResult = engine.previewNextTurn({ inputs: { s: { stupidIntelligence: { success: false, sl: -7 } } } });
-    assert.equal(byRoll.ready, true);
-    const marker = preview => preview.state.combat.participants.find(row => row.id === 's').extensions.v5.lostTurn;
-    assert.deepEqual(marker(byRoll), marker(byResult));
+    const { store, engine } = await open([hero(), stupid()], { current: 's' });
+    const marker = inputs => engine.previewNextTurn({ inputs: { s: { stupidIntelligence: inputs } } }).state.combat.participants.find(row => row.id === 's').extensions.v5.lostTurn;
+    assert.deepEqual(marker(99), marker({ success: false, sl: -7 }));
+    assert.ok(marker(99), 'échec : tour perdu');
+    assert.equal(marker(5), undefined, 'réussite tirée (05 contre Int 25) : rien');
     assert.equal(round(store), 1, 'l’aperçu ne modifie rien');
   });
 });
@@ -161,6 +194,53 @@ describe('Increvable : case « corps intact » et Test étendu (CA9, D15, D18)',
     assert.equal(decided.participant.extensions.v5.dieHard.total, 0);
     assert.equal(decideStateDeath(dying(), { pendingId: 'pd', decision: 'decline', bodyIntact: true }).participant.extensions.v5.dieHard, undefined, 'refus : rien');
   });
+
+  test('décapité : la case « corps intact » est ignorée', () => {
+    const head = { ...dying(), extensions: { v5: { criticalAftermath: [{ id: 'c1', table: 'HEAD', sequela: { criticalDeath: true } }] } } };
+    const decided = decideImmediateCriticalDeath(head, { criticalId: 'c1', decision: 'confirm', decapitated: true, bodyIntact: true, round: 2 });
+    assert.equal(decided.participant.extensions.v5.deathCause, 'decapitation');
+    assert.equal(decided.participant.extensions.v5.dieHard, undefined);
+    assert.equal(decideImmediateCriticalDeath(head, { criticalId: 'c1', decision: 'confirm', bodyIntact: true, round: 2 }).participant.extensions.v5.dieHard.roundsLeft, 3, 'tête non tranchée : la case compte');
+  });
+
+  test('le Store transmet la case aux deux décisions de mort critique', async () => {
+    const critical = () => ({ ...dying(), extensions: { v5: { criticalAftermath: [{ id: 'c1', table: 'BODY', sequela: { criticalDeath: true } }] } } });
+    const countdown = () => ({ ...dying(), states: [{ id: 'i', name: 'Inconscient', key: 'inconscient', level: 1 }],
+      extensions: { v5: { criticalWounds: [{ id: 'w1' }], criticalDeath: { id: 'cd', status: 'awaiting-mj', dueRound: 2, toughnessBonus: 0, criticalIds: ['w1'] } } } });
+    for (const bodyIntact of [true, false]) {
+      const immediate = await open([hero(), critical()], { round: 2, current: 'x' });
+      await immediate.store.decideImmediateCriticalDeath('d', 'c1', 'confirm', { bodyIntact });
+      assert.equal(who(immediate.store, 'd').extensions.v5.dieHard?.roundsLeft, bodyIntact ? 3 : undefined, `mort immédiate, case ${bodyIntact}`);
+      const counted = await open([hero(), countdown()], { round: 2, current: 'x' });
+      await counted.store.decideCriticalDeath('d', 'confirm', { bodyIntact });
+      assert.equal(who(counted.store, 'd').extensions.v5.dieHard?.roundsLeft, bodyIntact ? 3 : undefined, `décompte, case ${bodyIntact}`);
+    }
+    const decapitated = await open([hero(), { ...critical(), extensions: { v5: { criticalAftermath: [{ id: 'c1', table: 'HEAD', sequela: { criticalDeath: true } }] } } }], { round: 2, current: 'x' });
+    await decapitated.store.decideImmediateCriticalDeath('d', 'c1', 'confirm', { decapitated: true, bodyIntact: true });
+    assert.equal(who(decapitated.store, 'd').extensions.v5.dieHard, undefined, 'décapité par le Store : case ignorée');
+  });
+
+  test('d100 tiré et résultat saisi donnent le même total de DR (CA0)', async () => {
+    const { store, engine } = await open([hero(), dying()], { current: 'd' });
+    await store.decideStateDeath('d', 'pd', 'confirm', { bodyIntact: true });
+    const total = raw => engine.previewNextTurn({ inputs: { d: { dieHardEndurance: raw } } }).state.combat.participants.find(row => row.id === 'd').extensions.v5.dieHard.total;
+    assert.equal(total(5), 3, '05 contre E 30 : 3 DR');
+    assert.equal(total({ success: true, sl: 3 }), total(5));
+    assert.equal(total(28), 1, '28 contre E 30 : 1 DR');
+  });
+
+  test('créature relevée avant le Round suivant : plus de demande, suivi clos', async () => {
+    const { store, engine } = await open([hero(), dying()], { current: 'd' });
+    await store.decideStateDeath('d', 'pd', 'confirm', { bodyIntact: true });
+    const relieved = who(store, 'd');
+    const living = { ...relieved, hp: 8, extensions: { v5: { ...relieved.extensions.v5, dead: false } } };
+    const again = await open([hero(), living], { current: 'd' });
+    const preview = again.engine.previewNextTurn();
+    assert.equal(preview.requests.some(row => row.field === 'dieHardEndurance'), false);
+    await turn(again.engine);
+    assert.equal(who(again.store, 'd').hp, 8);
+    assert.equal(who(again.store, 'd').extensions.v5.dieHard.ended, 'cancelled');
+  });
 });
 
 describe('Inflammable (CA22, D17)', () => {
@@ -185,6 +265,13 @@ describe('Inflammable (CA22, D17)', () => {
     const removal = resolveV5ConditionTestContext(ablaze(), { characteristic: 'Ag', skill: 'Athlétisme' }).slModifiers.filter(row => row.id === 'trait:flammable');
     assert.deepEqual(removal, [], 'retrait par Athlétisme');
   });
+
+  test('le catalogue dit −2 DR aux seuls Tests pour éviter Enflammé (D17)', () => {
+    const text = catalogueTraitOf('Flammable').summaryFr;
+    assert.match(text, /−2 DR/);
+    assert.match(text, /éviter Enflammé/);
+    assert.doesNotMatch(text, /−20/);
+  });
 });
 
 describe('Participant sans ces Traits (CA24)', () => {
@@ -194,6 +281,23 @@ describe('Participant sans ces Traits (CA24)', () => {
     assert.equal(preview.ready, true);
     assert.equal('traitPlans' in preview, false);
     assert.deepEqual(preview.state.combat.participants, state.combat.participants);
+    assert.equal(preview.state.log.some(row => String(row.id).startsWith('trait:')), false);
+  });
+
+  test('engagés, Élan d\'un côté, un mort sans suivi : les Traits n\'ajoutent ni ne retirent rien', () => {
+    const engaged = other => ({ [other]: { since: 1, lastAttackRound: 1 } });
+    const state = envelope([
+      person('a', 50, { extensions: { v5: { hasMomentum: true, engagements: engaged('b') } } }),
+      person('b', 40, { camp: 'pj', extensions: { v5: { engagements: engaged('a') } } }),
+      person('c', 30, { hp: 0, extensions: { v5: { dead: true, deathCause: 'blood' } } })
+    ], { current: 'c' });
+    const preview = previewV5Turn(state);
+    assert.equal(preview.ready, true);
+    assert.equal(preview.state.combat.round, 2);
+    assert.equal('traitPlans' in preview, false);
+    assert.equal(preview.state.combat.participants.find(row => row.id === 'a').extensions.v5.hasMomentum, true, 'Élan intact');
+    assert.equal(preview.state.combat.participants.find(row => row.id === 'c').extensions.v5.dieHard, undefined);
+    assert.deepEqual(preview.state.combat.participants.map(row => row.hp), [10, 10, 0]);
     assert.equal(preview.state.log.some(row => String(row.id).startsWith('trait:')), false);
   });
 });
