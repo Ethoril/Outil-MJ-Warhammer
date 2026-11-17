@@ -2,6 +2,7 @@
 // blocs de la fiche, marqueurs et pastilles. Le DOM est un faux arbre ; aucune règle n'est simulée (le moteur est réel).
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { openV5EffectInputDialog } from '../../../js/ui/v5-effect-dialog.js';
 import { renderTraitPlanRequests } from '../../../js/ui/resolution-panel/result.js';
 import { buildEncounterBlock, bindEncounterBlock, buildTraitStatusBlock, buildBodyIntactControl, readBodyIntact } from '../../../js/ui/creature-states-block.js';
@@ -191,4 +192,25 @@ test('case « corps intact » : seulement pour un porteur d’Increvable, lue pa
   all(control, el => el.type === 'checkbox')[0].checked = true;
   assert.equal(readBodyIntact(control), true);
   assert.equal(readBodyIntact(null), false);
+}));
+
+test('constat 7 : la fiche convertit un refus ok:false du Store en message français, comme workspace-view', () => {
+  const card = readFileSync('js/ui/card.js', 'utf8');
+  assert.match(card, /import \{[^}]*userError[^}]*\} from '\.\/messages\.js'/);
+  assert.match(card, /next\?\.ok === false && next\.status !== 'requires-input' \? \{ \.\.\.next, error: userError\(next\.message \|\| 'Commande refusée\.'\) \}/);
+});
+
+test('constat 6 : le panneau refuse Réussite avec des DR négatifs et Échec avec des DR positifs, comme le dialogue', () => withDom(async () => {
+  const request = traitRequest({ field: 'infectedEndurance', kind: 'test', participantId: 'hero', participantName: 'Héros', label: 'Héros · Endurance (+4 DR)', testTarget: target });
+  const selected = [];
+  const panel = renderTraitPlanRequests([request], { v5Context: {} }, { select: patch => selected.push(patch), calculate: () => {} });
+  const [success] = byTag(panel, 'select'), [dr] = byTag(panel, 'input');
+  success.value = 'true'; dr.value = '-2'; await success.fire('change');
+  assert.equal(selected.length, 0, 'Réussite avec DR négatifs : aucune réponse envoyée');
+  assert.match(panel.textContent, /incompatibles/);
+  success.value = 'false'; dr.value = '3'; await dr.fire('change');
+  assert.equal(selected.length, 0, 'Échec avec DR positifs : aucune réponse envoyée');
+  success.value = 'false'; dr.value = '-1'; await dr.fire('change');
+  assert.deepEqual(selected.at(-1).v5Context.traitInputs.hero.infectedEndurance, { success: false, sl: -1 });
+  assert.doesNotMatch(panel.textContent, /incompatibles/, 'le message disparaît une fois la saisie cohérente');
 }));

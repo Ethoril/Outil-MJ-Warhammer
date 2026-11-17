@@ -95,6 +95,12 @@ describe('Instable en fin de Round (CA6, CA7, D10)', () => {
     await store.decideStateDeath('u', body.extensions.v5.pendingStateDeath.id, 'confirm');
     assert.equal(who(store, 'u').extensions.v5.dead, true);
     assert.equal(who(store, 'u').extensions.v5.deathCause, 'unstable');
+    await store.undo();
+    assert.notEqual(who(store, 'u').extensions.v5.dead, true, 'CA25 : ↶ annule la décision de mort');
+    assert.equal(who(store, 'u').extensions.v5.pendingStateDeath.cause, 'unstable', 'la décision redevient en attente');
+    await store.redo();
+    assert.equal(who(store, 'u').extensions.v5.dead, true, '↷ rejoue la mort');
+    assert.equal(who(store, 'u').extensions.v5.deathCause, 'unstable');
   });
 });
 
@@ -122,6 +128,25 @@ describe('Stupide au début de Round (CA8)', () => {
     assert.equal(who(store, 's').extensions.v5.lostTurn, undefined, 'levé à la fin du Tour du porteur');
     await store.undo();
     assert.equal(who(store, 's').extensions.v5.lostTurn.cause, 'stupid', '↶ rétablit le marqueur');
+  });
+
+  test('CA25 : ↶ annule la pose du tour perdu (et le changement de Round), ↷ la rejoue', async () => {
+    const { store, engine } = await open([hero(), stupid()], { current: 's' });
+    await turn(engine, { s: { stupidIntelligence: { success: false, sl: -2 } } });
+    assert.equal(who(store, 's').extensions.v5.lostTurn.cause, 'stupid');
+    assert.equal(round(store), 2);
+    await store.undo();
+    assert.equal(who(store, 's').extensions.v5.lostTurn, undefined, '↶ retire le marqueur posé');
+    assert.equal(round(store), 1);
+    await store.redo();
+    assert.equal(who(store, 's').extensions.v5.lostTurn.cause, 'stupid', '↷ le repose');
+    assert.equal(round(store), 2);
+    await turn(engine);
+    await turn(engine, { s: { stupidIntelligence: { success: true, sl: 0 } } });
+    assert.equal(who(store, 's').extensions.v5.lostTurn, undefined);
+    await store.undo();
+    await store.redo();
+    assert.equal(who(store, 's').extensions.v5.lostTurn, undefined, '↷ de la levée : le marqueur reste levé');
   });
 
   test('un d100 tiré par le bouton et le résultat saisi donnent le même état (CA0)', async () => {
@@ -173,6 +198,18 @@ describe('Increvable : case « corps intact » et Test étendu (CA9, D15, D18)',
     await store.redo();
     assert.equal(record(store).total, 6, '↷ rejoue');
     assert.equal(who(store, 'd').hp, 1);
+  });
+
+  test('CA25 : ↶ annule la case « corps intact » (le suivi d\'Increvable disparaît), ↷ la rejoue', async () => {
+    const { store } = await open([hero(), dying()], { current: 'd' });
+    await store.decideStateDeath('d', 'pd', 'confirm', { bodyIntact: true });
+    assert.equal(record(store).roundsLeft, 3);
+    await store.undo();
+    assert.equal(who(store, 'd').extensions.v5.dieHard, undefined, '↶ retire le suivi');
+    assert.notEqual(who(store, 'd').extensions.v5.dead, true);
+    await store.redo();
+    assert.equal(record(store).roundsLeft, 3, '↷ le rétablit');
+    assert.equal(who(store, 'd').extensions.v5.dead, true);
   });
 
   test('sans la case : aucune demande au Round suivant', async () => {

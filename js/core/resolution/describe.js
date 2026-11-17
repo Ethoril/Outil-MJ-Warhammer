@@ -125,7 +125,9 @@ export function describeResolutionDetail(detail) {
     if (present(protection.ap)) parts.push(`Protection retenue : ${protection.ap} PA${protection.arbitrated ? ' (arbitrage MJ)' : ''}`);
     if (protection.counted?.length) parts.push(`Armures comptées : ${protection.counted.map(pieceName).join(', ')}`);
     if (protection.ignored?.length) parts.push(`Armures écartées : ${protection.ignored.map(pieceName).join(', ')}`);
-    if (protection.shield?.name) parts.push(`Bouclier : ${protection.shield.name} · ${protection.shieldAp || 0} PA`);
+    // Le Bouclier du Trait l'a emporté sur le vrai bouclier : la description nomme le Trait, pas l'objet écarté.
+    if (present(protection.traitShield) && Number(protection.traitShield) > 0) parts.push(`Bouclier (${protection.traitShield}) du Trait · ${protection.shieldAp || 0} PA`);
+    else if (protection.shield?.name) parts.push(`Bouclier : ${protection.shield.name} · ${protection.shieldAp || 0} PA`);
   }
   for (const rule of Array.isArray(detail.mechanics) ? detail.mechanics.filter(isRecord) : []) {
     const origin = [rule.edition, rule.source].filter(Boolean).join(' · ');

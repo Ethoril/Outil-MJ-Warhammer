@@ -38,9 +38,19 @@ export function renderTraitPlanRequests(requests = [], draft = {}, handlers = {}
       const dr = document.createElement('input');
       dr.type = 'number'; dr.step = '1'; dr.value = given?.sl ?? '';
       dr.setAttribute('aria-label', `${request.label} : DR`);
-      const send = () => { const sl = Number(dr.value); if (success.value && dr.value !== '' && Number.isSafeInteger(sl)) answer(request, { success: success.value === 'true', sl }); };
+      // Même contrôle que le dialogue (v5-effect-dialog.js) : une réussite avec des DR négatifs, ou un échec avec des DR positifs, est refusé.
+      const warning = node('span', 'workspace-muted', '');
+      warning.setAttribute('role', 'alert');
+      const send = () => {
+        const sl = Number(dr.value);
+        warning.textContent = '';
+        if (!success.value || dr.value === '' || !Number.isSafeInteger(sl)) return;
+        const passed = success.value === 'true';
+        if ((passed && sl < 0) || (!passed && sl > 0)) { warning.textContent = 'La réussite et les DR indiqués sont incompatibles.'; return; }
+        answer(request, { success: passed, sl });
+      };
       success.addEventListener('change', send); dr.addEventListener('change', send);
-      row.append(success, dr);
+      row.append(success, dr, warning);
       if (request.testTarget) {
         const roll = button('Lancer d100', 'workspace-secondary', { 'aria-label': `Lancer d100 : ${request.label}` });
         roll.addEventListener('click', () => { const found = resolveTraitAnswer(request, Math.floor(Math.random() * 100) + 1); if (found) answer(request, { success: found.success, sl: found.sl }); });

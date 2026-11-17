@@ -111,6 +111,14 @@ describe('Increvable (CA9, D15)', () => {
     assert.match(out.requests[0].label, /0\/6/);
   });
 
+  test('constat 1 : Increvable prend le total de Résistance de la fiche, toujours sans modificateur', () => {
+    const skills = [{ id: 'skill-52_e9_73_69_73_74_61_6e_63_65-base', name: 'Résistance', total: 52 }];
+    const body = startDieHard(dead({ skills, states: [{ key: 'sonne', level: 2 }] }), { round: 2, bodyIntact: true });
+    const target = collectRoundTraitEffects({ participants: [body], phase: 'startOfRound', round: 3, turnIndex: 9 }).requests[0].testTarget;
+    assert.equal(target.score, 52);
+    assert.deepEqual(target.slModifiers, []);
+  });
+
   test('Test +0 (MJ 17/11) : les États du mort ne minorent pas le Test d\'Increvable', () => {
     const states = [{ key: 'sonne', level: 2 }, { key: 'fatigue', level: 2 }];
     const plain = testTargetOf(person('t', { states }), { characteristic: 'E', base: 30, dr: 0 });

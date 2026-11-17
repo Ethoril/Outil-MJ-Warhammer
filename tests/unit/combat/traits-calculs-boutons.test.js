@@ -5,6 +5,7 @@ import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../../../js/core/store.js';
 import { planNaturalAttack } from '../../../js/core/creature-combat.js';
+import { readCombatPosition } from '../../../js/core/v5-game-time.js';
 
 const person = (id, extra = {}) => ({ id, name: id.toUpperCase(), kind: 'PNJ', camp: 'monstres', zone: 'active', initiative: 30, hp: 10, maxHp: 10,
   caracs: { E: 30, Int: 25, FM: 40, Ag: 30, I: 30, F: 50 }, states: [], traits: [], extensions: { v5: {} }, ...extra });
@@ -94,6 +95,15 @@ describe('Rencontre : Effrayé et Animosité (CA13, D9)', () => {
     const store = await open([person('a'), person('o', { camp: 'pj' })]);
     assert.equal((await store.applyCreatureEncounter('a', 'afraid', { targetId: 'o' })).ok, false);
     assert.equal((await store.applyCreatureEncounter('a', 'nimportequoi', { targetId: 'o' })).ok, false);
+  });
+});
+
+describe('constat 1 : Calme lu sur la compétence de la fiche', () => {
+  const skills = [{ id: 'skill-43_61_6c_6d_65-base', name: 'Calme', total: 61 }];
+  test('Frénésie et Animosité demandent le total de Calme', async () => {
+    const store = await open([person('f', { traits: ['Frenzy', 'Animosity (Orc)'], skills }), person('o', { keywords: ['Orc'], camp: 'pj' })]);
+    assert.equal((await store.enterTraitFrenzy('f')).requests[0].testTarget.score, 61);
+    assert.equal((await store.applyCreatureEncounter('f', 'animosity', { targetId: 'o' })).requests[0].testTarget.score, 61);
   });
 });
 
@@ -225,6 +235,17 @@ describe('Affamé : cadavre frais', () => {
     assert.equal(who(store, 'g').extensions.v5.lostTurn, undefined);
     await store.redo();
     assert.equal(who(store, 'g').extensions.v5.lostTurn.cause, 'hungry');
+  });
+
+  test('constat 5 : le marqueur lit la position par readCombatPosition (scène active comprise)', async () => {
+    const rows = [person('g', { traits: ['Hungry'] })];
+    const store = createStore({ storage: null });
+    await store.ready;
+    await store.loadFromJSON({ ...envelope(rows), activeScene: { id: 'scene-1', status: 'active', extensions: { v5: { turnIndex: 4 } } } });
+    const asked = await store.markFreshCorpse('g');
+    await store.markFreshCorpse('g', { inputs: { g: { [asked.requests[0].field]: fail } } });
+    assert.equal(who(store, 'g').extensions.v5.lostTurn.since.turnIndex, readCombatPosition({ ...envelope(rows), activeScene: { id: 'scene-1', status: 'active', extensions: { v5: { turnIndex: 4 } } } }).turnIndex);
+    assert.equal(who(store, 'g').extensions.v5.lostTurn.since.turnIndex, 4);
   });
 
   test('sans le Trait : refus', async () => {

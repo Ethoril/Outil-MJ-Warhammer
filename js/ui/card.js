@@ -5,7 +5,7 @@ import { normalizeEffects, normalizeState } from '../core/effects.js';
 import { DiceLine } from '../core/models.js';
 import { renderMiniDiceLine } from './dice-line.js';
 import { showToast } from './toast.js';
-import { contextMessage, refusalError } from './messages.js';
+import { contextMessage, refusalError, userError } from './messages.js';
 import { buildParticipantReminders } from '../core/reminders.js';
 import { buildHeadsBlock, nextHeadState } from './heads-block.js';
 import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
@@ -280,7 +280,7 @@ export function initCardUI(Store, Combat) {
     if (encounterBlock) {
       bindEncounterBlock(encounterBlock, { Store, participant: p, notify: message => showToast(message, 'error'),
         ask: (result, retry) => openV5EffectInputDialog({ pending: { ...result, inputs: {}, baseRevision: Store.getLocalRevision?.() }, title: 'Résoudre la demande de dé',
-          getCurrentRevision: () => Store.getLocalRevision?.(), submit: inputs => retry(inputs) }) });
+          getCurrentRevision: () => Store.getLocalRevision?.(), submit: async inputs => { const next = await retry(inputs); return next?.ok === false && next.status !== 'requires-input' ? { ...next, error: userError(next.message || 'Commande refusée.') } : next; } }) });
       armDiv.after(encounterBlock);
     }
     const familiarBlock = buildFamiliarBlock(tag => document.createElement(tag), p, Store.listParticipants());

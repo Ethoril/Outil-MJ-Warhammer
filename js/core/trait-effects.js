@@ -54,7 +54,19 @@ export function shieldTraitOf(participant) {
 // ─────────────────────────────── Demandes et réponses (CA0) ───────────────────────────────
 
 /** Valeur d'un Test avec ses modificateurs : de quoi déduire réussite et DR d'un d100, sans connaître aucune règle. */
-export function testTargetOf(participant, { characteristic, base, dr = 0, bare = false }) {
+const SKILLS = Object.freeze({
+  resistance: { id: 'skill-52_e9_73_69_73_74_61_6e_63_65-base', names: ['resistance', 'endurance'] },
+  calm: { id: 'skill-43_61_6c_6d_65-base', names: ['calme', 'calm'] }
+});
+/** Total de la compétence de la fiche (`resistance`, `calm`) quand elle existe, sinon `fallback` (la Caractéristique), comme `resolution.js`. */
+export function skillTotalOf(participant, skill, fallback) {
+  const wanted = SKILLS[skill];
+  const row = wanted && (participant?.skills || []).find(item => item?.id === wanted.id || wanted.names.includes(foldName(item?.name)));
+  return Number.isSafeInteger(Number(row?.total)) && row?.total !== null && row?.total !== '' ? Number(row.total) : fallback;
+}
+
+export function testTargetOf(participant, { characteristic, base, dr = 0, bare = false, skill = null }) {
+  if (skill) base = skillTotalOf(participant, skill, base);
   // `bare` : Test +0 sans aucun modificateur du porteur (Increvable, MJ 17/11 : les États du mort ne comptent pas).
   let resolved = null;
   if (!bare) { try { resolved = resolveV5TestModifiers(participant, { kind: 'test', characteristic }, {}); } catch { resolved = null; } }
@@ -203,12 +215,12 @@ const newOut = () => ({ plans: [], requests: [], patches: [], logs: [], unresolv
 const makeLog = (id, participant, text, detail) => ({ id, kind: 'effect', actorId: participant?.id ?? null, actorName: participant?.name ?? null, text, detail });
 
 /** Un test de plan psychologique (Calme, Intelligence…) devient une demande de Test ; `unresolved` si la base manque. */
-export function psychologyTestRequest(out, participant, key, planOptions, { field, label, characteristic, dr }) {
+export function psychologyTestRequest(out, participant, key, planOptions, { field, label, characteristic, dr, skill = null }) {
   const plan = planPsychology(participant, key, planOptions);
   const test = plan.tests[0];
   if (!test || !isNum(test.base)) { out.unresolved.push(...(plan.unresolved.length ? plan.unresolved : [`${plan.label} : valeur du Test inconnue.`])); return null; }
   return traitRequest({ field, kind: 'test', participantId: participant.id, participantName: participant.name, label,
-    testTarget: testTargetOf(participant, { characteristic, base: test.base, dr: test.dr ?? dr }) });
+    testTarget: testTargetOf(participant, { characteristic, base: test.base, dr: test.dr ?? dr, skill }) });
 }
 
 /**
@@ -252,7 +264,7 @@ export function collectWoundTraitEffects({ actor = null, target = null, particip
     if (!plan.available || !isNum(E)) out.unresolved.push(...(plan.unresolved.length ? plan.unresolved : ['Infecté : Endurance de la victime inconnue.']));
     else {
       const request = traitRequest({ field: 'infectedEndurance', kind: 'test', participantId: target.id, participantName: target.name,
-        label: `${nameOf(target)} · Endurance (+4 DR) contre l'Infecté de ${nameOf(actor)}`, testTarget: testTargetOf(target, { characteristic: 'E', base: E, dr: 4 }) });
+        label: `${nameOf(target)} · Endurance (+4 DR) contre l'Infecté de ${nameOf(actor)}`, testTarget: testTargetOf(target, { characteristic: 'E', base: E, dr: 4, skill: 'resistance' }) });
       const answer = answerOf(traitInputs, request);
       if (!answer) { out.requests.push(request); out.plans.push({ key: 'infected', participantId: target.id, status: 'requested' }); }
       else {
@@ -276,7 +288,7 @@ export function collectWoundTraitEffects({ actor = null, target = null, particip
 
   // Affamé : le porteur met un vivant à 0 Blessure → Test de Calme +2 DR ; échec : tour perdu.
   if (actor && hasPsy(actor, 'hungry') && isLiving(target) && dead && hpBefore > 0) {
-    const request = psychologyTestRequest(out, actor, 'hungry', { trigger: true }, { field: 'hungryCalm', characteristic: 'FM', dr: 2,
+    const request = psychologyTestRequest(out, actor, 'hungry', { trigger: true }, { field: 'hungryCalm', characteristic: 'FM', dr: 2, skill: 'calm',
       label: `${nameOf(actor)} · Calme (+2 DR) devant sa victime : résister à la faim` });
     if (request) {
       const answer = answerOf(traitInputs, request);
@@ -369,7 +381,7 @@ export function collectRoundTraitEffects({ participants = [], phase, round = nul
         if (!isNum(E)) { out.unresolved.push('Increvable : Endurance du participant inconnue.'); continue; }
         const request = traitRequest({ field: 'dieHardEndurance', kind: 'test', participantId: person.id, participantName: person.name,
           label: `${nameOf(person)} · Increvable : Endurance (+0), total ${record.total}/${DIE_HARD_TARGET} DR, ${record.roundsLeft} Round(s) restant(s)`,
-          testTarget: testTargetOf(person, { characteristic: 'E', base: E, dr: 0, bare: true }) });
+          testTarget: testTargetOf(person, { characteristic: 'E', base: E, dr: 0, bare: true, skill: 'resistance' }) });
         const answer = answerOf(inputs, request);
         if (!answer) { out.requests.push(request); out.plans.push({ key: 'diehard', participantId: person.id, status: 'requested', total: record.total }); continue; }
         const advanced = advanceDieHard(person, { round, test: answer });

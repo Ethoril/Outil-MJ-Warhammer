@@ -73,6 +73,12 @@ describe('Infecté (CA2)', () => {
     assert.ok(request.testTarget.slModifiers.some(row => row.amount === 4));
   });
 
+  test('constat 1 : le Test prend le total de la compétence Résistance de la fiche, la Caractéristique sinon', () => {
+    const skilled = person('v', { camp: 'pj', hp: 6, caracs: { E: 35 }, skills: [{ id: 'skill-52_e9_73_69_73_74_61_6e_63_65-base', name: 'Résistance', total: 55 }] });
+    const out = wound({ actor: biter, target: skilled, participants: [biter, skilled] });
+    assert.equal(out.requests[0].testTarget.score, 55);
+  });
+
   test('Mort-vivant ou Fabrication : aucune demande', () => {
     for (const nature of ['Undead', 'Construct']) {
       const other = person('v', { traits: [nature], caracs: { E: 35 } });
@@ -132,6 +138,12 @@ describe('Bestial (CA4)', () => {
 describe('Affamé (CA5)', () => {
   const eater = person('h', { traits: ['Hungry'], caracs: { E: 30, FM: 40 } });
   const prey = person('p', { camp: 'pj', hp: 0 });
+
+  test('constat 1 : le Test de Calme prend le total de la compétence Calme de la fiche', () => {
+    const calm = person('h', { traits: ['Hungry'], caracs: { E: 30, FM: 40 }, skills: [{ id: 'skill-43_61_6c_6d_65-base', name: 'Calme', total: 61 }] });
+    const out = wound({ actor: calm, target: prey, participants: [calm, prey], hpBefore: 3, hpAfter: 0, killed: true });
+    assert.equal(out.requests[0].testTarget.score, 61);
+  });
 
   test('met un vivant à 0 Blessure : Test de Calme +2 DR demandé au porteur', () => {
     const out = wound({ actor: eater, target: prey, participants: [eater, prey], hpBefore: 3, hpAfter: 0, killed: true });

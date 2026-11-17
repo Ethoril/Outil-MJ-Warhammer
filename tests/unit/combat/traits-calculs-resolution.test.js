@@ -5,6 +5,7 @@ import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../../../js/core/store.js';
 import { previewResolution, applyResolution } from '../../../js/core/resolution.js';
+import { describeResolutionDetail } from '../../../js/core/resolution/describe.js';
 import { sourceActive } from '../../../js/core/v5-talent-actions.js';
 
 const subject = (id, extra = {}) => ({ id, name: id.toUpperCase(), kind: 'PJ', camp: id === 'a' ? 'pj' : 'ennemi', zone: 'active', hp: 40, maxHp: 40,
@@ -136,6 +137,9 @@ describe('Infecté, Bestial, Affamé à la résolution (CA2, CA4, CA5)', () => {
     assert.equal(who(store, 'a').extensions.v5.lostTurn.cause, 'hungry');
     await store.undo();
     assert.equal(who(store, 'a').extensions.v5.lostTurn, undefined);
+    await store.redo();
+    assert.equal(who(store, 'a').extensions.v5.lostTurn.cause, 'hungry', 'CA25 : ↷ rejoue le tour perdu');
+    assert.equal(who(store, 'b').hp, 0, 'et les Blessures de la victime');
   });
 });
 
@@ -240,6 +244,10 @@ describe('Bouclier (n) (CA12)', () => {
     assert.equal(stronger.protection.ap, real.protection.ap + 1, 'sans cumul : 3 au lieu de 2');
     assert.equal(stronger.defenderTest.details.modifiers.some(row => row.id === 'trait:shield'), false, 'le +1 DR du vrai bouclier ne se double pas');
     assert.equal(stronger.defenderTest.sl, real.defenderTest.sl);
+    const strongerText = describeResolutionDetail(stronger).join('\n'), realText = describeResolutionDetail(real).join('\n');
+    assert.match(strongerText, /Bouclier \(3\) du Trait · 3 PA/, 'la description nomme le Trait qui l\'emporte');
+    assert.doesNotMatch(strongerText, /Bouclier : Bouclier/, 'et non le vrai bouclier');
+    assert.match(realText, /Bouclier : Bouclier · 2 PA/, 'référence : le vrai bouclier seul reste nommé');
     const weaker = previewResolution(melee('shi-6', { actor: subject('a'), target: subject('b', { traits: ['Shield (1)'], equipment: [shield] }), protectionContext }));
     assert.equal(weaker.protection.shieldAp, 2, 'le vrai bouclier plus fort l\'emporte');
     assert.equal(weaker.protection.ap, real.protection.ap);

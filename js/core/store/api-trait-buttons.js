@@ -16,6 +16,7 @@ import { traitFrenzyState } from '../v5-talent-actions.js';
 import { sourceActive } from '../v5-talent-source.js';
 import { creatureLocationOf, incidentalArmour } from '../resolution/criticals.js';
 import { d100 } from '../dice.js';
+import { readCombatPosition } from '../v5-game-time.js';
 import { traitRequest, resolveTraitAnswer, testTargetOf, psychologyTestRequest, applyTraitPatches } from '../trait-effects.js';
 
 const FLAGS = Object.freeze({ protectsYoung: '« protège ses petits »', cornered: '« acculé »' });
@@ -35,7 +36,7 @@ const finish = (result, extra = {}) => {
 
 export function createTraitButtonsApi({ api, currentEnvelope }) {
   const find = id => (currentEnvelope().combat?.participants || []).find(row => row.id === id);
-  const turnPosition = envelope => ({ round: envelope.combat?.round ?? null, turnIndex: envelope.extensions?.v5?.turnIndex ?? null });
+  const turnPosition = envelope => { const { round, turnIndex } = readCombatPosition(envelope); return { round, turnIndex }; };
   // Déplacement du Tour (`system:turn-move`) : suivi seulement pour l'acteur courant d'un Tour identifié.
   const moveKeyOf = (envelope, actorId) => {
     const clock = v5StoreActionClock(envelope);
@@ -73,7 +74,7 @@ export function createTraitButtonsApi({ api, currentEnvelope }) {
       const base = target ? plan.tests[0]?.base : willpowerBase(source).value;
       if (!plan.available || !Number.isFinite(base)) return refuse('refused', plan.unresolved.join(' ') || 'Animosité : Force Mentale du porteur inconnue.');
       const request = traitRequest({ field: 'animosityCalm', kind: 'test', participantId: carrierId, participantName: source.name, label: `${nameOf(source)} · Calme devant ${nameOf(met)} : se retenir (Animosité)`,
-        testTarget: testTargetOf(source, { characteristic: 'FM', base }) });
+        testTarget: testTargetOf(source, { characteristic: 'FM', base, skill: 'calm' }) });
       const answer = answerOf(request, inputs);
       if (!answer) return needsInput([request]);
       const text = answer.success ? `${nameOf(source)} · Animosité devant ${nameOf(met)} : Calme réussi, il se retient`
@@ -90,7 +91,7 @@ export function createTraitButtonsApi({ api, currentEnvelope }) {
       const base = plan.tests[0]?.base;
       if (!plan.available || !Number.isFinite(base)) return refuse('refused', plan.unresolved.join(' ') || 'Frénésie : Volonté du participant inconnue.');
       const request = traitRequest({ field: 'frenzyWill', kind: 'test', participantId, participantName: person.name, label: `${nameOf(person)} · Volonté : entrer en Frénésie`,
-        testTarget: testTargetOf(person, { characteristic: 'FM', base }) });
+        testTarget: testTargetOf(person, { characteristic: 'FM', base, skill: 'calm' }) });
       const answer = answerOf(request, inputs);
       if (!answer) return needsInput([request]);
       const state = answer.success ? traitFrenzyState(person, { resolutionId: uid() }) : null;
@@ -146,7 +147,7 @@ export function createTraitButtonsApi({ api, currentEnvelope }) {
       const person = find(participantId);
       if (!person || !psychologyTraits(person).some(trait => trait.key === 'hungry')) return refuse('no-trait', 'Ce participant n’a pas le Trait Affamé.');
       const out = { unresolved: [] };
-      const request = psychologyTestRequest(out, person, 'hungry', { trigger: true }, { field: 'hungryCalm', characteristic: 'FM', dr: 2, label: `${nameOf(person)} · Calme (+2 DR) devant un cadavre frais : résister à la faim` });
+      const request = psychologyTestRequest(out, person, 'hungry', { trigger: true }, { field: 'hungryCalm', characteristic: 'FM', dr: 2, skill: 'calm', label: `${nameOf(person)} · Calme (+2 DR) devant un cadavre frais : résister à la faim` });
       if (!request) return refuse('refused', out.unresolved.join(' '));
       const answer = answerOf(request, inputs);
       if (!answer) return needsInput([request]);
