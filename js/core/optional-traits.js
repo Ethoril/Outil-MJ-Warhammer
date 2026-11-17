@@ -2,7 +2,7 @@
  * Traits optionnels des créatures (chantier des Traits optionnels, lot L2) : modèle des coches et règles de choix.
  * Fonctions pures : aucune entrée n'est modifiée, chaque opération rend `{ ok: true, choices }` ou `{ ok: false, error }`.
  * Les coches vivent sur le profil, dans `extensions.v5.optionalChoices` (D14) ; leur absence se lit comme vide, sans réécrire les données.
- * Aucun effet sur les caractéristiques ici (lot L3).
+ * Effets des coches (lot L3) : `applyOptionalChoices`, en fin de fichier.
  *
  * Forme des coches : `{ traits: [{ key, name, param, kind, origin }], attacks: [{ name, actions }], armour: [{ name, part, zones }] }`.
  * `origin` : « optional » (Trait facultatif de la fiche) ou « free » (ajouté librement, D3). `key` : `Nom` ou `Nom:paramètre`.
@@ -11,6 +11,11 @@ import { cloneValue } from './models.js';
 import { attackActions, printedArmour } from './bestiary-profiles.js';
 import { parseSizeTrait } from './creature-size.js';
 import { catalogueTraitOf } from '../data/creature-trait-catalogue.js';
+import { OPTIONAL_TRAIT_MODIFIERS, OPTIONAL_TRAINED_MODIFIERS, OPTIONAL_TRAIT_MODELS } from '../data/optional-trait-modifiers.js';
+import { creatureWounds, hardyRank } from './v5-magic-arbitrations.js';
+import { creatureSizeOf } from './creature-size.js';
+import { resolveSkill, resolveTalent } from './reference-catalog.js';
+import { canonicalCaracKey } from './carac-keys.js';
 
 const isText = value => typeof value === 'string' && value.trim() !== '';
 const fold = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
@@ -176,3 +181,243 @@ export function toggleOptionalArmour(record, choices, name) {
   return ok({ ...state, armour: [...state.armour, { name, part: cloneValue(part), zones }] });
 }
 
+// ---------------------------------------------------------------------------------------------------------------------------------
+// Lot L3 : effets des Traits cochés (D5, D6, D9, D10, D11, D16, D19 à D23). Pur : le profil d'entrée n'est jamais modifié.
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+const lookupFold = table => Object.fromEntries(Object.entries(table).map(([name, row]) => [fold(name), { name, ...row }]));
+const MODIFIERS = lookupFold(OPTIONAL_TRAIT_MODIFIERS);
+const TRAINED = lookupFold(OPTIONAL_TRAINED_MODIFIERS);
+const MODELS = lookupFold(OPTIONAL_TRAIT_MODELS);
+
+const ARMOUR_LABELS = Object.freeze({ head: 'tête', body: 'corps', arms: 'bras', legs: 'jambes' });
+const isNumber = value => typeof value === 'number' && Number.isFinite(value);
+const textOfTrait = trait => (typeof trait === 'string' ? trait : trait?.name ?? '');
+const splitTrait = text => {
+  const match = /^\s*([^(]+?)\s*(?:\(([^)]*)\))?\s*$/.exec(String(text ?? ''));
+  return match ? { name: match[1], detail: (match[2] ?? '').trim() } : { name: String(text ?? ''), detail: '' };
+};
+const traitLabel = (name, param) => (param ? `${name} (${param})` : name);
+
+/** Vrai quand le Trait (nom anglais ou français) figure déjà dans les Traits imprimés du profil ; pour Trained, quand le dressage y est. */
+function printedTrait(traits, name, param) {
+  const french = catalogueTraitOf(name)?.nameFr;
+  return traits.some(text => {
+    const found = splitTrait(textOfTrait(text));
+    if (![fold(name), french && fold(french)].includes(fold(found.name))) return false;
+    if (isTrained(name)) return dressages(found.detail).some(item => fold(item) === fold(param) || fold(trainedLabel(item)) === fold(trainedLabel(param)));
+    return !param || fold(found.detail) === fold(param);
+  });
+}
+
+const woundsOf = (caracs, size, hardy) => creatureWounds({ caracs, size, hardy }).wounds;
+
+/**
+ * Profil effectif d'un profil de Réserve à coches : `{ profile, changes, notes }`.
+ * `changes` : `{ field, printed, effective, source }` pour chaque champ modifié (valeur imprimée et valeur modifiée) ; `notes` : points à
+ * signaler (caractéristique absente, Trait sans effet). Sans coche, le profil d'entrée est rendu tel quel (CA6). Les Traits de D5 déjà
+ * imprimés n'ont aucun effet (D10) ; Elite et Leader appliquent le modèle V5 à la place du Trait V4 (D19).
+ */
+export function applyOptionalChoices(profile) {
+  const choices = readOptionalChoices(profile);
+  if (!profile || !(choices.traits.length || choices.attacks.length || choices.armour.length)) return { profile, changes: [], notes: [] };
+  const out = cloneValue(profile);
+  const changes = [];
+  const notes = [];
+  const printedTraits = Array.isArray(profile.traits) ? profile.traits : [];
+  const printedCaracs = profile.caracs && typeof profile.caracs === 'object' ? profile.caracs : {};
+  out.caracs = cloneValue(printedCaracs);
+
+  // 1. Traits cochés : texte ajouté, écarts de caractéristiques, Blessures, modèles.
+  const delta = {};
+  const sources = {};
+  const addDelta = (key, value, source) => {
+    if (!isNumber(printedCaracs[key])) { notes.push(`${source} : ${key} absente du profil (case vide), écart non appliqué.`); return; }
+    delta[key] = (delta[key] || 0) + value;
+    (sources[key] ||= []).push(source);
+  };
+  const added = [];
+  const newDressages = [];
+  const models = [];
+  let hardyAdded = false;
+  let sizeChoice = null;
+  for (const item of choices.traits) {
+    const name = String(item.name ?? '');
+    const param = String(item.param ?? '').trim();
+    if (!name) continue;
+    const key = fold(name);
+    if (key === 'size') { if (param && !sizeChoice) sizeChoice = param; continue; }
+    if (isTrained(name)) {
+      if (!param || printedTrait(printedTraits, name, param) || newDressages.some(entry => fold(entry) === fold(param))) continue;
+      newDressages.push(param);
+      const war = TRAINED[fold(param)] || Object.values(TRAINED).find(row => fold(row.nameFr) === fold(param));
+      if (war) for (const [carac, value] of Object.entries(war.stats)) addDelta(carac, value, traitLabel(name, war.name));
+      continue;
+    }
+    if (printedTrait(printedTraits, name, param)) continue;
+    if (MODELS[key]) {
+      const model = MODELS[key];
+      if (model.blockedByTrait && (printedTrait(printedTraits, model.blockedByTrait, '') || choices.traits.some(other => fold(other.name) === fold(model.blockedByTrait)))) {
+        notes.push(`${model.nameFr} : refusé sur une créature ${model.blockedByTrait}, sans effet.`);
+        continue;
+      }
+      models.push({ ...model, source: name });
+      for (const [carac, value] of Object.entries(model.stats)) addDelta(carac, value, name);
+      added.push(traitLabel(name, param));
+      continue;
+    }
+    if (MODIFIERS[key]) {
+      const row = MODIFIERS[key];
+      for (const [carac, value] of Object.entries(row.stats || {})) addDelta(carac, value, name);
+      if (row.wounds?.rule === 'hardy') hardyAdded = true;
+    }
+    added.push(traitLabel(name, param));
+  }
+
+  // Caractéristiques effectives.
+  for (const key of Object.keys(printedCaracs)) {
+    if (!delta[key]) continue;
+    const effective = Math.max(0, printedCaracs[key] + delta[key]);
+    if (effective === printedCaracs[key]) continue;
+    out.caracs[key] = effective;
+    changes.push({ field: key, printed: printedCaracs[key], effective, source: sources[key].join(', ') });
+  }
+  const gain = key => (isNumber(out.caracs[key]) && isNumber(printedCaracs[key]) ? out.caracs[key] - printedCaracs[key] : 0);
+  const sourceOf = key => (sources[key] || []).join(', ');
+
+  // Traits du participant : texte au format imprimé (D9), Dressé fusionné en un seul texte, une seule Taille.
+  const traits = printedTraits.map(trait => (typeof trait === 'string' ? trait : cloneValue(trait)));
+  if (sizeChoice) {
+    const sizeText = `Size (${sizeChoice})`;
+    const at = traits.findIndex(text => isSize(splitTrait(textOfTrait(text)).name));
+    if (at >= 0) traits[at] = sizeText; else traits.push(sizeText);
+  }
+  traits.push(...added);
+  if (newDressages.length) {
+    const at = traits.findIndex(text => isTrained(splitTrait(textOfTrait(text)).name));
+    if (at >= 0) traits[at] = `Trained (${[...dressages(splitTrait(textOfTrait(traits[at])).detail), ...newDressages].join(', ')})`;
+    else traits.push(`Trained (${newDressages.join(', ')})`);
+  }
+  out.traits = traits;
+
+  // 2. Initiative, Taille, Blessures.
+  if (gain('I')) {
+    const printed = isNumber(profile.initiative) ? profile.initiative : printedCaracs.I;
+    out.initiative = printed + gain('I');
+    changes.push({ field: 'Initiative', printed, effective: out.initiative, source: sourceOf('I') });
+  }
+  const sizeBefore = creatureSizeOf(profile);
+  const sizeAfter = creatureSizeOf({ ...out, size: sizeChoice ? undefined : profile.size });
+  const sizeChanged = sizeBefore.key !== sizeAfter.key;
+  if (sizeChanged) changes.push({ field: 'Taille', printed: sizeBefore.label, effective: sizeAfter.label, source: 'Size' });
+  if (hardyAdded || sizeChanged || ['F', 'E', 'FM'].some(key => gain(key))) {
+    const hardyBase = (printedTrait(printedTraits, 'Hardy', '') ? 1 : 0) + hardyRank(profile);
+    const why = [hardyAdded && 'Hardy', sizeChanged && 'Size', ...['F', 'E', 'FM'].filter(key => gain(key)).map(sourceOf)].filter(Boolean).join(', ');
+    try {
+      const gap = woundsOf(out.caracs, sizeAfter.key, hardyBase + (hardyAdded ? 1 : 0)) - woundsOf(printedCaracs, sizeBefore.key, hardyBase);
+      if (isNumber(profile.maxHp) && gap) {
+        out.maxHp = Math.max(1, profile.maxHp + gap);
+        if (isNumber(profile.hp)) out.hp = Math.max(1, profile.hp + gap);
+        changes.push({ field: 'Blessures', printed: profile.maxHp, effective: out.maxHp, source: [...new Set(why.split(', '))].join(', ') });
+      }
+    } catch {
+      notes.push('Blessures inchangées : Force, Endurance et Force Mentale sont toutes nécessaires pour les recalculer.');
+    }
+  }
+
+  // 3. Compétences : suivent les caractéristiques (D22) ; les modèles ajoutent leur bonus (D21).
+  const skillSources = new Map();
+  const noteSkill = (skill, source) => skillSources.set(skill, [...(skillSources.get(skill) || []), source]);
+  const originals = Array.isArray(out.skills) ? out.skills : [];
+  const printedTotals = new Map(originals.map(skill => [skill, skill.total]));
+  for (const skill of originals) {
+    const carac = canonicalCaracKey(skill.carac);
+    if (carac && isNumber(skill.total) && gain(carac)) { skill.total += gain(carac); noteSkill(skill, sourceOf(carac)); }
+  }
+  const skills = [...originals];
+  const heldBy = (id, name) => skills.find(skill => (id && skill.id === id) || fold(skill.name) === fold(name));
+  for (const model of models) {
+    for (const row of model.skills) {
+      const targets = [];
+      if (row.kind === 'melee-two') {
+        const melee = skills.filter(skill => fold(skill.group) === 'corps a corps' && isNumber(skill.total)).sort((a, b) => b.total - a.total).slice(0, 2);
+        if (melee.length) targets.push(...melee.map(skill => ({ held: skill })));
+        else targets.push({ lookup: 'Corps à corps (Base)' });
+      } else {
+        const held = heldBy(resolveSkill(row.nameFr).entry?.id, row.nameFr);
+        targets.push(held ? { held } : { lookup: row.nameFr });
+      }
+      for (const target of targets) {
+        if (target.held) {
+          if (isNumber(target.held.total)) { target.held.total += row.value; noteSkill(target.held, model.source); }
+          continue;
+        }
+        const resolved = resolveSkill(target.lookup);
+        const entry = resolved.status === 'resolved' ? resolved.entry : null;
+        const carac = entry ? canonicalCaracKey(entry.carac) : null;
+        if (!entry || !carac || !isNumber(out.caracs[carac])) { notes.push(`${model.source} : compétence ${target.lookup} non ajoutée (${carac || 'caractéristique'} absente du profil).`); continue; }
+        const fresh = { name: entry.nom, sourceName: row.name, total: out.caracs[carac] + row.value, id: entry.id, group: entry.group, carac: entry.carac, status: 'resolved' };
+        skills.push(fresh);
+        noteSkill(fresh, model.source);
+      }
+    }
+  }
+  if (skills.length !== originals.length || skillSources.size) out.skills = skills;
+  for (const [skill, list] of skillSources) changes.push({ field: `Compétence : ${skill.name}`, printed: printedTotals.has(skill) ? printedTotals.get(skill) : null, effective: skill.total, source: [...new Set(list)].join(', ') });
+
+  // 4. Talents des modèles.
+  const talents = Array.isArray(out.talents) ? out.talents : [];
+  for (const model of models) {
+    for (const row of model.talents) {
+      const resolved = resolveTalent(row.nameFr);
+      const entry = resolved.status === 'resolved' ? resolved.entry : null;
+      const id = entry?.id || row.key;
+      if (talents.some(talent => talent.id === id || fold(talent.name) === fold(entry?.nom || row.nameFr))) continue;
+      talents.push({ name: entry?.nom || row.nameFr, sourceName: row.nameFr, rank: 1, id, status: entry ? 'resolved' : 'unresolved' });
+      changes.push({ field: `Talent : ${entry?.nom || row.nameFr}`, printed: null, effective: 'ajouté', source: model.source });
+    }
+  }
+  if (talents.length) out.talents = talents;
+
+  // 5. Attaques : cochées ajoutées, puis base (CC, CT) et dégâts de mêlée suivent les écarts (D22).
+  const lines = Array.isArray(out.diceLines) ? out.diceLines : [];
+  for (const item of choices.attacks) {
+    (Array.isArray(item.actions) ? item.actions : []).forEach((action, index) => {
+      const copy = cloneValue(action);
+      if (!copy.id) copy.id = `optional-attack:${item.name}:${index + 1}`;
+      lines.push(copy);
+    });
+  }
+  const bonusForce = gain('F') ? Math.floor(out.caracs.F / 10) - Math.floor(printedCaracs.F / 10) : 0;
+  for (const line of lines) {
+    const carac = line.attr === 'CC' || line.attr === 'CT' ? line.attr : null;
+    if (carac && isNumber(line.base) && gain(carac)) {
+      changes.push({ field: `Attaque : ${line.name} (base)`, printed: line.base, effective: line.base + gain(carac), source: sourceOf(carac) });
+      line.base += gain(carac);
+    }
+    const melee = line.extensions?.v5?.kind === 'melee' || (!line.extensions?.v5?.kind && line.attr === 'CC');
+    if (melee && bonusForce) {
+      if (line.damageFormula) notes.push(`Attaque ${line.name} : formule de dégâts « ${line.damageFormula} » non recalculée, à ajuster (BF ${bonusForce > 0 ? '+' : ''}${bonusForce}).`);
+      else if (isNumber(line.damage)) {
+        changes.push({ field: `Attaque : ${line.name} (dégâts)`, printed: line.damage, effective: line.damage + bonusForce, source: sourceOf('F') });
+        line.damage += bonusForce;
+      }
+    }
+  }
+  if (lines.length) out.diceLines = lines;
+
+  // 6. Armure : maximum par zone, comme l'armure imprimée.
+  if (choices.armour.length) {
+    out.armor = { ...(out.armor || {}) };
+    for (const piece of choices.armour) {
+      for (const zone of Object.keys(ARMOUR_LABELS)) {
+        const value = piece.zones?.[zone];
+        if (isNumber(value) && value > (out.armor[zone] || 0)) {
+          changes.push({ field: `Armure (${ARMOUR_LABELS[zone]})`, printed: out.armor[zone] || 0, effective: value, source: piece.name });
+          out.armor[zone] = value;
+        }
+      }
+    }
+  }
+  return { profile: out, changes, notes };
+}
