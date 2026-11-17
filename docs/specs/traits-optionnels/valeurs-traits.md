@@ -62,3 +62,57 @@ Effets dérivés à recalculer quand un Trait est coché (le livre ne les imprim
 7. **Cohérence avec le profil ci-dessus (D10).** Si le MJ coche un Trait déjà présent en base, l'effet est nul (D10). *Recommandation : afficher « déjà compté » plutôt que de masquer la case.*
 
 Point de méthode : les extractions PDF et les scripts de comparaison sont dans `tmp/reprise-team/traits-d13/` (non versionné).
+
+## 4. Modèles V5 Elite et Leader (D19)
+
+Relevé du 17/11/2026 dans le Livre de base V5 (L06), p. 353, plus p. 318 et p. 352 pour les règles d'application. Les chiffres viennent des deux versions du PDF du catalogue (« EN v2 » et « EN v3 »). Rien n'est recopié : noms, chiffres, page.
+
+**Écart de version, à trancher (voir plan, point 1).** *Elite* est identique en v2 et en v3. Le modèle que la v2 nomme *Leader* s'appelle *Lieutenant* en v3, avec des chiffres plus forts. Les données de l'outil (`js/data/bestiary/L06.json`, depuis la 3.28.0) sont en v3 : *Elite* = `E0-P-114`, *Lieutenant* = `E0-P-115`, *Commander* = `E0-P-116`. Le MJ parle de « Leader » (nom de la v2 et du Trait V4).
+
+### Elite (L06 p. 353, v2 = v3 ; `E0-P-114`, « Élite »)
+
+- Caractéristiques : +15 à CC, F, E, I, FM. Rien aux autres (M, CT, Ag, Dex, Int, Soc inchangées).
+- Blessures : le livre dit de les augmenter à cause de F, E et FM, sans chiffre. Contrôle sur le Stormvermin (p. 352, 15) et sur Skrakk (p. 354, 19) : le total égale BF + 2 × BE + BFM calculé sur leurs valeurs finales.
+- Compétences (valeurs ajoutées aux avances) : Calme +15, Esquive +15, Intimidation +10, Commandement +5, Corps à corps « n'importe lesquels deux » +15, Perception +15.
+- Talents ajoutés : Vigilance, Combat instinctif, Déterminé (Combat Aware, Combat Reflexes, Resolute).
+- Condition ou restriction : aucune de Bestial ou d'Intelligence ; le livre (p. 318 et p. 353) destine les modèles aux espèces « plus organisées », sous forme de suggestions.
+
+### Leader, v2 (L06 p. 353, PDF « EN v2 »)
+
+- Caractéristiques : +15 à CC, CT, F, E, I, Ag, FM ; +5 à Soc. Rien d'autre.
+- Compétences : Calme +15, Esquive +15, Intimidation +15, Commandement +15, Savoir (Guerre) +10, Corps à corps « deux » +15, Perception +15.
+- Talents : Vigilance, Combat instinctif, Assaut féroce, Exaltant, Déterminé, Seigneur de guerre.
+
+### Lieutenant, v3 (L06 p. 353, PDF « EN v3 », données de l'outil ; `E0-P-115`)
+
+- Caractéristiques : +20 à CC, CT, F, E, I, Ag, FM ; +10 à Soc. Rien d'autre.
+- Compétences : mêmes six noms et mêmes valeurs que Leader v2, soit Calme +15, Esquive +15, Intimidation +15, Commandement +15, Savoir (Guerre) +10, Corps à corps « deux » +15, Perception +15 (le relevé de `E0-P-115` les confirme).
+- Talents : les six de Leader v2.
+- Même absence de restriction écrite que pour Elite. La restriction de D17 (Bestial) vient du Livre de base français V4 (p. 340), pas de ce modèle.
+
+### Rapprochement avec les clés de l'outil
+
+Mesuré par `tmp/reprise-team/traits-plan/resolve.mjs` (`resolveSkill`, `resolveTalent` de `js/core/reference-catalog.js`).
+
+| Élément du modèle | Clé de l'outil | État |
+|---|---|---|
+| Cool | Calme (`skill-…-base`, FM) | existe |
+| Dodge | Esquive (Ag) | existe |
+| Intimidate | Intimidation (F) | existe |
+| Leadership | Commandement (Soc) | existe |
+| Lore (Warfare) | Savoir (Guerre) (Int) | existe |
+| Perception | Perception (I) | existe |
+| Melee (Any Two) | Corps à corps (Base, Armes d'hast, Deux mains, Escrime…) existent un par un ; « Any Two » n'a pas de clé (`frUnverified` dans la donnée) | **manque** : à résoudre en prenant les compétences de Corps à corps du profil |
+| Combat Aware | `talent-combat-aware` (Vigilance) | existe |
+| Combat Reflexes | `talent-combat-reflexes` (Combat instinctif) | existe |
+| Resolute | `talent-resolute` (Déterminé) | existe |
+| Furious Assault | `talent-furious-assault` (Assaut féroce) | existe |
+| Inspiring | `talent-inspiring` (Exaltant) | existe |
+| War Leader | `talent-war-leader` (Seigneur de guerre) | existe |
+
+Aucun Talent ne manque pour Elite ni pour Leader/Lieutenant (Chance et Inébranlable ne servent qu'à Commander, hors périmètre).
+
+### Mécanique de calcul constatée (sur les exemples du livre)
+
+- Une compétence imprimée est un total (caractéristique + avances) ; le bonus du modèle s'ajoute aux avances. Stormvermin (Elite sur Clanrat) : Calme 50 = FM 35 + 15, cohérent. Les autres compétences du Stormvermin ne se recomptent pas exactement depuis le Clanrat (Perception 65 au lieu de 75, Ag +10 que le modèle ne donne pas) : le livre arrondit ses exemples. Règle retenue pour l'outil : total = ancien total (ou caractéristique modifiée si absente) + écart de la caractéristique liée + bonus ; à confirmer par le MJ (plan, point 2).
+- `applyBestiaryTemplates` (`js/core/bestiary-templates.js`) applique déjà les modificateurs et les Talents. Deux défauts pour D19 : il ajoute une compétence absente avec le seul bonus comme total (au lieu de la caractéristique modifiée + bonus), et il refuse le profil dont une caractéristique modifiée est vide (CT ou Soc absente d'une bête).
