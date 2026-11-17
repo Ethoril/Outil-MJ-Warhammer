@@ -118,11 +118,21 @@ describe('Parasité et Bestial en défense (CA3, CA10)', () => {
 
   test('Bestial : le plan de défense ne propose que l\'Esquive ; une défense de Corps à corps est refusée', () => {
     const target = subject('b', { traits: ['Bestial'] });
-    const parried = previewResolution(melee('bes-2', { actor: subject('a'), target }));
+    const parried = previewResolution(melee('bes-2', { actor: subject('a'), target, defense: { label: 'Corps à corps (Base)', attr: 'CC' } }));
     assert.deepEqual(parried.defensePlan.allowed, ['Esquive']);
     assert.ok(parried.unresolved.some(row => /Bestial/.test(row) && /Esquive/.test(row)), JSON.stringify(parried.unresolved));
     const dodged = previewResolution(melee('bes-3', { actor: subject('a'), target, defense: dodge }));
     assert.equal(dodged.unresolved.some(row => /Bestial/.test(row)), false);
+  });
+
+  test('Bestial : une défense en valeur libre du MJ (ni compétence ni Caractéristique, ou « Autre ») n’est pas refusée', () => {
+    const target = subject('b', { traits: ['Bestial'] });
+    for (const defense of [{}, { label: 'Autre' }]) {
+      const free = previewResolution(melee('bes-4', { actor: subject('a'), target, defense }));
+      assert.deepEqual(free.defensePlan.allowed, ['Esquive']);
+      assert.equal(free.defensePlan.refused, undefined);
+      assert.equal(free.unresolved.some(row => /Bestial/.test(row)), false, JSON.stringify(free.unresolved));
+    }
   });
 });
 

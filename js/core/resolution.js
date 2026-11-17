@@ -276,9 +276,11 @@ export function previewResolution(input) {
   const withTraitModifier = (settings, row) => ({ ...settings, slModifiers: [...(settings?.slModifiers || []).filter(old => old.id !== row.id), row] });
   if (attackType(normalized.action.type) && mountedAttackKind === 'melee' && stateTraits(normalized.target).some(trait => trait.key === 'infestation'))
     normalized.v5 = withTraitModifier(normalized.v5, { id: 'trait:infestation', label: 'Parasité : −1 DR pour toucher en mêlée', amount: -1 });
-  // Bestial : défense par l'Esquive seule ; une autre défense est refusée.
+  // Bestial : défense par l'Esquive seule ; une autre défense calculée (Parade, Corps à corps…) est refusée.
+  // La valeur libre du MJ n'est pas refusée : ni compétence ni Caractéristique, libellé « Autre » ou absent (« CC » par défaut de la normalisation).
+  const freeDefense = !defenderSkillId && !normalizedDefenseAttribute && ['', 'autre', 'cc'].includes(normalizedDefenseSkill);
   if (attackType(normalized.action.type) && psychologyTraits(normalized.target).some(trait => trait.key === 'bestial'))
-    normalized.defensePlan = { allowed: ['Esquive'], reason: 'Bestial', ...(normalized.defense && !isDodgeDefense ? { refused: true } : {}) };
+    normalized.defensePlan = { allowed: ['Esquive'], reason: 'Bestial', ...(normalized.defense && !isDodgeDefense && !freeDefense ? { refused: true } : {}) };
   // Bouclier (n) : bouclier virtuel (option Bouclier) ; +1 DR en opposition par Esquive ou Corps à corps, n PA sur la zone touchée.
   // « Shield 2* » (L22, porté dans le dos) : rappel seul, le moteur ne connaît pas la direction de l'attaque. Un vrai bouclier l'emporte.
   const traitShield = attackType(normalized.action.type) ? shieldTraitOf(normalized.target) : null;
