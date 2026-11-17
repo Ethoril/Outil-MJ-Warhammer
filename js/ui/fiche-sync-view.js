@@ -13,12 +13,16 @@ const plural = (count, word) => `${count} ${word}${count > 1 ? 's' : ''}`;
 const mountName = (name, label) => (label && label !== name ? `« ${name} » (${label})` : `« ${name} »`);
 /**
  * Ligne d'aperçu de la monture déclarée par la fiche (voir planMountSync) ; '' quand rien ne change. `current` : profil `monture-<PJ>` en
- * place (facultatif) ; quand l'espèce change et qu'il porte des Traits optionnels cochés, la ligne annonce leur retrait (CA23).
+ * place (facultatif) ; quand ce profil est reconstruit (espèce changée, ou monture retirée puis redéclarée d'une autre espèce) et qu'il
+ * porte des Traits optionnels cochés, la ligne annonce leur retrait (CA23).
  */
 export function mountLineOf(mount, current = null) {
   const checked = readOptionalChoices(current);
-  if (mount?.kind === 'replace' && checked.traits.length + checked.attacks.length + checked.armour.length)
+  const lost = checked.traits.length + checked.attacks.length + checked.armour.length > 0;
+  if (mount?.kind === 'replace' && lost)
     return `${mountLineOf(mount)} Ses Traits optionnels cochés sont retirés : le nouveau profil repart sans coche.`;
+  if (mount?.kind === 'create' && lost)
+    return `${mountLineOf(mount)} Le profil de monture resté en bibliothèque${current?.name ? ` (« ${current.name} »)` : ''} est remplacé : ses Traits optionnels cochés sont retirés, le nouveau profil repart sans coche.`;
   switch (mount?.kind) {
     case 'create': return `Monture : ${mountName(mount.name, mount.label)} déclarée par la fiche (profil créé depuis le bestiaire et lié en combat).`;
     case 'redeclare': return `Monture : ${mountName(mount.name, mount.label)} de nouveau déclarée par la fiche (profil existant réutilisé, image et PV conservés).`;

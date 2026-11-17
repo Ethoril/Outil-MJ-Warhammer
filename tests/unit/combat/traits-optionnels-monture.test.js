@@ -21,8 +21,11 @@ const fiche = monture => ficheSnapshot('caelel', { ...fixture, monture });
 const horse = nom => ({ espece: HORSE, nom });
 const spider = nom => ({ espece: SPIDER, nom });
 
+// Persistance en mémoire, comme en production (js/main.js) : les profils sont rangés sous leur forme canonique.
+const memory = () => { let saved = null; return { async load() { return saved && structuredClone(saved); }, async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } }; };
+
 async function table() {
-  const store = createStore({ storage: null });
+  const store = createStore({ persistence: memory(), storage: null });
   await store.ready;
   await store.addProfile({ id: 'pj', name: 'Caelel', kind: 'PJ', caracs: { CC: 40 }, skills: [], talents: [], equipment: [], diceLines: [], extensions: {} });
   return store;
@@ -67,10 +70,30 @@ test('CA23 : espèce changée, le nouveau profil repart sans coche et l’aperç
   assert.deepEqual(readOptionalChoices(profileOf(store, 'monture-pj')), { traits: [], attacks: [], armour: [] });
 });
 
+test('CA23 : monture retirée puis redéclarée d’une autre espèce, l’aperçu dit la perte des coches', async () => {
+  const store = await table();
+  await sync(store, fiche(horse('Tonnerre')));
+  await check(store, 'monture-pj', warHorse());
+  // La fiche ne déclare plus de monture : le profil et ses coches restent en bibliothèque.
+  const removed = fiche(null);
+  assert.equal(planProfileSync(removed, profileOf(store), { library: store.listProfiles() }).mount.kind, 'remove');
+  await sync(store, removed);
+  assert.deepEqual(readOptionalChoices(profileOf(store, 'monture-pj')).traits.map(row => row.key), ['Trained:War']);
+  // Elle déclare ensuite une araignée : le profil `monture-pj` est reconstruit, l'aperçu doit l'annoncer.
+  const snapshot = fiche(spider('Toile'));
+  const plan = planProfileSync(snapshot, profileOf(store), { library: store.listProfiles() });
+  assert.equal(plan.mount.kind, 'create');
+  assert.match(mountLineOf(plan.mount, profileOf(store, 'monture-pj')), /Traits optionnels.*retirés/);
+  assert.equal(mountLineOf(plan.mount, null), mountLineOf(plan.mount), 'sans profil en place, la ligne reste celle d’aujourd’hui');
+  await sync(store, snapshot, SPIDER);
+  assert.deepEqual(readOptionalChoices(profileOf(store, 'monture-pj')), { traits: [], attacks: [], armour: [] }, 'le nouveau profil repart sans coche');
+});
+
 test('CA22 : le cavalier entre en combat avec sa monture cochée (Dressé (Guerre) : CC +10)', async () => {
   const store = await table();
   await sync(store, fiche(horse('Tonnerre')));
   await check(store, 'monture-pj', warHorse());
+  assert.match(store.getLog().find(row => /Traits optionnels/.test(row.text)).text, /Dressé \(Guerre\)/, 'journal au nom français, dressage compris');
   await store.addProfilesToCombat(['pj'], { zone: 'active' });
   const steed = store.listParticipants().find(row => row.profileId === 'monture-pj');
   assert.ok(steed, 'la monture entre avec son cavalier');

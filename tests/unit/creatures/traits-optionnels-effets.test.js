@@ -50,8 +50,9 @@ describe('traits optionnels : Traits de D5 pris seuls (CA7, CA9, D13)', () => {
     assert.equal(sortie.profile.hp, 17);
     assert.equal(competenceDe(sortie, 'Calme').total, 40);
     assert.ok(sortie.profile.traits.includes('Tough'));
-    assert.deepEqual(change(sortie, 'E'), { field: 'E', printed: 40, effective: 50, source: 'Tough' });
-    assert.deepEqual(change(sortie, 'Blessures'), { field: 'Blessures', printed: 14, effective: 17, source: 'Tough' });
+    // Source affichée au MJ : nom français du Trait (catalogue).
+    assert.deepEqual(change(sortie, 'E'), { field: 'E', printed: 40, effective: 50, source: 'Coriace' });
+    assert.deepEqual(change(sortie, 'Blessures'), { field: 'Blessures', printed: 14, effective: 17, source: 'Coriace' });
   });
   test('Fast : M +1 et Ag +10, l Esquive suit', () => {
     const sortie = applyOptionalChoices(profil({ coches: [coche('Fast')] }));
@@ -80,7 +81,7 @@ describe('traits optionnels : Traits de D5 pris seuls (CA7, CA9, D13)', () => {
     assert.equal(sortie.profile.caracs.Int, 40);
     assert.equal(sortie.profile.caracs.I, 40);
     assert.equal(sortie.profile.initiative, 40);
-    assert.deepEqual(change(sortie, 'Initiative'), { field: 'Initiative', printed: 30, effective: 40, source: 'Clever' });
+    assert.deepEqual(change(sortie, 'Initiative'), { field: 'Initiative', printed: 30, effective: 40, source: 'Intelligent' });
   });
   test('Cunning : Soc +10, Int +10, I +10', () => {
     const sortie = applyOptionalChoices(profil({ coches: [coche('Cunning')] }));
@@ -105,13 +106,13 @@ describe('traits optionnels : cumul, Traits déjà imprimés, décochage (CA10, 
   test('Fast et Tough ensemble : les écarts s additionnent', () => {
     const sortie = applyOptionalChoices(profil({ coches: [coche('Fast'), coche('Tough')] }));
     assert.deepEqual([sortie.profile.caracs.M, sortie.profile.caracs.Ag, sortie.profile.caracs.E, sortie.profile.caracs.FM], [5, 40, 50, 40]);
-    assert.equal(change(sortie, 'E').source, 'Tough');
+    assert.equal(change(sortie, 'E').source, 'Coriace');
   });
   test('Clever et Cunning ensemble : Int +30, I +20', () => {
     const sortie = applyOptionalChoices(profil({ coches: [coche('Clever'), coche('Cunning')] }));
     assert.equal(sortie.profile.caracs.Int, 50);
     assert.equal(sortie.profile.caracs.I, 50);
-    assert.equal(change(sortie, 'I').source, 'Clever, Cunning');
+    assert.equal(change(sortie, 'I').source, 'Intelligent, Rusé');
   });
   test('un Trait de D5 déjà imprimé en base n a aucun effet', () => {
     const entree = profil({ traits: ['Night Vision', 'Tough'], coches: [coche('Tough')] });
@@ -135,7 +136,7 @@ describe('traits optionnels : Hardy, Taille (D11, D16, D23)', () => {
     const sortie = hardy(['Night Vision']);
     assert.equal(sortie.profile.maxHp, 18);
     assert.deepEqual(sortie.profile.caracs, profil().caracs);
-    assert.deepEqual(change(sortie, 'Blessures'), { field: 'Blessures', printed: 14, effective: 18, source: 'Hardy' });
+    assert.deepEqual(change(sortie, 'Blessures'), { field: 'Blessures', printed: 14, effective: 18, source: 'Endurant' });
   });
   test('Hardy sur Taille Petite : + BE', () => {
     assert.equal(hardy(['Size (Small)']).profile.maxHp, 18);
@@ -154,7 +155,7 @@ describe('traits optionnels : Hardy, Taille (D11, D16, D23)', () => {
     const sortie = applyOptionalChoices(profil({ coches: [coche('Size', 'Large', 'size')] }));
     assert.equal(sortie.profile.maxHp, 29);
     assert.deepEqual(sortie.profile.traits.filter(texte => /^Size/.test(texte)), ['Size (Large)']);
-    assert.deepEqual(change(sortie, 'Taille'), { field: 'Taille', printed: 'Moyenne', effective: 'Grande', source: 'Size' });
+    assert.deepEqual(change(sortie, 'Taille'), { field: 'Taille', printed: 'Moyenne', effective: 'Grande', source: 'Taille' });
   });
   test('Taille Grande cochée sur une créature Petite : un seul Trait Size, Blessures recalculées par différence', () => {
     const sortie = applyOptionalChoices(profil({ traits: ['Size (Small)'], coches: [coche('Size', 'Large', 'size')] }));
@@ -254,6 +255,7 @@ describe('traits optionnels : modèles V5 Elite et Leader (D19, D20, D21)', () =
     assert.equal(sortie.profile.caracs.CC, 60);
     assert.ok(sortie.profile.caracs.CT === null || !('CT' in sortie.profile.caracs));
     assert.ok(sortie.notes.some(note => /CT/.test(note)), sortie.notes.join('|'));
+    assert.ok(sortie.notes.every(note => !/^Leader\b/.test(note)) && sortie.notes.some(note => /^Meneur/.test(note)), `notes au nom français : ${sortie.notes.join('|')}`);
   });
   test('Leader refusé sur une créature Bestial : sans effet, avec une note', () => {
     const entree = profil({ traits: ['Bestial'], coches: [coche('Leader')] });
@@ -276,6 +278,12 @@ describe('traits optionnels : attaques et armures cochées (CA21)', () => {
     const sortie = applyOptionalChoices(profil({ armour: [{ name: 'Casque', part: {}, zones: { head: 2, body: 0, arms: 0, legs: 0 } }, { name: 'Cotte', part: {}, zones: { head: 0, body: 3, arms: 1, legs: 0 } }] }));
     assert.deepEqual(sortie.profile.armor, { head: 2, body: 3, arms: 1, legs: 0 });
     assert.deepEqual(change(sortie, 'Armure (corps)'), { field: 'Armure (corps)', printed: 1, effective: 3, source: 'Cotte' });
+    // Le combat lit les PA par localisation d'abord : les six localisations suivent (bras et jambes des deux côtés).
+    assert.deepEqual(sortie.profile.armorLocations, { head: 2, body: 3, rightArm: 1, leftArm: 1, rightLeg: 0, leftLeg: 0 });
+  });
+  test('les PA par localisation d’un profil rangé partent de ses armorLocations', () => {
+    const entree = { ...profil({ armour: [{ name: 'Casque', part: {}, zones: { head: 2, body: 0, arms: 0, legs: 0 } }] }), armorLocations: { head: 0, body: 1, rightArm: 0, leftArm: 4, rightLeg: 0, leftLeg: 0 } };
+    assert.deepEqual(applyOptionalChoices(entree).profile.armorLocations, { head: 2, body: 1, rightArm: 0, leftArm: 4, rightLeg: 0, leftLeg: 0 });
   });
   test('une armure moins haute que l imprimée ne la diminue pas', () => {
     const sortie = applyOptionalChoices(profil({ armour: [{ name: 'Cuir', part: {}, zones: { head: 0, body: 0, arms: 0, legs: 0 } }] }));

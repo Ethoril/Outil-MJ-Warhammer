@@ -2,19 +2,14 @@
 // qui n'écrit que le profil. Les participants déjà en rencontre ne changent pas (D2) ; ceux ajoutés ensuite passent par
 // `applyOptionalChoices` à leur création (store.js, `participantFromProfile`).
 import { uid } from '../models.js';
-import { readOptionalChoices } from '../optional-traits.js';
-import { catalogueTraitOf } from '../../data/creature-trait-catalogue.js';
+import { readOptionalChoices, optionalTraitLabel } from '../optional-traits.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const refuse = (reason, message) => ({ ok: false, reason, message });
 const isEmpty = choices => !choices.traits.length && !choices.attacks.length && !choices.armour.length;
 
-/** Libellé court d'une coche de Trait pour le journal : « Pisteur », « Dressé (War) ». */
-const traitLabel = item => {
-  const name = catalogueTraitOf(item.name)?.nameFr || item.name;
-  const param = String(item.param ?? '').trim();
-  return param ? `${name} (${param})` : name;
-};
+/** Libellé court d'une coche de Trait pour le journal, en français : « Pisteur », « Dressé (Guerre) ». */
+const traitLabel = item => optionalTraitLabel(item.name, item.param);
 
 export function createOptionalTraitsApi({ api, currentEnvelope }) {
   return {

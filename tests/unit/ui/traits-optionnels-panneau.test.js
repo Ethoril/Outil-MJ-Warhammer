@@ -40,8 +40,12 @@ const OGRE = 'E0-P-072';
 const ogreRecord = l06.find(row => row.id === OGRE);
 const ogreTemplate = buildReserveProfileFromBestiary(OGRE, { library: l06, nameFr: true });
 
+// Persistance en mémoire, comme en production (js/main.js) : les profils sont rangés sous leur forme canonique (Traits imprimés dans
+// `extensions.traits`), celle que le panneau lit réellement.
+const memory = () => { let saved = null; return { async load() { return saved && structuredClone(saved); }, async saveAtomic({ state }) { saved = structuredClone(state); return { ok: true }; } }; };
+
 async function table(extra = []) {
-  const store = createStore({ storage: null });
+  const store = createStore({ persistence: memory(), storage: null });
   await store.ready;
   await store.addProfile({ id: 'ogre', ...structuredClone(ogreTemplate) });
   await store.addProfile({ id: 'pj', name: 'Caelel', kind: 'PJ', caracs: { CC: 40 }, skills: [], talents: [], equipment: [], diceLines: [], extensions: {} });
@@ -144,6 +148,42 @@ test('D17 : Leader n’est proposé ni en case ni à l’ajout sur une créature
   await fire(byData(plain.element, 'optionalAdd'));
   await search(plain, 'meneur');
   assert.deepEqual(pickable(plain), ['Leader']);
+}));
+
+test('D17, D18, D26 : profil sans fiche de bestiaire, ses Traits imprimés rangés par le Store comptent (Leader refusé, doublon non proposé)', async () => withDom(async () => {
+  const store = await table([{ id: 'bete', name: 'Bête des bois', kind: 'Créature', initiative: 30, hp: 12, maxHp: 12, caracs: { CC: 40, F: 30, E: 30, FM: 20 }, traits: ['Bestial', 'Night Vision'], skills: [], talents: [], equipment: [], diceLines: [], extensions: {} }]);
+  const stored = store.getProfile('bete');
+  assert.equal(Array.isArray(stored.traits), false, 'profil canonique');
+  assert.deepEqual(stored.extensions.traits, ['Bestial', 'Night Vision']);
+  const panel = await open(panelFor(store, null), store, 'bete');
+  await fire(byData(panel.element, 'optionalAdd'));
+  await search(panel, 'meneur');
+  assert.deepEqual(pickable(panel), [], 'Meneur refusé sur une créature Bestial');
+  await search(panel, 'nocturne');
+  assert.deepEqual(pickable(panel), [], 'Vision nocturne déjà imprimée');
+  await search(panel, 'coriace');
+  assert.deepEqual(pickable(panel), ['Tough']);
+}));
+
+test('D10, CA9 : l’aperçu imprimé → modifié concorde avec le participant (Rhinox, Endurant imprimé et coché par import) ; noms français', async () => withDom(async () => {
+  const l01 = book('L01');
+  const RHINOX = 'E0-P-127';
+  const store = await table([{ id: 'rhinox', ...structuredClone(buildReserveProfileFromBestiary(RHINOX, { library: l01, nameFr: true })) }]);
+  const imported = { traits: [{ key: 'Hardy', name: 'Hardy', param: '', kind: 'trait', origin: 'free' }], attacks: [], armour: [] };
+  await store.setProfileOptionalChoices('rhinox', imported, { expectedLocalRevision: store.getLocalRevision() });
+  const panel = await open(panelFor(store, l01.find(row => row.id === RHINOX)), store, 'rhinox');
+  assert.equal(byData(panel.element, 'optionalChange', 'Blessures'), null, 'Endurant déjà imprimé : aucune Blessure en plus annoncée');
+  await store.addProfilesToCombat(['rhinox'], { zone: 'bench' });
+  assert.equal(store.listParticipants().find(row => row.profileId === 'rhinox').maxHp, store.getProfile('rhinox').maxHp);
+  // Coriace en plus : l'aperçu annonce les Blessures du participant, et nomme le Trait en français.
+  await store.setProfileOptionalChoices('rhinox', { ...imported, traits: [...imported.traits, { key: 'Tough', name: 'Tough', param: '', kind: 'trait', origin: 'free' }] }, { expectedLocalRevision: store.getLocalRevision() });
+  await panel.refresh();
+  await store.addProfilesToCombat(['rhinox'], { zone: 'bench' });
+  const participant = store.listParticipants().filter(row => row.profileId === 'rhinox').at(-1);
+  const wounds = byData(panel.element, 'optionalChange', 'Blessures').textContent;
+  assert.match(wounds, new RegExp(`→ ${participant.maxHp}\\b`), wounds);
+  for (const line of allData(panel.element, 'optionalChange')) assert.doesNotMatch(line.textContent, /\b(Tough|Hardy)\b/, line.textContent);
+  assert.match(byData(panel.element, 'optionalChange', 'E').textContent, /\(Coriace\)/);
 }));
 
 test('CA17 : « Ajouter un Trait » cherche par nom français ou anglais, le Trait ajouté apparaît coché et se retire', async () => withDom(async () => {

@@ -7,7 +7,7 @@
  * Forme des coches : `{ traits: [{ key, name, param, kind, origin }], attacks: [{ name, actions }], armour: [{ name, part, zones }] }`.
  * `origin` : « optional » (Trait facultatif de la fiche) ou « free » (ajouté librement, D3). `key` : `Nom` ou `Nom:paramètre`.
  */
-import { cloneValue } from './models.js';
+import { cloneValue, normalizeArmorLocations } from './models.js';
 import { attackActions, printedArmour } from './bestiary-profiles.js';
 import { parseSizeTrait } from './creature-size.js';
 import { catalogueTraitOf } from '../data/creature-trait-catalogue.js';
@@ -71,6 +71,11 @@ function labelOf(name, detail, nameFr) {
   return detail ? `${label} (${detail})` : label;
 }
 
+/** Libellé français d'un Trait coché (nom du catalogue, dressage traduit) : « Coriace », « Dressé (Guerre) », « Peur (2) ». */
+export function optionalTraitLabel(name, param = '') {
+  return labelOf(name, String(param ?? '').trim(), catalogueTraitOf(name)?.nameFr);
+}
+
 /** Entrées de Traits facultatifs d'une fiche : un Trait par ligne, un dressage par ligne pour « Trained ». */
 function optionalTraitEntries(record) {
   const out = [];
@@ -122,7 +127,10 @@ export function optionalCandidates(record, choices = EMPTY()) {
 export function toggleOptionalTrait(record, choices, key) {
   const state = choices?.traits ? choices : readOptionalChoices(choices);
   const candidate = optionalCandidates(record, state).find(item => item.key === key && item.kind !== 'attack' && item.kind !== 'armour');
-  if (!candidate) return refuse(`Trait « ${key} » non proposé pour ${record?.nameFr || record?.name || 'ce profil'}.`);
+  if (!candidate) {
+    const [name, ...detail] = String(key ?? '').split(':');
+    return refuse(`Trait « ${optionalTraitLabel(name, detail.join(':'))} » non proposé pour ${record?.nameFr || record?.name || 'ce profil'}.`);
+  }
   if (candidate.checked) return ok({ ...state, traits: state.traits.filter(item => !sameKey(item.key, key)) });
   if (candidate.disabled) return refuse(`« ${candidate.label} » : ${candidate.reason}`);
   const entry = { key, name: candidate.name, param: candidate.param, kind: candidate.kind, origin: 'optional' };
@@ -191,6 +199,9 @@ const TRAINED = lookupFold(OPTIONAL_TRAINED_MODIFIERS);
 const MODELS = lookupFold(OPTIONAL_TRAIT_MODELS);
 
 const ARMOUR_LABELS = Object.freeze({ head: 'tête', body: 'corps', arms: 'bras', legs: 'jambes' });
+const ARMOUR_LOCATIONS_OF = Object.freeze({ head: ['head'], body: ['body'], arms: ['rightArm', 'leftArm'], legs: ['rightLeg', 'leftLeg'] });
+// Nom affiché d'un Trait : français du catalogue, sinon le nom tel quel ; Dressé suivi de son dressage en français.
+const frenchName = (name, param = '') => optionalTraitLabel(name, isTrained(name) ? param : '');
 const isNumber = value => typeof value === 'number' && Number.isFinite(value);
 const textOfTrait = trait => (typeof trait === 'string' ? trait : trait?.name ?? '');
 const splitTrait = text => {
@@ -217,10 +228,13 @@ const woundsOf = (caracs, size, hardy) => creatureWounds({ caracs, size, hardy }
  * `changes` : `{ field, printed, effective, source }` pour chaque champ modifié (valeur imprimée et valeur modifiée) ; `notes` : points à
  * signaler (caractéristique absente, Trait sans effet). Sans coche, le profil d'entrée est rendu tel quel (CA6). Les Traits de D5 déjà
  * imprimés n'ont aucun effet (D10) ; Elite et Leader appliquent le modèle V5 à la place du Trait V4 (D19).
+ * Les Traits imprimés se lisent dans `traits`, sinon dans `extensions.traits` (forme canonique d'un profil rangé par le Store) : l'aperçu
+ * du panneau et le participant créé partent ainsi des mêmes Traits.
  */
-export function applyOptionalChoices(profile) {
-  const choices = readOptionalChoices(profile);
-  if (!profile || !(choices.traits.length || choices.attacks.length || choices.armour.length)) return { profile, changes: [], notes: [] };
+export function applyOptionalChoices(stored) {
+  const choices = readOptionalChoices(stored);
+  if (!stored || !(choices.traits.length || choices.attacks.length || choices.armour.length)) return { profile: stored, changes: [], notes: [] };
+  const profile = !Array.isArray(stored.traits) && Array.isArray(stored.extensions?.traits) ? { ...stored, traits: stored.extensions.traits } : stored;
   const out = cloneValue(profile);
   const changes = [];
   const notes = [];
@@ -251,7 +265,7 @@ export function applyOptionalChoices(profile) {
       if (!param || printedTrait(printedTraits, name, param) || newDressages.some(entry => fold(entry) === fold(param))) continue;
       newDressages.push(param);
       const war = TRAINED[fold(param)] || Object.values(TRAINED).find(row => fold(row.nameFr) === fold(param));
-      if (war) for (const [carac, value] of Object.entries(war.stats)) addDelta(carac, value, traitLabel(name, war.name));
+      if (war) for (const [carac, value] of Object.entries(war.stats)) addDelta(carac, value, frenchName(name, war.name));
       continue;
     }
     if (printedTrait(printedTraits, name, param)) continue;
@@ -261,14 +275,14 @@ export function applyOptionalChoices(profile) {
         notes.push(`${model.nameFr} : refusé sur une créature ${model.blockedByTrait}, sans effet.`);
         continue;
       }
-      models.push({ ...model, source: name });
-      for (const [carac, value] of Object.entries(model.stats)) addDelta(carac, value, name);
+      models.push({ ...model, source: frenchName(name) });
+      for (const [carac, value] of Object.entries(model.stats)) addDelta(carac, value, frenchName(name));
       added.push(traitLabel(name, param));
       continue;
     }
     if (MODIFIERS[key]) {
       const row = MODIFIERS[key];
-      for (const [carac, value] of Object.entries(row.stats || {})) addDelta(carac, value, name);
+      for (const [carac, value] of Object.entries(row.stats || {})) addDelta(carac, value, frenchName(name));
       if (row.wounds?.rule === 'hardy') hardyAdded = true;
     }
     added.push(traitLabel(name, param));
@@ -309,10 +323,10 @@ export function applyOptionalChoices(profile) {
   const sizeBefore = creatureSizeOf(profile);
   const sizeAfter = creatureSizeOf({ ...out, size: sizeChoice ? undefined : profile.size });
   const sizeChanged = sizeBefore.key !== sizeAfter.key;
-  if (sizeChanged) changes.push({ field: 'Taille', printed: sizeBefore.label, effective: sizeAfter.label, source: 'Size' });
+  if (sizeChanged) changes.push({ field: 'Taille', printed: sizeBefore.label, effective: sizeAfter.label, source: frenchName('Size') });
   if (hardyAdded || sizeChanged || ['F', 'E', 'FM'].some(key => gain(key))) {
     const hardyBase = (printedTrait(printedTraits, 'Hardy', '') ? 1 : 0) + hardyRank(profile);
-    const why = [hardyAdded && 'Hardy', sizeChanged && 'Size', ...['F', 'E', 'FM'].filter(key => gain(key)).map(sourceOf)].filter(Boolean).join(', ');
+    const why = [hardyAdded && frenchName('Hardy'), sizeChanged && frenchName('Size'),...['F', 'E', 'FM'].filter(key => gain(key)).map(sourceOf)].filter(Boolean).join(', ');
     try {
       const gap = woundsOf(out.caracs, sizeAfter.key, hardyBase + (hardyAdded ? 1 : 0)) - woundsOf(printedCaracs, sizeBefore.key, hardyBase);
       if (isNumber(profile.maxHp) && gap) {
@@ -406,18 +420,23 @@ export function applyOptionalChoices(profile) {
   }
   if (lines.length) out.diceLines = lines;
 
-  // 6. Armure : maximum par zone, comme l'armure imprimée.
+  // 6. Armure : maximum par zone, comme l'armure imprimée. Le combat lit `armorLocations` d'abord (equipment.js, locationProtection) :
+  // les six localisations suivent la pièce cochée (bras et jambes des deux côtés), en partant des PA par localisation du profil.
   if (choices.armour.length) {
     out.armor = { ...(out.armor || {}) };
+    const locations = normalizeArmorLocations(profile.armorLocations ?? profile.armor);
     for (const piece of choices.armour) {
       for (const zone of Object.keys(ARMOUR_LABELS)) {
         const value = piece.zones?.[zone];
-        if (isNumber(value) && value > (out.armor[zone] || 0)) {
+        if (!isNumber(value)) continue;
+        for (const id of ARMOUR_LOCATIONS_OF[zone]) locations[id] = Math.max(locations[id], value);
+        if (value > (out.armor[zone] || 0)) {
           changes.push({ field: `Armure (${ARMOUR_LABELS[zone]})`, printed: out.armor[zone] || 0, effective: value, source: piece.name });
           out.armor[zone] = value;
         }
       }
     }
+    out.armorLocations = locations;
   }
   return { profile: out, changes, notes };
 }

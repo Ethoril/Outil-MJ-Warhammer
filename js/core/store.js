@@ -1319,13 +1319,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
   }
 
   // Participant copy of a reserve profile, as serialised in a command draft.
-  // Traits optionnels cochés (lot L5) : profil effectif d'un profil de Réserve. Un profil canonique range ses Traits imprimés dans
-  // `extensions.traits` : ils sont donnés au moteur comme `traits`. Sans coche, le profil d'entrée est rendu tel quel (même objet).
-  function effectiveProfile(source) {
-    const printed = source && !Array.isArray(source.traits) && Array.isArray(source.extensions?.traits) ? { ...source, traits: source.extensions.traits } : source;
-    const applied = applyOptionalChoices(printed).profile;
-    return applied === printed ? source : applied;
-  }
+  // Traits optionnels cochés (lot L5) : profil effectif d'un profil de Réserve, calculé comme l'aperçu du panneau (le moteur lit les Traits
+  // imprimés dans `traits` ou `extensions.traits`). Sans coche, le profil d'entrée est rendu tel quel (même objet).
+  const effectiveProfile = source => applyOptionalChoices(source).profile;
 
   // Participant copy of a reserve profile, as serialised in a command draft.
   function participantFromProfile(source, overrides = {}) {

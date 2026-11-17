@@ -30,8 +30,10 @@ export function mountTemplateFromProfile(profile) {
   return { ...template, extensions: { ...extensions, v5 } };
 }
 
-// Fiche minimale d'un profil sans fiche de bestiaire : ses Traits imprimés servent à ne pas proposer un Trait en double (CA19).
-const plainRecord = profile => ({ traits: (Array.isArray(profile?.traits) ? profile.traits : []).map(trait => {
+// Fiche minimale d'un profil sans fiche de bestiaire : ses Traits imprimés servent à ne pas proposer un Trait en double (CA19, D18) ni
+// Meneur sur une créature Bestial (D17, D26). Un profil rangé par le Store les porte dans `extensions.traits`.
+const printedTraitsOf = profile => (Array.isArray(profile?.traits) ? profile.traits : Array.isArray(profile?.extensions?.traits) ? profile.extensions.traits : []);
+const plainRecord = profile => ({ traits: printedTraitsOf(profile).map(trait => {
   const text = typeof trait === 'string' ? trait : trait?.name ?? '';
   const found = /^\s*([^(]+?)\s*(?:\(([^)]*)\))?\s*$/.exec(text);
   return found ? { name: found[1], param: found[2] || undefined } : { name: text };
