@@ -292,6 +292,7 @@ export const CREATURE_TRAIT_NAMES = Object.freeze([
   "strider",
   "striding gait",
   "Striding Gait",
+  "Stubborn",
   "stupid",
   "Stupid",
   "stupide",
