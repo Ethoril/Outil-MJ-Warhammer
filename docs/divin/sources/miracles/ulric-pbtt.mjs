@@ -82,7 +82,7 @@ export const miracles = [
     // Miracles narratifs L3 (PBtT p.50 relue : Challenging (+0)) : le Test est saisi au lancement, sans couche (effet instantané).
     effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 } },
       { type: 'imposed-test', label: 'Engourdissement', test: { skill: 'resistance', slModifier: 0 }, subjects: 'targets', when: 'cast', duration: { unit: 'instant' },
-        onFailure: [{ type: 'lost-turn', cause: 'divine-defensive-only', label: 'Tour perdu' }] }],
+        onFailure: [{ type: 'lost-turn', cause: 'divine-defensive-only', label: 'Actions défensives seulement' }] }],
     targetRules: [],
     needsInput: [
       { id: 'endurance-test', text: 'Résultat du Test d\'Endurance Intermédiaire (+0) de la cible : échec = aucune action à son prochain Tour, hors actions défensives.' }

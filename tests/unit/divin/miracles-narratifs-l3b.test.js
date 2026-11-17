@@ -1,4 +1,4 @@
-// L3b : Baume pour un esprit blessé supprime les Traits psychologiques pendant la durée ; Engourdissement affiche « Tour perdu ».
+// L3b : Baume pour un esprit blessé supprime les Traits psychologiques pendant la durée ; Engourdissement affiche « Actions défensives seulement ».
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { getAllDivineContracts } from '../../../js/core/v5-divine-store.js';
@@ -20,7 +20,7 @@ test('Traits psychologiques lus vides sous le drapeau, intacts sans lui', () => 
   assert.deepEqual(psychologyReminders(calm), []);
 });
 
-test('Engourdissement : issue libellée « Tour perdu »', () => {
+test('Engourdissement : issue libellée « Actions défensives seulement »', () => {
   const imposed = contractOf('Engourdissement').effects.find(effect => effect.type === 'imposed-test');
-  assert.deepEqual(imposed.onFailure, [{ type: 'lost-turn', cause: 'divine-defensive-only', label: 'Tour perdu' }]);
+  assert.deepEqual(imposed.onFailure, [{ type: 'lost-turn', cause: 'divine-defensive-only', label: 'Actions défensives seulement' }]);
 });

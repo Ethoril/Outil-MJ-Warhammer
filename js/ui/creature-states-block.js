@@ -201,7 +201,9 @@ export function buildTraitStatusBlock(make, participant) {
   const lines = [];
   if (v5.lostTurn) {
     const cause = LOST_TURN_CAUSES[v5.lostTurn.cause];
-    lines.push(['trait-lost-turn', `Tour perdu${cause ? ` (${cause})` : ''} : perd son Mouvement et son Action ; à jouer, ou à passer outre si le MJ en décide autrement.`]);
+    // Engourdissement : seules les actions défensives restent permises (Dodge, Parade, défense opposée), pas un tour entièrement perdu.
+    if (v5.lostTurn.cause === 'divine-defensive-only') lines.push(['trait-lost-turn', `Actions défensives seulement (${cause}) : pas d’attaque ni de Mouvement offensif ; esquive et parade restent permises.`]);
+    else lines.push(['trait-lost-turn', `Tour perdu${cause ? ` (${cause})` : ''} : perd son Mouvement et son Action ; à jouer, ou à passer outre si le MJ en décide autrement.`]);
   }
   const dieHard = v5.dieHard;
   if (dieHard) {

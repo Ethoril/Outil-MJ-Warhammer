@@ -174,7 +174,7 @@ describe('L3 — Engourdissement : Endurance +0, échec = hors actions défensiv
     assert.deepEqual(withoutId(person(store, 'foe').extensions.v5.lostTurn), withoutId(person(other, 'foe').extensions.v5.lostTurn));
     const marker = person(store, 'foe').extensions.v5.lostTurn;
     assert.equal(marker.cause, 'divine-defensive-only');
-    assert.equal(marker.label, 'Tour perdu');
+    assert.equal(marker.label, 'Actions défensives seulement');
     await store.undo();
     assert.equal(person(store, 'foe').extensions?.v5?.lostTurn, undefined);
   });

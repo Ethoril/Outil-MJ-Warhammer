@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:de700c02f72b0c76212377c9ba95a8def2b6be600401629962b03387c3c0267e",
+  "sourceFingerprint": "sha256:2f2fd23d097372ab7985fea3b22cbd05567e59587944532f321162d0969fd0a5",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -22460,7 +22460,7 @@
             {
               "type": "lost-turn",
               "cause": "divine-defensive-only",
-              "label": "Tour perdu"
+              "label": "Actions défensives seulement"
             }
           ]
         }
