@@ -54,9 +54,10 @@ export function shieldTraitOf(participant) {
 // ─────────────────────────────── Demandes et réponses (CA0) ───────────────────────────────
 
 /** Valeur d'un Test avec ses modificateurs : de quoi déduire réussite et DR d'un d100, sans connaître aucune règle. */
-export function testTargetOf(participant, { characteristic, base, dr = 0 }) {
+export function testTargetOf(participant, { characteristic, base, dr = 0, bare = false }) {
+  // `bare` : Test +0 sans aucun modificateur du porteur (Increvable, MJ 17/11 : les États du mort ne comptent pas).
   let resolved = null;
-  try { resolved = resolveV5TestModifiers(participant, { kind: 'test', characteristic }, {}); } catch { resolved = null; }
+  if (!bare) { try { resolved = resolveV5TestModifiers(participant, { kind: 'test', characteristic }, {}); } catch { resolved = null; } }
   const usable = list => (list || []).filter(row => typeof row?.id === 'string' && row.id).map(row => ({ ...row }));
   const slModifiers = usable(resolved?.slModifiers).filter(row => Number.isInteger(row.amount));
   if (dr) slModifiers.push({ id: 'trait-dr', label: 'DR du Trait', amount: dr });
@@ -368,7 +369,7 @@ export function collectRoundTraitEffects({ participants = [], phase, round = nul
         if (!isNum(E)) { out.unresolved.push('Increvable : Endurance du participant inconnue.'); continue; }
         const request = traitRequest({ field: 'dieHardEndurance', kind: 'test', participantId: person.id, participantName: person.name,
           label: `${nameOf(person)} · Increvable : Endurance (+0), total ${record.total}/${DIE_HARD_TARGET} DR, ${record.roundsLeft} Round(s) restant(s)`,
-          testTarget: testTargetOf(person, { characteristic: 'E', base: E, dr: 0 }) });
+          testTarget: testTargetOf(person, { characteristic: 'E', base: E, dr: 0, bare: true }) });
         const answer = answerOf(inputs, request);
         if (!answer) { out.requests.push(request); out.plans.push({ key: 'diehard', participantId: person.id, status: 'requested', total: record.total }); continue; }
         const advanced = advanceDieHard(person, { round, test: answer });

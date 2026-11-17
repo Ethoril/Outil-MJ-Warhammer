@@ -1,6 +1,6 @@
 import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
-import { collectRoundTraitEffects, applyTraitPatches, startDieHard, advanceDieHard } from '../../../js/core/trait-effects.js';
+import { collectRoundTraitEffects, applyTraitPatches, startDieHard, advanceDieHard, testTargetOf } from '../../../js/core/trait-effects.js';
 
 const person = (id, extra = {}) => ({ id, name: id.toUpperCase(), camp: 'monstres', zone: 'active', hp: 10, maxHp: 10, caracs: { E: 30, Int: 30, FM: 40 }, traits: [], extensions: { v5: {} }, ...extra });
 const withV5 = (extra = {}, v5 = {}) => ({ ...extra, extensions: { v5 } });
@@ -109,6 +109,18 @@ describe('Increvable (CA9, D15)', () => {
     assert.equal(out.requests.length, 1);
     assert.equal(out.requests[0].kind, 'test');
     assert.match(out.requests[0].label, /0\/6/);
+  });
+
+  test('Test +0 (MJ 17/11) : les États du mort ne minorent pas le Test d\'Increvable', () => {
+    const states = [{ key: 'sonne', level: 2 }, { key: 'fatigue', level: 2 }];
+    const plain = testTargetOf(person('t', { states }), { characteristic: 'E', base: 30, dr: 0 });
+    assert.ok(plain.slModifiers.length + plain.disadvantageSources.length > 0, 'témoin : ces États minorent un Test ordinaire');
+    const body = startDieHard(dead({ states }), { round: 2, bodyIntact: true });
+    const target = collectRoundTraitEffects({ participants: [body], phase: 'startOfRound', round: 3, turnIndex: 9 }).requests[0].testTarget;
+    assert.equal(target.score, 30);
+    assert.deepEqual(target.slModifiers, []);
+    assert.deepEqual(target.advantageSources, []);
+    assert.deepEqual(target.disadvantageSources, []);
   });
 
   test('6 DR atteints en trois Rounds : retour à 1 Blessure, mort levée', () => {
