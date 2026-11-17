@@ -1611,8 +1611,8 @@
     {
       "id": "divine:miracle:handrich:a-deal-s-a-deal",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5.",
-      "status": "manual",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Prière instantanée : le moteur ne pose aucune couche pour un effet instantané, la couche du bonus porte donc une durée propre sans échéance automatique (unité session, comme les prières qui durent jusqu’à la fin de la session) : le MJ retire la prière après le Test de Marchandage.",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -2196,7 +2196,7 @@
     {
       "id": "divine:miracle:ranald:ranald-s-grace",
       "catalogueEntry": null,
-      "v5Summary": "Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) ; le moteur n’a pas de modificateur de compétence ni d’octroi temporaire de Talent, donc miracle manuel malgré la partie Agilité automatisable.",
+      "v5Summary": "Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) : le +10 d’Agilité reste un modificateur de caractéristique, le +10 en Discrétion se lit +1 DR au Test de la compétence (Q14, comme Commander la Légion).",
       "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -13832,7 +13832,7 @@
       "catalogueName": "Un marché est un marché",
       "canonicalName": "A Deal's a Deal",
       "deity": "Handrich",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -13857,7 +13857,7 @@
         "specialization": "Handrich"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Prière instantanée : le moteur ne pose aucune couche pour un effet instantané, la couche du bonus porte donc une durée propre sans échéance automatique (unité session, comme les prières qui durent jusqu’à la fin de la session) : le MJ retire la prière après le Test de Marchandage.",
       "params": {
         "range": {
           "kind": "self"
@@ -13897,7 +13897,23 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "test-modifier",
+          "modifiers": {
+            "Marchandage": {
+              "base": 2,
+              "fromSuccessLevels": true,
+              "per": 2,
+              "add": 1
+            }
+          },
+          "appliesTo": "caster",
+          "duration": {
+            "unit": "session"
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "A Deal's a Deal",
@@ -13907,8 +13923,14 @@
       "clauses": [
         {
           "id": "haggle-bonus",
+          "mode": "engine",
+          "text": "+2 DR au Test de Marchandage du prêtre, +1 par tranche de +2 DR du Test de Prière (valeur calculée une fois les DR connus, puis figée ; Archives 3, p.47).",
+          "sourceRef": "v5-a-deal-s-a-deal"
+        },
+        {
+          "id": "haggle-one-test",
           "mode": "manual",
-          "text": "+2 DR au Test de Marchandage, +1 par tranche de +2 DR obtenue au Test de Prière.",
+          "text": "Le bonus ne vaut que pour le Test de Marchandage réussi qui vient d’être fait : le MJ retire la prière après ce Test.",
           "sourceRef": "v5-a-deal-s-a-deal"
         },
         {
@@ -13934,10 +13956,6 @@
         {
           "field": "haggle-result",
           "label": "Résultat du Test de Marchandage réussi auquel ajouter les DR."
-        },
-        {
-          "field": "pray-dr",
-          "label": "DR du Test de Prière (1 DR de plus au Marchandage par tranche de +2)."
         }
       ]
     },
@@ -19580,7 +19598,7 @@
         "specialization": "Ranald"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) ; le moteur n’a pas de modificateur de compétence ni d’octroi temporaire de Talent, donc miracle manuel malgré la partie Agilité automatisable.",
+      "sourceDelta": "Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) : le +10 d’Agilité reste un modificateur de caractéristique, le +10 en Discrétion se lit +1 DR au Test de la compétence (Q14, comme Commander la Légion).",
       "params": {
         "range": {
           "kind": "touch"
@@ -19636,6 +19654,18 @@
           }
         },
         {
+          "type": "test-modifier",
+          "modifiers": {
+            "Discrétion": 1
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "minutes",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
           "type": "grant-talent",
           "talents": [
             {
@@ -19667,8 +19697,8 @@
         },
         {
           "id": "stealth",
-          "mode": "manual",
-          "text": "+10 en Discrétion (compétence) pendant la durée, en plus du +10 d’Agilité.",
+          "mode": "engine",
+          "text": "+1 DR aux Tests de Discrétion de la cible pendant la durée, en plus du +10 d’Agilité (+10 lu +1 DR, Q14).",
           "sourceRef": "v5-ranald-s-grace"
         },
         {
@@ -20673,7 +20703,8 @@
           "type": "test-modifier",
           "modifiers": {
             "Corps à corps": 2,
-            "Résistance": 2
+            "Résistance": 2,
+            "carac:F": 2
           },
           "duration": {
             "value": null,
@@ -20710,8 +20741,8 @@
         },
         {
           "id": "force-test",
-          "mode": "manual",
-          "text": "+2 DR aux Tests de Force du prêtre pendant la durée (le moteur ne porte que les modificateurs de compétences).",
+          "mode": "engine",
+          "text": "+2 DR aux Tests de Force (caractéristique) du prêtre pendant la durée : tout Test lié à la Force (Archives 3, p.74).",
           "sourceRef": "v5-rhya-s-rage"
         },
         {
@@ -20725,10 +20756,6 @@
         {
           "field": "defending",
           "label": "Le prêtre défend-il des enfants, ou un foyer ou une ferme occupés par ses habitants ? Sinon le miracle ne peut pas être invoqué."
-        },
-        {
-          "field": "force-test",
-          "label": "Tests de Force (caractéristique) faits pendant la durée (+2 DR chacun)."
         }
       ]
     },
@@ -28167,5 +28194,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:3f553036402bfb1992b383eb213cc5ea00817601d4084300962161f88c0f7473"
+  "sourceFingerprint": "sha256:a5d5f5e2b35ab435bdb48b1e45b5d5dfc5d65eec79a5526ad5352cb776460167"
 }

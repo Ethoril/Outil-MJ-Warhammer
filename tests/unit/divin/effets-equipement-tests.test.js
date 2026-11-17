@@ -127,14 +127,15 @@ test('Trait divin et trait de sort identiques : pose acceptée (Q14 du MJ, DIV-0
   assert.equal(other.previewDivineExecution(MASK, input()).ready, true);
 });
 
-test('Grâce de Ranald : Ag +10, étiquette de talent et Chute féline injecté ; Discrétion reste un rappel', async () => {
+test('Grâce de Ranald : Ag +10, Discrétion +1 DR (Q14), étiquette de talent et Chute féline injecté', async () => {
   const store = await fixture({ cult: 'Ranald' });
   const preview = store.previewDivineExecution(GRACE, touching({ facts: { targets: { ally: { withinTouch: true } } } }));
   assert.equal(preview.ready, true, preview.error);
   const result = await store.applyDivineExecution(GRACE, { preview });
-  assert.ok(result.receipt.reminders.some(text => /Discrétion/.test(text)));
+  assert.ok(!result.receipt.reminders.some(text => /Discrétion/.test(text)));
   const ally = person(store, 'ally');
   assert.equal(ally.caracs.Ag, 50);
+  assert.deepEqual(ally.extensions.v5.testModifiers, { 'Discrétion': 1 });
   assert.deepEqual(layers(store, 'ally').find(row => row.grantedTalents).grantedTalents, [{ id: 'talent-catfall', rank: 1, name: 'Chute féline' }]);
   assert.ok(acquiredV5Talents(ally).some(row => row.talentId === 'talent-catfall' && row.rank === 1), 'le talent à contrat mécanique est réellement acquis');
   assert.equal((await store.advanceCampaignTime({ seconds: 3600, reason: 'Fin de la durée' })).status, 'applied');
@@ -848,7 +849,7 @@ test('statuts : les six miracles sont assistés, avec un effet test-modifier et 
   assert.deepEqual(manual(RALLY), ['status-exclusion']);
   assert.ok(manual(HEAT).includes('watch-minus-3') && manual(HEAT).includes('ends-on-crime') && !manual(HEAT).includes('fellowship-penalty'));
   assert.ok(manual(TRICKLE).includes('beneficiary') && manual(TRICKLE).includes('charm-condition'));
-  assert.deepEqual(manual(RAGE).filter(id => id.includes('test') || id.includes('force')), ['force-test']);
+  assert.deepEqual(manual(RAGE).filter(id => id.includes('test') || id.includes('force')), []);
   assert.ok(manual(WIND).includes('prone-each-round') && !manual(WIND).includes('test-penalty'));
 });
 
@@ -890,10 +891,10 @@ test('Ruissellement : Charme = DR du Test de Prière, sur le prêtre seul', asyn
   assert.deepEqual(layers(store, 'ally'), []);
 });
 
-test('Rage de Rhya : +2 Corps à corps et Résistance en plus des Traits, la Force reste un rappel', async () => {
+test('Rage de Rhya : +2 Corps à corps, Résistance et Force (Archives 3 p.74) en plus des Traits', async () => {
   const store = await fixture('Rhya');
   await cast(store, RAGE);
-  assert.deepEqual(mods(store, 'priest'), { 'Corps à corps': 2, 'Résistance': 2 });
+  assert.deepEqual(mods(store, 'priest'), { 'Corps à corps': 2, 'Résistance': 2, 'carac:F': 2 });
   assert.ok(person(store, 'priest').traits.includes('Impassible'));
 });
 

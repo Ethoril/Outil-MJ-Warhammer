@@ -3,7 +3,7 @@
  * Forme : `modifiers: {clé: valeur}` et/ou `categories: {carac: valeur}` (catégorie = toutes les compétences du catalogue dont la
  * caractéristique liée est `carac`, Prière exclue). Une valeur est un entier (DR) ou une règle dynamique résolue UNE fois à l'aperçu
  * par `resolve` puis figée : `{fromCharacteristicBonus:'Soc'}` (Bonus du prêtre), `{fromSuccessLevels:true, per?:1, add?:1}`
- * (+add par `per` DR du Test de Prière), `{base:2, perGroup:{size:10, add:1}}` (taille de foule saisie : `input.crowdSize`).
+ * (+add par `per` DR du Test de Prière ; avec `base`, il s'ajoute : `{base:2, fromSuccessLevels:true, per:2, add:1}` = +2, puis +1 par +2 DR), `{base:2, perGroup:{size:10, add:1}}` (taille de foule saisie : `input.crowdSize`).
  * `durationBonus: n` ajoute n à la durée issue du paramètre (ex. Bonus de Sociabilité + 3 Rounds ; compté aussi dans chaque extension
  * de durée, la valeur initiale étant Bonus + n). Les couches ne portent que des `testModifiers` entiers par clé de compétence : le
  * non-cumul (meilleur bonus + pire malus par clé) reste celui de calculateEffectiveTestModifiers. L'ancienne forme `{Natation: 4}` reste valide.
@@ -54,6 +54,7 @@ function valueError(label, value) {
     if (value.fromSuccessLevels !== true) return `test-modifier : ${label} : fromSuccessLevels ne peut valoir que true.`;
     if (value.per !== undefined && !(Number.isSafeInteger(value.per) && value.per >= 1)) return `test-modifier : ${label} : per doit être un entier positif.`;
     if (value.add !== undefined && !Number.isSafeInteger(value.add)) return `test-modifier : ${label} : add doit être un entier.`;
+    if (value.base !== undefined && !Number.isSafeInteger(value.base)) return `test-modifier : ${label} : base doit être un entier.`;
   }
   if (value.perGroup !== undefined) {
     if (!isRecord(value.perGroup) || !(Number.isSafeInteger(value.perGroup.size) && value.perGroup.size >= 1) || !Number.isSafeInteger(value.perGroup.add))
@@ -105,7 +106,7 @@ function evaluate(value, { actor, prayer, input }) {
     if (bonus === null) return { error: `Le Bonus de ${value.fromCharacteristicBonus} du prêtre est inconnu.`, needs: [need(`actor.caracs.${value.fromCharacteristicBonus}`, `Caractéristique ${value.fromCharacteristicBonus} du prêtre`)] };
     return bonus;
   }
-  if (value.fromSuccessLevels === true) return Math.floor(Math.max(0, prayer.sl) / (value.per ?? 1)) * (value.add ?? 1);
+  if (value.fromSuccessLevels === true) return (value.base ?? 0) + Math.floor(Math.max(0, prayer.sl) / (value.per ?? 1)) * (value.add ?? 1);
   const crowd = crowdSize(input);
   if (crowd === null) return { error: 'La taille de la foule est requise.', needs: [need('crowdSize', 'Nombre de personnes présentes (entier ≥ 0)')] };
   return (value.base ?? 0) + Math.floor(crowd / value.perGroup.size) * value.perGroup.add;
