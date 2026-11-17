@@ -14,7 +14,7 @@ const skillLabel = skill => skill.label + (skill.use ? ' (' + skill.use + ')' : 
 
 /** Entrée de l'écran Jouer (D17) : grisée, avec son motif lu par le bouton, quand la rencontre en cours n'a pas deux participants. */
 export function renderScenePursuitEntry({ Store, onOpen = () => {} } = {}) {
-  const { available, reason } = Store.scenePursuitAvailability(), box = node('div', 'workspace-pursuit-entry');
+  const { available, reason } = Store.scenePursuitAvailability?.() ?? { available: false, reason: 'Poursuite de scène indisponible.' }, box = node('div', 'workspace-pursuit-entry');
   const open = button('Poursuite de scène', 'workspace-secondary'); open.dataset.pursuitSceneOpen = ''; open.dataset.focusKey = FOCUS_KEY;
   open.disabled = !available;
   if (available) open.addEventListener('click', () => onOpen());
