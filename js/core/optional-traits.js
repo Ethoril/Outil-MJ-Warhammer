@@ -421,3 +421,76 @@ export function applyOptionalChoices(profile) {
   }
   return { profile: out, changes, notes };
 }
+
+// ---------------------------------------------------------------------------------------------------------------------------------
+// Lot L4 : rappels des Traits qu'aucun autre module n'affiche (D7, CA8, CA15, CA16, CA25). Calculés à l'affichage, jamais écrits.
+// ---------------------------------------------------------------------------------------------------------------------------------
+
+// Dressages dont l'effet est rappelé en plus de la ligne générale de « Dressé » (déjà affichée par creature-magic-traits.js).
+const TRAINED_NOTES = Object.freeze({
+  war: 'ignore Craintif face aux bruits forts (pas face à la magie) ; +10 en CC (seulement CC) quand le dressage est coché.',
+  magic: 'ignore Craintif face à la magie.',
+  'shock cavalry': 'en charge, traverse les plus petits (Esquive ou 4+BF dégâts) et perd 2 m de Mouvement par créature traversée ; exige Dressé (Guerre).'
+});
+const trainedKey = detail => {
+  const found = Object.entries(TRAINED_FR).find(([, french]) => fold(french) === fold(detail));
+  return found ? found[0] : fold(detail);
+};
+const slug = value => fold(value).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const statsText = stats => Object.entries(stats || {}).map(([carac, value]) => `${carac} ${value > 0 ? '+' : ''}${value}`).join(', ');
+
+/** Rappel « modifie le profil » d'un Trait coché, ou null. */
+function profileChangeText(item) {
+  const name = String(item.name ?? '');
+  const param = String(item.param ?? '').trim();
+  const key = fold(name);
+  if (isSize(name)) return param ? 'Taille et Blessures recalculées selon la Taille choisie' : null;
+  if (isTrained(name)) {
+    const war = TRAINED[trainedKey(param)];
+    return war ? `${statsText(war.stats)}` : null;
+  }
+  if (MODELS[key]) return `${statsText(MODELS[key].stats)}, compétences et talents du modèle ${MODELS[key].label}`;
+  const row = MODIFIERS[key];
+  if (!row) return null;
+  const parts = [statsText(row.stats), row.wounds?.rule === 'hardy' ? 'Blessures + BE (appliqué avant le multiplicateur de Taille)' : ''].filter(Boolean);
+  return parts.join(', ') || null;
+}
+
+// Traits appliqués par l'outil lui-même (bouton ou calcul) : leur rappel permanent a été retiré exprès (tests B1 à B6 de branchement-store),
+// la ligne de catalogue ne le ramène pas. Seuls noms dans ce cas ; tout autre Trait sans autre affichage reçoit sa ligne.
+export const TRAITS_APPLIED_BY_TOOL = Object.freeze(['Size', 'Regeneration', 'Terror', 'Chameleon', 'Stealthy', 'Amphibious']);
+
+/**
+ * Rappels de Traits d'un participant : `{ key, text }`. `others` : fonctions participant → textes des autres modules de rappel ; un Trait
+ * qu'une d'elles affiche déjà (essai sur un participant qui ne porte que lui) n'a pas de ligne de catalogue. « Dressé » garde sa ligne
+ * générale (module de magie des créatures) et reçoit seulement la ligne de son dressage (Guerre, Magie, Cavalerie de choc). Pur.
+ */
+export function catalogueReminders(participant, others = []) {
+  const out = [];
+  const seen = new Set();
+  const push = (key, text) => { if (!seen.has(key)) { seen.add(key); out.push({ key, text }); } };
+  const shown = text => others.some(fn => { try { return fn({ id: participant?.id, name: participant?.name, traits: [text], extensions: {} }).length > 0; } catch { return false; } });
+  const sources = [...(Array.isArray(participant?.traits) ? participant.traits : []), ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : [])];
+  for (const source of sources) {
+    const { name, detail: written } = splitTrait(textOfTrait(source));
+    const detail = written || detailOf(source);
+    const entry = catalogueTraitOf(name);
+    if (!entry || !isText(name)) continue;
+    if (isTrained(entry.name)) {
+      for (const dressage of dressages(detail)) {
+        const note = TRAINED_NOTES[trainedKey(dressage)];
+        if (note) push(`${slug(entry.name)}-${slug(trainedKey(dressage))}`, `${labelOf(entry.name, dressage, entry.nameFr)} : ${note}`);
+      }
+      continue;
+    }
+    if (!isText(entry.summaryFr) || TRAITS_APPLIED_BY_TOOL.includes(entry.name) || shown(traitLabel(entry.name, detail))) continue;
+    push(`${slug(entry.name)}-${slug(detail)}`, `${labelOf(entry.name, detail, entry.nameFr)} : ${entry.summaryFr}`);
+  }
+  for (const item of readOptionalChoices(participant).traits) {
+    const text = profileChangeText(item);
+    if (!text) continue;
+    const entry = catalogueTraitOf(item.name);
+    push(`modifie-${slug(item.key || item.name)}`, `${labelOf(entry?.name || item.name, String(item.param ?? '').trim(), entry?.nameFr)} : modifie le profil : ${text}.`);
+  }
+  return out;
+}

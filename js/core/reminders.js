@@ -11,9 +11,10 @@ import { creatureMagicReminders } from './creature-magic.js';
 import { creatureAbilityReminders } from './creature-abilities.js';
 import { slannTraitReminders } from './slann.js';
 import { familiarReminders, companionTalents } from './familiars.js';
+import { catalogueReminders } from './optional-traits.js';
 
 // Un module de Trait par ligne : [clé stable, fonction participant → textes]. Ajouter ici les autres `xxxReminders`.
-const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminderItems], ['regeneration', regenerationReminders], ['psychology', psychologyReminders], ['senses', senseReminders], ['movement', movementReminders], ['states', stateReminders], ['natures', natureReminders], ['magic', creatureMagicReminders], ['abilities', creatureAbilityReminders], ['slann', slannTraitReminders], ['familiar', familiarReminders]];
+const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminderItems], ['regeneration', regenerationReminders], ['psychology', psychologyReminders], ['senses', senseReminders], ['movement', movementReminders], ['states', stateReminders], ['natures', natureReminders], ['magic', creatureMagicReminders], ['abilities', creatureAbilityReminders], ['slann', slannTraitReminders], ['familiar', familiarReminders], ['catalogue', person => catalogueReminders(person, TRAIT_REMINDERS.slice(0, -1).map(([, fn]) => fn))]];
 // Rappels du maître d'un animal à portée : talents de compagnon donnés (appliqués aux Tests) ou déjà connus (+1 DR à la main), sans équivalent V5.
 const companionReminderTexts = (person, participants) => {
   const { granted, bonuses, reminders } = companionTalents(person, participants);
