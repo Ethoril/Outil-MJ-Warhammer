@@ -130,6 +130,7 @@ const ASSETS_TO_CACHE = [
   './js/core/v5-divine-effects-summon.js',
   './js/core/v5-divine-effects-imposed.js',
   './js/core/v5-divine-recurring.js',
+  './js/core/v5-divine-effects-zones.js',
   './js/core/v5-divine-store.js',
   './js/core/v5-divine-prayer-caps.js',
   './js/core/v5-divine-access.js',

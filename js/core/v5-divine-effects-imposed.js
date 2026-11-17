@@ -176,6 +176,8 @@ export function subjectAllowed(subjects, bearer, subject) {
 }
 
 const handler = {
+  // Test `manual` porté par le prêtre (appliesTo 'caster', ex. Seuil du Portail) : aucune cible désignée requise.
+  implicitTarget: true,
   validate: imposedTestProblem,
   needs(effect, { targets = [], input } = {}) {
     if (imposedTestProblem(effect)) return [need('contract.effects.imposedTest', imposedTestProblem(effect))];

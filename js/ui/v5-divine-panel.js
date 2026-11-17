@@ -66,6 +66,28 @@ export function renderImposedTestControls(container,{layer,participants=[],Store
  }
  container.append(box);
 }
+/**
+ * Zone divine d'une prière active (miracles narratifs, F5) : le MJ coche les présents (jamais lus sur la carte) et enregistre
+ * (Store.setDivineZoneMembers, appel tolérant : sans la commande, un message et rien d'autre).
+ */
+export function renderDivineZoneControls(container,{layer,participants=[],Store={},onDone=()=>{}}={}){
+ const zone=layer?.zone;if(!zone)return;
+ const box=node('div','workspace-divine-zone');
+ box.append(node('p','workspace-muted',`${zone.label} : zone${zone.radius?` de ${zone.radius} m`:''}, présence désignée par le MJ`));
+ const checks=participants.filter(row=>row.id!==layer.casterId).map(row=>{
+  const label=node('label','workspace-check');const input=node('input');input.type='checkbox';input.checked=(zone.members||[]).includes(row.id);input.dataset.participantId=row.id;
+  label.append(input,node('span','',row.name||row.id));box.append(label);return input;
+ });
+ const message=node('p','workspace-field-error');message.hidden=true;
+ const go=node('button','workspace-primary',`Enregistrer la présence : ${zone.label}`);go.type='button';go.dataset.divineAction='zone-members';
+ go.addEventListener('click',async()=>{
+  message.hidden=true;
+  if(typeof Store.setDivineZoneMembers!=='function'){message.textContent='Zone indisponible : commande absente de cette version.';message.hidden=false;return;}
+  try{const result=await Store.setDivineZoneMembers(layer.casterId,layer.id,checks.filter(input=>input.checked).map(input=>input.dataset.participantId));if(result?.ok===false){message.textContent=result.error||'Présence non enregistrée.';message.hidden=false;return;}onDone(result);}
+  catch(error){message.textContent=error?.message||'Présence non enregistrée.';message.hidden=false;}
+ });
+ box.append(go,message);container.append(box);
+}
 // Un personnage sans culte, talent divin ni suivi divin n'affiche pas la section (bouton discret pour l'ouvrir).
 const hasDivineLife=actor=>Boolean(actor?.cult)||actorDivineCults(actor).length>0||Object.entries(actor?.extensions?.v5||{}).some(([key,value])=>/^divine/.test(key)&&(Array.isArray(value)?value.length>0:value&&typeof value==='object'?Object.values(value).some(item=>item):Boolean(value)));
 export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
@@ -430,6 +452,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
     const layers=active.filter(layer=>layer.executionId===id),name=contracts.find(row=>row.id===layers[0].prayerId)?.name||'Prière';
     list.append(node('p','',[name+' · '+[...new Set(layers.map(layer=>layer.targetName))].join(', '),...layers.map(layer=>summonLayerLabel(layer,participants)).filter(Boolean)].join(' · ')));
     for(const layer of layers.filter(row=>row.imposedTest))renderImposedTestControls(list,{layer,participants,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});
+    for(const layer of layers.filter(row=>row.zone))renderDivineZoneControls(list,{layer,participants,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});
     button(list,'Terminer '+name,()=>run(async()=>{state.activePrayersOpen=true;const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);
   }

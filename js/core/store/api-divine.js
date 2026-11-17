@@ -5,6 +5,7 @@ import { combatActionBlock, brokenEscapeActionBlock, isBrokenEscapeActor, record
 import { isV5BrokenEscapeActionBlocked } from '../v5-broken-escape.js';
 import { registerNewV5Participants } from '../store/participant-registry.js';
 import { resolveImposedTestOnState } from '../v5-divine-effects-imposed.js';
+import { setDivineZoneMembersOnState } from '../v5-divine-effects-zones.js';
 
 export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
   return {
@@ -111,6 +112,18 @@ export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
       });
       const finish=result=>result?.ok===false?result:{...execution,ok:true};
       return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    /** Présence dans une zone divine (F5) : désignée par le MJ, un seul ↶. */
+    setDivineZoneMembers(casterId,layerId,ids=[]) {
+      const before=setDivineZoneMembersOnState(currentEnvelope(),casterId,layerId,cloneValue(ids));
+      if(!before.ok)return before;
+      const saved=api.executeCommand('v5-divine-zone-members',draft=>{
+        const transition=setDivineZoneMembersOnState(draft,casterId,layerId,cloneValue(ids));
+        if(!transition.ok)throw Object.assign(new Error(transition.error),{userFacing:true});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?{ok:false,error:result.error||'Présence non enregistrée.'}:{ok:true,members:before.members};
+      return saved&&typeof saved.then==='function'?saved.then(finish).catch(error=>({ok:false,error:error.message||'Présence non enregistrée.'})):finish(saved);
     },
     /** Test imposé `manual` d'une prière active (miracles narratifs, F2) : jet saisi par le MJ, issue appliquée, un seul ↶. */
     resolveDivineImposedTest(participantId,layerId,input={}) {

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:2f2fd23d097372ab7985fea3b22cbd05567e59587944532f321162d0969fd0a5",
+  "sourceFingerprint": "sha256:bc89f208df578e70bf1b6039b799127d712a61bc86b4d6e1a7674984623e59ba",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -12896,7 +12896,7 @@
       "type": "miracle",
       "name": "Seuil du Portail",
       "deity": "Morr",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12957,7 +12957,37 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "imposed-test",
+          "appliesTo": "caster",
+          "label": "Franchir la ligne",
+          "test": {
+            "skill": "calm",
+            "slModifier": 0
+          },
+          "subjects": "enemies",
+          "when": "manual",
+          "onFailure": [
+            {
+              "type": "marker",
+              "label": "ne franchit pas la ligne"
+            }
+          ],
+          "onSuccess": [
+            {
+              "type": "marker",
+              "label": "franchit la ligne"
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Portal's Threshold",
         "effect": "Le prêtre trace au sol une ligne de 8 m maximum en psalmodiant ; un portail d’ombre indistinct apparaît. Les créatures Mort-vivant doivent réussir un Test de Calme Intermédiaire (+0 DR) pour la franchir ; celles qui sont à la fois Mort-vivant et Construct ne le peuvent pas.",
@@ -12972,7 +13002,7 @@
         },
         {
           "id": "undead-cool",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Une créature Mort-vivant réussit un Test de Calme Intermédiaire (+0 DR) pour franchir la ligne.",
           "sourceRef": "v5-portal-s-threshold"
         },
@@ -20672,7 +20702,7 @@
       "type": "miracle",
       "name": "Paix de Taal",
       "deity": "Taal",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -20739,7 +20769,28 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "divine-zone",
+          "appliesTo": "caster",
+          "label": "Paix de Taal",
+          "radius": {
+            "characteristic": "Soc"
+          },
+          "excludes": [
+            "attack"
+          ],
+          "affects": {
+            "trait": "Bestial"
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Pax of Taal",
         "effect": "Le prêtre murmure une prière animale à Taal : toutes les bêtes dans la zone fixent les yeux sur lui. Toute créature de Trait Bestial dans la zone s’apaise et n’attaque personne, ni proie ni congénère. Sans effet sur les créatures corrompues par le Chaos. Si un personnage attaque les animaux, l’effet sur eux cesse.",
@@ -20748,7 +20799,7 @@
       "clauses": [
         {
           "id": "calm",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Les créatures de Trait Bestial dans la zone sont calmes et n’attaquent personne, proie ou congénère.",
           "sourceRef": "v5-pax-of-taal"
         },
@@ -21123,6 +21174,24 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "divine-zone",
+          "appliesTo": "caster",
+          "label": "Vent sauvage",
+          "excludes": [
+            "ranged-attack"
+          ],
+          "exceptions": [
+            "gunpowder",
+            "artillery"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "labels": {
@@ -21157,7 +21226,7 @@
         },
         {
           "id": "no-ranged",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Aucune attaque à distance n’est possible dans la zone, sauf armes à poudre ou d’artillerie ; ces armes peuvent seules viser les cibles dans la zone.",
           "sourceRef": "v5-wild-wind"
         }

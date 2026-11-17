@@ -62,14 +62,16 @@ export const miracles = [
     name: 'Paix de Taal', canonicalName: 'Pax of Taal', printedPage: 88,
     summary: 'Le prêtre murmure une prière animale à Taal : toutes les bêtes dans la zone fixent les yeux sur lui. Toute créature de Trait Bestial dans la zone s’apaise et n’attaque personne, ni proie ni congénère. Sans effet sur les créatures corrompues par le Chaos. Si un personnage attaque les animaux, l’effet sur eux cesse.',
     params: { range: self, targets: { kind: 'area', characteristic: 'Soc', unit: 'yards' }, duration: soc('characteristic-bonus', 'rounds') },
-    status: 'manual', effect: null,
+    // Miracles narratifs L4 (Deft Steps p.88) : zone Sociabilité mètres, présence désignée par le MJ ; avertissement, jamais un refus.
+    status: 'assisted', effect: null,
+    effects: [{ type: 'divine-zone', appliesTo: 'caster', label: 'Paix de Taal', radius: { characteristic: 'Soc' }, excludes: ['attack'], affects: { trait: 'Bestial' } }],
     targetRules: ['Trait Bestial', 'ni mutant ni Chaos'],
     needsInput: [
       { id: 'beasts', text: 'Quelles créatures de Trait Bestial sont dans la zone (Sociabilité mètres autour du prêtre), aucune souillée par le Chaos ?' },
       { id: 'attack', text: 'Un personnage a-t-il attaqué les animaux (fin de l’effet sur eux) ?' }
     ],
     clauses: [
-      { id: 'calm', mode: 'manual', text: 'Les créatures de Trait Bestial dans la zone sont calmes et n’attaquent personne, proie ou congénère.' },
+      { id: 'calm', mode: 'engine', text: 'Les créatures de Trait Bestial dans la zone sont calmes et n’attaquent personne, proie ou congénère.' },
       { id: 'chaos-immune', mode: 'manual', text: 'Les créatures déformées par le Chaos ne sont pas affectées.' },
       { id: 'broken-by-attack', mode: 'manual', text: 'Si un personnage attaque les animaux, l’effet sur eux est brisé.' }
     ],
@@ -115,7 +117,9 @@ export const miracles = [
     status: 'assisted',
     effects: [{ type: 'test-modifier', categories: { cc: -2, ag: -2 } }, { type: 'condition', key: 'Prone', level: 1, when: { fact: 'toughnessFailed', label: 'a échoué à son Test d’Endurance Difficult (-10 en V4, -1 DR en V5) du premier Round' } },
       // Miracles narratifs L3b (Deft Steps p.88, décision du MJ) : même Test (−10 en V4, lu −1 DR, Q14) à chaque début de Round suivant ; échec : À terre.
-      { type: 'imposed-test', label: 'Vent sauvage', test: { skill: 'resistance', slModifier: -1 }, subjects: 'targets', when: 'round', onFailure: [{ type: 'condition', key: 'Prone', level: 1 }] }],
+      { type: 'imposed-test', label: 'Vent sauvage', test: { skill: 'resistance', slModifier: -1 }, subjects: 'targets', when: 'round', onFailure: [{ type: 'condition', key: 'Prone', level: 1 }] },
+      // Miracles narratifs L4 (Deft Steps p.88) : taille « X » non imprimée, donc aucun rayon ; le MJ désigne les présents.
+      { type: 'divine-zone', appliesTo: 'caster', label: 'Vent sauvage', excludes: ['ranged-attack'], exceptions: ['gunpowder', 'artillery'] }],
     targetRules: ['prêtre non affecté'],
     needsInput: [
       { id: 'area', text: 'Taille de la zone : le livre l’indique « X » sans valeur ; décision MJ.' },
@@ -127,7 +131,7 @@ export const miracles = [
       { id: 'test-penalty', mode: 'engine', text: 'Les Tests de Capacité de Combat et d’Agilité des cibles dans la zone subissent -2 DR.' },
       { id: 'prone-first-round', mode: 'engine', text: 'Premier Round : chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre (résultat saisi par le MJ).' },
       { id: 'prone-each-round', mode: 'engine', text: 'Chaque Round suivant, chaque cible refait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.' },
-      { id: 'no-ranged', mode: 'manual', text: 'Aucune attaque à distance n’est possible dans la zone, sauf armes à poudre ou d’artillerie ; ces armes peuvent seules viser les cibles dans la zone.' }
+      { id: 'no-ranged', mode: 'engine', text: 'Aucune attaque à distance n’est possible dans la zone, sauf armes à poudre ou d’artillerie ; ces armes peuvent seules viser les cibles dans la zone.' }
     ],
     sourceDelta: 'Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme les Tests de toutes les compétences liées à CC ou à Agilité (catégories du catalogue, Prière exclue ; les Tests de caractéristique brute restent à la main). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.'
   },

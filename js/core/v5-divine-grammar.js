@@ -25,6 +25,8 @@ for (const type of ['test-modifier', 'sl-extreme']) effectTypes.add(type);
 for (const type of ['summon-creature']) effectTypes.add(type);
 // Test imposé à la cible, brique F2 des miracles narratifs (v5-divine-effects-imposed.js).
 for (const type of ['imposed-test']) effectTypes.add(type);
+// Zones désignées par le MJ, brique F5 (v5-divine-effects-zones.js).
+for (const type of ['divine-zone']) effectTypes.add(type);
 
 // Source d'une force d'État : `{kind:'characteristic-bonus'|'characteristic', characteristic}` ou `{kind:'success-levels'}`.
 export const strengthSources = new Set(['characteristic-bonus', 'characteristic', 'success-levels']);

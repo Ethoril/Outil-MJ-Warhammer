@@ -40,6 +40,7 @@ import gearHandlers from './v5-divine-effects-gear.js';
 import testsHandlers from './v5-divine-effects-tests.js';
 import summonHandlers from './v5-divine-effects-summon.js';
 import imposedHandlers from './v5-divine-effects-imposed.js';
+import zoneHandlers from './v5-divine-effects-zones.js';
 import { CARAC_KEYS } from './carac-keys.js';
 
 const clone = value => structuredClone(value);
@@ -172,7 +173,7 @@ function strengthError(strengthFrom) {
   return null;
 }
 
-export const effectHandlers = Object.freeze({ ...coreHandlers, ...damageHandlers, ...conditionHandlers, ...gearHandlers, ...testsHandlers, ...summonHandlers, ...imposedHandlers });
+export const effectHandlers = Object.freeze({ ...coreHandlers, ...damageHandlers, ...conditionHandlers, ...gearHandlers, ...testsHandlers, ...summonHandlers, ...imposedHandlers, ...zoneHandlers });
 for (const type of effectTypes) if (!effectHandlers[type]) throw new Error(`Type d'effet divin sans gestionnaire : ${type}.`);
 for (const type of Object.keys(effectHandlers)) if (!effectTypes.has(type)) throw new Error(`Gestionnaire d'effet divin hors grammaire : ${type}.`);
 

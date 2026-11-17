@@ -24,7 +24,6 @@
     "divine:miracle:mathlann:cloak-of-mathlann": "F6",
     "divine:miracle:morr:dooming": "F6",
     "divine:miracle:morr:last-rites": "F6",
-    "divine:miracle:morr:portal-s-threshold": "F5",
     "divine:miracle:ranald:crisis-of-confidence": "F1",
     "divine:miracle:ranald:force-the-hand-of-chance": "F3",
     "divine:miracle:ranald:perfect-empathy": "F6",
@@ -59,7 +58,6 @@
     "divine:miracle:solkan:light-of-stasis": "F5",
     "divine:miracle:solkan:still-the-winds": "F5",
     "divine:miracle:taal:nature-s-repast": "F6",
-    "divine:miracle:taal:pax-of-taal": "F5",
     "divine:miracle:taal:wilderness-way": "F3",
     "divine:miracle:taal:lord-of-the-hunt": "F1",
     "divine:miracle:ulric:pelt-of-the-winter-wolf": "F1",
@@ -108,7 +106,6 @@
     "divine:miracle:taal:river-s-blessing#water-speed": "F6",
     "divine:miracle:taal:river-s-blessing#salt-water": "F6",
     "divine:miracle:taal:wild-wind#priest-unaffected": "F6",
-    "divine:miracle:taal:wild-wind#no-ranged": "F5",
     "divine:miracle:taal:animal-instincts#rest-awakening": "F6",
     "divine:miracle:taal:king-of-the-wild#animal-placement": "F6",
     "divine:miracle:taal:king-of-the-wild#obedience": "F6",
@@ -130,6 +127,11 @@
     "divine:miracle:verena:wisdom-of-the-owl#likely-outcome": "F6",
     "divine:miracle:ranald:bamboozle#next-round": "F6",
     "divine:miracle:ranald:bamboozle#immune-types": "F6",
-    "divine:miracle:shallya:balm-to-a-wounded-mind#sleep": "F6"
+    "divine:miracle:shallya:balm-to-a-wounded-mind#sleep": "F6",
+    "divine:miracle:taal:pax-of-taal#chaos-immune": "F6",
+    "divine:miracle:taal:pax-of-taal#broken-by-attack": "F6",
+    "divine:miracle:morr:portal-s-threshold#line-length": "F6",
+    "divine:miracle:morr:portal-s-threshold#construct-undead-blocked": "F6",
+    "divine:miracle:morr:portal-s-threshold#expiry": "F6"
   }
 }

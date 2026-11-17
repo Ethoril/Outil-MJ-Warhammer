@@ -12,6 +12,7 @@ import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../../core/talent-contract
 import { acquiredV5TalentCoverage, V5_TALENT_TREATMENT_LABELS } from '../../core/v5-talent-coverage.js';
 import { readDivineRejections } from '../../core/v5-divine-access.js';
 import { resolveTraitAnswer } from '../../core/trait-effects.js';
+import { divineZoneAttackWarnings } from '../../core/v5-divine-effects-zones.js';
 import { rollFormula } from '../dice-buttons.js';
 
 /**
@@ -186,6 +187,9 @@ export function renderResult(preview, target, draft, handlers, participants=[], 
   if(preview.test?.automatic)result.appendChild(node('p','workspace-result-line',preview.test.noTest?'Choix de talent sans Test.':'Réussite automatique, sans jet.'));
   if(preview.defenderDamage)result.appendChild(node('p','workspace-result-line','Riposte : '+preview.defenderDamage.finalDamage+' Blessures sur '+(preview.input.actor?.name||'l’attaquant')));
   const effectiveTarget = participants.find(row => row.id === preview.targetId) || target;
+  // Zones divines (F5) : avertissement que le MJ peut passer outre, jamais un refus.
+  for (const text of divineZoneAttackWarnings({ attacker: preview.input?.actor, target: effectiveTarget, action: preview.input?.action ?? preview.action, participants }))
+    result.appendChild(node('p', 'workspace-field-error', text));
   if (preview.attack) result.appendChild(node('p', 'workspace-result-line', `${preview.hit ? 'Touché' : 'Pas de touche'}${preview.location ? ` · ${preview.location.name}` : ''}`));
   for (const plan of preview.profileAbilityPlans || []) {
     if (!plan.effects?.length) continue;

@@ -2,7 +2,7 @@
 // actives du panneau divin. Le DOM est un faux arbre ; un Store sans la commande ne fait rien planter.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { renderImposedTestControls } from '../../../js/ui/v5-divine-panel.js';
+import { renderImposedTestControls, renderDivineZoneControls } from '../../../js/ui/v5-divine-panel.js';
 
 class El {
   constructor(tag) { Object.assign(this, { tagName: tag, children: [], options: [], dataset: {}, attrs: {}, listeners: {}, className: '', value: '', disabled: false, hidden: false, _text: '' }); }
@@ -62,3 +62,25 @@ test('couche récurrente ou déjà résolue : libellé sans bouton manuel', () =
   assert.equal(buttonNamed(box, /Test imposé/), undefined);
   assert.match(box.textContent, /Vent sauvage/);
 }));
+
+const zoneLayer = { id: 'exec:priest:pax:divine-zone', type: 'divine-zone', casterId: 'priest', targetId: 'priest', zone: { label: 'Paix de Taal', radius: 60, members: ['foe'], excludes: ['attack'] } };
+
+test('Zone divine : une case par participant (présents cochés), la commande reçoit la liste', () => withDom(async () => {
+  const calls = [];
+  const Store = { setDivineZoneMembers: async (...args) => { calls.push(args); return { ok: true }; } };
+  const box = new El('div');
+  renderDivineZoneControls(box, { layer: zoneLayer, participants, Store, onDone: () => {} });
+  const checks = all(box, el => el.tagName === 'input');
+  assert.deepEqual(checks.map(el => [el.dataset.participantId, el.checked]), [['ally', false], ['foe', true]]);
+  checks[0].checked = true;
+  await buttonNamed(box, /Enregistrer la présence/).fire('click');
+  assert.deepEqual(calls, [['priest', zoneLayer.id, ['ally', 'foe']]]);
+}));
+
+test('Zone divine, Store sans la méthode : aucun plantage, message en français', () => withDom(async () => {
+  const box = new El('div');
+  renderDivineZoneControls(box, { layer: zoneLayer, participants, Store: {}, onDone: () => {} });
+  await buttonNamed(box, /Enregistrer la présence/).fire('click');
+  assert.match(box.textContent, /commande absente/);
+}));
+

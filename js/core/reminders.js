@@ -12,6 +12,7 @@ import { creatureAbilityReminders } from './creature-abilities.js';
 import { slannTraitReminders } from './slann.js';
 import { familiarReminders, companionTalents } from './familiars.js';
 import { catalogueReminders } from './optional-traits.js';
+import { divineZoneReminders } from './v5-divine-effects-zones.js';
 
 // Un module de Trait par ligne : [clé stable, fonction participant → textes]. Ajouter ici les autres `xxxReminders`.
 const TRAIT_REMINDERS = [['size', sizeReminders], ['heads', manyHeadsReminderItems], ['regeneration', regenerationReminders], ['psychology', psychologyReminders], ['senses', senseReminders], ['movement', movementReminders], ['states', stateReminders], ['natures', natureReminders], ['magic', creatureMagicReminders], ['abilities', creatureAbilityReminders], ['slann', slannTraitReminders], ['familiar', familiarReminders], ['catalogue', person => catalogueReminders(person, TRAIT_REMINDERS.slice(0, -1).map(([, fn]) => fn))]];
@@ -114,7 +115,7 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
     // Rappels dérivés des Traits (calculés à l'affichage, jamais écrits dans le participant) : permanents, donc réservés à la carte
     // et au Personnage actif (transition « participant »), jamais à « À traiter » qui ne garde que les rappels liés à un moment.
     if (transition.type === 'participant') {
-      const entries = [...traitReminderTexts(person), ...divineStateReminders(person), ...companionReminderTexts(person, snapshot.allParticipants || snapshot.participants).map((text, index) => ({ key: `companion-${index}`, text }))];
+      const entries = [...traitReminderTexts(person), ...divineStateReminders(person), ...divineZoneReminders(person, snapshot.allParticipants || snapshot.participants), ...companionReminderTexts(person, snapshot.allParticipants || snapshot.participants).map((text, index) => ({ key: `companion-${index}`, text }))];
       for (const { key, text } of entries) candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:trait-${key}`, text: `${person.name || 'Participant'} : ${text}`, mode: 'reminder' });
     }
     for (const note of Array.isArray(person.extensions?.v5?.reminders) ? person.extensions.v5.reminders : []) {
