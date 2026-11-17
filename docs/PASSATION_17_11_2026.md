@@ -14,7 +14,9 @@ Publié le 17/11 en 3.50.0 : poursuite selon le Livre de base V5 (p. 158-159) et
 
 **Table d10 des Obstacles de la poursuite : validée par le MJ le 17/11, sans correction.** **Attend le MJ, sans action de notre part :** éprouver à la table les images des pions et la carte « Monture » du bureau des fiches.
 
-## 2. Chantier en cours : Traits optionnels des créatures et des montures
+## 2. Chantier des Traits optionnels : publié en 3.51.0 le 17/11/2026 (`main` 7d71ac5)
+
+Détail, restes connus et preuves : `docs/SUIVI_EVOLUTION.md`, entrée 3.51.0. Décisions D1 à D26 dans la spec. Branche locale `traits-optionnels` fusionnée, gardée. Compte Team autorisé par le MJ jusqu'à nouvel ordre pour les lots (mémoire `delegation-compte-team`). Suite prévue : le tri de l'inventaire par Claude (section 3). Ce qui suit est l'historique du cadrage.
 
 **Où on en est.** Cadré (étape 1 du skill `cadrer-feature`), rien de codé. À lire, dans cet ordre :
 - [docs/specs/traits-optionnels/spec.md](specs/traits-optionnels/spec.md) : décisions D1 à D8 du MJ (17/11), choix D9 à D15 de Claude, CA1 à CA25, hors périmètre.
