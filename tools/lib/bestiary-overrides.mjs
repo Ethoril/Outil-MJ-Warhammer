@@ -205,6 +205,18 @@ export const V3_PATCHES = Object.freeze({
   } }
 });
 
+/**
+ * Corrections de données du chantier des Traits optionnels (D15), même mécanisme que V3_PATCHES :
+ * - E0-P-759 (L23 p. 22) : Stubborn, Trait facultatif de l'âne et de la mule (le texte du livre dit « souvent ») ;
+ * - E0-P-459 (L13 pp. 108-109) : le texte dit que le Demigryph adulte dressé porte aussi Dressé (Magie), absent du profil imprimé ;
+ * - E0-P-763 (L23 p. 23) : le livre imprime « Trained, (Broken, Drive) », la virgule parasite coupait la liste des dressages.
+ */
+export const D15_CORRECTIONS = Object.freeze({
+  'E0-P-759': { addOptional: [{ name: 'Stubborn' }] },
+  'E0-P-459': { addOptional: [{ name: 'Trained', param: 'Magic', ref: 'E0-T-060' }] },
+  'E0-P-763': { set: { 'traits.4': { name: 'Trained', param: 'Broken, Drive', ref: 'E0-T-060' } } }
+});
+
 /** Équipement dont un objet est suivi d'un mot ou d'une phrase de la colonne voisine : l'objet est coupé après le nom donné (L16 p. 45 : « Restorative Brew Once the preparations… », p. 90 : « Pair of Swords y »). */
 export const TRAPPING_TRIMS = Object.freeze({
   'E0-P-502': ['Restorative Brew'],

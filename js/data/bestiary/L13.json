@@ -229,7 +229,14 @@
    "keywords": [
     "bete"
    ],
-   "nameFrSource": "proposition"
+   "nameFrSource": "proposition",
+   "optionalTraits": [
+    {
+     "name": "Trained",
+     "param": "Magic",
+     "ref": "E0-T-060"
+    }
+   ]
   },
   {
    "id": "E0-P-460",

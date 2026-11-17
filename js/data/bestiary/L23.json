@@ -54,7 +54,12 @@
      "ref": "E0-T-060"
     }
    ],
-   "nameFrSource": "proposition"
+   "nameFrSource": "proposition",
+   "optionalTraits": [
+    {
+     "name": "Stubborn"
+    }
+   ]
   },
   {
    "id": "E0-P-760",
@@ -276,6 +281,7 @@
     },
     {
      "name": "Trained",
+     "param": "Broken, Drive",
      "ref": "E0-T-060"
     }
    ],
