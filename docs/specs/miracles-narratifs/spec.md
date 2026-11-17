@@ -195,3 +195,11 @@ Inventaire des 88 clauses des miracles assistés : `inventaire-assistes.md` (17/
 - **Q17. Désengagement (En bon ordre) et Élan en début de Round (Froid de la gelée blanche) :** branchés, en lot isolé tout à la fin (L11), avec tests de non-régression.
 
 Plus aucune question ouverte : reste `plan.md` et `tasks.md`.
+
+## 8. Décisions du MJ (17/11/2026, après L1)
+
+- **Règle générale :** l'outil sert au combat. Un miracle qui ne sert pas en combat reste un rappel, sans calcul. Le plan (L2 à L11) est trié selon cette règle (`tri-combat.md`).
+- **Talk Your Way Out, Crisis of Confidence :** narratifs, aucun calcul.
+- **The Gamemaster, Fair Winds, Lord of the Hunt :** hors combat, retour en rappel (L1 annulé).
+- **Grâce de Ranald et Rage de Rhya :** branchés ; l'ancien test d'`effets-equipement-tests.test.js` qui les figeait en rappel est mis à jour (Ranald : Q14 ; Rhya : après relecture du livre, sinon rappel).
+- **A Deal's a Deal :** valeur calculée une fois les DR de la Prière connus (+2, plus 1 par tranche de 2 DR), puis figée pendant la durée.
