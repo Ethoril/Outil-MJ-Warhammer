@@ -478,6 +478,19 @@ function effectLayer(effect, { contract, actorId, targetId, executionId, expiry,
   return layer;
 }
 
+// Rappel enrichi (L9) : libellé court, portée, cibles et note de durée d'une prière de combat, lus sans calcul sur les paramètres résolus.
+// Une prière en relève si `labels.combatReminder` vaut true ou si une de ses clauses `manual` porte un `shortLabel`. Libellé : `labels.shortLabel`,
+// sinon les `shortLabel` de ces clauses, sinon le nom du contrat.
+export function combatReminderInfo(contract, params = {}) {
+  const clauseLabels = (contract?.clauses || []).filter(clause => clause.mode === 'manual' && clause.shortLabel).map(clause => clause.shortLabel);
+  if (contract?.labels?.combatReminder !== true && !clauseLabels.length) return null;
+  const { range, targets } = params;
+  const rangeText = range?.unit === 'touch' ? 'contact' : range?.unit === 'self' ? 'le prêtre' : range?.unit === 'yards' && Number.isFinite(range.value) ? `${range.value} m` : null;
+  const targetText = targets?.unit === 'self' ? 'le prêtre' : targets?.unit === 'yards' && Number.isFinite(targets.value) ? `zone de ${targets.value} m`
+    : targets?.unit === 'allies' && Number.isFinite(targets.value) ? `${targets.value} allié${targets.value > 1 ? 's' : ''}` : !targets?.unit && Number.isFinite(targets?.value) ? `${targets.value} cible${targets.value > 1 ? 's' : ''}` : null;
+  return { label: contract.labels.shortLabel || clauseLabels.join(' · ') || contract.name, range: rangeText, targets: targetText, ...(contract.labels.durationNote ? { durationNote: contract.labels.durationNote } : {}) };
+}
+
 /** Preview a known divine action; no state or source object is mutated. */
 export function previewDivineExecution(actor, contract, targets = [], input = {}) {
   const contractProblem = sourceError(contract, input);
@@ -681,6 +694,20 @@ export function applyDivineExecution(state, contract, input = {}) {
   // Durée manuelle en minutes/heures/jours : la couche de rappel porte l'échéance calendaire de la durée résolue.
   const manualCalendarDuration = timedManual && calendarSeconds(preview.resolvedParams.duration) !== null ? { value: preview.resolvedParams.duration.value, unit: preview.resolvedParams.duration.unit } : null;
   const calendarLayerEffects = layerEffects.filter(isCalendarEffect);
+  // Rappel enrichi (L9). Une prière `assisted` le porte sur sa première couche d'effet datée (aucune couche en plus) ; sans couche, elle reçoit une couche de rappel
+  // seulement si sa durée se date (Rounds avec échéance, ou calendaire avec horloge) ou reste spéciale (fin à la main).
+  const reminderInfo = preview.success ? combatReminderInfo(contract, preview.resolvedParams) : null;
+  const reminderDuration = preview.resolvedParams.duration;
+  const assistedReminderDuration = reminderInfo && contract.status === 'assisted' && reminderDuration && reminderDuration.unit !== 'instant'
+    && (reminderDuration.unit === 'special' || Number.isSafeInteger(reminderDuration.value) && reminderDuration.value > 0
+      && (calendarSeconds(reminderDuration) !== null ? hasClockAnchor(input.clockAnchor) : reminderDuration.unit === 'rounds' && Boolean(input.expiry)))
+    ? (reminderDuration.unit === 'special' ? { value: null, unit: 'special' } : { value: reminderDuration.value, unit: reminderDuration.unit }) : null;
+  const withReminder = layer => {
+    if (!reminderInfo) return layer;
+    layer.reminder = clone(reminderInfo);
+    if (Number.isSafeInteger(reminderDuration?.value) && reminderDuration.value > 0) layer.duration = { value: reminderDuration.value, unit: reminderDuration.unit };
+    return layer;
+  };
   const appliesContext = { actorId, actor, contract, prayer: preview.prayer, input, targets: appliedTargets, designated };
   if ((preview.effects.length || timedManual) && appliedTargets.length) {
     if ((calendarLayerEffects.length || manualCalendarDuration) && !hasClockAnchor(input.clockAnchor))
@@ -698,7 +725,9 @@ export function applyDivineExecution(state, contract, input = {}) {
       // L'ordinal reste calculé sur tous les effets à couche : l'identifiant d'une couche ne dépend pas du filtre de portée.
       const layered = layerEffects.map((effect, index) => ({ effect, index })).filter(({ effect }) => effectApplies(effect, participant, appliesContext));
       const layers = layered.map(({ effect, index }) => effectLayer(effect, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry || null, clockAnchor: input.clockAnchor, ordinal: sameTypeOrdinal(layerEffects, index), input }));
-      if (timedManual && !layers.length) layers.push(effectLayer({ type: 'manual-prayer-reminder', duration: manualCalendarDuration || clone(activeDuration) }, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry, clockAnchor: input.clockAnchor }));
+      if (timedManual && !layers.length) layers.push(withReminder(effectLayer({ type: 'manual-prayer-reminder', duration: manualCalendarDuration || clone(activeDuration) }, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry, clockAnchor: input.clockAnchor })));
+      else if (reminderInfo && contract.status === 'assisted' && layers.length) (layers.find(row => row.expiry || row.deadline) || layers[0]).reminder = clone(reminderInfo);
+      else if (assistedReminderDuration) layers.push(withReminder(effectLayer({ type: 'manual-prayer-reminder', duration: assistedReminderDuration }, { contract, actorId, targetId: participant.id, executionId: input.executionId, expiry: input.expiry, clockAnchor: input.clockAnchor })));
       const updated = clone(participant);
       updated.extensions ||= {}; updated.extensions.v5 ||= {};
       updated.extensions.v5.divineEffects = [...(updated.extensions.v5.divineEffects || []), ...layers];

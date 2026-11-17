@@ -84,8 +84,8 @@ export const miracles = [
     targetRules: [],
     needsInput: [{ id: 'target-area', text: 'Zone visée, en ligne de vue et à portée.' }, { id: 'outdoors', text: 'La zone est-elle en extérieur ?' }, { id: 'sigmar-foes', text: 'Ennemis de Sigmar présents dans la zone (arbitrage MJ); sinon le prêtre est frappé.' }, { id: 'invalid-creatures', text: 'Créatures invalides exclues (notion non définie par la source).' }, { id: 'damage-roll', text: 'Jet de 1d10 + DR.' }],
     clauses: [
-      { id: 'targeting', mode: 'manual', text: 'Zone visible et à portée (Bonus de Sociabilité en mètres au maximum pour la zone) contenant des ennemis aux yeux de Sigmar.' },
-      { id: 'outdoors-only', mode: 'manual', text: 'La zone ciblée doit être en extérieur.' },
+      { id: 'targeting', shortLabel: "Zone visible contenant des ennemis", mode: 'manual', text: 'Zone visible et à portée (Bonus de Sociabilité en mètres au maximum pour la zone) contenant des ennemis aux yeux de Sigmar.' },
+      { id: 'outdoors-only', shortLabel: "Zone en extérieur seulement", mode: 'manual', text: 'La zone ciblée doit être en extérieur.' },
       { id: 'area-damage', mode: 'engine', text: 'Tout ce qui est dans la zone, sauf créatures invalides, subit 1d10 + DR Blessures ignorant BE et PA.' },
       { id: 'ablaze', mode: 'engine', text: 'Chaque créature touchée reçoit un État Enflammé.' },
       { id: 'backfire', mode: 'engine', text: 'Sans ennemi à frapper (aucune cible désignée n’est un ennemi de Sigmar, fait MJ par cible), Sigmar frappe le prêtre à la place : mêmes dégâts et même État Enflammé sur lui.' }

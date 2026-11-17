@@ -12456,6 +12456,7 @@
         },
         {
           "id": "eagle-sight",
+          "shortLabel": "Voit par l’aigle, prêtre vulnérable",
           "mode": "manual",
           "text": "Rappel : le prêtre voit par les yeux de l’aigle et utilise ses capacités à la place des siennes, sans voir par les siens pendant l’utilisation, ce qui le laisse potentiellement vulnérable.",
           "sourceRef": "v5-eagle-s-eye"
@@ -12684,6 +12685,7 @@
         },
         {
           "id": "relevant-order",
+          "shortLabel": "Ordre pertinent pour le combat",
           "mode": "manual",
           "text": "L’ordre doit être pertinent pour un combat armé ou une stratégie en cours ; le moteur applique le bonus à tous les Tests de Commandement du Round, le MJ écarte ceux qui sont sans rapport.",
           "sourceRef": "v5-command-the-legion"
@@ -13105,7 +13107,9 @@
       "labels": {
         "canonicalName": "Know Your Enemy",
         "effect": "Vous appelez Myrmidia pour connaître les forces et faiblesses d’un ennemi proche : le MJ vous laisse consulter ses caractéristiques, ses Traits, ses compétences et ses Talents.",
-        "sourceStatus": "V4 EN supplement L13 source checked"
+        "sourceStatus": "V4 EN supplement L13 source checked",
+        "combatReminder": true,
+        "shortLabel": "Profil de l’ennemi révélé par le MJ"
       },
       "clauses": [
         {
@@ -13239,7 +13243,9 @@
         "canonicalName": "On Deadly Ground",
         "effect": "Vous bannissez l’idée de retraite de l’esprit de vos alliés : tant que le miracle dure, ils ne reçoivent pas l’État Brisé. Vous comptez parmi eux.",
         "sourceStatus": "V4 EN supplement L13 source checked",
-        "durationNote": "durée non attestée par le livre"
+        "durationNote": "durée non attestée par le livre",
+        "combatReminder": true,
+        "shortLabel": "Alliés protégés du Brisé"
       },
       "clauses": [
         {
@@ -13544,6 +13550,7 @@
         },
         {
           "id": "fear-only",
+          "shortLabel": "Protège de la Peur seulement",
           "mode": "manual",
           "text": "En V5 (p.119) le Talent protège de la Peur du groupe choisi, non de sa Terreur ni de l’Intimidation.",
           "sourceRef": "v5-shieldmaiden-s-devotion"
@@ -14932,6 +14939,7 @@
         },
         {
           "id": "drowning",
+          "shortLabel": "Cible en train de se noyer",
           "mode": "manual",
           "text": "La cible se noie pendant la durée (règles p.169), y compris démons et morts-vivants.",
           "sourceRef": "v5-drowned-man-s-face"
@@ -15557,7 +15565,9 @@
       "labels": {
         "canonicalName": "Waterlungs",
         "effect": "Les cibles respirent sous l'eau, mais à l'air libre elles subissent Suffocation et Noyade (p.181 du livre de base). Elles se sentent attirées par l'eau et n'ont besoin que d'un seau pour respirer. Vous pouvez affecter une cible supplémentaire par tranche de +2 DR.",
-        "sourceStatus": "WFRP 4e (Fourth Edition), Cubicle 7 supplement L07 source checked"
+        "sourceStatus": "WFRP 4e (Fourth Edition), Cubicle 7 supplement L07 source checked",
+        "combatReminder": true,
+        "shortLabel": "Respire sous l’eau"
       },
       "clauses": [
         {
@@ -15833,6 +15843,7 @@
         },
         {
           "id": "undead-not-immune",
+          "shortLabel": "Morts-vivants non immunisés à la Peur",
           "mode": "manual",
           "text": "Les morts-vivants ne sont pas immunisés contre cette Peur, malgré tout Talent, Trait ou effet.",
           "sourceRef": "v5-death-mask"
@@ -16172,7 +16183,9 @@
       "labels": {
         "canonicalName": "Last Rites",
         "effect": "Le prêtre chante un requiem sur un cadavre : l’âme franchit le portail vers le royaume de Morr et le cadavre ne peut plus être ciblé par aucun sort de Nécromancie. Un ennemi possédant à la fois les Traits Construct et Mort-vivant ciblé par ce miracle est détruit.",
-        "sourceStatus": "V5 base source checked"
+        "sourceStatus": "V5 base source checked",
+        "combatReminder": true,
+        "shortLabel": "Détruit un Construct ou Mort-vivant ciblé"
       },
       "clauses": [
         {
@@ -16457,12 +16470,14 @@
         },
         {
           "id": "no-deterioration",
+          "shortLabel": "Cible stabilisée, Critiques ignorées",
           "mode": "manual",
           "text": "La cible ne se détériore pas : maladie suspendue, Blessures Critiques ignorées, poisons suspendus, et effets similaires.",
           "sourceRef": "v5-stay-morr-s-hand"
         },
         {
           "id": "end-healing",
+          "shortLabel": "Fin si des soins sont prodigués",
           "mode": "manual",
           "text": "Le miracle prend fin si des soins appropriés sont prodigués.",
           "sourceRef": "v5-stay-morr-s-hand"
@@ -18318,7 +18333,9 @@
       "labels": {
         "canonicalName": "Free Your Mind",
         "effect": "Le prêtre implore Ranald pour résister aux ordres de l’autorité : lui-même ou une cible choisie résiste automatiquement aux effets de tout Test de Charme ou de Commandement fait par un personnage de Statut supérieur à celui de la cible, aussi persuasif soit-il.",
-        "sourceStatus": "WFRP 4e édition, Cubicle 7, mise à jour du 23 janvier 2025 supplement L04 source checked"
+        "sourceStatus": "WFRP 4e édition, Cubicle 7, mise à jour du 23 janvier 2025 supplement L04 source checked",
+        "combatReminder": true,
+        "shortLabel": "Protégé des ordres et du Charme"
       },
       "clauses": [
         {
@@ -18446,6 +18463,7 @@
         },
         {
           "id": "running-effects",
+          "shortLabel": "Psychologie en cours : décision du MJ",
           "mode": "manual",
           "text": "Le MJ décide si un effet de Psychologie déjà en cours (Peur, Terreur, Animosité…) cesse d’agir au lancement.",
           "sourceRef": "v5-moment-of-clarity"
@@ -18588,6 +18606,7 @@
         },
         {
           "id": "status-exclusion",
+          "shortLabel": "Statut Argent ou Or non affectés",
           "mode": "manual",
           "text": "Les personnages de Statut Argent ou Or ne sont pas affectés.",
           "sourceRef": "v5-rally-round"
@@ -19554,6 +19573,7 @@
         },
         {
           "id": "no-own-senses",
+          "shortLabel": "Prêtre privé de ses propres sens",
           "mode": "manual",
           "text": "Rappel : le prêtre n’a pas accès à ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens pendant la durée, ce qui le laisse vulnérable.",
           "sourceRef": "v5-cat-s-eyes"
@@ -19694,6 +19714,7 @@
         },
         {
           "id": "session-end",
+          "shortLabel": "Fin à la fin de la session",
           "mode": "manual",
           "text": "Les points temporaires durent jusqu’à la fin de la session : le MJ termine la prière à ce moment (aucune échéance automatique).",
           "sourceRef": "v5-cheat-the-odds"
@@ -19826,6 +19847,7 @@
         },
         {
           "id": "stealth",
+          "shortLabel": "Bonus de Discrétion à ajouter à la main",
           "mode": "manual",
           "text": "+10 en Discrétion (compétence) pendant la durée, en plus du +10 d’Agilité.",
           "sourceRef": "v5-ranald-s-grace"
@@ -20439,7 +20461,9 @@
       "labels": {
         "canonicalName": "Rhya's Dominion",
         "effect": "Le prêtre invoque Rhya pour qu’un esprit de la nature apparaisse et lui obéisse. Il doit se concentrer sur un élément naturel où un esprit peut résider (champ cultivé, mare, roncier). Si le miracle réussit, l’esprit accomplit une tâche au nom de Rhya, de façon trop littérale, sans jamais enfreindre les interdits de Rhya : surveiller, harceler les intrus de son domaine ou retrouver un objet perdu à proximité.",
-        "sourceStatus": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023) supplement L02 source checked"
+        "sourceStatus": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023) supplement L02 source checked",
+        "combatReminder": true,
+        "shortLabel": "Esprit de la nature pour une tâche"
       },
       "clauses": [
         {
@@ -20688,7 +20712,9 @@
       "labels": {
         "canonicalName": "Rhya's Taming",
         "effect": "Le prêtre tend une main douce vers une créature sauvage et fredonne des mélodies apaisantes. Sur un Test de Charme animal Moyen (+20) réussi, un animal sauvage non corrompu de Taille Grande ou moins devient docile envers les Humains, les Elfes qui honorent Isha et alliés semblables, et s’adoucit encore par DR obtenu, sans quitter volontairement son territoire naturel. Dure jusqu’au prochain coucher du soleil.",
-        "sourceStatus": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023) supplement L02 source checked"
+        "sourceStatus": "V4 EN (crédits p.3 : Warhammer Fantasy Roleplay 4th Edition, © Games Workshop 2023) supplement L02 source checked",
+        "combatReminder": true,
+        "shortLabel": "Animal sauvage rendu docile"
       },
       "clauses": [
         {
@@ -20876,6 +20902,7 @@
         },
         {
           "id": "defend-only",
+          "shortLabel": "Seulement pour défendre enfants ou foyer",
           "mode": "manual",
           "text": "Invocable uniquement pour défendre des enfants, ou un foyer ou une ferme occupés par ses habitants.",
           "sourceRef": "v5-rhya-s-rage"
@@ -21959,7 +21986,9 @@
       "labels": {
         "canonicalName": "Bitter Catharsis",
         "effect": "Shallya attire en vous un poison ou une maladie de la cible et la purge entièrement. Par tranche de +2 DR, une maladie ou un poison de plus. Pour chaque poison retiré ou maladie guérie, vous subissez 1d10 moins votre Bonus de Sociabilité en Blessures.",
-        "sourceStatus": "V5 base source checked"
+        "sourceStatus": "V5 base source checked",
+        "combatReminder": true,
+        "shortLabel": "Purge un poison ou une maladie"
       },
       "clauses": [
         {
@@ -22211,6 +22240,7 @@
       "clauses": [
         {
           "id": "prayer-time",
+          "shortLabel": "Prière de plusieurs Rounds avant l’effet",
           "mode": "manual",
           "text": "Le prêtre prie (10 − Bonus de Sociabilité) Rounds avant l’effet.",
           "sourceRef": "v5-shallya-s-tears"
@@ -22223,12 +22253,14 @@
         },
         {
           "id": "interruption",
+          "shortLabel": "Interrompue : aucun effet",
           "mode": "manual",
           "text": "Prière interrompue : aucun effet pour la cible.",
           "sourceRef": "v5-shallya-s-tears"
         },
         {
           "id": "no-reattach",
+          "shortLabel": "Ne rattache pas les membres amputés",
           "mode": "manual",
           "text": "Ne rattache pas les membres amputés.",
           "sourceRef": "v5-shallya-s-tears"
@@ -23029,12 +23061,14 @@
       "clauses": [
         {
           "id": "targeting",
+          "shortLabel": "Zone visible contenant des ennemis",
           "mode": "manual",
           "text": "Zone visible et à portée (Bonus de Sociabilité en mètres au maximum pour la zone) contenant des ennemis aux yeux de Sigmar.",
           "sourceRef": "v5-twin-tailed-comet"
         },
         {
           "id": "outdoors-only",
+          "shortLabel": "Zone en extérieur seulement",
           "mode": "manual",
           "text": "La zone ciblée doit être en extérieur.",
           "sourceRef": "v5-twin-tailed-comet"
@@ -24462,6 +24496,7 @@
         },
         {
           "id": "structure-damage",
+          "shortLabel": "Dégâts aux structures à appliquer à la main",
           "mode": "manual",
           "text": "Chaque structure artificielle dans la zone subit 1d10 + DR dégâts (les éléments naturels ne sont pas touchés).",
           "sourceRef": "v5-earthshudder"
@@ -24945,12 +24980,14 @@
         },
         {
           "id": "water-speed",
+          "shortLabel": "Mouvement complet dans l’eau",
           "mode": "manual",
           "text": "En se déplaçant dans l’eau, la vitesse du prêtre est son Mouvement complet, non la moitié.",
           "sourceRef": "v5-river-s-blessing"
         },
         {
           "id": "salt-water",
+          "shortLabel": "Sans effet en eau salée",
           "mode": "manual",
           "text": "Aucun effet en eau salée : le MJ vérifie la nature de l’eau (le bonus de Natation reste appliqué par le moteur).",
           "sourceRef": "v5-river-s-blessing"
@@ -25124,6 +25161,7 @@
       "clauses": [
         {
           "id": "priest-unaffected",
+          "shortLabel": "Prêtre non affecté par le vent",
           "mode": "manual",
           "text": "Le prêtre n’est pas affecté par le vent.",
           "sourceRef": "v5-wild-wind"
@@ -25515,12 +25553,14 @@
         },
         {
           "id": "animal-placement",
+          "shortLabel": "Animal à placer par le MJ",
           "mode": "manual",
           "text": "L'animal apparaît à portée (Sociabilité mètres) : la position saisie est notée sur la créature, le MJ la place.",
           "sourceRef": "v5-king-of-the-wild"
         },
         {
           "id": "obedience",
+          "shortLabel": "Animal obéit au prêtre",
           "mode": "manual",
           "text": "L'animal agit selon les désirs du prêtre pendant toute la durée : le MJ joue l'animal en suivant les souhaits du prêtre.",
           "sourceRef": "v5-king-of-the-wild"
@@ -26269,12 +26309,14 @@
         },
         {
           "id": "stack-beyond-max",
+          "shortLabel": "Talent cumulé au-delà du maximum",
           "mode": "manual",
           "text": "S'il possède déjà le talent, il le gagne en plus, au-delà du maximum normal.",
           "sourceRef": "v5-howl-of-battle"
         },
         {
           "id": "talent-effect",
+          "shortLabel": "Bonus de Dégâts de charge à la main",
           "mode": "manual",
           "text": "Le bonus de dégâts du talent à la charge n'est pas injecté par le moteur : le MJ l'applique.",
           "sourceRef": "v5-howl-of-battle"
@@ -27187,12 +27229,14 @@
         },
         {
           "id": "wolf-placement",
+          "shortLabel": "Loup à placer par le MJ",
           "mode": "manual",
           "text": "Le loup apparaît à portée (Sociabilité mètres) : le MJ place la créature.",
           "sourceRef": "v5-howl-of-the-wolf"
         },
         {
           "id": "wolf-combat",
+          "shortLabel": "Loup combat pour le prêtre",
           "mode": "manual",
           "text": "Le loup combat les ennemis du prêtre pendant la durée ; le MJ le joue (arbitrage MJ : contrôlé par le MJ).",
           "sourceRef": "v5-howl-of-the-wolf"
@@ -27787,6 +27831,7 @@
         },
         {
           "id": "no-bleeding",
+          "shortLabel": "Aucun Hémorragique causé",
           "mode": "manual",
           "text": "La hache ne peut causer aucun État Hémorragique.",
           "sourceRef": "v5-winter-s-bite"
@@ -28294,6 +28339,7 @@
         },
         {
           "id": "sin",
+          "shortLabel": "Péché à attribuer à la main (crime sur inconscient)",
           "mode": "manual",
           "text": "+1 Point de Péché pour le prêtre par crime commis sur un adversaire inconscient.",
           "sourceRef": "v5-sword-of-justice"
@@ -28651,5 +28697,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:faab461356081ae1e39f28ef7f380ad5f361800df102e6cce9e4dd0bc83ee3f4"
+  "sourceFingerprint": "sha256:80ceeb3d58f1dba2a04b33324e970df1dd1a4ea49e9f579bb97a1b62c3675036"
 }

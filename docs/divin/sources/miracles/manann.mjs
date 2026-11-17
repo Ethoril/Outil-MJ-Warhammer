@@ -36,7 +36,7 @@ export const miracles = [
   ],
   clauses: [
    { id: 'fatigued', mode: 'engine', text: 'La cible gagne l’État Fatigué pendant la durée.' },
-   { id: 'drowning', mode: 'manual', text: 'La cible se noie pendant la durée (règles p.169), y compris démons et morts-vivants.' },
+   { id: 'drowning', shortLabel: "Cible en train de se noyer", mode: 'manual', text: 'La cible se noie pendant la durée (règles p.169), y compris démons et morts-vivants.' },
    { id: 'stunned-end', mode: 'engine', text: 'À la fin du miracle, la cible gagne Étourdi pendant 1 Round.' },
    { id: 'sl-extension', mode: 'assisted', text: 'Par tranche de +2 DR : portée, cibles ou durée augmentées de leur valeur initiale.' }
   ],

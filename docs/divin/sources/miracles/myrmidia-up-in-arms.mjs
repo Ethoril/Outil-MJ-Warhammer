@@ -25,7 +25,7 @@ export const miracles = [
     ],
     clauses: [
       { id: 'leadership-bonus', mode: 'engine', text: 'Les Tests de Commandement du prêtre gagnent +1 DR pendant la durée (le +10 V4 au Test se lit +1 DR, décision MJ).' },
-      { id: 'relevant-order', mode: 'manual', text: 'L’ordre doit être pertinent pour un combat armé ou une stratégie en cours ; le moteur applique le bonus à tous les Tests de Commandement du Round, le MJ écarte ceux qui sont sans rapport.' },
+      { id: 'relevant-order', shortLabel: "Ordre pertinent pour le combat", mode: 'manual', text: 'L’ordre doit être pertinent pour un combat armé ou une stratégie en cours ; le moteur applique le bonus à tous les Tests de Commandement du Round, le MJ écarte ceux qui sont sans rapport.' },
       { id: 'line-of-sight', mode: 'manual', text: 'L’allié qui reçoit l’ordre doit être dans la ligne de vue du prêtre.' },
       { id: 'duration', mode: 'engine', text: 'Durée : 1 Round (+1 Round par tranche de +2 DR).' }
     ],
@@ -73,7 +73,7 @@ export const miracles = [
     sourceDelta: 'Aucun type d’effet ne supprime l’Élan ou l’attaque gratuite de l’adversaire : contrat manuel. La zone imprimée est « Willpower mètres » (caractéristique entière) : lue en Bonus de Volonté, convention V5 du livre de base pour les zones (écart V4 documenté, décision MJ). L’« avantage » V4 devient l’Élan ; le Brisé de fuite, nouveau en V5, n’est pas annulé (décision MJ). Le Désengagement (p.163) reste hors du texte. ' + v4Unit
   },
   {
-    name: 'Connaître son Ennemi', canonicalName: 'Know Your Enemy', printedPage: 79,
+    name: 'Connaître son Ennemi', shortLabel: "Profil de l’ennemi révélé par le MJ", combatReminder: true, canonicalName: 'Know Your Enemy', printedPage: 79,
     summary: 'Vous appelez Myrmidia pour connaître les forces et faiblesses d’un ennemi proche : le MJ vous laisse consulter ses caractéristiques, ses Traits, ses compétences et ses Talents.',
     params: { range: { kind: 'characteristic', characteristic: 'FM', unit: 'yards' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'instant' } },
     status: 'manual',
@@ -89,7 +89,7 @@ export const miracles = [
     sourceDelta: 'Révélation d’information, sans effet moteur : contrat manuel. Portée imprimée « Willpower mètres » conservée en caractéristique entière (convention V5 pour les portées ; le catalogue disait Bonus, décision MJ). Étendue : caractéristiques, Traits, compétences, Talents ; Blessures actuelles, Chance et équipement ne sont pas inclus (décision MJ). ' + v4Unit
   },
   {
-    name: 'Sur un Terrain Mortel', canonicalName: 'On Deadly Ground', printedPage: 79,
+    name: 'Sur un Terrain Mortel', shortLabel: "Alliés protégés du Brisé", combatReminder: true, canonicalName: 'On Deadly Ground', printedPage: 79,
     summary: 'Vous bannissez l’idée de retraite de l’esprit de vos alliés : tant que le miracle dure, ils ne reçoivent pas l’État Brisé. Vous comptez parmi eux.',
     params: { range: self, targets: willpowerArea, duration: willpowerRounds },
     durationNote: 'durée non attestée par le livre',
@@ -139,7 +139,7 @@ export const miracles = [
     clauses: [
       { id: 'fearless-enemy', mode: 'engine', text: 'Chaque Myrmidien désigné gagne le Talent Sans peur [Ennemi] contre l’ennemi saisi par le prêtre au lancement, le même pour tous, pendant la durée ; sans ennemi saisi, le lancement est refusé.' },
       { id: 'myrmidians', mode: 'engine', text: 'Cible « See text » : tous les Myrmidiens à portée, sans plafond ; le MJ désigne ceux qui sont à 36 m ou moins.' },
-      { id: 'fear-only', mode: 'manual', text: 'En V5 (p.119) le Talent protège de la Peur du groupe choisi, non de sa Terreur ni de l’Intimidation.' },
+      { id: 'fear-only', shortLabel: "Protège de la Peur seulement", mode: 'manual', text: 'En V5 (p.119) le Talent protège de la Peur du groupe choisi, non de sa Terreur ni de l’Intimidation.' },
       { id: 'duration', mode: 'engine', text: 'Durée : 4 Rounds (+4 Rounds par tranche de +2 DR) ; portée 36 m (+36 par tranche).' }
     ],
     sourceDelta: 'Le Talent Sans peur du moteur est posé avec une spécialisation saisie par le prêtre à chaque lancement (grant-talent, specializationFrom input) : sans elle le lancement est refusé, car un Sans peur [Ennemi] sans spécialisation ne s’applique à aucun ennemi (fait manquant talent.specialization, talent-contract-v2). Un seul ennemi choisi par le prêtre au lancement, pour tous (décision MJ). « Individu précis » n’existe pas en V5 (groupe d’ennemis) : lecture MJ, la saisie est un texte libre. Cible « See text » : tous les Myrmidiens à portée, sans plafond (ciblage ally/within-range comme Compétence Martiale). Les alliés perdent la protection V4 contre la Terreur de l’ennemi choisi. ' + v4Unit

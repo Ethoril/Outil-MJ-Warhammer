@@ -15,7 +15,7 @@ export const miracles = [
   ],
   clauses: [
    { id: 'fear', mode: 'engine', text: 'Le prêtre gagne Peur (2) pendant la durée.' },
-   { id: 'undead-not-immune', mode: 'manual', text: 'Les morts-vivants ne sont pas immunisés contre cette Peur, malgré tout Talent, Trait ou effet.' }
+   { id: 'undead-not-immune', shortLabel: "Morts-vivants non immunisés à la Peur", mode: 'manual', text: 'Les morts-vivants ne sont pas immunisés contre cette Peur, malgré tout Talent, Trait ou effet.' }
   ]
  },
  {
@@ -56,7 +56,7 @@ export const miracles = [
   sourceDelta: 'Aucune ambiguïté de chiffres. La portée Contact (Touch) est encodée {kind:\'touch\'}.'
  },
  {
-  name: 'Rites funéraires', canonicalName: 'Last Rites', printedPage: 223,
+  name: 'Rites funéraires', shortLabel: "Détruit un Construct ou Mort-vivant ciblé", combatReminder: true, canonicalName: 'Last Rites', printedPage: 223,
   summary: 'Le prêtre chante un requiem sur un cadavre : l’âme franchit le portail vers le royaume de Morr et le cadavre ne peut plus être ciblé par aucun sort de Nécromancie. Un ennemi possédant à la fois les Traits Construct et Mort-vivant ciblé par ce miracle est détruit.',
   params: { range: { kind: 'fixed', value: 1, unit: 'yards' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'instant' } },
   status: 'manual', effect: null,
@@ -106,8 +106,8 @@ export const miracles = [
   ],
   clauses: [
    { id: 'unconscious', mode: 'engine', text: 'La cible gagne l’État Inconscient pendant la durée.' },
-   { id: 'no-deterioration', mode: 'manual', text: 'La cible ne se détériore pas : maladie suspendue, Blessures Critiques ignorées, poisons suspendus, et effets similaires.' },
-   { id: 'end-healing', mode: 'manual', text: 'Le miracle prend fin si des soins appropriés sont prodigués.' },
+   { id: 'no-deterioration', shortLabel: "Cible stabilisée, Critiques ignorées", mode: 'manual', text: 'La cible ne se détériore pas : maladie suspendue, Blessures Critiques ignorées, poisons suspendus, et effets similaires.' },
+   { id: 'end-healing', shortLabel: "Fin si des soins sont prodigués", mode: 'manual', text: 'Le miracle prend fin si des soins appropriés sont prodigués.' },
    { id: 'end-last-rites', mode: 'manual', text: 'Le prêtre peut y mettre fin par les derniers rites (environ 1 minute) : à la mort, l’âme franchit le portail de Morr et le cadavre est protégé de la Nécromancie.' }
   ],
   sourceDelta: 'Le livre emploie « ignoring Critical Wounds and poisons, and similar » : l’étendue exacte du « et similaire » est laissée à l’arbitrage du MJ. Lecture MJ : Inconscient est verrouillé (non récupérable) tant que le miracle dure ; la suspension des maladies, Blessures Critiques et poisons reste un rappel.'

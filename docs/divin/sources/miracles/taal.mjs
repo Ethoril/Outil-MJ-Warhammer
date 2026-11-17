@@ -46,8 +46,8 @@ export const miracles = [
     ],
     clauses: [
       { id: 'summon-animal', mode: 'engine', text: 'Le moteur crée l\'animal choisi par le MJ dans la liste fermée des six bêtes du bestiaire (pp.325-327), avec son profil de base, du camp du prêtre et contrôlé par le MJ.' },
-      { id: 'animal-placement', mode: 'manual', text: 'L\'animal apparaît à portée (Sociabilité mètres) : la position saisie est notée sur la créature, le MJ la place.' },
-      { id: 'obedience', mode: 'manual', text: 'L\'animal agit selon les désirs du prêtre pendant toute la durée : le MJ joue l\'animal en suivant les souhaits du prêtre.' },
+      { id: 'animal-placement', shortLabel: "Animal à placer par le MJ", mode: 'manual', text: 'L\'animal apparaît à portée (Sociabilité mètres) : la position saisie est notée sur la créature, le MJ la place.' },
+      { id: 'obedience', shortLabel: "Animal obéit au prêtre", mode: 'manual', text: 'L\'animal agit selon les désirs du prêtre pendant toute la durée : le MJ joue l\'animal en suivant les souhaits du prêtre.' },
       { id: 'end', mode: 'engine', text: 'Durée de Bonus de Sociabilité minutes (horloge de campagne) ; à l\'échéance, ou à la fin de la prière, l\'animal disparaît (arbitrage MJ : le livre est muet).' }
     ],
     sourceDelta: 'Le livre ne dit pas ce qu\'il advient de l\'animal à la fin de la durée : arbitrage MJ, il disparaît. « Animal sauvage adapté à l\'environnement » : liste fermée des six bêtes du bestiaire, choisie par le MJ.'

@@ -402,6 +402,16 @@ export function summonLayerLabel(layer, participants = []) {
   return `Invocation : ${created?.name || layer.summon?.profileKey || 'créature'}`;
 }
 
+/** Libellé du rappel enrichi (L9) d'une couche pour « Prières actives » : libellé court, portée, cible et échéance ; null si la couche n'en porte pas. */
+export function reminderLayerLabel(layer) {
+  if (!layer?.reminder?.label) return null;
+  const { label, range, targets, durationNote } = layer.reminder;
+  const details = [range ? `portée : ${range}` : null, targets ? `cible : ${targets}` : null].filter(Boolean).join(' ; ');
+  const end = layer.expiry?.round ? (layer.expiry.phase === 'endOfTurn' ? `fin du Tour du prêtre, Round ${layer.expiry.round}` : `fin du Round ${layer.expiry.round}`)
+    : layer.deadline?.atSeconds !== undefined ? `jusqu’à ${formatCampaignTime(layer.deadline.atSeconds)} de temps de campagne` : 'fin à la main';
+  return `Rappel : ${label}${details ? ` (${details})` : ''} · ${end}${durationNote ? ` · ${durationNote}` : ''}`;
+}
+
 /** Lignes d'un reçu appliqué (ou d'une projection d'aperçu) : DR, dés, Blessures perdues, États retirés. */
 export function summarizeExecution(receipt, { contract, participants = [] } = {}) {
   if (!receipt) return null;

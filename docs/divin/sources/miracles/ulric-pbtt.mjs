@@ -48,8 +48,8 @@ export const miracles = [
     ],
     clauses: [
       { id: 'grant-talent', mode: 'engine', text: 'Le prêtre gagne le talent Charge berserk (étiquette posée sur la fiche pendant la durée).' },
-      { id: 'stack-beyond-max', mode: 'manual', text: 'S\'il possède déjà le talent, il le gagne en plus, au-delà du maximum normal.' },
-      { id: 'talent-effect', mode: 'manual', text: 'Le bonus de dégâts du talent à la charge n\'est pas injecté par le moteur : le MJ l\'applique.' },
+      { id: 'stack-beyond-max', shortLabel: "Talent cumulé au-delà du maximum", mode: 'manual', text: 'S\'il possède déjà le talent, il le gagne en plus, au-delà du maximum normal.' },
+      { id: 'talent-effect', shortLabel: "Bonus de Dégâts de charge à la main", mode: 'manual', text: 'Le bonus de dégâts du talent à la charge n\'est pas injecté par le moteur : le MJ l\'applique.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
     sourceDelta: 'Charge berserk n\'est pas dans la liste des talents injectés par le moteur (étiquette seulement). Le rang gagné « en plus » dépend du rang déjà détenu, que le contrat ne lit pas : encodé au rang 1, empilement et maximum laissés au MJ.'

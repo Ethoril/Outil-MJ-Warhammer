@@ -11,7 +11,7 @@ import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-esc
 import {d100} from '../core/dice.js';
 import {counterLayerLabel} from '../core/v5-divine-effects-counters.js';
 import {renderConfirmationButtons} from './resolution-panel/dom.js';
-import {emptyDivineForm,defaultDivineSelection,confirmRangeByDefault,confirmAllyByDefault,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
+import {emptyDivineForm,defaultDivineSelection,confirmRangeByDefault,confirmAllyByDefault,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,reminderLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
 const labels={implemented:'Effet calculable',assisted:'Effets calculés + rappels MJ',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
@@ -483,7 +483,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    const list=node('details','workspace-v5-context-details');list.open=state.activePrayersOpen===true;list.addEventListener('toggle',()=>{state.activePrayersOpen=list.open;});list.append(node('summary','','Prières actives du personnage'));field(list,'Raison de fin de prière','endReason',{type:'text'});
    for(const id of [...new Set(active.map(layer=>layer.executionId))]){
     const layers=active.filter(layer=>layer.executionId===id),name=contracts.find(row=>row.id===layers[0].prayerId)?.name||'Prière';
-    list.append(node('p','',[name+' · '+[...new Set(layers.map(layer=>layer.targetName))].join(', '),...layers.map(layer=>summonLayerLabel(layer,participants)).filter(Boolean)].join(' · ')));
+    list.append(node('p','',[name+' · '+[...new Set(layers.map(layer=>layer.targetName))].join(', '),...layers.map(layer=>summonLayerLabel(layer,participants)||reminderLayerLabel(layer)).filter(Boolean)].join(' · ')));
     for(const layer of layers.filter(row=>row.imposedTest))renderImposedTestControls(list,{layer,participants,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});
     for(const layer of layers.filter(row=>row.counter||row.flag))renderDivineCounterControls(list,{layer,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});
     for(const layer of layers.filter(row=>row.zone))renderDivineZoneControls(list,{layer,participants,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});

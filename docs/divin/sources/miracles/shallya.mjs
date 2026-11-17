@@ -42,7 +42,7 @@ export const miracles = [
     sourceDelta: 'Le livre imprime « Challenging (+0 SL) » : traduit Intermédiaire (+0 DR). La résistance est écrite comme portant sur le sommeil; elle ne précise pas si elle protège aussi la suppression des Traits.'
   },
   {
-    name: 'Amère catharsis', canonicalName: 'Bitter Catharsis', printedPage: 226,
+    name: 'Amère catharsis', shortLabel: "Purge un poison ou une maladie", combatReminder: true, canonicalName: 'Bitter Catharsis', printedPage: 226,
     summary: 'Shallya attire en vous un poison ou une maladie de la cible et la purge entièrement. Par tranche de +2 DR, une maladie ou un poison de plus. Pour chaque poison retiré ou maladie guérie, vous subissez 1d10 moins votre Bonus de Sociabilité en Blessures.',
     params: { range: touch, targets: one, duration: { kind: 'instant' } },
     status: 'manual', effect: null, targetRules: [],
@@ -79,10 +79,10 @@ export const miracles = [
     targetRules: [],
     needsInput: [{ id: 'critical-wounds', text: 'Blessures Critiques guéries (1 + 1 par +2 DR) et lesquelles.' }, { id: 'prayer-rounds', text: 'Rounds de prière : 10 - Bonus de Sociabilité.' }, { id: 'uninterrupted', text: 'La prière est-elle restée ininterrompue ?' }],
     clauses: [
-      { id: 'prayer-time', mode: 'manual', text: 'Le prêtre prie (10 − Bonus de Sociabilité) Rounds avant l’effet.' },
+      { id: 'prayer-time', shortLabel: "Prière de plusieurs Rounds avant l’effet", mode: 'manual', text: 'Le prêtre prie (10 − Bonus de Sociabilité) Rounds avant l’effet.' },
       { id: 'heal-critical', mode: 'engine', text: 'Guérit 1 Blessure Critique de la cible ; +1 par tranche de +2 DR. La Blessure guérie est retirée du registre ; les États posés par le critique restent.' },
-      { id: 'interruption', mode: 'manual', text: 'Prière interrompue : aucun effet pour la cible.' },
-      { id: 'no-reattach', mode: 'manual', text: 'Ne rattache pas les membres amputés.' }
+      { id: 'interruption', shortLabel: "Interrompue : aucun effet", mode: 'manual', text: 'Prière interrompue : aucun effet pour la cible.' },
+      { id: 'no-reattach', shortLabel: "Ne rattache pas les membres amputés", mode: 'manual', text: 'Ne rattache pas les membres amputés.' }
     ]
   },
   {

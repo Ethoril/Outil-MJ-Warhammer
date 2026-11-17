@@ -26,8 +26,21 @@ const companionReminderTexts = (person, participants) => {
 const traitReminderTexts = person => TRAIT_REMINDERS.flatMap(([name, fn]) => fn(person).map((entry, index) => (typeof entry === 'string' ? { key: `${name}-${index}`, text: entry } : { key: `${name}-${entry.key}`, text: entry.text })));
 
 // G-DIV-12 : une couche divine reçue d'un autre prêtre doit se voir sur la fiche de celui qui la porte.
-const divineStateReminders = person => person?.extensions?.v5?.specialStates?.orderlyDisengage === true
-  ? [{ key: 'divine-orderly-disengage', text: 'En Bon Ordre (prière) : se désengage sans Élan ni attaque gratuite adverse, à appliquer par le MJ.' }] : [];
+const CALENDAR_UNITS = { minutes: 'minute(s)', hours: 'heure(s)', days: 'jour(s)' };
+// Rappel enrichi (L9) : une couche divine portant `reminder` (libellé court, portée, cibles) s'affiche sur le participant qui la porte, avec son échéance.
+const divineLayerReminders = (person, participants = []) => (person?.extensions?.v5?.divineEffects || []).filter(layer => layer?.reminder?.label).map(layer => {
+  const { label, range, targets, durationNote } = layer.reminder;
+  const caster = layer.casterId && layer.casterId !== person.id ? participants.find(row => row?.id === layer.casterId)?.name : null;
+  const details = [range ? `portée : ${range}` : null, targets ? `cible : ${targets}` : null].filter(Boolean).join(' ; ');
+  const calendar = CALENDAR_UNITS[layer.duration?.unit];
+  const end = layer.expiry?.round ? (layer.expiry.phase === 'endOfTurn' ? `fin du Tour du prêtre, Round ${layer.expiry.round}` : `fin du Round ${layer.expiry.round}`)
+    : calendar ? `${layer.duration.value} ${calendar} (temps de campagne)` : 'fin à la main par le MJ';
+  return { key: `divine-reminder-${layer.id}`, text: `${label}${caster ? ` (prêtre : ${caster})` : ''}${details ? ` (${details})` : ''} · ${end}${durationNote ? ` · ${durationNote}` : ''}.` };
+});
+const divineStateReminders = (person, participants = []) => [
+  ...(person?.extensions?.v5?.specialStates?.orderlyDisengage === true
+    ? [{ key: 'divine-orderly-disengage', text: 'En Bon Ordre (prière) : se désengage sans Élan ni attaque gratuite adverse, à appliquer par le MJ.' }] : []),
+  ...divineLayerReminders(person, participants)];
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -115,7 +128,7 @@ export function deriveReminders(snapshot = {}, transition = {}, choices = []) {
     // Rappels dérivés des Traits (calculés à l'affichage, jamais écrits dans le participant) : permanents, donc réservés à la carte
     // et au Personnage actif (transition « participant »), jamais à « À traiter » qui ne garde que les rappels liés à un moment.
     if (transition.type === 'participant') {
-      const entries = [...traitReminderTexts(person), ...divineStateReminders(person), ...divineZoneReminders(person, snapshot.allParticipants || snapshot.participants), ...companionReminderTexts(person, snapshot.allParticipants || snapshot.participants).map((text, index) => ({ key: `companion-${index}`, text }))];
+      const entries = [...traitReminderTexts(person), ...divineStateReminders(person, snapshot.allParticipants || snapshot.participants), ...divineZoneReminders(person, snapshot.allParticipants || snapshot.participants), ...companionReminderTexts(person, snapshot.allParticipants || snapshot.participants).map((text, index) => ({ key: `companion-${index}`, text }))];
       for (const { key, text } of entries) candidates.push({ kind: 'participant-reminder', effectId: `${person.id}:trait-${key}`, text: `${person.name || 'Participant'} : ${text}`, mode: 'reminder' });
     }
     for (const note of Array.isArray(person.extensions?.v5?.reminders) ? person.extensions.v5.reminders : []) {

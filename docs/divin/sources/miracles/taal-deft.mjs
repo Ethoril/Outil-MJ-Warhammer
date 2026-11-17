@@ -39,7 +39,7 @@ export const miracles = [
     ],
     clauses: [
       { id: 'athletics-test', mode: 'engine', text: 'Chaque cible dans la zone fait un Test d’Athlétisme Difficult (-10) ; échec : elle gagne l’État À terre.' },
-      { id: 'structure-damage', mode: 'manual', text: 'Chaque structure artificielle dans la zone subit 1d10 + DR dégâts (les éléments naturels ne sont pas touchés).' }
+      { id: 'structure-damage', shortLabel: "Dégâts aux structures à appliquer à la main", mode: 'manual', text: 'Chaque structure artificielle dans la zone subit 1d10 + DR dégâts (les éléments naturels ne sont pas touchés).' }
     ],
     sourceDelta: 'Portée imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière ; zone en Bonus de Sociabilité mètres. Le Test d’Athlétisme de chaque cible reste joué hors moteur : le MJ saisit son résultat (fait par cible) et le moteur pose À terre en cas d’échec. Difficulté Difficult (-10) imprimée en pourcentage (4e édition), affichée -1 DR (conversion par défaut, non confirmée). Le livre ne dit pas si « SL » est le DR du Test de Prière (lu ainsi).'
   },
@@ -105,8 +105,8 @@ export const miracles = [
     ],
     clauses: [
       { id: 'swim-bonus', mode: 'engine', text: '+4 DR à tous les Tests de Natation du prêtre pendant la durée.' },
-      { id: 'water-speed', mode: 'manual', text: 'En se déplaçant dans l’eau, la vitesse du prêtre est son Mouvement complet, non la moitié.' },
-      { id: 'salt-water', mode: 'manual', text: 'Aucun effet en eau salée : le MJ vérifie la nature de l’eau (le bonus de Natation reste appliqué par le moteur).' }
+      { id: 'water-speed', shortLabel: "Mouvement complet dans l’eau", mode: 'manual', text: 'En se déplaçant dans l’eau, la vitesse du prêtre est son Mouvement complet, non la moitié.' },
+      { id: 'salt-water', shortLabel: "Sans effet en eau salée", mode: 'manual', text: 'Aucun effet en eau salée : le MJ vérifie la nature de l’eau (le bonus de Natation reste appliqué par le moteur).' }
     ],
     sourceDelta: 'Durée imprimée « Fellowship Rounds » (sans « Bonus », contrairement aux autres durées) : lue telle quelle comme la Sociabilité entière en Rounds, probable coquille pour « Fellowship Bonus » mais non corrigée. Eau salée : le moteur ne distingue pas la nature de l’eau, le test-modifier reste actif et le MJ ne doit pas le laisser jouer.'
   },
@@ -127,7 +127,7 @@ export const miracles = [
       { id: 'ranged', text: 'Attaques à distance tentées dans la zone (interdites sauf armes à poudre ou d’artillerie) ?' }
     ],
     clauses: [
-      { id: 'priest-unaffected', mode: 'manual', text: 'Le prêtre n’est pas affecté par le vent.' },
+      { id: 'priest-unaffected', shortLabel: "Prêtre non affecté par le vent", mode: 'manual', text: 'Le prêtre n’est pas affecté par le vent.' },
       { id: 'test-penalty', mode: 'engine', text: 'Les Tests de Capacité de Combat et d’Agilité des cibles dans la zone subissent -2 DR.' },
       { id: 'prone-first-round', mode: 'engine', text: 'Premier Round : chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre (résultat saisi par le MJ).' },
       { id: 'prone-each-round', mode: 'engine', text: 'Chaque Round suivant, chaque cible refait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.' },

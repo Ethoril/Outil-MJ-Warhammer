@@ -33,7 +33,7 @@ export const miracles = [
   clauses: [
    { id: 'cat-servant', mode: 'engine', text: 'Le moteur crée le chat comme simple capteur : aucun participant dans l’ordre du combat, ni initiative ni action, invulnérable, sans profil chiffré (le livre n’en donne pas).' },
    { id: 'control-and-senses', mode: 'manual', text: 'Le prêtre dirige le chat et perçoit tout ce qu’il perçoit ; ses sens sont aussi aiguisés que ceux d’un chat.' },
-   { id: 'no-own-senses', mode: 'manual', text: 'Rappel : le prêtre n’a pas accès à ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens pendant la durée, ce qui le laisse vulnérable.' },
+   { id: 'no-own-senses', shortLabel: "Prêtre privé de ses propres sens", mode: 'manual', text: 'Rappel : le prêtre n’a pas accès à ses propres Talents sensoriels (Vision nocturne, etc.) et ne perçoit rien par ses propres sens pendant la durée, ce qui le laisse vulnérable.' },
    { id: 'end', mode: 'engine', text: 'Le chat disparaît à la fin de la durée (Bonus de Sociabilité rounds), à l’expiration ou à la fin de la prière, ou à la mort du prêtre.' }
   ],
   sourceDelta: 'Aucun profil chiffré du chat dans le livre (contrairement à l’aigle de Myrmidia) : le capteur ne porte que le Trait Invulnérable, sans Perception ni Mouvement inventés. Le chat n’est pas dit intangible. miracles.json ajoute « vulnérable » en clause : cela renvoie au prêtre, non au chat (le chat est invulnérable).'
@@ -53,7 +53,7 @@ export const miracles = [
    { id: 'fortune-gain', mode: 'engine', text: 'Le prêtre gagne +1 point de Chance, qui dure jusqu’à la fin de la session.' },
    { id: 'sl-fortune', mode: 'engine', text: 'Par tranche de +2 DR : +1 point de Chance supplémentaire.' },
    { id: 'reinvoke-lock', mode: 'engine', text: 'Interdit de réinvoquer ce miracle avant d’atteindre 0 point de Chance.' },
-   { id: 'session-end', mode: 'manual', text: 'Les points temporaires durent jusqu’à la fin de la session : le MJ termine la prière à ce moment (aucune échéance automatique).' }
+   { id: 'session-end', shortLabel: "Fin à la fin de la session", mode: 'manual', text: 'Les points temporaires durent jusqu’à la fin de la session : le MJ termine la prière à ce moment (aucune échéance automatique).' }
   ],
   sourceDelta: 'Le livre ne dit pas si les points gagnés dépassent le maximum de Chance du personnage, ni s’ils se perdent à la fin de la session s’ils n’ont pas été dépensés (lecture : ils persistent jusqu’à la fin de la session). Lecture MJ : points temporaires sans plafond, portés par une couche séparée et dépensés avant la Chance permanente ; la réinvocation est refusée tant que le total de Chance reste supérieur à 0.'
  },
@@ -74,7 +74,7 @@ export const miracles = [
   ],
   clauses: [
    { id: 'agility', mode: 'assisted', text: '+10 en Agilité pendant la durée (modificateur de caractéristique, appliquable par le moteur).' },
-   { id: 'stealth', mode: 'manual', text: '+10 en Discrétion (compétence) pendant la durée, en plus du +10 d’Agilité.' },
+   { id: 'stealth', shortLabel: "Bonus de Discrétion à ajouter à la main", mode: 'manual', text: '+10 en Discrétion (compétence) pendant la durée, en plus du +10 d’Agilité.' },
    { id: 'catfall', mode: 'engine', text: 'La cible gagne +1 niveau du Talent Chute féline (Catfall) pendant la durée.' }
   ],
   sourceDelta: 'Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) ; le moteur n’a pas de modificateur de compétence ni d’octroi temporaire de Talent, donc miracle manuel malgré la partie Agilité automatisable.'

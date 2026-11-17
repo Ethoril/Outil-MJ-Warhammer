@@ -53,7 +53,7 @@ export const miracles = [
   sourceDelta: delta + ' La zone est « Area of Effect » sans taille en en-tête ; le texte donne Bonus de Sociabilité mètres pour les victimes, puis « Sociabilité mètres » (sans Bonus) pour le sol stérile : lu comme la même zone, à confirmer. La perte de 1 Blessure +1 par DR est une perte fixe : direct-damage à valeur fixe (fixed 1, +1 par DR), sans dés ; le fait « humanoïde sans sacrifice » est saisi pour chaque cible.'
  },
  {
-  name: 'Domination de Rhya', canonicalName: "Rhya's Dominion", printedPage: 74,
+  name: 'Domination de Rhya', shortLabel: "Esprit de la nature pour une tâche", combatReminder: true, canonicalName: "Rhya's Dominion", printedPage: 74,
   summary: 'Le prêtre invoque Rhya pour qu’un esprit de la nature apparaisse et lui obéisse. Il doit se concentrer sur un élément naturel où un esprit peut résider (champ cultivé, mare, roncier). Si le miracle réussit, l’esprit accomplit une tâche au nom de Rhya, de façon trop littérale, sans jamais enfreindre les interdits de Rhya : surveiller, harceler les intrus de son domaine ou retrouver un objet perdu à proximité.',
   params: { range: { kind: 'fixed', value: 4, unit: 'yards' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'special' } },
   status: 'manual', effect: null,
@@ -90,7 +90,7 @@ export const miracles = [
   sourceDelta: delta + ' La cible est « Special » : la taille du groupe n’est pas bornée, laissée au MJ.'
  },
  {
-  name: 'Apprivoisement de Rhya', canonicalName: "Rhya's Taming", printedPage: 74,
+  name: 'Apprivoisement de Rhya', shortLabel: "Animal sauvage rendu docile", combatReminder: true, canonicalName: "Rhya's Taming", printedPage: 74,
   summary: 'Le prêtre tend une main douce vers une créature sauvage et fredonne des mélodies apaisantes. Sur un Test de Charme animal Moyen (+20) réussi, un animal sauvage non corrompu de Taille Grande ou moins devient docile envers les Humains, les Elfes qui honorent Isha et alliés semblables, et s’adoucit encore par DR obtenu, sans quitter volontairement son territoire naturel. Dure jusqu’au prochain coucher du soleil.',
   params: { range: { kind: 'touch' }, targets: { kind: 'count', value: 1 }, duration: { kind: 'special' } },
   status: 'manual', effect: null,
@@ -123,7 +123,7 @@ export const miracles = [
    { id: 'psychology', mode: 'engine', text: 'Le prêtre est immunisé à la peur pendant la durée (drapeau fearImmune ; les autres Psychologies restent à la charge du MJ).' },
    { id: 'test-bonus', mode: 'engine', text: '+2 DR aux Tests de Mêlée (Corps à corps) et d’Endurance (Résistance) du prêtre pendant la durée.' },
    { id: 'force-test', mode: 'engine', text: '+2 DR aux Tests de Force (caractéristique) du prêtre pendant la durée : tout Test lié à la Force (Archives 3, p.74).' },
-   { id: 'defend-only', mode: 'manual', text: 'Invocable uniquement pour défendre des enfants, ou un foyer ou une ferme occupés par ses habitants.' }
+   { id: 'defend-only', shortLabel: "Seulement pour défendre enfants ou foyer", mode: 'manual', text: 'Invocable uniquement pour défendre des enfants, ou un foyer ou une ferme occupés par ses habitants.' }
   ],
   sourceDelta: delta + ' « Immunity to Psychology » est mappée sur fearImmune (peur uniquement) ; Painless sur Impassible, comme pour Shallya.'
  }

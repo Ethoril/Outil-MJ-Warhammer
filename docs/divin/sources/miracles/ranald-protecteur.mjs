@@ -48,7 +48,7 @@ export const miracles = [
     sourceDelta: 'Renvoie à la Curse of Ill-fortune du livre de base 4e (p.255) ; son équivalent dans le livre de base V5 n’est pas vérifié ici, le MJ applique l’effet de la malédiction équivalente. Durée en jours liée au Rang Or + DR : encodée en special. « Gold Tier » (cible) et « Gold Standing » (durée) sont traduits Statut Or / Rang Or.'
   },
   {
-    name: 'Libère ton esprit', canonicalName: 'Free Your Mind', printedPage: 25,
+    name: 'Libère ton esprit', shortLabel: "Protégé des ordres et du Charme", combatReminder: true, canonicalName: 'Free Your Mind', printedPage: 25,
     summary: 'Le prêtre implore Ranald pour résister aux ordres de l’autorité : lui-même ou une cible choisie résiste automatiquement aux effets de tout Test de Charme ou de Commandement fait par un personnage de Statut supérieur à celui de la cible, aussi persuasif soit-il.',
     params: { range: yards24, targets: one, duration: soc('characteristic-bonus', 'hours') },
     status: 'manual', effect: null,
@@ -74,7 +74,7 @@ export const miracles = [
     ],
     clauses: [
       { id: 'immunity', mode: 'engine', text: 'Le prêtre gagne le Trait Immunité à la Psychologie pendant la durée.' },
-      { id: 'running-effects', mode: 'manual', text: 'Le MJ décide si un effet de Psychologie déjà en cours (Peur, Terreur, Animosité…) cesse d’agir au lancement.' }
+      { id: 'running-effects', shortLabel: "Psychologie en cours : décision du MJ", mode: 'manual', text: 'Le MJ décide si un effet de Psychologie déjà en cours (Peur, Terreur, Animosité…) cesse d’agir au lancement.' }
     ],
     sourceDelta: 'Trait imprimé « Immunity to Psychology », encodé Immunité (Psychologie), libellé déjà utilisé par les autres contrats du moteur. Le livre ne dit pas si l’immunité retire un effet de Psychologie déjà subi : décision MJ.'
   },
@@ -91,7 +91,7 @@ export const miracles = [
     clauses: [
       { id: 'endurance-cool', mode: 'engine', text: 'Chaque allié affecté gagne +2 DR aux Tests d’Endurance et de Calme.' },
       { id: 'crowd-scaling', mode: 'engine', text: '+1 DR supplémentaire par tranche de 10 personnes dans la foule (taille saisie par le MJ).' },
-      { id: 'status-exclusion', mode: 'manual', text: 'Les personnages de Statut Argent ou Or ne sont pas affectés.' }
+      { id: 'status-exclusion', shortLabel: "Statut Argent ou Or non affectés", mode: 'manual', text: 'Les personnages de Statut Argent ou Or ne sont pas affectés.' }
     ],
     sourceDelta: 'Zone imprimée « Sociabilité mètres » (sans « Bonus ») : lue comme la Sociabilité entière. Le livre ne précise pas si la foule compte uniquement les alliés ou toute personne présente, ni si le +1 DR par 10 se calcule sur le nombre total ou sur les tranches complètes (lecture : tranches complètes). Lecture retenue (non confirmée par le MJ) : la foule compte toute personne présente, saisie par le MJ (crowdSize), et le bonus vaut 2 + 1 par tranche complète de 10 ; « Endurance » est normalisé en Résistance.'
   },

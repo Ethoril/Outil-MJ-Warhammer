@@ -14,7 +14,7 @@ const one = { kind: 'count', value: 1 };
 export const miracles = [
   {
     name: 'Poumons d\'eau',
-    canonicalName: 'Waterlungs',
+    shortLabel: "Respire sous l’eau", combatReminder: true, canonicalName: 'Waterlungs',
     printedPage: 81,
     summary: 'Les cibles respirent sous l\'eau, mais à l\'air libre elles subissent Suffocation et Noyade (p.181 du livre de base). Elles se sentent attirées par l\'eau et n\'ont besoin que d\'un seau pour respirer. Vous pouvez affecter une cible supplémentaire par tranche de +2 DR.',
     params: { range, targets: one, duration: { kind: 'characteristic-bonus', characteristic: 'Soc', unit: 'hours' } },

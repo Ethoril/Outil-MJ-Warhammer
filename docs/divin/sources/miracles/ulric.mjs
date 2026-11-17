@@ -46,8 +46,8 @@ export const miracles = [
     ],
     clauses: [
       { id: 'summon-wolf', mode: 'engine', text: 'Le moteur crée le loup blanc (Serviteur divin mineur) : participant du camp du prêtre, contrôlé par le MJ, avec le profil du Loup du bestiaire (p.327) et les valeurs du miracle (CC 45, Volonté 35, Morsure +6, Frénésie, Magique, Taille Grande, Blessures par la formule des créatures de Taille Grande).' },
-      { id: 'wolf-placement', mode: 'manual', text: 'Le loup apparaît à portée (Sociabilité mètres) : le MJ place la créature.' },
-      { id: 'wolf-combat', mode: 'manual', text: 'Le loup combat les ennemis du prêtre pendant la durée ; le MJ le joue (arbitrage MJ : contrôlé par le MJ).' },
+      { id: 'wolf-placement', shortLabel: "Loup à placer par le MJ", mode: 'manual', text: 'Le loup apparaît à portée (Sociabilité mètres) : le MJ place la créature.' },
+      { id: 'wolf-combat', shortLabel: "Loup combat pour le prêtre", mode: 'manual', text: 'Le loup combat les ennemis du prêtre pendant la durée ; le MJ le joue (arbitrage MJ : contrôlé par le MJ).' },
       { id: 'end', mode: 'engine', text: 'Le loup disparaît à la fin de la durée (Bonus de Sociabilité rounds), à l\'expiration ou à la fin manuelle de la prière, ou à la mort du prêtre.' }
     ],
     sourceDelta: 'Le texte donne « Willpower 35 » (Volonté) : lu comme la caractéristique FM du moteur. Cible « Special ». Arbitrages MJ : le profil de base vient du bestiaire de Forme bestiale (Loup, p.327), complété par les valeurs de la source ; le loup est contrôlé par le MJ et disparaît à la fin.'
@@ -137,7 +137,7 @@ export const miracles = [
       { id: 'damage-plus-sl', mode: 'engine', text: '+DR Dégâts avec la hache.' },
       { id: 'fatigued', mode: 'engine', text: 'Toute cible touchée gagne un État Fatigué.' },
       { id: 'remove-bleeding', mode: 'manual', text: 'Toute cible touchée perd ses États Hémorragique.' },
-      { id: 'no-bleeding', mode: 'manual', text: 'La hache ne peut causer aucun État Hémorragique.' },
+      { id: 'no-bleeding', shortLabel: "Aucun Hémorragique causé", mode: 'manual', text: 'La hache ne peut causer aucun État Hémorragique.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
     sourceDelta: '« +SL Damage » : SL du test de Prière présumé, non précisé; Fatigué : un seul État par coup.'
