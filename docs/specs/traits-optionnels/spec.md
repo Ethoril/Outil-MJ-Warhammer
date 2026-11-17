@@ -19,7 +19,7 @@ Le bestiaire porte 761 Traits optionnels sur 200 profils (dont 45 montures), mai
 | D7 | Autres Traits non calculés | Ce chantier garantit que tout Trait coché apparaît au moins en rappel. Le tableau Trait par Trait est remis au MJ ; les nouveaux calculs feront un second chantier, selon son tri. |
 | D8 | Monture d'un PJ | Le MJ coche dans l'outil, sur le profil de la monture ; « Mettre à jour les PJ » conserve ses coches. Rien ne change dans les fiches des joueurs. |
 
-## Choix de cadrage (Claude, à confirmer par le MJ à la relecture)
+## Choix de cadrage (Claude, confirmés par le MJ le 17/11/2026, D10 et D11 compris)
 
 | N° | Sujet | Choix |
 |---|---|---|
@@ -30,6 +30,17 @@ Le bestiaire porte 761 Traits optionnels sur 200 profils (dont 45 montures), mai
 | D13 | Valeurs chiffrées | Les valeurs des neuf Traits de D5 et de Dressé (Guerre) sont relues dans les livres avant le code, et la table saisie est relue par le MJ. |
 | D14 | Durée de vie des coches | Les coches font partie du profil : elles suivent la sauvegarde, l'export et l'import JSON, la synchronisation. Un profil créé avant ce chantier n'a aucune coche et se comporte comme aujourd'hui. |
 | D15 | Données des livres | Corrections de données dans ce chantier : « Stubborn » ajouté au catalogue (L23 p. 22, en rappel) et proposé sur l'âne et la mule ; Dressé (Magie) du Demigryph (L13) ; liste des dressages du Cheval de trait lourd (L23). « Fast » des pur-sang se pose par l'ajout libre. |
+
+## Décisions du MJ après la relecture D13 (17/11/2026)
+
+Table relue : [valeurs-traits.md](valeurs-traits.md). D10 n'est pas tranché par les livres mais la plupart des profils le confirment : il est maintenu.
+
+| N° | Sujet | Décision |
+|---|---|---|
+| D16 | Hardy coché | Blessures imprimées + (formule avec Hardy − formule sans), selon la Taille ; le total du livre n'est jamais recalculé en entier. |
+| D17 | Leader sur une créature Bestial | Bloqué : Leader n'est pas proposé (ni en case ni à l'ajout) sur une créature qui a le Trait Bestial (Livre de base FR p. 340). |
+| D18 | Trait optionnel déjà présent en Trait de base | Case grisée, libellée « déjà compté », sans effet. |
+| D19 | Valeurs de D5 | Celles de [valeurs-traits.md](valeurs-traits.md) (L11 et Livre de base FR, identiques) pour Big, Brute, Clever, Cunning, Fast, Tough, Hardy et Dressé (Guerre). **Sauf Elite et Leader** : cocher l'un d'eux applique le modèle du même nom du Livre de base V5 (p. 353), caractéristiques, compétences et Talents compris, à la place des valeurs du Trait V4. Le détail du modèle est relu dans le livre avant le plan. |
 
 ## Scénarios et critères d'acceptation
 
