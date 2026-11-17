@@ -94,7 +94,10 @@ export const miracles = [
   name: 'Revirement de fortune', canonicalName: 'Twist of Fortune', printedPage: 47,
   summary: 'Le prêtre peut dépenser 1 point de Chance de la cible comme si c’était le sien. La cible peut s’y opposer par un Test de Sociabilité Intermédiaire (+0) contre les DR du prêtre ; si elle le dépasse de +4 DR, elle peut dépenser un point de Chance du prêtre à son tour. La Chance perdue doit être dépensée avant la fin de la session ; à la session suivante, elle revient à son propriétaire.',
   params: { range: soc('characteristic', 'yards'), targets: { kind: 'count', value: 1 }, duration: { kind: 'instant' } },
-  status: 'manual', effect: null,
+  // Miracles narratifs L6 (Archives 3 p.47, relu) : 1 point de Chance, Test de Sociabilité Intermédiaire (+0) de la cible contre les DR de la
+  // Prière, saisi par le MJ ; +4 DR de marge : retour de flamme. Le point est retiré à la cible quand le prêtre le dépense.
+  status: 'assisted', effect: null,
+  effects: [{ type: 'miracle-counter', appliesTo: 'caster', label: 'Revirement de fortune', counter: { key: 'twist-of-fortune', label: 'Chance empruntée', initial: 1 }, borrow: { characteristic: 'Soc', backfireSl: 4 }, duration: { unit: 'session' } }],
   targetRules: [],
   needsInput: [
    { id: 'target', text: 'Quelle créature est la cible, et a-t-elle un point de Chance ?' },
@@ -102,8 +105,8 @@ export const miracles = [
    { id: 'session-end', text: 'La Chance dépensée doit l’être avant la fin de la session ; restitution au début de la suivante.' }
   ],
   clauses: [
-   { id: 'borrow-fortune', mode: 'manual', text: 'Le prêtre dépense 1 point de Chance de la cible comme le sien (transfert de Chance depuis la cible, non couvert par le moteur).' },
-   { id: 'contest', mode: 'manual', text: 'La cible peut contester par un Test de Sociabilité Intermédiaire (+0) contre les DR du prêtre ; si elle gagne, elle garde son point.' },
+   { id: 'borrow-fortune', mode: 'engine', text: 'Le prêtre dépense 1 point de Chance de la cible comme le sien (réserve d’un point portée par le prêtre ; le point de la cible est retiré à la dépense).' },
+   { id: 'contest', mode: 'engine', text: 'La cible peut contester par un Test de Sociabilité Intermédiaire (+0) contre les DR du prêtre ; si elle gagne, elle garde son point.' },
    { id: 'backfire', mode: 'manual', text: 'Si la cible dépasse les DR du prêtre de +4 DR, elle peut dépenser un point de Chance du prêtre comme le sien.' },
    { id: 'restore', mode: 'manual', text: 'La Chance perdue doit être dépensée avant la fin de la session ; elle revient à son propriétaire d’origine au début de la session suivante.' },
    afterTest, profit

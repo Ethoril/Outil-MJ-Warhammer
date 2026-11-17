@@ -45,16 +45,19 @@ export const miracles = [
     name: 'Forcer la main du hasard', canonicalName: 'Force the Hand of Chance', printedPage: 19,
     summary: 'Le prêtre demande à Ranald de rejuger une épreuve difficile : +1 DR à un Test précis, auquel s’ajoute +1 DR supplémentaire à chaque jet de 1d10 de 6 ou moins, tant que les jets réussissent. Un 7 ou plus fait perdre tous les DR accumulés et impose le Test initial à -1 DR.',
     params: { range: self, targets: self, duration: { kind: 'instant' } },
-    status: 'manual', effect: null,
+    // Miracles narratifs L6 (Deft Steps p.19, relu) : +1 DR, puis +1 DR par jet de 1d10 de 6 ou moins ; 7 ou plus : tout perdu, Test à −1 DR.
+    // Les jets de 1d10 sont saisis par le MJ ; la réserve est reportée à la main dans le Test.
+    status: 'assisted', effect: null,
+    effects: [{ type: 'miracle-counter', appliesTo: 'caster', label: 'Forcer la main du hasard', counter: { key: 'force-the-hand-of-chance', label: 'Forcer la main du hasard', initial: 1 }, push: { threshold: 6, step: 1 }, duration: { unit: 'session' } }],
     targetRules: ['prêtre uniquement'],
     needsInput: [
       { id: 'test', text: 'Quel Test précis est amélioré ?' },
       { id: 'rolls', text: 'Résultats successifs des jets de 1d10 (6 ou moins : +1 DR de plus ; 7 ou plus : tout perdu et -1 DR au Test).' }
     ],
     clauses: [
-      { id: 'base-bonus', mode: 'manual', text: '+1 DR au Test choisi.' },
-      { id: 'push-your-luck', mode: 'manual', text: 'Jet de 1d10 : 6 ou moins ajoute +1 DR et permet de rejouer ; on peut continuer tant que les jets réussissent.' },
-      { id: 'bust', mode: 'manual', text: 'Un jet de 7 ou plus fait perdre tous les DR accumulés et le Test initial se fait à -1 DR.' }
+      { id: 'base-bonus', mode: 'engine', text: '+1 DR au Test choisi.' },
+      { id: 'push-your-luck', mode: 'engine', text: 'Jet de 1d10 : 6 ou moins ajoute +1 DR et permet de rejouer ; on peut continuer tant que les jets réussissent.' },
+      { id: 'bust', mode: 'engine', text: 'Un jet de 7 ou plus fait perdre tous les DR accumulés et le Test initial se fait à -1 DR.' }
     ],
     sourceDelta: 'Le livre ne précise pas si le prêtre doit annoncer le Test avant de lancer ni s’il peut s’arrêter avant le premier jet : lecture MJ (le prêtre choisit quand s’arrêter).'
   },

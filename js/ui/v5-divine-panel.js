@@ -9,6 +9,7 @@ import {defaultFirstMorningAt} from '../core/v5-game-time.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
 import {d100} from '../core/dice.js';
+import {counterLayerLabel} from '../core/v5-divine-effects-counters.js';
 import {renderConfirmationButtons} from './resolution-panel/dom.js';
 import {emptyDivineForm,defaultDivineSelection,confirmRangeByDefault,confirmAllyByDefault,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
@@ -87,6 +88,38 @@ export function renderDivineZoneControls(container,{layer,participants=[],Store=
   catch(error){message.textContent=error?.message||'Présence non enregistrée.';message.hidden=false;}
  });
  box.append(go,message);container.append(box);
+}
+/**
+ * Compteur ou case d'une prière active (miracles narratifs, F3) : état affiché, dépense (Store.spendDivineCounter), jet de relance
+ * (Store.pushDivineCounter, d10 saisi) ou case à cocher (Store.setDivineFlag). Appels tolérants : sans la commande, un message et rien d'autre.
+ */
+export function renderDivineCounterControls(container,{layer,Store={},onDone=()=>{}}={}){
+ if(!layer?.counter&&!layer?.flag)return;
+ const box=node('div','workspace-divine-counter');
+ box.append(node('p','workspace-muted',counterLayerLabel(layer)));
+ const message=node('p','workspace-field-error');message.hidden=true;
+ const run=async(method,missing,fallback,...args)=>{
+  message.hidden=true;
+  if(typeof Store[method]!=='function'){message.textContent=missing;message.hidden=false;return;}
+  try{const result=await Store[method](layer.targetId,layer.id,...args);if(result?.ok===false){message.textContent=result.error||fallback;message.hidden=false;return;}onDone(result);}
+  catch(error){message.textContent=error?.message||fallback;message.hidden=false;}
+ };
+ if(layer.flag){
+  const label=node('label','workspace-check');const input=node('input');input.type='checkbox';input.checked=layer.flag.set===true;input.dataset.divineAction='flag';
+  input.addEventListener('change',()=>run('setDivineFlag','Case indisponible : commande absente de cette version.','Case non enregistrée.',input.checked));
+  label.append(input,node('span','',layer.flag.label));box.append(label,message);container.append(box);return;
+ }
+ const amount=node('input');amount.type='number';amount.min='1';amount.value='1';amount.setAttribute('aria-label',`${layer.counter.label} : quantité à dépenser`);
+ const spend=node('button','workspace-secondary',`Dépenser : ${layer.counter.label}`);spend.type='button';spend.dataset.divineAction='counter-spend';
+ spend.addEventListener('click',()=>run('spendDivineCounter','Compteur indisponible : commande absente de cette version.','Dépense non enregistrée.',Number(amount.value)));
+ box.append(amount,spend);
+ if(layer.counter.push&&!layer.counter.bust){
+  const roll=node('input');roll.type='number';roll.min='1';roll.max='10';roll.setAttribute('aria-label',`${layer.counter.label} : jet de 1d10`);
+  const push=node('button','workspace-secondary',`Jet de 1d10 : ${layer.counter.label}`);push.type='button';push.dataset.divineAction='counter-push';
+  push.addEventListener('click',()=>run('pushDivineCounter','Compteur indisponible : commande absente de cette version.','Jet non enregistré.',Number(roll.value)));
+  box.append(roll,push);
+ }
+ box.append(message);container.append(box);
 }
 // Un personnage sans culte, talent divin ni suivi divin n'affiche pas la section (bouton discret pour l'ouvrir).
 const hasDivineLife=actor=>Boolean(actor?.cult)||actorDivineCults(actor).length>0||Object.entries(actor?.extensions?.v5||{}).some(([key,value])=>/^divine/.test(key)&&(Array.isArray(value)?value.length>0:value&&typeof value==='object'?Object.values(value).some(item=>item):Boolean(value)));
@@ -452,6 +485,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
     const layers=active.filter(layer=>layer.executionId===id),name=contracts.find(row=>row.id===layers[0].prayerId)?.name||'Prière';
     list.append(node('p','',[name+' · '+[...new Set(layers.map(layer=>layer.targetName))].join(', '),...layers.map(layer=>summonLayerLabel(layer,participants)).filter(Boolean)].join(' · ')));
     for(const layer of layers.filter(row=>row.imposedTest))renderImposedTestControls(list,{layer,participants,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});
+    for(const layer of layers.filter(row=>row.counter||row.flag))renderDivineCounterControls(list,{layer,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});
     for(const layer of layers.filter(row=>row.zone))renderDivineZoneControls(list,{layer,participants,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});
     button(list,'Terminer '+name,()=>run(async()=>{state.activePrayersOpen=true;const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);

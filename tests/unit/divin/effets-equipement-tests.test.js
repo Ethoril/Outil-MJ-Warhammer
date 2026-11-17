@@ -541,7 +541,7 @@ test('statuts P4b T4 : cinq miracles assistés (clause moteur), deux promus en i
   assert.deepEqual(getDivineContract(SPEAR).effects[0].qualities, ['devastatrice']);
   assert.equal(getDivineContract(CHILL).effects[0].appliesTo, 'caster');
   assert.deepEqual(getDivineContract(VANQUISH).effects[0].talents.map(row => row.specialization), ['Orques', 'Gobelins', 'Morts-vivants', 'Associés au Chaos']);
-  assert.ok(getDivineContract(VANQUISH).clauses.some(row => row.id === 'hatred-kill' && row.mode === 'manual'), 'bonus de +2 DR reste un rappel');
+  assert.ok(getDivineContract(VANQUISH).clauses.some(row => row.id === 'hatred-kill' && row.mode === 'engine'), 'bonus de +2 DR calculé par la case (L6)');
   assert.ok(getDivineContract(CHILL).clauses.some(row => row.id === 'momentum-loss' && row.mode === 'manual'), 'perte d’Élan reste un rappel');
 });
 
@@ -570,11 +570,11 @@ test('Lance de Myrmidia : Magique et Dévastatrice sur la lance désignée', asy
   assert.deepEqual(magicWeaponQualities(person(store, 'priest'), spear), []);
 });
 
-test('Vaincre les impies : quatre lignes de Haine sur la cible, rappel du bonus de +2 DR', async () => {
+test('Vaincre les impies : quatre lignes de Haine sur la cible, bonus de +2 DR porté par la case (L6)', async () => {
   const store = await fixture('Sigmar');
   const result = await cast(store, VANQUISH);
   assert.deepEqual(injected(person(store, 'ally')).map(row => row.specialization).sort(), ['Associés au Chaos', 'Gobelins', 'Morts-vivants', 'Orques']);
-  assert.ok(result.receipt.reminders.some(text => /\+2 DR/.test(text)), JSON.stringify(result.receipt.reminders));
+  assert.ok(person(store, 'ally').extensions.v5.divineEffects.some(layer => layer.flag?.key === 'hatred-kill'), 'case « a tué un ennemi visé » (L6)');
   await toRoundEnd(store);
   assert.equal(injected(person(store, 'ally')).length, 0);
 });

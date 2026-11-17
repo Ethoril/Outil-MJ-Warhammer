@@ -14,7 +14,6 @@
     "divine:miracle:handrich:a-deal-s-a-deal": "F1",
     "divine:miracle:handrich:carry-my-burdens": "F6",
     "divine:miracle:handrich:supply-and-demand": "F6",
-    "divine:miracle:handrich:twist-of-fortune": "F3",
     "divine:miracle:handrich:shake-on-it": "F2",
     "divine:miracle:manann:becalm": "F5",
     "divine:miracle:manann:fair-winds": "F1",
@@ -25,7 +24,6 @@
     "divine:miracle:morr:dooming": "F6",
     "divine:miracle:morr:last-rites": "F6",
     "divine:miracle:ranald:crisis-of-confidence": "F1",
-    "divine:miracle:ranald:force-the-hand-of-chance": "F3",
     "divine:miracle:ranald:perfect-empathy": "F6",
     "divine:miracle:ranald:the-gamemaster": "F1",
     "divine:miracle:ranald:distant-sounds": "F6",
@@ -101,7 +99,6 @@
     "divine:miracle:shallya:shallya-s-tears#no-reattach": "F6",
     "divine:miracle:sigmar:twin-tailed-comet#targeting": "F6",
     "divine:miracle:sigmar:twin-tailed-comet#outdoors-only": "F6",
-    "divine:miracle:sigmar:vanquish-the-unrighteous#hatred-kill": "F3",
     "divine:miracle:taal:earthshudder#structure-damage": "F6",
     "divine:miracle:taal:river-s-blessing#water-speed": "F6",
     "divine:miracle:taal:river-s-blessing#salt-water": "F6",
@@ -132,6 +129,10 @@
     "divine:miracle:taal:pax-of-taal#broken-by-attack": "F6",
     "divine:miracle:morr:portal-s-threshold#line-length": "F6",
     "divine:miracle:morr:portal-s-threshold#construct-undead-blocked": "F6",
-    "divine:miracle:morr:portal-s-threshold#expiry": "F6"
+    "divine:miracle:morr:portal-s-threshold#expiry": "F6",
+    "divine:miracle:handrich:twist-of-fortune#backfire": "F6",
+    "divine:miracle:handrich:twist-of-fortune#restore": "F6",
+    "divine:miracle:handrich:twist-of-fortune#after-test": "F6",
+    "divine:miracle:handrich:twist-of-fortune#profit-sin": "F6"
   }
 }

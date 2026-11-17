@@ -89,7 +89,7 @@ describe('L10 : clauses requalifiées en engine', () => {
     assert.equal(haines[0].appliesTo, undefined);
     assert.equal(haines[1].appliesTo, 'caster');
     assert.deepEqual(haines[1].talents, haines[0].talents);
-    assert.equal(clause('divine:miracle:sigmar:vanquish-the-unrighteous#hatred-kill').mode, 'manual');
+    assert.equal(clause('divine:miracle:sigmar:vanquish-the-unrighteous#hatred-kill').mode, 'engine'); // L6 : case « a tué un ennemi visé »
   });
 
   test('les cultes Solkan gardent leur rappel de pureté, affiché une fois', () => {

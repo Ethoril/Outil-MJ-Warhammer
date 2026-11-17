@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:bc89f208df578e70bf1b6039b799127d712a61bc86b4d6e1a7674984623e59ba",
+  "sourceFingerprint": "sha256:961f925da31db7429e1d03dcc7dc6020f9bd19ea03f33bc52fef00742810935e",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -11208,7 +11208,7 @@
       "type": "miracle",
       "name": "Revirement de fortune",
       "deity": "Handrich",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -11274,7 +11274,25 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "miracle-counter",
+          "appliesTo": "caster",
+          "label": "Revirement de fortune",
+          "counter": {
+            "key": "twist-of-fortune",
+            "label": "Chance empruntée",
+            "initial": 1
+          },
+          "borrow": {
+            "characteristic": "Soc",
+            "backfireSl": 4
+          },
+          "duration": {
+            "unit": "session"
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Twist of Fortune",
         "effect": "Le prêtre peut dépenser 1 point de Chance de la cible comme si c’était le sien. La cible peut s’y opposer par un Test de Sociabilité Intermédiaire (+0) contre les DR du prêtre ; si elle le dépasse de +4 DR, elle peut dépenser un point de Chance du prêtre à son tour. La Chance perdue doit être dépensée avant la fin de la session ; à la session suivante, elle revient à son propriétaire.",
@@ -11283,13 +11301,13 @@
       "clauses": [
         {
           "id": "borrow-fortune",
-          "mode": "manual",
-          "text": "Le prêtre dépense 1 point de Chance de la cible comme le sien (transfert de Chance depuis la cible, non couvert par le moteur).",
+          "mode": "engine",
+          "text": "Le prêtre dépense 1 point de Chance de la cible comme le sien (réserve d’un point portée par le prêtre ; le point de la cible est retiré à la dépense).",
           "sourceRef": "v5-twist-of-fortune"
         },
         {
           "id": "contest",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La cible peut contester par un Test de Sociabilité Intermédiaire (+0) contre les DR du prêtre ; si elle gagne, elle garde son point.",
           "sourceRef": "v5-twist-of-fortune"
         },
@@ -13382,7 +13400,7 @@
       "name": "Forcer la main du hasard",
       "deity": "Ranald",
       "aspect": "Gamester",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -13445,7 +13463,25 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "miracle-counter",
+          "appliesTo": "caster",
+          "label": "Forcer la main du hasard",
+          "counter": {
+            "key": "force-the-hand-of-chance",
+            "label": "Forcer la main du hasard",
+            "initial": 1
+          },
+          "push": {
+            "threshold": 6,
+            "step": 1
+          },
+          "duration": {
+            "unit": "session"
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Force the Hand of Chance",
         "effect": "Le prêtre demande à Ranald de rejuger une épreuve difficile : +1 DR à un Test précis, auquel s’ajoute +1 DR supplémentaire à chaque jet de 1d10 de 6 ou moins, tant que les jets réussissent. Un 7 ou plus fait perdre tous les DR accumulés et impose le Test initial à -1 DR.",
@@ -13454,19 +13490,19 @@
       "clauses": [
         {
           "id": "base-bonus",
-          "mode": "manual",
+          "mode": "engine",
           "text": "+1 DR au Test choisi.",
           "sourceRef": "v5-force-the-hand-of-chance"
         },
         {
           "id": "push-your-luck",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Jet de 1d10 : 6 ou moins ajoute +1 DR et permet de rejouer ; on peut continuer tant que les jets réussissent.",
           "sourceRef": "v5-force-the-hand-of-chance"
         },
         {
           "id": "bust",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Un jet de 7 ou plus fait perdre tous les DR accumulés et le Test initial se fait à -1 DR.",
           "sourceRef": "v5-force-the-hand-of-chance"
         }
@@ -19503,6 +19539,87 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "miracle-counter",
+          "label": "Vaincre les impies",
+          "flag": {
+            "key": "hatred-kill",
+            "label": "A tué un ennemi visé",
+            "grantTalents": [
+              {
+                "id": "talent-hatred",
+                "name": "Haine",
+                "specialization": "orque",
+                "rank": 1
+              },
+              {
+                "id": "talent-hatred",
+                "name": "Haine",
+                "specialization": "gobelin",
+                "rank": 1
+              },
+              {
+                "id": "talent-hatred",
+                "name": "Haine",
+                "specialization": "mort-vivant",
+                "rank": 1
+              },
+              {
+                "id": "talent-hatred",
+                "name": "Haine",
+                "specialization": "chaos",
+                "rank": 1
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
+          "type": "miracle-counter",
+          "appliesTo": "caster",
+          "label": "Vaincre les impies",
+          "flag": {
+            "key": "hatred-kill",
+            "label": "A tué un ennemi visé",
+            "grantTalents": [
+              {
+                "id": "talent-hatred",
+                "name": "Haine",
+                "specialization": "orque",
+                "rank": 1
+              },
+              {
+                "id": "talent-hatred",
+                "name": "Haine",
+                "specialization": "gobelin",
+                "rank": 1
+              },
+              {
+                "id": "talent-hatred",
+                "name": "Haine",
+                "specialization": "mort-vivant",
+                "rank": 1
+              },
+              {
+                "id": "talent-hatred",
+                "name": "Haine",
+                "specialization": "chaos",
+                "rank": 1
+              }
+            ]
+          },
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "labels": {
@@ -19519,7 +19636,7 @@
         },
         {
           "id": "hatred-kill",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Après avoir tué un tel ennemi, la Haine donne +2 DR aux Tests de combat au lieu de +1.",
           "sourceRef": "v5-vanquish-the-unrighteous"
         },

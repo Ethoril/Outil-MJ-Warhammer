@@ -6,8 +6,22 @@ import { isV5BrokenEscapeActionBlocked } from '../v5-broken-escape.js';
 import { registerNewV5Participants } from '../store/participant-registry.js';
 import { resolveImposedTestOnState } from '../v5-divine-effects-imposed.js';
 import { setDivineZoneMembersOnState } from '../v5-divine-effects-zones.js';
+import { spendDivineCounterOnState, pushDivineCounterOnState, setDivineFlagOnState } from '../v5-divine-effects-counters.js';
 
 export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
+  // Commande pure de compteur : essai à blanc sur l'état courant, puis un seul executeCommand (un ↶).
+  const counterCommand=(name,run,args,failure,shape)=>{
+    const before=run(currentEnvelope(),...cloneValue(args));
+    if(!before.ok)return before;
+    let transition;
+    const saved=api.executeCommand(name,draft=>{
+      transition=run(draft,...cloneValue(args));
+      if(!transition.ok)throw Object.assign(new Error(transition.error),{userFacing:true});
+      return transition.state;
+    });
+    const finish=result=>result?.ok===false?{ok:false,error:result.error||failure}:shape(transition);
+    return saved&&typeof saved.then==='function'?saved.then(finish).catch(error=>({ok:false,error:error.message||failure})):finish(saved);
+  };
   return {
     getDivineAccessGrants(actorId=null) { return getStoreDivineAccessGrants(currentEnvelope(),actorId); },
     resolveDivineAccess(actorId,contractId) { return resolveStoreDivineAccess(currentEnvelope(),actorId,contractId); },
@@ -125,6 +139,10 @@ export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
       const finish=result=>result?.ok===false?{ok:false,error:result.error||'Présence non enregistrée.'}:{ok:true,members:before.members};
       return saved&&typeof saved.then==='function'?saved.then(finish).catch(error=>({ok:false,error:error.message||'Présence non enregistrée.'})):finish(saved);
     },
+    /** Compteurs et cases des miracles (F3) : un seul ↶ par commande, jets saisis par le MJ. */
+    spendDivineCounter(participantId,layerId,amount=1) { return counterCommand('v5-divine-counter-spend',spendDivineCounterOnState,[participantId,layerId,amount],'Dépense non enregistrée.',transition=>({ok:true,remaining:transition.remaining,reminders:transition.reminders})); },
+    pushDivineCounter(participantId,layerId,roll) { return counterCommand('v5-divine-counter-push',pushDivineCounterOnState,[participantId,layerId,roll],'Jet non enregistré.',transition=>({ok:true,value:transition.value,bust:transition.bust})); },
+    setDivineFlag(participantId,layerId,value) { return counterCommand('v5-divine-flag',setDivineFlagOnState,[participantId,layerId,value],'Case non enregistrée.',transition=>({ok:true,value:transition.value})); },
     /** Test imposé `manual` d'une prière active (miracles narratifs, F2) : jet saisi par le MJ, issue appliquée, un seul ↶. */
     resolveDivineImposedTest(participantId,layerId,input={}) {
       const before=resolveImposedTestOnState(currentEnvelope(),participantId,layerId,cloneValue(input||{}));

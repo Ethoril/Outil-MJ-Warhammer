@@ -2,7 +2,7 @@
 // actives du panneau divin. Le DOM est un faux arbre ; un Store sans la commande ne fait rien planter.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { renderImposedTestControls, renderDivineZoneControls } from '../../../js/ui/v5-divine-panel.js';
+import { renderImposedTestControls, renderDivineZoneControls, renderDivineCounterControls } from '../../../js/ui/v5-divine-panel.js';
 
 class El {
   constructor(tag) { Object.assign(this, { tagName: tag, children: [], options: [], dataset: {}, attrs: {}, listeners: {}, className: '', value: '', disabled: false, hidden: false, _text: '' }); }
@@ -84,3 +84,39 @@ test('Zone divine, Store sans la méthode : aucun plantage, message en français
   assert.match(box.textContent, /commande absente/);
 }));
 
+
+const counterLayer = { id: 'exec:priest:force:miracle-counter', type: 'miracle-counter', casterId: 'priest', targetId: 'priest',
+  counter: { key: 'force', label: 'Forcer la main du hasard', value: 2, min: 0, push: { threshold: 6, step: 1 } } };
+const flagLayer = { id: 'exec:ally:vanquish:miracle-counter', type: 'miracle-counter', casterId: 'priest', targetId: 'ally',
+  flag: { key: 'hatred-kill', label: 'A tué un ennemi visé', set: false } };
+
+test('Compteur divin : état affiché, la dépense et le jet de 1d10 appellent le Store avec la couche du porteur', () => withDom(async () => {
+  const calls = [];
+  const Store = { spendDivineCounter: async (...args) => { calls.push(['spend', ...args]); return { ok: true }; }, pushDivineCounter: async (...args) => { calls.push(['push', ...args]); return { ok: true }; } };
+  const box = new El('div');
+  renderDivineCounterControls(box, { layer: counterLayer, Store, onDone: () => {} });
+  assert.match(box.textContent, /Forcer la main du hasard : 2 DR en réserve/);
+  const [amount, roll] = all(box, el => el.tagName === 'input');
+  amount.value = '2'; roll.value = '4';
+  await buttonNamed(box, /Dépenser/).fire('click');
+  await buttonNamed(box, /Jet de 1d10/).fire('click');
+  assert.deepEqual(calls, [['spend', 'priest', counterLayer.id, 2], ['push', 'priest', counterLayer.id, 4]]);
+}));
+
+test('Compteur divin, Store sans la méthode : aucun plantage, message en français', () => withDom(async () => {
+  const box = new El('div');
+  renderDivineCounterControls(box, { layer: counterLayer, Store: {}, onDone: () => {} });
+  await assert.doesNotReject(() => buttonNamed(box, /Dépenser/).fire('click'));
+  assert.match(box.textContent, /commande absente/);
+}));
+
+test('Case divine : cocher appelle setDivineFlag sur le porteur', () => withDom(async () => {
+  const calls = [];
+  const box = new El('div');
+  renderDivineCounterControls(box, { layer: flagLayer, Store: { setDivineFlag: async (...args) => { calls.push(args); return { ok: true }; } }, onDone: () => {} });
+  const check = all(box, el => el.tagName === 'input')[0];
+  check.checked = true;
+  await check.fire('change');
+  assert.deepEqual(calls, [['ally', flagLayer.id, true]]);
+  assert.match(box.textContent, /A tué un ennemi visé/);
+}));

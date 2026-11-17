@@ -5,6 +5,8 @@ const soc = (kind, unit) => ({ kind, characteristic: 'Soc', unit });
 const area = { kind: 'area', characteristicBonus: 'Soc', unit: 'yards' };
 const rounds = soc('characteristic-bonus', 'rounds');
 const hatredTalents = ['Orques', 'Gobelins', 'Morts-vivants', 'Associés au Chaos'].map(specialization => ({ id: 'talent-hatred', name: 'Haine', specialization, rank: 1 }));
+// Seconde ligne de Haine après un kill : mêmes groupes, désignés par l'identifiant de leur mot-clé (autre clé de Talent, même ennemi).
+const hatredKillTalents = ['orque', 'gobelin', 'mort-vivant', 'chaos'].map(specialization => ({ id: 'talent-hatred', name: 'Haine', specialization, rank: 1 }));
 const foes = 'orques, gobelins, morts-vivants et serviteurs des Puissances de la Ruine';
 
 export const miracles = [
@@ -96,12 +98,16 @@ export const miracles = [
     params: { range: { kind: 'self' }, targets: area, duration: rounds },
     status: 'assisted', effect: null,
     // Q11 : le prêtre est compté parmi les alliés. Second effet identique, réservé au prêtre : il gagne la Haine même s'il n'est pas désigné.
-    effects: [{ type: 'grant-talent', talents: hatredTalents }, { type: 'grant-talent', talents: hatredTalents, appliesTo: 'caster' }],
+    // Miracles narratifs L6 (LdB V5 p.227, relu) : après un kill, la Haine vaut +2 DR au lieu de +1. Case cochée par le MJ sur chaque porteur ;
+    // cochée, une seconde ligne de Haine (même ennemi, identifiant du mot-clé) porte le bonus à +2.
+    effects: [{ type: 'grant-talent', talents: hatredTalents }, { type: 'grant-talent', talents: hatredTalents, appliesTo: 'caster' },
+      { type: 'miracle-counter', label: 'Vaincre les impies', flag: { key: 'hatred-kill', label: 'A tué un ennemi visé', grantTalents: hatredKillTalents } },
+      { type: 'miracle-counter', appliesTo: 'caster', label: 'Vaincre les impies', flag: { key: 'hatred-kill', label: 'A tué un ennemi visé', grantTalents: hatredKillTalents } }],
     targetRules: [],
     needsInput: [{ id: 'allies', text: 'Alliés choisis dans la zone; le prêtre est-il compté (non précisé par la source) ?' }, { id: 'enemy-categories', text: 'Ennemis relevant des catégories visées (orques, gobelins, morts-vivants, associés au Chaos).' }, { id: 'kills', text: 'Ennemi de ces catégories tué par un allié (déclenche le bonus de +2 DR).' }],
     clauses: [
       { id: 'hatred', mode: 'engine', text: 'Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184) : une ligne de Haine par groupe.' },
-      { id: 'hatred-kill', mode: 'manual', text: 'Après avoir tué un tel ennemi, la Haine donne +2 DR aux Tests de combat au lieu de +1.' },
+      { id: 'hatred-kill', mode: 'engine', text: 'Après avoir tué un tel ennemi, la Haine donne +2 DR aux Tests de combat au lieu de +1.' },
       { id: 'priest-counted', mode: 'engine', text: 'Le prêtre est compté parmi les alliés (décision du MJ) : il gagne la Haine même s’il n’est pas désigné.' },
       { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
