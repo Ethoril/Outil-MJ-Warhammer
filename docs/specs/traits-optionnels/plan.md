@@ -92,6 +92,8 @@ setProfileOptionalChoices(profileId, choices, { expectedLocalRevision })  // ref
 
 ## Points à trancher par le MJ
 
+**Tranchés le 17/11/2026 : recommandations retenues pour les sept points, reportées dans la spec en D20 à D26, qui font foi.**
+
 1. **Leader : version du livre.** La v2 du Livre de base V5 (p. 353) donne « Leader » (+15 ; Soc +5) ; la v3, qui est celle des données de l'outil, le nomme « Lieutenant » (+20 ; Soc +10). Appliquer le Lieutenant v3 ? Recommandation : oui (`E0-P-115`, déjà dans l'outil), affiché « Meneur (Lieutenant V5) ».
 2. **Compétences d'un modèle.** Le bonus s'ajoute aux avances : total = ancien total (ou caractéristique modifiée si la compétence manque) + écart de la caractéristique liée + bonus ; « Corps à corps (deux) » = les deux compétences de Corps à corps les plus hautes du profil, à défaut Corps à corps (Base). Valider ? Recommandation : oui.
 3. **Attaques et compétences suivent les caractéristiques.** Un Trait de D5 qui change CC, CT ou F change aussi la base de l'attaque (CC ou CT) et, en mêlée, ses dégâts (écart du BF) ; les compétences liées suivent. Sans cela Elite, Big et Brute n'ont aucun effet sur les attaques. Recommandation : oui, tirs inchangés pour les dégâts.

@@ -41,6 +41,13 @@ Table relue : [valeurs-traits.md](valeurs-traits.md). D10 n'est pas tranché par
 | D17 | Leader sur une créature Bestial | Bloqué : Leader n'est pas proposé (ni en case ni à l'ajout) sur une créature qui a le Trait Bestial (Livre de base FR p. 340). |
 | D18 | Trait optionnel déjà présent en Trait de base | Case grisée, libellée « déjà compté », sans effet. |
 | D19 | Valeurs de D5 | Celles de [valeurs-traits.md](valeurs-traits.md) (L11 et Livre de base FR, identiques) pour Big, Brute, Clever, Cunning, Fast, Tough, Hardy et Dressé (Guerre). **Sauf Elite et Leader** : cocher l'un d'eux applique le modèle du même nom du Livre de base V5 (p. 353), caractéristiques, compétences et Talents compris, à la place des valeurs du Trait V4. Le détail du modèle est relu dans le livre avant le plan. |
+| D20 | Version de Leader | Le modèle « Lieutenant » de la v3 du Livre V5 (données de l'outil, `E0-P-115`), affiché « Meneur (Lieutenant V5) ». |
+| D21 | Compétences d'un modèle | Total = ancien total (ou caractéristique modifiée si la compétence manque) + écart de la caractéristique liée + bonus du modèle ; « Corps à corps (deux) » = les deux Corps à corps les plus hauts du profil, à défaut Corps à corps (Base). |
+| D22 | Attaques et compétences suivent les caractéristiques | Un changement de CC, CT ou F modifie la valeur de test des attaques et les compétences liées ; les dégâts de mêlée suivent l'écart du BF ; les dégâts des tirs sont inchangés. |
+| D23 | Taille et Blessures | D11 se lit selon D16 : Blessures imprimées + (formule avec la nouvelle Taille − formule avec l'ancienne). |
+| D24 | Monture proposable | La recherche de monture d'un PJ liste aussi les profils de Réserve cochés « Dressé (Monture) », copiés avec leurs coches. |
+| D25 | Profils concernés | Tout profil sauf les PJ ; sans fiche de bestiaire, seul « Ajouter un Trait » apparaît. |
+| D26 | Leader et Bestial | Le blocage de D17 est maintenu malgré le modèle V5. |
 
 ## Scénarios et critères d'acceptation
 
