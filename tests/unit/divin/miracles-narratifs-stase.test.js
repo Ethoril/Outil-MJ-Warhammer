@@ -214,4 +214,14 @@ describe('L5 — Apaisez les vents', () => {
     assert.equal(who(store, 'mage').extensions.v5.stilledMagic, undefined);
     assert.doesNotMatch(String(previewCasting(who(store, 'mage'), spell, { roll: 20 }).error || ''), /Apaisez les vents/);
   });
+  test('prière terminée à la main par le MJ : magie rétablie tout de suite, sans attendre le Tour', async () => {
+    const { store } = await fixture();
+    await cast(store, STILL);
+    await members(store, ['mage']);
+    assert.equal(who(store, 'mage').caracs.CC, 40);
+    await store.endDivinePrayer(zoneOf(store).executionId, { reason: 'fin' });
+    assert.equal(who(store, 'mage').caracs.CC, 50);
+    assert.equal(who(store, 'mage').extensions.v5.stilledMagic, undefined);
+    assert.doesNotMatch(String(previewCasting(who(store, 'mage'), spell, { roll: 20 }).error || ''), /Apaisez les vents/);
+  });
 });

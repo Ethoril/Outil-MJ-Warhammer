@@ -18,6 +18,7 @@ import {previewV5Test,selectV5Test,normalizeV5Roll} from './v5-roll.js';
 import {resolveV5ConditionTestContext,withV5TestTalents} from './v5-test-context.js';
 import {effectiveSkillScore,baseCharacteristicScore,magicSkillModifiers} from './v5-magic-talents.js';
 import {SUPPLEMENT_DIVINE_CONTRACTS} from './supplement-loader.js';
+import {syncDivineMagicSuppression} from './v5-divine-effects-zones.js';
 
 const clone=value=>structuredClone(value);
 const text=value=>typeof value==='string'&&value.trim()?value.trim():null;
@@ -1424,6 +1425,8 @@ export function endStoreDivinePrayer(state,executionId,{reason}={}){
  }
  if(!removed)throw ruleError('Cette prière ne possède plus d’effet actif.');
  sweepDivineSummons(next);
+ // Apaisez les vents terminé à la main : la magie est rétablie tout de suite, sans attendre le Tour suivant.
+ if(Array.isArray(next.combat?.participants))next.combat.participants=syncDivineMagicSuppression(next.combat.participants);
  const receipt=(next.extensions?.v5?.divineExecutions||[]).find(row=>row.executionId===executionId);if(receipt)receipt.endedByMJ=reason.trim();
  next.log=[{id:executionId+':end',kind:'effect',text:'Prière terminée par le MJ · '+reason.trim()},...(next.log||[])].slice(0,300);
  return next;
