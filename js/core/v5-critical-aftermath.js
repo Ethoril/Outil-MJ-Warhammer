@@ -1,5 +1,6 @@
 import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION, V5_CRIT_DATA } from '../data/v5-crits.js';
 import { acquireV5Conditions } from './v5-effects.js';
+import { startDieHard } from './trait-effects.js';
 
 export const V5_CRITICAL_AFTERMATH_RULE_VERSION = 'v5-critical-aftermath-2026-10-27.1';
 export const CRITICAL_DEATH_FIELD = 'criticalDeath';
@@ -129,7 +130,7 @@ export function updateCriticalDeathCountdown(participant, { round, toughnessBonu
 }
 
 /** Resolve an explicit MJ decision at or after the critical-death deadline. */
-export function decideCriticalDeath(participant, { decision, round } = {}) {
+export function decideCriticalDeath(participant, { decision, round, bodyIntact = false } = {}) {
   const countdown = participant?.extensions?.v5?.[CRITICAL_DEATH_FIELD];
   if (!validRound(round) || !countdown || !['awaiting-mj', 'countdown'].includes(countdown.status) || round < countdown.dueRound) {
     return { status: 'blocked', reason: 'Le décompte de mort par blessures critiques n’a pas atteint son échéance.' };
@@ -145,8 +146,9 @@ export function decideCriticalDeath(participant, { decision, round } = {}) {
     next.hp = 0;
     if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = 'blood';
     next.extensions.v5.dead = true;
+    return { status: 'dead', participant: withDieHard(next, { round, bodyIntact }), countdown: nextCount };
   }
-  return { status: decision === 'confirm' ? 'dead' : 'declined', participant: next, countdown: nextCount };
+  return { status: 'declined', participant: next, countdown: nextCount };
 }
 
 /**
@@ -159,11 +161,15 @@ export function criticalDeathCause(record, { decapitated = false } = {}) {
   return ['ARM', 'BODY', 'LEG'].includes(record?.table) ? 'dismemberment' : 'blood';
 }
 
+/** Increvable (D15) : une mort confirmée avec la case « corps intact » ouvre le Test étendu ; sans la case ou sans le Trait, inchangé. */
+const withDieHard = (participant, { round, bodyIntact }) => (bodyIntact === true ? startDieHard(participant, { round, bodyIntact: true }) : participant);
+
 /**
  * Mort proposée par un état en fin de Round (`pendingStateDeath`, posé par la fin de Tour V5) :
  * le MJ confirme (mort V5 et cause pour la carte) ou refuse ; la proposition disparaît dans les deux cas.
+ * `bodyIntact` : case « corps intact » d'Increvable ; `round` : Round de la décision (à défaut, celui de la proposition).
  */
-export function decideStateDeath(participant, { pendingId, decision } = {}) {
+export function decideStateDeath(participant, { pendingId, decision, bodyIntact = false, round = null } = {}) {
   const pending = participant?.extensions?.v5?.pendingStateDeath;
   if (!pending || pending.id !== pendingId) return { status: 'blocked', participant, reason: 'Décès proposé introuvable.' };
   if (decision !== 'confirm' && decision !== 'decline') return { status: 'confirmation-required', participant };
@@ -174,12 +180,13 @@ export function decideStateDeath(participant, { pendingId, decision } = {}) {
     next.hp = 0;
     if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = pending.cause || 'blood';
     next.extensions.v5.dead = true;
+    return { status: 'dead', participant: withDieHard(next, { round: round ?? pending.round ?? null, bodyIntact }) };
   }
-  return { status: decision === 'confirm' ? 'dead' : 'declined', participant: next };
+  return { status: 'declined', participant: next };
 }
 
 /** Death printed in a critical table is a request for an explicit MJ decision. */
-export function decideImmediateCriticalDeath(participant, { criticalId, decision, decapitated = false } = {}) {
+export function decideImmediateCriticalDeath(participant, { criticalId, decision, decapitated = false, bodyIntact = false, round = null } = {}) {
   if (!participant?.id || !criticalId || (decision !== 'confirm' && decision !== 'decline')) {
     return { status: 'confirmation-required', participant };
   }
@@ -197,7 +204,7 @@ export function decideImmediateCriticalDeath(participant, { criticalId, decision
     if (next.extensions.v5.dead !== true) next.extensions.v5.deathCause = criticalDeathCause(record, { decapitated });
     next.extensions.v5.dead = true;
   }
-  return { status: decision === 'confirm' ? 'dead' : 'declined', participant: next,
+  return { status: decision === 'confirm' ? 'dead' : 'declined', participant: decision === 'confirm' ? withDieHard(next, { round, bodyIntact }) : next,
     record: next.extensions.v5[CRITICAL_AFTERMATH_FIELD].find(row => row.id === criticalId) };
 }
 

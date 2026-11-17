@@ -10,6 +10,7 @@ import { armourProtection } from './equipment.js';
 import { isMiscastConditionLocked } from './v5-miscast-locks.js';
 import { bestiaryProfileStateImmunity } from './creature-abilities.js';
 import { PHASES, clone, integer, createV5TimedEffect } from './v5-timed-effect.js';
+import { isFlammable } from './trait-effects.js';
 export { createV5TimedEffect } from './v5-timed-effect.js';
 export const V5_EFFECT_RULE_VERSION = 'v5-effects-2026-10-09.1';
 export const V5_CONDITION_KEYS = Object.freeze(['enflamme','souille','hemorragique','aveugle','brise','assourdi','enchevetre','extenue','empoisonne','a-terre','sonne','surpris','inconscient']);
@@ -351,8 +352,9 @@ export function advanceV5Effects(participant,transition={},inputs={}) {
     if(flames){
       const roll=explicitD10(inputs.fireRoll,'fireRoll',needsInput),be=toughnessBonus(next,inputs.toughnessBonus,needsInput),ap=fireArmour(next,inputs.fireArmour,needsInput);
       if(hp!==null&&roll!==null&&be!==null&&ap!==null){
-        const lost=Math.max(0,roll+flames-1-be-ap),excess=Math.max(0,lost-hp);hp=Math.max(0,hp-lost);
-        reminders.push(`Enflammé ${flames} : 1d10(${roll}) + ${flames-1} − BE(${be}) − PA(${ap}) = ${lost} Blessure(s).`);
+        // Inflammable (L07, D17) : la perte d'Enflammé est doublée.
+        const flammable=isFlammable(next),base=Math.max(0,roll+flames-1-be-ap),lost=flammable?base*2:base,excess=Math.max(0,lost-hp);hp=Math.max(0,hp-lost);
+        reminders.push(`Enflammé ${flames} : 1d10(${roll}) + ${flames-1} − BE(${be}) − PA(${ap}) = ${flammable?`${base} × 2 (Inflammable) = `:''}${lost} Blessure(s).`);
         if(lost>0&&hp===0)criticalRequests.push({location:'BODY',reason:'ablaze-zero-wounds',bonus:excess*10});
       }
     }

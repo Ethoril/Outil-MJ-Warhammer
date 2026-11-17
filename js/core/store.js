@@ -2697,29 +2697,29 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       return api.executeCommand('decide-critical-death-v5',draft=>{
         const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);
         if(index<0)throw new TypeError('Participant introuvable');
-        const result=decideV5CriticalDeath(draft.combat.participants[index],{decision,round:draft.combat?.round});
+        const result=decideV5CriticalDeath(draft.combat.participants[index],{decision,round:draft.combat?.round,bodyIntact:captured.bodyIntact===true});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
         draft.combat.participants[index]=result.participant;
         if(result.status==='dead')draft.combat.participants=fallFromSaddle(draft.combat.participants,participantId);
         return draft;
       });
     },
-    decideImmediateCriticalDeath(participantId, criticalId, decision, { decapitated = false } = {}) {
+    decideImmediateCriticalDeath(participantId, criticalId, decision, { decapitated = false, bodyIntact = false } = {}) {
       return api.executeCommand('decide-immediate-critical-death-v5',draft=>{
         const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);
         if(index<0)throw new TypeError('Participant introuvable');
-        const result=decideV5ImmediateCriticalDeath(draft.combat.participants[index],{criticalId,decision,decapitated});
+        const result=decideV5ImmediateCriticalDeath(draft.combat.participants[index],{criticalId,decision,decapitated,bodyIntact:bodyIntact===true,round:draft.combat?.round??null});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'CRITICAL_DEATH_CONFIRMATION'});
         draft.combat.participants[index]=result.participant;
         if(result.status==='dead')draft.combat.participants=fallFromSaddle(draft.combat.participants,participantId);
         return draft;
       });
     },
-    decideStateDeath(participantId, pendingId, decision) {
+    decideStateDeath(participantId, pendingId, decision, { bodyIntact = false } = {}) {
       return api.executeCommand('decide-state-death-v5',draft=>{
         const index=(draft.combat?.participants||[]).findIndex(row=>row.id===participantId);
         if(index<0)throw new TypeError('Participant introuvable');
-        const result=decideV5StateDeath(draft.combat.participants[index],{pendingId,decision});
+        const result=decideV5StateDeath(draft.combat.participants[index],{pendingId,decision,bodyIntact:bodyIntact===true,round:draft.combat?.round??null});
         if(!['dead','declined'].includes(result.status))throw Object.assign(new Error(result.reason||'Confirmation MJ requise.'),{userFacing:true,code:'STATE_DEATH_CONFIRMATION'});
         draft.combat.participants[index]=result.participant;
         if(result.status==='dead')draft.combat.participants=fallFromSaddle(draft.combat.participants,participantId);

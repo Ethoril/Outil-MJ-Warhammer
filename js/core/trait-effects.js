@@ -25,6 +25,14 @@ const hasPsy = (participant, key) => psychologyTraits(participant).some(trait =>
 /** Élan du moteur (booléen `extensions.v5.hasMomentum`) lu comme le nombre que `planUnstableEndOfRound` attend. */
 export const momentumCount = participant => (v5Of(participant).hasMomentum === true ? 1 : 0);
 
+const foldName = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s*\(.*$/, '').trim();
+
+/** Inflammable (Flammable, L07) : Trait imprimé ou coché, lu dans `traits` et `extensions.traits` (D11). */
+export function isFlammable(participant) {
+  return [...(Array.isArray(participant?.traits) ? participant.traits : []), ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : [])]
+    .some(trait => ['flammable', 'inflammable'].includes(foldName(typeof trait === 'string' ? trait : trait?.name ?? trait?.nom)));
+}
+
 /** Marqueur de drapeau de fiche (« protège ses petits », « acculé ») : `extensions.v5.flags`, à défaut `flags`. */
 const flagOf = (participant, flag) => v5Of(participant).flags?.[flag] === true || participant?.flags?.[flag] === true;
 
@@ -151,7 +159,8 @@ export function applyTraitPatches(participants, patches = []) {
     else if (patch.type === 'lost-turn') next[index] = markLostTurn(current, patch);
     else if (patch.type === 'lift-lost-turn') next[index] = liftLostTurn(current, patch);
     else if (patch.type === 'state-death') {
-      if (!isDead(current) && v5Of(current).pendingStateDeath?.id !== patch.pending.id) next[index] = touchV5(current, { pendingStateDeath: clone(patch.pending) });
+      // Une décision de mort déjà proposée (Hémorragique, critique de feu…) garde sa cause : la première cause l'emporte.
+      if (!isDead(current) && !v5Of(current).pendingStateDeath) next[index] = touchV5(current, { pendingStateDeath: clone(patch.pending) });
     } else if (patch.type === 'die-hard-start') next[index] = startDieHard(current, patch);
     else if (patch.type === 'die-hard-advance') next[index] = advanceDieHard(current, patch).participant;
   }
@@ -253,8 +262,9 @@ export function collectWoundTraitEffects({ actor = null, target = null, particip
  * Début et fin de Round, fin de Tour. `phase` : `startOfRound` (Stupide, Increvable), `endOfRound` (Instable), `endOfTurn` (levée du tour perdu de `actorId`).
  * `turnIndex` : numéro du Tour qui s'achève (`endOfTurn`) ou du premier Tour du Round qui s'ouvre (`startOfRound`).
  * `engagedIdsOf(id)` : engagés du participant sur le plateau. `inputs[participantId][field]` : réponses aux demandes.
+ * `momentumOf(participant)` : Élan retenu pour Instable (par défaut `momentumCount`) ; le Tour V5 le lit avant les pertes de fin de Round.
  */
-export function collectRoundTraitEffects({ participants = [], phase, round = null, turnIndex = null, actorId = null, inputs = {}, engagedIdsOf = () => [] } = {}) {
+export function collectRoundTraitEffects({ participants = [], phase, round = null, turnIndex = null, actorId = null, inputs = {}, engagedIdsOf = () => [], momentumOf = momentumCount } = {}) {
   const out = newOut();
   const scope = `r${round}:${phase}`;
   if (phase === 'endOfTurn') {
@@ -272,7 +282,7 @@ export function collectRoundTraitEffects({ participants = [], phase, round = nul
 
     if (phase === 'endOfRound' && hasState(person, 'unstable') && !isDead(person) && Number(person.hp) > 0) {
       const engaged = [...new Set(engagedIdsOf(person.id) || [])].map(id => participants.find(row => row.id === id)).filter(Boolean);
-      const plan = planUnstableEndOfRound(person, { engaged: engaged.length > 0, enemyMomentum: Math.max(0, ...engaged.map(momentumCount)), ownMomentum: momentumCount(person) });
+      const plan = planUnstableEndOfRound(person, { engaged: engaged.length > 0, enemyMomentum: Math.max(0, ...engaged.map(momentumOf)), ownMomentum: momentumOf(person) });
       if (!plan.available) { out.unresolved.push(...plan.unresolved); continue; }
       if (!plan.damage) continue;
       out.patches.push({ type: 'wounds', participantId: person.id, amount: plan.damage.amount, cause: 'unstable' });

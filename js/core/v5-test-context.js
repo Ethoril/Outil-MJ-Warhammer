@@ -1,6 +1,7 @@
 import { normalizeState } from './effects.js';
 import { resolveV5TestModifiers, finalizeV5TestModifiers, resolveConditionPenaltyMix } from './v5-test-modifiers.js';
 import { PROFILE_CARAC_KEYS } from './carac-keys.js';
+import { isFlammable } from './trait-effects.js';
 
 const CHARACTERISTICS = new Set(PROFILE_CARAC_KEYS);
 const TALENT_MARKERS = new Set(['talent-active', 'talent-pending']);
@@ -205,6 +206,9 @@ export function resolveV5ConditionTestContext(actor, context = {}) {
     slModifiers.push({ id: 'conditions:highest-sl', label: `Malus d’État maximal (${label})`, amount: -slPenalty });
   }
   disadvantageSources.push(...mix.disadvantages);
+  // Inflammable (L07, D17) : −2 DR au seul Test pour éviter d'acquérir Enflammé (`avoidsCondition`), jamais au retrait par Athlétisme.
+  if (typeof context.avoidsCondition === 'string' && ALIASES.get(fold(context.avoidsCondition)) === 'enflamme' && isFlammable(actor))
+    slModifiers.push({ id: 'trait:flammable', label: 'Inflammable : Test pour éviter Enflammé', amount: -2 });
 
   // MJ 09/11 CA13 : séquelles durables du calcul commun (lignes `durable`, qu'aucun plafond n'efface) ; la Caractéristique perdue
   // est rendue en `scoreDelta`, à ajouter au score du Test. Deux yeux perdus : la question de la vue, si l'appelant ne l'a pas tranchée.

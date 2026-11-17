@@ -12,6 +12,8 @@ import { advanceGameClock, createGameClock, deriveTurnPhasePlan, readCombatPosit
 import { expireDivineAtClock } from './v5-divine-store.js';
 import { resolveV5ConditionTestContext } from './v5-test-context.js';
 import { v5CombatActionClock } from './v5-resources.js';
+import { collectRoundTraitEffects, applyTraitPatches, momentumCount } from './trait-effects.js';
+import { engagedWith } from './engagements.js';
 
 const kinds = { fireRoll: 'd10', bleedingDeathRoll: 'd10', fireCriticalRoll: 'd100', bleedingEnduranceTest: 'test', poisonEnduranceTest: 'test', recoveryTest: 'test', currentWounds: 'manual' };
 function brokenEscapeTurnGate(state){
@@ -107,8 +109,19 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
       return updated;
     });
   };
+  // Effets de Traits d'office (D5 b) : demandes dans `requests`, patches appliqués dans ce même état, donc un seul commit et un seul ↶.
+  const traitPlans = [], traitReminders = [];
+  const runTraits = (phase, row, extra = {}) => {
+    const out = collectRoundTraitEffects({ participants, phase, round: row.round, turnIndex: row.turnIndex, actorId: row.actorId, inputs, ...extra });
+    if (out.patches.length) participants = applyTraitPatches(participants, out.patches);
+    for (const request of out.requests) requests.push({ ...request, participantName: request.participantName ?? participants.find(row => row.id === request.participantId)?.name });
+    effectLogs.push(...out.logs);
+    traitPlans.push(...out.plans.map(plan => ({ ...plan, phase })));
+    traitReminders.push(...out.unresolved);
+  };
   runPhase('endOfTurn', phaseRows('endOfTurn'));
   const ending=phaseRow('endOfTurn');
+  runTraits('endOfTurn', ending);
   const endedSpells=roundSpellEffects(participants,ending.phase,ending.round,inputs,ending.actorId);participants=endedSpells.participants;requests.push(...endedSpells.requests);effectLogs.push(...endedSpells.logs);noteTests(endedSpells);
   const expiry=phaseRow('expiry');
   const closingSpells=roundSpellEffects(participants,expiry.phase,expiry.round,inputs,expiry.actorId);participants=closingSpells.participants;requests.push(...closingSpells.requests);effectLogs.push(...closingSpells.logs);noteTests(closingSpells);
@@ -121,8 +134,13 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     const endRound=phaseRows('endOfRound').at(-1),startRound=phaseRow('startOfRound');
     const roundSpells=row=>{const spells=roundSpellEffects(participants,row.phase,row.round,inputs,row.actorId); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);noteTests(spells);};
     roundSpells(endRound);
+    // Instable : l'Élan se lit tel qu'il est à la fin du Round, avant que les pertes de fin de Round ne le fassent tomber.
+    const momentumAtRoundEnd = new Map(participants.map(participant => [participant.id, momentumCount(participant)]));
     runPhase('endOfRound', phaseRows('endOfRound'));
+    runTraits('endOfRound', endRound, { engagedIdsOf: id => engagedWith({ participants }, participants, id),
+      momentumOf: participant => momentumAtRoundEnd.get(participant.id) ?? momentumCount(participant) });
     roundSpells(startRound);
+    runTraits('startOfRound', startRound);
   }
   if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
   toPosition = { ...fromPosition, round: transition.round, turnIndex: turn + 1, currentActorId: transition.currentActorId };
@@ -174,5 +192,6 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   }
   return { status: uniqueRequests.length ? 'requires-input' : 'ready', ready: !uniqueRequests.length,
     baseRevision: before.localRevision || 0, inputs: structuredClone(inputs), requests: uniqueRequests, receipts, transition, phases: clockResult.validatedPhases, clockReceipt: clockResult.receipt, state: stateAfter,
+    ...(traitPlans.length ? { traitPlans } : {}), ...(traitReminders.length ? { traitReminders: [...new Set(traitReminders)] } : {}),
     performedTests: [...new Map(performedTests.map(test => [JSON.stringify([test.participantId,test.testKey]),test])).values()] };
 }
