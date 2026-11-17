@@ -8,6 +8,7 @@ import { renderFicheDetails } from './fiche-details.js';
 import { resolveKeyword } from '../core/reference-catalog.js';
 import { contextMessage } from './messages.js';
 import { createKeywordPicker } from './keyword-picker.js';
+import { createOptionalTraitsPanel, reserveMountCandidates, mountTemplateFromProfile } from './optional-traits-panel.js';
 import { exportProfilesJson } from '../core/json-profile-export.js';
 import { buildReserveProfileFromBestiary } from '../core/bestiary-profiles.js';
 import { sharedBestiaryLoader } from '../core/bestiary-loader.js';
@@ -146,8 +147,20 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
       if (!wanted && !all.checked) return;
       loadBestiary(all.checked).then(rows => {
         results.textContent = '';
+        // Profils de Réserve cochés « Dressé (Monture) » (D24) : copiés avec leurs coches.
+        const fromReserve = reserveMountCandidates(Store.listProfiles(), { search: text.value || '', excludeId: mountSubjectId });
+        for (const profile of fromReserve) {
+          const pick = document.createElement('button'); pick.type = 'button'; pick.className = 'ghost tiny form-mount-pick form-mount-pick-reserve';
+          pick.textContent = `${profile.name} (Réserve, Monture cochée)`;
+          pick.addEventListener('click', () => {
+            const template = mountTemplateFromProfile(profile);
+            const profileId = mountSubjectId;
+            settle(Store.setProfileMount(profileId, { template, bestiaryId: profile.extensions?.v5?.bestiary?.id || null, name: template.name }), 'Monture').then(() => { text.value = ''; results.textContent = ''; setMountSubject(Store.getProfile(profileId)); showToast(`Monture : ${template.name}`, 'success'); });
+          });
+          results.append(pick);
+        }
         const found = rows.filter(row => (all.checked || isMountCandidate(row)) && (!wanted || [row.name, row.nameFr].some(value => normalizeSearchText(value || '').includes(wanted)))).slice(0, 24);
-        if (!found.length) { results.append(Object.assign(document.createElement('span'), { className: 'muted', textContent: all.checked ? 'Aucune créature.' : 'Aucune monture dressée : cochez « tout le bestiaire ».' })); return; }
+        if (!found.length && !fromReserve.length) { results.append(Object.assign(document.createElement('span'), { className: 'muted', textContent: all.checked ? 'Aucune créature.' : 'Aucune monture dressée : cochez « tout le bestiaire ».' })); return; }
         for (const row of found) {
           const pick = document.createElement('button'); pick.type = 'button'; pick.className = 'ghost tiny form-mount-pick';
           pick.textContent = `${row.nameFr || row.name} (${row.book} p. ${row.page})`;
@@ -209,6 +222,22 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     renderMountImage(mountSubjectId ? declared : null);
   }
 
+  // Traits optionnels (D25 : tout profil sauf les PJ) : panneau inséré dans le formulaire, rempli à l'édition (setOptionalSubject).
+  let optionalPanel = null;
+  const bestiaryRecordOf = async profile => {
+    const printed = profile?.extensions?.v5?.bestiary;
+    if (!printed?.id || !printed?.book) return null;
+    const rows = await bestiaryLoader.book(printed.book);
+    return rows.find(row => row.id === printed.id) || null;
+  };
+  function ensureOptionalPanel() {
+    const f = DOM.reserve.form;
+    if (!f || optionalPanel) return;
+    optionalPanel = createOptionalTraitsPanel({ Store, loadRecord: bestiaryRecordOf });
+    f.insertBefore(optionalPanel.element, f.querySelector('.actions'));
+  }
+  const setOptionalSubject = profile => { ensureOptionalPanel(); return optionalPanel?.setSubject(profile); };
+
   function ensureArmorSides() {
     const f = DOM.reserve.form;
     if (!f || f.querySelector('[name=armor_rightArm]')) return;
@@ -264,6 +293,8 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
       children.push(empty);
     }
     DOM.reserve.list.replaceChildren(...children);
+    // Annulation, rechargement : le panneau des Traits optionnels relit le profil ouvert.
+    optionalPanel?.refresh();
   }
 
   function renderReserveGroup(groupName, profiles) {
@@ -340,6 +371,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     imageRevision++; imageExtensions = p.extensions || null; tokenLibraryImage = normalizeLibraryImage(p.tokenLibraryImage) ?? null; tokenImage = p.tokenImage || null; renderTokenImage();
     if (btnSubmit) btnSubmit.disabled = false;
     setMountSubject(p);
+    setOptionalSubject(p);
     ensureArmorSides();
     const f = DOM.reserve.form;
     lockSourceFields(p);
@@ -374,6 +406,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     imageRevision++; imageExtensions = null; tokenLibraryImage = null; setTokenImage(null);
     if (btnSubmit) btnSubmit.disabled = false;
     setMountSubject(null);
+    setOptionalSubject(null);
     ensureArmorSides();
     lockSourceFields();
     DOM.reserve.form.reset();
