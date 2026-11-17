@@ -10,7 +10,7 @@ const need = (field, label) => ({ field, label });
 const isText = value => typeof value === 'string' && value.trim() !== '';
 const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
 
-const specialStateKeys = new Set(['fearImmune', 'terrorAsFear', 'ignoreConditionPenalties', 'cannotRaiseUndead', 'doesNotBreathe', 'orderlyDisengage']);
+const specialStateKeys = new Set(['fearImmune', 'terrorAsFear', 'ignoreConditionPenalties', 'cannotRaiseUndead', 'doesNotBreathe', 'orderlyDisengage', 'fearTerrorImmunity']);
 // Talents dont le moteur lit un contrat mécanique : seuls ceux-là sont injectés pour de vrai (les autres restent une étiquette).
 export const injectableTalentIds = new Set(['talent-fearless', 'talent-strong-legs', 'talent-menacing', 'talent-catfall', 'talent-drilled', 'talent-hatred', 'talent-frenzy', 'talent-strike-to-injure']);
 const weaponFacts = input => input?.facts?.weapon;
@@ -125,8 +125,8 @@ const handlers = {
       if (effect.damage !== undefined && !Number.isFinite(effect.damage)) return 'weapon-bonus : damage doit être un nombre.';
       if (effect.replaceDamageBonus !== undefined && !Number.isFinite(effect.replaceDamageBonus)) return 'weapon-bonus : replaceDamageBonus doit être un nombre.';
       if (effect.damageFrom !== undefined && !isText(effect.damageFrom)) return 'weapon-bonus : damageFrom doit nommer une caractéristique.';
-      for (const key of ['qualities', 'hitConditions']) if (effect[key] !== undefined && (!Array.isArray(effect[key]) || !effect[key].every(isText))) return `weapon-bonus : ${key} doit être une liste de textes.`;
-      return ['magical', 'qualities', 'hitConditions', 'damage', 'damageFrom', 'replaceDamageBonus', 'damageFormula', 'value'].some(key => effect[key] !== undefined) ? null : 'weapon-bonus exige au moins un bonus.';
+      for (const key of ['qualities', 'hitConditions', 'removeQualities']) if (effect[key] !== undefined && (!Array.isArray(effect[key]) || !effect[key].every(isText))) return `weapon-bonus : ${key} doit être une liste de textes.`;
+      return ['magical', 'qualities', 'removeQualities', 'hitConditions', 'damage', 'damageFrom', 'replaceDamageBonus', 'damageFormula', 'value'].some(key => effect[key] !== undefined) ? null : 'weapon-bonus exige au moins un bonus.';
     },
     // Contrôle souple (A10) : l'arme désignée est demandée, sa classe (marteau, hache…) n'est jamais vérifiée ni bloquante.
     needs: (effect, { input } = {}) => effect.designatedWeapon === true && !isText(weaponFacts(input)?.equipmentId)
@@ -138,6 +138,7 @@ const handlers = {
       ...(Number.isFinite(effect.replaceDamageBonus) ? { replaceDamageBonus: effect.replaceDamageBonus } : {}),
       ...(effect.damageFormula ? { damageFormula: effect.damageFormula } : {}),
       ...(effect.qualities?.length ? { qualities: [...effect.qualities] } : {}),
+      ...(effect.removeQualities?.length ? { removeQualities: [...effect.removeQualities] } : {}),
       ...(effect.hitConditions?.length ? { hitConditions: [...effect.hitConditions] } : {}),
       ...(effect.onWoundsOnly === true ? { onWoundsOnly: true } : {}),
       ...(effect.unarmedOnly === true ? { unarmedOnly: true } : {}),

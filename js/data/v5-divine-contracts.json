@@ -2526,7 +2526,7 @@
     {
       "id": "divine:miracle:solkan:fury-of-the-righteous-sun",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. « Magic missile with Damage of +2 » : mécanique de projectile magique V4 non convertie (dés, PA, TB non précisés), laissée au MJ. Le livre ne précise pas si la zone est centrée sur le prêtre ou sur un point visé à portée : lue comme un point à portée.",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. « Magic missile with Damage of +2 » : lu comme des dégâts ordinaires de 2, BE et PA appliqués (décision du MJ, Q16). Le livre ne précise pas si la zone est centrée sur le prêtre ou sur un point visé à portée : lue comme un point à portée.",
       "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
@@ -2736,7 +2736,7 @@
     {
       "id": "divine:miracle:taal:tooth-and-claw",
       "catalogueEntry": null,
-      "v5Summary": "V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : clause manuelle, le moteur ne marque pas les mains nues Inoffensives.",
+      "v5Summary": "V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : second bonus d'arme réservé aux mains nues, qui retire la qualité Inoffensive.",
       "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
@@ -2811,7 +2811,7 @@
     {
       "id": "divine:miracle:ulric:heart-of-the-wolf",
       "catalogueEntry": null,
-      "v5Summary": "L'état spécial fearImmune du moteur couvre la Peur ; la Terreur et les effets d'Intimidation/Effrayant ne sont pas confirmés couverts, d'où le rappel manuel. Le prêtre n'est pas dit compté parmi les alliés.",
+      "v5Summary": "Le drapeau fearTerrorImmunity du moteur couvre la Peur et la Terreur ; les effets d'Intimidation/Effrayant restent un rappel manuel. Le prêtre n'est pas dit compté parmi les alliés.",
       "status": "assisted",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
@@ -2826,8 +2826,8 @@
     {
       "id": "divine:miracle:ulric:hoarfrost-thews",
       "catalogueEntry": null,
-      "v5Summary": "Nom français « Muscles givrés » : « thews » (muscles, force) n'a pas de forme établie dans le glossaire du dépôt. Aucun état spécial d'immunité au froid n'existe dans le moteur.",
-      "status": "manual",
+      "v5Summary": "Nom français « Muscles givrés » : « thews » (muscles, force) n'a pas de forme établie dans le glossaire du dépôt. L'immunité passe par le Trait Immunité (Froid) lu par le filtre d'attaque (étiquette froid) ; le climat reste un rappel (tri du MJ du 17/11/2026).",
+      "status": "assisted",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
         "fileSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
@@ -23517,7 +23517,7 @@
         "specialization": "Solkan"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. « Magic missile with Damage of +2 » : mécanique de projectile magique V4 non convertie (dés, PA, TB non précisés), laissée au MJ. Le livre ne précise pas si la zone est centrée sur le prêtre ou sur un point visé à portée : lue comme un point à portée.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. « Magic missile with Damage of +2 » : lu comme des dégâts ordinaires de 2, BE et PA appliqués (décision du MJ, Q16). Le livre ne précise pas si la zone est centrée sur le prêtre ou sur un point visé à portée : lue comme un point à portée.",
       "params": {
         "range": {
           "kind": "characteristic-bonus",
@@ -23573,6 +23573,13 @@
           "duration": {
             "unit": "instant"
           }
+        },
+        {
+          "type": "ordinary-damage",
+          "fixed": 2,
+          "duration": {
+            "unit": "instant"
+          }
         }
       ],
       "targetRules": [],
@@ -23590,8 +23597,8 @@
         },
         {
           "id": "missile",
-          "mode": "manual",
-          "text": "La lumière agit comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche.",
+          "mode": "engine",
+          "text": "La lumière agit comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche : dégâts ordinaires de 2, réduits par le Bonus d’Endurance et les PA de la localisation (Q16).",
           "sourceRef": "v5-fury-of-the-righteous-sun"
         },
         {
@@ -25541,7 +25548,7 @@
         "specialization": "Taal"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : clause manuelle, le moteur ne marque pas les mains nues Inoffensives.",
+      "sourceDelta": "V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : second bonus d'arme réservé aux mains nues, qui retire la qualité Inoffensive.",
       "params": {
         "range": {
           "kind": "self"
@@ -25609,6 +25616,19 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "weapon-bonus",
+          "unarmedOnly": true,
+          "removeQualities": [
+            "undamaging"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -25632,8 +25652,8 @@
         },
         {
           "id": "unarmed-damaging",
-          "mode": "manual",
-          "text": "Pendant la durée, les attaques à mains nues du prêtre ne comptent plus comme Inoffensives (Undamaging) : à appliquer au jet.",
+          "mode": "engine",
+          "text": "Pendant la durée, les attaques à mains nues du prêtre ne comptent plus comme Inoffensives (Undamaging) : la qualité est levée au jet.",
           "sourceRef": "v5-tooth-and-claw"
         }
       ],
@@ -26145,7 +26165,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "L'état spécial fearImmune du moteur couvre la Peur ; la Terreur et les effets d'Intimidation/Effrayant ne sont pas confirmés couverts, d'où le rappel manuel. Le prêtre n'est pas dit compté parmi les alliés.",
+      "sourceDelta": "Le drapeau fearTerrorImmunity du moteur couvre la Peur et la Terreur ; les effets d'Intimidation/Effrayant restent un rappel manuel. Le prêtre n'est pas dit compté parmi les alliés.",
       "params": {
         "range": {
           "kind": "self"
@@ -26201,6 +26221,7 @@
         {
           "type": "special-state",
           "fearImmune": true,
+          "fearTerrorImmunity": true,
           "duration": {
             "value": null,
             "sourceParameter": "params.duration",
@@ -26232,8 +26253,14 @@
         },
         {
           "id": "terror-and-skills",
+          "mode": "engine",
+          "text": "Immunité à la Terreur pendant la durée (drapeau d'immunité à la Peur et à la Terreur).",
+          "sourceRef": "v5-heart-of-the-wolf"
+        },
+        {
+          "id": "intimidation",
           "mode": "manual",
-          "text": "Immunité à la Terreur et aux effets d'Intimidation ou d'Effrayant : rappel MJ.",
+          "text": "Immunité aux effets d'Intimidation ou d'Effrayant : rappel MJ.",
           "sourceRef": "v5-heart-of-the-wolf"
         },
         {
@@ -26261,7 +26288,7 @@
       "catalogueName": "Muscles givrés",
       "canonicalName": "Hoarfrost Thews",
       "deity": "Ulric",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "WFRP_Power_Behind_the_Throne_Companion.pdf",
         "fileSha256": "df27ea115b6368e5185492a64ebf34691aa99ed9f5e7b0fcdfc33120bcb49427",
@@ -26286,7 +26313,7 @@
         "specialization": "Ulric"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Nom français « Muscles givrés » : « thews » (muscles, force) n'a pas de forme établie dans le glossaire du dépôt. Aucun état spécial d'immunité au froid n'existe dans le moteur.",
+      "sourceDelta": "Nom français « Muscles givrés » : « thews » (muscles, force) n'a pas de forme établie dans le glossaire du dépôt. L'immunité passe par le Trait Immunité (Froid) lu par le filtre d'attaque (étiquette froid) ; le climat reste un rappel (tri du MJ du 17/11/2026).",
       "params": {
         "range": {
           "kind": "self"
@@ -26328,7 +26355,20 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "grant-trait",
+          "traits": [
+            "Immunité (Froid)"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "hours",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Hoarfrost Thews",
@@ -26338,13 +26378,19 @@
       "clauses": [
         {
           "id": "cold-immunity",
+          "mode": "engine",
+          "text": "Trait Immunité (Froid) pour le prêtre : les dégâts d'une attaque étiquetée froid sont annulés.",
+          "sourceRef": "v5-hoarfrost-thews"
+        },
+        {
+          "id": "climate",
           "mode": "manual",
-          "text": "Immunité au froid de toute source pour le prêtre.",
+          "text": "Climat, intempéries et Tests contre le froid ne sont pas calculés : le MJ en tient compte (usage hors combat).",
           "sourceRef": "v5-hoarfrost-thews"
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité heures.",
           "sourceRef": "v5-hoarfrost-thews"
         }
@@ -26352,7 +26398,7 @@
       "needsInput": [
         {
           "field": "cold-sources",
-          "label": "Sources de froid ignorées (États, Tests, dégâts) : décision MJ selon la situation."
+          "label": "Attaques de froid : le MJ précise au besoin l'étiquette froid de l'attaque ; le climat et les Tests contre le froid ne sont pas calculés."
         }
       ]
     },
@@ -28164,5 +28210,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:e444c8e94b5aaf56f039e3c688f0afb5dc812c1a198ee4f93ad0048802c4bb50"
+  "sourceFingerprint": "sha256:bbbf3886ecd4fc613deb79d53083391f3ded4ec592e17e575efc7024768a3ad5"
 }

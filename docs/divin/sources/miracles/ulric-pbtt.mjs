@@ -101,7 +101,7 @@ export const miracles = [
     effect: null,
     effects: [
       { type: 'remove-condition', key: 'Broken', amount: 'all', duration: { unit: 'instant' } },
-      { type: 'special-state', fearImmune: true }
+      { type: 'special-state', fearImmune: true, fearTerrorImmunity: true }
     ],
     targetRules: ['ally'],
     needsInput: [
@@ -111,10 +111,11 @@ export const miracles = [
     clauses: [
       { id: 'remove-broken', mode: 'engine', text: 'Les alliés dans la zone perdent tous leurs États Brisé.' },
       { id: 'fear-immunity', mode: 'engine', text: 'Immunité à la Peur pendant la durée.' },
-      { id: 'terror-and-skills', mode: 'manual', text: 'Immunité à la Terreur et aux effets d\'Intimidation ou d\'Effrayant : rappel MJ.' },
+      { id: 'terror-and-skills', mode: 'engine', text: 'Immunité à la Terreur pendant la durée (drapeau d\'immunité à la Peur et à la Terreur).' },
+      { id: 'intimidation', mode: 'manual', text: 'Immunité aux effets d\'Intimidation ou d\'Effrayant : rappel MJ.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
-    sourceDelta: 'L\'état spécial fearImmune du moteur couvre la Peur ; la Terreur et les effets d\'Intimidation/Effrayant ne sont pas confirmés couverts, d\'où le rappel manuel. Le prêtre n\'est pas dit compté parmi les alliés.'
+    sourceDelta: 'Le drapeau fearTerrorImmunity du moteur couvre la Peur et la Terreur ; les effets d\'Intimidation/Effrayant restent un rappel manuel. Le prêtre n\'est pas dit compté parmi les alliés.'
   },
   {
     name: 'Muscles givrés',
@@ -122,18 +123,19 @@ export const miracles = [
     printedPage: 50,
     summary: 'Ulric refroidit votre corps et le givre se forme sur votre chair. Vous devenez immunisé au froid, quelle qu\'en soit la source.',
     params: { range: self, targets: self, duration: felHours },
-    status: 'manual',
+    status: 'assisted',
     effect: null,
-    effects: [],
+    effects: [{ type: 'grant-trait', traits: ['Immunité (Froid)'] }],
     targetRules: [],
     needsInput: [
-      { id: 'cold-sources', text: 'Sources de froid ignorées (États, Tests, dégâts) : décision MJ selon la situation.' }
+      { id: 'cold-sources', text: 'Attaques de froid : le MJ précise au besoin l\'étiquette froid de l\'attaque ; le climat et les Tests contre le froid ne sont pas calculés.' }
     ],
     clauses: [
-      { id: 'cold-immunity', mode: 'manual', text: 'Immunité au froid de toute source pour le prêtre.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité heures.' }
+      { id: 'cold-immunity', mode: 'engine', text: 'Trait Immunité (Froid) pour le prêtre : les dégâts d\'une attaque étiquetée froid sont annulés.' },
+      { id: 'climate', mode: 'manual', text: 'Climat, intempéries et Tests contre le froid ne sont pas calculés : le MJ en tient compte (usage hors combat).' },
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité heures.' }
     ],
-    sourceDelta: 'Nom français « Muscles givrés » : « thews » (muscles, force) n\'a pas de forme établie dans le glossaire du dépôt. Aucun état spécial d\'immunité au froid n\'existe dans le moteur.'
+    sourceDelta: 'Nom français « Muscles givrés » : « thews » (muscles, force) n\'a pas de forme établie dans le glossaire du dépôt. L\'immunité passe par le Trait Immunité (Froid) lu par le filtre d\'attaque (étiquette froid) ; le climat reste un rappel (tri du MJ du 17/11/2026).'
   },
   {
     name: 'Tempête de glace',

@@ -77,7 +77,7 @@ export const miracles = [
   summary: 'Le prêtre implore Solkan d’une illumination totale : une lumière aveuglante tombe du soleil. Tout ce qui se trouve à Bonus de Sociabilité mètres reçoit autant d’États Aveuglé que son Bonus de Sociabilité. La lumière brûlante agit aussi comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche.',
   params: { range: soc('characteristic-bonus', 'yards'), targets: area, duration: { kind: 'instant' } },
   status: 'assisted', effect: null,
-  effects: [{ type: 'condition', key: 'Blinded', level: 1, strengthFrom: { kind: 'characteristic-bonus', characteristic: 'Soc' } }],
+  effects: [{ type: 'condition', key: 'Blinded', level: 1, strengthFrom: { kind: 'characteristic-bonus', characteristic: 'Soc' } }, { type: 'ordinary-damage', fixed: 2 }],
   targetRules: [],
   needsInput: [
    { id: 'area-center', text: 'Point central de la zone dans la portée (Bonus de Sociabilité mètres).' },
@@ -86,11 +86,11 @@ export const miracles = [
   ],
   clauses: [
    { id: 'blinded', mode: 'engine', text: 'Chaque créature de la zone gagne un nombre d’États Aveuglé égal au Bonus de Sociabilité du prêtre.' },
-   { id: 'missile', mode: 'manual', text: 'La lumière agit comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche.' },
+   { id: 'missile', mode: 'engine', text: 'La lumière agit comme un projectile magique de Dégâts +2 sur tout ce qu’elle touche : dégâts ordinaires de 2, réduits par le Bonus d’Endurance et les PA de la localisation (Q16).' },
    { id: 'area', mode: 'assisted', text: 'Zone de rayon égal au Bonus de Sociabilité en mètres ; centre à portée Bonus de Sociabilité mètres.' },
    purity
   ],
-  sourceDelta: delta + ' « Magic missile with Damage of +2 » : mécanique de projectile magique V4 non convertie (dés, PA, TB non précisés), laissée au MJ. Le livre ne précise pas si la zone est centrée sur le prêtre ou sur un point visé à portée : lue comme un point à portée.'
+  sourceDelta: delta + ' « Magic missile with Damage of +2 » : lu comme des dégâts ordinaires de 2, BE et PA appliqués (décision du MJ, Q16). Le livre ne précise pas si la zone est centrée sur le prêtre ou sur un point visé à portée : lue comme un point à portée.'
  },
  {
   name: 'Lumière de stase', canonicalName: 'Light of Stasis', printedPage: 55,

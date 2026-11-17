@@ -124,15 +124,16 @@ export const miracles = [
     effect: null,
     effects: [
       { type: 'grant-actions', actions: [{ id: 'bite', name: 'Morsure', damageFormula: 'BF+3' }] },
-      { type: 'weapon-bonus', magical: true }
+      { type: 'weapon-bonus', magical: true },
+      { type: 'weapon-bonus', unarmedOnly: true, removeQualities: ['undamaging'] }
     ],
     targetRules: [],
     needsInput: [],
     clauses: [
       { id: 'bite', mode: 'engine', text: 'Trait Morsure (Bonus de Force + 3) pendant la durée.' },
       { id: 'magical', mode: 'engine', text: 'Trait Magique : les attaques de mêlée du prêtre sont Magiques (arbitrage MJ : toutes les attaques de mêlée, pas le tir).' },
-      { id: 'unarmed-damaging', mode: 'manual', text: 'Pendant la durée, les attaques à mains nues du prêtre ne comptent plus comme Inoffensives (Undamaging) : à appliquer au jet.' }
+      { id: 'unarmed-damaging', mode: 'engine', text: 'Pendant la durée, les attaques à mains nues du prêtre ne comptent plus comme Inoffensives (Undamaging) : la qualité est levée au jet.' }
     ],
-    sourceDelta: 'V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : clause manuelle, le moteur ne marque pas les mains nues Inoffensives.'
+    sourceDelta: 'V5 v3 : Traits Morsure et Magique, plus de Trait Arme (BF+4). La portée exacte du Trait Magique (attaques de ces Traits ou toutes) reste lue comme toutes les attaques de mêlée (arbitrage MJ). Mains nues plus Inoffensives : second bonus d\'arme réservé aux mains nues, qui retire la qualité Inoffensive.'
   }
 ];
