@@ -240,6 +240,10 @@
    "completeDivinePenance/2",
    "previewDivineAbsolution/0",
    "resolveDivineImposedTest/2",
+   "setDivineZoneMembers/2",
+   "spendDivineCounter/2",
+   "pushDivineCounter/3",
+   "setDivineFlag/3",
    "applyDivineAbsolution/0",
    "setSanctifiedGround/0",
    "removeSanctifiedGround/1",
@@ -2274,6 +2278,26 @@
     "state": "ae772d01dc7b7eee"
    },
    {
+    "label": "sweep setDivineZoneMembers",
+    "result": "f6ccffb24947bbb4",
+    "state": "ae772d01dc7b7eee"
+   },
+   {
+    "label": "sweep spendDivineCounter",
+    "result": "f74f951d18c495c6",
+    "state": "ae772d01dc7b7eee"
+   },
+   {
+    "label": "sweep pushDivineCounter",
+    "result": "bfc48257703a9d34",
+    "state": "ae772d01dc7b7eee"
+   },
+   {
+    "label": "sweep setDivineFlag",
+    "result": "b6705409271024fa",
+    "state": "ae772d01dc7b7eee"
+   },
+   {
     "label": "sweep applyDivineAbsolution",
     "error": "Error: Aperçu d’absolution requis.",
     "state": "ae772d01dc7b7eee"
@@ -2976,6 +3000,10 @@
    "completeDivinePenance/2",
    "previewDivineAbsolution/0",
    "resolveDivineImposedTest/2",
+   "setDivineZoneMembers/2",
+   "spendDivineCounter/2",
+   "pushDivineCounter/3",
+   "setDivineFlag/3",
    "applyDivineAbsolution/0",
    "setSanctifiedGround/0",
    "removeSanctifiedGround/1",
@@ -5007,6 +5035,26 @@
    {
     "label": "sweep resolveDivineImposedTest",
     "result": "ec20fecb4426220d",
+    "state": "8b84d322c16bba67"
+   },
+   {
+    "label": "sweep setDivineZoneMembers",
+    "result": "f6ccffb24947bbb4",
+    "state": "8b84d322c16bba67"
+   },
+   {
+    "label": "sweep spendDivineCounter",
+    "result": "f74f951d18c495c6",
+    "state": "8b84d322c16bba67"
+   },
+   {
+    "label": "sweep pushDivineCounter",
+    "result": "bfc48257703a9d34",
+    "state": "8b84d322c16bba67"
+   },
+   {
+    "label": "sweep setDivineFlag",
+    "result": "b6705409271024fa",
     "state": "8b84d322c16bba67"
    },
    {

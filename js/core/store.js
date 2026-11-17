@@ -5102,6 +5102,10 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     },
     previewDivineAbsolution: divineApi.previewDivineAbsolution,
     resolveDivineImposedTest: divineApi.resolveDivineImposedTest,
+    setDivineZoneMembers: divineApi.setDivineZoneMembers,
+    spendDivineCounter: divineApi.spendDivineCounter,
+    pushDivineCounter: divineApi.pushDivineCounter,
+    setDivineFlag: divineApi.setDivineFlag,
     applyDivineAbsolution: divineApi.applyDivineAbsolution,
     async setSanctifiedGround(input={}){
       if(divineAuthority!=='MJ')throw new Error('Seul le MJ peut poser une terre sanctifiée.');
