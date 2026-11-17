@@ -184,6 +184,7 @@
     "sw-update-fresh-cache-browser.mjs": {"famille":"general","socle":true},
     "terminer-combat-browser.mjs": {"famille":"general","socle":true},
     "topbar-onglets-mobile-browser.mjs": {"famille":"ticket","chantier":"correctif"},
+    "traits-optionnels-browser.mjs": {"famille":"ticket","chantier":"traits-optionnels"},
     "u1-contre-verification-browser.mjs": {"famille":"general"},
     "u1-panneau-action-browser.mjs": {"famille":"general"},
     "u2-preserve-view.browser.mjs": {"famille":"general"},
