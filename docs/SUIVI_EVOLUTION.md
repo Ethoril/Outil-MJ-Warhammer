@@ -10,6 +10,20 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.51.0 — Traits optionnels des créatures et des montures (publiée le 17/11/2026)
+
+Cadrage et décisions du MJ du 17/11/2026 : `docs/specs/traits-optionnels/spec.md` (D1 à D26, CA1 à CA25), valeurs relues dans `valeurs-traits.md`, inventaire des 125 Traits dans `inventaire.md`.
+
+- **Panneau « Traits optionnels »** sur tout profil de Réserve sauf les PJ (`js/ui/optional-traits-panel.js`) : une case par Trait, dressage, attaque et pièce d’armure optionnels de la fiche ; « Ajouter un Trait » prend n’importe quel Trait du catalogue (recherche en français ou en anglais, paramètre exigé pour Peur, Taille, Dressé, Haine…). Le choix vaut pour les participants ajoutés ensuite ; ceux déjà en rencontre ne changent pas. ↶/↷, sauvegarde, export et import JSON (clé `traitsOptionnels`), synchronisation.
+- **Effets.** Un Trait coché agit comme le même Trait de base. Big, Brute, Clever, Cunning, Fast, Tough, Hardy et Dressé (Guerre) modifient le profil (valeurs de L11 et du Livre de base FR) ; Elite et Leader appliquent les modèles V5 Elite et Lieutenant (caractéristiques, compétences, Talents). Compétences, attaques et dégâts de mêlée suivent les caractéristiques. Blessures et Taille : différence de formule ajoutée aux Blessures imprimées. Le panneau montre « imprimé → modifié ».
+- **Règles de choix.** Un Trait déjà imprimé en base est grisé « déjà compté » et réputé compté dans le profil imprimé ; une seule Taille ; Leader refusé sur une créature Bestial.
+- **Rappels.** Tout Trait coché ou ajouté s’affiche au moins en rappel, sauf six que l’outil applique déjà lui-même (Taille, Régénération, Terreur, Caméléon, Furtif, Amphibie).
+- **Montures.** Un profil de Réserve coché « Dressé (Monture) » est proposé comme monture d’un PJ, copié avec ses coches ; « Mettre à jour les PJ » garde les coches si l’espèce ne change pas et dit leur perte sinon.
+- **Données.** Stubborn (« Têtu ») au catalogue et sur l’âne et la mule ; Dressé (Magie) du Demigryph ; dressages du Cheval de trait lourd. Catalogue généré `js/data/creature-trait-catalogue.js`, table `js/data/optional-trait-modifiers.js`.
+- Moteur : `js/core/optional-traits.js`, `js/core/store/api-optional-traits.js`.
+- Restes connus : noms des pièces d’armure optionnelles en anglais (pas de nom français dans les données) ; protection de l’armure cochée prouvée par test unitaire, pas par le parcours ; « Résistance à l’alcool » ne suit pas les modèles Elite et Lieutenant ; synchronisation prouvée sur une relecture simulée, pas contre un vrai compte ; `tools/build-bestiary-profiles.mjs --check` se lance sous Bash (sous PowerShell, l’extraction PDF altère un nom accentué).
+- Preuves : suite unitaire à la fusion (6628 + 221) ; tests `tests/unit/**/traits-optionnels-*.test.*` ; parcours `tests/traits-optionnels-browser.mjs` ; socle navigateur ; contre-vérification indépendante, huit constats dont six corrigés (un bloquant : l’armure cochée ne protégeait pas en combat), sans seconde relecture indépendante.
+
 ## 3.50.0 — Poursuite selon le Livre de base V5, image du pion des PJ (publiée le 17/11/2026)
 
 Cadrages et décisions du MJ des 16 et 17/11/2026 : `docs/specs/poursuite-v5/spec.md` (D1 à D24, CA1 à CA25) et `docs/specs/images-pions/spec.md` (CA16). Publiée avec la carte (test et contrat de liaison revus, aucun code changé).
