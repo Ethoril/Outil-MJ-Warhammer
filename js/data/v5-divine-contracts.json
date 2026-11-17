@@ -2107,7 +2107,7 @@
       "id": "divine:miracle:ranald:bamboozle",
       "catalogueEntry": null,
       "v5Summary": "Difficulté imprimée en pourcentage de la 4e édition (Hard -20), non convertie en DR ; le palier est conservé en anglais. Durée imprimée « 1 Round (maximum) » : encodée 1 Round fixe, le « maximum » étant laissé au MJ.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -2362,7 +2362,7 @@
       "id": "divine:miracle:shallya:balm-to-a-wounded-mind",
       "catalogueEntry": null,
       "v5Summary": "Le livre imprime « Challenging (+0 SL) » : traduit Intermédiaire (+0 DR). La résistance est écrite comme portant sur le sommeil; elle ne précise pas si elle protège aussi la suppression des Traits.",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -12803,6 +12803,36 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "imposed-test",
+          "appliesTo": "caster",
+          "label": "Effrayer l’Ennemi",
+          "test": {
+            "skill": "calm",
+            "slModifier": 0
+          },
+          "subjects": "enemies",
+          "when": "manual",
+          "once": true,
+          "onFailure": [
+            {
+              "type": "terror",
+              "rating": 1
+            }
+          ],
+          "onSuccess": [
+            {
+              "type": "terror",
+              "rating": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -12825,7 +12855,7 @@
         },
         {
           "id": "terror-test",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Tout ennemi qui voit le prêtre au lancement fait une fois pendant la durée le Test de Psychologie (Calme) de la Terreur (p.184, p.362) ; échec : États Brisé selon l’indice et les DR négatifs, plus la Peur de même indice (p.183).",
           "sourceRef": "v5-dismay-foe"
         },
@@ -18714,7 +18744,7 @@
       "canonicalName": "Bamboozle",
       "deity": "Ranald",
       "aspect": "Deceiver",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -18784,7 +18814,30 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "imposed-test",
+          "label": "Embobiner",
+          "test": {
+            "skill": "calm",
+            "slModifier": -2
+          },
+          "subjects": "targets",
+          "when": "cast",
+          "onFailure": [
+            {
+              "type": "marker",
+              "label": "obéit au prêtre au Round suivant (sans se nuire directement)"
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "targetNotes": [
         "taille Moyenne ou inférieure",
@@ -18798,7 +18851,7 @@
       "clauses": [
         {
           "id": "cool-resist",
-          "mode": "manual",
+          "mode": "engine",
           "text": "La cible obéit sauf si elle réussit un Test de Calme Hard (-20).",
           "sourceRef": "v5-bamboozle"
         },
@@ -21569,7 +21622,7 @@
       "catalogueName": "Baume pour un esprit blessé",
       "canonicalName": "Balm to a Wounded Mind",
       "deity": "Shallya",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -21634,7 +21687,40 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "imposed-test",
+          "label": "Baume pour un esprit blessé",
+          "test": {
+            "skill": "calm",
+            "slModifier": 0
+          },
+          "subjects": "targets",
+          "when": "cast",
+          "waivedBy": {
+            "fact": "consenting",
+            "label": "est consentante (aucun Test de résistance au sommeil)"
+          },
+          "onFailure": [
+            {
+              "type": "marker",
+              "label": "s’endort à la fin de l’effet jusqu’au lever du soleil, sauf dérangement"
+            }
+          ],
+          "onSuccess": [
+            {
+              "type": "marker",
+              "label": "résiste au sommeil"
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "minutes",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Balm to a Wounded Mind",
@@ -21656,7 +21742,7 @@
         },
         {
           "id": "resist",
-          "mode": "assisted",
+          "mode": "engine",
           "text": "Cible non consentante : Test de Calme Intermédiaire (+0 DR) pour résister au sommeil.",
           "sourceRef": "v5-balm-to-a-wounded-mind"
         },
@@ -26098,6 +26184,26 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "imposed-test",
+          "label": "Engourdissement",
+          "test": {
+            "skill": "resistance",
+            "slModifier": 0
+          },
+          "subjects": "targets",
+          "when": "cast",
+          "duration": {
+            "unit": "instant"
+          },
+          "onFailure": [
+            {
+              "type": "lost-turn",
+              "cause": "divine-defensive-only",
+              "label": "hors actions défensives"
+            }
+          ]
         }
       ],
       "targetRules": [],
@@ -26121,7 +26227,7 @@
         },
         {
           "id": "endurance-test",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Test d'Endurance Intermédiaire (+0) de la cible ; en cas d'échec, aucune action au prochain Tour sauf défensive.",
           "sourceRef": "v5-frostbite"
         }
@@ -28210,5 +28316,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:bbbf3886ecd4fc613deb79d53083391f3ded4ec592e17e575efc7024768a3ad5"
+  "sourceFingerprint": "sha256:a7314350cbee6636e18ce1a353a6a1f457b7f42592f331fb6b1d4a94a1f03c1c"
 }

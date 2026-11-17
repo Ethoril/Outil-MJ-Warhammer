@@ -14,6 +14,7 @@ import { resolveV5ConditionTestContext } from './v5-test-context.js';
 import { v5CombatActionClock } from './v5-resources.js';
 import { collectRoundTraitEffects, applyTraitPatches, momentumCount } from './trait-effects.js';
 import { engagedWith } from './engagements.js';
+import { collectDivineRecurringEffects } from './v5-divine-recurring.js';
 
 const kinds = { fireRoll: 'd10', bleedingDeathRoll: 'd10', fireCriticalRoll: 'd100', bleedingEnduranceTest: 'test', poisonEnduranceTest: 'test', recoveryTest: 'test', currentWounds: 'manual' };
 function brokenEscapeTurnGate(state){
@@ -119,6 +120,11 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     traitPlans.push(...out.plans.map(plan => ({ ...plan, phase })));
     traitReminders.push(...out.unresolved);
   };
+  // Tests imposés des prières (miracles narratifs, F2) : début de Round et début du Tour du porteur, même forme de demandes.
+  const runDivine = (phase, row) => {
+    const out = collectDivineRecurringEffects({ participants, phase, round: row.round, turnIndex: row.turnIndex, actorId: row.actorId, inputs });
+    participants = out.participants; requests.push(...out.requests); effectLogs.push(...out.logs);
+  };
   runPhase('endOfTurn', phaseRows('endOfTurn'));
   const ending=phaseRow('endOfTurn');
   runTraits('endOfTurn', ending);
@@ -141,6 +147,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
       momentumOf: participant => momentumAtRoundEnd.get(participant.id) ?? momentumCount(participant) });
     roundSpells(startRound);
     runTraits('startOfRound', startRound);
+    runDivine('startOfRound', startRound);
   }
   if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
   toPosition = { ...fromPosition, round: transition.round, turnIndex: turn + 1, currentActorId: transition.currentActorId };
@@ -148,6 +155,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   catch (error) { return { status: 'clock-conflict', ready: false, baseRevision: before.localRevision || 0, requests: [], error: error.message }; }
   runPhase('startOfTurn', phaseRows('startOfTurn'));
   const starting=phaseRow('startOfTurn');
+  runDivine('startOfTurn', starting);
   const startSpells=roundSpellEffects(participants,starting.phase,starting.round,inputs,starting.actorId);participants=startSpells.participants;requests.push(...startSpells.requests);effectLogs.push(...startSpells.logs);noteTests(startSpells);
   participants = shieldAtTurnStart(participants, transition.currentActorId);
   // Sorts à coups récurrents (Lames Azurées) : portés au début du Tour de l'adversaire désigné.

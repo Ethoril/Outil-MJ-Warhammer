@@ -31,6 +31,41 @@ function resolvedParamText(value){
  if(value.unit==='touch')return 'Contact';
  return unitText(value.value,value.unit);
 }
+const signedDr=value=>value>0?`+${value} DR`:value<0?`−${-value} DR`:'+0';
+const IMPOSED_SKILL_LABELS={calm:'Calme',resistance:'Endurance',athletics:'Athlétisme',willpower:'Volonté'};
+const IMPOSED_WHEN_LABELS={cast:'au lancement',round:'à chaque début de Round',turn:'à chaque Tour du porteur',move:'pour chaque Mouvement du porteur',manual:'au bouton, par sujet'};
+/**
+ * Test imposé d'une prière active (miracles narratifs, F2) : libellé, résultats connus, et pour `manual` un choix du sujet, un d100 et
+ * le bouton « Test imposé » (Store.resolveDivineImposedTest, appel tolérant : sans la commande, un message et rien d'autre).
+ */
+export function renderImposedTestControls(container,{layer,participants=[],Store={},onDone=()=>{}}={}){
+ const spec=layer?.imposedTest;if(!spec)return;
+ const nameOf=id=>participants.find(row=>row.id===id)?.name||id;
+ const box=node('div','workspace-divine-imposed');
+ const results=[...(spec.result?[[layer.targetId,spec.result,spec.outcome]]:[]),...Object.entries(spec.resolved||{}).map(([id,row])=>[id,row,row.outcome])];
+ box.append(node('p','workspace-muted',`${spec.label} : Test de ${IMPOSED_SKILL_LABELS[spec.test?.skill]||'?'} (${signedDr(spec.test?.slModifier??0)}) ${IMPOSED_WHEN_LABELS[spec.when]||''}`
+  +results.map(([id,row,outcome])=>` · ${nameOf(id)} : ${row.waived?'dispensé':row.success?'réussi':'raté'}${(outcome||[]).length?' — '+outcome.join(', '):''}`).join('')));
+ if(spec.when==='manual'){
+  const bearer=participants.find(row=>row.id===layer.targetId);
+  const campOf=row=>row?.camp||(row?.kind==='PJ'?'pj':'');
+  const done=new Set(Object.keys(spec.resolved||{}));
+  const eligible=participants.filter(row=>row.id!==bearer?.id&&!(spec.once&&done.has(row.id))&&(spec.subjects==='allies'?campOf(row)===campOf(bearer):spec.subjects==='enemies'?campOf(row)!==campOf(bearer):false));
+  const who=node('select');who.setAttribute('aria-label',`${spec.label} : sujet du Test`);who.append(new Option('Choisir le sujet…',''),...eligible.map(row=>new Option(row.name||row.id,row.id)));
+  const roll=node('input');roll.type='number';roll.min='1';roll.max='100';roll.setAttribute('aria-label',`${spec.label} : d100 du sujet`);
+  const message=node('p','workspace-field-error');message.hidden=true;
+  const go=node('button','workspace-primary',`Test imposé : ${spec.label}`);go.type='button';go.dataset.divineAction='imposed-test';
+  go.addEventListener('click',async()=>{
+   message.hidden=true;
+   const value=Number(roll.value);
+   if(!who.value||!Number.isSafeInteger(value)||value<1||value>100){message.textContent='Choisissez le sujet et saisissez un d100 de 1 à 100.';message.hidden=false;return;}
+   if(typeof Store.resolveDivineImposedTest!=='function'){message.textContent='Test imposé indisponible : commande absente de cette version.';message.hidden=false;return;}
+   try{const result=await Store.resolveDivineImposedTest(who.value,layer.id,{roll:value});if(result?.ok===false){message.textContent=result.error||'Test imposé non enregistré.';message.hidden=false;return;}onDone(result);}
+   catch(error){message.textContent=error?.message||'Test imposé non enregistré.';message.hidden=false;}
+  });
+  box.append(who,roll,go,message);
+ }
+ container.append(box);
+}
 // Un personnage sans culte, talent divin ni suivi divin n'affiche pas la section (bouton discret pour l'ouvrir).
 const hasDivineLife=actor=>Boolean(actor?.cult)||actorDivineCults(actor).length>0||Object.entries(actor?.extensions?.v5||{}).some(([key,value])=>/^divine/.test(key)&&(Array.isArray(value)?value.length>0:value&&typeof value==='object'?Object.values(value).some(item=>item):Boolean(value)));
 export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
@@ -394,6 +429,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    for(const id of [...new Set(active.map(layer=>layer.executionId))]){
     const layers=active.filter(layer=>layer.executionId===id),name=contracts.find(row=>row.id===layers[0].prayerId)?.name||'Prière';
     list.append(node('p','',[name+' · '+[...new Set(layers.map(layer=>layer.targetName))].join(', '),...layers.map(layer=>summonLayerLabel(layer,participants)).filter(Boolean)].join(' · ')));
+    for(const layer of layers.filter(row=>row.imposedTest))renderImposedTestControls(list,{layer,participants,Store,onDone:()=>{state.activePrayersOpen=true;state.preview=null;refresh();}});
     button(list,'Terminer '+name,()=>run(async()=>{state.activePrayersOpen=true;const result=await Store.endDivinePrayer(id,{reason:state.endReason,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Fin non enregistrée.');state.preview=null;}),false,'end');
    }content.append(list);
   }

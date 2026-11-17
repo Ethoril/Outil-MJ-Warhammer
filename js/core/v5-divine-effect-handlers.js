@@ -28,7 +28,7 @@
  *   d'un contrat le déclarent (hasImplicitCasterTarget), la prière n'exige ni cible explicite ni fait de portée : le prêtre est la cible.
  * Champ d'effet générique : `effect.appliesTo` 'caster' | 'targets' (défaut 'targets' ; `casterOnly` : alias de 'caster').
  * Durée : `{value, unit}` ou numérique résolue par le moteur `{base?, fromSuccessLevels?: true, unit}` (valeur = base + DR, ≥ 1).
- * Chaque tâche ajoute ses types dans SON module (-tests, -damage, -conditions, -gear, -summon) et dans la grammaire.
+ * Chaque tâche ajoute ses types dans SON module (-tests, -damage, -conditions, -gear, -summon, -imposed) et dans la grammaire.
  */
 import { healV5Wounds, acquireV5Conditions } from './v5-effects.js';
 import { knownMovement } from './v5-magic-effects.js';
@@ -39,6 +39,7 @@ import conditionHandlers, { whenProblem, whenNeeds, whenApplies, whenFactFields 
 import gearHandlers from './v5-divine-effects-gear.js';
 import testsHandlers from './v5-divine-effects-tests.js';
 import summonHandlers from './v5-divine-effects-summon.js';
+import imposedHandlers from './v5-divine-effects-imposed.js';
 import { CARAC_KEYS } from './carac-keys.js';
 
 const clone = value => structuredClone(value);
@@ -171,7 +172,7 @@ function strengthError(strengthFrom) {
   return null;
 }
 
-export const effectHandlers = Object.freeze({ ...coreHandlers, ...damageHandlers, ...conditionHandlers, ...gearHandlers, ...testsHandlers, ...summonHandlers });
+export const effectHandlers = Object.freeze({ ...coreHandlers, ...damageHandlers, ...conditionHandlers, ...gearHandlers, ...testsHandlers, ...summonHandlers, ...imposedHandlers });
 for (const type of effectTypes) if (!effectHandlers[type]) throw new Error(`Type d'effet divin sans gestionnaire : ${type}.`);
 for (const type of Object.keys(effectHandlers)) if (!effectTypes.has(type)) throw new Error(`Gestionnaire d'effet divin hors grammaire : ${type}.`);
 

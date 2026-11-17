@@ -30,7 +30,11 @@ export const miracles = [
     name: 'Embobiner', canonicalName: 'Bamboozle', printedPage: 24,
     summary: 'Le prêtre pose une énigme sur le libre arbitre dans un monde régi par les dieux : il abuse une créature de taille Moyenne ou plus petite, qui obéit sauf si elle réussit un Test de Calme Hard (-20). Le prêtre décide de ce qu’elle fait au Round suivant, tant qu’elle ne se nuit pas directement (indirectement est une autre affaire). Les créatures de Trait Démoniaque ou Mort-vivant ne peuvent pas être embobinées.',
     params: { range: { kind: 'fixed', value: 24, unit: 'yards' }, targets: one, duration: { kind: 'fixed', value: 1, unit: 'rounds' } },
-    status: 'manual', effect: null,
+    status: 'assisted', effect: null,
+    // Miracles narratifs L3 (Deft Steps p.24 relue) : Hard (-20) lu −2 DR (table des difficultés V5, p.131). Issue sans calcul :
+    // le prêtre décide de l'action ; la couche porte le libellé.
+    effects: [{ type: 'imposed-test', label: 'Embobiner', test: { skill: 'calm', slModifier: -2 }, subjects: 'targets', when: 'cast',
+      onFailure: [{ type: 'marker', label: 'obéit au prêtre au Round suivant (sans se nuire directement)' }] }],
     targetRules: ['taille Moyenne ou inférieure', 'ni Démoniaque ni Mort-vivant'],
     needsInput: [
       { id: 'target', text: 'Quelle créature est ciblée : de taille Moyenne ou moins, ni Démoniaque ni Mort-vivant ?' },
@@ -38,7 +42,7 @@ export const miracles = [
       { id: 'order', text: 'Quel ordre le prêtre donne-t-il pour le Round suivant (sans nuire directement à la cible) ?' }
     ],
     clauses: [
-      { id: 'cool-resist', mode: 'manual', text: 'La cible obéit sauf si elle réussit un Test de Calme Hard (-20).' },
+      { id: 'cool-resist', mode: 'engine', text: 'La cible obéit sauf si elle réussit un Test de Calme Hard (-20).' },
       { id: 'next-round', mode: 'manual', text: 'Le prêtre détermine l’action de la cible au Round suivant, sans qu’elle se nuise directement.' },
       { id: 'immune-types', mode: 'manual', text: 'Les créatures Démoniaques ou Mort-vivantes sont immunisées.' }
     ],

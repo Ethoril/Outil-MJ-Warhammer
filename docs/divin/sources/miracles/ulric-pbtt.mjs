@@ -79,7 +79,10 @@ export const miracles = [
     params: { range, targets: one, duration: { kind: 'special' } },
     status: 'assisted',
     effect: null,
-    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 } }],
+    // Miracles narratifs L3 (PBtT p.50 relue : Challenging (+0)) : le Test est saisi au lancement, sans couche (effet instantané).
+    effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 } },
+      { type: 'imposed-test', label: 'Engourdissement', test: { skill: 'resistance', slModifier: 0 }, subjects: 'targets', when: 'cast', duration: { unit: 'instant' },
+        onFailure: [{ type: 'lost-turn', cause: 'divine-defensive-only', label: 'hors actions défensives' }] }],
     targetRules: [],
     needsInput: [
       { id: 'endurance-test', text: 'Résultat du Test d\'Endurance Intermédiaire (+0) de la cible : échec = aucune action à son prochain Tour, hors actions défensives.' }
@@ -87,7 +90,7 @@ export const miracles = [
     clauses: [
       { id: 'damage', mode: 'engine', text: '1d10 Blessures ignorant Bonus d\'Endurance et PA (pas de bonus au DR, le texte n\'en donne pas).' },
       { id: 'haine-sacree', mode: 'engine', text: 'Dégâts de miracle : +2 si le prêtre a le talent Haine sacrée (traitement commun des Blessures directes du moteur).' },
-      { id: 'endurance-test', mode: 'manual', text: 'Test d\'Endurance Intermédiaire (+0) de la cible ; en cas d\'échec, aucune action au prochain Tour sauf défensive.' }
+      { id: 'endurance-test', mode: 'engine', text: 'Test d\'Endurance Intermédiaire (+0) de la cible ; en cas d\'échec, aucune action au prochain Tour sauf défensive.' }
     ],
     sourceDelta: 'Durée imprimée « Special (see below) » : la perte d\'action ne dure que le prochain Tour de la cible, encodée en special. Le texte ne dit pas si la Haine sacrée s\'applique : le moteur l\'ajoute aux Blessures directes comme pour les miracles du livre de base.'
   },

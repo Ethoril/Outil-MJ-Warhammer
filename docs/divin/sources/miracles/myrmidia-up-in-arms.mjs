@@ -36,14 +36,18 @@ export const miracles = [
     summary: 'Vous incarnez Myrmidia sous son aspect le plus courroucé et gagnez le Trait de créature Terreur 1 pendant le miracle.',
     params: { range: self, targets: self, duration: rounds(1) },
     status: 'assisted',
-    effects: [{ type: 'grant-trait', traits: ['Terreur (1)'] }],
+    // Miracles narratifs L3 (Up in Arms p.79 relue : Terror 1) : chaque ennemi témoin fait son Test une fois, saisi par le MJ au
+    // bouton du panneau divin ; issue par les services de Psychologie (Brisé selon l'indice et les DR négatifs, puis Peur, p.184).
+    effects: [{ type: 'grant-trait', traits: ['Terreur (1)'] },
+      { type: 'imposed-test', appliesTo: 'caster', label: 'Effrayer l’Ennemi', test: { skill: 'calm', slModifier: 0 }, subjects: 'enemies', when: 'manual', once: true,
+        onFailure: [{ type: 'terror', rating: 1 }], onSuccess: [{ type: 'terror', rating: 1 }] }],
     targetRules: [],
     needsInput: [
       { id: 'terror-witnesses', text: 'Quels ennemis voient le prêtre au lancement et doivent faire leur Test de Psychologie ?' }
     ],
     clauses: [
       { id: 'terror-trait', mode: 'engine', text: 'Le prêtre gagne le Trait Terreur (1) pendant la durée (étiquette sans Test automatique).' },
-      { id: 'terror-test', mode: 'manual', text: 'Tout ennemi qui voit le prêtre au lancement fait une fois pendant la durée le Test de Psychologie (Calme) de la Terreur (p.184, p.362) ; échec : États Brisé selon l’indice et les DR négatifs, plus la Peur de même indice (p.183).' },
+      { id: 'terror-test', mode: 'engine', text: 'Tout ennemi qui voit le prêtre au lancement fait une fois pendant la durée le Test de Psychologie (Calme) de la Terreur (p.184, p.362) ; échec : États Brisé selon l’indice et les DR négatifs, plus la Peur de même indice (p.183).' },
       { id: 'duration', mode: 'engine', text: 'Durée : 1 Round (+1 Round par tranche de +2 DR).' }
     ],
     sourceDelta: 'Le Trait est posé comme une étiquette, les Tests de Psychologie des ennemis restent joués par le MJ. Qui teste : tout ennemi qui voit le prêtre au lancement, même en plein combat (décision MJ), une fois pendant la durée. L’incohérence interne V5 p.184 / p.362 sur les Brisé par DR négatif s’applique telle quelle. Portée et cible « Vous » : seule la durée peut croître.'

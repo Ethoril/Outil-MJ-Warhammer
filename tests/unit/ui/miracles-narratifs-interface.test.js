@@ -1,0 +1,64 @@
+// L3 des miracles narratifs : bouton du Test imposé `manual` (Effrayer l'Ennemi, puis Portal's Threshold en L4) dans les prières
+// actives du panneau divin. Le DOM est un faux arbre ; un Store sans la commande ne fait rien planter.
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { renderImposedTestControls } from '../../../js/ui/v5-divine-panel.js';
+
+class El {
+  constructor(tag) { Object.assign(this, { tagName: tag, children: [], options: [], dataset: {}, attrs: {}, listeners: {}, className: '', value: '', disabled: false, hidden: false, _text: '' }); }
+  append(...items) { for (const item of items) if (item != null) (item.isOption ? this.options : this.children).push(item); }
+  appendChild(item) { this.append(item); return item; }
+  setAttribute(key, value) { this.attrs[key] = String(value); }
+  addEventListener(type, fn) { (this.listeners[type] ||= []).push(fn); }
+  fire(type) { return Promise.all((this.listeners[type] || []).map(fn => fn({ preventDefault() {}, target: this }))); }
+  set textContent(value) { this._text = String(value); this.children = []; }
+  get textContent() { return this._text + this.children.map(child => child.textContent).join(' '); }
+}
+const withDom = async work => {
+  const old = { document: globalThis.document, Option: globalThis.Option };
+  globalThis.document = { createElement: tag => new El(tag), body: new El('body'), activeElement: null };
+  globalThis.Option = class { constructor(text, value) { Object.assign(this, { isOption: true, text, value }); } };
+  try { return await work(); } finally { Object.assign(globalThis, old); }
+};
+const all = (root, predicate, found = []) => { if (predicate(root)) found.push(root); for (const child of root.children || []) all(child, predicate, found); return found; };
+const buttonNamed = (root, pattern) => all(root, el => el.tagName === 'button' && pattern.test(el.textContent))[0];
+
+const participants = [
+  { id: 'priest', name: 'Prêtre', camp: 'pj' },
+  { id: 'ally', name: 'Allié', camp: 'pj' },
+  { id: 'foe', name: 'Orque', camp: 'ennemi' }
+];
+const layer = { id: 'exec:priest:dismay:imposed-test', type: 'imposed-test', casterId: 'priest', targetId: 'priest',
+  imposedTest: { label: 'Effrayer l’Ennemi', when: 'manual', subjects: 'enemies', test: { skill: 'calm', slModifier: 0 }, resolved: {} } };
+
+test('Test imposé manuel : un bouton, un choix des ennemis seulement, un d100 ; la commande reçoit le jet', () => withDom(async () => {
+  const calls = [];
+  const Store = { resolveDivineImposedTest: async (...args) => { calls.push(args); return { ok: true }; } };
+  const box = new El('div');
+  renderImposedTestControls(box, { layer, participants, Store, onDone: () => {} });
+  const button = buttonNamed(box, /Test imposé/);
+  assert.ok(button, 'bouton présent');
+  const select = all(box, el => el.tagName === 'select')[0];
+  assert.deepEqual(select.options.map(option => option.value), ['', 'foe']);
+  const roll = all(box, el => el.tagName === 'input')[0];
+  select.value = 'foe'; roll.value = '87';
+  await button.fire('click');
+  assert.deepEqual(calls, [['foe', layer.id, { roll: 87 }]]);
+}));
+
+test('Store sans la méthode : aucun plantage, message en français', () => withDom(async () => {
+  const box = new El('div');
+  renderImposedTestControls(box, { layer, participants, Store: {}, onDone: () => {} });
+  const select = all(box, el => el.tagName === 'select')[0];
+  const roll = all(box, el => el.tagName === 'input')[0];
+  select.value = 'foe'; roll.value = '40';
+  await assert.doesNotReject(() => buttonNamed(box, /Test imposé/).fire('click'));
+  assert.match(box.textContent, /indisponible/);
+}));
+
+test('couche récurrente ou déjà résolue : libellé sans bouton manuel', () => withDom(async () => {
+  const box = new El('div');
+  renderImposedTestControls(box, { layer: { ...layer, imposedTest: { ...layer.imposedTest, when: 'round', label: 'Vent sauvage' } }, participants, Store: {} });
+  assert.equal(buttonNamed(box, /Test imposé/), undefined);
+  assert.match(box.textContent, /Vent sauvage/);
+}));

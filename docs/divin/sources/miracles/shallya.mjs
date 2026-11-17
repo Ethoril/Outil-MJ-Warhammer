@@ -25,12 +25,17 @@ export const miracles = [
     name: 'Baume pour un esprit blessé', canonicalName: 'Balm to a Wounded Mind', printedPage: 226,
     summary: 'Tous les Traits psychologiques de la cible sont supprimés pendant la durée; ensuite elle dort profondément jusqu’au prochain lever du soleil si rien ne la dérange. Une cible non consentante peut résister par un Test de Calme Intermédiaire (+0 DR).',
     params: { range: touch, targets: one, duration: soc('characteristic-bonus', 'minutes') },
-    status: 'manual', effect: null, targetRules: [],
+    status: 'assisted', effect: null, targetRules: [],
+    // Miracles narratifs L3 (LdB V5 p.226 relue) : Challenging (+0 SL) contre le sommeil seulement ; cible consentante dispensée.
+    effects: [{ type: 'imposed-test', label: 'Baume pour un esprit blessé', test: { skill: 'calm', slModifier: 0 }, subjects: 'targets', when: 'cast',
+      waivedBy: { fact: 'consenting', label: 'est consentante (aucun Test de résistance au sommeil)' },
+      onFailure: [{ type: 'marker', label: 's’endort à la fin de l’effet jusqu’au lever du soleil, sauf dérangement' }],
+      onSuccess: [{ type: 'marker', label: 'résiste au sommeil' }] }],
     needsInput: [{ id: 'willing', text: 'La cible est-elle consentante ? Sinon, résultat de son Test de Calme.' }, { id: 'psychology-traits', text: 'Traits psychologiques de la cible à suspendre.' }, { id: 'disturbed', text: 'Le sommeil est-il dérangé ? Heure du lever du soleil.' }],
     clauses: [
       { id: 'remove-psychology', mode: 'manual', text: 'Tous les Traits psychologiques sont retirés pendant la durée.' },
       { id: 'sleep', mode: 'manual', text: 'Après la durée, la cible dort profondément jusqu’au lever du soleil, sauf dérangement.' },
-      { id: 'resist', mode: 'assisted', text: 'Cible non consentante : Test de Calme Intermédiaire (+0 DR) pour résister au sommeil.' },
+      { id: 'resist', mode: 'engine', text: 'Cible non consentante : Test de Calme Intermédiaire (+0 DR) pour résister au sommeil.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en minutes.' }
     ],
     sourceDelta: 'Le livre imprime « Challenging (+0 SL) » : traduit Intermédiaire (+0 DR). La résistance est écrite comme portant sur le sommeil; elle ne précise pas si elle protège aussi la suppression des Traits.'

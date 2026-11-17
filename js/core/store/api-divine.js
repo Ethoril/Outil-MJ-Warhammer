@@ -4,6 +4,7 @@ import { cloneValue } from '../models.js';
 import { combatActionBlock, brokenEscapeActionBlock, isBrokenEscapeActor, recordV5ActionUsage, recordV5EscapeVisibility } from '../store/v5-action-guards.js';
 import { isV5BrokenEscapeActionBlocked } from '../v5-broken-escape.js';
 import { registerNewV5Participants } from '../store/participant-registry.js';
+import { resolveImposedTestOnState } from '../v5-divine-effects-imposed.js';
 
 export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
   return {
@@ -110,6 +111,19 @@ export function createDivineApi({ api, currentEnvelope, divineAuthority }) {
       });
       const finish=result=>result?.ok===false?result:{...execution,ok:true};
       return saved&&typeof saved.then==='function'?saved.then(finish):finish(saved);
+    },
+    /** Test imposé `manual` d'une prière active (miracles narratifs, F2) : jet saisi par le MJ, issue appliquée, un seul ↶. */
+    resolveDivineImposedTest(participantId,layerId,input={}) {
+      const before=resolveImposedTestOnState(currentEnvelope(),participantId,layerId,cloneValue(input||{}));
+      if(!before.ok)return before;
+      let transition;
+      const saved=api.executeCommand('v5-divine-imposed-test',draft=>{
+        transition=resolveImposedTestOnState(draft,participantId,layerId,cloneValue(input||{}));
+        if(!transition.ok)throw Object.assign(new Error(transition.error),{userFacing:true});
+        return transition.state;
+      });
+      const finish=result=>result?.ok===false?{ok:false,error:result.error||'Test imposé non enregistré.'}:{ok:true,result:transition.result,applied:transition.applied,reminders:transition.reminders};
+      return saved&&typeof saved.then==='function'?saved.then(finish).catch(error=>({ok:false,error:error.message||'Test imposé non enregistré.'})):finish(saved);
     },
   };
 }

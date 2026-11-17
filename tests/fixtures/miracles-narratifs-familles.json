@@ -40,7 +40,6 @@
     "divine:miracle:ranald:free-your-mind": "F1",
     "divine:miracle:ranald:under-my-protection": "F2",
     "divine:miracle:ranald:a-suitable-sucker": "F3",
-    "divine:miracle:ranald:bamboozle": "F2",
     "divine:miracle:ranald:one-almighty-lie": "F3",
     "divine:miracle:ranald:unremembered-face": "F2",
     "divine:miracle:ranald:an-invitation": "F6",
@@ -54,7 +53,6 @@
     "divine:miracle:rhya:rhya-s-harvest": "F6",
     "divine:miracle:rhya:rhya-s-shelter": "F6",
     "divine:miracle:rhya:rhya-s-union": "F6",
-    "divine:miracle:shallya:balm-to-a-wounded-mind": "F2",
     "divine:miracle:shallya:bitter-catharsis": "F4",
     "divine:miracle:shallya:martyr": "F3",
     "divine:miracle:shallya:unblemished-innocence": "F4",
@@ -74,7 +72,6 @@
     "divine:miracle:il-de-l-aigle#eagle-sight": "F6",
     "divine:miracle:commander-la-legion#relevant-order": "F6",
     "divine:miracle:commander-la-legion#line-of-sight": "F8",
-    "divine:miracle:effrayer-l-ennemi#terror-test": "F2",
     "divine:miracle:en-bon-ordre#flee-exemption": "F1",
     "divine:miracle:en-bon-ordre#broken-from-fleeing": "F6",
     "divine:miracle:devotion-de-la-guerriere#fear-only": "F6",
@@ -120,7 +117,6 @@
     "divine:miracle:taal:leaping-stag#auto-leap": "F6",
     "divine:miracle:ulric:howl-of-battle#stack-beyond-max": "F6",
     "divine:miracle:ulric:howl-of-battle#talent-effect": "F6",
-    "divine:miracle:ulric:frostbite#endurance-test": "F2",
     "divine:miracle:ulric:heart-of-the-wolf#intimidation": "F6",
     "divine:miracle:ulric:hoarfrost-thews#climate": "F6",
     "divine:miracle:ulric:hoarfrost-s-chill#momentum-loss": "F3",
@@ -134,6 +130,10 @@
     "divine:miracle:verena:sword-of-justice#ignore-ap": "F1",
     "divine:miracle:verena:sword-of-justice#unconscious-duration": "F1",
     "divine:miracle:verena:sword-of-justice#sin": "F6",
-    "divine:miracle:verena:wisdom-of-the-owl#likely-outcome": "F6"
+    "divine:miracle:verena:wisdom-of-the-owl#likely-outcome": "F6",
+    "divine:miracle:ranald:bamboozle#next-round": "F6",
+    "divine:miracle:ranald:bamboozle#immune-types": "F6",
+    "divine:miracle:shallya:balm-to-a-wounded-mind#remove-psychology": "F6",
+    "divine:miracle:shallya:balm-to-a-wounded-mind#sleep": "F6"
   }
 }
