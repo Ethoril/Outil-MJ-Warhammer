@@ -10,7 +10,10 @@ const need = (field, label) => ({ field, label });
 const isText = value => typeof value === 'string' && value.trim() !== '';
 const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
 
-const specialStateKeys = new Set(['fearImmune', 'terrorAsFear', 'ignoreConditionPenalties', 'cannotRaiseUndead', 'doesNotBreathe', 'orderlyDisengage', 'fearTerrorImmunity', 'psychologySuppressed']);
+const specialStateKeys = new Set(['fearImmune', 'terrorAsFear', 'ignoreConditionPenalties', 'cannotRaiseUndead', 'doesNotBreathe', 'orderlyDisengage', 'fearTerrorImmunity', 'psychologySuppressed', 'stasis']);
+// Lumière de stase (Solkan) : le porteur est hors du temps, lu par le Tour (v5-turn.js) qui ne fait rien avancer pour lui.
+export const isDivineStasisLayer = layer => layer?.specialState?.stasis === true;
+export const inDivineStasis = participant => (participant?.extensions?.v5?.divineEffects || []).some(isDivineStasisLayer);
 // Talents dont le moteur lit un contrat mécanique : seuls ceux-là sont injectés pour de vrai (les autres restent une étiquette).
 export const injectableTalentIds = new Set(['talent-fearless', 'talent-strong-legs', 'talent-menacing', 'talent-catfall', 'talent-drilled', 'talent-hatred', 'talent-frenzy', 'talent-strike-to-injure']);
 const weaponFacts = input => input?.facts?.weapon;

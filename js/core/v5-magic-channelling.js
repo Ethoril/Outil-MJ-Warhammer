@@ -1,6 +1,7 @@
 import {enforceMagicTestRestrictions} from './v5-magic-talents.js';
 import { casterCaracs, castsWithStrength } from './creature-abilities.js';
 import { beastFormRestriction } from './v5-magic-arbitrations.js';
+import { stilledMagicRestriction } from './v5-divine-effects-zones.js';
 import { prepareMagicOptions, magicTalentRank, applyMagicAttempt, magicTurnKey, effectiveSkillScore, baseCharacteristicScore, activeMagicTalent } from './v5-magic-talents.js';
 /**
  * Moteur de Focalisation (Channelling) V5 — Lot 3.0.
@@ -252,7 +253,8 @@ function focalisationModifiers(participant, options, targetType, extra = []) {
  * Pure et déterministe, SANS MUTATION D'ÉTAT.
  */
 export function previewChannelling(participant, options = {}) {
-  const locked = beastFormRestriction(participant, 'channel');
+  // Apaisez les vents : la Focalisation échoue pour un présent ; pause et interruption restent permises.
+  const locked = beastFormRestriction(participant, 'channel') || (!['pause', 'interruption'].includes(options.mode) && stilledMagicRestriction(participant, 'channel'));
   if (locked) return { actionType: 'channelling', ready: false, error: locked, summary: locked };
   options = prepareMagicOptions(participant,options.mode==='pause'?'pause':options.mode==='interruption'?'interruption':'channelling',options);
   if (options.mode === 'interruption') {

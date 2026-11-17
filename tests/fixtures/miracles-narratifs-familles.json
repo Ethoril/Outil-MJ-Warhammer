@@ -53,8 +53,6 @@
     "divine:miracle:shallya:bitter-catharsis": "F4",
     "divine:miracle:shallya:martyr": "F3",
     "divine:miracle:shallya:unblemished-innocence": "F4",
-    "divine:miracle:solkan:light-of-stasis": "F5",
-    "divine:miracle:solkan:still-the-winds": "F5",
     "divine:miracle:taal:nature-s-repast": "F6",
     "divine:miracle:taal:wilderness-way": "F3",
     "divine:miracle:taal:lord-of-the-hunt": "F1",
@@ -133,6 +131,9 @@
     "divine:miracle:handrich:twist-of-fortune#backfire": "F6",
     "divine:miracle:handrich:twist-of-fortune#restore": "F6",
     "divine:miracle:handrich:twist-of-fortune#after-test": "F6",
-    "divine:miracle:handrich:twist-of-fortune#profit-sin": "F6"
+    "divine:miracle:handrich:twist-of-fortune#profit-sin": "F6",
+    "divine:miracle:solkan:light-of-stasis#stasis": "F6",
+    "divine:miracle:solkan:still-the-winds#magic-items": "F6",
+    "divine:miracle:solkan:still-the-winds#second-sight": "F6"
   }
 }

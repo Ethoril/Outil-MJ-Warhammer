@@ -1,6 +1,7 @@
 import { castsWithStrength } from './creature-abilities.js';
 import {enforceMagicTestRestrictions} from './v5-magic-talents.js';
 import { beastFormRestriction } from './v5-magic-arbitrations.js';
+import { stilledMagicRestriction } from './v5-divine-effects-zones.js';
 import { prepareMagicOptions, magicTalentRank, applyMagicAttempt, magicTurnKey, effectiveSkillScore, baseCharacteristicScore, activeMagicTalent, suffusedCastingBonus, castingTalent } from './v5-magic-talents.js';
 /**
  * Moteur de Lancement de sort (Casting) et Surpuissance (Overcasting) V5 — Lot 3.0.
@@ -270,7 +271,7 @@ function resolveMiscastWithMitigations(tableKey, rawRoll, modifier, options = {}
  * Pure et déterministe, SANS MUTATION D'ÉTAT.
  */
 export function previewCasting(participant, spell, options = {}) {
-  const locked = beastFormRestriction(participant, 'cast');
+  const locked = beastFormRestriction(participant, 'cast') || stilledMagicRestriction(participant, 'cast');
   if (locked) return { actionType: 'casting', ready: false, error: locked, summary: locked };
   options = prepareCastingOptions(participant, spell, options);
   return previewPreparedCasting(participant, spell, options);
@@ -281,6 +282,9 @@ export function previewCasting(participant, spell, options = {}) {
  * Lève une erreur de règle, ou renvoie les options enrichies (modificateurs d'États, atténuations, relances).
  */
 export function prepareCastingOptions(participant, spell, options = {}) {
+  // Apaisez les vents : aussi pour l'incantation à DR saisis, qui passe par ce seul garde-fou.
+  const stilled = stilledMagicRestriction(participant, 'cast');
+  if (stilled) throw Object.assign(new Error(stilled), { userFacing: true });
   options = prepareMagicOptions(participant, 'casting', options, spell);
   if (options.warWizard && (!magicTalentRank(participant,'war-wizard') || !participant.extensions?.v5?.hasMomentum || Number(spell?.cn ?? spell?.ni)>5 || participant.extensions?.v5?.magicAttemptTurn===magicTurnKey(participant,options))) throw new Error('Mage de guerre : NI ≤ 5, Élan et aucun autre Test magique ce Tour requis.');
   return options;

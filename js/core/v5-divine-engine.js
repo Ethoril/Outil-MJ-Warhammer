@@ -11,6 +11,7 @@ import {resolveV5ConditionTestContext,withV5TestTalents} from './v5-test-context
 import {campaignDurationSeconds} from './v5-game-time.js';
 import {calendarDurationUnits,targetRuleFactFields} from './v5-divine-grammar.js';
 import {effectHandler,effectNeeds,isLayerlessEffect,hasImplicitCasterTarget} from './v5-divine-effect-handlers.js';
+import {isDivineStasisLayer} from './v5-divine-effects-gear.js';
 // Cycle d'import connu (v5-magic-talents → v5-magic-effects → …) : fonction appelée seulement à l'exécution.
 import {collectTestEffects} from './v5-magic-talents.js';
 
@@ -808,6 +809,16 @@ export function expireDivineEffects(participant, transition = {}) {
   // Fin d'effet : certains types posent un État de suite (conditionsOnExpiry).
   for (const layer of expiredLayers) effectHandler(layer.type)?.onExpire?.(next, layer, transition);
   return { participant: next, removed, status: removed.length ? 'expired' : 'unchanged' };
+}
+
+/** Stase : seules les couches de stase du porteur expirent (même échéance que expireDivineEffects) ; ses autres couches attendent. */
+export function expireDivineStasis(participant, transition = {}) {
+  const layers = participant?.extensions?.v5?.divineEffects || [];
+  const out = expireDivineEffects({ ...participant, extensions: { ...participant.extensions, v5: { ...participant.extensions.v5, divineEffects: layers.filter(isDivineStasisLayer) } } }, transition);
+  if (!out.removed.length) return { participant, removed: [] };
+  const next = clone(participant);
+  next.extensions.v5.divineEffects = next.extensions.v5.divineEffects.filter(layer => !out.removed.includes(layer.id));
+  return { participant: next, removed: out.removed };
 }
 
 function replaceParticipants(state, participants) {

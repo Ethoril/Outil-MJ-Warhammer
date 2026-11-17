@@ -2541,8 +2541,8 @@
     {
       "id": "divine:miracle:solkan:light-of-stasis",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le texte ne dit pas si des objets inertes peuvent être comptés parmi les 3 cibles : laissé au MJ.",
-      "status": "manual",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le texte ne dit pas si des objets inertes peuvent être comptés parmi les 3 cibles : laissé au MJ. Encodé special-state stasis : la couche de stase expire normalement ; une échéance d’une autre couche tombée pendant la stase prend effet au passage suivant. « Ni agir ni bouger » reste un rappel.",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -2556,8 +2556,8 @@
     {
       "id": "divine:miracle:solkan:still-the-winds",
       "catalogueEntry": null,
-      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. « Channelling and Casting Tests » rendus par Canalisation et Incantation (vocabulaire V4) ; l’équivalent V5 n’est pas converti.",
-      "status": "manual",
+      "v5Summary": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. « Channelling and Casting Tests » rendus par Canalisation et Incantation (vocabulaire V4) ; l’équivalent V5 n’est pas converti. Encodé divine-zone suppressMagic : présence désignée par le MJ, Focalisation et Incantation refusées pour un présent, rayon = Bonus de Sociabilité mètres.",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -23911,7 +23911,7 @@
       "catalogueName": "Lumière de stase",
       "canonicalName": "Light of Stasis",
       "deity": "Solkan",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -23936,7 +23936,7 @@
         "specialization": "Solkan"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le texte ne dit pas si des objets inertes peuvent être comptés parmi les 3 cibles : laissé au MJ.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. Le texte ne dit pas si des objets inertes peuvent être comptés parmi les 3 cibles : laissé au MJ. Encodé special-state stasis : la couche de stase expire normalement ; une échéance d’une autre couche tombée pendant la stase prend effet au passage suivant. « Ni agir ni bouger » reste un rappel.",
       "params": {
         "range": {
           "kind": "fixed",
@@ -23981,7 +23981,18 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "special-state",
+          "stasis": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Light of Stasis",
@@ -23997,8 +24008,8 @@
         },
         {
           "id": "time-paused",
-          "mode": "manual",
-          "text": "Tout ce qu’affecte le passage du temps (chutes, projectiles, blessures, États…) est suspendu jusqu’à la fin de la durée.",
+          "mode": "engine",
+          "text": "Tout ce qu’affecte le passage du temps (chutes, projectiles, blessures, États…) est suspendu jusqu’à la fin de la durée : pour la cible, le Tour ne fait avancer ni États, ni pertes, ni expirations, ni sorts.",
           "sourceRef": "v5-light-of-stasis"
         },
         {
@@ -24041,7 +24052,7 @@
       "catalogueName": "Apaisez les vents",
       "canonicalName": "Still the Winds",
       "deity": "Solkan",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -24066,7 +24077,7 @@
         "specialization": "Solkan"
       },
       "requiredKnownPrayer": true,
-      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. « Channelling and Casting Tests » rendus par Canalisation et Incantation (vocabulaire V4) ; l’équivalent V5 n’est pas converti.",
+      "sourceDelta": "Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5. « Channelling and Casting Tests » rendus par Canalisation et Incantation (vocabulaire V4) ; l’équivalent V5 n’est pas converti. Encodé divine-zone suppressMagic : présence désignée par le MJ, Focalisation et Incantation refusées pour un présent, rayon = Bonus de Sociabilité mètres.",
       "params": {
         "range": {
           "kind": "characteristic-bonus",
@@ -24112,7 +24123,25 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "divine-zone",
+          "appliesTo": "caster",
+          "label": "Apaisez les vents",
+          "radius": {
+            "characteristic": "Soc",
+            "bonus": true
+          },
+          "excludes": [],
+          "suppressMagic": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "targetRules": [],
       "labels": {
         "canonicalName": "Still the Winds",
@@ -24122,13 +24151,19 @@
       "clauses": [
         {
           "id": "dispel",
+          "mode": "engine",
+          "text": "Toute magie est dissipée dans la zone : les couches de sort des présents désignés par le MJ sont suspendues, rétablies à la sortie ou à la fin de la prière.",
+          "sourceRef": "v5-still-the-winds"
+        },
+        {
+          "id": "magic-items",
           "mode": "manual",
-          "text": "Toute magie est dissipée dans la zone ; les objets magiques perdent temporairement leurs qualités magiques pendant la durée.",
+          "text": "Les objets magiques perdent temporairement leurs qualités magiques pendant la durée.",
           "sourceRef": "v5-still-the-winds"
         },
         {
           "id": "auto-fail",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Les Tests d’Incantation et de Canalisation échouent automatiquement dans la zone pendant la durée.",
           "sourceRef": "v5-still-the-winds"
         },
@@ -28580,5 +28615,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:961f925da31db7429e1d03dcc7dc6020f9bd19ea03f33bc52fef00742810935e"
+  "sourceFingerprint": "sha256:2be971e5b873c20cbd530bd5d16fbd9c8d768b29bc6418d596472d5e1d9948a0"
 }

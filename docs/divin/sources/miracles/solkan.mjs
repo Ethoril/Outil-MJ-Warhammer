@@ -96,7 +96,8 @@ export const miracles = [
   name: 'Lumière de stase', canonicalName: 'Light of Stasis', printedPage: 55,
   summary: 'Le prêtre demande aux Dieux de la Loi un répit face au changement. La scène baigne dans une lumière pâle et toutes les cibles sont figées dans une stase temporaire : elles ne peuvent ni agir ni bouger, et tout ce que le temps affecte (objets en chute, projectiles, blessures, États…) est suspendu jusqu’à la fin de la durée.',
   params: { range: { kind: 'fixed', value: 4, unit: 'yards' }, targets: { kind: 'count', value: 3 }, duration: rounds },
-  status: 'manual', effect: null,
+  status: 'assisted', effect: null,
+  effects: [{ type: 'special-state', stasis: true }],
   targetRules: [],
   needsInput: [
    { id: 'targets', text: 'Quelles 3 cibles sont visées, et sont-elles à moins de 4 m ?' },
@@ -104,27 +105,29 @@ export const miracles = [
   ],
   clauses: [
    { id: 'stasis', mode: 'manual', text: 'Les cibles ne peuvent ni agir ni bouger pendant la durée.' },
-   { id: 'time-paused', mode: 'manual', text: 'Tout ce qu’affecte le passage du temps (chutes, projectiles, blessures, États…) est suspendu jusqu’à la fin de la durée.' },
+   { id: 'time-paused', mode: 'engine', text: 'Tout ce qu’affecte le passage du temps (chutes, projectiles, blessures, États…) est suspendu jusqu’à la fin de la durée : pour la cible, le Tour ne fait avancer ni États, ni pertes, ni expirations, ni sorts.' },
    slExtension, purity
   ],
-  sourceDelta: delta + ' Le texte ne dit pas si des objets inertes peuvent être comptés parmi les 3 cibles : laissé au MJ.'
+  sourceDelta: delta + ' Le texte ne dit pas si des objets inertes peuvent être comptés parmi les 3 cibles : laissé au MJ. Encodé special-state stasis : la couche de stase expire normalement ; une échéance d’une autre couche tombée pendant la stase prend effet au passage suivant. « Ni agir ni bouger » reste un rappel.'
  },
  {
   name: 'Apaisez les vents', canonicalName: 'Still the Winds', printedPage: 55,
   summary: 'Le prêtre supplie les Dieux de la Loi de calmer les Vents de Magie. Pendant la durée, dans la zone de Bonus de Sociabilité mètres : toute magie est dissipée, les objets magiques perdent temporairement leurs qualités magiques, et les Tests d’Incantation et de Canalisation échouent automatiquement. La Seconde Vue montre des Vents inertes dans la zone.',
   params: { range: soc('characteristic-bonus', 'yards'), targets: area, duration: rounds },
-  status: 'manual', effect: null,
+  status: 'assisted', effect: null,
+  effects: [{ type: 'divine-zone', appliesTo: 'caster', label: 'Apaisez les vents', radius: { characteristic: 'Soc', bonus: true }, excludes: [], suppressMagic: true }],
   targetRules: [],
   needsInput: [
    { id: 'area-center', text: 'Point central de la zone dans la portée (Bonus de Sociabilité mètres).' },
    { id: 'magic-in-area', text: 'Sorts, objets magiques et lanceurs présents dans la zone.' }
   ],
   clauses: [
-   { id: 'dispel', mode: 'manual', text: 'Toute magie est dissipée dans la zone ; les objets magiques perdent temporairement leurs qualités magiques pendant la durée.' },
-   { id: 'auto-fail', mode: 'manual', text: 'Les Tests d’Incantation et de Canalisation échouent automatiquement dans la zone pendant la durée.' },
+   { id: 'dispel', mode: 'engine', text: 'Toute magie est dissipée dans la zone : les couches de sort des présents désignés par le MJ sont suspendues, rétablies à la sortie ou à la fin de la prière.' },
+   { id: 'magic-items', mode: 'manual', text: 'Les objets magiques perdent temporairement leurs qualités magiques pendant la durée.' },
+   { id: 'auto-fail', mode: 'engine', text: 'Les Tests d’Incantation et de Canalisation échouent automatiquement dans la zone pendant la durée.' },
    { id: 'second-sight', mode: 'manual', text: 'La Seconde Vue révèle que les Vents sont inertes dans la zone.' },
    slExtension, purity
   ],
-  sourceDelta: delta + ' « Channelling and Casting Tests » rendus par Canalisation et Incantation (vocabulaire V4) ; l’équivalent V5 n’est pas converti.'
+  sourceDelta: delta + ' « Channelling and Casting Tests » rendus par Canalisation et Incantation (vocabulaire V4) ; l’équivalent V5 n’est pas converti. Encodé divine-zone suppressMagic : présence désignée par le MJ, Focalisation et Incantation refusées pour un présent, rayon = Bonus de Sociabilité mètres.'
  }
 ];

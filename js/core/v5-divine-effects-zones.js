@@ -4,9 +4,13 @@
  * exceptions?: ['gunpowder'|'artillery'], affects?: { trait } }`. La couche du prêtre porte `zone: { label, radius, members, excludes,
  * exceptions, affects }`. La présence dans la zone est désignée par le MJ (`members`, commande `setDivineZoneMembers`) : elle n'est
  * jamais lue sur la carte. Les lecteurs sont purs ; un avertissement en français, que le MJ peut passer outre, jamais un refus.
- * Rayon : la Caractéristique entière du prêtre, en mètres (yards = mètres) ; inconnue ou non déclarée : `null`, la zone reste valable.
+ * Rayon : la Caractéristique entière du prêtre, en mètres (yards = mètres), ou son Bonus (`radius.bonus`) ; inconnue ou non déclarée :
+ * `null`, la zone reste valable. `suppressMagic: true` (Apaisez les vents, exclusions alors facultatives) : Incantation et Focalisation
+ * refusées pour un présent, ses couches de sort suspendues (`suspendedByDivineZone`, lu par unsuppressedSpellEffects) ;
+ * `syncDivineMagicSuppression` pose et lève ces marques à chaque désignation et à chaque Tour.
  */
 import { psychologyTraits } from './creature-psychology.js';
+import { refreshEffectLayers } from './v5-magic-effects.js';
 
 const clone = value => structuredClone(value);
 const record = value => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -20,12 +24,14 @@ export const ZONE_EXCEPTIONS = Object.freeze(['gunpowder', 'artillery']);
 export function divineZoneProblem(effect) {
   if (effect?.appliesTo !== 'caster' && effect?.casterOnly !== true) return 'divine-zone exige appliesTo "caster".';
   if (!isText(effect.label)) return 'divine-zone exige label.';
-  if (!Array.isArray(effect.excludes) || !effect.excludes.length || !effect.excludes.every(item => ZONE_EXCLUDES.includes(item)))
+  if (effect.suppressMagic !== undefined && effect.suppressMagic !== true) return 'divine-zone : suppressMagic doit valoir true.';
+  if (!Array.isArray(effect.excludes) || (!effect.excludes.length && effect.suppressMagic !== true) || !effect.excludes.every(item => ZONE_EXCLUDES.includes(item)))
     return `divine-zone : excludes doit être une liste non vide parmi ${ZONE_EXCLUDES.join(', ')}.`;
   if (effect.exceptions !== undefined && (!Array.isArray(effect.exceptions) || !effect.exceptions.every(item => ZONE_EXCEPTIONS.includes(item))))
     return `divine-zone : exceptions doit être une liste parmi ${ZONE_EXCEPTIONS.join(', ')}.`;
   if (effect.affects !== undefined && !(record(effect.affects) && isText(effect.affects.trait))) return 'divine-zone : affects doit déclarer trait.';
-  if (effect.radius !== undefined && !(record(effect.radius) && isText(effect.radius.characteristic))) return 'divine-zone : radius doit déclarer characteristic.';
+  if (effect.radius !== undefined && !(record(effect.radius) && isText(effect.radius.characteristic) && [undefined, true].includes(effect.radius.bonus)))
+    return 'divine-zone : radius doit déclarer characteristic (bonus : true facultatif).';
   return null;
 }
 
@@ -33,14 +39,15 @@ const handler = {
   implicitTarget: true,
   validate: divineZoneProblem,
   needs: effect => divineZoneProblem(effect) ? [{ field: 'contract.effects.zone', label: divineZoneProblem(effect) }] : [],
-  // Rayon figé à l'aperçu : la Caractéristique entière du prêtre (Sociabilité mètres) quand elle est connue.
+  // Rayon figé à l'aperçu : la Caractéristique entière du prêtre (Sociabilité mètres), ou son Bonus, quand elle est connue.
   resolve(effect, { actor } = {}) {
     const raw = effect.radius ? actor?.caracs?.[effect.radius.characteristic] : null;
     const value = Number(raw);
-    return { ...effect, radiusMeters: raw !== null && raw !== undefined && raw !== '' && Number.isFinite(value) ? value : null };
+    const known = raw !== null && raw !== undefined && raw !== '' && Number.isFinite(value);
+    return { ...effect, radiusMeters: known ? (effect.radius.bonus ? Math.floor(value / 10) : value) : null };
   },
   buildLayer: effect => ({ zone: { label: effect.label, radius: effect.radiusMeters ?? null, members: [], excludes: clone(effect.excludes),
-    exceptions: clone(effect.exceptions || []), ...(effect.affects ? { affects: clone(effect.affects) } : {}) } })
+    exceptions: clone(effect.exceptions || []), ...(effect.affects ? { affects: clone(effect.affects) } : {}), ...(effect.suppressMagic ? { suppressMagic: true } : {}) } })
 };
 export default { 'divine-zone': handler };
 
@@ -87,7 +94,36 @@ export function divineZoneAttackWarnings({ attacker, target, action, participant
 /** Textes de rappel affichés sur un participant présent dans une zone du prêtre. */
 export const divineZoneReminders = (participant, participants = []) => divineZoneOf(participant, participants).map(zone => ({
   key: `divine-zone-${zone.layerId}`,
-  text: `Dans la zone de ${zone.label} (${zone.casterName})${zone.radius ? ` · rayon ${zone.radius} m` : ''} : ${zone.excludes.includes('attack') ? 'n’attaque pas' : 'aucune attaque à distance, sauf arme à poudre ou d’artillerie'}.` }));
+  text: `Dans la zone de ${zone.label} (${zone.casterName})${zone.radius ? ` · rayon ${zone.radius} m` : ''} : ${zone.suppressMagic ? 'magie dissipée, Incantation et Focalisation échouent' : zone.excludes.includes('attack') ? 'n’attaque pas' : 'aucune attaque à distance, sauf arme à poudre ou d’artillerie'}.` }));
+
+/** Refus en français d'une Incantation (`cast`) ou d'une Focalisation (`channel`) pour un présent d'une zone qui suspend la magie, sinon `null`. */
+export function stilledMagicRestriction(participant, action) {
+  const zone = participant?.extensions?.v5?.stilledMagic;
+  if (!zone) return null;
+  return `${zone.label} (${zone.casterName}) : dans la zone, le Test ${action === 'channel' ? 'de Focalisation' : 'd’Incantation'} échoue automatiquement.`;
+}
+
+/**
+ * Pose ou lève, pour chaque participant, la marque `stilledMagic` et la suspension de ses couches de sort selon les zones `suppressMagic`
+ * où il est désigné présent. Rend la même liste quand rien ne change (aucune zone, aucune marque).
+ */
+export function syncDivineMagicSuppression(participants = []) {
+  let changed = false;
+  const out = participants.map(participant => {
+    const zone = divineZoneOf(participant, participants).find(row => row.suppressMagic === true);
+    const marker = zone ? { layerId: zone.layerId, casterId: zone.casterId, casterName: zone.casterName, label: zone.label } : null;
+    const v5 = participant?.extensions?.v5;
+    const spells = Array.isArray(v5?.spellEffects) ? v5.spellEffects : [];
+    if (JSON.stringify(v5?.stilledMagic ?? null) === JSON.stringify(marker) && spells.every(layer => (layer?.suspendedByDivineZone ?? null) === (marker?.layerId ?? null))) return participant;
+    changed = true;
+    const next = clone(participant);
+    next.extensions ??= {}; next.extensions.v5 ??= {};
+    if (marker) next.extensions.v5.stilledMagic = marker; else delete next.extensions.v5.stilledMagic;
+    for (const layer of next.extensions.v5.spellEffects || []) if (record(layer)) { if (marker) layer.suspendedByDivineZone = marker.layerId; else delete layer.suspendedByDivineZone; }
+    return refreshEffectLayers(next, participant);
+  });
+  return changed ? out : participants;
+}
 
 /**
  * Commande pure : remplace la présence désignée d'une zone. Rend `{ ok, state, members }` ou `{ ok: false, error }` sans écrire ;
@@ -105,6 +141,7 @@ export function setDivineZoneMembersOnState(state, casterId, layerId, ids = []) 
   const next = clone(state);
   const live = next.combat.participants.find(row => row.id === casterId).extensions.v5.divineEffects.find(row => row.id === layerId);
   live.zone.members = members;
+  next.combat.participants = syncDivineMagicSuppression(next.combat.participants);
   const names = members.map(id => nameOf(participants.find(row => row.id === id)));
   next.log = [{ id: `divine-zone:${layerId}:${state.localRevision || 0}`, kind: 'effect', actorId: casterId, actorName: bearer.name,
     text: `${live.zone.label} : présents dans la zone — ${names.length ? names.join(', ') : 'personne'}`, detail: { kind: 'divine-zone-members', layerId, members } }, ...(next.log || [])].slice(0, 300);

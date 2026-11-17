@@ -1,6 +1,6 @@
 import {wrathForcedPrayerGate} from './v5-divine-prayer-caps.js';
 /** Pure V5 turn transition; every die is an explicit input and all actors share one commit. */
-import {expireDivineEffects} from './v5-divine-engine.js';
+import {expireDivineEffects,expireDivineStasis} from './v5-divine-engine.js';
 import { withExpiredEngagements } from './store/api-engagements.js';
 import { pursuitFreesBrokenPrey } from './store/api-pursuit.js';
 import {refreshEffectLayers} from './v5-magic-effects.js';
@@ -15,6 +15,8 @@ import { v5CombatActionClock } from './v5-resources.js';
 import { collectRoundTraitEffects, applyTraitPatches, momentumCount } from './trait-effects.js';
 import { engagedWith } from './engagements.js';
 import { collectDivineRecurringEffects } from './v5-divine-recurring.js';
+import { inDivineStasis } from './v5-divine-effects-gear.js';
+import { syncDivineMagicSuppression } from './v5-divine-effects-zones.js';
 
 const kinds = { fireRoll: 'd10', bleedingDeathRoll: 'd10', fireCriticalRoll: 'd100', bleedingEnduranceTest: 'test', poisonEnduranceTest: 'test', recoveryTest: 'test', currentWounds: 'manual' };
 function brokenEscapeTurnGate(state){
@@ -63,6 +65,15 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     participants = participants.map(participant => {
       // Combat clocks for actors waiting to enter the scene do not advance.
       if (phase === 'endOfRound' && participant.zone !== 'active') return participant;
+      // Lumière de stase : rien n'avance pour le porteur (États, pertes, expirations) ; seule sa couche de stase suit son échéance.
+      if (inDivineStasis(participant)) {
+        const opening = expireDivineStasis(participant, { ...start, turn: start.turnIndex }), closing = expireDivineStasis(opening.participant, { ...finish, turn: finish.turnIndex });
+        const ended = opening.removed.concat(closing.removed);
+        if (!ended.length) return participant;
+        effectLogs.push({ id: `v5-turn:${before.localRevision || 0}:${serial}:${phase}:${participant.id}`, kind: 'effect', actorId: participant.id, actorName: participant.name,
+          text: `${participant.name} · fin de la stase`, detail: { phase, round, turn: serial, removed: ended.map(id => ({ id, kind: 'divine-effect' })) } });
+        return refreshEffectLayers(closing.participant, participant);
+      }
       const beforeDivine=expireDivineEffects(participant,{...start,turn:start.turnIndex});
       if(beforeDivine.removed.length)participant=refreshEffectLayers(beforeDivine.participant,participant);
       const data = inputs[participant.id] || {};
@@ -109,6 +120,18 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
       }
       return updated;
     });
+    // Apaisez les vents : une zone échue rétablit les sorts de ses présents.
+    participants = syncDivineMagicSuppression(participants);
+  };
+  // Lumière de stase : les sorts, Traits et Tests imposés d'une étape laissent intacts les participants en stase (ni demande ni journal).
+  const holdStasis = step => {
+    const held = new Map(participants.filter(inDivineStasis).map(participant => [participant.id, participant]));
+    if (!held.size) return step();
+    const counts = [requests.length, effectLogs.length, performedTests.length];
+    step();
+    participants = participants.map(participant => held.get(participant.id) || participant);
+    const free = row => !held.has(row?.participantId ?? row?.actorId);
+    [requests, effectLogs, performedTests].forEach((rows, index) => rows.splice(counts[index], Infinity, ...rows.slice(counts[index]).filter(free)));
   };
   // Effets de Traits d'office (D5 b) : demandes dans `requests`, patches appliqués dans ce même état, donc un seul commit et un seul ↶.
   const traitPlans = [], traitReminders = [];
@@ -127,27 +150,30 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   };
   runPhase('endOfTurn', phaseRows('endOfTurn'));
   const ending=phaseRow('endOfTurn');
+  const expiry=phaseRow('expiry'),caster=phaseRow('endOfCasterTurn');
+  holdStasis(()=>{
   runTraits('endOfTurn', ending);
   const endedSpells=roundSpellEffects(participants,ending.phase,ending.round,inputs,ending.actorId);participants=endedSpells.participants;requests.push(...endedSpells.requests);effectLogs.push(...endedSpells.logs);noteTests(endedSpells);
-  const expiry=phaseRow('expiry');
   const closingSpells=roundSpellEffects(participants,expiry.phase,expiry.round,inputs,expiry.actorId);participants=closingSpells.participants;requests.push(...closingSpells.requests);effectLogs.push(...closingSpells.logs);noteTests(closingSpells);
   participants = processCombatTurnSpells(participants, transition.round, transition.currentActorId, { actorId: combat.currentActorId, round: combat.round });
-  const caster=phaseRow('endOfCasterTurn');
   const casterSpells=roundSpellEffects(participants,caster.phase,caster.round,inputs,caster.actorId);participants=casterSpells.participants;requests.push(...casterSpells.requests);effectLogs.push(...casterSpells.logs);noteTests(casterSpells);
+  });
   if (transition.round > combat.round) {
     // Recette G-DIV-2 : les effets de sort de fin de Round (étouffement…) se résolvent avant l'expiration des couches
     // divines de ce même Round ; un Souffle « jusqu'à la fin du Round 6 » protège encore à ce passage.
     const endRound=phaseRows('endOfRound').at(-1),startRound=phaseRow('startOfRound');
     const roundSpells=row=>{const spells=roundSpellEffects(participants,row.phase,row.round,inputs,row.actorId); participants=spells.participants; requests.push(...spells.requests); effectLogs.push(...spells.logs);noteTests(spells);};
-    roundSpells(endRound);
+    holdStasis(()=>roundSpells(endRound));
     // Instable : l'Élan se lit tel qu'il est à la fin du Round, avant que les pertes de fin de Round ne le fassent tomber.
     const momentumAtRoundEnd = new Map(participants.map(participant => [participant.id, momentumCount(participant)]));
     runPhase('endOfRound', phaseRows('endOfRound'));
+    holdStasis(()=>{
     runTraits('endOfRound', endRound, { engagedIdsOf: id => engagedWith({ participants }, participants, id),
       momentumOf: participant => momentumAtRoundEnd.get(participant.id) ?? momentumCount(participant) });
     roundSpells(startRound);
     runTraits('startOfRound', startRound);
     runDivine('startOfRound', startRound);
+    });
   }
   if(transition.round>combat.round){transition.order=effectiveOrder(participants,{mode:combat.orderMode,order:combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:transition.round});transition.currentActorId=transition.order[0] || null;}
   toPosition = { ...fromPosition, round: transition.round, turnIndex: turn + 1, currentActorId: transition.currentActorId };
@@ -155,6 +181,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   catch (error) { return { status: 'clock-conflict', ready: false, baseRevision: before.localRevision || 0, requests: [], error: error.message }; }
   runPhase('startOfTurn', phaseRows('startOfTurn'));
   const starting=phaseRow('startOfTurn');
+  holdStasis(()=>{
   runDivine('startOfTurn', starting);
   const startSpells=roundSpellEffects(participants,starting.phase,starting.round,inputs,starting.actorId);participants=startSpells.participants;requests.push(...startSpells.requests);effectLogs.push(...startSpells.logs);noteTests(startSpells);
   participants = shieldAtTurnStart(participants, transition.currentActorId);
@@ -164,6 +191,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   requests.push(...recurring.requests);
   effectLogs.push(...recurring.logs);
   noteTests(recurring);
+  });
   const nextActor = participants.find(participant => participant.id === transition.currentActorId);
   const uniqueRequests = requests.filter((request, index) => requests.findIndex(other => other.participantId === request.participantId && other.field === request.field) === index);
   const clockEvent = {
