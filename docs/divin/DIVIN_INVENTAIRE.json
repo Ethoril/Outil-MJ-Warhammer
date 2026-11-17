@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:2be971e5b873c20cbd530bd5d16fbd9c8d768b29bc6418d596472d5e1d9948a0",
+  "sourceFingerprint": "sha256:781ba6ad9b48d746d0e792cf03d72c43e5d1b3a199af5ce3cf339179f6657e2b",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -14591,7 +14591,7 @@
       "name": "Retour à l’envoyeur",
       "deity": "Ranald",
       "aspect": "Protector",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -14659,7 +14659,22 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "wound-echo",
+          "compare": [
+            "CC",
+            "F",
+            "E"
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Back at You",
         "effect": "Paume tendue, doigts croisés, le prêtre vise un combat à portée auquel il ne prend pas part. Le participant le plus faible est celui qui est inférieur dans au moins deux des trois Caractéristiques CC, F, E ; le plus fort est supérieur dans au moins deux. Pendant la durée, les Blessures infligées par le plus fort lors d’une attaque peuvent être ajoutées aux Blessures que le plus faible lui inflige lors de sa prochaine attaque qui cause des dégâts.",
@@ -14668,14 +14683,20 @@
       "clauses": [
         {
           "id": "weaker-stronger",
-          "mode": "manual",
-          "text": "Détermination du plus faible : comparaison de CC, F et E ; le plus haut dans au moins deux Caractéristiques est le plus fort.",
+          "mode": "engine",
+          "text": "Plus fort : supérieur au plus faible dans au moins deux de CC, F et E, comparées à chaque attaque.",
           "sourceRef": "v5-back-at-you"
         },
         {
           "id": "echo-wounds",
+          "mode": "engine",
+          "text": "Les Blessures de la première attaque du plus fort qui blesse le plus faible sont mises en réserve, puis ajoutées une fois à la prochaine attaque du plus faible qui le blesse.",
+          "sourceRef": "v5-back-at-you"
+        },
+        {
+          "id": "echo-optional",
           "mode": "manual",
-          "text": "Les Blessures infligées par le plus fort en une attaque s’ajoutent à celles que le plus faible lui infligera la prochaine fois qu’il lui causera des dégâts.",
+          "text": "Le report est facultatif : le MJ annule par ↶ et rejoue s’il y renonce.",
           "sourceRef": "v5-back-at-you"
         }
       ],
@@ -14686,11 +14707,7 @@
         },
         {
           "field": "weaker",
-          "label": "Qui est le plus faible et le plus fort (comparaison de CC, F et E : le plus haut dans au moins deux est le plus fort) ?"
-        },
-        {
-          "field": "stored-wounds",
-          "label": "Blessures infligées par le plus fort lors d’une attaque (à reporter sur la prochaine attaque du plus faible)."
+          "label": "Cible : le participant le plus faible du combat."
         }
       ]
     },
@@ -18369,7 +18386,7 @@
       "type": "miracle",
       "name": "Martyr",
       "deity": "Shallya",
-      "status": "manual",
+      "status": "assisted",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -18434,7 +18451,18 @@
           }
         }
       ],
-      "effects": [],
+      "effects": [
+        {
+          "type": "damage-transfer",
+          "toughnessBonusFrom": "Soc",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
+        }
+      ],
       "labels": {
         "canonicalName": "Martyr",
         "effect": "Tous les Dégâts subis par la cible sont subis par vous à sa place; pour calculer les Blessures, ajoutez votre Bonus de Sociabilité à votre Bonus d’Endurance.",
@@ -18443,14 +18471,20 @@
       "clauses": [
         {
           "id": "damage-transfer",
-          "mode": "manual",
-          "text": "Tout Dégât que subirait la cible est subi par le prêtre (redirection de dégâts non gérée par le moteur).",
+          "mode": "engine",
+          "text": "Les Dégâts d’une attaque résolue contre la cible sont subis par le prêtre ; la cible ne perd aucune Blessure.",
           "sourceRef": "v5-martyr"
         },
         {
           "id": "toughness-add",
+          "mode": "engine",
+          "text": "Pour ces Dégâts, le BE du prêtre est augmenté de son Bonus de Sociabilité ; ses PA ne comptent pas.",
+          "sourceRef": "v5-martyr"
+        },
+        {
+          "id": "other-damage",
           "mode": "manual",
-          "text": "Pour ces Dégâts, le BE du prêtre est augmenté de son Bonus de Sociabilité.",
+          "text": "Dégâts hors attaque résolue (sort, miracle, Riposte, explosion) et Coup Critique : à reporter à la main.",
           "sourceRef": "v5-martyr"
         },
         {
@@ -18464,10 +18498,6 @@
         {
           "field": "target",
           "label": "Cible protégée."
-        },
-        {
-          "field": "damage-events",
-          "label": "Chaque Dégât subi par la cible pendant la durée (à rediriger vers le prêtre)."
         }
       ]
     },

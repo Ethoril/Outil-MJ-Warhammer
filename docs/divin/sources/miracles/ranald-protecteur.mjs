@@ -14,16 +14,18 @@ export const miracles = [
     name: 'Retour à l’envoyeur', canonicalName: 'Back at You', printedPage: 25,
     summary: 'Paume tendue, doigts croisés, le prêtre vise un combat à portée auquel il ne prend pas part. Le participant le plus faible est celui qui est inférieur dans au moins deux des trois Caractéristiques CC, F, E ; le plus fort est supérieur dans au moins deux. Pendant la durée, les Blessures infligées par le plus fort lors d’une attaque peuvent être ajoutées aux Blessures que le plus faible lui inflige lors de sa prochaine attaque qui cause des dégâts.',
     params: { range: yards24, targets: one, duration: soc('characteristic-bonus', 'rounds') },
-    status: 'manual', effect: null,
+    status: 'assisted', effect: null,
+    // Miracles narratifs L7 (Deft Steps p.25) : couche sur le plus faible, réserve remplie et consommée par la résolution des attaques.
+    effects: [{ type: 'wound-echo', compare: ['CC', 'F', 'E'] }],
     targetRules: ['combat auquel le prêtre ne participe pas'],
     needsInput: [
       { id: 'combat', text: 'Quel combat à portée est visé (le prêtre n’y est pas engagé) ?' },
-      { id: 'weaker', text: 'Qui est le plus faible et le plus fort (comparaison de CC, F et E : le plus haut dans au moins deux est le plus fort) ?' },
-      { id: 'stored-wounds', text: 'Blessures infligées par le plus fort lors d’une attaque (à reporter sur la prochaine attaque du plus faible).' }
+      { id: 'weaker', text: 'Cible : le participant le plus faible du combat.' }
     ],
     clauses: [
-      { id: 'weaker-stronger', mode: 'manual', text: 'Détermination du plus faible : comparaison de CC, F et E ; le plus haut dans au moins deux Caractéristiques est le plus fort.' },
-      { id: 'echo-wounds', mode: 'manual', text: 'Les Blessures infligées par le plus fort en une attaque s’ajoutent à celles que le plus faible lui infligera la prochaine fois qu’il lui causera des dégâts.' }
+      { id: 'weaker-stronger', mode: 'engine', text: 'Plus fort : supérieur au plus faible dans au moins deux de CC, F et E, comparées à chaque attaque.' },
+      { id: 'echo-wounds', mode: 'engine', text: 'Les Blessures de la première attaque du plus fort qui blesse le plus faible sont mises en réserve, puis ajoutées une fois à la prochaine attaque du plus faible qui le blesse.' },
+      { id: 'echo-optional', mode: 'manual', text: 'Le report est facultatif : le MJ annule par ↶ et rejoue s’il y renonce.' }
     ],
     sourceDelta: 'Le livre ne précise pas si le report vaut pour chaque attaque du plus fort pendant la durée (une seule réserve ou une par attaque), ni ce qui se passe en cas d’égalité sur les trois Caractéristiques.'
   },

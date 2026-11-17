@@ -57,11 +57,15 @@ export const miracles = [
     name: 'Martyr', canonicalName: 'Martyr', printedPage: 226,
     summary: 'Tous les Dégâts subis par la cible sont subis par vous à sa place; pour calculer les Blessures, ajoutez votre Bonus de Sociabilité à votre Bonus d’Endurance.',
     params: { range: soc('characteristic', 'yards'), targets: one, duration: soc('characteristic-bonus', 'rounds') },
-    status: 'manual', effect: null, targetRules: [],
-    needsInput: [{ id: 'target', text: 'Cible protégée.' }, { id: 'damage-events', text: 'Chaque Dégât subi par la cible pendant la durée (à rediriger vers le prêtre).' }],
+    status: 'assisted', effect: null,
+    // Miracles narratifs L7 (LdB V5 p.226) : couche sur la cible, lue par la résolution d'une attaque.
+    effects: [{ type: 'damage-transfer', toughnessBonusFrom: 'Soc' }],
+    targetRules: [],
+    needsInput: [{ id: 'target', text: 'Cible protégée.' }],
     clauses: [
-      { id: 'damage-transfer', mode: 'manual', text: 'Tout Dégât que subirait la cible est subi par le prêtre (redirection de dégâts non gérée par le moteur).' },
-      { id: 'toughness-add', mode: 'manual', text: 'Pour ces Dégâts, le BE du prêtre est augmenté de son Bonus de Sociabilité.' },
+      { id: 'damage-transfer', mode: 'engine', text: 'Les Dégâts d’une attaque résolue contre la cible sont subis par le prêtre ; la cible ne perd aucune Blessure.' },
+      { id: 'toughness-add', mode: 'engine', text: 'Pour ces Dégâts, le BE du prêtre est augmenté de son Bonus de Sociabilité ; ses PA ne comptent pas.' },
+      { id: 'other-damage', mode: 'manual', text: 'Dégâts hors attaque résolue (sort, miracle, Riposte, explosion) et Coup Critique : à reporter à la main.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ],
     sourceDelta: 'Non précisé : le sort des PA de la cible ou du prêtre dans le calcul, et le cas où le prêtre tombe.'

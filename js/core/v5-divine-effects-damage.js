@@ -312,5 +312,74 @@ const woundHeal = {
     log: `${actor?.name || 'Le prêtre'} · ${targetName || targetId} récupère ${result.hpDelta ?? 0} Blessure(s) (${result.amount} × ${result.chosen}/${result.slots} effet(s))` })
 };
 
+// Martyr (LdB V5 p.226) : couche sur la cible protégée ; les Dégâts d'une attaque résolue contre elle sont subis par le prêtre, dont le
+// Bonus d'Endurance est augmenté du Bonus de `toughnessBonusFrom` (lu par previewDamageTransfer, appliqué par applyResolution).
+const damageTransfer = {
+  validate: effect => effect.toughnessBonusFrom === undefined || STANDARD_CARACS.includes(effect.toughnessBonusFrom) ? null
+    : `toughnessBonusFrom doit être l’une de ${STANDARD_CARACS.join(', ')}.`,
+  // Le prêtre ne se protège pas lui-même.
+  applies: (effect, participant, { actorId } = {}) => participant?.id !== actorId,
+  buildLayer: (effect, { actorId }) => ({ damageTransfer: { toId: actorId, ...(effect.toughnessBonusFrom ? { toughnessBonusFrom: effect.toughnessBonusFrom } : {}) } })
+};
+
+// Retour à l'envoyeur (Deft Steps p.25) : couche sur le plus faible ; `compare` liste les trois Caractéristiques comparées (plus fort :
+// supérieur dans au moins deux). Réserve unique remplie par la première attaque du plus fort qui le blesse, consommée une fois.
+const woundEcho = {
+  validate: effect => Array.isArray(effect.compare) && effect.compare.length === 3 && effect.compare.every(carac => STANDARD_CARACS.includes(carac))
+    ? null : 'wound-echo exige compare : trois Caractéristiques.',
+  buildLayer: effect => ({ woundEcho: { compare: [...effect.compare] } })
+};
+
+const bonusOf = value => Number.isFinite(Number(value)) ? Math.floor(Number(value) / 10) : null;
+const echoLayer = participant => (participant?.extensions?.v5?.divineEffects || []).find(layer => isRecord(layer?.woundEcho));
+const stronger = (attacker, defender, compare) => compare.filter(carac => {
+  const a = Number(attacker?.caracs?.[carac]), d = Number(defender?.caracs?.[carac]);
+  return Number.isFinite(a) && Number.isFinite(d) && a > d;
+}).length >= 2;
+
+/**
+ * Martyr à l'aperçu d'une attaque : null si la cible ne porte aucune couche de transfert. Sinon `{ unresolved }` (données du prêtre
+ * manquantes), `{ reminder }` (prêtre absent : le coup reste sur la cible) ou `{ transfer }`. Dégâts = Dégâts de l'attaque avant
+ * absorption ; Blessures du prêtre = Dégâts − (BE + Bonus de la couche), plancher de la touche ; les PA du prêtre ne comptent pas.
+ */
+export function previewDamageTransfer(target, damage, roster = []) {
+  const layer = (target?.extensions?.v5?.divineEffects || []).find(row => isRecord(row?.damageTransfer) && row.damageTransfer.toId && row.damageTransfer.toId !== target.id);
+  if (!layer || !damage) return null;
+  const priest = roster.find(row => row?.id === layer.damageTransfer.toId);
+  if (!priest) return { reminder: `Martyr : prêtre absent de la rencontre, les Dégâts restent sur ${target.name || target.id}.` };
+  const name = priest.name || priest.id;
+  const toughness = bonusOf(priest.caracs?.E), from = layer.damageTransfer.toughnessBonusFrom, extra = from ? bonusOf(priest.caracs?.[from]) : 0;
+  if (toughness === null || extra === null) return { unresolved: [`Martyr : Endurance${from ? ` et ${from}` : ''} de ${name} requises pour calculer ses Blessures.`] };
+  if (!Number.isFinite(Number(priest.hp))) return { unresolved: [`Martyr : Blessures actuelles de ${name} requises.`] };
+  const rawDamage = damage.net + damage.absorption, absorption = toughness + extra, net = rawDamage - absorption;
+  const wounds = net > 0 ? net : damage.isInoffensive ? 0 : 1;
+  const hpBefore = Math.max(0, Number(priest.hp)), hpAfter = Math.max(0, hpBefore - wounds);
+  return { transfer: { layerId: layer.id, fromId: target.id, toId: priest.id, toName: name, rawDamage, toughness, bonus: extra, absorption, wounds,
+    hpBefore, hpAfter, excess: Math.max(0, wounds - hpBefore), before: clone(priest) } };
+}
+
+/** Retour à l'envoyeur, ajout : la réserve du plus faible (attaquant) contre le plus fort qui l'a remplie ; null sinon. */
+export function previewWoundEchoBonus(actor, target, damage) {
+  const layer = echoLayer(actor), echo = layer?.woundEcho;
+  if (!echo || echo.spent === true || !(echo.stored > 0) || echo.fromId !== target?.id || !(damage?.finalDamage > 0)) return null;
+  return { participantId: actor.id, layerId: layer.id, bonus: echo.stored };
+}
+
+/** Retour à l'envoyeur, réserve : Blessures infligées au plus faible (cible) par un plus fort, si la réserve est vide ; null sinon. */
+export function previewWoundEchoStore(actor, target, wounds) {
+  const layer = echoLayer(target), echo = layer?.woundEcho;
+  if (!echo || echo.spent === true || echo.stored !== undefined || !(wounds > 0) || !stronger(actor, target, echo.compare || [])) return null;
+  return { participantId: target.id, layerId: layer.id, fromId: actor.id, wounds };
+}
+
+/** Écrit la réserve ou sa consommation sur la couche du participant (copie) ; null si la couche a disparu. */
+export function withWoundEcho(participant, change) {
+  const next = clone(participant);
+  const layer = (next.extensions?.v5?.divineEffects || []).find(row => row?.id === change.layerId);
+  if (!layer?.woundEcho) return null;
+  layer.woundEcho = change.bonus !== undefined ? { ...layer.woundEcho, spent: true } : { ...layer.woundEcho, fromId: change.fromId, stored: change.wounds };
+  return next;
+}
+
 // `wound-heal` remplace ici le gestionnaire du socle (même contrat, soin chiffré inchangé).
-export default { 'direct-damage': directDamage, 'ordinary-damage': ordinaryDamage, 'wound-heal': woundHeal };
+export default { 'direct-damage': directDamage, 'ordinary-damage': ordinaryDamage, 'wound-heal': woundHeal, 'damage-transfer': damageTransfer, 'wound-echo': woundEcho };

@@ -26,10 +26,11 @@ import { buildV5RollDecision } from './v5-decision.js';
 import { previewMomentumEvents } from './v5-momentum.js';
 import { applyScytheOfShyishRules } from './v5-magic-arbitrations.js';
 import { awakeningSpell } from './v5-spell-restrictions.js';
-import { buildCombatTest, hasMomentum, withMomentum, loseMomentumUnderFear, isFrightened, conditionLevels, inferV5Kind,v5ShieldDefense, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
+import { buildCombatTest, hasMomentum, withMomentum, loseMomentumUnderFear, isFrightened, conditionLevels, inferV5Kind,v5ShieldDefense, momentumAfterChange, V5_COMBAT_RULE_VERSION } from './v5-combat-rules.js';
 import { evaluateV5Talents, previewV5TalentConditions, currentV5TalentHashes, V5_TALENT_IDS } from './v5-talents.js';
 import { previewV5ActionQualities, v5ActionQualityContext, previewV5WeaponConditions, v5QualityMechanicalStatus } from './v5-talent-qualities.js';
 import { consumeDivineLayers } from './v5-divine-effects-gear.js';
+import { previewDamageTransfer, previewWoundEchoBonus, previewWoundEchoStore, withWoundEcho } from './v5-divine-effects-damage.js';
 import { refreshEffectLayers } from './v5-magic-effects.js';
 import { previewFamiliarCondition } from './familiars.js';
 import { applyPrayerSLCaps,getPrayerSLModifiers } from './v5-divine-prayer-caps.js';
@@ -995,6 +996,17 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     damage={...damage,finalDamage:magicProtection.amount,magicProtection};
     if(magicProtection.wardSaved)criticalFirst=null;
   }
+  // Martyr (L7) : les Dégâts de la cible protégée sont subis par le prêtre ; la cible ne perd aucune Blessure. Sans couche : rien ne change.
+  let damageTransfer=null;
+  const transferPlan=attackType(action.type)&&hit?previewDamageTransfer(target,damage,normalized.v5State?.participants||[]):null;
+  if(transferPlan?.unresolved)unresolved.push(...transferPlan.unresolved);
+  if(transferPlan?.transfer){
+    damageTransfer=transferPlan.transfer;
+    damage={...damage,finalDamage:0,transferredTo:damageTransfer.toId};
+  }
+  // Retour à l'envoyeur (L7) : la réserve du plus faible s'ajoute aux Blessures de sa prochaine attaque qui blesse le plus fort.
+  const woundEchoBonus=attackType(action.type)&&hit?previewWoundEchoBonus(actor,target,damage):null;
+  if(woundEchoBonus)damage={...damage,finalDamage:damage.finalDamage+woundEchoBonus.bonus,woundEcho:woundEchoBonus.bonus};
   // Critical hits use their own random location; normal weapon damage keeps the reversed final hit roll.
   if (criticalFirst?.location) {
     const guard = locationProtection(target, { ...normalized.protectionContext, ignoredArmourFlaws, location: criticalFirst.location,
@@ -1543,6 +1555,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if (context.outsideCombat !== true && defenderPlan?.kind === 'melee' && opposed && !profileEffectOnly) targetEvents.push(event(hit ? 'opposedMeleeLost' : 'opposedMeleeWon'));
   const criticalEffects = criticalBlock?.application;
   targetEvents.push(event('woundsLost', { amount: Math.min(hpBefore, (damage?.finalDamage || 0) + (criticalEffects?.extraWounds || 0)) }));
+  const woundEchoStore=attackType(action.type)&&hit&&target?previewWoundEchoStore(actor,target,Math.min(hpBefore,(damage?.finalDamage||0)+(criticalEffects?.extraWounds||0))):null;
+  const woundEcho=woundEchoBonus||woundEchoStore?{...(woundEchoBonus?{consume:woundEchoBonus}:{}),...(woundEchoStore?{store:woundEchoStore}:{})}:null;
   targetEvents.push(event('conditionAcquired', { instances: conditionChanges.target?.acquiredInstances || 0 }));
   actorEvents.push(event('woundsLost', { amount: Math.min(Math.max(0, Number(actor?.hp) || 0), (defenderCritical?.application.extraWounds || 0)+(defenderDamage?.finalDamage||0)) }));
   actorEvents.push(event('conditionAcquired', { instances: conditionChanges.actor?.acquiredInstances || 0 }));
@@ -1842,6 +1856,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     location,
     targetId: target?.id || null,
     damage,
+    ...(damageTransfer ? { damageTransfer } : {}),
+    ...(woundEcho ? { woundEcho } : {}),
     weapon,
     protection,
     mechanicalWarnings,
@@ -1858,6 +1874,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       || (OPPOSITION_TYPES.has(action.type) ? { mode: 'manual', reason: 'aucune-convention-locale-vérifiée' } : null),
     application: { status: 'pending', applied: false }
   };
+  if(transferPlan?.reminder)result.reminders.push(transferPlan.reminder);
+  if(damageTransfer)result.reminders.push(`Martyr : ${damageTransfer.wounds} Blessure(s) subies par ${damageTransfer.toName} à la place de ${target.name||target.id} (Dégâts ${damageTransfer.rawDamage} − BE ${damageTransfer.toughness} − Bonus ${damageTransfer.bonus}).`
+    +(damageTransfer.excess>0?` ${damageTransfer.excess} Blessure(s) au-delà de 0 : Coup Critique du prêtre à résoudre par le MJ.`:'')+(result.critical?' Le Coup Critique reste sur la cible.':''));
+  if(woundEchoBonus)result.reminders.push(`Retour à l’envoyeur : +${woundEchoBonus.bonus} Blessure(s) de la réserve ajoutées, réserve consommée.`);
+  if(woundEchoStore)result.reminders.push(`Retour à l’envoyeur : ${woundEchoStore.wounds} Blessure(s) mises en réserve pour la prochaine attaque de ${target.name||target.id} qui blessera ${actor.name||actor.id}.`);
   if (!result.secondaryObstinateTests.length) delete result.secondaryObstinateTests;
   if (normalized.v5?.context?.fateAction === 'cancel-attack' && attackType(action.type)) {
     delete result.secondaryObstinateTests;
@@ -2055,6 +2076,14 @@ export function applyResolution(preview, currentState) {
       { resolutionId: preview.resolutionId, authorId: preview.input.actor?.id, round: preview.input.round, beforeStates: target.states || [] });
     if(preview.tripFall?.criticals?.length)appendCriticalWoundRecords(updated,preview.tripFall.criticals,{resolutionId:preview.resolutionId+':fall',authorId:preview.input.actor?.id,round:preview.input.round,beforeStates:target.states||[],source:'fall'});
     nextState.participants = participantListWithUpdate(currentState, preview.targetId, updated);
+  }
+  // Martyr (L7) : les Blessures du transfert vont au prêtre dans la même commande (un seul ↶) ; prêtre changé depuis l'aperçu : recalcul.
+  if (preview.damageTransfer && preview.damage) {
+    const transfer = preview.damageTransfer, live = participantById(nextState, transfer.toId);
+    if (!live || JSON.stringify(participantById(currentState, transfer.toId)) !== JSON.stringify(transfer.before)) return { status: 'stale', requiresPreview: true, state: clone(currentState), resolution: clone(preview) };
+    const updated = clone(live);
+    updated.hp = Math.max(0, (Number(updated.hp) || 0) - transfer.wounds);
+    nextState.participants = participantListWithUpdate(nextState, live.id, momentumAfterChange(live, updated));
   }
   if (preview.projectileLodging && preview.targetId) {
     const live = participantById(nextState, preview.targetId);
@@ -2456,6 +2485,11 @@ export function applyResolution(preview, currentState) {
       updatedLayer.frenzyFury = { ...updatedLayer.frenzyFury, lastTurnId: preview.ulricFury.turnId };
       nextState.participants = participantListWithUpdate(nextState, liveActor.id, updated);
     }
+  }
+  // Retour à l'envoyeur (L7) : réserve remplie ou consommée sur la couche du plus faible.
+  for (const change of preview.damage && preview.woundEcho ? [preview.woundEcho.consume, preview.woundEcho.store].filter(Boolean) : []) {
+    const live = participantById(nextState, change.participantId), updated = live && withWoundEcho(live, change);
+    if (updated) nextState.participants = participantListWithUpdate(nextState, live.id, updated);
   }
   const mountedDismountIds = new Set((preview.mountedFall || []).filter(row => row.dismount === true).map(row => row.participantId).filter(Boolean));
   if (preview.tripFall && preview.input.target?.extensions?.v5?.mounted === true) mountedDismountIds.add(preview.input.target.id);

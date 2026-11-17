@@ -17,6 +17,8 @@ export const effectTypes = new Set(['characteristic-modifier', 'characteristic-m
 for (const type of ['grant-trait', 'special-state', 'grant-actions', 'grant-talent', 'weapon-bonus', 'grant-immunity', 'critical-severity-bonus', 'casting-penalty', 'attack-deterrent', 'free-attack', 'frenzy-fury']) effectTypes.add(type);
 // Dégâts directs (v5-divine-effects-damage.js).
 for (const type of ['direct-damage', 'ordinary-damage']) effectTypes.add(type);
+// Transferts de Dégâts : Martyr, Retour à l'envoyeur (v5-divine-effects-damage.js, lus par resolution.js).
+for (const type of ['damage-transfer', 'wound-echo']) effectTypes.add(type);
 // États, verrous et Chance temporaire (v5-divine-effects-conditions.js).
 for (const type of ['remove-condition', 'expiry-condition', 'heal-critical', 'temporary-fortune', 'free-reroll', 'reverse-dice']) effectTypes.add(type);
 // Tests de compétence (v5-divine-effects-tests.js).
