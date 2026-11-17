@@ -58,6 +58,30 @@ describe('Rencontre : Effrayé et Animosité (CA13, D9)', () => {
     assert.equal(await store.redo(), true);
   });
 
+  test('Effrayé sans cible désignée (MJ 17/11) : Peur (2) posée sur le porteur, un seul ↶', async () => {
+    const store = await open([person('a', { traits: ['Afraid (Orc)'] })]);
+    const result = await store.applyCreatureEncounter('a', 'afraid', {});
+    assert.equal(result.ok, true, JSON.stringify(result));
+    const fear = who(store, 'a').states.find(row => row.key === 'fear-of-talent');
+    assert.ok(fear, 'état de Peur posé');
+    assert.equal(fear.rating, 2);
+    assert.match(logs(store), /Effrayé/);
+    await store.undo();
+    assert.equal(who(store, 'a').states.length, 0, '↶ retire la Peur');
+  });
+
+  test('Animosité sans cible désignée (MJ 17/11) : Test de Calme demandé, échec : journal ; ↶ ↷', async () => {
+    const store = await open([person('a', { traits: ['Animosity (Orc)'] })]);
+    const asked = await store.applyCreatureEncounter('a', 'animosity', { targetId: null });
+    assert.equal(asked.status, 'requires-input', JSON.stringify(asked));
+    assert.equal(asked.requests[0].testTarget.score, 40, 'Calme sur la Force Mentale du porteur');
+    const done = await store.applyCreatureEncounter('a', 'animosity', { inputs: { a: { [asked.requests[0].field]: fail } } });
+    assert.equal(done.ok, true, JSON.stringify(done));
+    assert.match(logs(store), /Animosité.*Calme raté/);
+    assert.equal(await store.undo(), true);
+    assert.equal(await store.redo(), true);
+  });
+
   test('Animosité : une cible sans le mot-clé nommé est refusée', async () => {
     const store = await open([person('a', { traits: ['Animosity (Orc)'] }), person('e', { keywords: ['Elfe'], camp: 'pj' })]);
     const result = await store.applyCreatureEncounter('a', 'animosity', { targetId: 'e' });

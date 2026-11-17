@@ -138,7 +138,28 @@ export function previewMountedSecondaryTest(subject, { score, roll, stat, skill 
   return { ready: true, test: selectV5Test(secondary.preview, secondary.optionId), detail: secondaryTestDetail(secondary), questions };
 }
 
-export function previewResolution(input) {
+// Sang corrosif (D19, MJ 17/11) : la localisation de chaque engagé est tirée une seule fois par résolution et gardée d'un aperçu
+// recalculé à l'autre, jusqu'au commit (`applyResolution` l'oublie). Les résolutions abandonnées sont oubliées au-delà des 50 dernières.
+const traitLocationRolls = new Map();
+let traitLocationRoller = () => d100();
+function keptTraitLocation(resolutionId, key) {
+  if (!traitLocationRolls.has(resolutionId)) {
+    traitLocationRolls.set(resolutionId, new Map());
+    if (traitLocationRolls.size > 50) traitLocationRolls.delete(traitLocationRolls.keys().next().value);
+  }
+  const rolls = traitLocationRolls.get(resolutionId);
+  if (!rolls.has(key)) rolls.set(key, traitLocationRoller());
+  return rolls.get(key);
+}
+
+/** `options.rollLocation` : d100 de localisation du Sang corrosif, injectable pour les tests (tiré par l'outil sinon). */
+export function previewResolution(input, { rollLocation = null } = {}) {
+  const previous = traitLocationRoller;
+  if (typeof rollLocation === 'function') traitLocationRoller = rollLocation;
+  try { return buildResolutionPreview(input); } finally { traitLocationRoller = previous; }
+}
+
+function buildResolutionPreview(input) {
   const initial=normalizeResolutionInput(input);
   if(initial.v5?.context?.grappleAction){
     initial.v5={...initial.v5,context:{...(initial.v5.context||{}),involvesMovement:true}};
@@ -282,13 +303,14 @@ export function previewResolution(input) {
   if (attackType(normalized.action.type) && psychologyTraits(normalized.target).some(trait => trait.key === 'bestial'))
     normalized.defensePlan = { allowed: ['Esquive'], reason: 'Bestial', ...(normalized.defense && !isDodgeDefense && !freeDefense ? { refused: true } : {}) };
   // Bouclier (n) : bouclier virtuel (option Bouclier) ; +1 DR en opposition par Esquive ou Corps à corps, n PA sur la zone touchée.
-  // « Shield 2* » (L22, porté dans le dos) : rappel seul, le moteur ne connaît pas la direction de l'attaque. Un vrai bouclier l'emporte.
+  // « Shield 2* » (L22, porté dans le dos) : rappel seul, le moteur ne connaît pas la direction de l'attaque. Avec un vrai bouclier
+  // (MJ 17/11), un seul bouclier compte : la plus forte des deux valeurs de PA, et le +1 DR du vrai bouclier n'est pas doublé.
   const traitShield = attackType(normalized.action.type) ? shieldTraitOf(normalized.target) : null;
   const realShield = normalized.defense ? v5ShieldDefense(normalized) : null;
-  if (traitShield && !traitShield.rear && normalized.defense && !(realShield?.v5Bonus || realShield?.confirmed)
-    && (isDodgeDefense || (normalized.defense.v5?.kind ?? 'melee') === 'melee')) {
+  if (traitShield && !traitShield.rear && normalized.defense && (isDodgeDefense || (normalized.defense.v5?.kind ?? 'melee') === 'melee')) {
     normalized.traitShield = traitShield.rating;
-    normalized.defense = { ...normalized.defense, v5: withTraitModifier(normalized.defense.v5, { id: 'trait:shield', label: `Bouclier (${traitShield.rating}) : +1 DR en opposition`, amount: 1 }) };
+    if (!(realShield?.v5Bonus || realShield?.confirmed))
+      normalized.defense = { ...normalized.defense, v5: withTraitModifier(normalized.defense.v5, { id: 'trait:shield', label: `Bouclier (${traitShield.rating}) : +1 DR en opposition`, amount: 1 }) };
   }
   if (traitShield?.rear) normalized.traitShieldReminder = `Bouclier (${traitShield.rating}*) : porté dans le dos, sans le bénéfice habituel ; ${traitShield.rating} PA contre une attaque venue de derrière, à appliquer à la main.`;
   const attachPrayerModifiers=(subject,skillId,settings)=>{
@@ -893,8 +915,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       location, attackRoll: roll,
       hitLocationRoll: location?.roll, critical: criticalAttack, qualities: action.qualities, nature });
     protection=applyAlliedShield(normalized,applyForgeProtection(normalized,protection));
-    // Bouclier (n) du Trait : n PA sur la zone touchée, sauf si un vrai bouclier protège déjà ce coup (un seul bouclier compte).
-    if(normalized.traitShield&&protection.ap!==null&&!(protection.shieldAp>0))protection={...protection,ap:protection.ap+normalized.traitShield,shieldAp:normalized.traitShield,traitShield:normalized.traitShield};
+    // Bouclier (n) du Trait : n PA sur la zone touchée ; si un vrai bouclier protège déjà ce coup, la plus forte des deux valeurs (un seul bouclier compte).
+    if(normalized.traitShield&&protection.ap!==null&&normalized.traitShield>(protection.shieldAp>0?protection.shieldAp:0)){
+      const realAp=protection.shieldAp>0?protection.shieldAp:0;
+      protection={...protection,ap:protection.ap-realAp+normalized.traitShield,shieldAp:normalized.traitShield,traitShield:normalized.traitShield};
+    }
     // G-CRI-2 : un appendice sans table propre (queue, tentacule) n'a pas de PA lisibles sur la fiche ; le MJ les saisit.
     if(context.hitAppendage){
       const appendageAp=context.hitAppendageAp;
@@ -1452,7 +1477,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     if (author?.id && actorPlan.kind === 'melee') engagedIds.push(author.id);
     const out = collectWoundTraitEffects({ actor: author, target: wounded, participants: traitPeople, hpBefore: before, hpAfter: Math.max(0, before - lost), killed,
       resolutionId: normalized.resolutionId, round: normalized.round ?? null, turnIndex: normalized.v5Clock?.turnIndex ?? null,
-      engagedIds, traitInputs: context.traitInputs || {}, rollLocation: () => d100() });
+      engagedIds, traitInputs: context.traitInputs || {}, rollLocation: row => keptTraitLocation(normalized.resolutionId, `${wounded.id}:${row.id}`) });
     for (const key of Object.keys(traitOut)) traitOut[key].push(...out[key]);
   };
   if (context.fateAction !== 'cancel-attack') {
@@ -2441,6 +2466,7 @@ export function applyResolution(preview, currentState) {
     const roster = Array.isArray(nextState.participants) ? nextState.participants : Object.values(nextState.participants || {});
     for (const updated of applyTraitPatches(roster, preview.traitPlans.patches)) nextState.participants = participantListWithUpdate(nextState, updated.id, updated);
   }
+  traitLocationRolls.delete(preview.resolutionId);
   nextState.revision = currentState.revision + 1;
   nextState.appliedResolutionIds = [...appliedIds, preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);
   const resolution = clone(preview);

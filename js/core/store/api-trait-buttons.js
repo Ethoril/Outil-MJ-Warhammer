@@ -4,6 +4,7 @@
 // revient dans `options.inputs[participantId][field]` (valeur tirée par le bouton ou résultat saisi, D13).
 import { uid } from '../models.js';
 import { planPsychology, psychologyTraits } from '../creature-psychology.js';
+import { willpowerBase } from '../creature-natures.js';
 import { traitTargets, traitTargetMatches } from '../creature-keywords.js';
 import { planVampiricHeal } from '../creature-states.js';
 import { planNaturalAttack } from '../creature-combat.js';
@@ -46,35 +47,38 @@ export function createTraitButtonsApi({ api, currentEnvelope }) {
   return {
     /**
      * Bouton « Rencontre » (D9). `key` : `afraid` (Peur (2) venant de la cible, posée sur le porteur) ou `animosity` (Test de Calme demandé ;
-     * le +1 DR de Sociabilité reste un rappel). Une cible sans le mot-clé nommé par le Trait est refusée.
+     * le +1 DR de Sociabilité reste un rappel). Une cible sans le mot-clé nommé par le Trait est refusée. La cible est facultative (MJ 17/11) :
+     * sans elle, la créature rencontrée est celle que nomme le Trait, hors plateau.
      */
     applyCreatureEncounter(carrierId, key, { targetId = null, inputs = null } = {}) {
       const label = key === 'afraid' ? 'Effrayé' : 'Animosité';
       const source = find(carrierId);
       if (!['afraid', 'animosity'].includes(key)) return refuse('bad-key', 'Rencontre : Effrayé ou Animosité seulement.');
       if (!source || !psychologyTraits(source).some(trait => trait.key === key)) return refuse('no-trait', `Ce participant n’a pas le Trait ${label}.`);
-      const target = find(targetId);
-      if (!target || target.id === carrierId) return refuse('no-target', `${label} : désignez la créature rencontrée.`);
+      const target = targetId ? find(targetId) : null;
+      if (targetId && (!target || target.id === carrierId)) return refuse('no-target', `${label} : désignez une autre créature, ou aucune.`);
       const names = key === 'afraid' ? ['afraid', 'effraye'] : ['animosity', 'animosite'];
-      if (traitTargets(source, names).length && !traitTargetMatches(source, names, target)) return refuse('wrong-target', `${label} : ${nameOf(target)} ne porte pas le mot-clé nommé par le Trait.`);
+      if (target && traitTargets(source, names).length && !traitTargetMatches(source, names, target)) return refuse('wrong-target', `${label} : ${nameOf(target)} ne porte pas le mot-clé nommé par le Trait.`);
+      // Sans cible : la créature nommée par le Trait, sans participant (la Peur n'a alors pas d'auteur sur le plateau).
+      const met = target || { id: `encounter:${key}:${carrierId}`, name: traitTargets(source, names).map(entry => entry.raw).filter(Boolean).join(', ') || 'la créature rencontrée' };
       if (key === 'afraid') {
         const encounterId = v5StoreActionClock(currentEnvelope()).encounterId || 'default-encounter';
-        const plan = planPsychology(source, 'afraid', { source: target, encounterId });
+        const plan = planPsychology(source, 'afraid', { source: met, encounterId });
         if (!plan.available) return refuse('refused', plan.unresolved.join(' '));
-        if (!plan.states.length) return refuse('no-effect', `Effrayé : aucune Peur à poser devant ${nameOf(target)} (immunité ou rencontre déjà subie).`);
+        if (!plan.states.length) return refuse('no-effect', `Effrayé : aucune Peur à poser devant ${nameOf(met)} (immunité ou rencontre déjà subie).`);
         return finish(api.executeCommand('creature-afraid', draft => withLog(mapParticipant(draft, carrierId, row => loseMomentumUnderFear({ ...row, states: [...(row.states || []), ...plan.states] })),
-          effectLog(carrierId, targetId, `${nameOf(source)} · Effrayé : Peur (2) de ${nameOf(target)}, Test de Calme demandé`, { kind: 'creature-encounter', key }))));
+          effectLog(carrierId, target?.id ?? null, `${nameOf(source)} · Effrayé : Peur (2) de ${nameOf(met)}, Test de Calme demandé`, { kind: 'creature-encounter', key }))));
       }
-      const plan = planPsychology(source, 'animosity', { target });
-      const base = plan.tests[0]?.base;
+      const plan = planPsychology(source, 'animosity', target ? { target } : {});
+      const base = target ? plan.tests[0]?.base : willpowerBase(source).value;
       if (!plan.available || !Number.isFinite(base)) return refuse('refused', plan.unresolved.join(' ') || 'Animosité : Force Mentale du porteur inconnue.');
-      const request = traitRequest({ field: 'animosityCalm', kind: 'test', participantId: carrierId, participantName: source.name, label: `${nameOf(source)} · Calme devant ${nameOf(target)} : se retenir (Animosité)`,
+      const request = traitRequest({ field: 'animosityCalm', kind: 'test', participantId: carrierId, participantName: source.name, label: `${nameOf(source)} · Calme devant ${nameOf(met)} : se retenir (Animosité)`,
         testTarget: testTargetOf(source, { characteristic: 'FM', base }) });
       const answer = answerOf(request, inputs);
       if (!answer) return needsInput([request]);
-      const text = answer.success ? `${nameOf(source)} · Animosité devant ${nameOf(target)} : Calme réussi, il se retient`
-        : `${nameOf(source)} · Animosité devant ${nameOf(target)} : Calme raté, il l’attaque (socialement ou physiquement) ; +1 DR de Sociabilité contre elle, à jouer`;
-      return finish(api.executeCommand('creature-animosity', draft => withLog(draft, effectLog(carrierId, targetId, text, { kind: 'creature-encounter', key, success: answer.success }))));
+      const text = answer.success ? `${nameOf(source)} · Animosité devant ${nameOf(met)} : Calme réussi, il se retient`
+        : `${nameOf(source)} · Animosité devant ${nameOf(met)} : Calme raté, il l’attaque (socialement ou physiquement) ; +1 DR de Sociabilité contre elle, à jouer`;
+      return finish(api.executeCommand('creature-animosity', draft => withLog(draft, effectLog(carrierId, target?.id ?? null, text, { kind: 'creature-encounter', key, success: answer.success }))));
     },
 
     /** Entrer en Frénésie (Trait) : Test de Volonté demandé ; réussi, l'état Frénésie du Talent est posé (+1 dégât déjà lu par la résolution). */

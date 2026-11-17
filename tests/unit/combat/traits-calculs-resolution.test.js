@@ -4,7 +4,7 @@
 import test, { describe } from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../../../js/core/store.js';
-import { previewResolution } from '../../../js/core/resolution.js';
+import { previewResolution, applyResolution } from '../../../js/core/resolution.js';
 import { sourceActive } from '../../../js/core/v5-talent-actions.js';
 
 const subject = (id, extra = {}) => ({ id, name: id.toUpperCase(), kind: 'PJ', camp: id === 'a' ? 'pj' : 'ennemi', zone: 'active', hp: 40, maxHp: 40,
@@ -62,6 +62,38 @@ describe('Sang corrosif à la résolution (CA1, D14, D19, CA25)', () => {
     await store.redo();
     assert.equal(who(store, 'a').hp, 35);
     assert.equal(who(store, 'e').hp, 35);
+  });
+});
+
+describe('Sang corrosif : localisation tirée une fois par résolution (D19, MJ 17/11)', () => {
+  const corrosive = id => melee(id, { actor: subject('a'), target: subject('b', { traits: ['Corrosive Blood'] }), traitInputs: { b: { corrosiveBlood: 8 } } });
+  const hitOf = preview => preview.traitPlans.plans.find(plan => plan.key === 'corrosive').hits[0];
+  const engineState = preview => ({ revision: preview.baseRevision, participants: [preview.input.actor, preview.input.target], appliedResolutionIds: [] });
+
+  test('même aperçu recalculé : même localisation ; nouvelle résolution : nouveau tirage ; après le commit : nouveau tirage', () => {
+    const rolls = [35, 90, 12];
+    let calls = 0;
+    const rollLocation = () => rolls[calls++];
+    const first = previewResolution(corrosive('loc-1'), { rollLocation });
+    const again = previewResolution(corrosive('loc-1'), { rollLocation });
+    assert.equal(calls, 1, 'un seul tirage pour deux aperçus de la même résolution');
+    assert.equal(hitOf(first).locationRoll, 35);
+    assert.equal(hitOf(again).locationRoll, 35);
+    const other = previewResolution(corrosive('loc-2'), { rollLocation });
+    assert.equal(hitOf(other).locationRoll, 90, 'une autre résolution tire sa propre localisation');
+    assert.equal(applyResolution(again, engineState(again)).status, 'applied');
+    const replay = previewResolution(corrosive('loc-1'), { rollLocation });
+    assert.equal(hitOf(replay).locationRoll, 12, 'la résolution commitée ne garde pas son tirage');
+  });
+
+  test('par le Store : deux aperçus de la même résolution donnent la même localisation', async () => {
+    const carrier = subject('b', { traits: ['Corrosive Blood'], extensions: { v5: { engagements: { e: { since: 1, lastAttackRound: 1 } } } } });
+    const other = subject('e', { camp: 'pj', extensions: { v5: { engagements: { b: { since: 1, lastAttackRound: 1 } } } } });
+    const store = await open([subject('a'), carrier, other]);
+    const input = melee('loc-store', { traitInputs: { b: { corrosiveBlood: 8 } } });
+    const rollsOf = preview => preview.traitPlans.plans.find(plan => plan.key === 'corrosive').hits.map(hit => hit.locationRoll);
+    const reference = rollsOf(store.previewResolution(input));
+    for (let index = 0; index < 5; index += 1) assert.deepEqual(rollsOf(store.previewResolution(input)), reference);
   });
 });
 
@@ -195,6 +227,22 @@ describe('Bouclier (n) (CA12)', () => {
     assert.ok(preview.defenderTest.details.modifiers.some(row => row.id === 'trait:shield' && row.amount === 1), JSON.stringify(preview.defenderTest.details.modifiers));
     const dodged = previewResolution(melee('shi-2', { actor: subject('a'), target: subject('b', { traits: ['Shield (2)'] }), defense: dodge }));
     assert.ok(dodged.defenderTest.details.modifiers.some(row => row.id === 'trait:shield'));
+  });
+
+  test('avec un vrai bouclier, la plus forte des deux valeurs compte, sans cumul (MJ 17/11)', () => {
+    const shield = { id: 'shield', baseId: 'fixture-shield', kind: 'shield', custom: true, name: 'Bouclier', ap: 2, locations: [], layer: 'none',
+      category: 'Bouclier', damage: '', range: '', keywords: [{ id: 'protectrice', parameter: '2' }], catalogVersion: 'fixture' };
+    const protectionContext = { shieldId: 'shield', shieldAvailable: true, opposedWithShield: true };
+    const real = previewResolution(melee('shi-4', { actor: subject('a'), target: subject('b', { equipment: [shield] }), protectionContext }));
+    assert.equal(real.protection.shieldAp, 2, 'référence : le vrai bouclier seul');
+    const stronger = previewResolution(melee('shi-5', { actor: subject('a'), target: subject('b', { traits: ['Shield (3)'], equipment: [shield] }), protectionContext }));
+    assert.equal(stronger.protection.shieldAp, 3, 'le Trait plus fort l\'emporte');
+    assert.equal(stronger.protection.ap, real.protection.ap + 1, 'sans cumul : 3 au lieu de 2');
+    assert.equal(stronger.defenderTest.details.modifiers.some(row => row.id === 'trait:shield'), false, 'le +1 DR du vrai bouclier ne se double pas');
+    assert.equal(stronger.defenderTest.sl, real.defenderTest.sl);
+    const weaker = previewResolution(melee('shi-6', { actor: subject('a'), target: subject('b', { traits: ['Shield (1)'], equipment: [shield] }), protectionContext }));
+    assert.equal(weaker.protection.shieldAp, 2, 'le vrai bouclier plus fort l\'emporte');
+    assert.equal(weaker.protection.ap, real.protection.ap);
   });
 
   test('profil L22 « Shield 2* » : rappel seul', () => {
