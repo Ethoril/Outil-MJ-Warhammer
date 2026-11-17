@@ -10,6 +10,25 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.52.0 — Calculs des Traits de créature (préparée le 17/11/2026, non publiée)
+
+Cadrage et décisions du MJ du 17/11/2026 : `docs/specs/traits-calculs/spec.md` (D1 à D20), tri dans `tri.md`, plan et tâches (huit lots) dans le même dossier. Branche locale `traits-calculs`.
+
+**Publier la carte avant l’outil.** Le palier Bond envoie à la carte un nouveau champ facultatif, `bondCells` (le double de la Course, en cases). La carte doit l’accepter avant que l’outil ne l’envoie ; une carte qui ne le connaît pas ne l’affiche simplement pas.
+
+- **Traits désormais calculés, sans que le MJ ouvre quoi que ce soit.** À chaque blessure, au début et à la fin d’un Round, ou quand le porteur gagne un Avantage, l’outil ouvre de lui-même la demande qui convient (Test à passer ou d10 à tirer). Chaque demande a **un bouton qui tire le dé**, en plus de la saisie d’un résultat ; un seul ↶ annule le tout.
+  - **À la blessure** : Sang corrosif (un seul d10 par blessure, réduit par le Bonus d’Endurance et par les PA de la zone, que l’outil tire lui-même ; minimum 1), Infecté (Test d’Endurance de la victime), Parasité (−1 DR pour toucher le porteur en mêlée), Champion (il blesse aussi quand il gagne l’opposition en défense), Bouclier du Trait (lié à l’option Bouclier de l’équipement ; contre un vrai bouclier, la plus forte valeur compte).
+  - **En début de Round** : Stupide (Test d’Intelligence Facile, sauf s’il est guidé par un allié qui ne l’est pas). Bestial : défense par l’Esquive seulement, fuite sous la moitié des Blessures. Rage : suit le gain d’Élan.
+  - **En fin de Round** : Instable (2 Blessures s’il est engagé avec un adversaire qui a l’Élan alors que lui n’en a pas ; sa mort passe par la décision de mort habituelle, jamais de suppression automatique).
+- **Marqueur « tour perdu ».** Quand un Trait fait perdre au porteur son Mouvement et son Action (Stupide, Affamé), un marqueur apparaît sur sa carte de combat pour son prochain Tour, avec un avertissement, et se lève à la fin de ce Tour.
+- **Increvable en Test étendu.** À la mort avec le corps intact (case à cocher), un Test de Résistance +0 au début de chaque Round ; les DR s’additionnent, un échec n’en retire jamais, et la créature revient à 1 Blessure dès 6 DR, au plus en BE Rounds. Le total s’affiche ; les États du mort ne comptent pas.
+- **Inflammable en défense.** Contre une attaque qui inflige Enflammé (Inflige, arme enchantée, attaque naturelle), le porteur prend −2 DR sur sa défense (Esquive ou Corps à corps opposé) ; sans défense possible, pas de Test. Jamais au retrait d’Enflammé par Athlétisme.
+- **Bloc « Rencontre » et boutons.** Effrayé et Animosité se déclenchent par des boutons dans un même bloc (l’outil ne connaît pas la rencontre) ; Vampirique et Se cabrer (remplace le déplacement, Piétinement) aussi. Les demandes Oui/Non (Stupide guidé) s’affichent en clair, et une réponse garde le choix de résultat déjà fait.
+- **Petits calculs.** Insensible à la douleur ignore les pénalités des critiques mais pas les amputations ni les États qu’ils posent ; Béni et Miracles donnent Prière à Sociabilité +10 ; Dressé (Guerre) et Dressé (Magie) ignorent Craintif pour leur cause (l’outil demande la cause de la chute) ; **Bond** : pastille sur la fiche (portée doublée) et portée envoyée à la carte, sans toucher la Course ni la poursuite.
+- **Reste en rappel.** Tri, section 3 : Traits rares à règle propre (Capricieux, Salive anticoagulante, Scission…), Traits de terrain (Limicole, Grimpant, Fouissage…), Traits narratifs ou tirés par le MJ, Traits sans règle d’exposition (Aura glaciale, Sillage de feu, Rampant…), Têtu, Dressé (Choc). **Disruption** et **Creature Weapons** passent officiellement en rappel (ils étaient déclarés « couverts » sans calcul). **Insensible à la douleur hors combat** reste au MJ.
+- Moteur : `js/core/trait-effects.js`, `js/core/store/api-trait-buttons.js`.
+- Preuves : tests `tests/unit/creatures/traits-calculs-*.test.js` ; parcours navigateur de bout en bout (Sang corrosif, Instable, Stupide, Increvable, Bond, ↶/↷, rechargement) ; relectures de lots corrigées. Suite unitaire complète à lancer avant la publication. Côté carte, le lot L7 (`bondCells`, dépôt `rpg-map-display`) n’a pas été revérifié lors de la préparation de cette version.
+
 ## 3.51.0 — Traits optionnels des créatures et des montures (publiée le 17/11/2026)
 
 Cadrage et décisions du MJ du 17/11/2026 : `docs/specs/traits-optionnels/spec.md` (D1 à D26, CA1 à CA25), valeurs relues dans `valeurs-traits.md`, inventaire des 125 Traits dans `inventaire.md`.

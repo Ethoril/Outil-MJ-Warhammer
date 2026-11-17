@@ -40,7 +40,11 @@ Détail, restes connus et preuves : `docs/SUIVI_EVOLUTION.md`, entrée 3.51.0. D
 ## 3. Ce qui reste ensuite
 
 - **Miracles narratifs** : `docs/specs/miracles-narratifs/spec.md` (69 prières en rappel, lots L0 à L9). Avant le plan : inventorier et classer les 88 clauses résiduelles des 60 miracles « assistés ».
-- **Second chantier des Traits** : nouveaux calculs. Tri fait le 17/11, quatre doutes tranchés par le MJ : [specs/traits-calculs/tri.md](specs/traits-calculs/tri.md). Spec écrite le 17/11 (compte Team) et questions tranchées : [specs/traits-calculs/spec.md](specs/traits-calculs/spec.md), D1 à D17. Suite : plan et tâches ; D5 et D7 à D12 sont des choix de Claude non relus par le MJ. Bond touche aussi la carte (D16).
+- **Second chantier des Traits (calculs)** : codé et préparé en **3.52.0**, **non publié**. Branche locale `traits-calculs`, commit `chore(release): 3.52.0` (hash dans le rapport de la session), rien poussé, rien fusionné dans `main`. Détail et preuves : `docs/SUIVI_EVOLUTION.md`, entrée 3.52.0. Spec : [specs/traits-calculs/spec.md](specs/traits-calculs/spec.md), D1 à D20 ; tri : [tri.md](specs/traits-calculs/tri.md) ; lots L1 à L8 dans `tasks.md`.
+  - **Fait** : Traits branchés à la blessure, au début et à la fin de Round (Sang corrosif, Infecté, Parasité, Champion, Bouclier, Stupide, Bestial, Rage, Instable) ; demandes avec bouton qui tire le dé ; marqueur « tour perdu » ; Increvable en Test étendu (D15, D18) ; Inflammable −2 DR en défense (D17, D20) ; Insensible à la douleur ; Béni/Miracles ; causes de Dressé ; Se cabrer ; Bond sur la fiche et `bondCells` envoyé à la carte (D16) ; Disruption et Creature Weapons déclarés en rappel.
+  - **Reste en rappel** : tri section 3 (rares, terrain, narratifs, sans règle d'exposition, Têtu, Dressé (Choc)) ; Insensible à la douleur hors combat.
+  - **Décisions** : D1 à D4, D13 à D20 du MJ (17/11) ; D5 et D7 à D12 confirmés par le MJ au plan.
+  - **À faire avant de publier** : (1) publier la **carte d'abord** (champ `bondCells`, `E:/rpg-map-display`), puis l'outil ; (2) suite unitaire complète verte (deux commandes) ; (3) feu vert du MJ ; (4) fusion dans `main` et push.
 - **Restes de la 3.50.0** (dans `docs/SUIVI_EVOLUTION.md`) : `docs/AUDIT_REGLES.md` non régénéré ; synchronisation en ligne d'une poursuite non éprouvée ; Vol dans le Mouvement de poursuite sans test. Ne les traiter que si le MJ le demande.
 - Ne rien reproposer de ce qui est « classé » dans la mémoire `classement-restes-15-11`.
 
