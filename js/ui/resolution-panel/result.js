@@ -22,7 +22,8 @@ export function renderTraitPlanRequests(requests = [], draft = {}, handlers = {}
   const section = node('div', 'workspace-trait-requests');
   const answer = (request, value) => {
     const current = draft.v5Context || {}, inputs = current.traitInputs || {};
-    handlers.select?.({ v5Context: { ...current, traitInputs: { ...inputs, [request.participantId]: { ...(inputs[request.participantId] || {}), [request.field]: value } } } });
+    // keepChoice : une réponse de Trait (d10, Test) ne change pas le jet, le choix de résultat déjà fait reste valable.
+    handlers.select?.({ keepChoice: true, v5Context: { ...current, traitInputs: { ...inputs, [request.participantId]: { ...(inputs[request.participantId] || {}), [request.field]: value } } } });
     handlers.calculate?.();
   };
   for (const request of requests) {

@@ -61,6 +61,17 @@ test('une demande `choice` (Stupide guidé) s’affiche en Oui/Non et se résout
   assert.equal((await ctx.outcome).ok, true);
 }));
 
+test('une réponse `choice` déjà donnée se relit Oui/Non, pas true/false (défaut relevé par L8)', () => withDom(async () => {
+  const guided = traitRequest({ field: 'stupidGuided', kind: 'choice', participantId: 'orc', participantName: 'Orque', label: 'Orque · guidé ?' });
+  const intTest = traitRequest({ field: 'stupidInt', kind: 'test', participantId: 'orc', participantName: 'Orque', label: 'Orque · Intelligence', testTarget: target });
+  const ctx = await open([guided], async inputs => ({ ok: false, status: 'requires-input', requests: [intTest], inputs, baseRevision: 3 }));
+  await choose(byTag(ctx.dialog, 'select')[0], 'true');
+  await submitForm(ctx.form);
+  const text = ctx.dialog.textContent;
+  assert.match(text, /guidé \? : Oui/);
+  assert.doesNotMatch(text, /guidé \? : true/);
+}));
+
 test('« Non » est une réponse valide pour une demande `choice`', () => withDom(async () => {
   const request = traitRequest({ field: 'stupidGuided', kind: 'choice', participantId: 'orc', label: 'Guidé ?' });
   const ctx = await open([request]);
@@ -113,6 +124,7 @@ test('le panneau de résultat montre chaque demande à la blessure avec son bout
   await d100.fire('click');
   assert.deepEqual(selected.at(-1).v5Context.traitInputs.hero.infectedEndurance, resolveTraitAnswer(requests[1], 46));
   assert.equal(calculated, 2, 'chaque réponse relance le calcul');
+  assert.ok(selected.every(patch => patch.keepChoice === true), 'une réponse de Trait garde le choix de résultat déjà fait (défaut relevé par L8)');
   const typed = renderTraitPlanRequests([requests[0]], { v5Context: {} }, handlers);
   const input = byTag(typed, 'input')[0];
   input.value = '5'; await input.fire('change');

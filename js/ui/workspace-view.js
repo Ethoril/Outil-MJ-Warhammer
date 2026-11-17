@@ -1390,8 +1390,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
       for (const key of ['v5Kind','v5SlModifier','v5Advantages','v5Disadvantages','charging','extraAttack','reactionId','aimed','beatBlade','fortuneReroll','fortuneForAdvantage','fortuneRerollRolls','reverseDice','fortuneRerollRoll','actorSize','targetSize','defenseKind','defenseSlModifier','defenseAdvantages','defenseDisadvantages','v5Context','defenseContext','combatDefensiveSkillId','combatAimWeaponId','combatAimWeaponName','combatAimWeaponHeldConfirmed','combatAimWeaponKindConfirmed','talentChoices','defenseTalentChoices','magicChannelMode','magicChannelType','magicLore','magicFumbleLossRoll','magicMiscastRoll','magicMajorRoll','magicSecondaryDurationRoll','magicSecondaryDamageRoll','magicSecondaryDistanceRoll','magicSecondaryLocation','magicSpellId','magicArcaneArmorPoints','magicArcaneEnhancedDamage','magicArcaneChooseItem','magicArcaneTargets','magicMjChoice','magicChosenStats','magicHogTier','magicResistanceRoll','magicVortexDirection','magicVortexDistance','magicCriticalChoice','magicOvercastDamage','magicOvercastTargets','magicOvercastRange','magicOvercastDuration','magicOvercastAoe','magicOvercastSpecial','magicBeastKey','magicRoll3d10','magicTargetIds']) if (key in patch) draft[key] = patch[key];
       for(const [key,value] of Object.entries(patch))if(/^magic[A-Z]/.test(key))draft[key]=value;
-      draft.v5Choice = null;
-      draft.defenseChoice = null;
+      if (patch.keepChoice !== true) { draft.v5Choice = null; draft.defenseChoice = null; }
       if ('targetId' in patch) {
         draft.ignoredConditions = [];
         clearFortuneAdvantageDraft(draft);

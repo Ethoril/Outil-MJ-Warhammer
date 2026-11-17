@@ -108,7 +108,7 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, g
       fields.replaceChildren();prior.replaceChildren();readers=[];talentControls=[];alert.hidden=true;
       const pendingKeys=new Set((current.requests||[]).map(keyFor));
       const answered=[];
-      for(const [participantId,values] of Object.entries(inputs))for(const [field,value]of Object.entries(values||{}))if(!pendingKeys.has(`${participantId}:${field}`)&&labels.has(`${participantId}:${field}`))answered.push(`${labels.get(`${participantId}:${field}`)} : ${Array.isArray(value)?(value.length?value.join(', '):'Aucune cible'):typeof value==='object'?`${value.success?'Réussite':'Échec'}, ${value.sl} DR`:String(value)}`);
+      for(const [participantId,values] of Object.entries(inputs))for(const [field,value]of Object.entries(values||{}))if(!pendingKeys.has(`${participantId}:${field}`)&&labels.has(`${participantId}:${field}`))answered.push(`${labels.get(`${participantId}:${field}`)} : ${Array.isArray(value)?(value.length?value.join(', '):'Aucune cible'):typeof value==='object'?`${value.success?'Réussite':'Échec'}, ${value.sl} DR`:typeof value==='boolean'?(value?'Oui':'Non'):String(value)}`);
       if(answered.length){const detail=el('details');detail.open=true;detail.append(el('summary','Résultats déjà renseignés'));answered.forEach(text=>detail.append(el('p',text)));prior.append(detail);}
       const groups=new Map();let manual=false,index=0;
       for(const request of current.requests||[]) {
