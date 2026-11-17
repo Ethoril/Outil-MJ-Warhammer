@@ -3,7 +3,7 @@
  * Les PDF restent hors du dépôt (chemins du manifeste du corpus) ; les générateurs qui s'en servent se lancent en local.
  */
 import { readFileSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { runPdftotext } from './pdftotext-version.mjs';
 import { pageBlocks, setLenient } from './bestiary-blocks.mjs';
 import { parseBlock } from './bestiary-profile.mjs';
 import { repairGlyphs } from './bestiary-glyphs.mjs';
@@ -29,7 +29,7 @@ export function dictionaries() {
 export function bookPages(book) {
   // Livre français : sortie UTF-8 explicite (accents) ; les autres livres gardent la sortie par défaut, inchangée.
   const encoding = book.language === 'fr' ? ['-enc', 'UTF-8'] : [];
-  return repairGlyphs(execFileSync('pdftotext', [...encoding, '-layout', book.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8')).split('\f');
+  return repairGlyphs(runPdftotext([...encoding, '-layout', book.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8')).split('\f');
 }
 
 /** Profils des livres demandés : [{ key, book, physicalPage, index, zone, title, stats, … }] et lignes de valeurs à confirmer. */

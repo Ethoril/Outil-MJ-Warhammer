@@ -16,7 +16,7 @@ import { MANUAL_BLOCKS, PARTIAL_BOOKS } from './lib/bestiary-manual.mjs';
 import { KEYWORDS_MANUAL } from './lib/bestiary-keywords-manual.mjs';
 import { parsePregenerated } from './lib/bestiary-pregen.mjs';
 import { cleanSkills } from './lib/bestiary-record.mjs';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { resolvePdftotext, runPdftotext } from './lib/pdftotext-version.mjs';
 import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
 import { NAMES_FR } from './lib/bestiary-names-fr.mjs';
 import { proposeFrenchName } from './lib/bestiary-names-glossary.mjs';
@@ -50,7 +50,8 @@ function writeOrCompare(path, text, label) {
 }
 if (CHECK) {
   const missing = [];
-  if (spawnSync('pdftotext', ['-v']).error) missing.push('pdftotext introuvable (Poppler)');
+  const outil = resolvePdftotext();
+  if (!outil.ok) missing.push(outil.message);
   for (const book of corpusBooks().filter(item => ids.includes(item.id))) {
     if (!existsSync(book.path)) missing.push(`${book.id} : PDF absent (${book.path})`);
     else if (createHash('sha256').update(readFileSync(book.path)).digest('hex') !== book.sha256) missing.push(`${book.id} : PDF différent du manifeste (${book.path})`);
@@ -160,7 +161,7 @@ for (const book of ids) {
   const talentDictionary = new Set(JSON.parse(readFileSync('js/data/reference-snapshot.json', 'utf8')).talents.entries.map(item => item.englishName).filter(Boolean));
   for (const entry of missing.filter(item => item.kind === 'pregenerated-character')) {
     const meta = manifest.find(item => item.id === book);
-    const page = flag => repairGlyphs(execFileSync('pdftotext', [...flag, '-f', String(entry.physicalPage), '-l', String(entry.physicalPage), meta.path, '-'], { maxBuffer: 1 << 26 }).toString('utf8'));
+    const page = flag => repairGlyphs(runPdftotext([...flag, '-f', String(entry.physicalPage), '-l', String(entry.physicalPage), meta.path, '-'], { maxBuffer: 1 << 26 }).toString('utf8'));
     const parsed = parsePregenerated(page([]), page(['-layout']), talentDictionary);
     const skills = cleanSkills(parsed.skills);
     const record = {

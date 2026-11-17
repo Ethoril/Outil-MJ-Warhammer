@@ -5,7 +5,7 @@
  * Les gabarits (cases vides) et les profils transcrits à la main sont signalés « non contrôlables », pas acceptés en silence.
  */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { execFileSync } from 'node:child_process';
+import { runPdftotext } from './lib/pdftotext-version.mjs';
 import { corpusBooks } from './lib/bestiary-extract.mjs';
 import { repairGlyphs } from './lib/bestiary-glyphs.mjs';
 import { JUSTIFIED, JUSTIFIED_Q34, JUSTIFIED_Q40 } from './lib/bestiary-justified.mjs';
@@ -28,7 +28,7 @@ const dataDir = args.find(arg => arg.startsWith('--data-dir='))?.slice('--data-d
 for (const book of args.filter(arg => !arg.startsWith('--'))) {
   const data = JSON.parse(readFileSync(`${dataDir}/${book}.json`, 'utf8'));
   const meta = corpusBooks().find(item => item.id === book);
-  const pages = repairGlyphs(execFileSync('pdftotext', [meta.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8')).split('\f')
+  const pages = repairGlyphs(runPdftotext([meta.path, '-'], { maxBuffer: 1 << 28 }).toString('utf8')).split('\f')
     .map(page => page.replace(/[­−–—�]/g, '-').replace(/-{2,}/g, '-').replace(/\*/g, '').replace(/\s+/g, ' '));
   // Un zéro initial imprimé (« 09 », « 04 ») est la même valeur que « 9 », « 4 ».
   const unpadded = pages.map(page => normalizeBlockText(page).replace(/(?<=\s)0(\d)(?=\s)/g, '$1'));
