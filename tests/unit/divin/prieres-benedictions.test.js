@@ -1745,7 +1745,9 @@ test('v3 Jugement du Roi de la neige : ignore BE et PA et inflige Sonné', () =>
   assert.equal(stun.when.fact, 'judgement');
   assert.ok(judgement.effects.some(effect => effect.type === 'direct-damage'));
   assert.match(clause(judgement, 'stunned').text, /Sonné/);
-  assert.equal(clause(judgement, 'redirect-stunned').mode, 'manual');
+  // Miracles narratifs (L7, 17/11/2026) : le prêtre qui subit l'effet reçoit Sonné par le moteur.
+  assert.equal(clause(judgement, 'redirect-stunned').mode, 'engine');
+  assert.deepEqual(judgement.effects.find(effect => effect.appliesTo === 'caster').conditions, [{ key: 'Stunned', level: 1 }]);
 });
 });
 

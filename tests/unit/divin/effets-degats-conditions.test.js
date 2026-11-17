@@ -416,6 +416,9 @@ test('Jugement du Roi de la neige : le verdict MJ est requis ; refusé, la cible
   await cast(store, JUDGEMENT, input(['target'], { damageRoll: 4 }, { target: { judgement: false } }));
   assert.equal(person(store, 'target').hp, 20);
   assert.equal(person(store, 'priest').hp, 20 - 6, 'même jet 4 + 2 DR sur le prêtre');
+  const stunned = who => (person(store, who).states || []).some(row => /^(stunned|sonne)$/i.test(String(row.key).normalize('NFD').replace(/[̀-ͯ]/g, '')));
+  assert.equal(stunned('priest'), true, 'le prêtre qui subit l’effet reçoit Sonné');
+  assert.equal(stunned('target'), false, 'la cible épargnée ne reçoit rien');
 });
 
 test('Caresse de Rhya : soigne le Bonus de Sociabilité, un soin de plus par tranche de +2 DR', async () => {

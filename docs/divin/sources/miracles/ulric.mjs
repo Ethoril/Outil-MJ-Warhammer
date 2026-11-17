@@ -80,7 +80,7 @@ export const miracles = [
     status: 'assisted', effect: null,
     effects: [{ type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, requiresFact: { field: 'judgement', onFalse: 'skip', label: 'verdict MJ : cible faible, lâche ou fourbe (sinon la cible est épargnée et le prêtre subit l’effet)' } },
       { type: 'condition', key: 'Stunned', level: 1, when: { fact: 'judgement', label: 'verdict MJ : cible faible, lâche ou fourbe (sinon la cible est épargnée et le prêtre subit l’effet)' } },
-      { type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, appliesTo: 'caster', casterWhen: { field: 'judgement', label: 'verdict MJ : cible faible, lâche ou fourbe', value: false, match: 'any' } }],
+      { type: 'direct-damage', dice: { count: 1, sides: 10 }, perSuccessLevel: 1, appliesTo: 'caster', conditions: [{ key: 'Stunned', level: 1 }], casterWhen: { field: 'judgement', label: 'verdict MJ : cible faible, lâche ou fourbe', value: false, match: 'any' } }],
     targetRules: [],
     needsInput: [
       { id: 'target-judgement', text: 'Le MJ juge-t-il la cible faible, lâche ou fourbe ? Sinon le prêtre subit l\'effet.' },
@@ -89,7 +89,7 @@ export const miracles = [
     clauses: [
       { id: 'damage', mode: 'engine', text: '1d10 Blessures ignorant Bonus d\'Endurance et PA, +1 Blessure par DR.' },
       { id: 'stunned', mode: 'engine', text: 'La cible jugée faible, lâche ou fourbe reçoit l\'état Sonné.' },
-      { id: 'redirect-stunned', mode: 'manual', text: 'Si le prêtre subit l\'effet à la place de la cible, il reçoit aussi l\'état Sonné : à poser à la main.' },
+      { id: 'redirect-stunned', mode: 'engine', text: 'Si le prêtre subit l\'effet à la place de la cible, il reçoit aussi l\'état Sonné.' },
       { id: 'redirect', mode: 'engine', text: 'Si la cible n\'est ni faible, ni lâche, ni fourbe (verdict MJ), elle est épargnée et le prêtre subit le même effet (même jet de dégâts).' },
       { id: 'haine-sacree', mode: 'engine', text: 'Dégâts de miracle : +2 si le prêtre a le talent Haine sacrée (déclencheur « miracle inflige des Blessures »).' }
     ]

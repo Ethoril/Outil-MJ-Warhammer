@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:781ba6ad9b48d746d0e792cf03d72c43e5d1b3a199af5ce3cf339179f6657e2b",
+  "sourceFingerprint": "sha256:faab461356081ae1e39f28ef7f380ad5f361800df102e6cce9e4dd0bc83ee3f4",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -23591,6 +23591,12 @@
           },
           "perSuccessLevel": 1,
           "appliesTo": "caster",
+          "conditions": [
+            {
+              "key": "Stunned",
+              "level": 1
+            }
+          ],
           "casterWhen": {
             "field": "judgement",
             "label": "verdict MJ : cible faible, lâche ou fourbe",
@@ -23622,8 +23628,8 @@
         },
         {
           "id": "redirect-stunned",
-          "mode": "manual",
-          "text": "Si le prêtre subit l'effet à la place de la cible, il reçoit aussi l'état Sonné : à poser à la main.",
+          "mode": "engine",
+          "text": "Si le prêtre subit l'effet à la place de la cible, il reçoit aussi l'état Sonné.",
           "sourceRef": "v5-the-snow-king-s-judgement"
         },
         {

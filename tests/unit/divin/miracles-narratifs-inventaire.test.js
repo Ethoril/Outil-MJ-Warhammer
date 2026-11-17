@@ -67,16 +67,16 @@ describe('Inventaire des miracles narratifs : clauses des miracles assistés', (
   // clauses manual, 41 → 43 contrats portant encore une clause manual.
   // L7 : Martyr (damage-transfer) et Retour à l'envoyeur (wound-echo) passent assisted (60 → 58 manual, 69 → 71 assisted) ; damage-transfer,
   // toughness-add, weaker-stronger et echo-wounds branchées ; deux rappels F6 (other-damage, echo-optional) : 73 → 75 clauses manual,
-  // 43 → 45 contrats portant encore une clause manual. redirect-stunned reste manual (figée par un test existant, CA7).
-  test('71 contrats assisted, tous des miracles, 45 avec une clause manual', () => {
+  // 43 → 45 contrats portant encore une clause manual ; puis redirect-stunned branchée (Sonné sur le prêtre) : 74 clauses, 44 contrats.
+  test('71 contrats assisted, tous des miracles, 44 avec une clause manual', () => {
     assert.equal(assistes.length, 71, `Nombre de contrats « assisted » : ${assistes.length} au lieu de 71`);
     assert.ok(assistes.every((c) => c.type === 'miracle'), 'Un contrat « assisted » n\'est pas un miracle');
     const avec = assistes.filter((c) => c.clauses.some((cl) => cl.mode === 'manual'));
-    assert.equal(avec.length, 45, `Contrats assistés avec clause manuelle : ${avec.length} au lieu de 45`);
+    assert.equal(avec.length, 44, `Contrats assistés avec clause manuelle : ${avec.length} au lieu de 44`);
   });
 
-  test('75 clauses manual, chacune dans la table', () => {
-    assert.equal(clausesManuelles.length, 75, `Clauses « manual » des assistés : ${clausesManuelles.length} au lieu de 75`);
+  test('74 clauses manual, chacune dans la table', () => {
+    assert.equal(clausesManuelles.length, 74, `Clauses « manual » des assistés : ${clausesManuelles.length} au lieu de 74`);
     for (const cle of clausesManuelles) {
       assert.ok(table.clauses[cle], `Clause « manual » absente de la table des familles : ${cle}`);
     }
@@ -90,6 +90,6 @@ describe('Inventaire des miracles narratifs : clauses des miracles assistés', (
   });
 
   test('comptes par famille : F1 5, F3 2, F4 1, F5 0, F6 66, F8 1 (plus aucune clause F2)', () => {
-    assert.deepEqual(compter(Object.values(table.clauses)), { F1: 5, F3: 2, F4: 1, F6: 66, F8: 1 });
+    assert.deepEqual(compter(Object.values(table.clauses)), { F1: 5, F3: 1, F4: 1, F6: 66, F8: 1 });
   });
 });
