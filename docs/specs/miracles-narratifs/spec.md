@@ -182,4 +182,16 @@ Ordre recommandé : L0, L1, L2, L3, L4, puis L6, puis les lots à question (L5, 
 Choix technique de Claude, hors décision du MJ :
 - **Q8. Moteur d'effets unifié :** ne pas attendre ; les effets neufs s'écrivent dans les types de `v5-divine-grammar.js`.
 
-Reste à faire avant `plan.md` et `tasks.md` : l'inventaire des 88 clauses des miracles assistés (conséquence de Q1).
+Inventaire des 88 clauses des miracles assistés : `inventaire-assistes.md` (17/11/2026 ; familles F1 à F8, lots L10 et L11 ajoutés).
+
+## 7. Décisions du MJ (17/11/2026), sur l'inventaire des miracles assistés
+
+- **Q11. Vaincre les impies :** le prêtre compte parmi les alliés qui gagnent la Haine.
+- **Q12. Ruissellement :** le bonus de Charme va au prêtre seul (lecture affichée dans le rappel).
+- **Q13. Sur un terrain mortel :** durée Bonus de Volonté en Rounds, affichée « durée non attestée par le livre ».
+- **Q14. Grâce de Ranald :** le +10 en Discrétion se lit +1 DR (comme Commander la Légion) ; le +10 d'Agilité reste un modificateur de caractéristique.
+- **Q15. Épée de justice :** le Péché suit Q9 (rappel au résultat, attribué à la main).
+- **Q16. Fureur du soleil vertueux :** Dégâts +2 ordinaires (réduits par BE et PA), après relecture de la page (Q10).
+- **Q17. Désengagement (En bon ordre) et Élan en début de Round (Froid de la gelée blanche) :** branchés, en lot isolé tout à la fin (L11), avec tests de non-régression.
+
+Plus aucune question ouverte : reste `plan.md` et `tasks.md`.
