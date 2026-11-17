@@ -187,6 +187,7 @@
     "traits-optionnels-browser.mjs": {"famille":"ticket","chantier":"traits-optionnels"},
     "u1-contre-verification-browser.mjs": {"famille":"general"},
     "u1-panneau-action-browser.mjs": {"famille":"general"},
+    "traits-calculs-browser.mjs": {"famille":"ticket","chantier":"traits-calculs"},
     "u2-preserve-view.browser.mjs": {"famille":"general"},
     "u3-colonne-jouer-browser.mjs": {"famille":"general"},
     "u5-hud-barre-pv.browser.mjs": {"famille":"general"},
