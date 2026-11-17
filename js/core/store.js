@@ -179,6 +179,8 @@ import { createDivineApi } from './store/api-divine.js';
 import { createAftermathApi } from './store/api-aftermath.js';
 import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 import { createEngagementsApi, engageAfterMeleeAttack, withExpiredEngagements } from './store/api-engagements.js';
+import { createOptionalTraitsApi } from './store/api-optional-traits.js';
+import { applyOptionalChoices } from './optional-traits.js';
 import { createPursuitApi, withAbandonedPursuit, pursuitFreesBrokenPrey, pursuitInvolves, withoutPursuitParticipant, withScenePursuit, withoutScenePursuit } from './store/api-pursuit.js';
 import { withoutEngagements } from './engagements.js';
 
@@ -1317,21 +1319,37 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
   }
 
   // Participant copy of a reserve profile, as serialised in a command draft.
-  function participantFromProfile(prof, overrides = {}) {
+  // Traits optionnels cochés (lot L5) : profil effectif d'un profil de Réserve. Un profil canonique range ses Traits imprimés dans
+  // `extensions.traits` : ils sont donnés au moteur comme `traits`. Sans coche, le profil d'entrée est rendu tel quel (même objet).
+  function effectiveProfile(source) {
+    const printed = source && !Array.isArray(source.traits) && Array.isArray(source.extensions?.traits) ? { ...source, traits: source.extensions.traits } : source;
+    const applied = applyOptionalChoices(printed).profile;
+    return applied === printed ? source : applied;
+  }
+
+  // Participant copy of a reserve profile, as serialised in a command draft.
+  function participantFromProfile(source, overrides = {}) {
+    const prof = effectiveProfile(source);
+    const checked = prof !== source;
+    const extensions = cloneValue(prof.extensions || {});
+    // Traits imprimés et cochés (format imprimé, D9) : seulement quand le profil porte des coches.
+    if (checked && Array.isArray(extensions.traits)) extensions.traits = cloneValue(prof.traits);
     return {
       id: uid(), profileId: prof.id, name: prof.name, kind: prof.kind,
       initiative: prof.initiative, hp: prof.hp, maxHp: prof.maxHp ?? prof.hp,
-      ...normalizeFicheFields(prof), extensions: cloneValue(prof.extensions || {}),
+      ...normalizeFicheFields(prof), extensions,
       armor: JSON.parse(JSON.stringify(prof.armor || {})),
       caracs: JSON.parse(JSON.stringify(prof.caracs || {})),
-      actions: JSON.parse(JSON.stringify(prof.actions || [])),
+      actions: JSON.parse(JSON.stringify(prof.actions || source.actions || [])),
       tags: JSON.parse(JSON.stringify(prof.tags || [])),
       notes: prof.notes || '', zone: 'bench', states: [],
+      ...(checked && Array.isArray(prof.traits) ? { traits: cloneValue(prof.traits) } : {}),
       ...overrides
     };
   }
 
-  function diceLinesFromProfile(prof, participantId) {
+  function diceLinesFromProfile(source, participantId) {
+    const prof = effectiveProfile(source);
     return (Array.isArray(prof.diceLines) ? prof.diceLines : [])
       .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId, extensions: { ...template.extensions, profileActionId: template.id } }));
   }
@@ -4254,6 +4272,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
   };
 
   Object.assign(api, createEngagementsApi({ api, currentEnvelope }));
+  Object.assign(api, createOptionalTraitsApi({ api, currentEnvelope }));
   Object.assign(api, createPursuitApi({ api, currentEnvelope }));
   Object.assign(api, createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews, declaredFleeEngaged }), {
     previewResolution(input = {}) {

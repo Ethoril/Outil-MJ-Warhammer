@@ -32,7 +32,8 @@ const PROFILE_KEYS = {
   keywords: ['keywords', 'motsclescreature', 'creaturekeywords'], keywordExclusions: ['keywordexclusions', 'motsclesexclus'],
   skills: ['competences', 'skills'], talents: ['talents'], equipment: ['equipement', 'equipment'], spells: ['sorts', 'spells'], prayers: ['prieres', 'prayers'],
   traits: ['traits'], size: ['taille', 'size'], fortune: ['fortune', 'chance'], fate: ['destin', 'fate'], resilience: ['resilience'], corruption: ['corruption'], sin: ['peches', 'sin'],
-  ficheSnapshot: ['fichesnapshot'], protection: ['protection'], movement: ['mouvement', 'movement'], race: ['espece', 'race'], cult: ['culte', 'cult']
+  ficheSnapshot: ['fichesnapshot'], protection: ['protection'], movement: ['mouvement', 'movement'], race: ['espece', 'race'], cult: ['culte', 'cult'],
+  optionalChoices: ['traitsoptionnels', 'optionalchoices']
 };
 const PROFILE_IGNORED = ['id', 'extensions', 'participantid', 'targetid', 'attr', 'format', 'version', 'profils', 'profiles'];
 const ACTION_KEYS = {
@@ -290,6 +291,29 @@ function parseKeywordList(value, field, errors, referential) {
   return ids;
 }
 
+/**
+ * Traits optionnels cochés (`traitsOptionnels`, forme de optional-traits.js : `{ traits, attacks, armour }`). Chaque entrée exige un nom ;
+ * une sous-clé inconnue (version plus récente) est ignorée sans erreur. Rend les coches non vides, ou null.
+ */
+const OPTIONAL_LIST_LABELS = { traits: 'Trait', attacks: 'attaque', armour: 'pièce d’armure' };
+function parseOptionalChoices(value, errors) {
+  const field = 'traitsOptionnels';
+  if (!isRecord(value)) { errors.push({ field, reason: 'objet-attendu', value: shownValue(value), message: 'Traits optionnels : un objet { traits, attacks, armour } est attendu.' }); return null; }
+  const choices = {};
+  for (const [key, label] of Object.entries(OPTIONAL_LIST_LABELS)) {
+    const list = value[key];
+    if (list === undefined || list === null) continue;
+    if (!Array.isArray(list)) { errors.push({ field: `${field} · ${key}`, reason: 'liste-attendue', value: shownValue(list), message: `Traits optionnels : « ${key} » doit être une liste.` }); continue; }
+    const rows = [];
+    list.forEach((item, at) => {
+      if (!isRecord(item) || typeof item.name !== 'string' || !item.name.trim()) { errors.push({ field: `${field} · ${key} ${at + 1}`, reason: 'champ-manquant', value: shownValue(item), message: `Traits optionnels : ${label} n°${at + 1} sans nom.` }); return; }
+      rows.push(cloneValue(item));
+    });
+    if (rows.length) choices[key] = rows;
+  }
+  return Object.keys(choices).length ? choices : null;
+}
+
 function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
   const errors = [];
   const unknownQualities = [];
@@ -369,6 +393,10 @@ function parseProfile(raw, index, referential = BASE_REFERENTIAL) {
   if (sheet && (sheet.traits?.length || Object.keys(sheet.v5).length)) {
     const extensions = profile.extensions || {};
     profile.extensions = { ...extensions, ...(sheet.traits?.length ? { traits: sheet.traits } : {}), ...(Object.keys(sheet.v5).length ? { v5: { ...(extensions.v5 || {}), ...sheet.v5 } } : {}) };
+  }
+  if (values.optionalChoices !== undefined && values.optionalChoices !== null) {
+    const optionalChoices = parseOptionalChoices(values.optionalChoices, errors);
+    if (optionalChoices) profile.extensions = { ...(profile.extensions || {}), v5: { ...(profile.extensions?.v5 || {}), optionalChoices } };
   }
   if (values.armorLocations !== undefined) profile.armorLocations = normalizeArmorLocations(parseArmor(values.armorLocations, errors));
   else if (['rightArm', 'leftArm', 'rightLeg', 'leftLeg'].some(key => Object.hasOwn(profile.armor, key))) profile.armorLocations = normalizeArmorLocations(profile.armor);

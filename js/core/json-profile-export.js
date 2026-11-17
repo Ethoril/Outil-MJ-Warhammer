@@ -72,6 +72,11 @@ function exportEquipment(profile, catalogue) {
   });
 }
 
+const OPTIONAL_LISTS = ['traits', 'attacks', 'armour'];
+const hasOptionalChoices = choices => isRecord(choices) && OPTIONAL_LISTS.some(key => Array.isArray(choices[key]) && choices[key].length);
+/** Coches telles que stockées (forme de optional-traits.js), listes non vides seulement : `json-profile-import.js` les relit. */
+const optionalChoicesJson = choices => Object.fromEntries(OPTIONAL_LISTS.filter(key => Array.isArray(choices[key]) && choices[key].length).map(key => [key, JSON.parse(JSON.stringify(choices[key]))]));
+
 const namesOf = list => (list || []).map(row => (typeof row === 'string' ? row : row?.nom ?? row?.name)).filter(Boolean);
 
 /** Profil du Store → objet JSON d'import (sans `id`, ni lien de fiche). */
@@ -102,7 +107,9 @@ export function exportProfileJson(profile) {
     ...(Number.isInteger(fortune) ? { fortune } : {}), ...(Number.isInteger(fate) ? { destin: fate } : {}),
     ...(Number.isInteger(v5.resilience) ? { resilience: v5.resilience } : {}), ...(Number.isInteger(v5.corruptionPoints) ? { corruption: v5.corruptionPoints } : {}),
     ...(Number.isInteger(v5.divine?.sin) ? { peches: v5.divine.sin } : {}),
-    ...(jets.length ? { jets } : {})
+    ...(jets.length ? { jets } : {}),
+    // Traits optionnels cochés (D14) : la clé n'apparaît que s'il y a des coches.
+    ...(hasOptionalChoices(v5.optionalChoices) ? { traitsOptionnels: optionalChoicesJson(v5.optionalChoices) } : {})
   };
   return out;
 }

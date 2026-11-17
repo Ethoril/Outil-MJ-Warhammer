@@ -2,6 +2,8 @@ import { ficheSnapshot, matchFiches, planProfileSync, ficheErrorMessage, profile
 import { userMessage, userError } from './messages.js';
 import { ficheUnavailableReason } from '../core/fiche-source.js';
 import { resolveKeyword } from '../core/creature-keywords.js';
+import { readOptionalChoices } from '../core/optional-traits.js';
+import { mountProfileId } from '../core/mounts.js';
 
 const shown = value => (value === null || value === undefined || value === '' ? '—' : String(value));
 const MISSING = '__introuvable';
@@ -9,8 +11,14 @@ const NEW_PROFILE = '__nouveau';
 const KEYWORD_TYPE_LABELS = Object.freeze({ haine: 'Haine', animosite: 'Animosité', prejuge: 'Préjugé', 'sans-peur': 'Sans peur' });
 const plural = (count, word) => `${count} ${word}${count > 1 ? 's' : ''}`;
 const mountName = (name, label) => (label && label !== name ? `« ${name} » (${label})` : `« ${name} »`);
-/** Ligne d'aperçu de la monture déclarée par la fiche (voir planMountSync) ; '' quand rien ne change. */
-export function mountLineOf(mount) {
+/**
+ * Ligne d'aperçu de la monture déclarée par la fiche (voir planMountSync) ; '' quand rien ne change. `current` : profil `monture-<PJ>` en
+ * place (facultatif) ; quand l'espèce change et qu'il porte des Traits optionnels cochés, la ligne annonce leur retrait (CA23).
+ */
+export function mountLineOf(mount, current = null) {
+  const checked = readOptionalChoices(current);
+  if (mount?.kind === 'replace' && checked.traits.length + checked.attacks.length + checked.armour.length)
+    return `${mountLineOf(mount)} Ses Traits optionnels cochés sont retirés : le nouveau profil repart sans coche.`;
   switch (mount?.kind) {
     case 'create': return `Monture : ${mountName(mount.name, mount.label)} déclarée par la fiche (profil créé depuis le bestiaire et lié en combat).`;
     case 'redeclare': return `Monture : ${mountName(mount.name, mount.label)} de nouveau déclarée par la fiche (profil existant réutilisé, image et PV conservés).`;
@@ -188,7 +196,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
         snapshot.keywordTargets?.length ? `Mots-clés : ${snapshot.keywordTargets.map(row => `${KEYWORD_TYPE_LABELS[row.id] || row.id} (${resolveKeyword(row.target)?.nameFr || row.target})`).join(', ')}` : ''].filter(Boolean).join(' · ');
       card.appendChild(declared);
     }
-    const mountLine = mountLineOf(plan.mount);
+    const mountLine = mountLineOf(plan.mount, (getContext().profiles || []).find(row => row.id === mountProfileId(profile.id)));
     if (mountLine) { const info = document.createElement('p'); info.dataset.key = `monture:${snapshot.charId}`; info.textContent = mountLine; card.appendChild(info); }
     const active = (getContext().participants || []).filter(row => row.profileId === profile.id || row.extensions?.ficheId === snapshot.charId);
     active.forEach(row => {

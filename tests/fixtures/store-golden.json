@@ -145,6 +145,7 @@
    "getSceneCircumstances/0",
    "setSceneCircumstances/0",
    "setParticipantPosition/1",
+   "setProfileOptionalChoices/2",
    "getPursuit/0",
    "startPursuit/0",
    "setPursuitMovement/2",
@@ -1791,6 +1792,11 @@
     "state": "68c8ab7d431c0e71"
    },
    {
+    "label": "sweep setProfileOptionalChoices",
+    "result": "78f321085d238bb7",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
     "label": "sweep getPursuit",
     "result": "74234e98afe7498f",
     "state": "68c8ab7d431c0e71"
@@ -2833,6 +2839,7 @@
    "getSceneCircumstances/0",
    "setSceneCircumstances/0",
    "setParticipantPosition/1",
+   "setProfileOptionalChoices/2",
    "getPursuit/0",
    "startPursuit/0",
    "setPursuitMovement/2",
@@ -4476,6 +4483,11 @@
    {
     "label": "sweep setParticipantPosition",
     "error": "Error: Combattant introuvable.",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep setProfileOptionalChoices",
+    "result": "78f321085d238bb7",
     "state": "4bd34c4c9a63fc31"
    },
    {

@@ -33,9 +33,14 @@ export function buildMountProfile(riderProfileId, mount) {
 
 const TRAINED = new Set(['trained', 'dresse']);
 const MOUNT_WORDS = new Set(['mount', 'monture']);
-/** Créature du bestiaire dressée comme monture : Trait (ou Trait optionnel) Trained/Dressé dont la liste porte Mount/Monture. */
+/**
+ * Créature du bestiaire dressée comme monture : Trait (ou Trait optionnel) Trained/Dressé dont la liste porte Mount/Monture.
+ * Un profil de Réserve l'est aussi quand le MJ a coché ce dressage (`extensions.v5.optionalChoices`, CA14 ; absence = aucune coche).
+ */
 export function isMountCandidate(record) {
-  return [...(record?.traits || []), ...(record?.optionalTraits || [])].some(trait => {
+  const checked = record?.extensions?.v5?.optionalChoices?.traits;
+  const checkedTraits = (Array.isArray(checked) ? checked : []).filter(item => item && typeof item === 'object').map(item => ({ name: item.name, param: item.param }));
+  return [...(record?.traits || []), ...(record?.optionalTraits || []), ...checkedTraits].some(trait => {
     const text = typeof trait === 'string' ? trait : `${trait?.name ?? ''} (${trait?.param ?? ''})`;
     const match = /^\s*([^(]+?)\s*\(([^)]*)\)/.exec(text);
     return match && TRAINED.has(fold(match[1])) && match[2].split(/[,;]/).some(word => MOUNT_WORDS.has(fold(word)));
