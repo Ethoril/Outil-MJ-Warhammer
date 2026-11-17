@@ -202,4 +202,6 @@ Plus aucune question ouverte : reste `plan.md` et `tasks.md`.
 - **Talk Your Way Out, Crisis of Confidence :** narratifs, aucun calcul.
 - **The Gamemaster, Fair Winds, Lord of the Hunt :** hors combat, retour en rappel (L1 annulé).
 - **Grâce de Ranald et Rage de Rhya :** branchés ; l'ancien test d'`effets-equipement-tests.test.js` qui les figeait en rappel est mis à jour (Ranald : Q14 ; Rhya : après relecture du livre, sinon rappel).
-- **A Deal's a Deal :** valeur calculée une fois les DR de la Prière connus (+2, plus 1 par tranche de 2 DR), puis figée pendant la durée.
+- **A Deal's a Deal :** valeur calculée une fois les DR de la Prière connus (+2, plus 1 par tranche de 2 DR), puis figée pendant la durée. *Remplacé par le tri ci-dessous : hors combat, rappel.*
+
+**Tri des cas « à confirmer » de `tri-combat.md` (MJ, 17/11/2026).** Calculés : Hoarfrost Thews, Rage de Rhya, Bamboozle, Balm to a Wounded Mind, Portal's Threshold, Twist of Fortune, Force the Hand of Chance. Rappels : Waterlungs, Free Your Mind, Grâce de Ranald, A Deal's a Deal (L1b les avait branchés : retour en rappel). Les autres « à confirmer » (Bitter Catharsis, Connaître son Ennemi, Rhya's Dominion, Rhya's Taming, et les clauses à confirmer) restent des rappels, enrichis en L9 s'ils servent en combat.
