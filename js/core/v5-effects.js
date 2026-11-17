@@ -10,7 +10,7 @@ import { armourProtection } from './equipment.js';
 import { isMiscastConditionLocked } from './v5-miscast-locks.js';
 import { bestiaryProfileStateImmunity } from './creature-abilities.js';
 import { PHASES, clone, integer, createV5TimedEffect } from './v5-timed-effect.js';
-import { isFlammable } from './trait-effects.js';
+import { isFlammable } from './trait-markers.js';
 export { createV5TimedEffect } from './v5-timed-effect.js';
 export const V5_EFFECT_RULE_VERSION = 'v5-effects-2026-10-09.1';
 export const V5_CONDITION_KEYS = Object.freeze(['enflamme','souille','hemorragique','aveugle','brise','assourdi','enchevetre','extenue','empoisonne','a-terre','sonne','surpris','inconscient']);

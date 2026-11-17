@@ -48,6 +48,7 @@ const ASSETS_TO_CACHE = [
   './js/core/creature-combat.js',
   './js/core/creature-states.js',
   './js/core/trait-effects.js',
+  './js/core/trait-markers.js',
   './js/core/creature-movement.js',
   './js/core/creature-psychology.js',
   './js/core/creature-magic.js',

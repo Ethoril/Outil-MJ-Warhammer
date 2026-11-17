@@ -1,7 +1,7 @@
 import { normalizeState } from './effects.js';
 import { resolveV5TestModifiers, finalizeV5TestModifiers, resolveConditionPenaltyMix } from './v5-test-modifiers.js';
 import { PROFILE_CARAC_KEYS } from './carac-keys.js';
-import { isFlammable } from './trait-effects.js';
+import { isFlammable } from './trait-markers.js';
 
 const CHARACTERISTICS = new Set(PROFILE_CARAC_KEYS);
 const TALENT_MARKERS = new Set(['talent-active', 'talent-pending']);

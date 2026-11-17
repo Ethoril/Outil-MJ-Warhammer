@@ -13,6 +13,9 @@ import { d100 } from './dice.js';
 import { creatureLocationOf, incidentalArmour } from './resolution/criticals.js';
 import { participantCamp } from './participant-camp.js';
 import { withMomentum } from './v5-momentum-state.js';
+import { isFlammable, startDieHard } from './trait-markers.js';
+
+export { isFlammable, startDieHard };
 
 const DIE_HARD_TARGET = 6;
 const clone = value => structuredClone(value);
@@ -31,12 +34,6 @@ const sideOf = participant => { const camp = participantCamp(participant); retur
 export const momentumCount = participant => (v5Of(participant).hasMomentum === true ? 1 : 0);
 
 const foldName = value => String(value ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s*\(.*$/, '').trim();
-
-/** Inflammable (Flammable, L07) : Trait imprimé ou coché, lu dans `traits` et `extensions.traits` (D11). */
-export function isFlammable(participant) {
-  return [...(Array.isArray(participant?.traits) ? participant.traits : []), ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : [])]
-    .some(trait => ['flammable', 'inflammable'].includes(foldName(typeof trait === 'string' ? trait : trait?.name ?? trait?.nom)));
-}
 
 /** Marqueur de drapeau de fiche (« protège ses petits », « acculé ») : `extensions.v5.flags`, à défaut `flags`. */
 const flagOf = (participant, flag) => v5Of(participant).flags?.[flag] === true || participant?.flags?.[flag] === true;
@@ -135,13 +132,6 @@ export function liftLostTurn(participant, { turnIndex, round } = {}) {
   const next = clone(participant);
   delete next.extensions.v5.lostTurn;
   return next;
-}
-
-/** Mort d'un porteur d'Increvable à corps intact : Test étendu pendant BE Rounds (D15). Sans la case, sans Trait ou sans Endurance : inchangé. */
-export function startDieHard(participant, { round = null, bodyIntact = false } = {}) {
-  const rounds = bonusOf(participant?.caracs?.E);
-  if (bodyIntact !== true || !hasState(participant, 'diehard') || rounds === null || rounds < 1) return clone(participant);
-  return touchV5(clone(participant), { dieHard: { total: 0, roundsLeft: rounds, bodyIntact: true, startRound: round, lastRound: round, ended: null } });
 }
 
 const dieHardActive = participant => {

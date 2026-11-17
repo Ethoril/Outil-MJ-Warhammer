@@ -815,6 +815,11 @@ export function expireSpellEffects(participant, filter = {}) {
         ...next.extensions.v5.temporaryTraits
       ]));
     }
+    // Le miroir `extensions.traits` reçoit aussi les Traits temporaires : il perd ceux de l'effet retiré (sinon un Trait expiré se lit comme imprimé).
+    if (Array.isArray(next.extensions.traits)) {
+      const kept = new Set([...(next.extensions.v5.baseTraits || []), ...next.extensions.v5.temporaryTraits]);
+      next.extensions.traits = next.extensions.traits.filter(trait => !traitsToRemove.has(trait) || kept.has(trait));
+    }
   }
 
   next.states = (next.states || []).flatMap(s => {

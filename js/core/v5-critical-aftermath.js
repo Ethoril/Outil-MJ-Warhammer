@@ -1,6 +1,6 @@
 import { getV5CriticalEffect, V5_CRITICAL_TABLE_VERSION, V5_CRIT_DATA } from '../data/v5-crits.js';
 import { acquireV5Conditions } from './v5-effects.js';
-import { startDieHard } from './trait-effects.js';
+import { startDieHard } from './trait-markers.js';
 
 export const V5_CRITICAL_AFTERMATH_RULE_VERSION = 'v5-critical-aftermath-2026-10-27.1';
 export const CRITICAL_DEATH_FIELD = 'criticalDeath';

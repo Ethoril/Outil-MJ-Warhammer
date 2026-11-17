@@ -12,6 +12,7 @@ import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../../core/talent-contract
 import { acquiredV5TalentCoverage, V5_TALENT_TREATMENT_LABELS } from '../../core/v5-talent-coverage.js';
 import { readDivineRejections } from '../../core/v5-divine-access.js';
 import { resolveTraitAnswer } from '../../core/trait-effects.js';
+import { rollFormula } from '../dice-buttons.js';
 
 /**
  * Demandes de dé des Traits à la blessure (`traitPlans.requests`, D13) : chacune a son bouton de dé et sa saisie ; tirage et saisie
@@ -53,7 +54,7 @@ export function renderTraitPlanRequests(requests = [], draft = {}, handlers = {}
       row.append(success, dr, warning);
       if (request.testTarget) {
         const roll = button('Lancer d100', 'workspace-secondary', { 'aria-label': `Lancer d100 : ${request.label}` });
-        roll.addEventListener('click', () => { const found = resolveTraitAnswer(request, Math.floor(Math.random() * 100) + 1); if (found) answer(request, { success: found.success, sl: found.sl }); });
+        roll.addEventListener('click', () => { const found = resolveTraitAnswer(request, rollFormula({ count: 1, sides: 100 })); if (found) answer(request, { success: found.success, sl: found.sl }); });
         row.appendChild(roll);
       }
     } else if (request.kind === 'choice') {
@@ -69,7 +70,7 @@ export function renderTraitPlanRequests(requests = [], draft = {}, handlers = {}
       input.setAttribute('aria-label', request.label);
       input.addEventListener('change', () => { const value = Number(input.value); if (Number.isInteger(value) && value >= 1 && value <= 10) answer(request, value); });
       const roll = button('Lancer d10', 'workspace-secondary', { 'aria-label': `Lancer d10 : ${request.label}` });
-      roll.addEventListener('click', () => answer(request, Math.floor(Math.random() * 10) + 1));
+      roll.addEventListener('click', () => answer(request, rollFormula({ count: 1, sides: 10 })));
       row.append(input, roll);
     }
     section.appendChild(row);
