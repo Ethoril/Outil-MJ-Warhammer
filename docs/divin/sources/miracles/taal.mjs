@@ -80,8 +80,8 @@ export const miracles = [
     printedPage: 227,
     summary: 'Vous traquez une proie (animal déjà vu ou individu connu, dans la limite fixée par le MJ). Vous ne pouvez perdre sa piste que par un moyen surnaturel, mais la piste s\'arrête si elle entre dans une agglomération. Vous gagnez +1 DR à tous les tests concernant la proie.',
     params: { range: self, targets: self, duration: felHours },
-    status: 'assisted',
-    effects: [{ type: 'test-modifier', modifiers: { Pistage: 1 }, appliesTo: 'caster' }],
+    status: 'manual',
+    effect: null,
     targetRules: [],
     needsInput: [
       { id: 'quarry', text: 'Proie désignée (animal vu ou individu connu) et limite de connaissance validée par le MJ.' },
@@ -92,8 +92,7 @@ export const miracles = [
     clauses: [
       { id: 'track-lock', mode: 'manual', text: 'La piste de la proie ne se perd que par moyen surnaturel.' },
       { id: 'settlement-end', mode: 'manual', text: 'Si la proie entre dans une agglomération, la piste s\'arrête là.' },
-      { id: 'quarry-sl', mode: 'engine', text: '+1 DR aux Tests de Pistage du prêtre pendant la durée (LdB p.227).' },
-      { id: 'quarry-other-tests', mode: 'manual', text: '+1 DR à tout autre Test concernant la proie : le MJ l\'applique à la main.' }
+      { id: 'quarry-sl', mode: 'manual', text: '+1 DR à tous les tests concernant la proie.' }
     ]
   },
   {

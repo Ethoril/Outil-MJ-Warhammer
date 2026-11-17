@@ -37,9 +37,9 @@ export const miracles = [
     ],
     clauses: [
       { id: 'back-down', mode: 'manual', text: 'La cible renonce à son Test volontaire de Sociabilité.' },
-      { id: 'forced-penalty', mode: 'manual', text: 'Si elle doit le faire quand même : -20 à ce Test (lu -2 DR, Q14, à appliquer à la main).' }
+      { id: 'forced-penalty', mode: 'manual', text: 'Si elle doit le faire quand même : -20 à ce Test.' }
     ],
-    sourceDelta: 'Le livre vise un Test « Fellowship-based » (basé sur la Sociabilité) : la liste exacte des compétences concernées n’est pas donnée, le MJ tranche. Le malus est de -20 (points de pourcentage) : lu -2 DR (Q14). Prière instantanée : le moteur ne pose aucune couche pour un effet instantané, le malus reste un rappel pour le MJ.'
+    sourceDelta: 'Le livre vise un Test « Fellowship-based » (basé sur la Sociabilité) : la liste exacte des compétences concernées n’est pas donnée, le MJ tranche. Le malus est de -20 (points de pourcentage), non des DR.'
   },
   {
     name: 'Forcer la main du hasard', canonicalName: 'Force the Hand of Chance', printedPage: 19,
@@ -76,19 +76,17 @@ export const miracles = [
     name: 'Le Maître du jeu', canonicalName: 'The Gamemaster', printedPage: 19,
     summary: 'Le prêtre invoque Ranald, maître de tous les jeux : devant une partie, un sport ou un passe-temps, il en connaît aussitôt les règles et les meilleures stratégies. Si le jeu repose sur l’habileté mentale (non sur le seul hasard ou la force physique), ses Tests pour y jouer sont à +4 DR. À la fin, il oublie tout sauf les règles.',
     params: { range: self, targets: self, duration: soc('characteristic-bonus', 'hours') },
-    status: 'assisted',
-    effects: [{ type: 'test-modifier', modifiers: { Pari: 4 }, appliesTo: 'caster' }],
+    status: 'manual', effect: null,
     targetRules: ['prêtre uniquement'],
     needsInput: [
       { id: 'game', text: 'Quel jeu est observé, et repose-t-il sur l’habileté mentale (+4 DR) ou sur le hasard / la force physique (pas de bonus) ?' }
     ],
     clauses: [
       { id: 'rules-known', mode: 'manual', text: 'Le prêtre connaît les règles et les meilleures stratégies du jeu observé.' },
-      { id: 'skill-bonus', mode: 'engine', text: '+4 DR aux Tests de Pari du prêtre pendant la durée (Deft Steps p.19).' },
-      { id: 'mental-game-only', mode: 'manual', text: 'Le +4 DR ne vaut que pour un jeu d’habileté mentale (ni hasard pur ni force physique) ; pour tout autre Test de jeu, le MJ applique le bonus à la main.' },
+      { id: 'skill-bonus', mode: 'manual', text: '+4 DR aux Tests du prêtre pour jouer à un jeu d’habileté mentale.' },
       { id: 'forget', mode: 'manual', text: 'À la fin du miracle, le prêtre oublie tout sauf les règles.' }
     ],
-    sourceDelta: 'Le livre vise « tous les Tests pour concourir » au jeu, sans nommer de compétence : lu comme la compétence Pari ; la catégorie de jeux (habileté mentale) et les autres compétences restent au MJ.'
+    sourceDelta: 'Le bonus ne vaut que pour une catégorie de jeux décidée par le MJ et pour des Tests de compétence non nommés : test-modifier par clé de compétence inadapté ; manuel.'
   },
   {
     name: 'Faire monter les enjeux', canonicalName: 'Up the Stakes', printedPage: 19,

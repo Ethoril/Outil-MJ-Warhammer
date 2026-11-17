@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:c38a496b75033577e541ef4f7717790536ed3bc23744f2222e480146f65db42f",
+  "sourceFingerprint": "sha256:3f553036402bfb1992b383eb213cc5ea00817601d4084300962161f88c0f7473",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -11696,7 +11696,7 @@
       "type": "miracle",
       "name": "Vents favorables",
       "deity": "Manann",
-      "status": "assisted",
+      "status": "manual",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -11761,21 +11761,7 @@
           }
         }
       ],
-      "effects": [
-        {
-          "type": "test-modifier",
-          "modifiers": {
-            "Voile": 1
-          },
-          "appliesTo": "caster",
-          "duration": {
-            "value": null,
-            "sourceParameter": "params.duration",
-            "unit": "hours",
-            "requiresResolvedExpiry": true
-          }
-        }
-      ],
+      "effects": [],
       "labels": {
         "canonicalName": "Fair Winds",
         "effect": "Le navire cible file à sa vitesse maximale quels que soient vent, marée et courant ; tous les Tests de Navigation (Sail) pour le piloter gagnent +1 DR.",
@@ -11790,8 +11776,8 @@
         },
         {
           "id": "sail-sl",
-          "mode": "engine",
-          "text": "Les Tests de Voile (Sail) du prêtre pour contrôler le navire gagnent +1 DR pendant la durée (LdB p.222).",
+          "mode": "manual",
+          "text": "Les Tests de Navigation (Sail) pour contrôler le navire gagnent +1 DR pendant la durée.",
           "sourceRef": "v5-fair-winds"
         },
         {
@@ -13292,7 +13278,7 @@
         {
           "id": "forced-penalty",
           "mode": "manual",
-          "text": "Si elle doit le faire quand même : -20 à ce Test (lu -2 DR, Q14, à appliquer à la main).",
+          "text": "Si elle doit le faire quand même : -20 à ce Test.",
           "sourceRef": "v5-crisis-of-confidence"
         }
       ],
@@ -13518,7 +13504,7 @@
       "name": "Le Maître du jeu",
       "deity": "Ranald",
       "aspect": "Gamester",
-      "status": "assisted",
+      "status": "manual",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -13583,21 +13569,7 @@
           }
         }
       ],
-      "effects": [
-        {
-          "type": "test-modifier",
-          "modifiers": {
-            "Pari": 4
-          },
-          "appliesTo": "caster",
-          "duration": {
-            "value": null,
-            "sourceParameter": "params.duration",
-            "unit": "hours",
-            "requiresResolvedExpiry": true
-          }
-        }
-      ],
+      "effects": [],
       "labels": {
         "canonicalName": "The Gamemaster",
         "effect": "Le prêtre invoque Ranald, maître de tous les jeux : devant une partie, un sport ou un passe-temps, il en connaît aussitôt les règles et les meilleures stratégies. Si le jeu repose sur l’habileté mentale (non sur le seul hasard ou la force physique), ses Tests pour y jouer sont à +4 DR. À la fin, il oublie tout sauf les règles.",
@@ -13612,14 +13584,8 @@
         },
         {
           "id": "skill-bonus",
-          "mode": "engine",
-          "text": "+4 DR aux Tests de Pari du prêtre pendant la durée (Deft Steps p.19).",
-          "sourceRef": "v5-the-gamemaster"
-        },
-        {
-          "id": "mental-game-only",
           "mode": "manual",
-          "text": "Le +4 DR ne vaut que pour un jeu d’habileté mentale (ni hasard pur ni force physique) ; pour tout autre Test de jeu, le MJ applique le bonus à la main.",
+          "text": "+4 DR aux Tests du prêtre pour jouer à un jeu d’habileté mentale.",
           "sourceRef": "v5-the-gamemaster"
         },
         {
@@ -14283,7 +14249,7 @@
       "name": "Se sortir d’affaire par la parole",
       "deity": "Ranald",
       "aspect": "Night Prowler",
-      "status": "assisted",
+      "status": "manual",
       "source": {
         "document": "Deft Steps Light Fingers.pdf",
         "fileSha256": "aea5d0c2d5b998386cc4b4563fa60bc85c355327b29270f4e6cd58ed1325f89d",
@@ -14348,21 +14314,7 @@
           }
         }
       ],
-      "effects": [
-        {
-          "type": "test-modifier",
-          "modifiers": {
-            "Charme": 8
-          },
-          "appliesTo": "caster",
-          "duration": {
-            "value": null,
-            "sourceParameter": "params.duration",
-            "unit": "minutes",
-            "requiresResolvedExpiry": true
-          }
-        }
-      ],
+      "effects": [],
       "labels": {
         "canonicalName": "Talk Your Way Out",
         "effect": "Le prêtre peut se tirer des situations les plus compromettantes : il gagne un bonus unique de +8 DR à un Test de Charme tenté pour échapper à une arrestation en flagrant délit.",
@@ -14371,14 +14323,8 @@
       "clauses": [
         {
           "id": "charm-bonus",
-          "mode": "engine",
-          "text": "+8 DR aux Tests de Charme du prêtre pendant la durée (Deft Steps p.18).",
-          "sourceRef": "v5-talk-your-way-out"
-        },
-        {
-          "id": "one-off-caught",
           "mode": "manual",
-          "text": "Le bonus est unique et ne vaut que pour échapper à une arrestation en flagrant délit : le MJ retire la prière après ce Test.",
+          "text": "+8 DR, une seule fois, à un Test de Charme pour se sortir d’un flagrant délit.",
           "sourceRef": "v5-talk-your-way-out"
         }
       ],
@@ -21575,7 +21521,7 @@
       "type": "miracle",
       "name": "Seigneur de la Chasse",
       "deity": "Taal",
-      "status": "assisted",
+      "status": "manual",
       "source": {
         "document": "Livre de base V5 EN v2.pdf",
         "fileSha256": "53e84b3d484782279df8d09f67cbaeaeca58977285cff4c9230ebac28bd2d9de",
@@ -21637,21 +21583,7 @@
           }
         }
       ],
-      "effects": [
-        {
-          "type": "test-modifier",
-          "modifiers": {
-            "Pistage": 1
-          },
-          "appliesTo": "caster",
-          "duration": {
-            "value": null,
-            "sourceParameter": "params.duration",
-            "unit": "hours",
-            "requiresResolvedExpiry": true
-          }
-        }
-      ],
+      "effects": [],
       "labels": {
         "canonicalName": "Lord of the Hunt",
         "effect": "Vous traquez une proie (animal déjà vu ou individu connu, dans la limite fixée par le MJ). Vous ne pouvez perdre sa piste que par un moyen surnaturel, mais la piste s'arrête si elle entre dans une agglomération. Vous gagnez +1 DR à tous les tests concernant la proie.",
@@ -21672,14 +21604,8 @@
         },
         {
           "id": "quarry-sl",
-          "mode": "engine",
-          "text": "+1 DR aux Tests de Pistage du prêtre pendant la durée (LdB p.227).",
-          "sourceRef": "v5-lord-of-the-hunt"
-        },
-        {
-          "id": "quarry-other-tests",
           "mode": "manual",
-          "text": "+1 DR à tout autre Test concernant la proie : le MJ l'applique à la main.",
+          "text": "+1 DR à tous les tests concernant la proie.",
           "sourceRef": "v5-lord-of-the-hunt"
         }
       ],
