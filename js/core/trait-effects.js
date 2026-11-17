@@ -1,5 +1,5 @@
 // Effets d'office des Traits de créature (second chantier des Traits) : trois collecteurs et leurs patches.
-// Module pur : entrées jamais mutées, aucun dé tiré. Une demande de dé (`traitRequest`) est posée au bon moment ; la réponse
+// Module pur : entrées jamais mutées, aucun dé tiré, sauf la localisation du Sang corrosif (D19, injectable). Une demande de dé (`traitRequest`) est posée au bon moment ; la réponse
 // (valeur tirée par le bouton, ou résultat saisi) est lue dans `inputs[participantId][field]` ; l'effet est rendu en patches
 // que `applyTraitPatches` applique d'un seul passage (donc un seul ↶). Un Trait coché se lit comme un Trait imprimé :
 // chaque calcul lit `participant.traits` (et `extensions.traits`) par les modules de Traits existants.
@@ -9,7 +9,8 @@ import { isLiving } from './creature-natures.js';
 import { canBeEngaged } from './engagements.js';
 import { previewV5Test } from './v5-roll.js';
 import { resolveV5TestModifiers } from './v5-test-modifiers.js';
-import { normalizeArmorLocations } from './equipment.js';
+import { d100 } from './dice.js';
+import { creatureLocationOf, incidentalArmour } from './resolution/criticals.js';
 
 const DIE_HARD_TARGET = 6;
 const clone = value => structuredClone(value);
@@ -36,10 +37,14 @@ export function isFlammable(participant) {
 /** Marqueur de drapeau de fiche (« protège ses petits », « acculé ») : `extensions.v5.flags`, à défaut `flags`. */
 const flagOf = (participant, flag) => v5Of(participant).flags?.[flag] === true || participant?.flags?.[flag] === true;
 
-/** PA retenus pour un engagé : le plus faible de ses PA par zone (la zone n'est pas connue du Trait). */
-function lowestArmour(participant) {
-  const locations = Object.values(normalizeArmorLocations(participant?.armorLocations ?? participant?.armor ?? {}));
-  return locations.length ? Math.min(...locations.map(value => Number(value) || 0)) : 0;
+/** Bouclier (Shield n, L22) : `{ rating, rear }` ; `rear` pour « Shield 2* » (porté dans le dos, rappel seul). `null` sans le Trait. */
+export function shieldTraitOf(participant) {
+  for (const trait of [...(Array.isArray(participant?.traits) ? participant.traits : []), ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : [])]) {
+    const text = typeof trait === 'string' ? trait : `${trait?.name ?? trait?.nom ?? ''} ${trait?.param ?? trait?.rating ?? ''}`;
+    const match = /^\s*(?:shield|bouclier)\s*\(?\s*(\d+)\s*(\*)?\s*\)?\s*$/i.exec(String(text));
+    if (match) return { rating: Number(match[1]), rear: Boolean(match[2]) };
+  }
+  return null;
 }
 
 // ─────────────────────────────── Demandes et réponses (CA0) ───────────────────────────────
@@ -183,17 +188,19 @@ function psychologyTestRequest(out, participant, key, planOptions, { field, labe
 
 /**
  * À la blessure : Sang corrosif, Infecté, Bestial, Affamé. `target` est le blessé, `actor` l'auteur du coup.
- * `engagedIds` : engagés avec le porteur de Sang corrosif (lus sur le plateau par l'appelant). `armourPoints(participant)` : PA d'un engagé.
+ * `engagedIds` : engagés avec le porteur de Sang corrosif (lus sur le plateau par l'appelant). `rollLocation(engagé)` : d100 de localisation
+ * tiré par l'outil (D19), injectable pour les tests.
  */
 export function collectWoundTraitEffects({ actor = null, target = null, participants = [], hpBefore, hpAfter, killed = false, resolutionId = null, round = null, turnIndex = null,
-  engagedIds = [], traitInputs = {}, armourPoints = lowestArmour } = {}) {
+  engagedIds = [], traitInputs = {}, rollLocation = () => d100() } = {}) {
   const out = newOut();
   if (!target || !isNum(hpBefore) || !isNum(hpAfter) || hpAfter >= hpBefore) return out;
   const scope = resolutionId ?? `r${round}`;
   const since = { round, turnIndex };
   const dead = killed === true || hpAfter <= 0;
 
-  // Sang corrosif : un seul d10 pour tous les engagés, réduit par BE et PA de chacun, minimum 1 (D14).
+  // Sang corrosif : un seul d10 pour tous les engagés, réduit par BE et PA de chacun, minimum 1 (D14). Les PA sont ceux d'une
+  // localisation que l'outil tire lui-même pour chaque engagé, une fois le d10 connu (D19, `rollLocation` injectable).
   if (hasState(target, 'corrosive')) {
     const engaged = [...new Set(engagedIds)].filter(id => id !== target.id).map(id => participants.find(row => row.id === id)).filter(row => row && canBeEngaged(row));
     if (engaged.length) {
@@ -201,10 +208,13 @@ export function collectWoundTraitEffects({ actor = null, target = null, particip
       const answer = answerOf(traitInputs, request);
       if (!answer) { out.requests.push(request); out.plans.push({ key: 'corrosive', participantId: target.id, status: 'requested' }); }
       else {
-        const hits = engaged.map(row => ({ id: row.id, name: nameOf(row), amount: Math.max(1, answer.value - (bonusOf(row.caracs?.E) ?? 0) - (Number(armourPoints(row)) || 0)) }));
+        const hits = engaged.map(row => {
+          const locationRoll = rollLocation(row), location = creatureLocationOf(locationRoll, row), ap = Number(incidentalArmour(row, location)) || 0;
+          return { id: row.id, name: nameOf(row), locationRoll, location: location.name, ap, amount: Math.max(1, answer.value - (bonusOf(row.caracs?.E) ?? 0) - ap) };
+        });
         for (const hit of hits) out.patches.push({ type: 'wounds', participantId: hit.id, amount: hit.amount, cause: 'corrosive' });
         out.plans.push({ key: 'corrosive', participantId: target.id, status: 'applied', d10: answer.value, hits });
-        out.logs.push(makeLog(`trait:${scope}:corrosive:${target.id}`, target, `${nameOf(target)} · Sang corrosif (d10 ${answer.value}) : ${hits.map(hit => `${hit.name} −${hit.amount}`).join(', ')} Blessure(s)`,
+        out.logs.push(makeLog(`trait:${scope}:corrosive:${target.id}`, target, `${nameOf(target)} · Sang corrosif (d10 ${answer.value}) : ${hits.map(hit => `${hit.name} (${hit.location}) −${hit.amount}`).join(', ')} Blessure(s)`,
           { kind: 'trait-effect', key: 'corrosive', d10: answer.value, hits }));
       }
     }

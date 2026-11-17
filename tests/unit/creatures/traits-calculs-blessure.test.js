@@ -33,6 +33,24 @@ describe('Sang corrosif (CA1)', () => {
     assert.equal(out.logs.length, 1);
   });
 
+  test('D19 : l\'outil tire la localisation de chaque engagé (d100 injectable) et retire les PA de cette zone, minimum 1', () => {
+    const plated = person('e4', { camp: 'pj', caracs: { E: 30 }, armorLocations: { head: 0, body: 5, rightArm: 2, leftArm: 2, rightLeg: 1, leftLeg: 1 } });
+    const asked = [];
+    const rolls = { e4: 50, e2: 5 };
+    const out = wound({ target: carrier, participants: [carrier, plated, e2], engagedIds: ['e4', 'e2'], traitInputs: { c: { corrosiveBlood: 9 } },
+      rollLocation: row => { asked.push(row.id); return rolls[row.id]; } });
+    assert.deepEqual(asked.sort(), ['e2', 'e4'], 'un d100 tiré par engagé, sans saisie manuelle');
+    const hits = Object.fromEntries(out.plans.find(plan => plan.key === 'corrosive').hits.map(hit => [hit.id, hit]));
+    assert.equal(hits.e4.locationRoll, 50);
+    assert.equal(hits.e4.location, 'Corps');
+    assert.equal(hits.e4.amount, 1, '9 − BE 3 − PA du Corps 5 = 1');
+    const head = wound({ target: carrier, participants: [carrier, plated], engagedIds: ['e4'], traitInputs: { c: { corrosiveBlood: 9 } }, rollLocation: () => 5 });
+    assert.equal(head.patches[0].amount, 6, '9 − BE 3 − PA de la Tête 0');
+    assert.equal(wound({ target: carrier, participants: [carrier, plated], engagedIds: ['e4'], traitInputs: { c: { corrosiveBlood: 2 } }, rollLocation: () => 50 }).patches[0].amount, 1, 'minimum 1');
+    assert.equal(wound({ target: carrier, participants: [carrier, plated], engagedIds: ['e4'], rollLocation: () => { throw new Error('tiré trop tôt'); } }).requests.length, 1,
+      'aucune localisation tirée tant que le d10 manque');
+  });
+
   test('sans engagé, rien ; porteur non blessé, rien', () => {
     assert.deepEqual(wound({ target: carrier, participants: [carrier, e1], engagedIds: [] }).requests, []);
     assert.deepEqual(wound({ target: carrier, participants: [carrier, e1], engagedIds: ['e1'], hpAfter: 10 }).requests, []);

@@ -40,6 +40,12 @@ import { advanceV5NetEscape, conditionalV5KnifeQualities, entanglementStrength, 
 import { consumeV5WeaponShot, initialV5ReloadState } from './v5-reloading.js';
 import { mountedRiderEventsFor, mountedRideAnswerFor, planMountedAttack, planMountedChargeDamage, planMountedDodge, planMountedFall, resolveMountedMount, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
 import { previewSupplementalEquipment } from './v5-supplemental-equipment.js';
+import { collectWoundTraitEffects, applyTraitPatches, shieldTraitOf } from './trait-effects.js';
+import { engagedWith } from './engagements.js';
+import { psychologyTraits } from './creature-psychology.js';
+import { stateTraits } from './creature-states.js';
+import { creatureMagicTraits } from './creature-magic-traits.js';
+import { d100 } from './dice.js';
 
 export { damageBreakdown, formatDamageFormula, formatWeaponDamage, describeWeaponDamage } from './damage.js';
 
@@ -266,6 +272,23 @@ export function previewResolution(input) {
   }
   normalized.mountedCombatPlan = mountedCombatPlan;
   normalized.mountedDodgePlan = mountedDodgePlan;
+  // Traits du défenseur lus à l'aperçu (second chantier des Traits, L3). Parasité : −1 DR pour le toucher en mêlée (rien contre un tir).
+  const withTraitModifier = (settings, row) => ({ ...settings, slModifiers: [...(settings?.slModifiers || []).filter(old => old.id !== row.id), row] });
+  if (attackType(normalized.action.type) && mountedAttackKind === 'melee' && stateTraits(normalized.target).some(trait => trait.key === 'infestation'))
+    normalized.v5 = withTraitModifier(normalized.v5, { id: 'trait:infestation', label: 'Parasité : −1 DR pour toucher en mêlée', amount: -1 });
+  // Bestial : défense par l'Esquive seule ; une autre défense est refusée.
+  if (attackType(normalized.action.type) && psychologyTraits(normalized.target).some(trait => trait.key === 'bestial'))
+    normalized.defensePlan = { allowed: ['Esquive'], reason: 'Bestial', ...(normalized.defense && !isDodgeDefense ? { refused: true } : {}) };
+  // Bouclier (n) : bouclier virtuel (option Bouclier) ; +1 DR en opposition par Esquive ou Corps à corps, n PA sur la zone touchée.
+  // « Shield 2* » (L22, porté dans le dos) : rappel seul, le moteur ne connaît pas la direction de l'attaque. Un vrai bouclier l'emporte.
+  const traitShield = attackType(normalized.action.type) ? shieldTraitOf(normalized.target) : null;
+  const realShield = normalized.defense ? v5ShieldDefense(normalized) : null;
+  if (traitShield && !traitShield.rear && normalized.defense && !(realShield?.v5Bonus || realShield?.confirmed)
+    && (isDodgeDefense || (normalized.defense.v5?.kind ?? 'melee') === 'melee')) {
+    normalized.traitShield = traitShield.rating;
+    normalized.defense = { ...normalized.defense, v5: withTraitModifier(normalized.defense.v5, { id: 'trait:shield', label: `Bouclier (${traitShield.rating}) : +1 DR en opposition`, amount: 1 }) };
+  }
+  if (traitShield?.rear) normalized.traitShieldReminder = `Bouclier (${traitShield.rating}*) : porté dans le dos, sans le bénéfice habituel ; ${traitShield.rating} PA contre une attaque venue de derrière, à appliquer à la main.`;
   const attachPrayerModifiers=(subject,skillId,settings)=>{
     if(skillId!=='skill-50_72_69_e8_72_65-base'||normalized.noTestAction)return [];
     const checked=getPrayerSLModifiers(subject,normalized.prayerSLContext||{});
@@ -797,6 +820,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   if (context.silentTakedown === true && (attackType(action.type) || actorPlan.kind !== 'melee' || actorSkill?.groupId !== 'skill-group-43_6f_72_70_73_20_e0_20_63_6f_72_70_73' || !defenderPlan || defenderPlan.kind !== 'test' || !enduranceDefense || context.outsideCombat !== true || context.targetUnaware !== true || context.calledShot === true)) unresolved.push('Neutralisation silencieuse : Test opposé Corps à corps/Résistance hors combat, cible inconsciente du danger et sans Coup ciblé requis ; conséquences spéciales à arbitrer.');
   for (const plan of [normalized.qualityTalentPlan, damageTalents, beatTalents].filter(Boolean)) unresolved.push(...plan.unresolved.flatMap(row => row.fields.map(field => 'Talent : préciser ' + field + '.')));
   if (attackType(action.type) && actorPlan.kind === 'melee' && !normalized.defense && !cannotDefend) unresolved.push('Jet de défense requis pour l’opposition de Corps à corps.');
+  if (normalized.defensePlan?.refused) unresolved.push('Bestial : la cible ne se défend que par l’Esquive.');
   const pistolContact = previewV5PistolContact({ qualities: action.qualities, attack: attackType(action.type),
     engaged: context.targetEngaged === true, ranged: actorPlan.kind === 'ranged' });
   const allowsPistolContactDodge = attackType(action.type) && actorPlan.kind === 'ranged' && (context.targetEngaged === true || context.engaged === true)
@@ -867,6 +891,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       location, attackRoll: roll,
       hitLocationRoll: location?.roll, critical: criticalAttack, qualities: action.qualities, nature });
     protection=applyAlliedShield(normalized,applyForgeProtection(normalized,protection));
+    // Bouclier (n) du Trait : n PA sur la zone touchée, sauf si un vrai bouclier protège déjà ce coup (un seul bouclier compte).
+    if(normalized.traitShield&&protection.ap!==null&&!(protection.shieldAp>0))protection={...protection,ap:protection.ap+normalized.traitShield,shieldAp:normalized.traitShield,traitShield:normalized.traitShield};
     // G-CRI-2 : un appendice sans table propre (queue, tentacule) n'a pas de PA lisibles sur la fiche ; le MJ les saisit.
     if(context.hitAppendage){
       const appendageAp=context.hitAppendageAp;
@@ -1018,8 +1044,11 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   supplementaryTalentPlans.push(riposte);
   // Livre de base V5 v3 p.124 : une seule Riposte par Round (quota `talent:riposte` du registre, étendue Round, lu par le Store avant l'aperçu).
   const riposteSpent=normalized.riposteSpent===true;
-  const riposteDue=riposte.proposals.some(row=>row.op==='riposte')&&!riposteSpent;
-  const riposteReminders=riposteSpent&&riposte.proposals.some(row=>row.op==='riposte')?['Riposte : déjà utilisée ce Round (une fois par Round, V5 p.124).']:[];
+  const talentRiposteDue=riposte.proposals.some(row=>row.op==='riposte')&&!riposteSpent;
+  // Champion (V5 p. 357) : opposition de mêlée défensive gagnée, dégâts comme l'attaquant, sans le quota d'une Riposte par Round du Talent.
+  const championRiposte=!talentRiposteDue&&opposed?.winner==='defender'&&actorPlan.kind==='melee'&&defenderPlan?.kind==='melee'&&creatureMagicTraits(target).some(trait=>trait.key==='champion');
+  const riposteDue=talentRiposteDue||championRiposte;
+  const riposteReminders=riposteSpent&&!championRiposte&&riposte.proposals.some(row=>row.op==='riposte')?['Riposte : déjà utilisée ce Round (une fois par Round, V5 p.124).']:[];
   if(riposteDue){
     if(!knownHp(actor)||normalized.defense?.damage===undefined&&!normalized.defense?.damageFormula)unresolved.push('Riposte : Blessures de l’attaquant et dégâts de l’arme utilisée en défense requis.');
     else {
@@ -1407,15 +1436,57 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
   for (const plan of mountedFallPlans) if (plan.requiredTest) mountedRidePlanCounts.set(plan.participantId, (mountedRidePlanCounts.get(plan.participantId) || 0) + 1);
   resolveMountedFallTests();
   conditionPlan(actor,actorConditionApplication,'actor',context.blackpowderBrokenTest?context.blackpowderShooterId:target?.id);
+  // Effets de Traits à la blessure (second chantier des Traits, L3) : Sang corrosif, Infecté, Bestial, Affamé, pour la cible touchée
+  // et pour l'attaquant blessé en retour (Riposte, Champion). Les demandes de dé restent dans `traitPlans.requests` tant que
+  // `context.traitInputs` n'y répond pas ; `applyResolution` applique les patches dans la même commande que le coup.
+  const traitRoster = Array.isArray(normalized.v5State?.participants) ? normalized.v5State.participants : Object.values(normalized.v5State?.participants || {});
+  const traitPeople = [actor, target, ...traitRoster].filter((row, index, all) => row?.id && all.findIndex(other => other?.id === row.id) === index);
+  const traitOut = { plans: [], requests: [], patches: [], logs: [], unresolved: [] };
+  const woundTraits = (wounded, author, lost, killed) => {
+    if (!wounded?.id || !knownHp(wounded) || !(lost > 0)) return;
+    const before = Math.max(0, Number(wounded.hp) || 0);
+    const engagedIds = engagedWith({ participants: traitPeople }, traitPeople, wounded.id);
+    // Une attaque de mêlée engage la paire (V5 p. 163) avant que le Store ne l'inscrive au plateau.
+    if (author?.id && actorPlan.kind === 'melee') engagedIds.push(author.id);
+    const out = collectWoundTraitEffects({ actor: author, target: wounded, participants: traitPeople, hpBefore: before, hpAfter: Math.max(0, before - lost), killed,
+      resolutionId: normalized.resolutionId, round: normalized.round ?? null, turnIndex: normalized.v5Clock?.turnIndex ?? null,
+      engagedIds, traitInputs: context.traitInputs || {}, rollLocation: () => d100() });
+    for (const key of Object.keys(traitOut)) traitOut[key].push(...out[key]);
+  };
+  if (context.fateAction !== 'cancel-attack') {
+    woundTraits(target, actor, hit && attackType(action.type) ? Math.min(hpBefore, (damage?.finalDamage || 0) + (criticalBlock?.application?.extraWounds || 0)) : 0, lethalDeath?.targetId === target?.id);
+    woundTraits(actor, target, Math.min(Math.max(0, Number(actor?.hp) || 0), (defenderCritical?.application?.extraWounds || 0) + (defenderDamage?.finalDamage || 0)), false);
+  }
+  unresolved.push(...traitOut.unresolved, ...traitOut.requests.map(row => `${row.label} : à saisir.`));
+  const traitPlans = Object.values(traitOut).some(rows => rows.length) ? traitOut : null;
   if(defenderCritical?.application)defenderCritical.application.states=actorConditionApplication.filter(row=>row.source?.kind==='critical');
   defenderWeaponConditions.applied=actorConditionApplication.filter(row=>row.source?.keywordId==='assommante');
   const momentum = [];
   // Faux de Shyish (V5 v3 p.247) : le Mort-vivant en mêlée avec le porteur ne gagne pas d'Élan.
   const scytheBlocksGain = (participant, other) => (actorPlan.kind === 'melee' || defenderPlan?.kind === 'melee') && other?.extensions?.v5?.specialStates?.scytheOfShyish === true
     && applyScytheOfShyishRules({ target: participant, isEngagedWithWielder: true }).momentumGainBlocked;
+  // Rage (lecture du MJ du 04/11) : dès que le porteur gagne l'Élan, il entre en Frénésie et perd l'Élan, dans la même commande.
+  const rageChanges = [];
+  const rageFrenzy = participant => {
+    const borrowed = evaluateV5Talents({ ...participant, talents: [...(participant.talents || []), { id: 'talent-frenzy', status: 'resolved', rank: 1 }] }, { event: 'talent.activate', role: 'actor', context: { talentAction: 'frenzy' } });
+    const origin = borrowed.proposals.find(row => row.op === 'activateTalent' && row.key === 'talent-frenzy')?.origins?.[0];
+    return origin ? { id: `${normalized.resolutionId}:rage:${participant.id}`, key: 'frenzy', name: 'Frénésie', kind: 'talent-pending', level: 1, duration: null,
+      authorId: participant.id, targetId: participant.id, source: { ...origin, activationResolutionId: normalized.resolutionId, trait: 'fury' } } : null;
+  };
   const planMomentum = (participant, events, exceptions=[], other = null) => {
     if (!participant?.id) return;
-    momentum.push({ participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions, frightened: isFrightened(participant), gainBlocked: scytheBlocksGain(participant, other) }) });
+    const change = { participantId: participant.id, ...previewMomentumEvents({ hasMomentum: hasMomentum(participant), events, exceptions, frightened: isFrightened(participant), gainBlocked: scytheBlocksGain(participant, other) }) };
+    const frenzied = (participant.states || []).some(row => row.key === 'frenzy' && sourceActive(row));
+    if (change.before === false && change.after === true && !frenzied && psychologyTraits(participant).some(trait => trait.key === 'fury')) {
+      const state = rageFrenzy(participant);
+      if (state) {
+        change.after = false;
+        change.details = [...(change.details || []), { eventId: `${normalized.resolutionId}:rage`, effect: 'spend', before: true, after: false, preventedBy: [], trait: 'fury' }];
+        change.rage = true;
+        rageChanges.push({ participantId: participant.id, removeKeys: ['frenzy'], add: [state] });
+      } else unresolved.push('Rage : Frénésie indisponible (source du Talent à revalider).');
+    }
+    momentum.push(change);
   };
   const actorEvents = [], targetEvents = [];
   const event = (type, data = {}) => ({ id: `${normalized.resolutionId}:${type}`, type, ...data });
@@ -1467,7 +1538,7 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
 
   const bolt=lodgedHarpoon(normalized,criticalFirst,hit);
   supplementaryTalentPlans.push(...bolt.plans);
-  const talentActionChanges=[...activation.changes,...special.changes,...defenseShield.changes,...bolt.changes,...finishImmediateAttack(normalized)];
+  const talentActionChanges=[...activation.changes,...special.changes,...defenseShield.changes,...bolt.changes,...finishImmediateAttack(normalized),...rageChanges];
   const situationAfter=previewSituationAfter(normalized,actorTest);
   talentActionChanges.push(...situationAfter.changes);
   supplementaryTalentPlans.push(...situationAfter.plans);
@@ -1694,15 +1765,19 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     mountedCharge: mountedChargePlan?.available ? clone(mountedChargePlan) : null,
     mountedDodge: normalized.mountedDodgePlan?.disadvantageSources?.length ? clone(normalized.mountedDodgePlan) : null,
     mountedFall: mountedFallPlans.length ? clone(mountedFallPlans) : null,
+    ...(traitPlans ? { traitPlans } : {}),
+    ...(traitPlans?.requests.length ? { needsInput: clone(traitPlans.requests) } : {}),
+    ...(normalized.defensePlan ? { defensePlan: clone(normalized.defensePlan) } : {}),
     blastPlan,
     spreadPlan,
     targetConditionApplication,actorConditionApplication,defenderWeaponConditions,familiarConditionRefusals,
-    reminders: [...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...psychologyTestReminder,...riposteReminders,...profileAbilityReminders,...(supplementalEquipment?.reminders||[]),...(supplementalEquipment?.unresolved||[]),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
+    reminders: [...(normalized.traitShieldReminder ? [normalized.traitShieldReminder] : []),...familiarConditionRefusals.map(row => `${row.name || 'Homoncule'} : ${row.message}`),...psychologyTestReminder,...riposteReminders,...profileAbilityReminders,...(supplementalEquipment?.reminders||[]),...(supplementalEquipment?.unresolved||[]),...(magicFearImmune?['Le Bœuf Reste Debout : immunité aux Tests de Peur et Terreur pour la durée.']:[]),...(fast.initiativeBonus?[`Rapide : +${fast.initiativeBonus} Initiative pour cette attaque uniquement; le MJ l’applique à son arbitrage d’ordre, sans modifier l’Initiative de fiche.`]:[]),...activation.reminders,...special.reminders,...naturalReminders,...(hit&&attackType(action.type)&&target?reactionReminders(target,nature):[]),...(hit&&target&&damage?.finalDamage>0&&(target.extensions?.v5?.spellEffects||[]).some(e=>e.specialState?.festeringWoundTest)?[`Domaine de Nurgle (D-C51) : ${target.name||target.id} subit des Blessures ; proposer au MJ de jouer le Test de Blessure Suppurée (V5 p. 180). Rien n’est appliqué par l’outil.`]:[]),...(context.silentTakedown === true ? ['Neutralisation silencieuse : Blessures égales au BF et Inconscient si victoire ; Sonné et alarme si la cible gagne. Ces conséquences restent à arbitrer.'] : [])],
     activeEffects,talentActionChanges,secondaryTargets,
     damageReplacedByTalent: replacement ? clone(replacement) : null,defenderDamageReplacedByTalent:defenseShield.replacement||null,
     unresolved: [...unresolved,...(supplementalEquipment?.unresolved||[])],
     weaponSkillReceipt: normalized.weaponSkillReceipt,
-    defenderCritical,defenderDamage,riposteUsed:riposteDue&&defenderDamage&&!defenseShield.replacement?{participantId:target.id}:null,
+    defenderCritical,defenderDamage,riposteUsed:talentRiposteDue&&defenderDamage&&!defenseShield.replacement?{participantId:target.id}:null,
+    ...(championRiposte&&defenderDamage&&!defenseShield.replacement?{championRiposte:{participantId:target.id}}:{}),
     actionType: action.type,
     attack: attackType(action.type),
     ulricFury: furyDue&&furyValid?{turnId:furyTurnId}:null,
@@ -1767,6 +1842,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
     result.lethalDeath = null;
     result.tripFall = null;
     result.trip = null;
+    delete result.traitPlans;
+    delete result.needsInput;
     result.reminders = [...result.reminders, 'Destin : attaque annulée avant Blessures et Blessures Critiques.'];
   }
   if(normalized.v5?.context?.fateAction==='survive'){
@@ -1785,6 +1862,8 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       result.projectileLodging=null;
       result.secondaryTargets=[];
       result.lethalDeath=null;
+      delete result.traitPlans;
+      delete result.needsInput;
       result.reminders=[...result.reminders,'Destin : le personnage échappe à la mort et quitte la rencontre.'];
     }
     else {
@@ -2354,6 +2433,11 @@ export function applyResolution(preview, currentState) {
     extensions.v5 = v5;
     updated.extensions = extensions;
     nextState.participants = participantListWithUpdate(nextState, id, updated);
+  }
+  // Effets de Traits à la blessure (L3) : patches de l'aperçu, appliqués dans la même commande que le coup (un seul ↶).
+  if (preview.traitPlans?.patches?.length) {
+    const roster = Array.isArray(nextState.participants) ? nextState.participants : Object.values(nextState.participants || {});
+    for (const updated of applyTraitPatches(roster, preview.traitPlans.patches)) nextState.participants = participantListWithUpdate(nextState, updated.id, updated);
   }
   nextState.revision = currentState.revision + 1;
   nextState.appliedResolutionIds = [...appliedIds, preview.resolutionId].slice(-MAX_APPLIED_RESOLUTION_IDS);

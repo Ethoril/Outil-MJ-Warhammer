@@ -4516,7 +4516,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         semanticResult = result;
         const next=clearV5FortuneAdvantageDeclaration({
           ...v5StoreActionResult(draft, result),
-          log: [resolutionLogEntry(preview, result.resolution), ...(draft.log || [])].slice(0, 300)
+          // Effets de Traits à la blessure (L3) : leurs lignes suivent celle du coup, dans la même commande.
+          log: [...cloneValue(preview.traitPlans?.logs || []).reverse(), resolutionLogEntry(preview, result.resolution), ...(draft.log || [])].slice(0, 300)
         },resolvedActorId);
         for (const test of preview.secondaryObstinateTests || []) consumeObstinate(next, findObstinateActor(next, test.participantId), test);
         const exposure = preview.fateAction?.cancelled || preview.fateSurvival ? null : preview.supplementalEquipment?.exposure;
