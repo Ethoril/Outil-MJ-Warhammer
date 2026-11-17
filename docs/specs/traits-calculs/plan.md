@@ -68,6 +68,8 @@ rearUp(sourceId, targetId), markFreshCorpse(sourceId, test), setCreatureFlag(par
 
 ## Points à trancher par le MJ
 
+**Tranchés le 17/11/2026 : les quatre recommandations sont retenues.** Marqueur avec avertissement ; `bondCells` (choix de Claude) ; les trois décisions de mort, tout autre chemin seulement signalé ; D5 et D7 à D12 confirmés par le MJ.
+
 1. **« Tour perdu » (Stupide, Affamé) : simple marqueur ou blocage ?** Marqueur affiché sur la fiche, avec avertissement dans l'aperçu d'action du porteur, que le MJ peut passer outre ; ou refus dur de toute Action et de tout Mouvement du porteur ce Tour. *Recommandation : marqueur avec avertissement* (le moteur ne connaît pas toutes les actions libres ; un refus dur bloquerait un cas que la règle autorise).
 2. **Nom du champ de la carte.** `bondCells` (double de la Course, en cases). *Recommandation : oui.* Sans réponse, le lot L7 de la carte garde ce nom.
 3. **Quelles morts proposent la case « corps intact » (Increvable) ?** Les décisions du MJ existantes (`decideStateDeath`, `decideImmediateCriticalDeath`, `decideCriticalDeath`) ; L2 recense les autres chemins de mort confirmée (mort subite, Blessures à 0) sans les vérifier ici. *Recommandation : ces trois ; tout autre chemin trouvé par L2 est signalé au rapport, pas branché.*
