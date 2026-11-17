@@ -88,6 +88,8 @@ Légende : « d'office » = le moteur connaît le déclencheur, l'effet se pose 
 | D14 | Sang corrosif (question 1) | Dégâts réduits par BE et PA, minimum 1. |
 | D15 | Increvable (question 2, corrigée par le MJ après relecture de la règle) | Test étendu : un Test de Résistance (+0) au début de chaque Round, les DR s'additionnent ; la créature revient à 1 Blessure dès que le total atteint 6 DR, au plus en BE Rounds. |
 | D16 | Bond (question 3) | Pastille sur la fiche **et** portée de Bond envoyée à la carte : touche aussi le dépôt de la carte (`E:/rpg-map-display`), qui doit accepter le champ (contrat de liaison à étendre, carte tolérante à son absence). |
+| D18 | Increvable, Round échoué (après L1) | Un échec ajoute 0 DR au total ; il ne le fait jamais baisser. |
+| D19 | Sang corrosif, PA (après L1) | Pour chaque engagé, l'outil tire lui-même la localisation (d100, table des localisations habituelle de l'outil), sans jet manuel, et soustrait les PA de cette zone ; minimum 1. |
 | D17 | Inflammable (question 4, non posée) | Recommandation de Claude retenue par défaut : −2 DR sur les seuls Tests pour éviter Enflammé, pas sur le retrait par Athlétisme. |
 
 ### Choix de Claude, à confirmer
