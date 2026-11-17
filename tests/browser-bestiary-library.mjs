@@ -91,7 +91,9 @@ try {
   await crumbs.getByRole('button', { name: 'Ennemis' }).click();
   await page.waitForFunction(() => document.querySelector('.bestiary-crumbs [aria-current]')?.textContent === 'Ennemis');
   // Recherche dans un dossier : bornée au dossier et à ses sous-dossiers ; depuis la racine, tout le bestiaire.
-  await page.getByLabel('Nom du profil').fill('Rat');
+  // « Rat- » : des Skavens (Rat-ogre, Rat-loup) et un PNJ hors Ennemis (Rassark, L23), aucun Démon (« Rat » seul trouve aussi un démon
+  // par sa compétence « Savoir (stratégie/tactique) »).
+  await page.getByLabel('Nom du profil').fill('Rat-');
   await page.waitForFunction(() => /trouvés? dans Ennemis\./.test(document.querySelector('[role="status"]').textContent));
   const inEnemies = await page.locator('.bestiary-row-folder').evaluateAll(nodes => nodes.map(node => node.getAttribute('aria-label')));
   assert.ok(inEnemies.length > 0 && inEnemies.every(label => label.startsWith('Ouvrir le dossier Ennemis › ')), inEnemies.join(', '));
@@ -100,8 +102,10 @@ try {
   await crumbs.getByRole('button', { name: 'Tout le bestiaire' }).click();
   await page.waitForFunction(() => /trouvés? dans tout le bestiaire\./.test(document.querySelector('[role="status"]').textContent));
   const everywhere = await page.locator('.bestiary-row-folder').evaluateAll(nodes => nodes.map(node => node.getAttribute('aria-label')));
-  assert.ok(everywhere.length > inEnemies.length && everywhere.includes('Ouvrir le dossier Bestiaire'), everywhere.join(', '));
+  assert.ok(everywhere.length > inEnemies.length && everywhere.some(label => !label.startsWith('Ouvrir le dossier Ennemis')), everywhere.join(', '));
   // Le dossier d'un résultat s'ouvre d'un clic ; ajout à la réserve depuis ce dossier.
+  await page.getByLabel('Nom du profil').fill('Rat géant');
+  await page.waitForFunction(() => /trouvés? dans tout le bestiaire\./.test(document.querySelector('[role="status"]').textContent));
   await page.locator('.item').filter({ has: page.locator('strong', { hasText: /^Rat géant — Giant Rat$/ }) }).first().getByRole('button', { name: 'Ouvrir le dossier Bestiaire' }).click();
   await page.waitForFunction(() => document.querySelector('.bestiary-crumbs [aria-current]')?.textContent === 'Bestiaire');
   await page.getByLabel('Nom du profil').fill('');
