@@ -12,7 +12,7 @@
 
 Publié le 17/11 en 3.50.0 : poursuite selon le Livre de base V5 (p. 158-159) et image du pion des PJ envoyée à la carte. Détail et restes connus dans `docs/SUIVI_EVOLUTION.md`, entrée 3.50.0.
 
-**Attend le MJ, sans action de notre part :** relire la table d10 des Obstacles de la poursuite (`docs/specs/poursuite-v5/spec.md`, section « Table des Obstacles (d10) » ; une correction = retouche de `js/data/v5-pursuit-obstacles.js`) ; éprouver à la table les images des pions et la carte « Monture » du bureau des fiches.
+**Table d10 des Obstacles de la poursuite : validée par le MJ le 17/11, sans correction.** **Attend le MJ, sans action de notre part :** éprouver à la table les images des pions et la carte « Monture » du bureau des fiches.
 
 ## 2. Chantier en cours : Traits optionnels des créatures et des montures
 
