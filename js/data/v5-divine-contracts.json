@@ -15281,6 +15281,29 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "imposed-test",
+          "label": "Mer déchaînée",
+          "test": {
+            "skill": "athletics",
+            "slModifier": 2
+          },
+          "subjects": "targets",
+          "when": "move",
+          "onFailure": [
+            {
+              "type": "condition",
+              "key": "Prone",
+              "level": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -15310,7 +15333,7 @@
         },
         {
           "id": "athletics",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Pour utiliser son Mouvement, la cible tente un Test d’Athlétisme Accessible (+2 DR).",
           "sourceRef": "v5-sea-legs"
         },
@@ -21689,6 +21712,16 @@
       ],
       "effects": [
         {
+          "type": "special-state",
+          "psychologySuppressed": true,
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "minutes",
+            "requiresResolvedExpiry": true
+          }
+        },
+        {
           "type": "imposed-test",
           "label": "Baume pour un esprit blessé",
           "test": {
@@ -21730,7 +21763,7 @@
       "clauses": [
         {
           "id": "remove-psychology",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Tous les Traits psychologiques sont retirés pendant la durée.",
           "sourceRef": "v5-balm-to-a-wounded-mind"
         },
@@ -24803,6 +24836,29 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "imposed-test",
+          "label": "Vent sauvage",
+          "test": {
+            "skill": "resistance",
+            "slModifier": -1
+          },
+          "subjects": "targets",
+          "when": "round",
+          "onFailure": [
+            {
+              "type": "condition",
+              "key": "Prone",
+              "level": 1
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -24835,7 +24891,7 @@
         },
         {
           "id": "prone-each-round",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Chaque Round suivant, chaque cible refait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.",
           "sourceRef": "v5-wild-wind"
         },
@@ -26201,7 +26257,7 @@
             {
               "type": "lost-turn",
               "cause": "divine-defensive-only",
-              "label": "hors actions défensives"
+              "label": "Tour perdu"
             }
           ]
         }
@@ -27279,6 +27335,28 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "imposed-test",
+          "label": "Fureur d'Ulric",
+          "test": {
+            "skill": "willpower",
+            "slModifier": 0
+          },
+          "subjects": "targets",
+          "when": "turn",
+          "optional": true,
+          "onSuccess": [
+            {
+              "type": "frenzy"
+            }
+          ],
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [
@@ -27292,7 +27370,7 @@
       "clauses": [
         {
           "id": "free-frenzy",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Test de Frénésie gratuit à chaque Tour de l'allié pendant la durée (règle p.184).",
           "sourceRef": "v5-ulric-s-fury"
         },
@@ -28316,5 +28394,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:a7314350cbee6636e18ce1a353a6a1f457b7f42592f331fb6b1d4a94a1f03c1c"
+  "sourceFingerprint": "sha256:de700c02f72b0c76212377c9ba95a8def2b6be600401629962b03387c3c0267e"
 }

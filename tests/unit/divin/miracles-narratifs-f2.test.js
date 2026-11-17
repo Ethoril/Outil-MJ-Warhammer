@@ -72,14 +72,16 @@ describe('L3 — statuts, clauses et grammaire', () => {
     }
   });
 
-  test('terror-test et endurance-test requalifiées ; athletics, prone-each-round, free-frenzy restent en rappel (figées par des tests existants, CA7)', () => {
+  test('terror-test, athletics, prone-each-round, endurance-test, free-frenzy requalifiées (L3b : décision du MJ)', () => {
+    const imposed = id => getDivineContract(id).effects.find(effect => effect.type === 'imposed-test');
     assert.equal(modeOf(DISMAY, 'terror-test'), 'engine');
-    assert.equal(modeOf(SEA_LEGS, 'athletics'), 'manual');
-    assert.ok(!getDivineContract(SEA_LEGS).effects.some(effect => effect.type === 'imposed-test'));
-    assert.equal(modeOf(WILD_WIND, 'prone-each-round'), 'manual');
+    assert.equal(modeOf(SEA_LEGS, 'athletics'), 'engine');
+    assert.deepEqual([imposed(SEA_LEGS).when, imposed(SEA_LEGS).test], ['move', { skill: 'athletics', slModifier: 2 }]);
+    assert.equal(modeOf(WILD_WIND, 'prone-each-round'), 'engine');
+    assert.deepEqual([imposed(WILD_WIND).when, imposed(WILD_WIND).test], ['round', { skill: 'resistance', slModifier: -1 }]);
     assert.equal(modeOf(FROSTBITE, 'endurance-test'), 'engine');
-    assert.equal(modeOf(FURY, 'free-frenzy'), 'manual');
-    for (const id of [WILD_WIND, FURY]) assert.ok(!getDivineContract(id).effects.some(effect => effect.type === 'imposed-test'), id);
+    assert.equal(modeOf(FURY, 'free-frenzy'), 'engine');
+    assert.deepEqual([imposed(FURY).when, imposed(FURY).test, imposed(FURY).optional], ['turn', { skill: 'willpower', slModifier: 0 }, true]);
     assert.equal(modeOf(BAMBOOZLE, 'cool-resist'), 'engine');
     assert.equal(modeOf(BALM, 'resist'), 'engine');
   });
@@ -172,7 +174,7 @@ describe('L3 — Engourdissement : Endurance +0, échec = hors actions défensiv
     assert.deepEqual(withoutId(person(store, 'foe').extensions.v5.lostTurn), withoutId(person(other, 'foe').extensions.v5.lostTurn));
     const marker = person(store, 'foe').extensions.v5.lostTurn;
     assert.equal(marker.cause, 'divine-defensive-only');
-    assert.equal(marker.label, 'hors actions défensives');
+    assert.equal(marker.label, 'Tour perdu');
     await store.undo();
     assert.equal(person(store, 'foe').extensions?.v5?.lostTurn, undefined);
   });

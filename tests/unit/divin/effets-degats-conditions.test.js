@@ -721,7 +721,8 @@ test('Vent sauvage : À terre au premier Round selon le fait de chaque cible', a
   const result = await run(store, WIND, 'toughnessFailed', { ally: true, foe: false });
   assert.ok(stateOf(store, 'ally', /terre|prone/i));
   assert.equal(stateOf(store, 'foe', /terre|prone/i), undefined);
-  assert.ok(result.receipt.reminders.some(text => /Round suivant/.test(text)), 'les Rounds suivants restent en rappel');
+  // L3b : les Rounds suivants sont demandés par le Tour (Test imposé `round`), plus un rappel.
+  assert.ok(!result.receipt.reminders.some(text => /Round suivant/.test(text)), 'les Rounds suivants ne sont plus un rappel');
 });
 
 test('Mer déchaînée : les trois États restent, À terre selon le Test d’Athlétisme', async () => {

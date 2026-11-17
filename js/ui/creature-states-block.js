@@ -80,7 +80,7 @@ const traitNamed = (participant, pattern) => [...(participant.traits || []), ...
   .some(trait => pattern.test(String(typeof trait === 'string' ? trait : trait?.name || trait?.key || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase()));
 const peers = (participant, participants) => participants.filter(item => item.zone === 'active' && item.id !== participant.id);
 const nameOf = item => item.name || item.id;
-const LOST_TURN_CAUSES = { stupid: 'Stupide', hungry: 'Affamé' };
+const LOST_TURN_CAUSES = { stupid: 'Stupide', hungry: 'Affamé', 'divine-defensive-only': 'Engourdissement' };
 
 function targetSelect(make, className, label, people) {
   const select = make('select');

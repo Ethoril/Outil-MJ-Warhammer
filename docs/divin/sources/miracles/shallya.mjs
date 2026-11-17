@@ -27,13 +27,14 @@ export const miracles = [
     params: { range: touch, targets: one, duration: soc('characteristic-bonus', 'minutes') },
     status: 'assisted', effect: null, targetRules: [],
     // Miracles narratifs L3 (LdB V5 p.226 relue) : Challenging (+0 SL) contre le sommeil seulement ; cible consentante dispensée.
-    effects: [{ type: 'imposed-test', label: 'Baume pour un esprit blessé', test: { skill: 'calm', slModifier: 0 }, subjects: 'targets', when: 'cast',
+    // L3b : suppression des Traits psychologiques pendant la durée (drapeau lu par creature-psychology.js), même si la cible résiste au sommeil.
+    effects: [{ type: 'special-state', psychologySuppressed: true }, { type: 'imposed-test', label: 'Baume pour un esprit blessé', test: { skill: 'calm', slModifier: 0 }, subjects: 'targets', when: 'cast',
       waivedBy: { fact: 'consenting', label: 'est consentante (aucun Test de résistance au sommeil)' },
       onFailure: [{ type: 'marker', label: 's’endort à la fin de l’effet jusqu’au lever du soleil, sauf dérangement' }],
       onSuccess: [{ type: 'marker', label: 'résiste au sommeil' }] }],
     needsInput: [{ id: 'willing', text: 'La cible est-elle consentante ? Sinon, résultat de son Test de Calme.' }, { id: 'psychology-traits', text: 'Traits psychologiques de la cible à suspendre.' }, { id: 'disturbed', text: 'Le sommeil est-il dérangé ? Heure du lever du soleil.' }],
     clauses: [
-      { id: 'remove-psychology', mode: 'manual', text: 'Tous les Traits psychologiques sont retirés pendant la durée.' },
+      { id: 'remove-psychology', mode: 'engine', text: 'Tous les Traits psychologiques sont retirés pendant la durée.' },
       { id: 'sleep', mode: 'manual', text: 'Après la durée, la cible dort profondément jusqu’au lever du soleil, sauf dérangement.' },
       { id: 'resist', mode: 'engine', text: 'Cible non consentante : Test de Calme Intermédiaire (+0 DR) pour résister au sommeil.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en minutes.' }

@@ -113,7 +113,9 @@ export const miracles = [
     summary: 'Le prêtre appelle le Seigneur de la Nature, qui lève un vent déchaîné en tourbillon. Le prêtre n’est pas affecté ; toutes les cibles de la zone sont malmenées par des vents irrésistibles : leurs Tests de Capacité de Combat ou d’Agilité subissent -2 DR, et chaque Round elles doivent réussir un Test d’Endurance Difficult (-10) pour éviter l’État À terre. Aucune attaque à distance n’est possible dans la zone ; seules les armes à poudre ou d’artillerie peuvent viser une cible dans la zone.',
     params: { range: self, targets: { kind: 'special' }, duration: soc('characteristic-bonus', 'rounds') },
     status: 'assisted',
-    effects: [{ type: 'test-modifier', categories: { cc: -2, ag: -2 } }, { type: 'condition', key: 'Prone', level: 1, when: { fact: 'toughnessFailed', label: 'a échoué à son Test d’Endurance Difficult (-10 en V4, -1 DR en V5) du premier Round' } }],
+    effects: [{ type: 'test-modifier', categories: { cc: -2, ag: -2 } }, { type: 'condition', key: 'Prone', level: 1, when: { fact: 'toughnessFailed', label: 'a échoué à son Test d’Endurance Difficult (-10 en V4, -1 DR en V5) du premier Round' } },
+      // Miracles narratifs L3b (Deft Steps p.88, décision du MJ) : même Test (−10 en V4, lu −1 DR, Q14) à chaque début de Round suivant ; échec : À terre.
+      { type: 'imposed-test', label: 'Vent sauvage', test: { skill: 'resistance', slModifier: -1 }, subjects: 'targets', when: 'round', onFailure: [{ type: 'condition', key: 'Prone', level: 1 }] }],
     targetRules: ['prêtre non affecté'],
     needsInput: [
       { id: 'area', text: 'Taille de la zone : le livre l’indique « X » sans valeur ; décision MJ.' },
@@ -124,7 +126,7 @@ export const miracles = [
       { id: 'priest-unaffected', mode: 'manual', text: 'Le prêtre n’est pas affecté par le vent.' },
       { id: 'test-penalty', mode: 'engine', text: 'Les Tests de Capacité de Combat et d’Agilité des cibles dans la zone subissent -2 DR.' },
       { id: 'prone-first-round', mode: 'engine', text: 'Premier Round : chaque cible fait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre (résultat saisi par le MJ).' },
-      { id: 'prone-each-round', mode: 'manual', text: 'Chaque Round suivant, chaque cible refait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.' },
+      { id: 'prone-each-round', mode: 'engine', text: 'Chaque Round suivant, chaque cible refait un Test d’Endurance Difficult (-10) ; échec : elle gagne l’État À terre.' },
       { id: 'no-ranged', mode: 'manual', text: 'Aucune attaque à distance n’est possible dans la zone, sauf armes à poudre ou d’artillerie ; ces armes peuvent seules viser les cibles dans la zone.' }
     ],
     sourceDelta: 'Zone imprimée « AoE (X) » : la taille n’est pas donnée dans le livre (sans doute oubli d’impression) ; encodée en special avec besoin MJ. « Any Weapon Skill or Agility Tests » : lu comme les Tests de toutes les compétences liées à CC ou à Agilité (catégories du catalogue, Prière exclue ; les Tests de caractéristique brute restent à la main). Difficulté Difficult (-10) imprimée en pourcentage (4e édition), non convertie en DR.'

@@ -542,7 +542,8 @@ test('Fureur d’Ulric : contrat assisté, l’allié gagne Frénésie et la cou
   assert.equal(getDivineContract(FURY).status, 'assisted');
   assert.deepEqual(getDivineContract(FURY).effects.map(effect => ({ type: effect.type, talents: effect.talents })), [
     { type: 'grant-talent', talents: [{ id: 'talent-frenzy', rank: 1 }] },
-    { type: 'frenzy-fury', talents: undefined }]);
+    { type: 'frenzy-fury', talents: undefined },
+    { type: 'imposed-test', talents: undefined }]); // L3b : Test de Frénésie gratuit à chaque Tour
   const store = await fixture();
   const result = await invoke(store);
   const ally = person(store, 'ally');

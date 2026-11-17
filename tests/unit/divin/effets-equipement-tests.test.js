@@ -849,7 +849,7 @@ test('statuts : les six miracles sont assistés, avec un effet test-modifier et 
   assert.ok(manual(HEAT).includes('watch-minus-3') && manual(HEAT).includes('ends-on-crime') && !manual(HEAT).includes('fellowship-penalty'));
   assert.ok(manual(TRICKLE).includes('beneficiary') && manual(TRICKLE).includes('charm-condition'));
   assert.deepEqual(manual(RAGE).filter(id => id.includes('test') || id.includes('force')), []);
-  assert.ok(manual(WIND).includes('prone-each-round') && !manual(WIND).includes('test-penalty'));
+  assert.ok(!manual(WIND).includes('prone-each-round') && !manual(WIND).includes('test-penalty')); // L3b : prone-each-round branchée (Test imposé `round`)
 });
 
 test('Cœur d’aurochs : Résistance +6 (Bonus de Sociabilité) sur la cible touchée, 9 Rounds', async () => {

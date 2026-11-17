@@ -45,7 +45,9 @@ export function parsePsychologyTrait(trait) {
   return key ? { key, name: match[1].trim(), detail } : null;
 }
 
-const traitsOf = participant => [
+// Baume pour un esprit blessé : tous les Traits psychologiques sont supprimés pendant la durée (drapeau de couche divine).
+const suppressed = participant => participant?.extensions?.v5?.specialStates?.psychologySuppressed === true;
+const traitsOf = participant => suppressed(participant) ? [] : [
   ...(Array.isArray(participant?.traits) ? participant.traits : []),
   ...(Array.isArray(participant?.extensions?.traits) ? participant.extensions.traits : []),
   // Animosité et Préjugé déclarés par la fiche du PJ (`motsCles`) : même règle que le Trait.

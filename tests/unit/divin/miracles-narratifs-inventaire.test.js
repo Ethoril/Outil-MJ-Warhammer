@@ -52,15 +52,18 @@ describe('Inventaire des miracles narratifs : clauses des miracles assistés', (
   // L3 : Embobiner et Baume passent assisted (68 → 66 manual, 61 → 63 assisted) ; deux clauses F2 requalifiées (terror-test,
   // endurance-test ; athletics, prone-each-round et free-frenzy restent manual, figées par des tests existants, CA7), quatre rappels F6
   // neufs (next-round, immune-types, remove-psychology, sleep) : 65 → 67 clauses manual, 41 contrats portant encore une clause manual.
-  test('63 contrats assisted, tous des miracles, 41 avec une clause manual', () => {
+  // L3b (décision du MJ, ces prières servent en combat) : athletics (Mer déchaînée), prone-each-round (Vent sauvage), free-frenzy
+  // (Fureur d'Ulric) branchées en Tests imposés, remove-psychology (Baume) en drapeau : 67 → 63 clauses manual, 41 → 39 contrats
+  // portant encore une clause manual (Mer déchaînée et Fureur d'Ulric n'en ont plus).
+  test('63 contrats assisted, tous des miracles, 39 avec une clause manual', () => {
     assert.equal(assistes.length, 63, `Nombre de contrats « assisted » : ${assistes.length} au lieu de 63`);
     assert.ok(assistes.every((c) => c.type === 'miracle'), 'Un contrat « assisted » n\'est pas un miracle');
     const avec = assistes.filter((c) => c.clauses.some((cl) => cl.mode === 'manual'));
-    assert.equal(avec.length, 41, `Contrats assistés avec clause manuelle : ${avec.length} au lieu de 41`);
+    assert.equal(avec.length, 39, `Contrats assistés avec clause manuelle : ${avec.length} au lieu de 39`);
   });
 
-  test('67 clauses manual, chacune dans la table', () => {
-    assert.equal(clausesManuelles.length, 67, `Clauses « manual » des assistés : ${clausesManuelles.length} au lieu de 67`);
+  test('63 clauses manual, chacune dans la table', () => {
+    assert.equal(clausesManuelles.length, 63, `Clauses « manual » des assistés : ${clausesManuelles.length} au lieu de 63`);
     for (const cle of clausesManuelles) {
       assert.ok(table.clauses[cle], `Clause « manual » absente de la table des familles : ${cle}`);
     }
@@ -73,7 +76,7 @@ describe('Inventaire des miracles narratifs : clauses des miracles assistés', (
     }
   });
 
-  test('comptes par famille : F1 5, F2 3, F3 3, F4 1, F5 1, F6 53, F8 1', () => {
-    assert.deepEqual(compter(Object.values(table.clauses)), { F1: 5, F2: 3, F3: 3, F4: 1, F5: 1, F6: 53, F8: 1 });
+  test('comptes par famille : F1 5, F3 3, F4 1, F5 1, F6 52, F8 1 (plus aucune clause F2)', () => {
+    assert.deepEqual(compter(Object.values(table.clauses)), { F1: 5, F3: 3, F4: 1, F5: 1, F6: 52, F8: 1 });
   });
 });

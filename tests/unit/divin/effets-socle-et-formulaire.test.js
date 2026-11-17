@@ -73,14 +73,15 @@ test('assisted : Mer déchaînée applique ses trois États et expose les clause
   const store = await fixture(), preview = store.previewDivineExecution(SEA_LEGS, input({ expiry: { phase: 'endOfTurn', round: 6, actorId: 'priest' } }));
   assert.equal(preview.ready, true, preview.error);
   assert.equal(preview.status, 'ready');
-  assert.ok(preview.preview.reminders.some(text => /Athlétisme/.test(text)), 'la clause manuelle sort en rappel');
+  assert.ok(!preview.preview.reminders.some(text => /Athlétisme/.test(text)), 'L3b : le Test d’Athlétisme est demandé par le Tour, plus un rappel');
   assert.ok(!preview.preview.reminders.some(text => /gagne 1 État Aveuglé/.test(text)), 'une clause moteur n’est pas un rappel');
   const result = await store.applyDivineExecution(SEA_LEGS, { preview });
   assert.equal(result.ready, true, result.error);
   assert.deepEqual(person(store, 'ally').states.map(row => row.key).sort(), ['assourdi', 'aveugle', 'extenue']);
-  assert.equal(new Set(layers(store, 'ally').map(row => row.id)).size, 3, 'trois couches aux identifiants distincts');
-  assert.equal(result.receipt.appliedEffectIds.length, 3);
-  assert.ok(result.receipt.reminders.some(text => /Athlétisme/.test(text)));
+  // L3b : une quatrième couche, le Test d’Athlétisme imposé à chaque Mouvement (plus un rappel).
+  assert.equal(new Set(layers(store, 'ally').map(row => row.id)).size, 4, 'quatre couches aux identifiants distincts');
+  assert.equal(result.receipt.appliedEffectIds.length, 4);
+  assert.ok(!result.receipt.reminders.some(text => /Athlétisme/.test(text)));
   for (let i = 0; i < 12; i++) await store.nextTurn();
   assert.deepEqual(person(store, 'ally').states, [], 'la fin de l’effet retire les trois États');
   assert.equal(layers(store, 'ally').length, 0);

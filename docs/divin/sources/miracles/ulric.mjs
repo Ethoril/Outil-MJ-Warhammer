@@ -102,13 +102,15 @@ export const miracles = [
     params: { range, targets: one, duration: felRounds },
     status: 'assisted',
     effect: null,
-    effects: [{ type: 'grant-talent', talents: [{ id: 'talent-frenzy', rank: 1 }] }, { type: 'frenzy-fury' }],
+    effects: [{ type: 'grant-talent', talents: [{ id: 'talent-frenzy', rank: 1 }] }, { type: 'frenzy-fury' },
+      // Miracles narratifs L3b (LdB V5 p.228 et p.184, décision du MJ) : Test de Volonté de Frénésie gratuit à chaque Tour de l'allié (il peut renoncer) ; réussite : Frénésie.
+      { type: 'imposed-test', label: 'Fureur d\'Ulric', test: { skill: 'willpower', slModifier: 0 }, subjects: 'targets', when: 'turn', optional: true, onSuccess: [{ type: 'frenzy' }] }],
     targetRules: ['ally'],
     needsInput: [
       { id: 'ally', text: 'Allié ciblé dans la portée (Sociabilité mètres).' }
     ],
     clauses: [
-      { id: 'free-frenzy', mode: 'manual', text: 'Test de Frénésie gratuit à chaque Tour de l\'allié pendant la durée (règle p.184).' },
+      { id: 'free-frenzy', mode: 'engine', text: 'Test de Frénésie gratuit à chaque Tour de l\'allié pendant la durée (règle p.184).' },
       { id: 'fury', mode: 'engine', text: 'Frénésie accordée ; en Frénésie, +1d10 Dégâts explosifs au premier coup de mêlée touché de chaque Tour, au lieu de l\'attaque gratuite' },
       { id: 'exploding-d10', mode: 'engine', text: 'Sur un 10 au d10, relancer et ajouter, jusqu\'à obtenir moins de 10.' },
       { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }

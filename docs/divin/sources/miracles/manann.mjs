@@ -84,7 +84,9 @@ export const miracles = [
    { type: 'condition', key: 'Blinded', level: 1 },
    { type: 'condition', key: 'Deafened', level: 1 },
    { type: 'condition', key: 'Fatigued', level: 1 },
-   { type: 'condition', key: 'Prone', level: 1, when: { fact: 'athleticsFailed', label: 'a échoué à son Test d’Athlétisme Accessible (+2 DR)' } }
+   { type: 'condition', key: 'Prone', level: 1, when: { fact: 'athleticsFailed', label: 'a échoué à son Test d’Athlétisme Accessible (+2 DR)' } },
+   // Miracles narratifs L3b (LdB V5 p.223, décision du MJ) : chaque Tour où la cible utilise son Mouvement, Athlétisme +2 DR ; échec : À terre.
+   { type: 'imposed-test', label: 'Mer déchaînée', test: { skill: 'athletics', slModifier: 2 }, subjects: 'targets', when: 'move', onFailure: [{ type: 'condition', key: 'Prone', level: 1 }] }
   ],
   targetRules: [],
   needsInput: [
@@ -95,7 +97,7 @@ export const miracles = [
    { id: 'blinded', mode: 'engine', text: 'La cible gagne 1 État Aveuglé.' },
    { id: 'deafened', mode: 'engine', text: 'La cible gagne 1 État Assourdi.' },
    { id: 'fatigued', mode: 'engine', text: 'La cible gagne 1 État Fatigué.' },
-   { id: 'athletics', mode: 'manual', text: 'Pour utiliser son Mouvement, la cible tente un Test d’Athlétisme Accessible (+2 DR).' },
+   { id: 'athletics', mode: 'engine', text: 'Pour utiliser son Mouvement, la cible tente un Test d’Athlétisme Accessible (+2 DR).' },
    { id: 'prone', mode: 'engine', text: 'En cas d’échec au Test, la cible gagne aussi l’État À terre.' }
   ]
  },
