@@ -151,7 +151,7 @@ function detailArmour(detail, zones) {
  * Armure imprimée par zone : `ap` d'ensemble (limité aux zones nommées par `detail`), sinon pièces non facultatives (zone nommée, ou partout),
  * sinon `detail` seul (zones du catalogue). Aucun BE ajouté. `reminder` : texte à montrer quand la valeur ou la zone n'est pas déterminable.
  */
-function printedArmour(armour, includeOptional) {
+export function printedArmour(armour, includeOptional) {
   const zones = { head: 0, body: 0, arms: 0, legs: 0 };
   if (!armour) return { zones, reminder: '' };
   if (isInt(armour.ap)) {
@@ -180,7 +180,7 @@ export function unvaluedSkillNames(skills) {
   return (Array.isArray(skills) ? skills : []).filter(isText);
 }
 
-const traitText = trait => {
+export const traitText = trait => {
   const detail = trait.param ?? trait.rating;
   if (detail === undefined || detail === null || detail === '') return trait.name;
   // « Tentacles (8 × +9) » : le nombre imprimé reste lisible par le quota des attaques gratuites (creature-combat.js).
@@ -191,7 +191,7 @@ const traitText = trait => {
  * Une attaque imprimée « 2 Claws », « 8 × Tentacles » (`count`) devient autant d'actions (« Claws 1 », « Claws 2 »…), chacune marquée
  * `multiAttack` ; livre de base V5 (L06) p. 362 : « 8 Tentacles : la créature peut faire 8 attaques gratuites ».
  */
-function attackActions(attack, stats = {}, translate = false) {
+export function attackActions(attack, stats = {}, translate = false) {
   // Une attaque imprimée « Ranged (Pistol) +9 » sans portée reste une attaque à distance (CT), portée à saisir par le MJ.
   const ranged = isInt(attack.rangeYards) || attack.ranged === true;
   const of = isInt(attack.count) && attack.count > 1 ? attack.count : 1;
