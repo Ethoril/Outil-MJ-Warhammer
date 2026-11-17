@@ -334,7 +334,8 @@ test('Solkan : aucun Péché ni Corruption toléré, rappel MJ sur chaque béné
   for (const row of solkan) {
     assert.equal(row.reminders.length, 1, row.id);
     assert.match(row.reminders[0], /aucune Bénédiction ni aucun Miracle .* Péché ou de Corruption/);
-    assert.deepEqual(row.clauses.at(-1), { id: 'solkan-purity', mode: 'manual', text: row.reminders[0], sourceRef: 'archives-of-the-empire-3-p55' });
+    // L10 des miracles narratifs : le refus est tenu par le moteur (v5-divine-access.js), la clause est `engine`, le rappel reste affiché.
+    assert.deepEqual(row.clauses.at(-1), { id: 'solkan-purity', mode: 'engine', text: row.reminders[0], sourceRef: 'archives-of-the-empire-3-p55' });
     const s = await fixture('Solkan');
     const preview = s.previewDivineExecution(row.id, input(row.params.duration.kind === 'instant' ? { expiry: undefined } : {}));
     assert.equal(preview.ready, true, `${row.id} : ${preview.error}`);
@@ -540,7 +541,7 @@ for (const [cult, mod] of Object.entries(modules)) {
 
 test('règles de culte portées en clauses', () => {
  for (const m of handrich.miracles) assert.ok(m.clauses.some(c => c.id === 'profit-sin' && c.mode === 'manual'), m.name);
- for (const m of solkan.miracles) assert.ok(m.clauses.some(c => c.id === 'no-sin-corruption' && c.mode === 'manual'), m.name);
+ for (const m of solkan.miracles) assert.ok(m.clauses.some(c => c.id === 'no-sin-corruption' && c.mode === 'engine'), m.name);
  const rage = rhya.miracles.find(m => m.canonicalName === "Rhya's Rage");
  assert.ok(rage.clauses.some(c => c.id === 'defend-only'));
 });
@@ -1020,7 +1021,7 @@ test('chargeur : Solkan n’accepte ni Péché ni Corruption, en rappel et en cl
   assert.equal(status, 0, stderr);
   const [solkan, handrich] = contracts;
   assert.match(solkan.reminders[0], /Péché ou de Corruption/);
-  assert.deepEqual(solkan.clauses.map(row => [row.id, row.mode]), [['effect', 'engine'], ['solkan-purity', 'manual']]);
+  assert.deepEqual(solkan.clauses.map(row => [row.id, row.mode]), [['effect', 'engine'], ['solkan-purity', 'engine']]);
   assert.equal('reminders' in handrich, false);
 });
 

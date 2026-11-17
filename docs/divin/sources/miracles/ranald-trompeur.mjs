@@ -74,7 +74,7 @@ export const miracles = [
     ],
     clauses: [
       { id: 'two-characteristics', mode: 'engine', text: 'Deux Caractéristiques du prêtre prennent la valeur de celles de l’adversaire désigné pendant la durée, dans tout Test opposé réalisé contre lui : la fiche ne change pas, le score du Test est décalé de l’écart (adversaire − prêtre), valeurs lues au moment du Test (couche retirée à la fin de la prière).' },
-      { id: 'table-roll', mode: 'manual', text: 'Table 1d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 une Caractéristique au choix ; relancer les doublons. Le MJ saisit les deux Caractéristiques tirées.' }
+      { id: 'table-roll', mode: 'engine', text: 'Table 1d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 une Caractéristique au choix ; relancer les doublons. Le MJ saisit les deux Caractéristiques tirées.' }
     ],
     sourceDelta: 'La table imprimée utilise WS, I, Int, Fel (4e édition) : traduits CC, I, Int, Soc pour la V5. Le livre dit « pour un Test opposé avec cet adversaire » : règle complète du MJ (20 oct.), l’égalisation vaut pendant la durée dans tout Test opposé réalisé spécifiquement contre cet adversaire. Automatisée par l’effet characteristic-match : la fiche ne change pas, le score du Test opposé est décalé de l’écart lu au moment du Test.'
   },

@@ -13,7 +13,7 @@ const area = { kind: 'area', characteristicBonus: 'Soc', unit: 'yards' };
 const rounds = soc('characteristic-bonus', 'rounds');
 const delta = 'Texte V4 : Succès (SL) lus comme DR, difficultés V4 conservées telles quelles, sans conversion V5.';
 // Règle du culte, p.55 : aucun Péché ni Corruption toléré pour invoquer un miracle ou une bénédiction.
-const purity = { id: 'no-sin-corruption', mode: 'manual', text: 'Solkan refuse tout miracle ou toute bénédiction à un prêtre qui a un Point de Péché ou de Corruption.' };
+const purity = { id: 'no-sin-corruption', mode: 'engine', text: 'Solkan refuse tout miracle ou toute bénédiction à un prêtre qui a un Point de Péché ou de Corruption.' };
 const slExtension = { id: 'sl-extension', mode: 'assisted', text: 'Par tranche de +2 DR : portée, cibles ou durée augmentées de leur valeur initiale (sauf Instantané et Vous).' };
 
 export const miracles = [
@@ -67,7 +67,7 @@ export const miracles = [
   clauses: [
    { id: 'magical-damage', mode: 'engine', text: 'L’arme devient Magique et gagne +6 Dégâts pendant la durée.' },
    { id: 'ablaze', mode: 'engine', text: 'Toute créature frappée par la lame gagne +1 État Enflammé.' },
-   { id: 'sword-only', mode: 'manual', text: 'Le bonus ne vaut que si le prêtre manie une épée (la classe d’arme n’est pas vérifiée par le moteur).' },
+   { id: 'sword-only', mode: 'engine', text: 'Le bonus ne vaut que si le prêtre manie une épée : le MJ le confirme par la case de l’arme désignée (arbitrage A10, jamais bloquant).' },
    purity
   ],
   sourceDelta: delta

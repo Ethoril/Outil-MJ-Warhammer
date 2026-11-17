@@ -1567,7 +1567,9 @@ test('grant-immunity : type déclaré, contrat assisté avec un effet d’immuni
   assert.equal(contract.status, 'assisted');
   assert.deepEqual(contract.effects.map(effect => ({ type: effect.type, conditions: effect.conditions })), [{ type: 'grant-immunity', conditions: ['Brisé'] }]);
   assert.ok(contract.clauses.some(row => row.id === 'no-broken' && row.mode === 'engine'));
-  assert.ok(contract.clauses.some(row => row.id === 'duration-unattested' && row.mode === 'manual'), 'la durée non attestée reste signalée');
+  // Q13 (17/11/2026) : durée Bonus de Volonté en Rounds tenue par le moteur, signalée « non attestée » par labels.durationNote.
+  assert.ok(contract.clauses.some(row => row.id === 'duration-unattested' && row.mode === 'engine'));
+  assert.equal(contract.labels.durationNote, 'durée non attestée par le livre', 'la durée non attestée reste signalée');
 });
 
 test('Sur un Terrain Mortel : les cibles désignées (prêtre compris) n’acquièrent plus Brisé ; les Brisé existants restent ; fin et Undo', async () => {
@@ -1577,6 +1579,7 @@ test('Sur un Terrain Mortel : les cibles désignées (prêtre compris) n’acqui
     expiry: { phase: 'endOfTurn', round: 5, actorId: 'priest' }, facts: { targets: { priest: { withinRange: true }, ally: { withinRange: true } } } };
   const preview = store.previewDivineExecution(contract.id, input);
   assert.equal(preview.ready, true, `${preview.error} ${JSON.stringify(preview.needsInput)}`);
+  assert.ok(preview.preview.reminders.includes('Attention : durée non attestée par le livre.'), 'Q13 : durée non attestée signalée au résultat');
   const result = await store.applyDivineExecution(contract.id, { preview });
   assert.equal(result.ready, true, result.error);
   for (const id of ['priest', 'ally']) {

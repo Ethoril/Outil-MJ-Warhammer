@@ -1220,7 +1220,9 @@ test('provenance : les neuf contrats gardent leur id et leur entrée de catalogu
     assert.equal(row.source.printedPage, 79);
     assert.equal(row.source.edition, 'V4 EN');
     assert.equal(row.clauses[0].id, 'catalogue-entry');
-    assert.ok(row.clauses.some(clause => clause.mode === 'manual'), `${name} garde au moins un rappel manuel`);
+    // L10 des miracles narratifs (17/11/2026) : les clauses tenues par le moteur passent en `engine` ; un contrat peut n'avoir plus aucun
+    // rappel manuel (Attaque Rapide, Sur un terrain mortel, dont la durée non attestée s'affiche par labels.durationNote, Q13).
+    assert.ok(row.clauses.every(clause => ['source-checked', 'engine', 'assisted', 'manual'].includes(clause.mode)), name);
     assert.ok(row.effects.every(effect => effectHandlers[effect.type]), name);
   }
   assert.ok(registry.sourceManifest.supplementBooks.some(book => book.bookId === 'L13' && book.document === 'Up in arms.pdf' && book.fileSha256 === SHA));

@@ -1005,7 +1005,7 @@ test('contrats : six miracles assistés, les clauses restantes sont celles qui n
   assert.deepEqual(getDivineContract(DEMAND).effects.map(row => row.type), ['condition', 'direct-damage']);
   assert.deepEqual(getDivineContract(COMET).effects.map(row => row.appliesTo), [undefined, 'caster']);
   assert.deepEqual(getDivineContract(JUDGEMENT).effects.map(row => row.appliesTo), [undefined, undefined, 'caster']);
-  assert.deepEqual(remaining(FIST), ['no-sin-corruption', 'solkan-purity']);
+  assert.deepEqual(remaining(FIST), [], 'pureté de Solkan tenue par le moteur (L10 des miracles narratifs)');
   assert.deepEqual(remaining(ICE), []);
   assert.ok(!remaining(COMET).includes('backfire') && !remaining(JUDGEMENT).includes('redirect') && !remaining(DEMAND).includes('wounds'));
 });

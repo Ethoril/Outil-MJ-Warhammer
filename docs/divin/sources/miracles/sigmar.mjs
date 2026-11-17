@@ -4,6 +4,7 @@ export const cult = 'Sigmar';
 const soc = (kind, unit) => ({ kind, characteristic: 'Soc', unit });
 const area = { kind: 'area', characteristicBonus: 'Soc', unit: 'yards' };
 const rounds = soc('characteristic-bonus', 'rounds');
+const hatredTalents = ['Orques', 'Gobelins', 'Morts-vivants', 'Associés au Chaos'].map(specialization => ({ id: 'talent-hatred', name: 'Haine', specialization, rank: 1 }));
 const foes = 'orques, gobelins, morts-vivants et serviteurs des Puissances de la Ruine';
 
 export const miracles = [
@@ -47,7 +48,7 @@ export const miracles = [
     targetRules: [],
     needsInput: [{ id: 'warhammer', text: 'Le prêtre manie-t-il un marteau de guerre ?' }, { id: 'hits', text: 'Cibles frappées par le marteau pendant la durée (pour l’État Enflammé).' }],
     clauses: [
-      { id: 'weapon-restriction', mode: 'manual', text: 'Seul un marteau de guerre manié par le prêtre est concerné.' },
+      { id: 'weapon-restriction', mode: 'engine', text: 'Seul un marteau de guerre manié par le prêtre est concerné.' },
       { id: 'magical', mode: 'engine', text: 'L’arme compte comme Magique.' },
       { id: 'damage-bonus', mode: 'engine', text: 'L’arme inflige +Bonus de Sociabilité Dégâts.' },
       { id: 'ablaze-on-hit', mode: 'engine', text: 'Toute cible frappée reçoit +1 État Enflammé (Ablaze).' },
@@ -94,13 +95,14 @@ export const miracles = [
     summary: 'Les alliés choisis gagnent la Haine (Hatred, p.184) envers ' + foes + '. Après avoir tué un tel ennemi, la Haine accorde +2 DR aux Tests de combat au lieu de +1.',
     params: { range: { kind: 'self' }, targets: area, duration: rounds },
     status: 'assisted', effect: null,
-    effects: [{ type: 'grant-talent', talents: ['Orques', 'Gobelins', 'Morts-vivants', 'Associés au Chaos'].map(specialization => ({ id: 'talent-hatred', name: 'Haine', specialization, rank: 1 })) }],
+    // Q11 : le prêtre est compté parmi les alliés. Second effet identique, réservé au prêtre : il gagne la Haine même s'il n'est pas désigné.
+    effects: [{ type: 'grant-talent', talents: hatredTalents }, { type: 'grant-talent', talents: hatredTalents, appliesTo: 'caster' }],
     targetRules: [],
     needsInput: [{ id: 'allies', text: 'Alliés choisis dans la zone; le prêtre est-il compté (non précisé par la source) ?' }, { id: 'enemy-categories', text: 'Ennemis relevant des catégories visées (orques, gobelins, morts-vivants, associés au Chaos).' }, { id: 'kills', text: 'Ennemi de ces catégories tué par un allié (déclenche le bonus de +2 DR).' }],
     clauses: [
       { id: 'hatred', mode: 'engine', text: 'Les alliés gagnent la Haine envers orques, gobelins, morts-vivants et alliés du Chaos (règle de Haine, p.184) : une ligne de Haine par groupe.' },
       { id: 'hatred-kill', mode: 'manual', text: 'Après avoir tué un tel ennemi, la Haine donne +2 DR aux Tests de combat au lieu de +1.' },
-      { id: 'priest-counted', mode: 'manual', text: 'Le prêtre n’est pas expressément exclu ni inclus parmi les alliés : à trancher, rappel au MJ.' },
+      { id: 'priest-counted', mode: 'engine', text: 'Le prêtre est compté parmi les alliés (décision du MJ) : il gagne la Haine même s’il n’est pas désigné.' },
       { id: 'area', mode: 'assisted', text: 'Zone centrée sur vous, de rayon égal au Bonus de Sociabilité en mètres.' },
       { id: 'duration', mode: 'engine', text: 'Durée : Bonus de Sociabilité en rounds.' }
     ],

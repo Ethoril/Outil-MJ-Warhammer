@@ -65,7 +65,7 @@ export const miracles = [
     clauses: [
       { id: 'entangled', mode: 'engine', text: 'Si la cible a commis le crime et le nie, elle gagne l\'État Entangled impossible à retirer pendant la durée.' },
       { id: 'false-accusation-wrath', mode: 'manual', text: 'Accusation fausse : jet immédiat sur la table Colère des dieux (règle de colère, p.218-219).' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
     sourceDelta: 'Niveau (Force) de l\'État Entangled non précisé : 1 présumé, à confirmer.'
   },
@@ -91,7 +91,7 @@ export const miracles = [
       { id: 'endurance-test', mode: 'assisted', text: 'Adversaire criminel frappé : test d\'Endurance Accessible (+2 DR), échec : État Inconscient.' },
       { id: 'unconscious-duration', mode: 'manual', text: 'L\'État Inconscient dure au moins Bonus de Sociabilité rounds (Bonus du prêtre présumé).' },
       { id: 'sin', mode: 'manual', text: '+1 Point de Péché pour le prêtre par crime commis sur un adversaire inconscient.' },
-      { id: 'end', mode: 'manual', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
+      { id: 'end', mode: 'engine', text: 'Fin des effets après Bonus de Sociabilité rounds.' }
     ],
     sourceDelta: '« Fellowship Bonus Rounds » pour l\'Inconscient : Bonus de Sociabilité du prêtre présumé, non précisé. « Unconscious » peut prolonger au-delà de la durée du miracle. L\'État Inconscient reste au rappel MJ : la cible du miracle est le prêtre seul (portée et cible « vous »), l\'adversaire frappé n\'est pas un participant adressable par le moteur.'
   },

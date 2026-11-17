@@ -45,15 +45,16 @@ describe('Inventaire des miracles narratifs : prières en rappel', () => {
 });
 
 describe('Inventaire des miracles narratifs : clauses des miracles assistés', () => {
-  test('60 contrats assisted, tous des miracles, 50 avec une clause manual', () => {
+  // L10 : 21 clauses requalifiées en engine (88 → 67 ; 50 → 42 contrats portant encore une clause manual).
+  test('60 contrats assisted, tous des miracles, 42 avec une clause manual', () => {
     assert.equal(assistes.length, 60, `Nombre de contrats « assisted » : ${assistes.length} au lieu de 60`);
     assert.ok(assistes.every((c) => c.type === 'miracle'), 'Un contrat « assisted » n\'est pas un miracle');
     const avec = assistes.filter((c) => c.clauses.some((cl) => cl.mode === 'manual'));
-    assert.equal(avec.length, 50, `Contrats assistés avec clause manuelle : ${avec.length} au lieu de 50`);
+    assert.equal(avec.length, 42, `Contrats assistés avec clause manuelle : ${avec.length} au lieu de 42`);
   });
 
-  test('88 clauses manual, chacune dans la table', () => {
-    assert.equal(clausesManuelles.length, 88, `Clauses « manual » des assistés : ${clausesManuelles.length} au lieu de 88`);
+  test('67 clauses manual, chacune dans la table', () => {
+    assert.equal(clausesManuelles.length, 67, `Clauses « manual » des assistés : ${clausesManuelles.length} au lieu de 67`);
     for (const cle of clausesManuelles) {
       assert.ok(table.clauses[cle], `Clause « manual » absente de la table des familles : ${cle}`);
     }
@@ -66,7 +67,7 @@ describe('Inventaire des miracles narratifs : clauses des miracles assistés', (
     }
   });
 
-  test('comptes par famille : F1 11, F2 5, F3 3, F4 1, F5 1, F6 48, F8 19', () => {
-    assert.deepEqual(compter(Object.values(table.clauses)), { F1: 11, F2: 5, F3: 3, F4: 1, F5: 1, F6: 48, F8: 19 });
+  test('comptes par famille : F1 9, F2 5, F3 3, F4 1, F5 1, F6 47, F8 1', () => {
+    assert.deepEqual(compter(Object.values(table.clauses)), { F1: 9, F2: 5, F3: 3, F4: 1, F5: 1, F6: 47, F8: 1 });
   });
 });

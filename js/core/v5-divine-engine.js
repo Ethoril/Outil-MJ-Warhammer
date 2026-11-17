@@ -565,6 +565,8 @@ export function previewDivineExecution(actor, contract, targets = [], input = {}
   const appliesEffects = ['implemented', 'assisted'].includes(contract.status);
   if (contract.status === 'assisted' && effectiveSuccess) reminders.push('Effets structurés appliqués; clauses restantes laissées au rappel MJ.',
     ...(contract.clauses || []).filter(clause => clause.mode !== 'engine' && clause.text).map(clause => clause.text));
+  // Durée suivie par le moteur mais absente du livre (Q13 des miracles narratifs) : le MJ en est averti au résultat.
+  if (effectiveSuccess && appliesEffects && contract.labels?.durationNote) reminders.push(`Attention : ${contract.labels.durationNote}.`);
   if(targetRejections.length)reminders.push(allTargetsRejected?'Courroux 41–45 : cette invocation visant une cible réprouvée est rejetée par ce culte ; le Test de Prière et son risque de Courroux restent résolus.':'Courroux 41–45 : la prière échoue pour la cible réprouvée seule ; elle s’applique aux autres cibles.');
   const effects = effectiveSuccess && appliesEffects ? (contract.effects || []) : [];
   const effectTargets = (targets?.length ? targets : [actor]).filter(target => !rejectedTargetIds.includes(target.id));

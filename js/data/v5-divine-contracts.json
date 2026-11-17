@@ -10474,7 +10474,7 @@
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -10595,7 +10595,7 @@
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -10726,7 +10726,7 @@
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -10857,7 +10857,7 @@
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -10988,7 +10988,7 @@
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -11113,7 +11113,7 @@
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -12462,7 +12462,7 @@
         },
         {
           "id": "eagle-intangible",
-          "mode": "manual",
+          "mode": "engine",
           "text": "L’aigle est intangible : il ne peut pas affecter physiquement le monde.",
           "sourceRef": "v5-eagle-s-eye"
         },
@@ -12968,13 +12968,13 @@
         },
         {
           "id": "area",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en mètres (convention V5 des zones).",
           "sourceRef": "v5-in-good-order"
         },
         {
           "id": "duration",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Durée : Bonus de Volonté en Rounds.",
           "sourceRef": "v5-in-good-order"
         }
@@ -13208,7 +13208,8 @@
       "labels": {
         "canonicalName": "On Deadly Ground",
         "effect": "Vous bannissez l’idée de retraite de l’esprit de vos alliés : tant que le miracle dure, ils ne reçoivent pas l’État Brisé. Vous comptez parmi eux.",
-        "sourceStatus": "V4 EN supplement L13 source checked"
+        "sourceStatus": "V4 EN supplement L13 source checked",
+        "durationNote": "durée non attestée par le livre"
       },
       "clauses": [
         {
@@ -13230,7 +13231,7 @@
         },
         {
           "id": "duration-unattested",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Durée : Bonus de Volonté en Rounds, valeur NON ATTESTÉE par la page 79 (voir l’écart).",
           "sourceRef": "v5-on-deadly-ground"
         }
@@ -13362,7 +13363,7 @@
         },
         {
           "id": "free-attack",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Sur réussite : une attaque de Mêlée ordinaire opposée, avec l’arme de la main principale, sans Action ni Mouvement ; l’Élan se gagne et se perd normalement (p.168).",
           "sourceRef": "v5-quick-strike"
         },
@@ -13507,7 +13508,7 @@
         },
         {
           "id": "myrmidians",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Cible « See text » : tous les Myrmidiens à portée, sans plafond ; le MJ désigne ceux qui sont à 36 m ou moins.",
           "sourceRef": "v5-shieldmaiden-s-devotion"
         },
@@ -13665,7 +13666,7 @@
         },
         {
           "id": "allies",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Cible « See text » : tous les alliés à portée, sans plafond ; le MJ désigne ceux qui sont à 24 m ou moins.",
           "sourceRef": "v5-skill-of-combat"
         },
@@ -19051,7 +19052,7 @@
         },
         {
           "id": "table-roll",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Table 1d10 : 1-2 CC, 3-4 I, 5-6 Int, 7-8 Soc, 9-0 une Caractéristique au choix ; relancer les doublons. Le MJ saisit les deux Caractéristiques tirées.",
           "sourceRef": "v5-ranald-s-mischief"
         }
@@ -22508,7 +22509,7 @@
       "clauses": [
         {
           "id": "weapon-restriction",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Seul un marteau de guerre manié par le prêtre est concerné.",
           "sourceRef": "v5-sigmar-s-fiery-hammer"
         },
@@ -22976,6 +22977,42 @@
             "unit": "rounds",
             "requiresResolvedExpiry": true
           }
+        },
+        {
+          "type": "grant-talent",
+          "talents": [
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Orques",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Gobelins",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Morts-vivants",
+              "rank": 1
+            },
+            {
+              "id": "talent-hatred",
+              "name": "Haine",
+              "specialization": "Associés au Chaos",
+              "rank": 1
+            }
+          ],
+          "appliesTo": "caster",
+          "duration": {
+            "value": null,
+            "sourceParameter": "params.duration",
+            "unit": "rounds",
+            "requiresResolvedExpiry": true
+          }
         }
       ],
       "targetRules": [],
@@ -22999,8 +23036,8 @@
         },
         {
           "id": "priest-counted",
-          "mode": "manual",
-          "text": "Le prêtre n’est pas expressément exclu ni inclus parmi les alliés : à trancher, rappel au MJ.",
+          "mode": "engine",
+          "text": "Le prêtre est compté parmi les alliés (décision du MJ) : il gagne la Haine même s’il n’est pas désigné.",
           "sourceRef": "v5-vanquish-the-unrighteous"
         },
         {
@@ -23153,13 +23190,13 @@
         },
         {
           "id": "no-sin-corruption",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan refuse tout miracle ou toute bénédiction à un prêtre qui a un Point de Péché ou de Corruption.",
           "sourceRef": "v5-absolute-purity"
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -23286,13 +23323,13 @@
         },
         {
           "id": "no-sin-corruption",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan refuse tout miracle ou toute bénédiction à un prêtre qui a un Point de Péché ou de Corruption.",
           "sourceRef": "v5-fist-of-vengeance"
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -23424,19 +23461,19 @@
         },
         {
           "id": "sword-only",
-          "mode": "manual",
-          "text": "Le bonus ne vaut que si le prêtre manie une épée (la classe d’arme n’est pas vérifiée par le moteur).",
+          "mode": "engine",
+          "text": "Le bonus ne vaut que si le prêtre manie une épée : le MJ le confirme par la case de l’arme désignée (arbitrage A10, jamais bloquant).",
           "sourceRef": "v5-flaming-blade"
         },
         {
           "id": "no-sin-corruption",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan refuse tout miracle ou toute bénédiction à un prêtre qui a un Point de Péché ou de Corruption.",
           "sourceRef": "v5-flaming-blade"
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -23568,13 +23605,13 @@
         },
         {
           "id": "no-sin-corruption",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan refuse tout miracle ou toute bénédiction à un prêtre qui a un Point de Péché ou de Corruption.",
           "sourceRef": "v5-fury-of-the-righteous-sun"
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -23702,13 +23739,13 @@
         },
         {
           "id": "no-sin-corruption",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan refuse tout miracle ou toute bénédiction à un prêtre qui a un Point de Péché ou de Corruption.",
           "sourceRef": "v5-light-of-stasis"
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -23839,13 +23876,13 @@
         },
         {
           "id": "no-sin-corruption",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan refuse tout miracle ou toute bénédiction à un prêtre qui a un Point de Péché ou de Corruption.",
           "sourceRef": "v5-still-the-winds"
         },
         {
           "id": "solkan-purity",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Solkan n’accepte aucune Bénédiction ni aucun Miracle d’un prêtre qui a des Points de Péché ou de Corruption (Archives of the Empire 3, p. 55) : le MJ vérifie les deux avant la Prière.",
           "sourceRef": "archives-of-the-empire-3-p55"
         }
@@ -27632,7 +27669,7 @@
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-shackles-of-truth"
         }
@@ -27779,7 +27816,7 @@
         },
         {
           "id": "end",
-          "mode": "manual",
+          "mode": "engine",
           "text": "Fin des effets après Bonus de Sociabilité rounds.",
           "sourceRef": "v5-sword-of-justice"
         }
@@ -28130,5 +28167,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:4e81b2c5da49bfb80d60c55a2caf0b062f05c86cf8bfc04c23584246bea832a8"
+  "sourceFingerprint": "sha256:3f553036402bfb1992b383eb213cc5ea00817601d4084300962161f88c0f7473"
 }
