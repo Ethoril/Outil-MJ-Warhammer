@@ -65,7 +65,6 @@ export const miracles = [
   effect: null,
   effects: [
    { type: 'characteristic-modifier', characteristic: 'Ag', value: 10 },
-   { type: 'test-modifier', modifiers: { 'Discrétion': 1 } },
    { type: 'grant-talent', talents: [{ id: 'talent-catfall', name: 'Chute féline', rank: 1 }] }
   ],
   targetRules: [],
@@ -75,10 +74,10 @@ export const miracles = [
   ],
   clauses: [
    { id: 'agility', mode: 'assisted', text: '+10 en Agilité pendant la durée (modificateur de caractéristique, appliquable par le moteur).' },
-   { id: 'stealth', mode: 'engine', text: '+1 DR aux Tests de Discrétion de la cible pendant la durée, en plus du +10 d’Agilité (+10 lu +1 DR, Q14).' },
+   { id: 'stealth', mode: 'manual', text: '+10 en Discrétion (compétence) pendant la durée, en plus du +10 d’Agilité.' },
    { id: 'catfall', mode: 'engine', text: 'La cible gagne +1 niveau du Talent Chute féline (Catfall) pendant la durée.' }
   ],
-  sourceDelta: 'Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) : le +10 d’Agilité reste un modificateur de caractéristique, le +10 en Discrétion se lit +1 DR au Test de la compétence (Q14, comme Commander la Légion).'
+  sourceDelta: 'Le +10 en Discrétion est distinct du +10 en Agilité (compétence vs caractéristique) ; le moteur n’a pas de modificateur de compétence ni d’octroi temporaire de Talent, donc miracle manuel malgré la partie Agilité automatisable.'
  },
  {
   name: 'Riche, pauvre, mendiant, voleur', canonicalName: "Trickster's Glamour", printedPage: 225,

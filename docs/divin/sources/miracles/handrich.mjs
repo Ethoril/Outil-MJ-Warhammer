@@ -20,19 +20,18 @@ export const miracles = [
   name: 'Un marché est un marché', canonicalName: "A Deal's a Deal", printedPage: 47,
   summary: 'Après un Test de Marchandage réussi, le prêtre remercie Handrich avant de sceller l’accord d’une poignée de main : +2 DR au Test de Marchandage, plus 1 par tranche de +2 DR du Test de Prière. Le partenaire garde une bonne impression du prêtre.',
   params: { range: { kind: 'self' }, targets: { kind: 'self' }, duration: { kind: 'instant' } },
-  status: 'assisted',
-  effects: [{ type: 'test-modifier', modifiers: { 'Marchandage': { base: 2, fromSuccessLevels: true, per: 2, add: 1 } }, appliesTo: 'caster', duration: { unit: 'session' } }],
+  status: 'manual', effect: null,
   targetRules: [],
   needsInput: [
-   { id: 'haggle-result', text: 'Résultat du Test de Marchandage réussi auquel ajouter les DR.' }
+   { id: 'haggle-result', text: 'Résultat du Test de Marchandage réussi auquel ajouter les DR.' },
+   { id: 'pray-dr', text: 'DR du Test de Prière (1 DR de plus au Marchandage par tranche de +2).' }
   ],
   clauses: [
-   { id: 'haggle-bonus', mode: 'engine', text: '+2 DR au Test de Marchandage du prêtre, +1 par tranche de +2 DR du Test de Prière (valeur calculée une fois les DR connus, puis figée ; Archives 3, p.47).' },
-   { id: 'haggle-one-test', mode: 'manual', text: 'Le bonus ne vaut que pour le Test de Marchandage réussi qui vient d’être fait : le MJ retire la prière après ce Test.' },
+   { id: 'haggle-bonus', mode: 'manual', text: '+2 DR au Test de Marchandage, +1 par tranche de +2 DR obtenue au Test de Prière.' },
    { id: 'impression', mode: 'manual', text: 'La personne avec qui le prêtre marchande garde une bonne impression de lui.' },
    afterTest, profit
   ],
-  sourceDelta: delta + ' Prière instantanée : le moteur ne pose aucune couche pour un effet instantané, la couche du bonus porte donc une durée propre sans échéance automatique (unité session, comme les prières qui durent jusqu’à la fin de la session) : le MJ retire la prière après le Test de Marchandage.'
+  sourceDelta: delta
  },
  {
   name: 'Portez mes fardeaux', canonicalName: 'Carry My Burdens', printedPage: 47,

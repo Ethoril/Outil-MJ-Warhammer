@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:a5d5f5e2b35ab435bdb48b1e45b5d5dfc5d65eec79a5526ad5352cb776460167",
+  "sourceFingerprint": "sha256:e444c8e94b5aaf56f039e3c688f0afb5dc812c1a198ee4f93ad0048802c4bb50",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -10668,7 +10668,7 @@
       "type": "miracle",
       "name": "Un marché est un marché",
       "deity": "Handrich",
-      "status": "assisted",
+      "status": "manual",
       "source": {
         "document": "Archives of the Empire 3.pdf",
         "fileSha256": "5c86d70ec9368857456877be59e40752cf6f051e7094a9cc9ec748ada9b1a29f",
@@ -10731,23 +10731,7 @@
           }
         }
       ],
-      "effects": [
-        {
-          "type": "test-modifier",
-          "modifiers": {
-            "Marchandage": {
-              "base": 2,
-              "fromSuccessLevels": true,
-              "per": 2,
-              "add": 1
-            }
-          },
-          "appliesTo": "caster",
-          "duration": {
-            "unit": "session"
-          }
-        }
-      ],
+      "effects": [],
       "labels": {
         "canonicalName": "A Deal's a Deal",
         "effect": "Après un Test de Marchandage réussi, le prêtre remercie Handrich avant de sceller l’accord d’une poignée de main : +2 DR au Test de Marchandage, plus 1 par tranche de +2 DR du Test de Prière. Le partenaire garde une bonne impression du prêtre.",
@@ -10756,14 +10740,8 @@
       "clauses": [
         {
           "id": "haggle-bonus",
-          "mode": "engine",
-          "text": "+2 DR au Test de Marchandage du prêtre, +1 par tranche de +2 DR du Test de Prière (valeur calculée une fois les DR connus, puis figée ; Archives 3, p.47).",
-          "sourceRef": "v5-a-deal-s-a-deal"
-        },
-        {
-          "id": "haggle-one-test",
           "mode": "manual",
-          "text": "Le bonus ne vaut que pour le Test de Marchandage réussi qui vient d’être fait : le MJ retire la prière après ce Test.",
+          "text": "+2 DR au Test de Marchandage, +1 par tranche de +2 DR obtenue au Test de Prière.",
           "sourceRef": "v5-a-deal-s-a-deal"
         },
         {
@@ -10789,6 +10767,10 @@
         {
           "field": "haggle-result",
           "label": "Résultat du Test de Marchandage réussi auquel ajouter les DR."
+        },
+        {
+          "field": "pray-dr",
+          "label": "DR du Test de Prière (1 DR de plus au Marchandage par tranche de +2)."
         }
       ]
     },
@@ -16147,18 +16129,6 @@
           }
         },
         {
-          "type": "test-modifier",
-          "modifiers": {
-            "Discrétion": 1
-          },
-          "duration": {
-            "value": null,
-            "sourceParameter": "params.duration",
-            "unit": "minutes",
-            "requiresResolvedExpiry": true
-          }
-        },
-        {
           "type": "grant-talent",
           "talents": [
             {
@@ -16189,8 +16159,8 @@
         },
         {
           "id": "stealth",
-          "mode": "engine",
-          "text": "+1 DR aux Tests de Discrétion de la cible pendant la durée, en plus du +10 d’Agilité (+10 lu +1 DR, Q14).",
+          "mode": "manual",
+          "text": "+10 en Discrétion (compétence) pendant la durée, en plus du +10 d’Agilité.",
           "sourceRef": "v5-ranald-s-grace"
         },
         {

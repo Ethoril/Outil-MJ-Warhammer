@@ -5,8 +5,8 @@ import { createGameClock } from '../../../js/core/v5-game-time.js';
 import { getDivineContract, getAllDivineContracts } from '../../../js/core/v5-divine-store.js';
 import { targetAppliesToTest } from '../../../js/core/effect-engine.js';
 
-// L1b — Grâce de Ranald (Discrétion +10 lu +1 DR, Q14), Rage de Rhya (Force +2 DR, Archives 3 p.74), Un marché est un marché
-// (Marchandage +2 DR, +1 par +2 DR du Test de Prière, Archives 3 p.47, valeur figée à l'aperçu, Q10).
+// L1c — seule Rage de Rhya (Force +2 DR, Archives 3 p.74) reste branchée ; Grâce de Ranald et Un marché est un marché
+// repassent en rappel (hors combat, tri du MJ du 17/11/2026, spec §8).
 const clone = value => structuredClone(value);
 const memory = () => { let saved = null; return { async load() { return saved && clone(saved); }, async saveAtomic({ state }) { saved = clone(state); return { ok: true }; } }; };
 const idOf = name => getAllDivineContracts().find(row => row.type === 'miracle' && row.name === name).id;
@@ -40,22 +40,13 @@ const layers = (store, id) => person(store, id).extensions.v5.divineEffects || [
 const mods = (store, id) => person(store, id).extensions.v5.testModifiers ?? {};
 const manual = id => getDivineContract(id).clauses.filter(clause => clause.mode === 'manual').map(clause => clause.id);
 
-describe('L1b — Grâce de Ranald, Rage de Rhya, Un marché est un marché', () => {
-  test('statuts et clauses : trois prières assistées, la part non branchable reste en rappel', () => {
-    for (const id of [GRACE, RAGE, DEAL]) assert.equal(getDivineContract(id).status, 'assisted', getDivineContract(id).name);
-    assert.deepEqual(manual(GRACE), []);
+describe('L1c — Rage de Rhya branchée, Grâce de Ranald et Un marché est un marché en rappel', () => {
+  test('statuts et clauses : Rage assistée, la Discrétion de Grâce et le Marchandage restent des rappels', () => {
+    assert.equal(getDivineContract(RAGE).status, 'assisted');
     assert.deepEqual(manual(RAGE), ['defend-only']);
-    assert.deepEqual(manual(DEAL), ['haggle-one-test', 'impression', 'after-test', 'profit-sin']);
-  });
-
-  test('Grâce de Ranald : Discrétion +1 DR sur la cible, Agilité +10 en caractéristique, plus de rappel de Discrétion', async () => {
-    const store = await fixture('Ranald');
-    const touching = { targetIds: ['ally'], facts: { targets: { ally: { withinTouch: true } } }, expiry: undefined, clockAnchor: { campaignSeconds: 0, clockRevision: 0, lastEventId: null } };
-    const { result } = await cast(store, GRACE, touching);
-    assert.deepEqual(mods(store, 'ally'), { 'Discrétion': 1 });
-    assert.deepEqual(mods(store, 'priest'), {});
-    assert.equal(person(store, 'ally').caracs.Ag, 50);
-    assert.ok(!result.receipt.reminders.some(text => /Discrétion/.test(text)));
+    assert.equal(getDivineContract(DEAL).status, 'manual');
+    assert.ok(manual(GRACE).includes('stealth'));
+    assert.ok(!getDivineContract(GRACE).effects.some(effect => effect.type === 'test-modifier'));
   });
 
   test('Rage de Rhya : Force +2 DR, clé de caractéristique qui vise la Force et jamais l’Agilité', async () => {
@@ -67,37 +58,14 @@ describe('L1b — Grâce de Ranald, Rage de Rhya, Un marché est un marché', ()
     assert.equal(targetAppliesToTest('carac:F', { skill: 'Esquive', carac: 'Ag' }), false);
   });
 
-  test('Un marché est un marché : Marchandage = +2 DR plus 1 par tranche de 2 DR de la Prière, figé dans la couche', async () => {
-    const store = await fixture('Handrich');
-    const seen = new Set();
-    for (const roll of [5, 21, 35, 45, 55]) {
-      const probe = await fixture('Handrich');
-      const { preview } = await cast(probe, DEAL, { roll, expiry: undefined });
-      const dr = preview.preview.prayer.sl;
-      assert.equal(mods(probe, 'priest').Marchandage, 2 + Math.floor(dr / 2), `DR ${dr}`);
-      seen.add(dr);
-    }
-    assert.ok(seen.size >= 3, 'plusieurs valeurs de DR ont été essayées');
-    const { preview } = await cast(store, DEAL, { roll: 21, expiry: undefined });
-    const dr = preview.preview.prayer.sl;
-    assert.deepEqual(layers(store, 'priest')[0].testModifiers, { Marchandage: 2 + Math.floor(dr / 2) });
-    assert.deepEqual(mods(store, 'ally'), {});
-  });
-
-  test('la valeur figée ne bouge plus après coup, et la règle refuse une base non entière', () => {
-    const contract = getDivineContract(DEAL);
-    assert.deepEqual(contract.effects[0].modifiers.Marchandage, { base: 2, fromSuccessLevels: true, per: 2, add: 1 });
-  });
-
-  test('chaque prière s’annule en un seul ↶ et se rejoue par ↷', async () => {
-    const store = await fixture('Handrich');
-    const { preview } = await cast(store, DEAL, { roll: 21, expiry: undefined });
-    const expected = 2 + Math.floor(preview.preview.prayer.sl / 2);
-    assert.equal(mods(store, 'priest').Marchandage, expected);
+  test('Rage de Rhya s’annule en un seul ↶ et se rejoue par ↷', async () => {
+    const store = await fixture('Rhya');
+    await cast(store, RAGE);
+    assert.equal(mods(store, 'priest')['carac:F'], 2);
     await store.undo();
     assert.deepEqual(mods(store, 'priest'), {});
     assert.deepEqual(layers(store, 'priest'), []);
     await store.redo();
-    assert.equal(mods(store, 'priest').Marchandage, expected);
+    assert.equal(mods(store, 'priest')['carac:F'], 2);
   });
 });

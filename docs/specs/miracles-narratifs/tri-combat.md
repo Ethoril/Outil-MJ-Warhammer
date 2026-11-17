@@ -8,6 +8,13 @@ Décision du MJ du 17/11/2026 (spec §8) : l'outil sert au combat ; un miracle q
 
 **Conséquence générale.** « Hors combat » = le contrat garde `manual` (ou la clause garde `manual`) et le rappel au résultat actuel : aucune brique, aucun calcul, aucun test de calcul. « Combat » ne veut pas dire « branché » : une prière classée combat mais sans moteur à brancher (F6) reste un rappel, enrichi par L9.
 
+## 0. Tri du MJ sur les cas « à confirmer » (17/11/2026, spec §8)
+
+- **Confirmés, calculés (7)** : Hoarfrost Thews (L2), Rage de Rhya (L1b, fait), Bamboozle et Balm to a Wounded Mind (L3), Portal's Threshold (L4), Twist of Fortune et Force the Hand of Chance (L6).
+- **Confirmés, rappels (4)** : Waterlungs, Free Your Mind, Grâce de Ranald, A Deal's a Deal. Grâce de Ranald et A Deal's a Deal étaient branchés par L1b : retour en rappel par L1c (Rage de Rhya reste branchée).
+- **Autres « à confirmer »** (Bitter Catharsis, Connaître son Ennemi, Rhya's Dominion, Rhya's Taming, et les clauses ÀC) : restent des rappels, enrichis en L9 s'ils servent en combat.
+- Les marques **ÀC** des tableaux ci-dessous sont conservées comme historique ; ce paragraphe fait foi.
+
 ## 1. Prières (une ligne par prière)
 
 ### L1b et L2 : modificateurs, immunités, drapeaux
@@ -191,21 +198,21 @@ Les 14 prières ÀC : Waterlungs, Hoarfrost Thews, Free Your Mind, Grâce de Ran
 
 | Lot | Après le tri | Vidé ? |
 |---|---|---|
-| L1b | Grâce de Ranald (`stealth`) et Rage de Rhya (`force-test`), tous deux ÀC ; A Deal's a Deal repasse en rappel (hors combat) | non, 2 prières |
-| L2 | Vindicte vengeresse ; Waterlungs et Hoarfrost Thews (ÀC) ; six clauses (`ignore-ap`, `unconscious-duration`, `unarmed-damaging`, `remove-bleeding`, `terror-and-skills`, `missile`). Pelt et Free Your Mind sont reclassées F6, rien à brancher | non |
-| L3 | Brique `imposed-test` pour cinq clauses de combat (`terror-test`, `athletics`, `prone-each-round`, `endurance-test`, `free-frenzy`), plus Bamboozle et Balm (ÀC). Shake on It, Under My Protection, Unremembered Face, Truth Will Out repassent en rappel : la récurrence `morning` et le bouton « Test du matin » disparaissent ; `manual` et `resolveDivineImposedTest` ne restent utiles que si Portal's Threshold est confirmé | non, brique allégée |
-| L4 | Pax of Taal, `no-ranged`, Portal's Threshold (ÀC). Becalm et Silence Reigns repassent en rappel | non |
-| L6 | `hatred-kill` ; Twist of Fortune et Force the Hand of Chance (ÀC). Si ces deux-là passent hors combat, le lot se réduit à `hatred-kill` (une case sur le porteur) et le type `miracle-counter` devient inutile. A Suitable Sucker, One Almighty Lie, Wilderness Way repassent en rappel | non, peut se réduire à une clause |
+| L1b | Rage de Rhya (`force-test`), confirmée. Grâce de Ranald et A Deal's a Deal repassent en rappel (L1c) | **fait** (L1b, puis L1c) |
+| L2 | Vindicte vengeresse ; Hoarfrost Thews (confirmé) ; six clauses (`ignore-ap`, `unconscious-duration`, `unarmed-damaging`, `remove-bleeding`, `terror-and-skills`, `missile`). Waterlungs reste un rappel (confirmé). Pelt et Free Your Mind sont reclassées F6, rien à brancher | non |
+| L3 | Brique `imposed-test` pour cinq clauses de combat (`terror-test`, `athletics`, `prone-each-round`, `endurance-test`, `free-frenzy`), plus Bamboozle et Balm (confirmés). Shake on It, Under My Protection, Unremembered Face, Truth Will Out repassent en rappel : la récurrence `morning` et le bouton « Test du matin » disparaissent ; `manual` et `resolveDivineImposedTest` restent (Portal's Threshold, confirmé, L4) | non, brique allégée |
+| L4 | Pax of Taal, `no-ranged`, Portal's Threshold (confirmé). Becalm et Silence Reigns repassent en rappel | non |
+| L6 | `hatred-kill` ; Twist of Fortune et Force the Hand of Chance (confirmés : le type `miracle-counter` reste utile). A Suitable Sucker, One Almighty Lie, Wilderness Way repassent en rappel | non |
 | L5 | Inchangé : Light of Stasis, Still the Winds | non |
 | L7 | Inchangé : Martyr, Back at You, `redirect-stunned` | non |
 | L8 | Unblemished Innocence est hors combat : rien à brancher | **oui, vidé** |
-| L9 | Reste en rappel : toutes les prières hors combat et les clauses hors combat gardent le rappel actuel au résultat, sans couche affichée. Le rappel enrichi (durée suivie, portée, cible, libellé sur le participant) se limite aux 29 clauses et aux prières « combat » restées `manual` : Last Rites, Connaître son Ennemi, Rhya's Dominion, Rhya's Taming, Bitter Catharsis (ÀC) et Free Your Mind (ÀC). Le lot est donc réduit, pas vide | non, réduit |
+| L9 | Reste en rappel : toutes les prières hors combat et les clauses hors combat gardent le rappel actuel au résultat, sans couche affichée. Le rappel enrichi (durée suivie, portée, cible, libellé sur le participant) se limite aux 29 clauses et aux prières « combat » restées `manual` : Last Rites, Connaître son Ennemi, Rhya's Dominion, Rhya's Taming, Bitter Catharsis, Free Your Mind et Waterlungs (rappels confirmés), plus la clause `stealth` de Grâce de Ranald. Le lot est donc réduit, pas vide | non, réduit |
 | L11 | Inchangé : `flee-exemption`, `broken-from-fleeing` (tests et requalification), `momentum-loss` | non |
 
 **Lots vidés : L8.** L1 était déjà annulé.
 
 ## 5. Points d'attention
 
-- A Deal's a Deal : la dernière ligne du §8 de la spec (valeur calculée puis figée) devient sans objet si le MJ valide son classement hors combat.
-- Les clauses ÀC de L9 ne changent que l'affichage du rappel, jamais un calcul : les confirmer coûte peu. Les ÀC qui pilotent une brique (Bamboozle, Balm, Portal's Threshold, Twist of Fortune, Force the Hand of Chance) sont à trancher en premier.
-- Les clauses de L9 listées ci-dessus peuvent aussi être confirmées par groupe de miracle (Larmes de Shallya, Bénédiction de la rivière, Yeux de chat avec Œil de l'aigle).
+- A Deal's a Deal : hors combat, rappel (le MJ a validé) ; la ligne du §8 de la spec (valeur calculée puis figée) est annulée.
+- Les ÀC qui pilotent une brique (Bamboozle, Balm, Portal's Threshold, Twist of Fortune, Force the Hand of Chance) sont tranchés : calculés.
+- Les clauses ÀC de L9 ne changent que l'affichage du rappel, jamais un calcul ; elles restent des rappels.
