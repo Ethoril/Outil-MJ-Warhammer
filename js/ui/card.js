@@ -11,7 +11,8 @@ import { buildHeadsBlock, nextHeadState } from './heads-block.js';
 import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
 import { buildPsychologyBlock, readPsychologyInputs } from './psychology-block.js';
 import { buildSlannBlock, readSlannInputs } from './slann-block.js';
-import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
+import { buildCreatureStatesBlock, readCreatureStatesInputs, buildEncounterBlock, bindEncounterBlock, buildTraitStatusBlock } from './creature-states-block.js';
+import { openV5EffectInputDialog } from './v5-effect-dialog.js';
 import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from './familiar-block.js';
 
 export function initCardUI(Store, Combat) {
@@ -272,6 +273,16 @@ export function initCardUI(Store, Combat) {
     if (psychologyBlock) armDiv.after(psychologyBlock);
     const statesBlock = buildCreatureStatesBlock(tag => document.createElement(tag), p, Store.listParticipants());
     if (statesBlock) armDiv.after(statesBlock);
+    // Traits calculés (traits-calculs L6) : Store tolérant, la demande de dé passe par le dialogue des effets.
+    const traitStatusBlock = buildTraitStatusBlock(tag => document.createElement(tag), p);
+    if (traitStatusBlock) armDiv.after(traitStatusBlock);
+    const encounterBlock = buildEncounterBlock(tag => document.createElement(tag), p, Store.listParticipants());
+    if (encounterBlock) {
+      bindEncounterBlock(encounterBlock, { Store, participant: p, notify: message => showToast(message, 'error'),
+        ask: (result, retry) => openV5EffectInputDialog({ pending: { ...result, inputs: {}, baseRevision: Store.getLocalRevision?.() }, title: 'Résoudre la demande de dé',
+          getCurrentRevision: () => Store.getLocalRevision?.(), submit: inputs => retry(inputs) }) });
+      armDiv.after(encounterBlock);
+    }
     const familiarBlock = buildFamiliarBlock(tag => document.createElement(tag), p, Store.listParticipants());
     if (familiarBlock) armDiv.after(familiarBlock);
 

@@ -1,6 +1,7 @@
 /** Explicit V5 effect inputs: values survive each preview and no die is drawn implicitly. */
 import { userMessage, userError } from './messages.js';
 import { formatV5Balance } from '../core/v5-resources.js';
+import { resolveTraitAnswer } from '../core/trait-effects.js';
 
 const BOOLEAN_FIELDS = new Set(['silkCut','minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery']);
 const el = (tag, text, className = '') => { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; };
@@ -115,7 +116,7 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, g
         if(!group){group=el('fieldset');group.append(el('legend',request.participantName||'Combattant'));groups.set(request.participantId,group);fields.append(group);}
         labels.set(keyFor(request),`${request.participantName||'Combattant'} — ${request.label}`);
         const wrapper=el('div',null,'v5-effect-field');const label=el('label',`${request.label}${request.bonus?` (+${request.bonus} à la gravité)` : ''}`);const id=`v5-effect-input-${++index}`;label.htmlFor=id;wrapper.append(label);
-        let kind=BOOLEAN_FIELDS.has(request.field)?'boolean':request.field==='recoveryMoment'?'moment':request.kind;
+        let kind=BOOLEAN_FIELDS.has(request.field)||request.kind==='choice'?'boolean':request.field==='recoveryMoment'?'moment':request.kind;
         const value=getValue(request);
         // Choix propre à ce Test, présenté avec son d100 : les autres jets du même personnage gardent leur propre choix.
         let talentControl=null;
@@ -159,6 +160,13 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, g
         } else if(kind==='test') {
           const row=el('div',null,'v5-effect-test');const success=el('select');success.id=id;success.setAttribute('aria-label',`${request.label} : résultat`);success.append(new Option('Résultat…',''),new Option('Réussite','true'),new Option('Échec','false'));success.value=typeof value?.success==='boolean'?String(value.success):'';
           const slLabel=el('label','DR finaux');const sl=el('input');sl.type='number';sl.step='1';sl.inputMode='numeric';sl.value=value?.sl??'';sl.setAttribute('aria-label',`${request.label} : DR`);slLabel.append(sl);row.append(success,slLabel);wrapper.append(row,el('p','Saisissez le résultat final du Test, avec les modificateurs V5 déjà retenus.','workspace-muted'));
+          // Bouton de dé (D13) : seulement si la demande porte la valeur du Test ; le moteur déduit réussite et DR, comme pour la saisie.
+          if(request.testTarget){
+            const roll=el('button','Lancer d100','ghost');roll.type='button';roll.setAttribute('aria-label',`Lancer d100 : ${request.label}`);roll.disabled=drawn.has(keyFor(request));
+            roll.addEventListener('click',()=>{if(drawn.has(keyFor(request)))return;const answer=resolveTraitAnswer(request,Math.floor(Math.random()*100)+1);if(!answer)return;
+              success.value=String(answer.success);sl.value=String(answer.sl);setValue(request,{success:answer.success,sl:answer.sl});drawn.add(keyFor(request));roll.disabled=true;success.focus();});
+            row.append(roll);
+          }
           readers.push(()=>{const amount=Number(sl.value);if(!success.value||sl.value===''||!Number.isSafeInteger(amount))throw userError(`Saisissez la réussite et les DR : ${request.label}.`);const passed=success.value==='true';if(passed&&amount<0||!passed&&amount>0)throw userError('La réussite et les DR indiqués sont incompatibles.');setValue(request,{success:passed,sl:amount});});
         } else {
           const input=el('input');input.id=id;input.type='text';input.inputMode='numeric';input.autocomplete='off';input.value=value??'';input.setAttribute('aria-label',request.label);

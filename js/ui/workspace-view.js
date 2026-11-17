@@ -20,7 +20,7 @@ import { createV5TimedEffect } from '../core/v5-effects.js';
 import { openCampaignTimeDialog } from './v5-campaign-time-dialog.js';
 import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { prepareMagicOptions } from '../core/v5-magic-talents.js';
-import { recoveryMethodsFor } from './v5-effect-dialog.js';
+import { recoveryMethodsFor, openV5EffectInputDialog } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '../core/outnumbering.js';
 // Surnombre, tir engagé et forçage du MJ ne valent que pour la cible où ils ont été saisis (spec engagements CA18).
@@ -37,7 +37,7 @@ import { buildFamiliarBlock, readFamiliarInputs, readFamiliarDeathInputs } from 
 import { buildHeadsBlock, nextHeadState } from './heads-block.js';
 import { buildRegenerationBlock, readRegenerationInputs } from './regeneration-block.js';
 import { buildSlannBlock, readSlannInputs } from './slann-block.js';
-import { buildCreatureStatesBlock, readCreatureStatesInputs } from './creature-states-block.js';
+import { buildCreatureStatesBlock, readCreatureStatesInputs, buildEncounterBlock, bindEncounterBlock, buildTraitStatusBlock, buildBodyIntactControl, readBodyIntact } from './creature-states-block.js';
 import { formatV5Balance } from '../core/v5-resources.js';
 import { normalizeEffects } from '../core/effects.js';
 import { CAMP_LABELS, normalizeCamp, participantCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
@@ -814,6 +814,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       });
       blocks.push(creatureStates);
     }
+    // Traits calculés (traits-calculs L6) : marqueurs, Rencontre et boutons ; chaque appel au Store est tolérant (`Store.methode?.()`).
+    const traitStatus = buildTraitStatusBlock(make, participant);
+    if (traitStatus) blocks.push(traitStatus);
+    const preview = state.resolution?.preview;
+    const lastWounds = preview?.input?.actor?.id === id && preview.damage ? previewHpLoss(preview) : null;
+    const encounter = buildEncounterBlock(make, participant, Store.listParticipants(), { lastWounds });
+    if (encounter) {
+      bindEncounterBlock(encounter, { Store, participant, refresh: () => render(), notify: message => toast(message),
+        ask: (result, retry) => openV5EffectInputDialog({ pending: { ...result, inputs: {}, baseRevision: Store.getLocalRevision?.() }, title: 'Résoudre la demande de dé',
+          getCurrentRevision: () => Store.getLocalRevision?.(),
+          submit: async inputs => { const next = await retry(inputs); return next?.ok === false && next.status !== 'requires-input' ? { ...next, error: userError(next.message || 'Commande refusée.') } : next; } }) });
+      blocks.push(encounter);
+    }
     return blocks;
   }
 
@@ -1387,7 +1400,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         draft.v5Context={...(draft.v5Context||{})};
         for(const key of ['fateAction','fateChosenRoll','fateCriticalLocation','warpBladeEnduranceTest','f2h','struckPieceManual'])delete draft.v5Context[key];
         if(draft.v5Context.repeaterSecondShot===true){for(const key of ['repeaterDoubleShot','repeaterSecondShot','primaryResolutionId','freeAttackTalent'])delete draft.v5Context[key];draft.extraAttack=false;}
-        for (const key of ['hitMorphology','hitAppendage','hitAppendageAp','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById']) delete draft.v5Context[key];
+        for (const key of ['hitMorphology','hitAppendage','hitAppendageAp','spiderLegSide','fallPreventedByEquipment','mountedRestraint','mountedRideTestsById','mountedRideScoresById','mountedRideRollsById','traitInputs']) delete draft.v5Context[key];
         draft.fortuneReroll=false;
         draft.fortuneRerollRolls=[];
         draft.targetSize = null;
@@ -2604,6 +2617,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const participant=item.participant,label=item.kind==='state'?`${participant.name} · décès proposé par ${stateCause} (Round ${item.pending.round})`:item.kind==='table'?`${participant.name} · ${item.record.effectName} (${item.record.source?.printedName||item.record.table})`:`${participant.name} · décompte arrivé à l’échéance du Round ${item.countdown.dueRound}`;
         const row=node('div','workspace-result-line');
         row.appendChild(node('span','',label));
+        const bodyIntact=buildBodyIntactControl(tag=>document.createElement(tag),participant);
+        if(bodyIntact)row.appendChild(bodyIntact);
         // Crâne fracassé (V5 p. 173) : une arme tranchante peut décapiter ; le MJ le constate, la carte joue la décapitation.
         const choices=[['confirm','Confirmer la mort'],...(item.kind==='table'&&item.record.table==='HEAD'?[['confirm','Confirmer : décapité',true]]:[]),['decline','Refuser la mort']];
         for(const [decision,text,decapitated=false] of choices){
@@ -2613,8 +2628,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
           button.addEventListener('click',async()=>{
             button.disabled=true;
             try{
-              if(item.kind==='state')await Store.decideStateDeath(participant.id,item.pending.id,decision);
-              else if(item.kind==='table')await Store.decideImmediateCriticalDeath(participant.id,item.record.id,decision,{decapitated});else await Store.decideCriticalDeath(participant.id,decision,{round:readCombat(Store).round});
+              if(item.kind==='state')await Store.decideStateDeath(participant.id,item.pending.id,decision,{bodyIntact:readBodyIntact(bodyIntact)});
+              else if(item.kind==='table')await Store.decideImmediateCriticalDeath(participant.id,item.record.id,decision,{decapitated,bodyIntact:readBodyIntact(bodyIntact)});else await Store.decideCriticalDeath(participant.id,decision,{round:readCombat(Store).round,bodyIntact:readBodyIntact(bodyIntact)});
               render();
             }catch(error){
               button.disabled=false;

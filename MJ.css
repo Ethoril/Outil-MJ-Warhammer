@@ -557,3 +557,9 @@ body:has(dialog.tool-sheet[open]) #toast-container { right: calc(clamp(480px, 50
 .optional-traits-add { justify-self: start; }
 .optional-traits-dialog { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--chip); border-radius: 6px; }
 .optional-traits-results { display: flex; flex-wrap: wrap; gap: 6px; max-height: 180px; overflow: auto; }
+.actor-creature-traits, .actor-trait-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 4px 0; }
+.trait-chip { padding: 2px 8px; border: 1px solid var(--chip); border-radius: 10px; font-size: 0.9em; }
+.trait-lost-turn { border-color: var(--danger, #b00020); font-weight: 600; }
+.body-intact-control { display: inline-flex; align-items: center; gap: 4px; }
+.workspace-trait-requests { display: grid; gap: 4px; }
+.workspace-trait-request { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }

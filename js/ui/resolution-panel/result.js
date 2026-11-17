@@ -11,8 +11,62 @@ import { hasV5Talent, V5_TALENT_IDS } from '../../core/v5-talents.js';
 import { EXCLUDED_BASE_CHARACTERISTIC_TALENTS } from '../../core/talent-contracts.js';
 import { acquiredV5TalentCoverage, V5_TALENT_TREATMENT_LABELS } from '../../core/v5-talent-coverage.js';
 import { readDivineRejections } from '../../core/v5-divine-access.js';
+import { resolveTraitAnswer } from '../../core/trait-effects.js';
 
-export const ROLL_LABELS = Object.freeze({ attack: 'Attaque', test: 'Test', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition', channelling: 'Focalisation', cast: 'Incantation', dispel: 'Dissipation' });
+/**
+ * Demandes de dé des Traits à la blessure (`traitPlans.requests`, D13) : chacune a son bouton de dé et sa saisie ; tirage et saisie
+ * écrivent la même réponse dans `v5Context.traitInputs[participant][champ]`, que le moteur lit tel quel. `null` sans demande.
+ */
+export function renderTraitPlanRequests(requests = [], draft = {}, handlers = {}) {
+  if (!requests.length) return null;
+  const section = node('div', 'workspace-trait-requests');
+  const answer = (request, value) => {
+    const current = draft.v5Context || {}, inputs = current.traitInputs || {};
+    handlers.select?.({ v5Context: { ...current, traitInputs: { ...inputs, [request.participantId]: { ...(inputs[request.participantId] || {}), [request.field]: value } } } });
+    handlers.calculate?.();
+  };
+  for (const request of requests) {
+    const row = node('div', 'workspace-result-line workspace-trait-request');
+    const given = draft.v5Context?.traitInputs?.[request.participantId]?.[request.field];
+    row.appendChild(node('span', '', request.label));
+    if (request.kind === 'test') {
+      const success = document.createElement('select');
+      success.setAttribute('aria-label', `${request.label} : résultat`);
+      success.append(new Option('Résultat…', ''), new Option('Réussite', 'true'), new Option('Échec', 'false'));
+      success.value = typeof given?.success === 'boolean' ? String(given.success) : '';
+      const dr = document.createElement('input');
+      dr.type = 'number'; dr.step = '1'; dr.value = given?.sl ?? '';
+      dr.setAttribute('aria-label', `${request.label} : DR`);
+      const send = () => { const sl = Number(dr.value); if (success.value && dr.value !== '' && Number.isSafeInteger(sl)) answer(request, { success: success.value === 'true', sl }); };
+      success.addEventListener('change', send); dr.addEventListener('change', send);
+      row.append(success, dr);
+      if (request.testTarget) {
+        const roll = button('Lancer d100', 'workspace-secondary', { 'aria-label': `Lancer d100 : ${request.label}` });
+        roll.addEventListener('click', () => { const found = resolveTraitAnswer(request, Math.floor(Math.random() * 100) + 1); if (found) answer(request, { success: found.success, sl: found.sl }); });
+        row.appendChild(roll);
+      }
+    } else if (request.kind === 'choice') {
+      const choice = document.createElement('select');
+      choice.setAttribute('aria-label', request.label);
+      choice.append(new Option('À préciser', ''), new Option('Oui', 'true'), new Option('Non', 'false'));
+      choice.value = typeof given === 'boolean' ? String(given) : '';
+      choice.addEventListener('change', () => { if (choice.value) answer(request, choice.value === 'true'); });
+      row.appendChild(choice);
+    } else {
+      const input = document.createElement('input');
+      input.type = 'number'; input.min = '1'; input.max = '10'; input.step = '1'; input.value = given ?? '';
+      input.setAttribute('aria-label', request.label);
+      input.addEventListener('change', () => { const value = Number(input.value); if (Number.isInteger(value) && value >= 1 && value <= 10) answer(request, value); });
+      const roll = button('Lancer d10', 'workspace-secondary', { 'aria-label': `Lancer d10 : ${request.label}` });
+      roll.addEventListener('click', () => answer(request, Math.floor(Math.random() * 10) + 1));
+      row.append(input, roll);
+    }
+    section.appendChild(row);
+  }
+  return section;
+}
+
+export const ROLL_LABELS =Object.freeze({ attack: 'Attaque', test: 'Test', skill: 'Compétence', defense: 'Défense', opposition: 'Opposition', channelling: 'Focalisation', cast: 'Incantation', dispel: 'Dissipation' });
 
 const COST_LABELS = { momentum: 'Élan', fortune: 'Chance', fate: 'Destin', resolve: 'Résolution', resilience: 'Résilience' };
 // Un coût par payeur et par ressource, avec le nom du payeur et son solde (recette G-DES-2).
@@ -148,6 +202,9 @@ export function renderResult(preview, target, draft, handlers, participants=[], 
     result.appendChild(node('p', 'workspace-result-line', `${name || 'Combattant'} : Élan ${change.before || paidMomentum ? 'oui' : 'non'} → ${change.after ? 'oui' : 'non'}`));
   }
   for(const reminder of preview.reminders || [])result.appendChild(node('p','workspace-muted',reminder));
+  for(const log of preview.traitPlans?.logs || [])result.appendChild(node('p','workspace-result-line',log.text));
+  const traitRequests = renderTraitPlanRequests(preview.traitPlans?.requests, draft, handlers);
+  if (traitRequests) result.appendChild(traitRequests);
   for(const occurrence of preview.weaponConditions?.applied || [])result.appendChild(node('p','workspace-result-line',describeWeaponCondition(occurrence)+' proposé.'));
   if((preview.targetConditionApplication||[]).some(row=>row.source?.kind==='knockout'))result.appendChild(node('p','workspace-result-line','Assommer : le total de Sonné dépasse le BE; Inconscient proposé.'));
   const renderedMountedRideInputs = new Set();
