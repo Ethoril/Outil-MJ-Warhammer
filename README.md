@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer (v3.49.0)
+# Outil MJ — Warhammer (v3.50.0)
 
 Application web progressive (PWA) qui assiste le Maître de Jeu de **Warhammer Fantasy 4e**, avec le combat et la magie **V5**. Un seul utilisateur (le MJ, francophone) ; HTML5 et modules ES natifs, sans bundler ; hors ligne grâce au service worker. En ligne : <https://ethoril.github.io/Outil-MJ-Warhammer/> (GitHub Pages, branche `main`).
 
@@ -11,7 +11,7 @@ Onglets de la barre du haut (raccourcis `1` à `4`).
 | Espace | Rôle |
 |---|---|
 | **Préparer** (1) | Réserve de profils (PNJ, PJ, créatures), création, import JSON ([format](docs/IMPORT_PROFILS_JSON.md)) ou texte ([format](docs/IMPORT_PROFILS_TEXTE.md)), composition des rencontres, liaison avec les fiches des PJ. |
-| **Jouer** (2) | Combat V5 : initiative, tour courant, résolution des Tests (moteur d’effets unifié, détail des modificateurs), dégâts, critiques, États, magie, prières et miracles, engagements et plateau des mêlées, montures, journal, annulation/rétablissement. Barre du haut : Temps de campagne, Événements, Rappels, « Terminer le combat », « Envoyer aux fiches ». |
+| **Jouer** (2) | Combat V5 : initiative, tour courant, résolution des Tests (moteur d’effets unifié, détail des modificateurs), dégâts, critiques, États, magie, prières et miracles, engagements et plateau des mêlées, montures, poursuites (Livre de base V5), journal, annulation/rétablissement. Barre du haut : Temps de campagne, Événements, Rappels, « Terminer le combat », « Envoyer aux fiches ». |
 | **Campagne** (3) | Temps de campagne, synthèse des suivis des personnages (blessures, critiques, maladies, séquelles, convalescence), soins des participants de la rencontre et des personnages suivis hors rencontre. |
 | **Bibliothèque** (4) | Règles consultables, bestiaire, références (armes, armures, mots-clés, talents, sorts, prières). |
 

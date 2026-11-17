@@ -10,6 +10,21 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.50.0 — Poursuite selon le Livre de base V5, image du pion des PJ (publiée le 17/11/2026)
+
+Cadrages et décisions du MJ des 16 et 17/11/2026 : `docs/specs/poursuite-v5/spec.md` (D1 à D24, CA1 à CA25) et `docs/specs/images-pions/spec.md` (CA16). Publiée avec la carte (test et contrat de liaison revus, aucun code changé).
+
+- **Poursuite (Livre de base V5 p. 158-159).** L’ancien calcul à distance de 1 à 10 est retiré. Le plus rapide des poursuivants s’oppose au plus lent des fuyards ; la poursuite finit à 6 DR d’écart, ou tout de suite quand un camp a le double du Mouvement de l’autre. L’outil déduit deux facteurs favorables, le MJ coche le terrain et corrige les cases et les Mouvements. Égalité au poursuivant.
+- **Obstacles.** Table d10 figée dans `js/data/v5-pursuit-obstacles.js` ; seul le camp des PJ les franchit (sans PJ, le MJ désigne le camp). Issue complète ou partielle : journal, et « Retirer de la rencontre » pour un fuyard échappé.
+- **En combat.** Carte « Poursuite » dans Jouer (`js/ui/v5-pursuit-panel.js`), un Test par participant et par Tour, qui remplace le Sprint. Tant qu’un Brisé est le fuyard d’une poursuite en cours, il n’a plus à fuir ni à sprinter pour finir son Tour.
+- **Hors combat.** Modale « Poursuite de scène » (`js/ui/v5-pursuit-dialog.js`) entre participants de la rencontre en cours ; ↶ annule une validation. La poursuite suit sa scène mise en pause ; une rencontre terminée ou recommencée l’abandonne, avec une ligne au journal.
+- **Attaque gratuite à la fuite.** Réservée aux adversaires engagés avec le Brisé, une par adversaire et par Tour, Élan dépensé par adversaire.
+- **Cas limites.** Mouvement inconnu ou nul : la règle du double et la paire automatique attendent la saisie du MJ. Compétence de base absente : repli sur sa Caractéristique ; avancée absente : refusée. Grandes enjambées : l’outil demande si le terrain convient. Un participant retiré sort du compte de son camp.
+- **Image du pion des PJ.** Un PJ envoie à la carte l’image choisie dans l’outil ; sans image choisie, la carte garde la sienne. Le sélecteur d’image de la Réserve s’affiche pour les PJ. À savoir : un PJ qui portait déjà une image dans l’outil l’envoie désormais, et retirer l’image dans l’outil ne restaure pas l’ancienne image de la carte.
+- Moteur : `js/core/v5-pursuit.js`, `js/core/store/api-pursuit.js`. `docs/AUDIT_REGLES.json` : F-L06-0293 passée à « assiste ».
+- Restes connus : table d10 à relire par le MJ ; `docs/AUDIT_REGLES.md` non régénéré ; synchronisation en ligne d’une poursuite en cours non éprouvée ; Vol dans le Mouvement de poursuite sans test ; les engagés cochés dans le panneau du Brisé ne sont gardés qu’en mémoire ; un reçu des vingt dernières validations hors combat est conservé (écart léger à D8) ; boutons de fin hors combat perdus après un rechargement.
+- Preuves : suite unitaire à la fusion ; tests de la poursuite (`tests/unit/combat/poursuite-v5-*.test.js`, `brise-attaque-gratuite.test.js`, `tests/unit/moteur/poursuite-v5-tests.test.js`, `tests/unit/ui/poursuite-v5-*.test.js`, `tests/unit/donnees/poursuite-obstacles.test.mjs`) ; parcours `tests/poursuite-v5-browser.mjs` et `tests/poursuite-hors-combat-browser.mjs` ; contre-vérification indépendante, onze constats corrigés (les corrections n’ont pas eu de seconde relecture indépendante).
+
 ## 3.49.0 — Monture d’un PJ déclarée sur sa fiche en ligne (publiée le 16/11/2026)
 
 Cadrage et décisions du MJ du 16/11/2026 : `docs/specs/monture-depuis-fiche/spec.md`. Publiée avec les fiches 2.41.0 (champ « Monture », fonction `executeFicheCommand` redéployée).
