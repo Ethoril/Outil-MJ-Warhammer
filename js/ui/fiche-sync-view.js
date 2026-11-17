@@ -4,11 +4,12 @@ import { ficheUnavailableReason } from '../core/fiche-source.js';
 import { resolveKeyword } from '../core/creature-keywords.js';
 import { readOptionalChoices } from '../core/optional-traits.js';
 import { mountProfileId } from '../core/mounts.js';
+import { FICHE_KEYWORD_TYPES } from '../data/fiche-keyword-types.js';
 
 const shown = value => (value === null || value === undefined || value === '' ? '—' : String(value));
 const MISSING = '__introuvable';
 const NEW_PROFILE = '__nouveau';
-const KEYWORD_TYPE_LABELS = Object.freeze({ haine: 'Haine', animosite: 'Animosité', prejuge: 'Préjugé', 'sans-peur': 'Sans peur' });
+const KEYWORD_TYPE_LABELS = FICHE_KEYWORD_TYPES;
 const plural = (count, word) => `${count} ${word}${count > 1 ? 's' : ''}`;
 const mountName = (name, label) => (label && label !== name ? `« ${name} » (${label})` : `« ${name} »`);
 /**
@@ -184,7 +185,7 @@ export function initFicheSyncView({ mount, hosted = false, source, getContext, c
       confirm.addEventListener('change', () => { selection.replaceAssociation = confirm.checked; render(); });
       card.appendChild(labelled(`Je confirme le remplacement de la fiche ${previousId} par ${snapshot.charId}`, confirm));
     }
-    const labels = { mount: 'Monture', skills: 'Compétences', talents: 'Talents', equipment: 'Équipement', spells: 'Sorts (consultation)', prayers: 'Prières (consultation)' };
+    const labels = { mount: 'Monture', keywords: 'Mots-clés', skills: 'Compétences', talents: 'Talents', equipment: 'Équipement', spells: 'Sorts (consultation)', prayers: 'Prières (consultation)' };
     const collections = document.createElement('ul');
     Object.entries(plan.collections || {}).forEach(([key, diff]) => {
       const row = document.createElement('li');

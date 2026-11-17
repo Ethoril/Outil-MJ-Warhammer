@@ -11,6 +11,8 @@ import { FAMILIAR_SYSTEMS, HOMUNCULUS_KINDS, FAMILIAR_WINDS, COMPANION_TRAITS, F
 import { CARAC_BY_LOWER } from './carac-keys.js';
 import { declaredMountOf, mountProfileId, buildMountProfile, linkDeclaredMounts } from './mounts.js';
 import { montureFicheDe } from '../data/montures-fiches.js';
+import { FICHE_KEYWORD_TYPES } from '../data/fiche-keyword-types.js';
+import { resolveKeyword } from './creature-keywords.js';
 
 export const FICHE_CHAR_IDS = Object.freeze(['bhelgi', 'caelel', 'elysia', 'hellaya', 'wren']);
 
@@ -26,7 +28,6 @@ export const ficheFamiliarTemplate = familiar => {
 };
 /** Profil de bibliothèque d'un familier de la fiche : identité stable par fiche et par familier. */
 export const ficheFamiliarProfileId = (charId, familiarId) => `fiche-familier-${charId}-${familiarId}`;
-const FICHE_KEYWORD_TYPES = Object.freeze(['haine', 'animosite', 'prejuge', 'sans-peur']);
 
 /** `familiers` de la fiche (schéma du 04/11/2026), en clés de l'outil ; null si le champ est absent. */
 function ficheFamiliars(raw, warnings) {
@@ -55,11 +56,31 @@ function ficheMount(raw, warnings) {
   if (!montureFicheDe(row.espece)) return invalid(`Monture « ${row.espece.slice(0, 40)} » inconnue de l’outil (fiche plus récente ?) : ignorée, monture du profil conservée.`);
   return { key: row.espece, name: typeof row.nom === 'string' ? row.nom.trim().slice(0, 200) : '' };
 }
-/** `motsCles` de la fiche : `{ id, cible }` d'un type connu ; null si le champ est absent. */
-function ficheKeywordTargets(raw) {
+/**
+ * `motsCles` de la fiche : `{ id, target }` d'un type connu ; null si le champ est absent. Un type inconnu de l'outil est écarté, une
+ * cible inconnue est gardée telle quelle (sans effet) : l'un et l'autre signalés par un avertissement (fiche plus récente que l'outil ?).
+ */
+function ficheKeywordTargets(raw, warnings) {
   if (!Object.hasOwn(raw, 'motsCles') || !Array.isArray(raw.motsCles)) return null;
-  return raw.motsCles.filter(row => isRecord(row) && FICHE_KEYWORD_TYPES.includes(row.id) && typeof row.cible === 'string' && row.cible.trim())
-    .map(row => ({ id: row.id, target: row.cible.trim() }));
+  const warn = (code, message) => warnings.push({ field: 'keywords', severity: 'warning', code, message });
+  const short = value => String(value).slice(0, 40);
+  const targets = [];
+  const unknownTypes = new Set();
+  const unknownTargets = new Set();
+  for (const row of raw.motsCles) {
+    if (!isRecord(row) || typeof row.cible !== 'string' || !row.cible.trim()) continue;
+    if (!Object.hasOwn(FICHE_KEYWORD_TYPES, row.id)) {
+      if (!unknownTypes.has(row.id)) { unknownTypes.add(row.id); warn('keyword-type-unknown', `Type de mot-clé « ${short(row.id)} » inconnu de l’outil (fiche plus récente ?) : ligne ignorée.`); }
+      continue;
+    }
+    const target = row.cible.trim();
+    if (!resolveKeyword(target) && !unknownTargets.has(target)) {
+      unknownTargets.add(target);
+      warn('keyword-target-unknown', `Cible de mot-clé « ${short(target)} » inconnue de l’outil (fiche plus récente ?) : gardée, sans effet tant qu’elle n’est pas reconnue.`);
+    }
+    targets.push({ id: row.id, target });
+  }
+  return targets;
 }
 
 // Clés de la fiche → clés canoniques du profil.
@@ -191,7 +212,7 @@ export function ficheSnapshot(charId, fiche, metadata = {}) {
     equipment: equipmentResult.items, spells, prayers, coverage, warnings };
   const familiars = ficheFamiliars(raw, warnings);
   if (familiars) snapshot.familiars = familiars.map(row => ({ ...row, profileId: ficheFamiliarProfileId(charId, row.id) }));
-  const keywordTargets = ficheKeywordTargets(raw);
+  const keywordTargets = ficheKeywordTargets(raw, warnings);
   if (keywordTargets) snapshot.keywordTargets = keywordTargets;
   const mount = ficheMount(raw, warnings);
   if (mount !== undefined) snapshot.mount = mount;
