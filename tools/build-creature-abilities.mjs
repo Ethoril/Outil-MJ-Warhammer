@@ -5,6 +5,7 @@
  * charge par un lot de Traits (T1 à T11), soit un rappel dont le motif est consigné par entrée.
  */
 import { readFileSync, writeFileSync } from 'node:fs';
+// `--check` : ne rien écrire, échouer si js/data/creature-abilities.js n'est pas celui que ce générateur produit.
 
 const inScope = n => (n >= 96 && n <= 161) || (n >= 173 && n <= 205) || (n >= 250 && n <= 288);
 
@@ -15,10 +16,8 @@ const COVERED = {
   'T2 Vomissement': [123, 125],
   'T2 Hurlement': [260],
   'T2 Attaques gratuites': [113, 262],
-  'T2 Armes naturelles V4': [288],
   'T3 Venin': [135, 153, 156, 183],
   'T3 Nuée': [144],
-  'T3 Instable': [147],
   'T3 Déclencheurs de mort': [253, 256, 259, 269, 286],
   'T4 Fouissage': [105],
   'T4 Respiration aquatique': [150, 152],
@@ -60,6 +59,11 @@ const MOTIVES = [
   [['ranged', 'ammo', 'artillery', 'platform', 'breath', 'breathCost', 'secondaryTest', 'trait', 'breathing', 'movement', 'aquatic', 'suffocation', 'testPenalty', 'movementRestriction', 'momentumFloor', 'groupPool', 'stationary', 'mount', 'traitAddition', 'handlingTest', 'gearRestriction', 'unstable', 'enduranceTest', 'corruption', 'frenzy', 'trigger', 'redirect', 'hatred', 'web', 'unconscious', 'deathTrigger', 'summon', 'replacement', 'noDamage', 'd10', 'naturalWeapon', 'printedDamage', 'armour', 'opposedBonus', 'markOfChaos', 'mutation', 'animosity', 'talentAccess', 'swarm', 'training']
     , 'Règle de profil sans équivalent chiffré dans le moteur (tir spécial, monture, terrain, plateforme) : rappelée sur la fiche, jouée par le MJ.']
 ];
+// Motifs propres : capacités déclarées couvertes à tort, que le code ne lit pas (traits-calculs, D3).
+const OWN_MOTIVES = {
+  147: "Disruption : le moteur n'en fait qu'un rappel (la règle d'Avantage de l'Instable n'est pas calculée), à jouer à la main.",
+  288: "Creature Weapons : le Trait lui-même n'est lu par aucun module, les attaques imprimées sont des actions ordinaires ; seuls leurs noms d'attaque sont reconnus."
+};
 const DEFAULT_MOTIVE = 'Règle de profil sans équivalent chiffré dans le moteur : rappelée sur la fiche, jouée par le MJ.';
 
 const motiveOf = mechanic => {
@@ -68,17 +72,27 @@ const motiveOf = mechanic => {
   return DEFAULT_MOTIVE;
 };
 
+// Yards = mètres, même valeur, partout (CLAUDE.md) : l'inventaire garde l'unité du livre, la fiche affiche des mètres.
+// Un nombre chiffré s'écrit « 80 m », un nombre en lettres ou un indice « BE mètres ».
+const metres = text => text.replace(/(\d) yards/g, '$1 m').replace(/yards/g, 'mètres').replace(/yard/g, 'mètre');
+
 const inventory = JSON.parse(readFileSync(new URL('../docs/BESTIAIRE_INVENTAIRE.json', import.meta.url), 'utf8'));
 const entries = inventory.traits
   .filter(trait => inScope(Number(trait.id.slice(5))))
   .map(trait => {
     const by = COVERED_BY.get(Number(trait.id.slice(5)));
-    const base = { id: trait.id, book: trait.book, name: trait.name, summaryFr: trait.summaryFr };
-    return by ? { ...base, status: 'covered', by } : { ...base, status: 'reminder', motive: motiveOf(trait.mechanic) };
+    const base = { id: trait.id, book: trait.book, name: trait.name, summaryFr: metres(trait.summaryFr) };
+    return by ? { ...base, status: 'covered', by } : { ...base, status: 'reminder', motive: OWN_MOTIVES[Number(trait.id.slice(5))] ?? motiveOf(trait.mechanic) };
   });
 
 const text = `// Dispositions des capacités propres de profil (lot T12). Fichier généré par tools/build-creature-abilities.mjs : ne pas modifier à la main.
 export const CREATURE_ABILITIES = Object.freeze(${JSON.stringify(entries, null, 2)}.map(entry => Object.freeze(entry)));
 `;
-writeFileSync(new URL('../js/data/creature-abilities.js', import.meta.url), text, 'utf8');
+const target = new URL('../js/data/creature-abilities.js', import.meta.url);
+if (process.argv.includes('--check')) {
+  if (readFileSync(target, 'utf8') !== text) { console.error("js/data/creature-abilities.js n'est pas à jour : relancer node tools/build-creature-abilities.mjs"); process.exit(1); }
+  console.log('js/data/creature-abilities.js à jour');
+  process.exit(0);
+}
+writeFileSync(target, text, 'utf8');
 console.log(`${entries.length} capacités (${entries.filter(entry => entry.status === 'covered').length} couvertes)`);

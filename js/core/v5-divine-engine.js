@@ -3,6 +3,7 @@ import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import DIVINE_REGISTRY from '../data/v5-divine-contracts.json' with { type: 'json' };
 import { SUPPLEMENT_DIVINE_CONTRACTS, isSupplementDivineContract } from './supplement-loader.js';
+import {creaturePrayerBase} from './creature-magic-traits.js';
 import {resolveDivineAccess,emptyDivineAccess,resolveDivineTalentRestriction} from './v5-divine-access.js';
 import {applyPrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {v5ResourceIdentity} from './v5-resources.js';
@@ -326,7 +327,9 @@ function readObjectValueCaseInsensitive(record, key) {
 function readSkillScore(actor) {
   const skillRows = Array.isArray(actor?.skills) ? actor.skills : [];
   const candidates = skillRows.filter(skill => ['pray', 'priere'].includes(fold(skill?.name ?? skill?.nom)));
-  if (!candidates.length || candidates.some(skill => skill?.status !== 'resolved')) return null;
+  // Béni et Miracles : un porteur sans compétence Prière prie à Sociabilité+10.
+  if (!candidates.length) return creaturePrayerBase(actor);
+  if (candidates.some(skill => skill?.status !== 'resolved')) return null;
   const scores = candidates.map(skill => finiteInteger(skill?.total));
   if (scores.some(score => score === null || score < 0) || new Set(scores).size !== 1) return null;
   const characteristics = new Set(candidates.map(skill => fold(skill?.carac || 'Soc')));

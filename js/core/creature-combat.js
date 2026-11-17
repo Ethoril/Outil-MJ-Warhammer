@@ -96,9 +96,11 @@ const isZoo =participant => participant?.extensions?.v5?.bestiary?.book === 'L11
  * Rend `{ available, costs, quota, damageFormula, effects, unresolved, reminders, receipt }`.
  */
 export function planNaturalAttack(participant, key, options = {}) {
-  const rule = RULES[key];
+  // Se cabrer (`via: 'rear'`, Imperial Zoo p.136) : le Piétinement remplace le déplacement, sans Trait propre ni Élan.
+  const rear = key === 'stomp' && options.via === 'rear';
+  const rule = rear ? { ...RULES.stomp, fr: 'Se cabrer', cost: undefined, costs: [{ resource: 'movement', amount: 1 }], note: 'Se cabrer : la créature remplace son déplacement par un Piétinement contre une créature plus petite.' } : RULES[key];
   // Une attaque ordinaire sans le Trait (décision (4) du 24/10) est lue comme un Trait sans valeur.
-  const owned = rule && (traitsOf(participant).find(trait => trait.key === key) ?? (options.ordinary === true ? { key, name: rule.fr, detail: '', inferred: true } : null));
+  const owned = rule && (traitsOf(participant).find(trait => trait.key === key) ?? (options.ordinary === true || rear ? { key, name: rule.fr, detail: '', inferred: true } : null));
   const plan = { key, label: rule?.fr ?? key, available: false, costs: [], quota: null, damageFormula: null, sizeBonus: 0, effects: [], unresolved: [], reminders: [] };
   if (!rule || !owned) { plan.unresolved.push(`${plan.label} : Trait absent du participant.`); return { ...plan, receipt: receiptOf(plan) }; }
   if (isZoo(participant) && ['howl', 'vomit'].includes(key)) plan.reminders.push(`${rule.fr} (Imperial Zoo) : coût en Avantages et résolution propres au Zoo, à appliquer à la main (E0-T-${key === 'howl' ? '090' : '095'}).`);
@@ -160,7 +162,7 @@ export function planNaturalAttack(participant, key, options = {}) {
     else if (actorSize <= targetSize) plan.unresolved.push(`${rule.fr} : la cible doit être plus petite que l'auteur.`);
   }
   if (rule.costs?.length || rule.cost) {
-    if (options.momentum === false) plan.unresolved.push(`${rule.fr} : plus d'Élan à perdre.`);
+    if (options.momentum === false && !rear) plan.unresolved.push(`${rule.fr} : plus d'Élan à perdre.`);
   }
   if (rule.oncePerTurn) {
     plan.quota = { id: `creature:${key}`, scope: 'turn', maximum: 1 };
@@ -207,7 +209,7 @@ export function planV4NaturalWeapon(participant) {
 function receiptOf(plan) {
   return {
     ability: plan.label,
-    costs: plan.costs.map(cost => `${cost.amount} ${cost.resource === 'momentum' ? 'Élan' : cost.resource}`),
+    costs: plan.costs.map(cost => `${cost.amount} ${cost.resource === 'momentum' ? 'Élan' : cost.resource === 'movement' ? 'déplacement' : cost.resource}`),
     damage: plan.damageFormula,
     effects: plan.effects.map(effect => effect.state ?? effect.damage),
     blocked: plan.unresolved.slice()

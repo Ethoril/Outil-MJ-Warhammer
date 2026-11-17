@@ -413,8 +413,8 @@ export const CREATURE_ABILITIES = Object.freeze([
     "book": "L11",
     "name": "Disruption",
     "summaryFr": "Instable traite son Avantage comme diminué de deux contre ses adversaires, sans perte réelle d’Avantage.",
-    "status": "covered",
-    "by": "T3 Instable"
+    "status": "reminder",
+    "motive": "Disruption : le moteur n'en fait qu'un rappel (la règle d'Avantage de l'Instable n'est pas calculée), à jouer à la main."
   },
   {
     "id": "E0-T-148",
@@ -1101,7 +1101,7 @@ export const CREATURE_ABILITIES = Object.freeze([
     "book": "L22",
     "name": "Creature Weapons (Claws, Beak, Slam, Tongue)",
     "summaryFr": "Attaques naturelles V4 écrites « Claws +6 », « Beak +8 », « Slam +n », « Tongue Attack +3 » : dégâts imprimés, déjà complets, à traiter comme les autres armes de créature.",
-    "status": "covered",
-    "by": "T2 Armes naturelles V4"
+    "status": "reminder",
+    "motive": "Creature Weapons : le Trait lui-même n'est lu par aucun module, les attaques imprimées sont des actions ordinaires ; seuls leurs noms d'attaque sont reconnus."
   }
 ].map(entry => Object.freeze(entry)));

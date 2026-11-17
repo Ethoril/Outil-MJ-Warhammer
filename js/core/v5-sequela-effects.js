@@ -61,7 +61,8 @@ export function sequelaEffectRows(state, participantId) {
   const day = state?.calendar?.currentDay ?? 0;
   const own = (state?.sequelae || []).filter(row => row.participantId === participantId);
   const rows = [];
-  const add = (sequela, suffix, row) => rows.push({ id: `${sequela.id}:${suffix}`, sourceId: sequela.id, lifetime: 'permanent', ...row });
+  // `amputation` : la ligne vient d'une perte (Insensible à la douleur ignore les pénalités de critique, pas celles d'une amputation).
+  const add = (sequela, suffix, row) => rows.push({ id: `${sequela.id}:${suffix}`, sourceId: sequela.id, lifetime: 'permanent', ...(sequela.kind === 'loss' ? { amputation: true } : {}), ...row });
 
   // Membres inférieurs « perdus » : pertes définitives et fracture de jambe en cours (p.177 : règles du membre amputé).
   const lowerSides = new Map();
@@ -315,7 +316,7 @@ export function sequelaTestRules({ actor, opponent = null, skillLabel = '', acti
   };
   const used = new Set();
   const once = (row, apply) => { if (used.has(row.type + (row.loc || ''))) return; used.add(row.type + (row.loc || '')); apply(); };
-  const push = (row, amount) => { out.modifiers.push({ id: `sequela:${row.id}`, label: row.label, amount }); out.sources.push(row.id); };
+  const push = (row, amount) => { out.modifiers.push({ id: `sequela:${row.id}`, label: row.label, amount, ...(row.amputation === true ? { amputation: true } : {}) }); out.sources.push(row.id); };
   for (const row of rows) {
     switch (row.type) {
       case 'language-dr': if (language) push(row, row.amount); break;

@@ -1,5 +1,6 @@
 import { creatureSizeOf } from './creature-size.js';
 import { slModifierClause } from './effect-engine.js';
+import { planCreatureMagic } from './creature-magic-traits.js';
 
 const isRecord = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 const fold = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '');
@@ -147,8 +148,18 @@ export function mountedRideAnswerFor({ participantId, event, requiredPlanCount =
   return requiredPlanCount <= 1 ? participantAnswers : {};
 }
 
-/** Fall trigger and required Ride test. Applying the fall remains a Store/MJ decision. */
-export function planMountedFall({ event, restraint = null, riderEntangled = false, mountTraits = [], fallPreventedByEquipment = false } = {}) {
+// Cause de la surprise d'une monture Craintif → effet de Dressé qui l'ignore (Guerre : bruits forts ; Magie : magie).
+const SKITTISH_CAUSES = { loudnoise: 'bruits forts', bruitfort: 'bruits forts', bruitsforts: 'bruits forts', magic: 'magie', magie: 'magie' };
+const trainedIgnoresCause = (mountTraits, cause) => {
+  const ignored = SKITTISH_CAUSES[fold(cause)];
+  return Boolean(ignored) && planCreatureMagic({ traits: mountTraits }, 'trained').effects.some(effect => effect.trainedEffect?.ignoresSkittish === ignored);
+};
+
+/**
+ * Fall trigger and required Ride test. Applying the fall remains a Store/MJ decision.
+ * `cause` (« loud-noise », « magic ») : cause de la surprise ou de l'enchevêtrement de la monture ; une monture Craintif Dressée pour cette cause n'exige pas de Test. Sans `cause`, comportement inchangé.
+ */
+export function planMountedFall({ event, restraint = null, riderEntangled = false, mountTraits = [], fallPreventedByEquipment = false, cause = null } = {}) {
   if (fallPreventedByEquipment === true && ['rider-dead', 'rider-unconscious', 'rider-prone'].includes(event)) {
     return { falls: false, requiredTest: null, opposedStrengthSize: null, dismount: false };
   }
@@ -158,9 +169,9 @@ export function planMountedFall({ event, restraint = null, riderEntangled = fals
   let modifier = null, purpose = 'stay-mounted';
   if (event === 'rider-surprised') modifier = 4;
   else if (event === 'rider-stunned') modifier = 0;
-  else if (event === 'mount-surprised' && hasTrait(mountTraits, new Set(['skittish', 'craintif']))) modifier = 4;
+  else if (event === 'mount-surprised' && hasTrait(mountTraits, new Set(['skittish', 'craintif'])) && !trainedIgnoresCause(mountTraits, cause)) modifier = 4;
   else if (event === 'rider-restrained' && ['held', 'anchored'].includes(restraint)) purpose = 'keep-saddle-and-use-mount-size', modifier = 0;
-  else if (event === 'mount-entangled' && riderEntangled !== true && hasTrait(mountTraits, new Set(['skittish', 'craintif']))) modifier = 0;
+  else if (event === 'mount-entangled' && riderEntangled !== true && hasTrait(mountTraits, new Set(['skittish', 'craintif'])) && !trainedIgnoresCause(mountTraits, cause)) modifier = 0;
 
   const requiredTest = modifier === null ? null : { skillId: V5_RIDE_SKILL_ID, modifier, purpose };
   return {

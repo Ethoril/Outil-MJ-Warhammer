@@ -70,6 +70,16 @@ export function rangeCellsOf(participant) {
   return { speedCells, runCells };
 }
 
+/**
+ * Portée de Bond en cases (D16) : le double de la Course effective, pour Charge, Saut et Sprint seulement (V5 p.357). `null` sans le Trait
+ * ou sans Mouvement connu. Champ optionnel `bondCells` du `token.state` ; `speedCells` et `runCells` (lus aussi par la poursuite) ne changent pas.
+ */
+export function bondCellsOf(participant) {
+  if (!carriesMovement(participant, 'bounce')) return null;
+  const { runCells } = rangeCellsOf(participant);
+  return Number.isFinite(runCells) ? 2 * runCells : null;
+}
+
 /** PV max d'un PJ persistant : maximum de Blessures de la fiche importée, sinon `maxHp` du profil (import JSON : null). */
 export const persistentMaxHpOf = profile => profile?.ficheSnapshot?.woundsMax ?? profile?.maxHp ?? null;
 
@@ -130,6 +140,7 @@ export function tokenStateOf(participant, participants = [], { maxHp = null, ima
     color: pj || isPjMount(participant, participants) ? normalizeTokenColor(color) ?? null : null,
     sizeCells: SIZE_CELLS[creatureSizeOf(participant).key] ?? 1,
     ...rangeCellsOf(participant),
+    ...(bondCellsOf(participant) === null ? {} : { bondCells: bondCellsOf(participant) }),
     visionDim: visionDimOf(participant),
     hp: { current: Math.max(0, Math.min(current, max)), max },
     health: healthOf(current, max),
@@ -152,7 +163,9 @@ export const riderOverlayOf = mountState => ({
  * La carte fusionne les pions ; l'état de la monture part toujours, pour son pion conservé hors plateau.
  */
 export function mountedTokenState(riderState, mountState) {
-  return { ...riderState, sizeCells: mountState.sizeCells, speedCells: mountState.speedCells, runCells: mountState.runCells,
+  const { bondCells: _own, ...rider } = riderState;
+  return { ...rider, sizeCells: mountState.sizeCells, speedCells: mountState.speedCells, runCells: mountState.runCells,
+    ...(mountState.bondCells === undefined ? {} : { bondCells: mountState.bondCells }),
     mounted: true, rider: riderOverlayOf(mountState) };
 }
 

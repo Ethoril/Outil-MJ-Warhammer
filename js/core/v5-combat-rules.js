@@ -31,6 +31,7 @@ export { conditionLevels };
 import { weaponHandsForParticipant } from './equipment.js';
 import { hasMomentum, withMomentum } from './v5-momentum-state.js';
 import { CARAC_KEYS } from './carac-keys.js';
+import { parseNatureTrait } from './creature-natures.js';
 import { canonicalQualityId, hasQuality, isQuality } from './quality-normalization.js';
 export { hasMomentum, withMomentum } from './v5-momentum-state.js';
 export const V5_COMBAT_RULE_VERSION = 'v5-combat-2026-10-09.24.6';
@@ -408,8 +409,13 @@ export function buildCombatTest(normalized, role = 'actor') {
   // Les pertes durables ne sont pas des pénalités d'État : aucun talent d'immunité aux États ne les efface.
   modifiers.push(...sequelae.modifiers); advantages.push(...sequelae.advantages); disadvantages.push(...sequelae.disadvantages);
   const ignoreCritical=context.extendedTest===true && activeMagicTalent(actor,'mind-over-body')?.ignoreCriticalPenalties;
-  if(Number(context.magicCriticalPenalty)<0 && !ignoreCritical)modifiers.push({id:'critical-wounds',label:'Blessures Critiques précisées par le MJ',amount:Number(context.magicCriticalPenalty)});
+  // Insensible à la douleur (Trait) : pénalités des Blessures Critiques ignorées, hors Test étendu aussi ; celles d'une amputation et celles des États restent.
+  // Les Traits temporaires des sorts et talents (`temporaryTraits`) n'en font pas partie : la Contemplation garde sa règle (Fortune, Test étendu).
+  const temporary=Array.isArray(actor?.extensions?.v5?.temporaryTraits)?actor.extensions.v5.temporaryTraits:[];
+  const painless=[...(Array.isArray(actor?.traits)?actor.traits:[]),...(Array.isArray(actor?.extensions?.traits)?actor.extensions.traits:[])].some(trait=>!temporary.includes(trait)&&parseNatureTrait(trait)?.key==='painless');
+  if(Number(context.magicCriticalPenalty)<0 && !ignoreCritical && !painless)modifiers.push({id:'critical-wounds',label:'Blessures Critiques précisées par le MJ',amount:Number(context.magicCriticalPenalty)});
   if(ignoreCritical)for(const modifier of modifiers)if(modifier.id==='critical-wounds' || modifier.source?.kind==='critical')modifier.amount=0;
+  if(painless)for(const modifier of modifiers)if(String(modifier.id).startsWith('sequela:') && modifier.amount<0 && modifier.amputation!==true)modifier.amount=0;
   let test = previewV5Test({ score: Math.max(0, action.base), roll: defending ? action.roll : normalized.roll, kind,
     slModifiers: modifiers, advantageSources: advantages, disadvantageSources: disadvantages });
   const dualWhirlwind=!defending&&context.specialAttack==='whirlwind-of-death'&&context.dualWielding===true?situationPlan(actor,'dual-whirlwind'):null;

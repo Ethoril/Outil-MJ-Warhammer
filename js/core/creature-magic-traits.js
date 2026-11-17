@@ -201,3 +201,14 @@ export function creatureCastingBases(participant, { baseline = false } = {}) {
   const baseOf = skill => tests.find(test => test.skill === skill)?.base ?? null;
   return { focusBase: baseOf('Focalisation'), tongueBase: baseOf('Langue magique') };
 }
+
+/**
+ * Base de Prière d'un porteur de Béni ou de Miracles : Sociabilité+10 (livre de base V5 pp.356 et 359), seulement s'il n'a pas de compétence
+ * Prière sur sa fiche (la compétence de la fiche fait foi). `null` sans le Trait, sans compétence à remplacer ou sans Sociabilité.
+ */
+export function creaturePrayerBase(participant) {
+  if (!traitsOf(participant).some(trait => trait.key === 'blessed' || trait.key === 'miracles')) return null;
+  if ((Array.isArray(participant?.skills) ? participant.skills : []).some(skill => ['pray', 'priere'].includes(fold(skill?.name ?? skill?.nom)))) return null;
+  const social = carac(participant, 'Soc');
+  return social === null ? null : social + 10;
+}
