@@ -69,7 +69,7 @@ describe('L7 — contrats et grammaire', () => {
     assert.deepEqual(getDivineContract(ECHO).effects.map(({ type, compare }) => ({ type, compare })), [{ type: 'wound-echo', compare: ['CC', 'F', 'E'] }]);
     assert.equal(modeOf(ECHO, 'weaker-stronger'), 'engine');
     assert.equal(modeOf(ECHO, 'echo-wounds'), 'engine');
-    assert.equal(modeOf(JUDGEMENT, 'redirect-stunned'), 'manual');
+    assert.equal(modeOf(JUDGEMENT, 'redirect-stunned'), 'engine', 'Sonné posé sur le prêtre par le moteur (4da676b)');
     assert.equal(validateEffect({ type: 'damage-transfer' }), null);
     assert.match(validateEffect({ type: 'damage-transfer', toughnessBonusFrom: 'XX' }), /toughnessBonusFrom/);
     assert.match(validateEffect({ type: 'wound-echo', compare: ['CC', 'F'] }), /compare/);
