@@ -50,7 +50,7 @@ export function shieldTraitOf(participant) {
 // ─────────────────────────────── Demandes et réponses (CA0) ───────────────────────────────
 
 /** Valeur d'un Test avec ses modificateurs : de quoi déduire réussite et DR d'un d100, sans connaître aucune règle. */
-function testTargetOf(participant, { characteristic, base, dr = 0 }) {
+export function testTargetOf(participant, { characteristic, base, dr = 0 }) {
   let resolved = null;
   try { resolved = resolveV5TestModifiers(participant, { kind: 'test', characteristic }, {}); } catch { resolved = null; }
   const usable = list => (list || []).filter(row => typeof row?.id === 'string' && row.id).map(row => ({ ...row }));
@@ -178,7 +178,7 @@ const newOut = () => ({ plans: [], requests: [], patches: [], logs: [], unresolv
 const makeLog = (id, participant, text, detail) => ({ id, kind: 'effect', actorId: participant?.id ?? null, actorName: participant?.name ?? null, text, detail });
 
 /** Un test de plan psychologique (Calme, Intelligence…) devient une demande de Test ; `unresolved` si la base manque. */
-function psychologyTestRequest(out, participant, key, planOptions, { field, label, characteristic, dr }) {
+export function psychologyTestRequest(out, participant, key, planOptions, { field, label, characteristic, dr }) {
   const plan = planPsychology(participant, key, planOptions);
   const test = plan.tests[0];
   if (!test || !isNum(test.base)) { out.unresolved.push(...(plan.unresolved.length ? plan.unresolved : [`${plan.label} : valeur du Test inconnue.`])); return null; }

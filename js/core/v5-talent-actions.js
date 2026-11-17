@@ -154,3 +154,9 @@ export function previewV5FrenzyExit(participant,{round,resolutionId='talent-life
  return{participant:next,plans,usageRequests,unresolved,ended:true};
 }
 export function refreshV5TalentEffects(participant,options={}){return previewV5FrenzyExit(participant,options).participant;}
+/** Frénésie du Trait (même état que le Talent, source empruntée comme la Rage) : `null` si la source du Talent est à revalider. */
+export function traitFrenzyState(participant,{resolutionId}={}){
+  const borrowed=evaluateV5Talents({...participant,talents:[...(participant.talents||[]),{id:'talent-frenzy',status:'resolved',rank:1}]},{event:'talent.activate',role:'actor',context:{talentAction:'frenzy'}});
+  const origin=borrowed.proposals.find(p=>p.op==='activateTalent'&&p.key==='talent-frenzy')?.origins?.[0];
+  return origin?{id:`${resolutionId}:trait-frenzy:${participant.id}`,key:'frenzy',name:'Frénésie',kind:'talent-pending',level:1,duration:null,authorId:participant.id,targetId:participant.id,source:{...origin,activationResolutionId:resolutionId,trait:'frenzy'}}:null;
+}

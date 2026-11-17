@@ -146,6 +146,12 @@
    "setSceneCircumstances/0",
    "setParticipantPosition/1",
    "setProfileOptionalChoices/2",
+   "applyCreatureEncounter/2",
+   "enterTraitFrenzy/1",
+   "applyVampiricHeal/1",
+   "rearUp/2",
+   "markFreshCorpse/1",
+   "setCreatureFlag/3",
    "getPursuit/0",
    "startPursuit/0",
    "setPursuitMovement/2",
@@ -1797,6 +1803,36 @@
     "state": "68c8ab7d431c0e71"
    },
    {
+    "label": "sweep applyCreatureEncounter",
+    "result": "5c2e0ec023938f7d",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep enterTraitFrenzy",
+    "result": "ceedfe9b59ae8547",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep applyVampiricHeal",
+    "result": "dbe47d585b4e3fdc",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep rearUp",
+    "result": "1fc737210bcd4853",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep markFreshCorpse",
+    "result": "b88efac933d97d6e",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
+    "label": "sweep setCreatureFlag",
+    "result": "ad3c5b2f55a030b3",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
     "label": "sweep getPursuit",
     "result": "74234e98afe7498f",
     "state": "68c8ab7d431c0e71"
@@ -2840,6 +2876,12 @@
    "setSceneCircumstances/0",
    "setParticipantPosition/1",
    "setProfileOptionalChoices/2",
+   "applyCreatureEncounter/2",
+   "enterTraitFrenzy/1",
+   "applyVampiricHeal/1",
+   "rearUp/2",
+   "markFreshCorpse/1",
+   "setCreatureFlag/3",
    "getPursuit/0",
    "startPursuit/0",
    "setPursuitMovement/2",
@@ -4488,6 +4530,36 @@
    {
     "label": "sweep setProfileOptionalChoices",
     "result": "78f321085d238bb7",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep applyCreatureEncounter",
+    "result": "5c2e0ec023938f7d",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep enterTraitFrenzy",
+    "result": "ceedfe9b59ae8547",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep applyVampiricHeal",
+    "result": "dbe47d585b4e3fdc",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep rearUp",
+    "result": "1fc737210bcd4853",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep markFreshCorpse",
+    "result": "b88efac933d97d6e",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep setCreatureFlag",
+    "result": "ad3c5b2f55a030b3",
     "state": "4bd34c4c9a63fc31"
    },
    {

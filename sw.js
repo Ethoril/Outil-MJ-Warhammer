@@ -63,6 +63,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/dice-buttons.js',
   './js/core/store/api-engagements.js',
   './js/core/store/api-optional-traits.js',
+  './js/core/store/api-trait-buttons.js',
   './js/core/store/api-pursuit.js',
   './js/core/bestiary-templates.js',
   './js/core/creature-abilities.js',

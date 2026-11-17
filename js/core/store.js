@@ -179,6 +179,7 @@ import { createDivineApi } from './store/api-divine.js';
 import { createAftermathApi } from './store/api-aftermath.js';
 import { createV5CombatActionsApi } from './store/api-v5-combat-actions.js';
 import { createEngagementsApi, engageAfterMeleeAttack, withExpiredEngagements } from './store/api-engagements.js';
+import { createTraitButtonsApi } from './store/api-trait-buttons.js';
 import { createOptionalTraitsApi } from './store/api-optional-traits.js';
 import { applyOptionalChoices } from './optional-traits.js';
 import { createPursuitApi, withAbandonedPursuit, pursuitFreesBrokenPrey, pursuitInvolves, withoutPursuitParticipant, withScenePursuit, withoutScenePursuit } from './store/api-pursuit.js';
@@ -2149,7 +2150,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
             .filter(rider => mountEvent !== 'mount-entangled' || !(rider.states || []).some(state => ['enchevetre','entangled'].includes(String(state.key || state.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())))
             .map(rider => ({ rider, event: mountEvent, mountTraits: participant.traits || participant.profile?.traits || [] })) : [];
         for (const { rider, event, mountTraits } of fallTargets) {
-          const plan = planMountedFall({ event, mountTraits, riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(String(state.key || state.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())), fallPreventedByEquipment: context.fallPreventedByEquipment === true });
+          const plan = planMountedFall({ event, mountTraits, riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(String(state.key || state.name || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase())), fallPreventedByEquipment: context.fallPreventedByEquipment === true, cause: context.mountedFallCause });
           if (plan.requiredTest) {
             const skill = (rider.skills || []).find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
             const suffix = rider.id === id ? '' : ':' + rider.id;
@@ -4269,6 +4270,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
 
   Object.assign(api, createEngagementsApi({ api, currentEnvelope }));
   Object.assign(api, createOptionalTraitsApi({ api, currentEnvelope }));
+  Object.assign(api, createTraitButtonsApi({ api, currentEnvelope }));
   Object.assign(api, createPursuitApi({ api, currentEnvelope }));
   Object.assign(api, createV5CombatActionsApi({ api, currentEnvelope, issuedBrokenEscapePreviews, issuedPaviseDeploymentPreviews, declaredFleeEngaged }), {
     previewResolution(input = {}) {
@@ -5348,7 +5350,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           if (mountEvent) for (const rider of riders) {
             const traits = before.traits || before.profile?.traits || [];
             const riderEntangled = (rider.states || []).some(state => ['enchevetre','entangled'].includes(keyOfState(state)));
-            const fall = planMountedFall({ event: mountEvent, mountTraits: traits, riderEntangled });
+            const fall = planMountedFall({ event: mountEvent, mountTraits: traits, riderEntangled , cause: input.mountedFallCause });
             if (fall.requiredTest || fall.falls) addMountedFall({ participantId: rider.id, mountId: before.id, event: mountEvent, ...fall });
           }
         }
@@ -5370,7 +5372,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
               : newlyAcquired(before, after, new Set(['surpris'])) ? 'mount-surprised'
                 : newlyAcquired(before, after, new Set(['enchevetre'])) ? 'mount-entangled' : null;
           if (mountEvent) for (const rider of riders) {
-            const fall = planMountedFall({ event: mountEvent, mountTraits: before.traits || before.profile?.traits || [], riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(keyOfState(state))) });
+            const fall = planMountedFall({ event: mountEvent, mountTraits: before.traits || before.profile?.traits || [], riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(keyOfState(state))) , cause: input.mountedFallCause });
             if (fall.requiredTest || fall.falls) addMountedFall({ participantId: rider.id, mountId: before.id, event: mountEvent, ...fall });
           }
         }
@@ -5398,7 +5400,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
                   : newlyAcquired(before, after, new Set(['surpris'])) ? 'mount-surprised'
                     : newlyAcquired(before, after, new Set(['enchevetre'])) ? 'mount-entangled' : null;
             if (riders.length && mountEvent) for (const rider of riders) {
-              const fall = planMountedFall({ event: mountEvent, mountTraits: before.traits || before.profile?.traits || [], riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(keyOfState(state))) });
+              const fall = planMountedFall({ event: mountEvent, mountTraits: before.traits || before.profile?.traits || [], riderEntangled: (rider.states || []).some(state => ['enchevetre','entangled'].includes(keyOfState(state))) , cause: input.mountedFallCause });
               if (fall.requiredTest || fall.falls) addMountedFall({ participantId: rider.id, mountId: before.id, event: mountEvent, ...fall });
             }
           }
