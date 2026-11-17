@@ -62,11 +62,8 @@ describe('L10 : clauses requalifiées en engine', () => {
   test('la table du garde-fou ne garde que les clauses encore manuelles', () => {
     for (const cle of REQUALIFIEES) assert.equal(table.clauses[cle], undefined, `La table garde encore ${cle}`);
     assert.equal(table.clauses[RESTE_MANUELLE], 'F8');
-    assert.equal(Object.keys(table.clauses).length, 67);
-    const familles = Object.values(table.clauses).reduce((acc, f) => ({ ...acc, [f]: (acc[f] || 0) + 1 }), {});
-    assert.equal(familles.F1, 9);
-    assert.equal(familles.F6, 47);
-    assert.equal(familles.F8, 1);
+    // Les comptes par famille évoluent à chaque lot : ils sont verrouillés par miracles-narratifs-inventaire.test.js, pas ici.
+    assert.equal(Object.values(table.clauses).filter(f => f === 'F8').length, 1, 'seule line-of-sight reste en F8');
   });
 
   test('un contrat requalifié ne rappelle plus la clause : texte absent des clauses non engine', () => {
