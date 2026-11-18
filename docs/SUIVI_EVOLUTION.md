@@ -10,6 +10,14 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.53.2 — Liaison carte neutre, premier lot de l’outil multi-jeux (publiée le 18/11/2026)
+
+Chantier « outil multi-jeux » (décision du MJ du 18/11/2026) : un chapeau d’infrastructure commune et un module par jeu (Warhammer, puis L’Appel de Cthulhu 7e, plus tard Imperium Maledictum et L’Ombre du Seigneur Démon). Exploration préalable : maquette Cthulhu et rapport sous le tag local `archive/maquette-cthulhu-18-11`. Cadrage : `docs/specs/multi-jeux/` (spec, plan, tâches ; questions Q1 à Q9 validées avec leur réponse par défaut).
+
+- **Lot L1, sans changement visible** : le protocole de la liaison Map Display sort dans `js/core/map-link-protocol.js`, qui ne charge aucune règle de Warhammer ; la traduction participant → pion devient une projection fournie par le jeu (`warhammerMapProjection` dans `map-link-state.js`). `createMapLink` garde ses exports et sa signature.
+- **Non-régression** : un test d’or (`tests/unit/chapeau/liaison-carte-messages-golden.test.mjs`) fige la suite exacte des messages envoyés à la carte ; il passe sur le code de la 3.53.1 comme sur celui-ci. Un second test vérifie que le protocole accepte une grille, des Zones et un jeu sans PV, et n’envoie jamais un marqueur inconnu de la carte.
+- **Recette** sur la carte réelle par le MJ : conforme. La carte ne change pas.
+
 ## 3.53.1 — Correctifs de la recette Gemini (publiée le 18/11/2026)
 
 Recette en conditions réelles des versions 3.46.0 à 3.53.0 exécutée par Gemini (plan : `docs/RECETTE_GEMINI_3_46_A_3_53.md`) : 54 scénarios réussis, 5 laissés au MJ ; anomalies triées (défauts réels corrigés, écarts du plan écartés).
