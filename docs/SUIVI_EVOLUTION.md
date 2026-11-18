@@ -10,6 +10,15 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.53.1 — Correctifs de la recette Gemini (publiée le 18/11/2026)
+
+Recette en conditions réelles des versions 3.46.0 à 3.53.0 exécutée par Gemini (plan : `docs/RECETTE_GEMINI_3_46_A_3_53.md`) : 54 scénarios réussis, 5 laissés au MJ ; anomalies triées (défauts réels corrigés, écarts du plan écartés).
+
+- **Plus aucune boîte native** (décision du MJ du 06/11 : le navigateur de l’app les refuse sans les afficher). Charger un fichier, recommencer le combat, vider la Réserve : action directe puis toast « Annuler » ; effacer tout l’historique (non annulable) et appliquer les PV aux profils : confirmation dans la page ; erreur de connexion Google : toast. Un test (`tests/unit/outillage/pas-de-boite-native.test.js`) empêche leur retour.
+- **Bestial** : la défense est présélectionnée sur l’Esquive quand la créature l’a.
+- **Vindicte vengeresse** : le panneau de résultat affiche « Relance gratuite : Vindicte vengeresse ».
+- **Import** : un registre de convalescence invalide fait refuser l’import dès l’aperçu, avec un message clair.
+- **Carte** (publiée avant l’outil, `main` `5fff780`) : mention « géré par l’outil MJ » sur la fiche d’un pion lié ; un pion lié en réserve accepte un état sans palier de Bond ; avertissement de lecture du canvas du brouillard supprimé.
 ## 3.53.0 — Miracles narratifs, mots-clés des fiches (publiée le 18/11/2026)
 
 Cadrage et décisions du MJ des 16, 17 et 18/11/2026 : `docs/specs/miracles-narratifs/spec.md` (Q1 à Q17, §8, « Choix validés en fin de chantier »), inventaire des 88 clauses des miracles assistés (`inventaire-assistes.md`), tri combat / hors combat (`tri-combat.md`), plan et tâches (lots L0 à L11) dans le même dossier.
