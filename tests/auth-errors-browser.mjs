@@ -46,14 +46,17 @@ try {
       // Initialization failure prevents binding; invoke the same exported action to cover its guard.
       if (uninitialized) document.querySelector('#login').addEventListener('click', () => sdk.loginWithGoogle());
     }, !!scenario.uninitialized);
-    const dialogPromise = page.waitForEvent('dialog');
-    const clicked = page.locator('#login').click();
-    const dialog = await dialogPromise, message = dialog.message();
+    // Pas de boîte native (décision du MJ du 06/11) : le message s'affiche en toast d'erreur.
+    const nativeDialogs = [];
+    page.on('dialog', dialog => { nativeDialogs.push(dialog.message()); void dialog.dismiss(); });
+    await page.locator('#login').click();
+    const toast = page.locator('.toast-error');
+    await toast.waitFor({ state: 'visible' });
+    const message = await toast.innerText();
+    assert.deepEqual(nativeDialogs, [], 'aucune boîte native');
     assert.ok(message.includes(scenario.expected), message);
-    assert.ok(message.endsWith(`Code : ${scenario.displayedCode || scenario.code}`), message);
+    assert.ok(message.includes(`Code : ${scenario.displayedCode || scenario.code}`), message);
     assert.ok(!message.includes('secret-email') && !message.includes('secret-token') && !message.includes('unsafe-email'));
-    await dialog.accept();
-    await clicked;
     assert.equal(await page.evaluate(() => localStorage.getItem('qa-local-data')), 'retain this data');
     assert.equal(await page.evaluate(() => window.sdkCalls || 0), scenario.uninitialized ? 0 : 1);
     if (!scenario.uninitialized) assert.equal(await page.evaluate(() => window.sdkActivation), true, 'SDK called during actual click activation');

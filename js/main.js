@@ -849,16 +849,9 @@ function openPrepareView(encounterId = null) {
   });
 }
 
-// Recommence le combat (scène active : retour au lancement ; sinon PV et états remis à zéro). Confirmation d'abord : l'action efface des saisies.
+// Recommence le combat (scène active : retour au lancement ; sinon PV et états remis à zéro). Pas de boîte native (décision du MJ du 06/11) :
+// la fenêtre d'Initiative sert de confirmation (Annuler n'efface rien) et le toast final propose ↶.
 async function restartCombat() {
-  const scene = Store.getActiveScene?.();
-  const running = scene?.status === 'active';
-  const extra = running && ((scene.events || []).length || (scene.clocks || []).length || (scene.intentions || []).length)
-    ? '\nLes événements, jauges et intentions créés pendant la séance seront effacés.' : '';
-  const message = running
-    ? `Recommencer « ${scene.title || 'Séance'} » depuis son lancement ?\nPV, états, tours et combattants reviennent à la composition de la rencontre ; les ajouts faits pendant le combat sont retirés.${extra}`
-    : 'Recommencer le combat ?\nPV remis au maximum, états retirés, round remis à zéro.';
-  if (!window.confirm(message)) return false;
   try {
     const staging = requireStoreApi('previewCombatRestart')();
     const initialized = await openCombatInitiativeDialog({ staging, title: 'Recommencer · Initiative' });
@@ -1810,7 +1803,7 @@ on(DOM.importModal.confirm, 'click', async (e) => {
   finally { DOM.importModal.confirm.disabled = false; }
 });
 on(DOM.combat.btnExport, 'click', async () => {
-  if (confirm('Appliquer PV aux profils correspondants ?')) {
+  if (await confirmInTool({ title: 'Appliquer les PV aux profils correspondants ?', text: 'Les PV actuels du combat sont reportés sur les profils de la Réserve et sur les fiches liées.', confirmLabel: 'Appliquer' })) {
     try { const result = await awaitStore(Store.exportToReserve(), 'Export'); showToast(result?.warnings?.length ? result.warnings.join(' ') : 'Profils de la réserve mis à jour', result?.warnings?.length ? 'warning' : 'success'); }
     catch (error) { showToast(contextMessage('Export impossible', error, 'réessayez.'), 'error'); }
   }

@@ -531,9 +531,9 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
   on(DOM.reserve.clear, 'click', () => {
     const count = Store.listProfiles().length;
     if (count === 0) return;
-    if (confirm(`Supprimer les ${count} profil(s) de la Réserve ? Cette action est irréversible.`)) {
-      Store.clearReserve();
-    }
+    // Pas de boîte native (décision du MJ du 06/11) : suppression directe, annulable par ↶ (commande « clear-reserve »).
+    Store.clearReserve();
+    showToast(`${count} profil(s) supprimé(s) de la Réserve`, 'warning', { label: 'Annuler', onClick: () => Store.undo() });
   });
 
   on(DOM.reserve.search, 'input', renderReserve);

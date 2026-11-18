@@ -8,6 +8,7 @@ import { transactionUpdate } from './sync-protocol.js';
 import { createSyncSession, normalizeRemoteDocument } from './sync-session.js';
 import { migrateV2SyncDocument, initializeV3Root } from './sync-migration.js';
 import { googleAuthErrorCode, googleAuthErrorMessage } from './auth-errors.js';
+import { showToast } from '../ui/toast.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD5f_ngBZ3OCXJCjT5M45BqbhkzI_QObLc",
@@ -50,7 +51,8 @@ export async function loginWithGoogle() {
     if (appContent) appContent.style.display = 'block';
   } catch (error) {
     console.error('❌ Erreur connexion:', googleAuthErrorCode(error));
-    alert(googleAuthErrorMessage(error, { online: navigator.onLine !== false }));
+    // Pas de boîte native (décision du MJ du 06/11) : le message s'affiche en toast, plus longtemps qu'un toast ordinaire pour rester lisible.
+    showToast(googleAuthErrorMessage(error, { online: navigator.onLine !== false }), 'error', null, 12000);
   }
 }
 

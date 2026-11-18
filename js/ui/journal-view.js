@@ -1,5 +1,6 @@
 import { DOM, qs, escapeHtml } from './dom.js';
 import { groupLogByTurn } from './journal-turns.js';
+import { confirmInTool } from './encounter-end-dialog.js';
 import { describeResolutionDetail, formatDamageFormula, formatWeaponDamage } from '../core/resolution.js';
 
 const signed = value => { const number = Number(value) || 0; return number < 0 ? `−${Math.abs(number)}` : `+${number}`; };
@@ -144,8 +145,9 @@ export function initLogViewUI(Store) {
   if (kindSelect) kindSelect.addEventListener('change', () => renderLog(Store));
   if (actorSelect) actorSelect.addEventListener('change', () => renderLog(Store));
   if (clearBtn) {
-    clearBtn.addEventListener('click', () => {
-      if (confirm('Effacer tout l\'historique ?')) {
+    // Pas de boîte native (décision du MJ du 06/11) : l'effacement n'est pas annulable par ↶ (recordHistory: false), d'où la confirmation dans la page.
+    clearBtn.addEventListener('click', async () => {
+      if (await confirmInTool({ title: 'Effacer tout l\'historique ?', text: 'Le journal est vidé définitivement ; ↶ ne le rétablit pas.', confirmLabel: 'Effacer' })) {
         Store.clearLog();
       }
     });
