@@ -1,4 +1,4 @@
-const CACHE_NAME = 'wfrp-cache-v3.53.2';
+const CACHE_NAME = 'wfrp-cache-v3.53.3';
 
 const ASSETS_TO_CACHE = [
   './',
