@@ -149,7 +149,8 @@ export function applyImposedOutcomes(participant, outcomes, ctx = {}) {
       applied.push(`État ${outcome.key}`);
       if (outcome.lockRounds) {
         const lock = lockAddedStates(next, beforeIds, outcome, index, ctx);
-        if (lock) applied.push(lock); else reminders.push(`${nameOf(participant)} : durée minimale de l’État ${outcome.key} à suivre à la main (Bonus ou Round inconnu).`);
+        if (lock) applied.push(lock);
+        else reminders.push(`${nameOf(participant)} : durée minimale de l’État ${outcome.key} à suivre à la main (${(next.states || []).some(row => !beforeIds.has(row.id)) ? 'Bonus ou Round inconnu' : 'cible déjà dans cet État : pas de nouveau verrou'}).`);
       }
       continue;
     }
@@ -192,10 +193,13 @@ export function imposedRequest(participant, layer) {
     label: `${nameOf(participant)} · ${layer.imposedTest.label} : ${imposedTestLabel(spec)}`, testTarget: imposedTestTarget(participant, spec) ?? undefined });
 }
 
+// Côté d'un participant : PJ et alliés ensemble (comme trait-effects.js et mounts.js), puis le camp canonique.
+const sideOf = participant => { const camp = participantCamp(participant); return camp === 'allie' ? 'pj' : camp; };
+
 /** Le sujet d'un Test `manual` appartient-il au bon camp par rapport au porteur de la couche ? */
 export function subjectAllowed(subjects, bearer, subject) {
   if (subjects === 'targets') return subject?.id === bearer?.id;
-  const same = participantCamp(subject) === participantCamp(bearer);
+  const same = sideOf(subject) === sideOf(bearer);
   return subjects === 'allies' ? same : !same;
 }
 

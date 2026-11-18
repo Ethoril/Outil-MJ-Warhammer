@@ -46,6 +46,13 @@ test('Test imposé manuel : un bouton, un choix des ennemis seulement, un d100 ;
   assert.deepEqual(calls, [['foe', layer.id, { roll: 87 }]]);
 }));
 
+test('camps lus comme le reste de l’outil : « allie » et PJ sans camp ne sont pas des ennemis', () => withDom(async () => {
+  const box = new El('div');
+  const people = [...participants, { id: 'amie', name: 'Amie', camp: 'allie' }, { id: 'pj2', name: 'PJ2', kind: 'PJ', camp: 'PJ' }, { id: 'pj3', name: 'PJ3', kind: 'PJ' }];
+  renderImposedTestControls(box, { layer, participants: people, Store: {}, onDone: () => {} });
+  assert.deepEqual(all(box, el => el.tagName === 'select')[0].options.map(option => option.value), ['', 'foe']);
+}));
+
 test('Store sans la méthode : aucun plantage, message en français', () => withDom(async () => {
   const box = new El('div');
   renderImposedTestControls(box, { layer, participants, Store: {}, onDone: () => {} });

@@ -85,10 +85,10 @@ export const miracles = [
   clauses: [
    { id: 'charm-bonus', mode: 'engine', text: 'Les Tests de Charme du prêtre gagnent +1 DR par DR du Test de Prière du miracle (valeur figée à l’aperçu).' },
    { id: 'charm-condition', mode: 'manual', text: 'Le bonus ne vaut que pour un Test de Charme réussi devant des personnes de Statut inférieur : le MJ écarte les autres Tests de Charme.' },
-   { id: 'beneficiary', mode: 'manual', text: 'Le texte ne dit pas clairement qui reçoit le bonus : lu comme le prêtre seul (les personnes visées sont les témoins) ; doute à confirmer par le MJ.' },
+   { id: 'beneficiary', mode: 'manual', text: 'Le texte ne dit pas clairement qui reçoit le bonus : lu comme le prêtre seul (les personnes visées sont les témoins), lecture confirmée par le MJ.' },
    slExtension, afterTest, profit
   ],
-  sourceDelta: delta + ' Cible imprimée « Fellowship Bonus targets » : lue comme les témoins, le bénéficiaire du bonus étant le prêtre seul (lecture non confirmée par le MJ) ; encodée self.'
+  sourceDelta: delta + ' Cible imprimée « Fellowship Bonus targets » : lue comme les témoins, le bénéficiaire du bonus étant le prêtre seul (lecture confirmée par le MJ) ; encodée self.'
  },
  {
   name: 'Revirement de fortune', canonicalName: 'Twist of Fortune', printedPage: 47,

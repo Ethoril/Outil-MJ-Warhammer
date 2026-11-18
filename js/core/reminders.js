@@ -39,7 +39,7 @@ const divineLayerReminders = (person, participants = []) => (person?.extensions?
 });
 const divineStateReminders = (person, participants = []) => [
   ...(person?.extensions?.v5?.specialStates?.orderlyDisengage === true
-    ? [{ key: 'divine-orderly-disengage', text: 'En Bon Ordre (prière) : en Fuite, les engagés ne gagnent ni Élan ni attaque gratuite ; le Brisé reste dû (appliqué par le moteur).' }] : []),
+    ? [{ key: 'divine-orderly-disengage', text: 'En Bon Ordre (prière) : en Fuite, les engagés ne gagnent ni Élan ni attaque gratuite ; le Désengagement est dispensé du Test ; le Brisé reste dû (appliqué par le moteur).' }] : []),
   ...divineLayerReminders(person, participants)];
 
 const hasOwn = (value, key) => Object.prototype.hasOwnProperty.call(value, key);

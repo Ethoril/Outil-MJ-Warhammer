@@ -14,6 +14,7 @@ import { getDivineContract, getAllDivineContracts } from '../../../js/core/v5-di
 import { validateEffect } from '../../../js/core/v5-divine-effect-handlers.js';
 import { recoverV5Condition } from '../../../js/core/v5-effects.js';
 import { expireDivineEffects } from '../../../js/core/v5-divine-engine.js';
+import { inferV5Kind } from '../../../js/core/v5-combat-rules.js';
 
 const clone = value => structuredClone(value);
 const memory = () => { let saved = null; return { async load() { return saved && clone(saved); }, async saveAtomic({ state }) { saved = clone(state); return { ok: true }; } }; };
@@ -181,6 +182,33 @@ describe('L11 — Vindicte vengeresse : relance des Tests de Mêlée', () => {
     assert.ok(paidFortune(hit));
   });
 
+  test('attaque réussie mais opposition perdue : relance gratuite (compte comme un Test raté, décision du MJ)', async () => {
+    const { store } = await open('Myrmidia');
+    await store.setFortune('priest', 3);
+    await cast(store, WRATH, { targetIds: ['priest'], facts: { targets: { priest: { withinRange: true } } } });
+    const lost = attack(store, swordAction, { roll: 34, defenseRoll: 10, reroll: 34 });
+    assert.equal(lost.opposition?.winner, 'defender');
+    assert.equal(lost.fortuneReroll?.free, true, 'opposition perdue : relance gratuite');
+    assert.equal(paidFortune(lost), false);
+  });
+
+  test('couche disparue entre l’aperçu et l’application : le refus nomme Vindicte vengeresse, pas la Chance', async () => {
+    const { store } = await open('Myrmidia');
+    await cast(store, WRATH, { targetIds: ['priest'], facts: { targets: { priest: { withinRange: true } } } });
+    const preview = attack(store, swordAction, { roll: 88, reroll: 24 });
+    assert.equal(preview.fortuneReroll?.free, true);
+    await store.updateParticipant('priest', { extensions: { v5: { divineEffects: [] } } });
+    const result = await store.applyResolution(preview);
+    assert.notEqual(result.status, 'applied');
+    assert.match(JSON.stringify(result), /Vindicte vengeresse/);
+    assert.doesNotMatch(JSON.stringify(result), /Bénédiction de Chance/);
+  });
+
+  test('action de type « Attaque » (casse des fiches) lue comme une attaque de mêlée', () => {
+    assert.equal(inferV5Kind({ type: 'Attaque', attr: 'CC' }), 'melee');
+    assert.equal(inferV5Kind({ type: ' ATTAQUE ', attr: 'CT' }), 'ranged');
+  });
+
   test('sans la prière : la relance d’une attaque de mêlée reste payante (comportement inchangé)', async () => {
     const { store } = await open('Myrmidia');
     await store.setFortune('priest', 3);
@@ -201,6 +229,14 @@ describe('L11 — Épée de justice : PA ignorés, Inconscient au moins BSoc Rou
     assert.equal(modeOf(SWORD, 'unconscious-duration'), 'engine');
     assert.equal(modeOf(SWORD, 'endurance-test'), 'assisted');
     assert.equal(modeOf(SWORD, 'sin'), 'manual');
+  });
+
+  test('un PNJ de camp « allie » n’est pas un adversaire du prêtre : Test imposé refusé', async () => {
+    const { store } = await open('Verena', { foe: { camp: 'allie' } });
+    await cast(store, SWORD, { facts: { weapon: { equipmentId: 'sword', classConfirmed: true } } });
+    const layer = layers(store, 'priest').find(row => row.imposedTest);
+    assert.equal((await store.resolveDivineImposedTest('foe', layer.id, { success: false, sl: -1 })).ok, false);
+    assert.equal((await store.resolveDivineImposedTest('other', layer.id, { success: false, sl: -1 })).ok, true);
   });
 
   test('l’épée désignée ignore les PA ; une autre arme et l’épée sans prière les subissent', async () => {
@@ -262,5 +298,19 @@ describe('L11 — Morsure de l’hiver : Hémorragique retiré au coup', () => {
     assert.ok(keys(store, 'foe').includes('extenue'), 'Exténué toujours infligé');
     await store.undo();
     assert.ok(keys(store, 'foe').includes('hemorragique'));
+  });
+});
+
+describe('L11 — Épée de justice : cible déjà Inconsciente', () => {
+  test('le rappel donne la vraie cause (pas de nouveau verrou), pas « Bonus ou Round inconnu »', async () => {
+    const { store } = await open('Verena');
+    await store.updateParticipant('foe', { states: [{ id: 'inc-0', key: 'inconscient', level: 1, status: 'resolved', source: { kind: 'manual' } }] });
+    await cast(store, SWORD, { facts: { weapon: { equipmentId: 'sword', classConfirmed: true } } });
+    const layer = layers(store, 'priest').find(row => row.imposedTest);
+    const result = await store.resolveDivineImposedTest('foe', layer.id, { success: false, sl: -1 });
+    assert.equal(result.ok, true);
+    const text = JSON.stringify(result) + JSON.stringify(store.getParticipantReminders('foe'));
+    assert.match(text, /déjà dans cet État/);
+    assert.doesNotMatch(text, /Bonus ou Round inconnu/);
   });
 });

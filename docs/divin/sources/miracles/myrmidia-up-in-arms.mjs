@@ -64,7 +64,7 @@ export const miracles = [
       { id: 'fleeing', text: 'Quel allié rompt le combat (Fuite) et combien d’ennemis Engagés a-t-il ?' }
     ],
     clauses: [
-      { id: 'orderly-disengage', mode: 'engine', text: 'Les alliés désignés portent « En bon ordre » : Désengagement sans Élan ni attaque gratuite adverse (à appliquer par le MJ, le moteur ne gère pas le Désengagement).' },
+      { id: 'orderly-disengage', mode: 'engine', text: 'Les alliés désignés portent « En bon ordre » : leur Désengagement est dispensé du Test, sans Élan ni attaque gratuite adverse (décision du MJ), appliqué par le moteur.' },
       { id: 'flee-exemption', mode: 'engine', text: 'Quand un allié de la zone fuit, les adversaires Engagés ne gagnent pas l’Élan et n’ont pas l’attaque de Mêlée gratuite (p.163) : appliqué par la Fuite du moteur.' },
       { id: 'broken-from-fleeing', mode: 'engine', text: 'Le fuyard gagne quand même 1 État Brisé par ennemi Engagé (p.163), posé par la Fuite du moteur ; seul le Désengagement n’est pas concerné.' },
       { id: 'area', mode: 'engine', text: 'Zone centrée sur le prêtre, de rayon égal au Bonus de Volonté en mètres (convention V5 des zones).' },

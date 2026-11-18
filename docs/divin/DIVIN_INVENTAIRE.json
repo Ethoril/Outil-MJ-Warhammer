@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "sha256:4a2825fa6afaceabf42e67bc3ab5134433d9ac40845be77cef11059208788c6f",
+  "sourceFingerprint": "sha256:8d94f59f212e63342781051859394e59657e7ede2ee1739f469965a2208c484e",
   "counts": {
     "blessings": 60,
     "miracles": 15,
@@ -9864,7 +9864,7 @@
         {
           "id": "orderly-disengage",
           "mode": "engine",
-          "text": "Les alliés désignés portent « En bon ordre » : Désengagement sans Élan ni attaque gratuite adverse (à appliquer par le MJ, le moteur ne gère pas le Désengagement).",
+          "text": "Les alliés désignés portent « En bon ordre » : leur Désengagement est dispensé du Test, sans Élan ni attaque gratuite adverse (décision du MJ), appliqué par le moteur.",
           "sourceRef": "v5-in-good-order"
         },
         {
@@ -11186,7 +11186,7 @@
         {
           "id": "beneficiary",
           "mode": "manual",
-          "text": "Le texte ne dit pas clairement qui reçoit le bonus : lu comme le prêtre seul (les personnes visées sont les témoins) ; doute à confirmer par le MJ.",
+          "text": "Le texte ne dit pas clairement qui reçoit le bonus : lu comme le prêtre seul (les personnes visées sont les témoins), lecture confirmée par le MJ.",
           "sourceRef": "v5-trickle-down"
         },
         {

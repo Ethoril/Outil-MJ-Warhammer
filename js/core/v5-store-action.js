@@ -318,7 +318,7 @@ export function applyV5StoreAction(preview, envelope, resolveAction) {
   }
   // Relance gratuite : exemption vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const free = preview.actionCostPlan?.request?.exemptions?.some(row => row.sourceId === FREE_REROLL_SOURCE);
-  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId), rerollScope(preview.input, current.round)).length) return { status: 'manual', reason: 'Bénédiction de Chance : plus de relance gratuite disponible.', state: current };
+  if (free && !freeRerollLayers(current.participants.find(p => p.id === preview.actionCostPlan.request.actorId), rerollScope(preview.input, current.round)).length) return { status: 'manual', reason: `${preview.fortuneReroll?.reminder?.startsWith('Prière') ? 'Vindicte vengeresse' : 'Bénédiction de Chance'} : plus de relance gratuite disponible.`, state: current };
   // Fortune généreuse : inversion vérifiée contre l'état courant, couche consommée dans la même commande que la résolution.
   const reversed = preview.input?.v5?.reverseDiceApplied === true;
   const reverseActorId = preview.input?.actorId || preview.input?.actor?.id;

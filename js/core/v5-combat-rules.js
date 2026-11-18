@@ -57,7 +57,7 @@ export function momentumAfterChange(before, after) {
   return loseMomentumUnderFear(Number(after.hp) < Number(before.hp) || acquired ? withMomentum(after, false) : after);
 }
 export function inferV5Kind(action = {}, attackContext = {}) {
-  return action.extensions?.v5?.kind || (['attack', 'attaque'].includes(action.type)
+  return action.extensions?.v5?.kind || (['attack', 'attaque'].includes(String(action.type || '').trim().toLocaleLowerCase())
     ? (typeof attackContext?.ranged === 'boolean' ? attackContext.ranged ? 'ranged' : 'melee' : action.attr === 'CT' ? 'ranged' : 'melee') : 'test');
 }
 /** A held, available shield explicitly chosen to oppose this attack. `confirmed` is legacy Protectrice; `v5Bonus` is V5 Bouclier. */

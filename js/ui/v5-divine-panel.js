@@ -2,7 +2,7 @@
 import { testQuestionLabel, answeredSequelaFields, resolveV5TestModifiers } from '../core/v5-test-modifiers.js';
 import { renderObstinateChoice, renderSourceDetail } from './test-questions.js';
 import {spellObjectChoices} from '../core/equipment.js';
-import {CAMP_LABELS} from '../core/encounters.js';
+import {CAMP_LABELS,participantCamp} from '../core/encounters.js';
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
 import {divineSinPolicy,actorDivineCults} from '../core/v5-divine-engine.js';
 import {defaultFirstMorningAt} from '../core/v5-game-time.js';
@@ -48,7 +48,7 @@ export function renderImposedTestControls(container,{layer,participants=[],Store
   +results.map(([id,row,outcome])=>` · ${nameOf(id)} : ${row.waived?'dispensé':row.success?'réussi':'raté'}${(outcome||[]).length?' — '+outcome.join(', '):''}`).join('')));
  if(spec.when==='manual'){
   const bearer=participants.find(row=>row.id===layer.targetId);
-  const campOf=row=>row?.camp||(row?.kind==='PJ'?'pj':'');
+  const campOf=row=>{const camp=participantCamp(row);return camp==='allie'?'pj':camp;};
   const done=new Set(Object.keys(spec.resolved||{}));
   const eligible=participants.filter(row=>row.id!==bearer?.id&&!(spec.once&&done.has(row.id))&&(spec.subjects==='allies'?campOf(row)===campOf(bearer):spec.subjects==='enemies'?campOf(row)!==campOf(bearer):false));
   const who=node('select');who.setAttribute('aria-label',`${spec.label} : sujet du Test`);who.append(new Option('Choisir le sujet…',''),...eligible.map(row=>new Option(row.name||row.id,row.id)));
