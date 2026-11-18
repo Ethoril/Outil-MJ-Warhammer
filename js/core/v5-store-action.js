@@ -209,16 +209,19 @@ export function buildV5StoreActionInput(envelope, raw = {}) {
       // Jet d'origine absent ou invalide : impossible de savoir s'il est raté, la relance reste payante (pas d'erreur levée).
       const initialRoll = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);
       const rerollLayers = freeRerollLayers(actor, rerollScope(supplied, state.round));
-      // Vindicte vengeresse : chaque Test de Mêlée se relance gratuitement, raté ou non (le nouveau résultat tient).
-      if (rerollLayers.some(layer => layer.freeReroll.everyTest)) { freeReroll = 'every-test'; exemptions.push({ costId: 'system:fortune-reroll:1', sourceId: FREE_REROLL_SOURCE }); }
-      else if (rerollLayers.length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
+      // Vindicte vengeresse : chaque Test de Mêlée raté se relance gratuitement, sans limite (décision du MJ, 18/11/2026 : sur un échec
+      // seulement, comme la Bénédiction de Chance) ; `everyTest` marque seulement que la couche ne s'épuise pas.
+      if (rerollLayers.length && Number.isInteger(initialRoll) && initialRoll >= 1 && initialRoll <= 100) {
         const { fortuneReroll: _context, fortuneRerollRoll: _contextRoll, fortuneRerollRolls:_contextRolls, ...plainContext } = context;
         const { fortuneReroll: _supplied, fortuneRerollRoll: _suppliedRoll, fortuneRerollRolls:_suppliedRolls, ...plainSupplied } = supplied;
         const original = previewResolution({ ...plainSupplied, resolutionId, actorId, targetId,
           actor: supplied.actor?.id === actorId ? supplied.actor : actor, target: state.participants.find(p => p.id === targetId) || supplied.target || null,
           round: state.round ?? supplied.round, baseRevision: supplied.baseRevision ?? state.revision, v5State: state, v5Clock: clock,
           v5: { ...v5, context: plainContext, fortuneReroll: undefined, fortuneRerollRoll: undefined, fortuneRerollRolls:undefined } });
-        if (original.success === false || original.opposition?.winner === 'defender') { freeReroll = true; exemptions.push({ costId: 'system:fortune-reroll:1', sourceId: FREE_REROLL_SOURCE }); }
+        if (original.success === false || original.opposition?.winner === 'defender') {
+          freeReroll = rerollLayers.some(layer => layer.freeReroll.everyTest) ? 'every-test' : true;
+          exemptions.push({ costId: 'system:fortune-reroll:1', sourceId: FREE_REROLL_SOURCE });
+        }
       }
     }
     initialRollBeforeFortune = Number(supplied.roll ?? supplied.dieRoll ?? supplied.enteredRoll);

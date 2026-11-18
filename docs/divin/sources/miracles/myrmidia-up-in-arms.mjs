@@ -176,7 +176,7 @@ export const miracles = [
     clauses: [
       { id: 'charge-and-attack', mode: 'manual', text: 'Le prêtre doit charger puis attaquer l’ennemi impénitent le plus proche (Charge V5 p.163). On ne charge que si l’on n’est pas déjà Engagé : s’il l’est, il doit d’abord se Désengager (perdre l’Élan pour se déplacer sans pénalité, ou Test d’Esquive/Acrobaties opposé), puis il peut charger, y compris une autre cible.' },
       { id: 'unrepentant', mode: 'manual', text: 'Le MJ désigne l’ennemi impénitent à chaque scène ; la contrainte s’arrête si aucun n’est en vue ou si le prêtre est Étourdi ou Inconscient.' },
-      { id: 'melee-reroll', mode: 'engine', text: 'Chaque Test de Mêlée du prêtre peut être relancé une fois, sans Point de Chance ; le nouveau résultat tient (p.133).' },
+      { id: 'melee-reroll', mode: 'engine', text: 'Chaque Test de Mêlée raté du prêtre peut être relancé une fois, sans Point de Chance ; le nouveau résultat tient (p.133). Une attaque réussie se relance au prix normal (décision du MJ).' },
       { id: 'no-frenzy-bonus', mode: 'manual', text: 'Aucun bonus de Frénésie : ni immunité à la Psychologie, ni attaque gratuite, ni +1 Dégât.' },
       { id: 'duration', mode: 'engine', text: 'Durée : 6 Rounds (+6 Rounds par tranche de +2 DR).' }
     ],

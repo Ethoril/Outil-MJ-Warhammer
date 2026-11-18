@@ -172,6 +172,15 @@ describe('L11 — Vindicte vengeresse : relance des Tests de Mêlée', () => {
     assert.equal(store.getFortune('priest').balance, 3);
   });
 
+  test('attaque de mêlée réussie : la relance reste payante (décision du MJ, 18/11 : relance gratuite sur un échec seulement)', async () => {
+    const { store } = await open('Myrmidia');
+    await store.setFortune('priest', 3);
+    await cast(store, WRATH, { targetIds: ['priest'], facts: { targets: { priest: { withinRange: true } } } });
+    const hit = attack(store, swordAction, { roll: 5, reroll: 24 });
+    assert.equal(hit.fortuneReroll?.free, undefined, 'attaque réussie : pas de relance gratuite');
+    assert.ok(paidFortune(hit));
+  });
+
   test('sans la prière : la relance d’une attaque de mêlée reste payante (comportement inchangé)', async () => {
     const { store } = await open('Myrmidia');
     await store.setFortune('priest', 3);

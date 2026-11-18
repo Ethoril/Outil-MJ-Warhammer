@@ -13841,7 +13841,7 @@
         {
           "id": "melee-reroll",
           "mode": "engine",
-          "text": "Chaque Test de Mêlée du prêtre peut être relancé une fois, sans Point de Chance ; le nouveau résultat tient (p.133).",
+          "text": "Chaque Test de Mêlée raté du prêtre peut être relancé une fois, sans Point de Chance ; le nouveau résultat tient (p.133). Une attaque réussie se relance au prix normal (décision du MJ).",
           "sourceRef": "v5-vengeful-wrath"
         },
         {
@@ -28753,5 +28753,5 @@
       "needsInput": []
     }
   ],
-  "sourceFingerprint": "sha256:56d6683083ab2f95ff79427330fd39846e3587eecf015e57d3d04fb30eb3979a"
+  "sourceFingerprint": "sha256:4a2825fa6afaceabf42e67bc3ab5134433d9ac40845be77cef11059208788c6f"
 }
