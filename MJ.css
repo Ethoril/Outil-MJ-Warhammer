@@ -218,6 +218,8 @@ h4 { font-family: var(--font-ui); font-weight: 700; color: var(--accent); margin
 
 /* Menu ⋯ (popover non modal, positionné par main.js sous le bouton) */
 .app-menu { position: fixed; inset: auto; margin: 0; min-width: 270px; max-width: calc(100vw - 16px); max-height: calc(100vh - 72px); overflow-y: auto; padding: 6px; background: var(--panel); color: var(--text); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3); font-family: var(--font-ui); }
+.app-menu-group[hidden] { display: none; }
+.app-menu button[aria-current="true"] { font-weight: 700; cursor: default; }
 .app-menu-group + .app-menu-group { border-top: 1px solid var(--chip); margin-top: 4px; padding-top: 4px; }
 .app-menu-heading { padding: 6px 10px 2px; font-size: 12.5px; font-weight: 700; color: var(--muted); }
 .app-menu button { display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; padding: 7px 10px; text-align: left; background: transparent; border: 1px solid transparent; color: var(--text); font-size: 14.5px; font-weight: 500; }

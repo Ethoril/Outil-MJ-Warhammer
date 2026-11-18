@@ -1,9 +1,9 @@
 {
   "id": "./",
-  "name": "WFRP 4e - Outil MJ",
-  "short_name": "WFRP MJ",
+  "name": "Outil MJ",
+  "short_name": "Outil MJ",
   "lang": "fr",
-  "description": "Assistant de gestion de combat et de règles pour Warhammer Fantasy Roleplay 4e",
+  "description": "Assistant du MJ : gestion de combat et de règles, d'abord pour Warhammer Fantasy Roleplay 4e",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

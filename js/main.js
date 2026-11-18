@@ -24,6 +24,7 @@ import { SUPPLEMENT_ERRORS } from './core/supplement-loader.js';
 import { mountSupplementErrors } from './ui/supplement-errors-banner.js';
 import { initKeyboardShortcuts } from './ui/keyboard.js';
 import { initThemeManager } from './ui/theme.js';
+import { initSelecteurJeu } from './ui/selecteur-jeu.js';
 import { statusSummary, LOCAL_STATUS_LABELS, SYNC_STATUS_LABELS } from './ui/status-summary.js';
 import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as normalizeV5RecoveryOptions } from './ui/v5-effect-dialog.js';
 import { renderObstinateChoice } from './ui/test-questions.js';
@@ -239,6 +240,9 @@ export const Combat = createCombatEngine(Store);
 
 // Theme Manager (Lot 11.2)
 initThemeManager();
+
+// Sélecteur de jeu (chapeau multi-jeux) : le groupe « Jeu » du menu ne s'affiche que si plusieurs jeux sont publiés.
+initSelecteurJeu();
 
 // Version (Lot 10.6 : numéro dans le menu, titre complet au survol)
 if (DOM.btnVersion) {
