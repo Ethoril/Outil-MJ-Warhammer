@@ -196,3 +196,18 @@ test('ARCH-10 — repli localStorage de version future : rien n’est lu ni écr
   assert.equal(storage.values.get(KEY.RESERVE), futureReserve, 'la sauvegarde future reste intacte');
   assert.equal(storage.values.get(KEY.SCHEMA), String(CURRENT_SCHEMA_VERSION + 1));
 });
+
+test('R-25 — import d’un registre de convalescence invalide : refusé tout de suite, partie en cours intacte', async () => {
+  const persistence = memoryPersistence();
+  const store = createStore({ persistence });
+  await store.ready;
+  await store.addProfile({ id: 'garde', name: 'Garde', hp: 12 });
+  const writes = persistence.writes;
+  const exported = JSON.parse(store.getFullJSON({ includeHistory: false }));
+  exported.extensions = { ...exported.extensions, v5: { ...exported.extensions?.v5, aftermathRegister: { incidents: 'x' } } };
+  const bad = JSON.stringify(exported);
+  assert.throws(() => store.previewImport(bad), error => error.details?.reason === 'registre-convalescence-invalide' && /convalescence/.test(userMessage(error)));
+  await assert.rejects(async () => store.loadFromJSON(bad), error => error.details?.reason === 'registre-convalescence-invalide');
+  assert.equal(persistence.writes, writes, 'aucune écriture');
+  assert.equal(store.getProfile('garde').name, 'Garde');
+});

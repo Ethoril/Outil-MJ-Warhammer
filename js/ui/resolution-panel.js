@@ -239,6 +239,8 @@ export function actionKey(action, index) {
   return action?.id ? String(action.id) : `index-${index}`;
 }
 
+const DODGE_SKILL_ID = 'skill-45_73_71_75_69_76_65-base';
+
 const finiteBase = value => (value !== null && value !== '' && value !== undefined && Number.isFinite(Number(value)) ? Number(value) : null);
 
 /**
@@ -267,8 +269,12 @@ export function defenseOptions(target, actions = [], { includeEndurance = false 
   return [...caracs, ...skills, ...perceptionOption, ...jets, { value: 'Autre', label: 'Autre (valeur libre)', statLabel: 'Autre', group: 'autre', base: null }];
 }
 
-/** Défense proposée d'office : le premier jet de type défense, sinon la CC. */
-export function defaultDefenseValue(options) {
+/** Défense proposée d'office : le premier jet de type défense, sinon la CC. Contre un défenseur Bestial (`dodgeOnly`), l'Esquive si la cible l'a. */
+export function defaultDefenseValue(options, { dodgeOnly = false } = {}) {
+  if (dodgeOnly) {
+    const dodge = options.find(option => option.extensions?.fiche?.skillId === DODGE_SKILL_ID);
+    if (dodge) return dodge.value;
+  }
   return options.find(option => option.group === 'jets' && option.type === 'defense')?.value || 'CC';
 }
 

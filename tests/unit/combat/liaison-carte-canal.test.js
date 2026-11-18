@@ -148,3 +148,16 @@ test('liaison durable des PJ (§3) : PJ hors scène émis depuis le persistant, 
   assert.deepEqual(rosters().at(-1).payload.characters, [{ ref: 'pj:c9', label: 'Ulrika' }]);
   assert.ok(!t.channel.sent.some(m => m.type === 'token.remove'), 'un PJ n’est jamais retiré');
 });
+
+test('R-42 : retirer le Trait Bond réémet le pion sans bondCells (champ absent = pas de palier)', () => {
+  const horse = (traits = ['Bounce']) => gob('h', { caracs: { M: 4 }, traits, extensions: { v5: {} } });
+  const t = setup();
+  t.set([horse()]);
+  t.link.refresh();
+  assert.equal(t.channel.sent.at(-1).payload.bondCells, 16);
+  t.set([horse([])]);
+  t.link.refresh();
+  const state = t.channel.sent.at(-1);
+  assert.equal(state.type, 'token.state');
+  assert.ok(!('bondCells' in state.payload), 'pas de bondCells après retrait du Trait');
+});

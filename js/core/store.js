@@ -145,7 +145,7 @@ import {
 
 import { Profile, Participant, DiceLine, uid, cloneValue, normalizeCaracs, canonicalizeProfileFields, normalizeFicheFields, FICHE_DATA_FIELDS } from './models.js';
 import { sanitizeArray, sanitizeProfile, sanitizeParticipant, sanitizeMagicEnvelope } from './sanitize.js';
-import { migrateSnapshot, migrateLegacyStorage, applySchemaMigrations, legacySchemaVersion, LEGACY_SCHEMA_KEY, CURRENT_SCHEMA_VERSION } from './migrations.js';
+import { MigrationError, migrateSnapshot, migrateLegacyStorage, applySchemaMigrations, legacySchemaVersion, LEGACY_SCHEMA_KEY, CURRENT_SCHEMA_VERSION } from './migrations.js';
 import { createStateCommand, createCompactStateCommand, applyStateChanges } from './commands.js';
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
 import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative } from './turn-order.js';
@@ -5773,6 +5773,11 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     previewImport(jsonStr) {
       const raw = typeof jsonStr === 'string' ? JSON.parse(jsonStr) : jsonStr;
       const migrated = migrateSnapshot(raw, { appVersion, contextId });
+      // Un registre de convalescence invalide serait refusé plus tard, au premier geste de suivi : l'import le refuse tout de suite.
+      if (migrated.data.extensions?.v5?.aftermathRegister != null) {
+        try { validateAftermathState(migrated.data.extensions.v5.aftermathRegister); }
+        catch { throw Object.assign(new MigrationError('registre de convalescence invalide', { reason: 'registre-convalescence-invalide' }), { userFacing: true, message: 'Ce fichier contient un registre de convalescence invalide : la sauvegarde n’a pas été chargée.' }); }
+      }
       const incomingProfileIds = new Set(migrated.data.reserve.map(profile => profile.id));
       const incomingParticipantIds = new Set(migrated.data.combat.participants.map(participant => participant.id));
       return {

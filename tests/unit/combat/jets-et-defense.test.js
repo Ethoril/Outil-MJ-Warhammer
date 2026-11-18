@@ -2172,3 +2172,11 @@ test('v3-B ombrageux — +1 Brisé au lieu de 3 (p.361)', () => {
   assert.equal(brisé, 1);
 });
 });
+
+test('défense : contre un défenseur Bestial, l’Esquive est proposée d’office si la cible l’a', () => {
+  const bestial = { name: 'Loup', caracs: { CC: 40, Ag: 35 }, skills: [{ id: 'skill-45_73_71_75_69_76_65-base', name: 'Esquive', status: 'resolved', total: 38 }] };
+  const options = defenseOptions(bestial);
+  assert.equal(defaultDefenseValue(options), 'CC');
+  assert.equal(defaultDefenseValue(options, { dodgeOnly: true }), 'skill:skill-45_73_71_75_69_76_65-base');
+  assert.equal(defaultDefenseValue(defenseOptions({ name: 'Loup', caracs: { CC: 40 } }), { dodgeOnly: true }), 'CC');
+});

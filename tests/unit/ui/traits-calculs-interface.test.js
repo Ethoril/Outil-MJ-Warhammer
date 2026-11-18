@@ -4,7 +4,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { openV5EffectInputDialog } from '../../../js/ui/v5-effect-dialog.js';
-import { renderTraitPlanRequests } from '../../../js/ui/resolution-panel/result.js';
+import { renderResult, renderTraitPlanRequests } from '../../../js/ui/resolution-panel/result.js';
 import { buildEncounterBlock, bindEncounterBlock, buildTraitStatusBlock, buildBodyIntactControl, readBodyIntact } from '../../../js/ui/creature-states-block.js';
 import { resolveTraitAnswer, traitRequest } from '../../../js/core/trait-effects.js';
 
@@ -213,4 +213,11 @@ test('constat 6 : le panneau refuse Réussite avec des DR négatifs et Échec av
   success.value = 'false'; dr.value = '-1'; await dr.fire('change');
   assert.deepEqual(selected.at(-1).v5Context.traitInputs.hero.infectedEndurance, { success: false, sl: -1 });
   assert.doesNotMatch(panel.textContent, /incompatibles/, 'le message disparaît une fois la saisie cohérente');
+}));
+
+test('le panneau de résultat dit quand la relance de Chance est gratuite (Vindicte vengeresse, R-59)', () => withDom(async () => {
+  const handlers = { select() {}, calculate() {} };
+  const render = fortuneReroll => renderResult({ input: {}, fortuneReroll }, null, {}, handlers);
+  assert.match(render({ active: true, free: true, source: 'Vindicte vengeresse' }).textContent, /Relance gratuite : Vindicte vengeresse/);
+  assert.doesNotMatch(render({ active: true }).textContent, /Relance gratuite/);
 }));

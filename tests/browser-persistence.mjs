@@ -69,18 +69,14 @@ async function fillProfile(page, name) {
   await expect(page.locator('#local-status')).toHaveAttribute('data-status', 'saved');
 }
 
-async function loadFixture(page, file, { accept = true } = {}) {
-  const dialog = accept
-    ? page.waitForEvent('dialog').then(browserDialog => browserDialog.accept())
-    : null;
+async function loadFixture(page, file) {
   await page.locator('#tab-combat').click();
   // The current workspace keeps the legacy combat panel hidden. Use the
   // session command of the ⋯ menu, which delegates to the same file input and import
-  // confirmation path.
+  // path (plus de boîte native : l'aperçu est un toast, le filet est « Annuler »).
   await openAppMenu(page);
   await page.locator('#workspace-load').click();
   await page.locator('#file-input').setInputFiles(file);
-  if (dialog) await dialog;
 }
 
 async function readDownload(download) {
@@ -118,7 +114,7 @@ async function main() {
         await waitForApp(page);
         await fillProfile(page, 'Profil avant import invalide');
         const before = await readPersistence(page);
-        await loadFixture(page, { name: 'e04-invalid.json', mimeType: 'application/json', buffer: Buffer.from(invalidFixture) }, { accept: false });
+        await loadFixture(page, { name: 'e04-invalid.json', mimeType: 'application/json', buffer: Buffer.from(invalidFixture) });
         await expect(page.locator('#toast-container .toast')).toContainText('Sauvegarde non chargée : ce fichier n’est pas une sauvegarde de l’outil MJ.');
         const after = await readPersistence(page);
         assert.deepEqual(after.contexts, before.contexts);

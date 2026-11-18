@@ -275,7 +275,7 @@ export function annotateV5StoreActionPreview(preview, input) {
     }
     preview = { ...preview, fortuneReroll: { active: true, used: Boolean(input.fortuneRerollRoll !== null), initialRoll: input.initialRollBeforeFortune, rerollRoll: input.fortuneRerollRoll,
       rolls:input.fortuneRerollRolls||[],
-      ...(input.freeReroll ? { free: true, reminder: input.freeReroll === 'every-test' ? 'Prière : relance gratuite du Test de Mêlée' : 'Bénédiction de Chance : relance gratuite' } : {}) } };
+      ...(input.freeReroll ? { free: true, source: input.freeReroll === 'every-test' ? 'Vindicte vengeresse' : 'Bénédiction de Chance', reminder: input.freeReroll === 'every-test' ? 'Prière : relance gratuite du Test de Mêlée' : 'Bénédiction de Chance : relance gratuite' } : {}) } };
   }
   if(input.secondaryTalentRequests?.length){
     const plans=input.secondaryTalentRequests.map(request=>previewV5ActionCosts({...request,state:input.v5State}));

@@ -109,6 +109,7 @@ export function renderResult(preview, target, draft, handlers, participants=[], 
   if(queued.length)result.appendChild(node('p','workspace-field-error','Effets de maladresse encore en attente : '+queued.map(row=>row.kind).join(', ')+'. Vérifiez leur durée et résolution selon la table.'));
   if (preview.choiceRequired) result.appendChild(node('p', 'workspace-muted', 'Aperçu provisoire : les joueurs doivent confirmer leurs choix.'));
   result.appendChild(renderV5Decisions(preview, draft, handlers));
+  if (preview.fortuneReroll?.free) result.appendChild(node('p', 'workspace-result-line', `Relance gratuite : ${preview.fortuneReroll.source || 'sans Point de Chance'}`));
   for(const choice of Object.entries(preview.talentSLChoices || {}).flatMap(([role,choices])=>choices.map(row=>({...row,role})))){
     const role=choice.role || 'actor', draftKey=role==='defender'?'defenseTalentChoices':'talentChoices';
     const label=node('label','workspace-type',choice.label+' · '+(role==='defender'?'défense':'Test')+' · '+(choice.optionId==='keep'?'jet conservé':'jet inversé'));

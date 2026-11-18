@@ -1837,10 +1837,10 @@ on(DOM.combat.fileInput, 'change', (e) => {
       const preview = Store.previewImport(ev.target.result);
       const { profiles, participants, rejected, repaired, replacedProfiles, replacedParticipants } = preview.counts;
       const incomingEncounters = Array.isArray(preview.data?.encounters) ? preview.data.encounters.length : 0;
-      const summary = `Importer ${profiles} profil(s), ${participants} participant(s) et ${incomingEncounters} rencontre(s) ?\n` +
-        `La partie actuelle (horloge de campagne, suivis et rencontres) sera entièrement remplacée (${replacedProfiles + replacedParticipants} élément(s) remplacé(s), ${repaired} réparé(s), ${rejected} rejeté(s)).`;
-      showToast(summary.replace('\n', ' — '), 'info');
-      if (!confirm(summary)) return;
+      // Pas de boîte native (décision du MJ du 06/11, voir plus bas) : l'aperçu s'affiche en toast, le filet est « Annuler » après le chargement.
+      const summary = `Import de ${profiles} profil(s), ${participants} participant(s) et ${incomingEncounters} rencontre(s) : ` +
+        `la partie actuelle (horloge de campagne, suivis et rencontres) est entièrement remplacée (${replacedProfiles + replacedParticipants} élément(s) remplacé(s), ${repaired} réparé(s), ${rejected} rejeté(s)).`;
+      showToast(summary, 'info');
       await awaitStore(Store.loadFromJSON(ev.target.result), 'Chargement');
       showToast('📂 Sauvegarde chargée avec succès', 'success', { label: 'Annuler', onClick: () => Store.undo() });
     } catch (err) {

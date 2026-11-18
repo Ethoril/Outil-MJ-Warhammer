@@ -5,6 +5,7 @@ import {createV5PursuitPanel} from './v5-pursuit-panel.js';
 import {openV5PursuitDialog,renderScenePursuitEntry} from './v5-pursuit-dialog.js';
 import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
+import { psychologyTraits } from '../core/creature-psychology.js';
 import { familiarOfOf, FAMILIAR_HEALING_SOURCES } from '../core/familiars.js';
 import { canRide, linkedMountOf, mountCandidates, mountLabel, mountOfOf } from '../core/mounts.js';
 /**
@@ -366,7 +367,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function defenseChoice(target, type) {
     const options = defenseOptions(target, actorActions(target), { includeEndurance: type === 'opposition' });
     const wanted = state.resolution.defenseStat;
-    const option = options.find(item => item.value === wanted) || options.find(item => item.value === defaultDefenseValue(options));
+    const option = options.find(item => item.value === wanted) || options.find(item => item.value === defaultDefenseValue(options, { dodgeOnly: psychologyTraits(target).some(trait => trait.key === 'bestial') }));
     return { options, value: option.value, option };
   }
 
