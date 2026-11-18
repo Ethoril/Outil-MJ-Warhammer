@@ -10,7 +10,25 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
-## 3.52.0 — Calculs des Traits de créature (préparée le 17/11/2026, non publiée)
+## 3.53.0 — Miracles narratifs, mots-clés des fiches (publiée le 18/11/2026)
+
+Cadrage et décisions du MJ des 16, 17 et 18/11/2026 : `docs/specs/miracles-narratifs/spec.md` (Q1 à Q17, §8, « Choix validés en fin de chantier »), inventaire des 88 clauses des miracles assistés (`inventaire-assistes.md`), tri combat / hors combat (`tri-combat.md`), plan et tâches (lots L0 à L11) dans le même dossier.
+
+**Règle du MJ : l’outil sert au combat.** Un miracle qui ne sert pas en combat reste un rappel, sans calcul (Talk Your Way Out, The Gamemaster, Fair Winds, Lord of the Hunt, Crisis of Confidence, Grâce de Ranald, A Deal’s a Deal, Waterlungs, Free Your Mind…).
+
+- **Miracles calculés.**
+  - **Bonus et immunités** : Muscles givrés (Immunité au froid), Cœur du loup (Terreur ignorée), Dent et griffe (mains nues sans Inoffensive), Fureur du soleil vertueux (Dégâts +2, réduits par BE et PA), Rage de Rhya (Force +2 DR).
+  - **Test imposé à la cible** (bouton dans le panneau divin, jet saisi par le MJ) : Embobiner, Baume pour un esprit blessé (suspend Peur et Frénésie), Engourdissement (« Actions défensives seulement »), Effrayer l’Ennemi, Mer déchaînée, Vent sauvage (−10 lu −1 DR), Fureur d’Ulric, Épée de justice (Inconscient verrouillé BSoc Rounds).
+  - **Zones** (présence désignée par le MJ) : Seuil du Portail, Paix de Taal, Froid de la gelée blanche (perte d’Élan au début du Round, sauf le prêtre), Apaisez les vents (Incantation et Focalisation échouent, sorts suspendus, rétablis à la sortie ou à la fin de la prière).
+  - **Compteurs** : Revirement de fortune, Forcer la main du hasard, Haine de Vaincre les impies (+2 après avoir tué un ennemi visé ; le prêtre compte parmi les alliés).
+  - **Temps suspendu** : Lumière de stase (États, pertes et expirations figés pour la cible).
+  - **Transferts de Dégâts** : Martyr (le prêtre reçoit les Dégâts, réduits de son BE et de son BSoc, sans PA), Retour à l’envoyeur (Blessures rendues d’office à la prochaine attaque du plus faible).
+  - **Moteurs de combat** : Vindicte vengeresse (relance gratuite d’un Test de Mêlée raté ou d’une opposition perdue), Épée de justice (armure et bouclier ignorés), Morsure de l’hiver (retire Hémorragique au coup), Jugement du Roi de la neige (le prêtre qui subit l’effet est aussi Sonné). En bon ordre dispense du Test de Désengagement.
+- **Rappel enrichi.** 30 prières utiles en combat mais sans calcul affichent un libellé court, la portée, les cibles et l’échéance ; une durée que le livre n’atteste pas est signalée (« Attention : durée non attestée par le livre »).
+- **21 clauses requalifiées** : ce que l’outil appliquait déjà (pureté de Solkan, zones, cibles, durées) ne s’affiche plus en rappel.
+- **Mots-clés des fiches.** Les types de mots-clés sont une donnée unique de l’outil (`js/data/fiche-keyword-types.js`), recopiée dans les fiches par `node tools/build-fiche-keywords.mjs` (`--check` pour contrôler). L’aperçu de synchronisation signale un type ou une cible de mot-clé inconnus (« fiche plus récente ? »).
+- **Vérification.** Contre-vérification indépendante : aucun bloquant ; corrigés : un PNJ de camp « allié » proposé comme ennemi, textes de clauses, messages. Suite unitaire complète verte (7175 tests).
+## 3.52.0 — Calculs des Traits de créature (publiée le 17/11/2026)
 
 Cadrage et décisions du MJ du 17/11/2026 : `docs/specs/traits-calculs/spec.md` (D1 à D20), tri dans `tri.md`, plan et tâches (huit lots) dans le même dossier. Branche locale `traits-calculs`.
 
