@@ -184,6 +184,18 @@ export function tokenStatesOf(participants = [], options = {}) {
   }));
 }
 
+/**
+ * Projection Warhammer participant → pion pour le protocole commun (`map-link-protocol.js`, multi-jeux L1) : états
+ * `token.state` (taille, sens, Mouvement en cases de 2 m, montures, `extensions.v5`) et `ref` stable. Les options sont
+ * celles de `tokenStatesOf`. Engagements et forme sont ajoutés par l'adaptateur `map-link.js`.
+ */
+export function warhammerMapProjection({ maxHpOf = () => null, imageUrlOf = () => null, formImageUrlOf = () => null, colorOf = () => null } = {}) {
+  return {
+    tokenStates: participants => tokenStatesOf(participants, { maxHpOf, imageUrlOf, formImageUrlOf, colorOf }),
+    refOf: mapRefOf
+  };
+}
+
 /** `ref` dont l'état a changé, apparu ou disparu entre deux instantanés. */
 export function diffTokenStates(prev = {}, next = {}) {
   const refs = new Set([...Object.keys(prev), ...Object.keys(next)]);

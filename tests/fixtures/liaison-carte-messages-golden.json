@@ -1,0 +1,1113 @@
+{
+  "messages": [
+    {
+      "v": 1,
+      "type": "mj.hello",
+      "seq": 1,
+      "from": "outil-mj",
+      "payload": {}
+    },
+    {
+      "v": 1,
+      "type": "mj.snapshot",
+      "seq": 2,
+      "from": "outil-mj",
+      "payload": {
+        "tokens": []
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.roster",
+      "seq": 3,
+      "from": "outil-mj",
+      "payload": {
+        "characters": []
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.engagements",
+      "seq": 4,
+      "from": "outil-mj",
+      "payload": {
+        "pairs": []
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.add",
+      "seq": 5,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c1",
+        "label": "Renaut",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": true,
+        "imageUrl": null,
+        "formImageUrl": null,
+        "color": "#aa3322",
+        "sizeCells": 1,
+        "speedCells": 4,
+        "runCells": 8,
+        "visionDim": 1,
+        "hp": {
+          "current": 12,
+          "max": 12
+        },
+        "health": "unharmed",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.roster",
+      "seq": 6,
+      "from": "outil-mj",
+      "payload": {
+        "characters": [
+          {
+            "ref": "pj:c1",
+            "label": "Renaut"
+          }
+        ]
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.add",
+      "seq": 7,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:o",
+        "label": "Orc",
+        "camp": "ennemi",
+        "kind": "npc",
+        "visionSource": false,
+        "imageUrl": "maps/tokens/orc.webp",
+        "formImageUrl": null,
+        "color": null,
+        "sizeCells": 1,
+        "speedCells": 2,
+        "runCells": 4,
+        "visionDim": 1,
+        "hp": {
+          "current": 10,
+          "max": 10
+        },
+        "health": "unharmed",
+        "markers": [
+          "stunned"
+        ],
+        "markerLevels": {
+          "stunned": 2
+        },
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.add",
+      "seq": 8,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:h",
+        "label": "Destrier",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": false,
+        "imageUrl": "maps/tokens/destrier.webp",
+        "formImageUrl": null,
+        "color": "#aa3322",
+        "sizeCells": 2,
+        "speedCells": 8,
+        "runCells": 16,
+        "visionDim": 1,
+        "hp": {
+          "current": 20,
+          "max": 22
+        },
+        "health": "wounded",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 9,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:o",
+        "label": "Orc",
+        "camp": "ennemi",
+        "kind": "npc",
+        "visionSource": false,
+        "imageUrl": "maps/tokens/orc.webp",
+        "formImageUrl": null,
+        "color": null,
+        "sizeCells": 1,
+        "speedCells": 2,
+        "runCells": 4,
+        "visionDim": 1,
+        "hp": {
+          "current": 6,
+          "max": 10
+        },
+        "health": "wounded",
+        "markers": [
+          "stunned"
+        ],
+        "markerLevels": {
+          "stunned": 2
+        },
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "fx.wound",
+      "seq": 10,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:o",
+        "hpLost": 4,
+        "maxHp": 10,
+        "target": "self"
+      }
+    },
+    {
+      "v": 1,
+      "type": "mount.request",
+      "seq": 11,
+      "from": "outil-mj",
+      "payload": {
+        "riderRef": "pj:c1",
+        "mountRef": "p:h"
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 12,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c1",
+        "label": "Renaut",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": true,
+        "imageUrl": null,
+        "formImageUrl": null,
+        "color": "#aa3322",
+        "sizeCells": 2,
+        "speedCells": 8,
+        "runCells": 16,
+        "visionDim": 1,
+        "hp": {
+          "current": 12,
+          "max": 12
+        },
+        "health": "unharmed",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": true,
+        "rider": {
+          "ref": "p:h",
+          "label": "Destrier",
+          "imageUrl": "maps/tokens/destrier.webp",
+          "hp": {
+            "current": 20,
+            "max": 22
+          },
+          "health": "wounded",
+          "markers": [],
+          "markerLevels": {}
+        },
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "mount.split",
+      "seq": 13,
+      "from": "outil-mj",
+      "payload": {
+        "riderRef": "pj:c1",
+        "mountRef": "p:h"
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 14,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c1",
+        "label": "Renaut",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": true,
+        "imageUrl": null,
+        "formImageUrl": null,
+        "color": "#aa3322",
+        "sizeCells": 1,
+        "speedCells": 4,
+        "runCells": 8,
+        "visionDim": 1,
+        "hp": {
+          "current": 12,
+          "max": 12
+        },
+        "health": "unharmed",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "mount.request",
+      "seq": 15,
+      "from": "outil-mj",
+      "payload": {
+        "riderRef": "pj:c1",
+        "mountRef": "p:h"
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 16,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c1",
+        "label": "Renaut",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": true,
+        "imageUrl": null,
+        "formImageUrl": "maps/tokens/loup.webp",
+        "color": "#aa3322",
+        "sizeCells": 1,
+        "speedCells": 9,
+        "runCells": 18,
+        "visionDim": 10,
+        "hp": {
+          "current": 13,
+          "max": 13
+        },
+        "health": "unharmed",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 17,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c1",
+        "label": "Renaut",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": true,
+        "imageUrl": null,
+        "formImageUrl": "maps/tokens/loup.webp",
+        "color": "#aa3322",
+        "sizeCells": 1,
+        "speedCells": 9,
+        "runCells": 18,
+        "visionDim": 10,
+        "hp": {
+          "current": 10,
+          "max": 13
+        },
+        "health": "wounded",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "fx.wound",
+      "seq": 18,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c1",
+        "hpLost": 3,
+        "maxHp": 13,
+        "target": "self"
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 19,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c1",
+        "label": "Renaut",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": true,
+        "imageUrl": null,
+        "formImageUrl": null,
+        "color": "#aa3322",
+        "sizeCells": 1,
+        "speedCells": 4,
+        "runCells": 8,
+        "visionDim": 1,
+        "hp": {
+          "current": 9,
+          "max": 12
+        },
+        "health": "wounded",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.add",
+      "seq": 20,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:g",
+        "label": "Gnoblar sauteur",
+        "camp": "ennemi",
+        "kind": "npc",
+        "visionSource": false,
+        "imageUrl": null,
+        "formImageUrl": null,
+        "color": null,
+        "sizeCells": 1,
+        "speedCells": 1,
+        "runCells": 1,
+        "bondCells": 2,
+        "visionDim": 1,
+        "hp": {
+          "current": 6,
+          "max": 6
+        },
+        "health": "unharmed",
+        "markers": [
+          "prone"
+        ],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 21,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:g",
+        "label": "Gnoblar sauteur",
+        "camp": "ennemi",
+        "kind": "npc",
+        "visionSource": false,
+        "imageUrl": null,
+        "formImageUrl": null,
+        "color": null,
+        "sizeCells": 1,
+        "speedCells": 3,
+        "runCells": 6,
+        "bondCells": 12,
+        "visionDim": 1,
+        "hp": {
+          "current": 6,
+          "max": 6
+        },
+        "health": "unharmed",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.engagements",
+      "seq": 22,
+      "from": "outil-mj",
+      "payload": {
+        "pairs": [
+          [
+            "p:o",
+            "pj:c1"
+          ]
+        ]
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.add",
+      "seq": 23,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c2",
+        "label": "Elsa",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": true,
+        "imageUrl": null,
+        "formImageUrl": null,
+        "color": "#2255cc",
+        "sizeCells": 1,
+        "speedCells": 4,
+        "runCells": 8,
+        "visionDim": 1,
+        "hp": {
+          "current": 8,
+          "max": 11
+        },
+        "health": "wounded",
+        "markers": [
+          "fatigued"
+        ],
+        "markerLevels": {
+          "fatigued": 2
+        },
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.roster",
+      "seq": 24,
+      "from": "outil-mj",
+      "payload": {
+        "characters": [
+          {
+            "ref": "pj:c2",
+            "label": "Elsa"
+          },
+          {
+            "ref": "pj:c1",
+            "label": "Renaut"
+          }
+        ]
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.distanceQuery",
+      "seq": 25,
+      "from": "outil-mj",
+      "payload": {
+        "fromRef": "pj:c1",
+        "toRef": "p:g",
+        "queryId": "dq-1"
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.ping",
+      "seq": 26,
+      "from": "outil-mj",
+      "payload": {}
+    },
+    {
+      "v": 1,
+      "type": "mj.ping",
+      "seq": 27,
+      "from": "outil-mj",
+      "payload": {}
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 28,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:o",
+        "label": "Orc",
+        "camp": "ennemi",
+        "kind": "npc",
+        "visionSource": false,
+        "imageUrl": "maps/tokens/orc.webp",
+        "formImageUrl": null,
+        "color": null,
+        "sizeCells": 1,
+        "speedCells": 2,
+        "runCells": 4,
+        "visionDim": 1,
+        "hp": {
+          "current": 0,
+          "max": 10
+        },
+        "health": "critical",
+        "markers": [
+          "stunned"
+        ],
+        "markerLevels": {
+          "stunned": 2
+        },
+        "mounted": false,
+        "rider": null,
+        "dead": true,
+        "deathCause": "fire"
+      }
+    },
+    {
+      "v": 1,
+      "type": "fx.wound",
+      "seq": 29,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:o",
+        "hpLost": 6,
+        "maxHp": 10,
+        "target": "self"
+      }
+    },
+    {
+      "v": 1,
+      "type": "fx.death",
+      "seq": 30,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:o",
+        "cause": "fire"
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.engagements",
+      "seq": 31,
+      "from": "outil-mj",
+      "payload": {
+        "pairs": []
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 32,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "pj:c1",
+        "label": "Renaut",
+        "camp": "pj",
+        "kind": "pc",
+        "visionSource": true,
+        "imageUrl": null,
+        "formImageUrl": null,
+        "color": "#aa3322",
+        "sizeCells": 1,
+        "speedCells": 4,
+        "runCells": 8,
+        "visionDim": 1,
+        "hp": {
+          "current": 12,
+          "max": 12
+        },
+        "health": "unharmed",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.remove",
+      "seq": 33,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:o"
+      }
+    },
+    {
+      "v": 1,
+      "type": "token.state",
+      "seq": 34,
+      "from": "outil-mj",
+      "payload": {
+        "ref": "p:h",
+        "label": "Destrier",
+        "camp": "pj",
+        "kind": "npc",
+        "visionSource": false,
+        "imageUrl": "maps/tokens/destrier.webp",
+        "formImageUrl": null,
+        "color": null,
+        "sizeCells": 2,
+        "speedCells": 8,
+        "runCells": 16,
+        "visionDim": 1,
+        "hp": {
+          "current": 20,
+          "max": 22
+        },
+        "health": "wounded",
+        "markers": [],
+        "markerLevels": {},
+        "mounted": false,
+        "rider": null,
+        "dead": false,
+        "deathCause": null
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.snapshot",
+      "seq": 35,
+      "from": "outil-mj",
+      "payload": {
+        "tokens": [
+          {
+            "ref": "p:h",
+            "label": "Destrier",
+            "camp": "pj",
+            "kind": "npc",
+            "visionSource": false,
+            "imageUrl": "maps/tokens/destrier.webp",
+            "formImageUrl": null,
+            "color": null,
+            "sizeCells": 2,
+            "speedCells": 8,
+            "runCells": 16,
+            "visionDim": 1,
+            "hp": {
+              "current": 20,
+              "max": 22
+            },
+            "health": "wounded",
+            "markers": [],
+            "markerLevels": {},
+            "mounted": false,
+            "rider": null,
+            "dead": false,
+            "deathCause": null
+          },
+          {
+            "ref": "p:g",
+            "label": "Gnoblar sauteur",
+            "camp": "ennemi",
+            "kind": "npc",
+            "visionSource": false,
+            "imageUrl": null,
+            "formImageUrl": null,
+            "color": null,
+            "sizeCells": 1,
+            "speedCells": 3,
+            "runCells": 6,
+            "bondCells": 12,
+            "visionDim": 1,
+            "hp": {
+              "current": 6,
+              "max": 6
+            },
+            "health": "unharmed",
+            "markers": [],
+            "markerLevels": {},
+            "mounted": false,
+            "rider": null,
+            "dead": false,
+            "deathCause": null
+          },
+          {
+            "ref": "pj:c1",
+            "label": "Renaut",
+            "camp": "pj",
+            "kind": "pc",
+            "visionSource": true,
+            "imageUrl": null,
+            "formImageUrl": null,
+            "color": "#aa3322",
+            "sizeCells": 1,
+            "speedCells": 4,
+            "runCells": 8,
+            "visionDim": 1,
+            "hp": {
+              "current": 12,
+              "max": 12
+            },
+            "health": "unharmed",
+            "markers": [],
+            "markerLevels": {},
+            "mounted": false,
+            "rider": null,
+            "dead": false,
+            "deathCause": null
+          },
+          {
+            "ref": "pj:c2",
+            "label": "Elsa",
+            "camp": "pj",
+            "kind": "pc",
+            "visionSource": true,
+            "imageUrl": null,
+            "formImageUrl": null,
+            "color": "#2255cc",
+            "sizeCells": 1,
+            "speedCells": 4,
+            "runCells": 8,
+            "visionDim": 1,
+            "hp": {
+              "current": 8,
+              "max": 11
+            },
+            "health": "wounded",
+            "markers": [
+              "fatigued"
+            ],
+            "markerLevels": {
+              "fatigued": 2
+            },
+            "mounted": false,
+            "rider": null,
+            "dead": false,
+            "deathCause": null
+          }
+        ]
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.roster",
+      "seq": 36,
+      "from": "outil-mj",
+      "payload": {
+        "characters": [
+          {
+            "ref": "pj:c2",
+            "label": "Elsa"
+          },
+          {
+            "ref": "pj:c1",
+            "label": "Renaut"
+          }
+        ]
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.engagements",
+      "seq": 37,
+      "from": "outil-mj",
+      "payload": {
+        "pairs": []
+      }
+    },
+    {
+      "v": 1,
+      "type": "mj.ping",
+      "seq": 38,
+      "from": "outil-mj",
+      "payload": {}
+    }
+  ],
+  "statuses": [
+    "connected",
+    "disconnected"
+  ],
+  "placements": [
+    {
+      "connected": true,
+      "placed": [],
+      "pending": []
+    },
+    {
+      "connected": true,
+      "placed": [],
+      "pending": [
+        {
+          "ref": "pj:c1",
+          "label": "Renaut"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [],
+      "pending": [
+        {
+          "ref": "p:o",
+          "label": "Orc"
+        },
+        {
+          "ref": "pj:c1",
+          "label": "Renaut"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [],
+      "pending": [
+        {
+          "ref": "p:h",
+          "label": "Destrier"
+        },
+        {
+          "ref": "p:o",
+          "label": "Orc"
+        },
+        {
+          "ref": "pj:c1",
+          "label": "Renaut"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [
+        "pj:c1"
+      ],
+      "pending": [
+        {
+          "ref": "p:h",
+          "label": "Destrier"
+        },
+        {
+          "ref": "p:o",
+          "label": "Orc"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [
+        "p:o",
+        "pj:c1"
+      ],
+      "pending": [
+        {
+          "ref": "p:h",
+          "label": "Destrier"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [
+        "p:h",
+        "p:o",
+        "pj:c1"
+      ],
+      "pending": []
+    },
+    {
+      "connected": true,
+      "placed": [
+        "p:h",
+        "p:o",
+        "pj:c1"
+      ],
+      "pending": [
+        {
+          "ref": "p:g",
+          "label": "Gnoblar sauteur"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [
+        "p:g",
+        "p:h",
+        "p:o",
+        "pj:c1"
+      ],
+      "pending": []
+    },
+    {
+      "connected": true,
+      "placed": [
+        "p:g",
+        "p:h",
+        "p:o",
+        "pj:c1"
+      ],
+      "pending": [
+        {
+          "ref": "pj:c2",
+          "label": "Elsa"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [
+        "p:g",
+        "p:h",
+        "pj:c1"
+      ],
+      "pending": [
+        {
+          "ref": "pj:c2",
+          "label": "Elsa"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [
+        "p:h",
+        "pj:c1"
+      ],
+      "pending": [
+        {
+          "ref": "pj:c2",
+          "label": "Elsa"
+        },
+        {
+          "ref": "p:g",
+          "label": "Gnoblar sauteur"
+        }
+      ]
+    },
+    {
+      "connected": true,
+      "placed": [],
+      "pending": [
+        {
+          "ref": "p:h",
+          "label": "Destrier"
+        },
+        {
+          "ref": "pj:c2",
+          "label": "Elsa"
+        },
+        {
+          "ref": "p:g",
+          "label": "Gnoblar sauteur"
+        },
+        {
+          "ref": "pj:c1",
+          "label": "Renaut"
+        }
+      ]
+    },
+    {
+      "connected": false,
+      "placed": [],
+      "pending": [
+        {
+          "ref": "p:h",
+          "label": "Destrier"
+        },
+        {
+          "ref": "pj:c2",
+          "label": "Elsa"
+        },
+        {
+          "ref": "p:g",
+          "label": "Gnoblar sauteur"
+        },
+        {
+          "ref": "pj:c1",
+          "label": "Renaut"
+        }
+      ]
+    }
+  ],
+  "adjacency": [
+    [
+      [
+        "pj:c1",
+        "p:g"
+      ]
+    ]
+  ],
+  "ran": [
+    "pj:c1"
+  ],
+  "answers": [
+    [
+      "requestMount",
+      {
+        "ok": true
+      }
+    ],
+    [
+      "requestMount",
+      {
+        "ok": false,
+        "reason": "not-adjacent",
+        "message": "Rapprochez le cavalier de sa monture sur la carte"
+      }
+    ],
+    [
+      "queryDistance",
+      {
+        "ok": true,
+        "cells": 3.5
+      }
+    ],
+    [
+      "queryDistance",
+      {
+        "ok": false,
+        "reason": "not-placed",
+        "message": "Pion non posé sur la carte : distance à saisir."
+      }
+    ],
+    [
+      "isPlaced",
+      true,
+      true,
+      true
+    ],
+    [
+      "status",
+      "disconnected"
+    ],
+    [
+      "timers",
+      [
+        3000,
+        3000,
+        3000
+      ]
+    ]
+  ]
+}
