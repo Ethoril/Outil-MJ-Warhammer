@@ -83,7 +83,7 @@ export function renderModule(entries) {
   const q = JSON.stringify;
   const lines = entries.map(({ path, label, group, profiles, form }) => {
     const formText = !form ? 'null' : form.monster ? `Object.freeze({ monster: ${q(form.monster)} })` : `Object.freeze({ beast: ${q(form.beast)}, wind: ${q(form.wind)} })`;
-    return `  Object.freeze({ path: ${q(path)}, label: ${q(label)}, group: ${q(group)}, profiles: Object.freeze([${profiles.map(q).join(', ')}]), form: ${formText} })`;
+    return `  { path: ${q(path)}, label: ${q(label)}, group: ${q(group)}, profiles: Object.freeze([${profiles.map(q).join(', ')}]), form: ${formText} }`;
   });
   return [
     '// Fichier généré par tools/build-token-images.mjs depuis tools/token-images.csv : ne pas modifier à la main.',
@@ -92,9 +92,17 @@ export function renderModule(entries) {
     '// group : premier dossier sous maps/tokens/ (« racine » pour un fichier à la racine) ; form : bête de Forme bestiale',
     '// (clé de REIKLAND_BEASTS) et vent (beasts = Vent des Bêtes, jade = Vent de Jade), ou monstre de Transformation de Kadon',
     '// (monster : clé de KADON_MONSTERS), sinon null.',
+    '/** @typedef {{ path: string, label: string, group: string, profiles: ReadonlyArray<string>, form: { beast: string, wind: string }|{ monster: string }|null }} TokenImage */',
+    '/** @type {ReadonlyArray<TokenImage>} */',
     'export const TOKEN_IMAGES = Object.freeze([',
     lines.join(',\n'),
     ']);',
+    '',
+    "// Gel profond à l'exécution. ⛔ Il se fait ICI, en boucle, et non par un `Object.freeze` autour de chaque",
+    "// entrée : un millier d'appels littéraux donnaient autant de types `Readonly<…>` distincts, et le `tsc`",
+    "// de la carte rendait « TS2590 : union type too complex to represent » — la table avait dépassé ce que",
+    "// l'inférence sait représenter. Le gel obtenu est le même, et le type n'est écrit qu'une fois.",
+    'for (const entree of TOKEN_IMAGES) Object.freeze(entree);',
     ''
   ].join('\n');
 }
