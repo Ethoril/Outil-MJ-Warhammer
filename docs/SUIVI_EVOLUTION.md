@@ -10,6 +10,16 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.53.4 — Sortie des scènes orphelines, 26 pions de plus (publiée le 19/11/2026)
+
+**Une scène dont la rencontre a disparu a enfin une sortie.** Signalé par le MJ : une scène « test » restait « En cours », bloquait tout lancement, et sa rencontre n’était plus dans Préparer — donc rien ne pouvait la fermer. Vérifié sur sa sauvegarde : une scène active pointant vers une rencontre dont l’identifiant n’apparaissait qu’à cet endroit dans tout le fichier. L’impasse était structurelle : le statut « En cours » se déduit de la scène, mais « Suspendre » et « Supprimer » vivent sur la carte de la rencontre, et « Terminer le combat » vide les combattants sans fermer la scène. Préparer affiche désormais une carte par scène orpheline, active ou suspendue, portant « Clore la scène » et rien d’autre — « Reprendre » ou « Relancer » demanderaient la rencontre, qui est justement ce qui manque. ⛔ Aucun nettoyage automatique au chargement : une scène active est un combat en cours, elle ne s’écarte que sur un geste du MJ, et la commande refuse toute scène encore rattachée à une rencontre. Six mécanismes mutés, six rouges ; un septième essai a révélé une remise à zéro du combat déjà faite par le miroir scène→combat, donc retirée.
+
+**26 PNJ du lot 28 dans la table des images** (`tools/token-images.csv`) : ils existaient dans le dépôt de Map Display sans être déclarés nulle part, donc ni offerts par le sélecteur de l’outil, ni publiés par le site. Aucun ne correspond à un profil du bestiaire — les 64 profils de L28 avaient déjà leur image. Le pion de Glugnur est remplacé par la même occasion : le nom du cache de `sw.js` suivant la version, cette publication chasse l’ancienne image des navigateurs.
+
+**La table des images déclare son type.** Avec 26 entrées de plus, le typecheck de Map Display rendait « TS2590 : union type too complex to represent » sur sa copie : chaque entrée portait son propre `Object.freeze`, soit un millier de types `Readonly<…>` distincts à réunir, au-delà de ce que l’inférence sait représenter. Le générateur écrit désormais le type une fois (`@typedef TokenImage`) et gèle les entrées en boucle ; le gel obtenu est identique, vérifié à l’exécution.
+
+Suites : 6 951 + 279, zéro échec, golden master régénéré et son écart relu. `tests/browser-workspace.mjs` et `tests/f2-c-workspace.browser.mjs` verts.
+
 ## 3.53.3 — Chapeau multi-jeux : registre des jeux (publiée le 18/11/2026)
 
 Lot L2 du chantier multi-jeux (`docs/specs/multi-jeux/`).
