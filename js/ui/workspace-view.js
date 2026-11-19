@@ -41,7 +41,7 @@ import { buildSlannBlock, readSlannInputs } from './slann-block.js';
 import { buildCreatureStatesBlock, readCreatureStatesInputs, buildEncounterBlock, bindEncounterBlock, buildTraitStatusBlock, buildBodyIntactControl, readBodyIntact } from './creature-states-block.js';
 import { formatV5Balance } from '../core/v5-resources.js';
 import { normalizeEffects } from '../core/effects.js';
-import { CAMP_LABELS, normalizeCamp, participantCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay } from '../core/encounters.js';
+import { CAMP_LABELS, normalizeCamp, participantCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay, orphanScenes } from '../core/encounters.js';
 import { uid } from '../core/models.js';
 import { renderFicheDetails } from './fiche-details.js';
 import { renderSilhouette } from './silhouette.js';
@@ -183,6 +183,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     deleteEncounter: typeof actions.deleteEncounter === 'function' ? actions.deleteEncounter : null,
     resumeScene: typeof actions.resumeScene === 'function' ? actions.resumeScene : null,
     suspendScene: typeof actions.suspendScene === 'function' ? actions.suspendScene : null,
+    discardOrphanScene: typeof actions.discardOrphanScene === 'function' ? actions.discardOrphanScene : null,
     restartCombat: typeof actions.restartCombat === 'function' ? actions.restartCombat : null,
     showPlay: typeof actions.showPlay === 'function' ? actions.showPlay : null,
     spaceShown: typeof actions.spaceShown === 'function' ? actions.spaceShown : null,
@@ -404,7 +405,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const encounters = encounterList({ compact: false });
     if (encounters.note) refs.prepare.appendChild(encounters.note);
     if (encounters.list) refs.prepare.appendChild(encounters.list);
-    else refs.prepare.appendChild(node('p', 'workspace-muted', 'Aucune rencontre préparée : « Nouvelle rencontre » pour en composer une à l’avance.'));
+    if (encounters.empty) refs.prepare.appendChild(node('p', 'workspace-muted', 'Aucune rencontre préparée : « Nouvelle rencontre » pour en composer une à l’avance.'));
 
     refs.prepare.appendChild(rubric('Profils'));
     const profiles = readProfiles(Store);
@@ -439,18 +440,58 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const scenes = readScenes(Store);
     const profiles = readProfiles(Store);
     const running = scenes.activeScene?.status === 'active';
-    let encounters = sortEncountersForDisplay(readEncounters(Store), scenes);
+    const toutes = readEncounters(Store);
+    let encounters = sortEncountersForDisplay(toutes, scenes);
     if (compact) encounters = encounters.filter(encounter => encounterDisplayStatus(encounter, scenes).key !== 'active');
-    // Aussi sans carte : le combat en cours peut venir d'une rencontre supprimée depuis.
+    // ⭐ Scènes dont la rencontre a disparu : sans leur carte, elles n'ont AUCUNE sortie. La note
+    // ci-dessous connaissait déjà le cas — « le combat en cours peut venir d'une rencontre supprimée
+    // depuis » — et renvoyait pourtant vers « Suspendez-le ou supprimez la rencontre », c'est-à-dire
+    // vers deux boutons qui vivent sur la carte absente. Un message qui désigne une porte murée.
+    const orphelines = compact ? [] : orphanScenes(scenes, toutes);
+    const orphelineActive = orphelines.some(scene => scene.status === 'active');
     const note = !compact && running
-      ? node('p', 'workspace-muted workspace-encounter-note', `Combat en cours : « ${scenes.activeScene.title || 'Séance'} ». Suspendez-le ou supprimez la rencontre pour en lancer une autre.`)
+      ? node('p', 'workspace-muted workspace-encounter-note', orphelineActive
+        ? `Combat en cours : « ${scenes.activeScene.title || 'Séance'} ». Sa rencontre n’existe plus : closez la scène ci-dessous pour en lancer une autre.`
+        : `Combat en cours : « ${scenes.activeScene.title || 'Séance'} ». Suspendez-le ou supprimez la rencontre pour en lancer une autre.`)
       : null;
-    if (!encounters.length) return { list: null, note };
+    // ⛔ `empty` dit la vérité sur les RENCONTRES, pas sur la liste : une carte de scène orpheline ne
+    // doit pas faire disparaître « Aucune rencontre préparée », qui reste exact — et qui porte le
+    // seul chemin vers « Nouvelle rencontre ».
+    const empty = !encounters.length;
+    if (!encounters.length && !orphelines.length) return { list: null, note, empty };
     const list = node('div', 'workspace-encounter-list');
+    orphelines.forEach(scene => list.appendChild(orphanSceneCard(scene)));
     encounters.forEach(encounter => list.appendChild(encounterCard(encounter, {
       status: encounterDisplayStatus(encounter, scenes), summary: encounterSummary(encounter, profiles), running, compact
     })));
-    return { list, note };
+    return { list, note, empty };
+  }
+
+  // Carte d'une scène sans rencontre : elle ne porte qu'une action, et elle dit pourquoi elle existe.
+  // ⛔ Une seule action, et c'est voulu : « Reprendre » ou « Relancer » demanderait une rencontre, qui
+  // est justement ce qui manque. La seule chose honnête à offrir ici est la sortie.
+  function orphanSceneCard(scene) {
+    const name = scene.title || 'Séance';
+    const active = scene.status === 'active';
+    const card = node('article', 'workspace-encounter-card is-orphan');
+    card.dataset.sceneId = scene.id;
+    const head = node('div', 'workspace-encounter-head');
+    head.append(
+      node('h3', '', `${name} — rencontre introuvable`),
+      node('span', `workspace-encounter-status is-${active ? 'active' : 'suspended'}`, active ? 'En cours' : 'Suspendue')
+    );
+    card.appendChild(head);
+    const combattants = (scene.participants || []).length;
+    card.appendChild(node('p', 'workspace-encounter-meta',
+      `${combattants} combattant${combattants > 1 ? 's' : ''} · la rencontre qui a lancé cette scène n’existe plus`));
+    const actions = node('div', 'workspace-encounter-actions');
+    const element = button('Clore la scène', 'workspace-primary',
+      { 'aria-label': `Clore la scène « ${name} »`, 'data-focus-key': `discard-orphan-scene-${scene.id}` });
+    element.dataset.workspaceAction = 'discard-orphan-scene';
+    element.dataset.sceneId = scene.id;
+    actions.appendChild(element);
+    card.appendChild(actions);
+    return card;
   }
 
   function encounterCard(encounter, { status, summary, running, compact }) {
@@ -3167,6 +3208,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         break;
       case 'resume-scene':
         callbacks.resumeScene?.(target.dataset.sceneId);
+        break;
+      case 'discard-orphan-scene':
+        // La carte disparaît avec la scène : le focus revient à « Nouvelle rencontre ».
+        Promise.resolve(callbacks.discardOrphanScene?.(target.dataset.sceneId)).then(done => { if (done) render('new-encounter'); }, noop);
         break;
       case 'suspend-scene': {
         // « Suspendre » laisse place à « Reprendre » sur la même carte.

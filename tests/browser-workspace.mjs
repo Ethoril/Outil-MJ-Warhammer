@@ -90,6 +90,7 @@ async function main() {
           deleteEncounter(id) { encounterCalls.push({ type: 'delete', id }); },
           resumeScene(id) { encounterCalls.push({ type: 'resume', id }); },
           suspendScene() { encounterCalls.push({ type: 'suspend' }); },
+          discardOrphanScene(id) { encounterCalls.push({ type: 'discard', id }); return true; },
           restartCombat() { encounterCalls.push({ type: 'restart' }); return true; },
           showPlay() { encounterCalls.push({ type: 'showPlay' }); }
         }
@@ -159,10 +160,23 @@ async function main() {
       { type: 'edit', id: 'enc-1' }, { type: 'launch', id: 'enc-1' }, { type: 'delete', id: 'enc-1' },
       { type: 'showPlay' }, { type: 'restart' }, { type: 'suspend' }, { type: 'resume', id: 'scene-2' }
     ]);
-    // Sans aucune carte (rencontre supprimée pendant le combat), la note du combat en cours reste.
+    // ⭐ Rencontre supprimée pendant le combat : la scène n'avait plus de carte, donc plus AUCUNE
+    // sortie — les deux commandes qui la relâchent vivent sur la carte de sa rencontre. Depuis le
+    // 19/11/2026 elle reçoit une carte à elle, et la note cesse de renvoyer vers des boutons absents.
     await page.evaluate(() => { const data = window.workspaceTestData; data.removed = data.encounters.splice(0); });
     await rerender();
-    await expect(prepare.locator('.workspace-encounter-card')).toHaveCount(0);
+    // Deux scènes vivaient sur ces rencontres : l'active et la suspendue. Les deux sont orphelines,
+    // les deux reçoivent leur sortie — une scène suspendue sans carte était tout aussi irrattrapable.
+    await expect(prepare.locator('.workspace-encounter-card')).toHaveCount(2);
+    await expect(prepare.locator('.workspace-encounter-card.is-orphan')).toHaveCount(2);
+    await expect(prepare.locator('[data-scene-id="scene-2"] .workspace-encounter-status.is-suspended')).toHaveText('Suspendue');
+    const orpheline = prepare.locator('[data-scene-id="scene-3"].workspace-encounter-card');
+    await expect(orpheline).toContainText('Autre — rencontre introuvable');
+    await expect(orpheline.locator('.workspace-encounter-status.is-active')).toHaveText('En cours');
+    await expect(prepare).toContainText('Sa rencontre n’existe plus');
+    await orpheline.getByRole('button', { name: 'Clore la scène « Autre »' }).click();
+    assert.deepEqual(await page.evaluate(() => window.workspaceTestData.encounterCalls.at(-1)), { type: 'discard', id: 'scene-3' });
+    // La carte de la scène ne masque pas l'état réel des rencontres : il n'y en a toujours aucune.
     await expect(prepare).toContainText('Combat en cours : « Autre »');
     await expect(prepare).toContainText('Aucune rencontre préparée');
     await page.evaluate(() => { const data = window.workspaceTestData; data.encounters.push(...data.removed); });

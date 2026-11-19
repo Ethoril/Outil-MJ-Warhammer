@@ -134,6 +134,7 @@
    "restartCombat/0",
    "addImprovisedParticipant/1",
    "suspendActiveScene/0",
+   "discardOrphanScene/1",
    "resumeScene/1",
    "getReactionOpportunities/1",
    "listEngagedWith/1",
@@ -1748,6 +1749,11 @@
     "state": "68c8ab7d431c0e71"
    },
    {
+    "label": "sweep discardOrphanScene",
+    "error": "Error: Scène introuvable, ou rattachée à une rencontre : rien n’a été écarté.",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
     "label": "sweep resumeScene",
     "error": "Error: Scène suspendue introuvable",
     "state": "68c8ab7d431c0e71"
@@ -2894,6 +2900,7 @@
    "restartCombat/0",
    "addImprovisedParticipant/1",
    "suspendActiveScene/0",
+   "discardOrphanScene/1",
    "resumeScene/1",
    "getReactionOpportunities/1",
    "listEngagedWith/1",
@@ -4505,6 +4512,11 @@
    {
     "label": "sweep suspendActiveScene",
     "error": "Error: Aucune scène active",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep discardOrphanScene",
+    "error": "Error: Scène introuvable, ou rattachée à une rencontre : rien n’a été écarté.",
     "state": "4bd34c4c9a63fc31"
    },
    {

@@ -4235,6 +4235,41 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         encounters: (draft.encounters || []).map(item => item.id === draft.activeScene.encounterId ? { ...item, status: 'suspended' } : item)
       }));
     },
+    /**
+     * Ferme une scène dont la rencontre n'existe plus — le seul chemin qui relâche une scène sans
+     * passer par la carte de sa rencontre (impasse du 19/11/2026, cf. `orphanScenes`).
+     *
+     * ⛔ Refuse toute scène encore rattachée à une rencontre, et c'est LA garantie de ce chemin : il
+     * ne peut pas servir à jeter un combat que le MJ retrouverait autrement. Sans ce refus, on aurait
+     * ajouté une deuxième façon de perdre une scène vivante pour en réparer une morte.
+     *
+     * Le ménage est celui de `deleteEncounter` : journal de la rencontre purgé, combat remis à zéro.
+     */
+    discardOrphanScene(sceneId) {
+      if (!canMutate()) return false;
+      return api.executeCommand('discard-orphan-scene', draft => {
+        const known = new Set((draft.encounters || []).map(item => item?.id).filter(Boolean));
+        const orpheline = scene => Boolean(scene?.id) && scene.id === sceneId && !known.has(scene.encounterId);
+        const retireActive = orpheline(draft.activeScene);
+        const suspendues = (draft.suspendedScenes || []).filter(orpheline);
+        if (!retireActive && !suspendues.length) {
+          throw new Error('Scène introuvable, ou rattachée à une rencontre : rien n’a été écarté.');
+        }
+        const encounterId = (retireActive ? draft.activeScene : suspendues[0]).encounterId;
+        const purged = typeof encounterId === 'string' && encounterId.trim()
+          ? purgeEncounterJournal(draft, encounterJournalScope(draft, encounterId))
+          : draft;
+        // ⛔ Pas de remise à zéro du combat ici, et c'est MESURÉ, pas supposé : la scène active
+        // relâchée, le miroir scène→combat le vide déjà (participants et round à zéro). La ligne
+        // qu'on écrirait par prudence ne change rien — vérifié en la retirant — et deux chemins
+        // vers la même donnée finissent toujours par diverger.
+        return {
+          ...purged,
+          activeScene: retireActive ? null : purged.activeScene,
+          suspendedScenes: (purged.suspendedScenes || []).filter(scene => !orpheline(scene))
+        };
+      });
+    },
     resumeScene(id) {
       const scene = suspendedScenes.find(item => item.id === id);
       if (!scene) throw new Error('Scène suspendue introuvable');

@@ -925,6 +925,15 @@ const encounterListActions = {
       return true;
     } catch (error) { showToast(contextMessage('Séance non reprise', error, 'réessayez.'), 'error'); return false; }
   },
+  // Sortie d'une scène dont la rencontre a disparu. Le store refuse toute scène encore rattachée à
+  // une rencontre : ce bouton ne peut donc pas servir à perdre un combat qu'on retrouverait ailleurs.
+  discardOrphanScene: async sceneId => {
+    try {
+      await awaitStore(requireStoreApi('discardOrphanScene')(sceneId), 'Fermeture');
+      showToast('Scène close : sa rencontre n’existait plus', 'warning', { label: 'Annuler', onClick: () => Store.undo() });
+      return true;
+    } catch (error) { showToast(contextMessage('Scène non close', error, 'réessayez.'), 'error'); return false; }
+  },
   suspendScene: async () => {
     try {
       await awaitStore(requireStoreApi('suspendActiveScene')(), 'Suspension');

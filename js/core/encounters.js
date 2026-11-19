@@ -235,3 +235,25 @@ export function sortEncountersForDisplay(encounters, scenes = {}) {
   return (Array.isArray(encounters) ? encounters : []).map((encounter, index) => ({ encounter, index, rank: rank(encounter) }))
     .sort((a, b) => a.rank - b.rank || a.index - b.index).map(item => item.encounter);
 }
+
+/**
+ * Scènes dont la rencontre n'existe plus — l'impasse relevée le 19/11/2026.
+ *
+ * ⭐ Le statut « En cours » se déduit de la scène (`encounterDisplayStatus`), mais les deux seules
+ * commandes qui relâchent une scène — la suspendre, ou supprimer sa rencontre — sont accrochées à la
+ * CARTE de la rencontre. Quand celle-ci a disparu, la scène continue de bloquer tout lancement et plus
+ * rien ne peut la fermer. Relevé sur une sauvegarde réelle : une scène « test » active pointant vers
+ * une rencontre dont l'identifiant n'apparaissait nulle part ailleurs dans le fichier.
+ *
+ * ⛔ Cette fonction désigne, elle ne nettoie pas. Une scène active est un combat en cours : l'écart se
+ * répare par un geste du MJ, jamais par un ménage automatique au chargement.
+ *
+ * @param {{ activeScene?: any, suspendedScenes?: any[] }} [scenes]
+ * @param {any[]} [encounters]
+ * @returns {any[]} les scènes orphelines, l'active d'abord
+ */
+export function orphanScenes(scenes = {}, encounters = []) {
+  const known = new Set((Array.isArray(encounters) ? encounters : []).map(encounter => encounter?.id).filter(Boolean));
+  const candidates = [scenes?.activeScene, ...(Array.isArray(scenes?.suspendedScenes) ? scenes.suspendedScenes : [])];
+  return candidates.filter(scene => scene?.id && !known.has(scene.encounterId));
+}
