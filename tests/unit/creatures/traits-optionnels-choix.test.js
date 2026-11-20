@@ -41,11 +41,40 @@ describe('traits optionnels : cases proposées', () => {
     assert.deepEqual(optionalCandidates(fiche(), vide()), []);
     assert.deepEqual(optionalCandidates(null, vide()), []);
   });
-  test('Trained (Broken, Mount, War) facultatif : trois cases, une par dressage', () => {
+  test('Trained (Broken, Mount, War) facultatif : une case par dressage, plus Cavalerie de choc', () => {
     const record = fiche({ optionalTraits: [{ name: 'Trained', param: 'Broken, Mount, War' }] });
     const cases = optionalCandidates(record, vide());
-    assert.deepEqual(cases.map(item => item.param), ['Broken', 'Mount', 'War']);
+    assert.deepEqual(cases.map(item => item.param), ['Broken', 'Mount', 'War', 'Shock Cavalry']);
     assert.ok(cases.every(item => item.kind === 'trained'));
+  });
+  test('Cavalerie de choc (Up in Arms p. 107) : grisée tant que Guerre n est pas cochée, puis cochable', () => {
+    const record = fiche({ optionalTraits: [{ name: 'Trained', param: 'Broken, Mount, War' }] });
+    const choc = choices => optionalCandidates(record, choices).find(item => item.param === 'Shock Cavalry');
+    assert.equal(choc(vide()).disabled, true);
+    assert.match(choc(vide()).reason, /Guerre/);
+    assert.equal(toggleOptionalTrait(record, vide(), 'Trained:Shock Cavalry').ok, false);
+    const guerre = toggleOptionalTrait(record, vide(), 'Trained:War');
+    assert.equal(choc(guerre.choices).disabled, false);
+    const coche = toggleOptionalTrait(record, guerre.choices, 'Trained:Shock Cavalry');
+    assert.equal(coche.ok, true);
+    assert.equal(choc(coche.choices).checked, true);
+    assert.equal(choc(coche.choices).label, 'Dressé (Cavalerie de choc)');
+  });
+  test('Cavalerie de choc : libre d office quand Guerre est imprimée ; absente sans Monture ou sans Guerre ; pas de doublon', () => {
+    const imprime = fiche({ traits: [{ name: 'Trained', param: 'War' }], optionalTraits: [{ name: 'Trained', param: 'Mount' }] });
+    assert.equal(optionalCandidates(imprime, vide()).find(item => item.param === 'Shock Cavalry').disabled, false);
+    for (const param of ['Broken, War', 'Broken, Mount', 'Guard, Fetch']) {
+      const record = fiche({ optionalTraits: [{ name: 'Trained', param }] });
+      assert.equal(optionalCandidates(record, vide()).some(item => item.param === 'Shock Cavalry'), false, param);
+    }
+    const lion = fiche({ optionalTraits: [{ name: 'Trained', param: 'Mount, Shock Cavalry, War' }] });
+    assert.equal(optionalCandidates(lion, vide()).filter(item => item.param === 'Shock Cavalry').length, 1);
+    const deja = fiche({ traits: [{ name: 'Trained', param: 'Mount, War, Shock Cavalry' }], optionalTraits: [{ name: 'Trained', param: 'Magic' }] });
+    assert.equal(optionalCandidates(deja, vide()).some(item => item.param === 'Shock Cavalry'), false);
+  });
+  test('Cavalerie de choc proposée au Cheval du bestiaire', () => {
+    const cheval = tous.find(profil => profil.name === 'Horse' && profil.book === 'L06');
+    assert.ok(optionalCandidates(cheval, vide()).some(item => item.param === 'Shock Cavalry'));
   });
   test('un dressage déjà dans les Traits de base est grisé « déjà compté » (D18)', () => {
     const record = fiche({ traits: [{ name: 'Trained', param: 'Broken, Drive' }], optionalTraits: [{ name: 'Trained', param: 'Broken, Mount' }] });

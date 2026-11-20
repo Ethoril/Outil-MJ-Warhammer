@@ -133,7 +133,7 @@ test('CA13 : une case par dressage d’une fiche dont « Dressé » est optionne
   const store = await table();
   const record = { ...ogreRecord, optionalTraits: [{ name: 'Trained', param: 'Mount, War' }] };
   const panel = await open(panelFor(store, record), store);
-  assert.deepEqual(keysOf(panel), ['Trained:Mount', 'Trained:War', 'armour:Gut Plate', 'armour:Helmet', 'armour:Ironfist']);
+  assert.deepEqual(keysOf(panel), ['Trained:Mount', 'Trained:War', 'Trained:Shock Cavalry', 'armour:Gut Plate', 'armour:Helmet', 'armour:Ironfist']);
 }));
 
 test('D17 : Leader n’est proposé ni en case ni à l’ajout sur une créature Bestial', async () => withDom(async () => {

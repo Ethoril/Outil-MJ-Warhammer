@@ -90,6 +90,21 @@ function optionalTraitEntries(record) {
 }
 
 /**
+ * Cavalerie de choc (Up in Arms p. 107) : dressage ajouté après les autres livres, que leurs profils ne listent donc pas. Proposé à toute
+ * monture qui peut être Dressée (Monture) et (Guerre), imprimé ou facultatif ; grisé tant que Dressé (Guerre) n'est ni imprimé ni coché.
+ */
+function shockCavalryCase(record, state, cases) {
+  const offered = detail => inBase(record, 'Trained', detail) || cases.some(item => item.kind === 'trained' && fold(item.param) === fold(detail));
+  if (offered('Shock Cavalry') || !offered('Mount') || !offered('War')) return null;
+  const key = keyOf('Trained', 'Shock Cavalry');
+  const checked = checkedHas(state, key);
+  const warOn = inBase(record, 'Trained', 'War') || state.traits.some(item => isTrained(item.name) && fold(item.param) === 'war');
+  const reason = checked || warOn ? '' : 'exige Dressé (Guerre) : le cocher d’abord.';
+  const nameFr = catalogueTraitOf('Trained')?.nameFr || 'Trained';
+  return { key, kind: 'trained', name: 'Trained', nameFr, param: 'Shock Cavalry', label: labelOf('Trained', 'Shock Cavalry', nameFr), checked, disabled: Boolean(reason), reason, origin: 'optional' };
+}
+
+/**
  * Cases du panneau d'un profil, dans l'ordre : Traits facultatifs (un dressage par case), attaques, pièces d'armure facultatives, puis
  * les Traits ajoutés librement (cochés). Chaque case : `{ key, kind, name, nameFr, param, label, checked, disabled, reason, origin }`.
  * Leader est absent sur une créature Bestial (D17, D26) ; une case « déjà compté » est grisée (D18) ; une seule Taille cochée (D11).
@@ -110,6 +125,8 @@ export function optionalCandidates(record, choices = EMPTY()) {
     }
     cases.push({ key, kind: entry.kind, name: entry.name, nameFr, param: entry.detail, label: labelOf(entry.name, entry.detail, nameFr), checked, disabled: Boolean(reason), reason, origin: 'optional' });
   }
+  const shock = shockCavalryCase(record, state, cases);
+  if (shock) cases.push(shock);
   for (const attack of (record?.attacks || []).filter(item => item?.optional && isText(item.name))) {
     cases.push({ key: `attack:${attack.name}`, kind: 'attack', name: attack.name, nameFr: attack.nameFr || attack.name, param: '', label: attack.nameFr || attack.name, checked: state.attacks.some(item => item.name === attack.name), disabled: false, reason: '', origin: 'optional' });
   }
