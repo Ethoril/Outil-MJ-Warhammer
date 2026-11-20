@@ -10,6 +10,14 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.55.0 — Sorts et prières des PNJ (publiée le 20/11/2026)
+
+**Une liste de sorts et de prières pour les PNJ.** Demande du MJ : le combat proposait tout le catalogue (400 sorts, plus de 200 prières), peu pratique en jeu. Le formulaire du profil porte un bloc « Sorts et prières », et la fiche du participant le même volet pour la seule rencontre. On ne peut y saisir que des noms des catalogues (sorts V5, prières divines) : un nom inconnu est refusé, le combat ne saurait pas le lancer. La liste du profil passe aux participants qui en sont tirés. Pour un PJ, les deux blocs sont masqués : sa liste vient de sa fiche (`js/core/magic-lists.js`, `js/ui/magic-list-picker.js`).
+
+**En combat, la liste est seule proposée.** Sorts : ceux de la liste ; la case « Tous les sorts » rouvre le catalogue. Prières : celles de la liste et toutes les Bénédictions des cultes du personnage (Béni les donne en entier) ; « Toutes les prières » rouvre le reste. Sans liste, rien ne change. Un miracle exige toujours son talent d’accès, PNJ compris. Les PJ, dont les sorts et prières venaient déjà de la fiche, profitent du même filtrage.
+
+Suites : 6 970 + 279, zéro échec. Navigateur verts : `browser-workspace`, `divin-v5-browser`, `divin-v5-p5-ui-browser`, `browser-magic-v5-smoke`, `lot3-v5-magic-2b-ui-browser`, `q6-t10-magie-browser` (les trois derniers cochent « Tous les sorts » avant de choisir un sort hors liste) ; vérifié dans l’outil local sur un PNJ et un profil de test.
+
 ## 3.54.0 — Cavalerie de choc, armure ôtée (publiée le 20/11/2026)
 
 **Cavalerie de choc proposée aux montures.** Dressage ajouté par Up in Arms (p. 107), il n’apparaît dans aucun profil plus ancien : le Cheval, le Destrier noir, le Sang-froid ou le Griffon ne le proposaient donc pas. Le panneau des Traits optionnels offre désormais la case à toute monture qui peut être Dressée (Monture) et (Guerre), imprimé ou facultatif. Elle reste grisée, « exige Dressé (Guerre) », tant que Guerre n’est ni imprimée ni cochée, comme le demande la règle. Un profil qui la liste déjà (Lion blanc) ou l’a d’office (Demigryphe dressé) n’a pas de seconde case.
