@@ -29,6 +29,9 @@ const TARGET_ENGAGEMENT_KEYS = ['targetEngaged', 'engagedWithShooter', 'engagedT
 const withoutOutnumberContext = context => { const rest = withoutOutnumberKeys(context); for (const key of TARGET_ENGAGEMENT_KEYS) delete rest[key]; return rest; };
 import { equipmentAttackContext, weaponSkillGroupInfo, HIT_LOCATIONS } from '../core/equipment.js';
 import { isArmourWorn, extensionsWithArmourWorn } from '../core/armour-worn.js';
+import { createMagicListPicker } from './magic-list-picker.js';
+// Listes de sorts dépliées, gardées d'un rendu à l'autre (état d'affichage seulement).
+const magicListOpen = new Set();
 import { d100, d10 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
@@ -1133,6 +1136,25 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
       worn.appendChild(error);
       states.appendChild(worn);
+    }
+    if (!participant.extensions?.ficheId && !participant.ficheSnapshot) {
+      // Sorts et prières d'un PNJ pour cette rencontre (le profil n'est pas modifié) ; ceux d'un PJ viennent de sa fiche.
+      const magic = node('details', 'workspace-magic-list');
+      magic.open = magicListOpen.has(participant.id);
+      magic.addEventListener('toggle', () => { if (magic.open) magicListOpen.add(participant.id); else magicListOpen.delete(participant.id); });
+      const count = (participant.spells?.length || 0) + (participant.prayers?.length || 0);
+      magic.appendChild(node('summary', 'workspace-rubric', `Sorts et prières${count ? ` (${count})` : ' · tout le catalogue'}`));
+      const error = node('p', 'workspace-error'), holder = node('div', '');
+      magic.append(holder, error);
+      createMagicListPicker({ container: holder, subject: participant, onChange: async value => {
+        error.textContent = '';
+        try {
+          const result = await Store.updateParticipant(participant.id, value);
+          if (result === false || result?.ok === false) throw new Error(result?.error || 'Liste non enregistrée.');
+          render();
+        } catch (cause) { error.textContent = userMessage(cause, 'Liste non enregistrée.'); }
+      } });
+      states.appendChild(magic);
     }
     const criticals =participant.extensions?.v5?.criticalWounds || [];
     if (criticals.length) {

@@ -94,6 +94,9 @@ async function pickSpell(page, name) {
   await clickU1Magic(page, 'cast');
   await openU1Settings(page);
   await page.waitForSelector('[data-focus-key="magic-spell"]');
+  // Le lanceur a une liste : « Tous les sorts » ouvre le catalogue aux sorts hors liste (magic-lists.js).
+  const allSpells = page.locator('[data-focus-key="magic-all-spells"]');
+  if (await allSpells.count() && !(await allSpells.isChecked())) await allSpells.check();
   await page.selectOption('[data-focus-key="magic-spell"]', await page.evaluate(n => window.__TEST__.getSpellContract(n).id, name));
   await page.waitForTimeout(250);
 }

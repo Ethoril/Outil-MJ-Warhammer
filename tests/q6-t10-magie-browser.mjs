@@ -57,6 +57,9 @@ try {
   async function openCast(name) {
     await clickU1Magic(page, 'cast');
     await page.waitForSelector('[data-focus-key="magic-spell"]');
+    // Le lanceur a une liste : « Tous les sorts » ouvre le catalogue aux sorts hors liste (magic-lists.js).
+    const allSpells = page.locator('[data-focus-key="magic-all-spells"]');
+    if (await allSpells.count() && !(await allSpells.isChecked())) await allSpells.check();
     await page.selectOption('[data-focus-key="magic-spell"]', await spellId(name));
   }
   const calculate = async () => { await page.click('[data-focus-key="calculate"]'); await page.waitForTimeout(300); };

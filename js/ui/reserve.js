@@ -8,6 +8,7 @@ import { renderFicheDetails } from './fiche-details.js';
 import { resolveKeyword } from '../core/reference-catalog.js';
 import { contextMessage } from './messages.js';
 import { createKeywordPicker } from './keyword-picker.js';
+import { createMagicListPicker } from './magic-list-picker.js';
 import { createOptionalTraitsPanel, reserveMountCandidates, mountTemplateFromProfile } from './optional-traits-panel.js';
 import { exportProfilesJson } from '../core/json-profile-export.js';
 import { buildReserveProfileFromBestiary } from '../core/bestiary-profiles.js';
@@ -100,6 +101,26 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     section.append(title, holder);
     f.insertBefore(section, f.querySelector('.actions'));
     keywordPicker = createKeywordPicker({ container: holder, store: Store, subject: {} });
+  }
+
+  // Sorts et prières d'un PNJ, choisis dans les catalogues ; ceux d'un PJ viennent de sa fiche (section masquée).
+  let magicPicker = null, magicSection = null;
+  function ensureMagicPicker() {
+    const f = DOM.reserve.form;
+    if (!f || magicPicker) return;
+    magicSection = document.createElement('div');
+    magicSection.id = 'form-magic-lists'; magicSection.style.cssText = 'margin:10px 0;';
+    const title = document.createElement('div'); title.textContent = 'Sorts et prières (proposés seuls en combat ; aucun = tout le catalogue)'; title.className = 'muted';
+    const holder = document.createElement('div');
+    magicSection.append(title, holder);
+    f.insertBefore(magicSection, f.querySelector('.actions'));
+    magicPicker = createMagicListPicker({ container: holder, subject: {} });
+  }
+  function setMagicSubject(p) {
+    ensureMagicPicker();
+    if (!magicPicker) return;
+    magicPicker.setSubject(p || {});
+    magicSection.hidden = Boolean(p?.extensions?.ficheId);
   }
 
   // Monture du profil : animal du bestiaire (Dressé (Monture) par défaut, tout le bestiaire sur demande), copié en profil de bibliothèque.
@@ -368,6 +389,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     ensureProfileFields();
     ensureKeywordPicker();
     keywordPicker.setSubject(p);
+    setMagicSubject(p);
     imageRevision++; imageExtensions = p.extensions || null; tokenLibraryImage = normalizeLibraryImage(p.tokenLibraryImage) ?? null; tokenImage = p.tokenImage || null; renderTokenImage();
     if (btnSubmit) btnSubmit.disabled = false;
     setMountSubject(p);
@@ -403,6 +425,7 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     ensureProfileFields();
     ensureKeywordPicker();
     keywordPicker.setSubject({});
+    setMagicSubject(null);
     imageRevision++; imageExtensions = null; tokenLibraryImage = null; setTokenImage(null);
     if (btnSubmit) btnSubmit.disabled = false;
     setMountSubject(null);
@@ -488,6 +511,11 @@ export function initReserveUI(Store, { onSaved = () => {} } = {}) {
     if (!data.cult && !existing?.cult) delete data.cult;
     const picked = keywordPicker?.getValue() || { keywords: [], keywordExclusions: [] };
     if (picked.keywords.length || picked.keywordExclusions.length || existing?.keywords || existing?.keywordExclusions) Object.assign(data, picked);
+    if (magicPicker && !existing?.extensions?.ficheId) {
+      const magic = magicPicker.getValue();
+      if (magic.spells.length || existing?.spells?.length) data.spells = magic.spells;
+      if (magic.prayers.length || existing?.prayers?.length) data.prayers = magic.prayers;
+    }
     if (existing?.extensions?.ficheId) {
       for (const key of ['caracs', 'initiative', 'hp', 'maxHp', 'armor', 'armorLocations']) data[key] = cloneValue(existing[key]);
       data.diceLines = data.diceLines.flatMap(action => {

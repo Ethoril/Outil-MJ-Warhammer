@@ -5,6 +5,7 @@ import {spellObjectChoices} from '../core/equipment.js';
 import {CAMP_LABELS,participantCamp} from '../core/encounters.js';
 import {getAllDivineContracts} from '../core/v5-divine-store.js';
 import {divineSinPolicy,actorDivineCults} from '../core/v5-divine-engine.js';
+import {prayerChoices} from '../core/magic-lists.js';
 import {defaultFirstMorningAt} from '../core/v5-game-time.js';
 import {resolveV5ConditionTestContext} from '../core/v5-test-context.js';
 import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-escape-panel.js';
@@ -435,9 +436,11 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    return more;
   }
   if(state.actorId!==actor.id)reset(actor);
-  const allContracts=getAllDivineContracts().filter(row=>['blessing','miracle'].includes(row.type));
+  // Liste de prières de l'acteur (fiche ou MJ) : ses prières et les Bénédictions de ses cultes ; « Toutes les prières » rouvre le catalogue.
+  const prayerView=prayerChoices(actor,getAllDivineContracts().filter(row=>['blessing','miracle'].includes(row.type)),{showAll:state.showAllPrayers===true,cults:actorDivineCults(actor)});
+  const allContracts=prayerView.contracts;
   const cults=[...new Set(allContracts.map(row=>row.deity).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'fr'));
-  const contracts=state.cult?allContracts.filter(row=>row.deity===state.cult):allContracts;
+  const contracts=state.cult&&allContracts.some(row=>row.deity===state.cult)?allContracts.filter(row=>row.deity===state.cult):allContracts;
   const contract=contracts.find(row=>row.id===state.contractId)||contracts[0];if(!contract)return null;
   const panel=node('details','workspace-card workspace-divine');panel.dataset.divinePanel='';panel.open=state.open;
   panel.addEventListener('toggle',()=>{if(state.open!==panel.open){state.open=panel.open;refresh();}});
@@ -446,6 +449,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   const content=node('div','workspace-divine-content');panel.append(content);
   if(cults.length>1)select(content,'Culte',state.cult,[['','Tous les cultes'],...cults.map(cult=>[cult,cult])],value=>{state.cult=value;state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',(value?allContracts.filter(row=>row.deity===value):allContracts)[0]?.id);},'cult');
   select(content,'Prière divine',contract.id,contracts.map(row=>[row.id,row.name+(row.type==='blessing'&&row.deity?' ('+row.deity+')':'')+(row.aspect?' ['+row.aspect+']':'')+' · '+(labels[row.status]||row.status)]),value=>{state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',value);},'prayer');
+  if(prayerView.hasList){const wrap=node('label','workspace-type workspace-recipient-check'),input=node('input');input.type='checkbox';input.checked=state.showAllPrayers===true;input.dataset.focusKey='divine-all-prayers';input.addEventListener('change',()=>{state.showAllPrayers=input.checked;state.targetIds=[];state.form=emptyDivineForm();state.lastReceipt=null;state.choices={range:0,targets:0,duration:0,effect:0};state.accessScope='';state.accessReason='';change('contractId',input.checked?state.contractId:undefined);});wrap.append(input,' Toutes les prières (hors de la liste de '+actor.name+')');content.append(wrap);}
   content.append(node('p','workspace-muted',(labels[contract.status]||contract.status)+' · '+(contract.deity||'Culte à préciser')+(contract.aspect?' · Aspect : '+contract.aspect:'')));
   const concerned = !divineSinPolicy(contract).exempt || Number(actor.extensions?.v5?.divine?.sin) > 0 || (actor.extensions?.v5?.divinePenances || []).some(row => row.status === 'open');
   content.append(node('p','',contract.labels?.effect||''));if(concerned)penanceControls(content,actor,contract.deity);supplementControls(content,actor,contract.deity,participants);

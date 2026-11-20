@@ -1,4 +1,5 @@
 import { node, rubric, outcomePill, signed, isMiscastDistanceD100 } from './dom.js';
+import { spellChoices } from '../../core/magic-lists.js';
 import { renderConditionQuestions, renderConditionDetail } from './condition-questions.js';
 import { renderObstinateChoice, renderSourceDetail } from '../test-questions.js';
 import { getSpellContract, getAllSpellContracts, getContractChoiceOptions } from '../../core/v5-spell-contracts.js';
@@ -156,11 +157,9 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     }
   } else if (type === 'cast') {
     v5.prepend(rubric('Incantation & Contrat de sort V5'));
-    const allContracts = getAllSpellContracts();
-    const actorSpells = (actor.spells || []).map(s => {
-      const c = getSpellContract(s.id) || getSpellContract(s.name || s.nom || s);
-      return { id: c?.id || s.id || s.name || s.nom, label: `${c?.name || s.name || s.nom} (NI ${c?.cn ?? s.cn ?? 0})` };
-    });
+    // Liste du lanceur seule quand il en a une ; « Tous les sorts » rouvre le catalogue (magic-lists.js).
+    const choices = spellChoices(actor, { showAll: draft.magicShowAllSpells === true });
+    const actorSpells = choices.own.map(s => ({ id: s.id, label: `${s.name} (NI ${s.cn})` }));
     const defaultSpellId = defaultMagicSpellId(draft, actor);
     const spellLabel = node('label', 'workspace-type', 'Sort à lancer');
     const spellSelect = document.createElement('select');
@@ -173,14 +172,28 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       actorSpells.forEach(s => grpActor.appendChild(new Option(s.label, s.id)));
       spellSelect.appendChild(grpActor);
     }
-    const grpAll = document.createElement('optgroup');
-    grpAll.label = 'Contrats de sorts V5';
-    allContracts.forEach(c => grpAll.appendChild(new Option(`${c.name} · NI ${c.cn} (${c.domain})`, c.id)));
-    spellSelect.appendChild(grpAll);
+    // Un sort choisi hors liste reste affiché même une fois « Tous les sorts » décoché.
+    const others = choices.others.length || actorSpells.some(s => s.id === defaultSpellId) ? choices.others
+      : getAllSpellContracts().filter(c => c.id === defaultSpellId);
+    if (others.length) {
+      const grpAll = document.createElement('optgroup');
+      grpAll.label = 'Contrats de sorts V5';
+      others.forEach(c => grpAll.appendChild(new Option(`${c.name} · NI ${c.cn} (${c.domain})`, c.id)));
+      spellSelect.appendChild(grpAll);
+    }
     spellSelect.value = defaultSpellId;
     spellSelect.addEventListener('change', () => handlers.select({ magicSpellId: spellSelect.value }));
     spellLabel.appendChild(spellSelect);
     v5.appendChild(spellLabel);
+    if (choices.hasList) {
+      const allLabel = node('label', 'workspace-type workspace-magic-all-spells'), allBox = document.createElement('input');
+      allBox.type = 'checkbox';
+      allBox.checked = draft.magicShowAllSpells === true;
+      allBox.dataset.focusKey = 'magic-all-spells';
+      allBox.addEventListener('change', () => handlers.select({ magicShowAllSpells: allBox.checked }));
+      allLabel.append(allBox, ' Tous les sorts (hors de la liste de ' + actor.name + ')');
+      v5.appendChild(allLabel);
+    }
 
     const contract = getSpellContract(defaultSpellId);
     const recipientControls = contract && renderSpellRecipientControls({ actor, participants, contract, draft, handlers, targetIds: magicTargetIds, target, getObstinateStatus });

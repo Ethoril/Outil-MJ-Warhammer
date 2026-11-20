@@ -200,6 +200,11 @@ try {
   // 2. Incantation V5 d'un projectile magique (Carreau) via les contrôles UI
   await clickU1Magic(page, 'cast');
   await page.waitForSelector('[data-focus-key="magic-spell"]');
+  // Le lanceur a une liste : elle seule est proposée ; « Tous les sorts » rouvre le catalogue pour les sorts hors liste plus bas.
+  const listedOnly = await page.$$eval('[data-focus-key="magic-spell"] option', options => options.length);
+  assert.equal(listedOnly, 4, 'Seuls les 4 sorts du lanceur sont proposés tant que « Tous les sorts » n’est pas coché');
+  await page.check('[data-focus-key="magic-all-spells"]');
+  await page.waitForFunction(() => document.querySelectorAll('[data-focus-key="magic-spell"] option').length > 4);
   await page.selectOption('[data-focus-key="magic-spell"]', 'spell-audit-f44d90e9c50d6dafb769');
 
   const contractSummaryText = await page.textContent('.workspace-magic-contract-summary');
