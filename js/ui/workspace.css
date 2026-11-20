@@ -666,6 +666,21 @@
   overflow-wrap: anywhere;
 }
 
+.workspace-rename {
+  padding: 0 6px;
+  min-height: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.workspace-sheet-name-input {
+  font-family: var(--j-serif);
+  font-size: 18px;
+  font-weight: 700;
+  min-width: 0;
+  flex: 1 1 12em;
+}
+
 .workspace-camp {
   display: inline-flex;
   padding: 1px 8px;

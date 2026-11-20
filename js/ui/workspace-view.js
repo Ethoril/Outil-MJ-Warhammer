@@ -32,6 +32,8 @@ import { isArmourWorn, extensionsWithArmourWorn } from '../core/armour-worn.js';
 import { createMagicListPicker } from './magic-list-picker.js';
 // Listes de sorts dépliées, gardées d'un rendu à l'autre (état d'affichage seulement).
 const magicListOpen = new Set();
+// Fiche dont le nom est en cours de saisie (`<id>:acteur|cible`) : survit aux rendus déclenchés pendant la frappe.
+let renamingSheet = null;
 import { d100, d10 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
@@ -992,7 +994,49 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const identity = node('div', 'workspace-sheet-identity');
     identity.append(roleLabel);
     const nameRow = node('div', 'workspace-sheet-name-row');
-    nameRow.append(node('h2', 'workspace-sheet-name combatant-name', participant.name), campChip(participant, context.camp));
+    // Renommer un PNJ ou une créature pour cette rencontre : le libellé de son pion suit, le profil du bestiaire ne change pas.
+    // Le nom d'un PJ vient de sa fiche.
+    const renameKey = `${participant.id}:${isTarget ? 'cible' : 'acteur'}`;
+    if (participant.kind !== 'PJ' && renamingSheet === renameKey) {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = participant.name || '';
+      input.maxLength = 80;
+      input.className = 'workspace-sheet-name-input';
+      input.dataset.focusKey = `rename-${renameKey}`;
+      input.setAttribute('aria-label', `Nouveau nom de ${participant.name}`);
+      const error = node('span', 'workspace-error');
+      let done = false;
+      const finish = async save => {
+        if (done) return;
+        const name = input.value.trim().replace(/\s+/g, ' ');
+        if (save && !name) { error.textContent = 'Le nom ne peut pas être vide.'; input.focus(); return; }
+        done = true;
+        renamingSheet = null;
+        if (save && name !== participant.name) {
+          try {
+            const result = await Store.updateParticipant(participant.id, { name });
+            if (result === false || result?.ok === false) throw new Error(result?.error || 'Nom non enregistré.');
+          } catch (cause) { window.alert(userMessage(cause, 'Nom non enregistré.')); }
+        }
+        render();
+      };
+      input.addEventListener('keydown', event => {
+        if (event.key === 'Enter') { event.preventDefault(); finish(true); }
+        else if (event.key === 'Escape') { event.preventDefault(); finish(false); }
+      });
+      input.addEventListener('blur', () => finish(true));
+      nameRow.append(input, error);
+      queueMicrotask(() => { if (input.isConnected && document.activeElement !== input) { input.focus(); input.select(); } });
+    } else {
+      nameRow.appendChild(node('h2', 'workspace-sheet-name combatant-name', participant.name));
+      if (participant.kind !== 'PJ') {
+        const rename = button('✎', 'workspace-secondary workspace-rename', { 'data-focus-key': `rename-button-${renameKey}`, title: 'Renommer pour cette rencontre (le pion suit, le bestiaire ne change pas)', 'aria-label': `Renommer ${participant.name}` });
+        rename.addEventListener('click', () => { renamingSheet = renameKey; render(); });
+        nameRow.appendChild(rename);
+      }
+    }
+    nameRow.appendChild(campChip(participant, context.camp));
     identity.appendChild(nameRow);
     const hp = node('p', 'workspace-sheet-hp num');
     hp.append(node('span', 'workspace-sheet-hp-label', 'PV'), ' ', hpText(participant));
