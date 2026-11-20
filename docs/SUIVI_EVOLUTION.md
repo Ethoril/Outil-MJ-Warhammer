@@ -10,6 +10,12 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 3.55.1 — Renommer un PNJ en rencontre (publiée le 20/11/2026)
+
+**Un PNJ ou une créature se renomme pour la rencontre.** Demande du MJ : changer le libellé d’un pion sur la carte sans toucher au bestiaire. La fiche du participant porte un bouton ✎ à côté du nom ; Entrée enregistre, Échap annule, un nom vide est refusé. Seul le participant change : la liaison renvoie son `label` à Map Display (champ géré par l’outil), l’image du pion, tirée du profil, reste la même, et le profil n’est pas modifié. Les PJ n’ont pas le bouton : leur nom vient de leur fiche. Une modification du profil propagée aux participants rétablit son nom, comme avant.
+
+Suites : 6 970 + 279, zéro échec. `tests/browser-workspace.mjs` vert ; vérifié dans l’outil local sur un PNJ de test (participant et libellé renommés, profil inchangé).
+
 ## 3.55.0 — Sorts et prières des PNJ (publiée le 20/11/2026)
 
 **Une liste de sorts et de prières pour les PNJ.** Demande du MJ : le combat proposait tout le catalogue (400 sorts, plus de 200 prières), peu pratique en jeu. Le formulaire du profil porte un bloc « Sorts et prières », et la fiche du participant le même volet pour la seule rencontre. On ne peut y saisir que des noms des catalogues (sorts V5, prières divines) : un nom inconnu est refusé, le combat ne saurait pas le lancer. La liste du profil passe aux participants qui en sont tirés. Pour un PJ, les deux blocs sont masqués : sa liste vient de sa fiche (`js/core/magic-lists.js`, `js/ui/magic-list-picker.js`).
