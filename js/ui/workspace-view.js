@@ -27,7 +27,8 @@ import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '
 // Surnombre, tir engagé et forçage du MJ ne valent que pour la cible où ils ont été saisis (spec engagements CA18).
 const TARGET_ENGAGEMENT_KEYS = ['targetEngaged', 'engagedWithShooter', 'engagedTargetIds', 'engagedTargetRoll', 'engagedDefensesById', 'shooterEngagedElsewhere', 'engagementForced'];
 const withoutOutnumberContext = context => { const rest = withoutOutnumberKeys(context); for (const key of TARGET_ENGAGEMENT_KEYS) delete rest[key]; return rest; };
-import { equipmentAttackContext, weaponSkillGroupInfo } from '../core/equipment.js';
+import { equipmentAttackContext, weaponSkillGroupInfo, HIT_LOCATIONS } from '../core/equipment.js';
+import { isArmourWorn, extensionsWithArmourWorn } from '../core/armour-worn.js';
 import { d100, d10 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
@@ -1100,7 +1101,40 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     add.disabled = !callbacks.acquireStates && !callbacks.setStates;
     list.appendChild(add);
     states.appendChild(list);
-    const criticals = participant.extensions?.v5?.criticalWounds || [];
+    const armourPieces = (participant.equipment || []).filter(item => item?.kind === 'armour');
+    if (armourPieces.length) {
+      // Armure portée pour cette rencontre seulement : la fiche n'est pas modifiée.
+      const worn = node('div', 'workspace-armour-worn');
+      worn.appendChild(rubric('Armure portée', 'p'));
+      const error = node('p', 'workspace-error');
+      for (const item of armourPieces) {
+        const label = node('label', 'workspace-type'), check = document.createElement('input');
+        check.type = 'checkbox';
+        check.checked = isArmourWorn(participant, item);
+        check.dataset.focusKey = `armour-worn-${participant.id}-${item.id}`;
+        const zones = (item.locations || []).map(id => HIT_LOCATIONS.find(row => row.id === id)?.label || id).join(', ');
+        check.setAttribute('aria-label', `${item.name} porté par ${participant.name}`);
+        check.addEventListener('change', async () => {
+          check.disabled = true;
+          error.textContent = '';
+          try {
+            const fresh = readParticipants(Store).find(row => row.id === participant.id) || participant;
+            const result = await Store.updateParticipant(fresh.id, { extensions: extensionsWithArmourWorn(fresh, item.id, check.checked) });
+            if (result === false || result?.ok === false) throw new Error(result?.error || 'Armure non enregistrée.');
+            render();
+          } catch (cause) {
+            error.textContent = userMessage(cause, 'Armure non enregistrée.');
+            check.checked = !check.checked;
+            check.disabled = false;
+          }
+        });
+        label.append(check, ` ${item.name}${zones ? ` (${zones})` : ''}${Number.isInteger(item.ap) ? ` · PA ${item.ap}` : ''}`);
+        worn.appendChild(label);
+      }
+      worn.appendChild(error);
+      states.appendChild(worn);
+    }
+    const criticals =participant.extensions?.v5?.criticalWounds || [];
     if (criticals.length) {
       const registry = node('div', 'workspace-critical-wounds');
       registry.appendChild(rubric('Blessures Critiques', 'p'));

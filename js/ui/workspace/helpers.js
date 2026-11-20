@@ -1,4 +1,5 @@
 import { ResolutionError } from '../../core/resolution.js';
+import { removedArmourIds } from '../../core/armour-worn.js';
 import { locationProtection } from '../../core/equipment.js';
 import { userMessage } from '../messages.js';
 import { minusSigned } from '../resolution-panel/dom.js';
@@ -94,9 +95,10 @@ export function armorSummary(armor = {}, precise = null) {
 }
 
 // L’armure de fiche reste physique. Montrer la protection réellement utilisée
-// par le combat quand une prière apporte des PA, sans réécrire cette armure.
+// par le combat quand une prière apporte des PA ou qu’une pièce est ôtée, sans réécrire cette armure.
 export function displayedArmorLocations(participant) {
-  if (!(participant.extensions?.v5?.divineEffects || []).some(layer => Object.keys(layer.apModifiers || {}).length)) return participant.armorLocations;
+  const prayerAp = (participant.extensions?.v5?.divineEffects || []).some(layer => Object.keys(layer.apModifiers || {}).length);
+  if (!prayerAp && !removedArmourIds(participant).length) return participant.armorLocations;
   return Object.fromEntries(['head','body','rightArm','leftArm','rightLeg','leftLeg'].map(location => [location, locationProtection(participant,{location}).ap ?? null]));
 }
 

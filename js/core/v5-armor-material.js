@@ -3,6 +3,8 @@
  * La couche (`rigid`, `flexible`) décrit la rigidité, pas le matériau : le cuir bouilli et les capes sont rigides sans être de métal.
  * Module pur. Réponse : 'metal', 'other' ou 'unknown' (matériau non déterminable : le MJ doit trancher, rien n'est présumé).
  */
+import { wornEquipment } from './armour-worn.js';
+
 
 const fold = value => String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 const METAL = /maille|metal|acier|plaque|plate|\bfer\b|gromril|ithilmar|mithril|bronze|cuivre|\bor\b|argent/;
@@ -27,8 +29,7 @@ export function armorMaterial(item) {
 
 /** Pièces d'armure portées qui protègent (PA > 0, hors couche de sort) : base commune des calculs de métal. */
 export function wornArmourPieces(participant, locationId = null) {
-  const equipment = Array.isArray(participant?.equipment) ? participant.equipment : [];
-  return equipment.filter(item => item && item.kind === 'armour' && item.equipped !== false && item.layer !== 'bonus'
+  return wornEquipment(participant).filter(item => item && item.kind === 'armour' && item.equipped !== false && item.layer !== 'bonus'
     && (Number(item.ap) || 0) > 0 && (locationId == null || Array.isArray(item.locations) && item.locations.includes(locationId)));
 }
 

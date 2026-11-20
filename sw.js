@@ -212,6 +212,7 @@ const ASSETS_TO_CACHE = [
   './js/core/v5-magic-overcast-options.js',
   './js/core/v5-magic-reminder-flags.js',
   './js/core/v5-armor-material.js',
+  './js/core/armour-worn.js',
   './js/data/v5-spell-contracts.json',
   './js/data/v5-transformation-bestiary.js',
   './js/data/v5-talent-contracts.json',

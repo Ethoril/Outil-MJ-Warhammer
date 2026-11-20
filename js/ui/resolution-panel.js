@@ -1,4 +1,5 @@
 import { sequelaContextFields } from '../core/v5-sequela-effects.js';
+import { wornEquipment } from '../core/armour-worn.js';
 import { isBrokenActor, renderBrokenEscapeVisibilityControl } from './v5-broken-escape-panel.js';
 import {magicTalentRank} from '../core/v5-magic-talents.js';
 import {natureSelects} from './v5-magic-controls.js';
@@ -1546,7 +1547,7 @@ export function renderResolutionPanel(options) {
   }
   const armorRelevantTest=(type==='test'||type==='skill')&&/(discretion|furtivite|perception)/u.test(String(action?.label||action?.note||'').normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase());
   if(armorRelevantTest){
-    const current=draft.v5Context||{},items=(actor.equipment||[]).filter(item=>item.kind==='armour'&&['Mailles','Mailles Naines','Plates','Plates Naines','Gromril (nain)','Ithilmar Haut Elfe','Dragon Haut Elfe'].includes(item.category));
+    const current=draft.v5Context||{},items=wornEquipment(actor).filter(item=>item.kind==='armour'&&['Mailles','Mailles Naines','Plates','Plates Naines','Gromril (nain)','Ithilmar Haut Elfe','Dragon Haut Elfe'].includes(item.category));
     fields.append(node('p','workspace-muted','Indiquez les pièces de maille/plates ou le heaume fermé effectivement portés pour ce Test.'));
     for(const item of items){
       const label=node('label','workspace-type'),check=document.createElement('input');

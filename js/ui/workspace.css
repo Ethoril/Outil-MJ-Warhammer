@@ -844,6 +844,9 @@
   display: grid;
   gap: 6px;
 }
+.workspace-armour-worn { display: grid; gap: 4px; }
+.workspace-armour-worn label { display: flex; flex-direction: row; align-items: center; gap: 6px; font-size: 13px; }
+.workspace-armour-worn input[type="checkbox"] { width: auto; margin: 0; flex: none; }
 .workspace-sheet-states .workspace-rubric {
   font-family: var(--j-sans);
   font-size: 11px;

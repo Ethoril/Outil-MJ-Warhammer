@@ -1,3 +1,4 @@
+import { wornEquipment } from './armour-worn.js';
 import { activeMagicTalent } from './v5-magic-talent-rank.js';
 import { needs } from './v5-leadership-rally.js';
 export { MASTER_AND_COMMANDER_TALENT, leadershipRallySlModifiers } from './v5-leadership-rally.js';
@@ -296,7 +297,7 @@ export function previewDeliciousExcruciation({caster,target,bfm,round}={}) {
 function fireArmour(participant,input,needsInput) {
   if(input!==undefined)return integer(input,'PA contre le feu');
   if(Array.isArray(participant.equipment)&&participant.equipment.some(item=>item.kind==='armour')){
-    const protection=armourProtection(participant.equipment);
+    const protection=armourProtection(wornEquipment(participant));
     if(protection.locations.some(location=>location.ignored.some(row=>row.item.ap===null))){needs(needsInput,'fireArmour','PA d’armure à préciser avant le feu');return null;}
     return Math.min(...protection.locations.map(location=>location.ap));
   }

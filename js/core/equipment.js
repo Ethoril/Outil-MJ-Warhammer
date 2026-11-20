@@ -1,4 +1,5 @@
 /** Pure fiche equipment contract, copied functions regenerated from the source project. */
+import { wornEquipment } from './armour-worn.js';
 import { HIT_LOCATIONS, armourProtection, equipmentFormula, armourLayer, validateEquipmentItem } from '../data/shared/fiche/equipment.js';
 import talentQualityRegistry from '../data/v5-quality-talent-contracts.json' with {type:'json'};
 import contracts from '../data/keyword-engine-contracts.json' with { type: 'json' };
@@ -505,7 +506,7 @@ export function locationProtection(target,context={}){
  const id=locationId(context),warnings=[],manual=[],evaluatedKeywords=new Set();if(!id){const override=Number(context.manualAp);if(context.manualAp!==undefined&&context.manualAp!==null&&Number.isFinite(override)&&override>=0)return {location:null,ap:override,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:[],warnings,evaluatedKeywords:[],arbitrated:true};return {ap:null,baseAp:null,shieldAp:0,counted:[],ignored:[],manual:['localisation-requise'],warnings};}
  const hasEquipment=Array.isArray(target?.equipment)&&target.equipment.some(i=>i.kind==='armour'||i.kind==='shield');
  const armor=target?.armorLocations??target?.armor??{};
- const protection=hasEquipment?armourProtection(target.equipment):null;
+ const protection=hasEquipment?armourProtection(wornEquipment(target)):null;
  const location=protection?.locations.find(row=>row.id===id);
  let counted=[],ignored=location?.ignored.map(row=>({...row}))??[];
  let baseAp=location?.ap??normalizeArmorLocations(armor)[id];

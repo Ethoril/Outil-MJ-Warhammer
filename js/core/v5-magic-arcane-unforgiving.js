@@ -1,4 +1,5 @@
 /** Destruction des Arcanes : choix explicites, sans tirage ni écriture de fiche. */
+import { wornEquipment } from './armour-worn.js';
 import { calculateArmor, normalizeArmorLocations } from './equipment.js';
 import { calculateEffectiveMagicAP } from './v5-magic-effects.js';
 import { previewChannelling } from './v5-magic-channelling.js';
@@ -27,7 +28,7 @@ export function normalizeArcaneOptions(options = {}) {
 }
 
 export function getArcaneWornArmor(target) {
-  const worn = (target.equipment || []).filter(item => item.kind === 'armour' && item.layer !== 'bonus');
+  const worn = wornEquipment(target).filter(item => item.kind === 'armour' && item.layer !== 'bonus');
   const base = worn.length ? calculateArmor(worn)
     : target.extensions?.v5?.baseArmor || target.baseArmor || target.armorLocations || target.armor || {};
   const damage = target.extensions?.v5?.armorDamage || {};
@@ -111,7 +112,7 @@ export function applyArcaneArmorDamage(target, receipt) {
   next.extensions.v5 = next.extensions.v5 || {};
   const v5 = next.extensions.v5;
   if (!v5.baseArmor) {
-    const worn = (next.equipment || []).filter(item => item.kind === 'armour' && item.layer !== 'bonus');
+    const worn = wornEquipment(next).filter(item => item.kind === 'armour' && item.layer !== 'bonus');
     v5.baseArmor = normalizeArmorLocations(worn.length ? calculateArmor(worn)
       : next.baseArmor || next.armorLocations || next.armor || {});
   }

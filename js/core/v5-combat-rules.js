@@ -1,3 +1,4 @@
+import { wornEquipment } from './armour-worn.js';
 import {enforceMagicTestRestrictions,activeMagicTalent} from './v5-magic-talents.js';
 import {transformationRestrictions} from './v5-magic-combat.js';
 import {getReferenceCatalogue} from './reference-catalog.js';
@@ -247,7 +248,7 @@ export function buildCombatTest(normalized, role = 'actor') {
   if(parryDefense.defensePenalty===0){const index=modifiers.findIndex(row=>row.id==='quality:offhand-defense');if(index>=0)modifiers.splice(index,1);}
   if(!defending&&['test','skill'].includes(kind)){
     const wornIds=Array.isArray(settings.context?.wornArmorItemIds)?settings.context.wornArmorItemIds:[];
-    const worn=actor?.equipment?.filter(item=>wornIds.includes(item.id)&&item.kind==='armour')||[];
+    const worn=wornEquipment(actor).filter(item=>wornIds.includes(item.id)&&item.kind==='armour');
     if(worn.length!==new Set(wornIds).size)unresolved.push('Armure portée : sélectionner uniquement des pièces d’armure de l’inventaire actif.');
     const armor=calculateV5ArmorPenalty({worn});
     const foldedLabel=String(skillLabel||'').normalize('NFD').replace(/[\u0300-\u036f]/gu,'').toLowerCase();

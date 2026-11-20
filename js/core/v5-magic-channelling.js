@@ -1,3 +1,4 @@
+import { wornEquipment } from './armour-worn.js';
 import {enforceMagicTestRestrictions} from './v5-magic-talents.js';
 import { casterCaracs, castsWithStrength } from './creature-abilities.js';
 import { beastFormRestriction } from './v5-magic-arbitrations.js';
@@ -78,7 +79,7 @@ export function calculateMagicArmorPenalty(participant, { wind = null } = {}) {
   const ignoreLeather = ['ghur', 'beasts', 'betes', 'ambre', 'amber'].includes(normalizedWind);
 
   const equipment = Array.isArray(participant?.equipment) ? participant.equipment : [];
-  const armours = equipment.filter(item => item && item.kind === 'armour' && item.equipped !== false);
+  const armours = wornEquipment(participant).filter(item => item && item.kind === 'armour' && item.equipped !== false);
 
   // Si aucun équipement porté n'est présent, vérifier si des PA portés explicites existent
   if (armours.length === 0 && !equipment.some(item => item?.kind === 'armour')) {
