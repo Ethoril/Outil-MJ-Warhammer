@@ -1012,13 +1012,18 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         const name = input.value.trim().replace(/\s+/g, ' ');
         if (save && !name) { error.textContent = 'Le nom ne peut pas être vide.'; input.focus(); return; }
         done = true;
-        renamingSheet = null;
         if (save && name !== participant.name) {
           try {
             const result = await Store.updateParticipant(participant.id, { name });
             if (result === false || result?.ok === false) throw new Error(result?.error || 'Nom non enregistré.');
-          } catch (cause) { window.alert(userMessage(cause, 'Nom non enregistré.')); }
+          } catch (cause) {
+            // La saisie reste ouverte, avec le message : rien n'est perdu.
+            done = false;
+            error.textContent = userMessage(cause, 'Nom non enregistré.');
+            return;
+          }
         }
+        renamingSheet = null;
         render();
       };
       input.addEventListener('keydown', event => {
