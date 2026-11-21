@@ -10,6 +10,10 @@
  * - `formSignature(participant)` → texte ; `''` par défaut. Un changement entre deux lectures (forme prise ou quittée) n'est
  *   pas une blessure : pas de `fx.wound`.
  *
+ * Tour de jeu (`mj.turn`, contrat §10, révision du 21/11/2026) : `getActiveId()` rend l'identifiant du participant actif
+ * ou `null`. Un jeu qui ne le fournit pas n'envoie jamais `mj.turn` ; sinon le message part à chaque changement et toujours
+ * dans l'instantané, `ref: null` hors tour.
+ *
  * Le cycle de vie se lit sur les instantanés : un `ref` qui apparaît part en `token.add`, un `ref` qui change en `token.state`,
  * un `ref` non PJ qui disparaît en `token.remove`. Mort et banc gardent le participant, donc le pion.
  */
@@ -122,7 +126,7 @@ export function effectsOf(prev, next, { formChanged = false } = {}) {
  * `mj.distanceQuery`. Retours de la carte (§10, L5) : `on('placement', fn)` reçoit `{ connected, placed, pending }` à
  * chaque changement, `on('adjacency', fn)` les paires de `map.adjacency` ; `queryDistance(de, vers)` interroge la carte.
  */
-export function createMapLinkProtocol({ channel, projection, getParticipants, now = () => Date.now(), onStatus = () => {},
+export function createMapLinkProtocol({ channel, projection, getParticipants, getActiveId = null, now = () => Date.now(), onStatus = () => {},
   onRan = () => {}, setTimer = (fn, ms) => setTimeout(fn, ms), clearTimer = id => clearTimeout(id) }) {
   if (typeof projection?.tokenStates !== 'function' || typeof projection?.refOf !== 'function') {
     throw new Error('Liaison carte : la projection du jeu doit fournir tokenStates et refOf.');
@@ -142,6 +146,7 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, no
   const pendingDistances = new Map();
   let distanceSeq = 0;
   let engagements = '[]';
+  let turn = null;
   let placement = '';
   const listeners = { placement: new Set(), adjacency: new Set() };
   const emit = (event, value) => { for (const fn of listeners[event]) fn(value); };
@@ -177,6 +182,20 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, no
     send('mj.engagements', { pairs });
   };
 
+  /**
+   * Participant actif (`mj.turn`, §10) : `ref` de son pion, `null` hors tour ou s'il n'est pas dans la scène. Émis quand il
+   * change ; l'instantané le renvoie toujours. Rien sans `getActiveId`.
+   */
+  const sendTurn = (force = false) => {
+    if (typeof getActiveId !== 'function') return;
+    const id = getActiveId();
+    const actor = id ? (getParticipants() || []).find(participant => participant?.id === id) : null;
+    const ref = actor ? refOf(actor) : null;
+    if (!force && ref === turn) return;
+    turn = ref;
+    send('mj.turn', { ref });
+  };
+
   /** Relit la scène et émet les changements (à brancher sur les événements du jeu). */
   function refresh() {
     const [next, nextForms] = readScene();
@@ -193,6 +212,7 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, no
     forms = nextForms;
     sendRoster();
     sendEngagements();
+    sendTurn();
     emitPlacement();
   }
 
@@ -202,6 +222,7 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, no
     send('mj.snapshot', { tokens: Object.values(states) });
     sendRoster(true);
     sendEngagements(true);
+    sendTurn(true);
     // Carte rechargée (audit A5) : elle renvoie map.placed pour chaque pion réellement posé après mj.snapshot.
     placed.clear();
     emitPlacement();

@@ -1895,6 +1895,8 @@ if (typeof BroadcastChannel === 'function') {
     channel: new BroadcastChannel(MAP_LINK_CHANNEL),
     // Scène, plus les PJ persistants hors scène : leur pion reste lié en exploration (contrat §3).
     getParticipants: () => { const scene = Store.listParticipants(); return [...scene, ...offScenePjParticipants(Store.listPersistentCharacters(), scene, id => Store.getProfile(id))]; },
+    // Tour de jeu (§10, révision du 21/11/2026) : la carte cerne le pion du participant actif, sur l'écran MJ seulement.
+    getActiveId: () => Store.getCombat()?.currentActorId ?? null,
     // Image importée, sinon choisie dans la bibliothèque, sinon automatique du bestiaire (docs/specs/images-pions), y compris pour
     // une monture (profil `monture-<id>`) et un participant ajouté depuis le bestiaire sans profil. Un PJ n'envoie rien (map-link-state).
     imageUrlOf: participant => participantTokenImageUrl(participant, id => Store.getProfile(id)),
