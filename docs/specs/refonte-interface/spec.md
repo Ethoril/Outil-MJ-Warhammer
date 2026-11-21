@@ -1,6 +1,6 @@
 # Spec · Refonte de l'interface (écran de combat d'abord)
 
-21/11/2026. Cadrage : aucun lot n'est lancé avant la validation du MJ. Plan : [plan.md](plan.md) · Tâches : [tasks.md](tasks.md).
+21/11/2026. **Cadrage validé par le MJ le 21/11/2026** (maquette A et spec telles quelles ; publication en une fois après E6). Plan : [plan.md](plan.md) · Tâches : [tasks.md](tasks.md).
 Inventaire de la 3.56.0 : [inventaire.md](inventaire.md) (captures) · relevé des fonctions de l'espace Jouer : [fonctions-jouer.md](fonctions-jouer.md) · maquette retenue : [maquette.html](maquette.html), parti pris A (en ligne : <https://claude.ai/artifact/2oCodrCDXsKERwhDh5nU6y>).
 
 ## 1. Pourquoi

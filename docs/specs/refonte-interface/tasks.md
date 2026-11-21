@@ -1,6 +1,6 @@
 # Tâches · Refonte de l'interface
 
-Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans une **session neuve**, sur sa branche locale tirée de la branche de cadrage, après le feu vert du MJ. Publication en une fois après E6 (ou par étapes si le MJ le demande).
+Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans une **session neuve**, sur sa branche locale tirée de la branche de cadrage, après le feu vert du MJ (cadrage validé le 21/11/2026). Publication en une fois après E6 et la recette du MJ à la table (décision du 21/11).
 
 | Lot | But | Modèle | Après | CA |
 |---|---|---|---|---|
