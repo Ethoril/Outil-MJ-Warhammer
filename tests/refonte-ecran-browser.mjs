@@ -342,7 +342,7 @@ try {
     return { turn: Store.getCombat().currentActorId, actor: document.querySelector('.workspace-sheet-actor')?.dataset.actorId || null, target: document.querySelector('.workspace-sheet-target')?.dataset.actorId || null };
   });
   const cartouches = page.locator('[data-zone="centre"] [data-part="melees"] [data-workspace-target]');
-  assert.ok(await cartouches.count() >= 20, `un cartouche par combattant actif (${await cartouches.count()}, 20 au moins attendus)`);
+  assert.equal(await cartouches.count(), await activeCount(), `un cartouche par combattant actif (${await cartouches.count()} pour ${await activeCount()})`);
   assert.equal(await page.locator('[data-zone="centre"] [data-part="melees"] [data-workspace-select]').count(), 0, 'les cartouches ne choisissent pas l’acteur');
   const wasMelee = await meleeState();
   const pick = await cartouches.evaluateAll((items, avoid) => items.map(item => item.dataset.workspaceTarget).find(id => !avoid.includes(id)), [wasMelee.actor, wasMelee.target]);
@@ -365,11 +365,11 @@ try {
   const moveOptions = await gorMove.locator('option').allTextContents();
   for (const label of ['Déplacer…', 'Engager avec Erich Massenbach', 'Encerclé', 'Position haute', 'À couvert']) assert.ok(moveOptions.includes(label), `Déplacer… propose « ${label} » (${moveOptions.join(' | ')})`);
   // Engagement : Gor 1 contre Erich et Jorunn — une mêlée, des cartouches groupés, aucun débordement.
-  await gorMove.selectOption(`engage:${ERICH}`);
-  await page.getByLabel('Déplacer Gor 1', { exact: true }).selectOption(`engage:${JORUNN}`);
+  await gorMove.selectOption(`engage:${ID.ERICH}`);
+  await page.getByLabel('Déplacer Gor 1', { exact: true }).selectOption(`engage:${ID.JORUNN}`);
   await page.locator('.workspace-zone.is-melee').first().waitFor();
-  assert.match(await page.locator('.workspace-token').filter({ has: page.locator(`[data-workspace-target="${GOR}"]`) }).textContent(), /Engagé avec : /, 'l’engagement reste lisible sur le cartouche');
-  await selectActor(GOR);
+  assert.match(await page.locator('.workspace-token').filter({ has: page.locator(`[data-workspace-target="${ID.GOR}"]`) }).textContent(), /Engagé avec : /, 'l’engagement reste lisible sur le cartouche');
+  await selectActor(ID.GOR);
   const bar = page.locator('[data-zone="bas"] .workspace-action-bar');
   const barLabels = await bar.locator('.workspace-action-bar-item strong').allTextContents();
   for (const label of ['Se désengager', 'Fuir', 'Se déplacer', 'Autres actions']) assert.ok(barLabels.includes(label), `la barre du bas propose « ${label} » (${barLabels.join(' | ')})`);
