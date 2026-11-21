@@ -2997,11 +2997,24 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return preview && !preview.choiceRequired && preview.targetId === participant.id ? previewHpLoss(preview) : 0;
   }
   let playReady = false;
+  // Refonte de l'interface (lot E0) : grille fixe de l'espace Jouer, une zone par case de la maquette A, repérée par
+  // `data-zone` (frise, acteur, centre, droite, bas) pour les tests et les lots suivants. Les blocs existants y sont
+  // relogés tels quels par renderPlay() ; chaque zone défile seule tant que les lots E1 à E4b ne l'ont pas compactée.
+  const PLAY_ZONES = [['frise', 'Frise d’initiative'], ['acteur', 'Celui qui agit'], ['centre', 'Mêlées et résolution'], ['droite', 'À décider et cible'], ['bas', 'Actions et onglets']];
   const play = (() => {
     const grid = node('div', 'workspace-play-grid');
+    const zones = Object.fromEntries(PLAY_ZONES.map(([name, label]) => {
+      const zone = node('section', `workspace-area workspace-area-${name}`);
+      zone.dataset.zone = name;
+      // Clé de défilement (U2) : la position de lecture de la zone survit aux re-rendus.
+      zone.dataset.scrollKey = `zone-${name}`;
+      zone.setAttribute('aria-label', label);
+      return [name, zone];
+    }));
     const track = node('aside', 'workspace-track-column');
     track.setAttribute('aria-label', 'Piste des tours');
     const center = node('div', 'workspace-center');
+    const actionsSlot = node('div', 'workspace-area-actions');
     const side = initSidePanel({
       tabs: [
         { id: 'rules', label: 'Règles', render: content => renderRenderer(callbacks.renderRules, content, 'Les règles et mots-clés restent consultables sans modifier la séance.') },
@@ -3014,10 +3027,30 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         onSideChange();
       }
     });
-    grid.append(track, center, side.element);
+    zones.centre.append(track, center);
+    zones.bas.append(actionsSlot, side.element);
+    grid.append(...PLAY_ZONES.map(([name]) => zones[name]));
     refs.play.appendChild(grid);
-    return { grid, track, center, side };
+    return { grid, zones, track, center, actionsSlot, side };
   })();
+  // Blocs relogés hors du centre après chaque rendu (lot E0) : fiches de l'acteur et de la cible, décisions attendues,
+  // barre d'actions du combattant. Les nœuds gardent leurs écouteurs ; ils sont reconstruits à chaque rendu.
+  const DECISION_BLOCKS = '.workspace-sudden-death-banner, .workspace-critical-death-decisions, .workspace-amputation-followups';
+  function placeInZones() {
+    const { zones, center, track, actionsSlot } = play;
+    zones.acteur.replaceChildren();
+    zones.droite.replaceChildren();
+    actionsSlot.replaceChildren();
+    const duel = center.querySelector(':scope > .workspace-duel');
+    const actorSheet = duel?.querySelector('.workspace-sheet-actor');
+    const targetSheet = duel?.querySelector('.workspace-sheet-target');
+    if (actorSheet) zones.acteur.appendChild(actorSheet);
+    zones.droite.append(...center.querySelectorAll(`:scope > :is(${DECISION_BLOCKS})`));
+    if (targetSheet) zones.droite.appendChild(targetSheet);
+    if (duel && !duel.children.length) duel.remove();
+    const actionBar = track.querySelector(':scope > .workspace-action-bar');
+    if (actionBar) actionsSlot.appendChild(actionBar);
+  }
 
   // U6 (05/11, D5) : Circonstances est un onglet du panneau latéral. Le bloc construit par la résolution
   // (aside .workspace-resolution-drawer) est déplacé à chaque rendu dans l'onglet ; il est « ouvert » quand
@@ -3070,6 +3103,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const context = playContext();
     renderTrack(context);
     renderCenter(context);
+    placeInZones();
     mountCircumstances();
   }
 

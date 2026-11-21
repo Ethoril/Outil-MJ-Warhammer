@@ -1,53 +1,8 @@
-/* Polices embarquées — l'application doit s'afficher sans réseau (PLAN.md §12.1).
-   Licence SIL OFL : voir assets/fonts/LICENSE.md. Ne pas repasser à un CDN.
-   Grenze Gotisch : titres et noms de combattants ; Alegreya : texte ; Alegreya Sans : interface. */
-@font-face {
-  font-family: 'Grenze Gotisch';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('assets/fonts/grenze-gotisch-normal.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Alegreya';
-  font-style: normal;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('assets/fonts/alegreya-normal.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Alegreya';
-  font-style: italic;
-  font-weight: 400 800;
-  font-display: swap;
-  src: url('assets/fonts/alegreya-italic.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Alegreya Sans';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('assets/fonts/alegreya-sans-400.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Alegreya Sans';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('assets/fonts/alegreya-sans-500.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Alegreya Sans';
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url('assets/fonts/alegreya-sans-700.woff2') format('woff2');
-}
-
+/* Police système partout (refonte de l'interface, CA21) : San Francisco sur le Mac, Segoe UI sous Windows ; aucune police chargée. */
 :root {
-  --font-display: 'Grenze Gotisch', 'Alegreya', Georgia, serif;
-  --font-text: 'Alegreya', Georgia, serif;
-  --font-ui: 'Alegreya Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, sans-serif;
+  --font-display: var(--font-ui);
+  --font-text: var(--font-ui);
 
   --bg: #f5e5c7;
   --bg-image: url('assets/images/old-paper.svg');
@@ -233,27 +188,54 @@ h4 { font-family: var(--font-ui); font-weight: 700; color: var(--accent); margin
 .app-menu-text { display: block; padding: 3px 10px; font-size: 13px; color: var(--muted); }
 .app-menu-text:empty { display: none; }
 
-/* Bandeau de combat persistant, sous la ligne principale de la barre */
-.combat-banner { border-top: 1px solid var(--chip); background: var(--panel); }
+/* Bandeau de combat fondu dans la barre du haut (refonte, lot E0) : round, au tour de, décisions en attente, Tour suivant. */
+.combat-banner { display: flex; flex: 1 1 auto; min-width: 0; }
 .combat-banner[hidden] { display: none; }
-.topbar .combat-banner-inner { gap: 12px; padding-block: 6px; min-width: 0; }
-.combat-banner-title { flex: none; max-width: 20ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-display); font-size: 19px; font-weight: 700; color: var(--heading-color); }
-.combat-banner-status { flex: none; font-family: var(--font-ui); font-size: 14.5px; white-space: nowrap; }
-.combat-banner-status .combatant-name { font-size: 16.5px; color: var(--accent-text); }
+.combat-banner-inner { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto; }
+.combat-banner-status { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-ui); font-size: 14px; white-space: nowrap; }
+.combat-banner-status .combatant-name { font-weight: 700; color: var(--accent-text); }
+.combat-banner-decisions { flex: none; padding: 2px 9px; border-radius: 999px; background: var(--accent); color: #fff; font-family: var(--font-ui); font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+.combat-banner-decisions[hidden] { display: none; }
 .combat-banner-track { display: flex; flex: 1 1 0; gap: 6px; min-width: 0; margin: 0; padding: 0; list-style: none; overflow: hidden; }
 .combat-banner-track[hidden] { display: none; }
+.combat-banner-inner > .spacer[hidden] { display: none; }
 .combat-banner-chip { display: inline-flex; flex: none; align-items: baseline; gap: 6px; padding: 2px 9px; border: 1px solid var(--chip); border-radius: 999px; background: var(--bg); font-family: var(--font-ui); font-size: 12.5px; white-space: nowrap; }
-.combat-banner-chip-name { max-width: 11ch; overflow: hidden; text-overflow: ellipsis; font-size: 14px; }
+.combat-banner-chip-name { max-width: 11ch; overflow: hidden; text-overflow: ellipsis; font-size: 13px; }
 .combat-banner-chip.is-current { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
 .combat-banner-chip.is-current .combat-banner-chip-name { color: var(--accent-text); }
 .combat-banner-more { color: var(--muted); }
 .combat-banner-back { flex: none; white-space: nowrap; }
-.combat-banner-reminder { display: flex; align-items: center; gap: 12px; padding-block: 4px 6px; font-family: var(--font-ui); font-size: 13.5px; }
+/* Rappel du Fléau des Démons : sous la barre, sans la faire grandir. */
+.combat-banner-reminder { position: absolute; top: 100%; left: 0; right: 0; display: flex; align-items: center; gap: 12px; padding: 4px 16px 6px; background: var(--panel); border-bottom: 1px solid var(--border); font-family: var(--font-ui); font-size: 13.5px; }
 .combat-banner-reminder[hidden] { display: none; }
 .combat-banner-restore { flex: none; white-space: nowrap; }
 .combat-banner-primary { flex: none; white-space: nowrap; background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; }
 .combat-banner-primary:hover:not(:disabled) { border-color: var(--accent-hover); box-shadow: 0 0 0 2px var(--accent-hover); }
 .combat-banner-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.topbar-main:has(> .combat-banner:not([hidden])) > .spacer { display: none; }
+.topbar .combat-banner-primary { padding: 5px 14px; }
+
+/* Barre du haut d'une seule ligne quand le bandeau de combat y est fondu (refonte, lot E0), dans tous les espaces. */
+@media (min-width: 901px) {
+  .topbar-main:has(> .combat-banner:not([hidden])) { gap: 10px; }
+  .topbar-main:has(> .combat-banner:not([hidden])) .topbar-title { display: none; }
+  .topbar-main:has(> .combat-banner:not([hidden])) .tab { padding: 5px 11px; font-size: 14px; }
+  .topbar-main:has(> .combat-banner:not([hidden])) .topbar-tool { padding: 4px 8px; font-size: 13px; }
+  /* États d'enregistrement et de liaison réduits à leur pastille (libellé au survol et pour les lecteurs d'écran), sauf alerte. */
+  .topbar-main:has(> .combat-banner:not([hidden])) .status-indicator:not([data-tone="danger"]) .status-label,
+  .topbar-main:has(> .combat-banner:not([hidden])) .map-link-indicator:not([data-state="version-mismatch"]) .map-link-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+
+/* Écran de combat sans défilement de page (refonte, lot E0) : à partir de 1000 px de large, quand Jouer est affiché,
+   la barre du haut a une hauteur fixe et l'espace de travail prend exactement le reste de la fenêtre. */
+@media (min-width: 1000px) {
+  :root { --topbar-height: 52px; }
+  body:has(#panel-workspace.is-active #workspace-play:not([hidden])) .topbar { height: var(--topbar-height); }
+  body:has(#panel-workspace.is-active #workspace-play:not([hidden])) .topbar .topbar-main { height: 100%; padding-block: 0; }
+  body:has(#panel-workspace.is-active #workspace-play:not([hidden])) main.wrap { height: calc(100dvh - var(--topbar-height)); padding: 0; }
+  body:has(#panel-workspace.is-active #workspace-play:not([hidden])) #panel-workspace { height: 100%; margin: 0; }
+  body:has(#panel-workspace.is-active #workspace-play:not([hidden])) #workspace-root { height: 100%; }
+}
 .panel { display: none; margin: 18px 0; } .panel.is-active { display: block; }
 .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15); }
 .row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
