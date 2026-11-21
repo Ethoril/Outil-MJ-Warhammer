@@ -1,0 +1,3630 @@
+{
+ "schemaVersion": 3,
+ "reserve": [],
+ "combat": {
+  "round": 0,
+  "currentActorId": null,
+  "order": [],
+  "orderMode": "automatic",
+  "participants": [
+   {
+    "id": "r20-e0-p-536",
+    "name": "Erich Massenbach",
+    "kind": "PJ",
+    "camp": "pj",
+    "zone": "active",
+    "species": "Human",
+    "identity": {
+     "name": "Erich Massenbach",
+     "career": "Artist",
+     "species": "Human",
+     "careerPath": "Artist",
+     "status": "Silver 3",
+     "formName": "Erich Massenbach"
+    },
+    "initiative": 43,
+    "hp": 11,
+    "maxHp": 11,
+    "caracs": {
+     "M": 4,
+     "CC": 24,
+     "CT": 29,
+     "F": 36,
+     "E": 38,
+     "I": 43,
+     "Ag": 29,
+     "Dex": 44,
+     "Int": 31,
+     "FM": 30,
+     "Soc": 41
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [],
+    "skills": [
+     {
+      "name": "Escalade",
+      "sourceName": "Climb",
+      "total": 41,
+      "id": "skill-45_73_63_61_6c_61_64_65-base",
+      "group": "Escalade",
+      "carac": "f",
+      "status": "resolved"
+     },
+     {
+      "name": "Calme",
+      "sourceName": "Cool",
+      "total": 38,
+      "id": "skill-43_61_6c_6d_65-base",
+      "group": "Calme",
+      "carac": "fm",
+      "status": "resolved"
+     },
+     {
+      "name": "Résistance à l’alcool",
+      "sourceName": "Consume Alcohol",
+      "total": 43,
+      "status": "unresolved"
+     },
+     {
+      "name": "Esquive",
+      "sourceName": "Dodge",
+      "total": 29,
+      "id": "skill-45_73_71_75_69_76_65-base",
+      "group": "Esquive",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Conduite d’attelage",
+      "sourceName": "Drive",
+      "total": 29,
+      "status": "unresolved"
+     },
+     {
+      "name": "Résistance",
+      "sourceName": "Endurance",
+      "total": 43,
+      "id": "skill-52_e9_73_69_73_74_61_6e_63_65-base",
+      "group": "Résistance",
+      "carac": "e",
+      "status": "resolved"
+     },
+     {
+      "name": "Pari",
+      "sourceName": "Gamble",
+      "total": 41,
+      "id": "skill-50_61_72_69-base",
+      "group": "Pari",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Marchandage",
+      "sourceName": "Haggle",
+      "total": 46,
+      "id": "skill-4d_61_72_63_68_61_6e_64_61_67_65-base",
+      "group": "Marchandage",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Commandement",
+      "sourceName": "Leadership",
+      "total": 48,
+      "id": "skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base",
+      "group": "Commandement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 24,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps",
+      "sourceName": "Melee",
+      "total": 24,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-base",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Orientation",
+      "sourceName": "Navigation",
+      "total": 43,
+      "id": "skill-4f_72_69_65_6e_74_61_74_69_6f_6e-base",
+      "group": "Orientation",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Chevaucher",
+      "sourceName": "Ride",
+      "total": 29,
+      "id": "skill-43_68_65_76_61_75_63_68_65_72-base",
+      "group": "Chevaucher",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion",
+      "sourceName": "Stealth",
+      "total": 36,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-base",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [
+     {
+      "name": "Âme pure",
+      "sourceName": "Pure Soul",
+      "rank": 1,
+      "id": "talent-pure-soul",
+      "status": "resolved"
+     },
+     {
+      "name": "Artiste",
+      "sourceName": "Artistic",
+      "rank": 1,
+      "id": "talent-artistic",
+      "status": "resolved"
+     },
+     {
+      "name": "Destinée",
+      "sourceName": "Doomed",
+      "rank": 1,
+      "id": "talent-doomed",
+      "status": "resolved"
+     },
+     {
+      "name": "Lire/Écrire",
+      "sourceName": "Read/Write",
+      "rank": 1,
+      "id": "talent-read-write",
+      "status": "resolved"
+     },
+     {
+      "name": "Oreille absolue",
+      "sourceName": "Perfect Pitch",
+      "rank": 1,
+      "id": "talent-perfect-pitch",
+      "status": "resolved"
+     },
+     {
+      "name": "Sens aiguisé",
+      "sourceName": "Acute Sense",
+      "rank": 1,
+      "id": "talent-acute-sense",
+      "status": "resolved"
+     }
+    ],
+    "traits": [],
+    "keywords": [
+     "humain"
+    ],
+    "tags": [],
+    "notes": "Source : The Imperial Zoo (L11), p. 122 — profil E0-P-536.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-536",
+       "book": "L11",
+       "page": 122,
+       "name": "Erich Massenbach",
+       "edition": "V4",
+       "identity": {
+        "name": "Erich Massenbach",
+        "career": "Artist",
+        "species": "Human",
+        "careerPath": "Artist",
+        "status": "Silver 3",
+        "formName": "Erich Massenbach"
+       },
+       "species": "Human",
+       "armour": {},
+       "traitRefs": {},
+       "optionalTraits": [],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-537",
+    "name": "Jorunn Gromsdottir",
+    "kind": "PJ",
+    "camp": "pj",
+    "zone": "active",
+    "species": "Dwarf",
+    "identity": {
+     "name": null,
+     "career": null,
+     "species": "Dwarf",
+     "careerPath": "Apothecary",
+     "status": "Silver 1",
+     "formName": null
+    },
+    "initiative": 31,
+    "hp": 15,
+    "maxHp": 15,
+    "caracs": {
+     "M": 3,
+     "CC": 44,
+     "CT": 33,
+     "F": 24,
+     "E": 51,
+     "I": 31,
+     "Ag": 19,
+     "Dex": 44,
+     "Int": 46,
+     "FM": 55,
+     "Soc": 25
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [],
+    "skills": [
+     {
+      "name": "Pari",
+      "sourceName": "Gamble",
+      "total": 56,
+      "id": "skill-50_61_72_69-base",
+      "group": "Pari",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Marchandage",
+      "sourceName": "Haggle",
+      "total": 30,
+      "id": "skill-4d_61_72_63_68_61_6e_64_61_67_65-base",
+      "group": "Marchandage",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Commandement",
+      "sourceName": "Leadership",
+      "total": 31,
+      "id": "skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base",
+      "group": "Commandement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 44,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps",
+      "sourceName": "Melee",
+      "total": 44,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-base",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Orientation",
+      "sourceName": "Navigation",
+      "total": 31,
+      "id": "skill-4f_72_69_65_6e_74_61_74_69_6f_6e-base",
+      "group": "Orientation",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Chevaucher",
+      "sourceName": "Ride",
+      "total": 19,
+      "id": "skill-43_68_65_76_61_75_63_68_65_72-base",
+      "group": "Chevaucher",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion",
+      "sourceName": "Stealth",
+      "total": 24,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-base",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [
+     {
+      "name": "Costaud",
+      "sourceName": "Sturdy",
+      "rank": 1,
+      "id": "talent-sturdy",
+      "status": "resolved"
+     },
+     {
+      "name": "Déterminé",
+      "sourceName": "Resolute",
+      "rank": 1,
+      "id": "talent-resolute",
+      "status": "resolved"
+     },
+     {
+      "name": "Lire/Écrire",
+      "sourceName": "Read/Write",
+      "rank": 1,
+      "id": "talent-read-write",
+      "status": "resolved"
+     },
+     {
+      "name": "Résistance à la Magie",
+      "sourceName": "Magic Resistance",
+      "rank": 1,
+      "id": "talent-magic-resistance",
+      "status": "resolved"
+     },
+     {
+      "name": "Vision nocturne",
+      "sourceName": "Night Vision",
+      "rank": 1,
+      "id": "talent-night-vision",
+      "status": "resolved"
+     }
+    ],
+    "traits": [],
+    "keywords": [
+     "nain"
+    ],
+    "tags": [],
+    "notes": "Source : The Imperial Zoo (L11), p. 124 — profil E0-P-537.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-537",
+       "book": "L11",
+       "page": 124,
+       "name": "Jorunn Gromsdottir",
+       "edition": "V4",
+       "identity": {
+        "name": null,
+        "career": null,
+        "species": "Dwarf",
+        "careerPath": "Apothecary",
+        "status": "Silver 1",
+        "formName": null
+       },
+       "species": "Dwarf",
+       "armour": {},
+       "traitRefs": {},
+       "optionalTraits": [],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-538",
+    "name": "Lynathryn Nightsong",
+    "kind": "PJ",
+    "camp": "pj",
+    "zone": "active",
+    "species": "Wood Elf",
+    "identity": {
+     "name": "Kirsten Krank",
+     "career": "Hunter LYNATHRYN NIGHTSONG HUNTER",
+     "species": "Wood Elf",
+     "careerPath": "Prowler",
+     "status": "Brass 1",
+     "formName": "Kirsten Krank",
+     "titleMismatch": true
+    },
+    "initiative": 55,
+    "hp": 15,
+    "maxHp": 15,
+    "caracs": {
+     "M": 5,
+     "CC": 45,
+     "CT": 57,
+     "F": 36,
+     "E": 35,
+     "I": 55,
+     "Ag": 40,
+     "Dex": 57,
+     "Int": 41,
+     "FM": 38,
+     "Soc": 31
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [],
+    "skills": [
+     {
+      "name": "Esquive",
+      "sourceName": "Dodge",
+      "total": 40,
+      "id": "skill-45_73_71_75_69_76_65-base",
+      "group": "Esquive",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Conduite d’attelage",
+      "sourceName": "Drive",
+      "total": 40,
+      "status": "unresolved"
+     },
+     {
+      "name": "Résistance",
+      "sourceName": "Endurance",
+      "total": 45,
+      "id": "skill-52_e9_73_69_73_74_61_6e_63_65-base",
+      "group": "Résistance",
+      "carac": "e",
+      "status": "resolved"
+     },
+     {
+      "name": "Pari",
+      "sourceName": "Gamble",
+      "total": 31,
+      "id": "skill-50_61_72_69-base",
+      "group": "Pari",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Marchandage",
+      "sourceName": "Haggle",
+      "total": 31,
+      "id": "skill-4d_61_72_63_68_61_6e_64_61_67_65-base",
+      "group": "Marchandage",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Commandement",
+      "sourceName": "Leadership",
+      "total": 55,
+      "id": "skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base",
+      "group": "Commandement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 50,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps",
+      "sourceName": "Melee",
+      "total": 45,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-base",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Orientation",
+      "sourceName": "Navigation",
+      "total": 55,
+      "id": "skill-4f_72_69_65_6e_74_61_74_69_6f_6e-base",
+      "group": "Orientation",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Chevaucher",
+      "sourceName": "Ride",
+      "total": 40,
+      "id": "skill-43_68_65_76_61_75_63_68_65_72-base",
+      "group": "Chevaucher",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion",
+      "sourceName": "Stealth",
+      "total": 36,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-base",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [
+     {
+      "name": "Dur à cuire",
+      "sourceName": "Hardy",
+      "rank": 1,
+      "id": "talent-hardy",
+      "status": "resolved"
+     },
+     {
+      "name": "Lire/Écrire",
+      "sourceName": "Read/Write",
+      "rank": 1,
+      "id": "talent-read-write",
+      "status": "resolved"
+     },
+     {
+      "name": "Nomade",
+      "sourceName": "Rover",
+      "rank": 1,
+      "id": "talent-rover",
+      "status": "resolved"
+     },
+     {
+      "name": "Sens aiguisé",
+      "sourceName": "Acute Sense",
+      "rank": 1,
+      "id": "talent-acute-sense",
+      "status": "resolved"
+     },
+     {
+      "name": "Vision nocturne",
+      "sourceName": "Night Vision",
+      "rank": 1,
+      "id": "talent-night-vision",
+      "status": "resolved"
+     }
+    ],
+    "traits": [],
+    "keywords": [
+     "elfe-sylvain"
+    ],
+    "tags": [],
+    "notes": "Source : The Imperial Zoo (L11), p. 126 — profil E0-P-538.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-538",
+       "book": "L11",
+       "page": 126,
+       "name": "Lynathryn Nightsong",
+       "edition": "V4",
+       "identity": {
+        "name": "Kirsten Krank",
+        "career": "Hunter LYNATHRYN NIGHTSONG HUNTER",
+        "species": "Wood Elf",
+        "careerPath": "Prowler",
+        "status": "Brass 1",
+        "formName": "Kirsten Krank",
+        "titleMismatch": true
+       },
+       "species": "Wood Elf",
+       "armour": {},
+       "traitRefs": {},
+       "optionalTraits": [],
+       "abilityRefs": []
+      },
+      "ownMountId": "r20-e0-p-458",
+      "mounted": true,
+      "mountId": "r20-e0-p-458"
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-539",
+    "name": "Theodosius Schreiber",
+    "kind": "PJ",
+    "camp": "pj",
+    "zone": "active",
+    "species": "Human",
+    "identity": {
+     "name": "Theodosius Schreiber",
+     "career": "Scholar THEODOSIUS SCHREIBER PROWLER",
+     "species": "Human",
+     "careerPath": "Scholar",
+     "status": "Silver 2",
+     "formName": "Theodosius Schreiber"
+    },
+    "initiative": 31,
+    "hp": 14,
+    "maxHp": 14,
+    "caracs": {
+     "M": 4,
+     "CC": 32,
+     "CT": 28,
+     "F": 30,
+     "E": 43,
+     "I": 31,
+     "Ag": 31,
+     "Dex": 31,
+     "Int": 47,
+     "FM": 36,
+     "Soc": 27
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [],
+    "skills": [
+     {
+      "name": "Résistance à l’alcool",
+      "sourceName": "Consume Alcohol",
+      "total": 48,
+      "status": "unresolved"
+     },
+     {
+      "name": "Esquive",
+      "sourceName": "Dodge",
+      "total": 31,
+      "id": "skill-45_73_71_75_69_76_65-base",
+      "group": "Esquive",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Conduite d’attelage",
+      "sourceName": "Drive",
+      "total": 31,
+      "status": "unresolved"
+     },
+     {
+      "name": "Résistance",
+      "sourceName": "Endurance",
+      "total": 43,
+      "id": "skill-52_e9_73_69_73_74_61_6e_63_65-base",
+      "group": "Résistance",
+      "carac": "e",
+      "status": "resolved"
+     },
+     {
+      "name": "Pari",
+      "sourceName": "Gamble",
+      "total": 32,
+      "id": "skill-50_61_72_69-base",
+      "group": "Pari",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Marchandage",
+      "sourceName": "Haggle",
+      "total": 35,
+      "id": "skill-4d_61_72_63_68_61_6e_64_61_67_65-base",
+      "group": "Marchandage",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Commandement",
+      "sourceName": "Leadership",
+      "total": 36,
+      "id": "skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base",
+      "group": "Commandement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 32,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps",
+      "sourceName": "Melee",
+      "total": 32,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-base",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Orientation",
+      "sourceName": "Navigation",
+      "total": 31,
+      "id": "skill-4f_72_69_65_6e_74_61_74_69_6f_6e-base",
+      "group": "Orientation",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [
+     {
+      "name": "Destinée",
+      "sourceName": "Doomed",
+      "rank": 1,
+      "id": "talent-doomed",
+      "status": "resolved"
+     },
+     {
+      "name": "Identité secrète",
+      "sourceName": "Secret Identity",
+      "rank": 1,
+      "id": "talent-secret-identity",
+      "status": "resolved"
+     },
+     {
+      "name": "Lire/Écrire",
+      "sourceName": "Read/Write",
+      "rank": 1,
+      "id": "talent-read-write",
+      "status": "resolved"
+     },
+     {
+      "name": "Noblesse",
+      "sourceName": "Noble Blood",
+      "rank": 1,
+      "id": "talent-noble-blood",
+      "status": "resolved"
+     },
+     {
+      "name": "Noctambule",
+      "sourceName": "Carouser",
+      "rank": 1,
+      "id": "talent-carouser",
+      "status": "resolved"
+     },
+     {
+      "name": "Sens aiguisé",
+      "sourceName": "Acute Sense (Hearing)",
+      "rank": 1,
+      "id": "talent-acute-sense",
+      "status": "resolved"
+     },
+     {
+      "name": "Sixième sens",
+      "sourceName": "Sixth Sense",
+      "rank": 1,
+      "id": "talent-sixth-sense",
+      "status": "resolved"
+     }
+    ],
+    "traits": [],
+    "keywords": [
+     "humain"
+    ],
+    "tags": [],
+    "notes": "Source : The Imperial Zoo (L11), p. 128 — profil E0-P-539.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-539",
+       "book": "L11",
+       "page": 128,
+       "name": "Theodosius Schreiber",
+       "edition": "V4",
+       "identity": {
+        "name": "Theodosius Schreiber",
+        "career": "Scholar THEODOSIUS SCHREIBER PROWLER",
+        "species": "Human",
+        "careerPath": "Scholar",
+        "status": "Silver 2",
+        "formName": "Theodosius Schreiber"
+       },
+       "species": "Human",
+       "armour": {},
+       "traitRefs": {},
+       "optionalTraits": [],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-458",
+    "name": "Cheval de selle",
+    "kind": "Créature",
+    "camp": "pj",
+    "zone": "active",
+    "initiative": 20,
+    "hp": 24,
+    "maxHp": 24,
+    "caracs": {
+     "M": 7,
+     "CC": 25,
+     "F": 30,
+     "E": 45,
+     "I": 20,
+     "Ag": 30,
+     "Int": 10,
+     "FM": 10,
+     "Soc": 20
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 25,
+      "damage": 6,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-458-action-1",
+      "mod": 0,
+      "note": "Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [],
+    "talents": [],
+    "traits": [
+     "Size (Large)",
+     "Skittish",
+     "Stride",
+     "Trained (Broken, Mount)"
+    ],
+    "keywords": [
+     "cheval"
+    ],
+    "tags": [],
+    "notes": "Source : Up in Arms (L13), p. 29 — profil E0-P-458.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-458",
+       "book": "L13",
+       "page": 29,
+       "name": "Riding Horse",
+       "edition": "V4",
+       "armour": {},
+       "traitRefs": {
+        "Size": "E0-T-045",
+        "Skittish": "E0-T-047",
+        "Stride": "E0-T-084",
+        "Trained": "E0-T-060"
+       },
+       "optionalTraits": [],
+       "abilityRefs": []
+      },
+      "mountOf": "r20-e0-p-538"
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-173",
+    "name": "Père Pedragar, prêtre de Taal",
+    "kind": "PNJ",
+    "camp": "allie",
+    "zone": "active",
+    "initiative": 39,
+    "hp": 21,
+    "maxHp": 21,
+    "caracs": {
+     "M": 4,
+     "CC": 34,
+     "CT": 41,
+     "F": 28,
+     "E": 50,
+     "I": 39,
+     "Ag": 45,
+     "Dex": 28,
+     "Int": 40,
+     "FM": 41,
+     "Soc": 58
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Bow",
+      "type": "attack",
+      "attr": "CT",
+      "base": 41,
+      "damage": 5,
+      "qualities": [],
+      "rangeYards": 50,
+      "extensions": {
+       "v5": {
+        "kind": "ranged"
+       }
+      },
+      "id": "r20-e0-p-173-action-1",
+      "mod": 0,
+      "note": "Bow",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Quarterstaff",
+      "type": "attack",
+      "attr": "CC",
+      "base": 34,
+      "damage": 6,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-173-action-2",
+      "mod": 0,
+      "note": "Quarterstaff",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Art (Écriture)",
+      "sourceName": "Art (Writing)",
+      "total": 33,
+      "id": "skill-41_72_74-c9_63_72_69_74_75_72_65",
+      "group": "Art",
+      "carac": "dex",
+      "status": "resolved"
+     },
+     {
+      "name": "Athlétisme",
+      "sourceName": "Athletics",
+      "total": 53,
+      "id": "skill-41_74_68_6c_e9_74_69_73_6d_65-base",
+      "group": "Athlétisme",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Charme",
+      "sourceName": "Charm",
+      "total": 68,
+      "id": "skill-43_68_61_72_6d_65-base",
+      "group": "Charme",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Emprise sur les animaux",
+      "sourceName": "Charm Animal",
+      "total": 47,
+      "id": "skill-45_6d_70_72_69_73_65_20_73_75_72_20_6c_65_73_20_61_6e_69_6d_61_75_78-base",
+      "group": "Emprise sur les animaux",
+      "carac": "fm",
+      "status": "resolved"
+     },
+     {
+      "name": "Escalade",
+      "sourceName": "Climb",
+      "total": 47,
+      "id": "skill-45_73_63_61_6c_61_64_65-base",
+      "group": "Escalade",
+      "carac": "f",
+      "status": "resolved"
+     },
+     {
+      "name": "Calme",
+      "sourceName": "Cool",
+      "total": 54,
+      "id": "skill-43_61_6c_6d_65-base",
+      "group": "Calme",
+      "carac": "fm",
+      "status": "resolved"
+     },
+     {
+      "name": "Résistance",
+      "sourceName": "Endurance",
+      "total": 55,
+      "id": "skill-52_e9_73_69_73_74_61_6e_63_65-base",
+      "group": "Résistance",
+      "carac": "e",
+      "status": "resolved"
+     },
+     {
+      "name": "Divertissement (Discours)",
+      "sourceName": "Entertain (Speeches)",
+      "total": 61,
+      "id": "skill-44_69_76_65_72_74_69_73_73_65_6d_65_6e_74-44_69_73_63_6f_75_72_73",
+      "group": "Divertissement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Divertissement (Contes)",
+      "sourceName": "Entertain (Storytelling)",
+      "total": 64,
+      "id": "skill-44_69_76_65_72_74_69_73_73_65_6d_65_6e_74-43_6f_6e_74_65_73",
+      "group": "Divertissement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Ragot",
+      "sourceName": "Gossip",
+      "total": 66,
+      "id": "skill-52_61_67_6f_74-base",
+      "group": "Ragot",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Marchandage",
+      "sourceName": "Haggle",
+      "total": 61,
+      "id": "skill-4d_61_72_63_68_61_6e_64_61_67_65-base",
+      "group": "Marchandage",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Guérison",
+      "sourceName": "Heal",
+      "total": 50,
+      "id": "skill-47_75_e9_72_69_73_6f_6e-base",
+      "group": "Guérison",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Intimidation",
+      "sourceName": "Intimidate",
+      "total": 38,
+      "id": "skill-49_6e_74_69_6d_69_64_61_74_69_6f_6e-base",
+      "group": "Intimidation",
+      "carac": "f",
+      "status": "resolved"
+     },
+     {
+      "name": "Intuition",
+      "sourceName": "Intuition",
+      "total": 49,
+      "id": "skill-49_6e_74_75_69_74_69_6f_6e-base",
+      "group": "Intuition",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Commandement",
+      "sourceName": "Leadership",
+      "total": 65,
+      "id": "skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base",
+      "group": "Commandement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Savoir (Drakwald)",
+      "sourceName": "Lore (Drakwald)",
+      "total": 58,
+      "status": "unresolved"
+     },
+     {
+      "name": "Savoir (Taal)",
+      "sourceName": "Lore (Taal)",
+      "total": 50,
+      "status": "unresolved"
+     },
+     {
+      "name": "Savoir (Théologie)",
+      "sourceName": "Lore (Theology)",
+      "total": 48,
+      "id": "skill-53_61_76_6f_69_72-54_68_e9_6f_6c_6f_67_69_65",
+      "group": "Savoir",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 44,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Armes d’hast)",
+      "sourceName": "Melee (Polearm)",
+      "total": 44,
+      "status": "unresolved"
+     },
+     {
+      "name": "Orientation",
+      "sourceName": "Navigation",
+      "total": 46,
+      "id": "skill-4f_72_69_65_6e_74_61_74_69_6f_6e-base",
+      "group": "Orientation",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Survie en extérieur",
+      "sourceName": "Outdoor Survival",
+      "total": 48,
+      "id": "skill-53_75_72_76_69_65_20_65_6e_20_65_78_74_e9_72_69_65_75_72-base",
+      "group": "Survie en extérieur",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 49,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Prière",
+      "sourceName": "Pray",
+      "total": 68,
+      "id": "skill-50_72_69_e8_72_65-base",
+      "group": "Prière",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Projectiles (Arc)",
+      "sourceName": "Ranged (Bow)",
+      "total": 44,
+      "id": "skill-50_72_6f_6a_65_63_74_69_6c_65_73-41_72_63",
+      "group": "Projectiles",
+      "carac": "ct",
+      "status": "resolved"
+     },
+     {
+      "name": "Recherche",
+      "sourceName": "Research",
+      "total": 46,
+      "id": "skill-52_65_63_68_65_72_63_68_65-base",
+      "group": "Recherche",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Signes secrets (Chasseur)",
+      "sourceName": "Secret Signs (Hunter)",
+      "total": 42,
+      "id": "skill-53_69_67_6e_65_73_20_73_65_63_72_65_74_73-43_68_61_73_73_65_75_72",
+      "group": "Signes secrets",
+      "carac": "int",
+      "status": "resolved"
+     }
+    ],
+    "talents": [
+     {
+      "name": "Baratiner",
+      "sourceName": "Blather",
+      "rank": 1,
+      "id": "talent-blather",
+      "status": "resolved"
+     },
+     {
+      "name": "Béni",
+      "sourceName": "Bless (Taal)",
+      "rank": 1,
+      "id": "talent-bless",
+      "status": "resolved"
+     },
+     {
+      "name": "Dur à cuire",
+      "sourceName": "Hardy",
+      "rank": 1,
+      "id": "talent-hardy",
+      "status": "resolved"
+     },
+     {
+      "name": "Visions sacrées",
+      "sourceName": "Holy Visions",
+      "rank": 1,
+      "id": "talent-holy-visions",
+      "status": "resolved"
+     },
+     {
+      "name": "Ferveur ardente",
+      "sourceName": "Impassioned Zeal",
+      "rank": 1,
+      "id": "talent-impassioned-zeal",
+      "status": "resolved"
+     },
+     {
+      "name": "Invocation",
+      "sourceName": "Invoke (Taal)",
+      "rank": 1,
+      "id": "talent-invoke",
+      "status": "resolved"
+     },
+     {
+      "name": "Chanceux",
+      "sourceName": "Luck",
+      "rank": 1,
+      "id": "talent-luck",
+      "status": "resolved"
+     },
+     {
+      "name": "Sens de l'orientation",
+      "sourceName": "Orientation",
+      "rank": 1,
+      "id": "talent-orientation",
+      "status": "resolved"
+     },
+     {
+      "name": "Résistance",
+      "sourceName": "Resistant (Poison)",
+      "rank": 1,
+      "id": "talent-resistant",
+      "status": "resolved"
+     },
+     {
+      "name": "Nomade",
+      "sourceName": "Rover",
+      "rank": 1,
+      "id": "talent-rover",
+      "status": "resolved"
+     },
+     {
+      "name": "Voyageur aguerri",
+      "sourceName": "Seasoned Traveller",
+      "rank": 1,
+      "id": "talent-seasoned-traveller",
+      "status": "resolved"
+     },
+     {
+      "name": "Bon marcheur",
+      "sourceName": "Strider (Woodland)",
+      "rank": 1,
+      "id": "talent-striding-gait",
+      "status": "resolved"
+     },
+     {
+      "name": "Obstiné",
+      "sourceName": "Strong-minded",
+      "rank": 1,
+      "id": "talent-strong-minded",
+      "status": "resolved"
+     },
+     {
+      "name": "Affable",
+      "sourceName": "Suave",
+      "rank": 1,
+      "id": "talent-suave",
+      "status": "resolved"
+     }
+    ],
+    "traits": [
+     "Ward (10+)"
+    ],
+    "keywords": [
+     "humain"
+    ],
+    "tags": [],
+    "notes": "Source : Deft Steps, Light Fingers (L04), p. 83 — profil E0-P-173.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-173",
+       "book": "L04",
+       "page": 83,
+       "name": "Father Pedragar, Priest of Taal",
+       "edition": "V4",
+       "armour": {},
+       "traitRefs": {
+        "Ward": "E0-T-066"
+       },
+       "optionalTraits": [],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-121",
+    "name": "Swilegrakk — Chamane-bray (Lanceur de sorts)",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 40,
+    "hp": 15,
+    "maxHp": 15,
+    "caracs": {
+     "M": 5,
+     "CC": 35,
+     "CT": 30,
+     "F": 35,
+     "E": 40,
+     "I": 40,
+     "Ag": 35,
+     "Dex": 20,
+     "Int": 30,
+     "FM": 40,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 45,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-121-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Horns",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee",
+        "freeAttack": "charge"
+       }
+      },
+      "id": "r20-e0-p-121-action-2",
+      "mod": 0,
+      "note": "Horns",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Focalisation (Ghur)",
+      "sourceName": "Channelling (Ghur)",
+      "total": 50,
+      "id": "skill-46_6f_63_61_6c_69_73_61_74_69_6f_6e-base",
+      "group": "Focalisation",
+      "carac": "fm",
+      "status": "resolved"
+     },
+     {
+      "name": "Calme",
+      "sourceName": "Cool",
+      "total": 50,
+      "id": "skill-43_61_6c_6d_65-base",
+      "group": "Calme",
+      "carac": "fm",
+      "status": "resolved"
+     },
+     {
+      "name": "Esquive",
+      "sourceName": "Dodge",
+      "total": 45,
+      "id": "skill-45_73_71_75_69_76_65-base",
+      "group": "Esquive",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Intuition",
+      "sourceName": "Intuition",
+      "total": 50,
+      "id": "skill-49_6e_74_75_69_74_69_6f_6e-base",
+      "group": "Intuition",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Langue (Magick)",
+      "sourceName": "Language (Magick)",
+      "total": 45,
+      "id": "skill-4c_61_6e_67_75_65-4d_61_67_69_63_6b",
+      "group": "Langue",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 45,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 50,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [
+     {
+      "name": "Magie des Arcanes",
+      "sourceName": "Arcane Magic (Beasts)",
+      "rank": 1,
+      "id": "talent-arcane-magic",
+      "status": "resolved"
+     },
+     {
+      "name": "Diction instinctive",
+      "sourceName": "Instinctive Diction",
+      "rank": 1,
+      "id": "talent-instinctive-diction",
+      "status": "resolved"
+     },
+     {
+      "name": "Magie mineure",
+      "sourceName": "Petty Magic",
+      "rank": 1,
+      "id": "talent-petty-magic",
+      "status": "resolved"
+     },
+     {
+      "name": "Seconde vue",
+      "sourceName": "Second Sight",
+      "rank": 1,
+      "id": "talent-second-sight",
+      "status": "resolved"
+     }
+    ],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "homme-bete"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 355 — profil E0-P-121.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-121",
+       "book": "L06",
+       "page": 355,
+       "name": "Swilegrakk — Bray Shaman (Spellcaster)",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 4
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [],
+       "abilityRefs": [],
+       "spells": {
+        "Petty": [
+         "Animal Friend",
+         "Dart",
+         "Sounds"
+        ],
+        "Lore of Beasts": [
+         "Arrow Shield",
+         "Beast Form",
+         "Blast"
+        ]
+       }
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-119",
+    "name": "Skrakk — Bestigor (Élite)",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 45,
+    "hp": 19,
+    "maxHp": 19,
+    "caracs": {
+     "M": 5,
+     "CC": 50,
+     "CT": 30,
+     "F": 50,
+     "E": 55,
+     "I": 45,
+     "Ag": 35,
+     "Dex": 20,
+     "Int": 20,
+     "FM": 45,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 1,
+     "body": 1,
+     "arms": 1,
+     "legs": 1
+    },
+    "actions": [
+     {
+      "name": "Greataxe",
+      "type": "attack",
+      "attr": "CC",
+      "base": 65,
+      "damage": 11,
+      "qualities": [
+       {
+        "id": "devastatrice"
+       },
+       {
+        "id": "taille"
+       },
+       {
+        "id": "desequilibree"
+       }
+      ],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-119-action-1",
+      "mod": 0,
+      "note": "Greataxe",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Horns",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 9,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee",
+        "freeAttack": "charge"
+       }
+      },
+      "id": "r20-e0-p-119-action-2",
+      "mod": 0,
+      "note": "Horns",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Calme",
+      "sourceName": "Cool",
+      "total": 60,
+      "id": "skill-43_61_6c_6d_65-base",
+      "group": "Calme",
+      "carac": "fm",
+      "status": "resolved"
+     },
+     {
+      "name": "Esquive",
+      "sourceName": "Dodge",
+      "total": 50,
+      "id": "skill-45_73_71_75_69_76_65-base",
+      "group": "Esquive",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Intimidation",
+      "sourceName": "Intimidate",
+      "total": 60,
+      "id": "skill-49_6e_74_69_6d_69_64_61_74_69_6f_6e-base",
+      "group": "Intimidation",
+      "carac": "f",
+      "status": "resolved"
+     },
+     {
+      "name": "Commandement",
+      "sourceName": "Leadership",
+      "total": 15,
+      "id": "skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base",
+      "group": "Commandement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 65,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Deux mains)",
+      "sourceName": "Melee (Two-Handed)",
+      "total": 65,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-44_65_75_78_20_6d_61_69_6e_73",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 60,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [
+     {
+      "name": "Vigilance",
+      "sourceName": "Combat Aware",
+      "rank": 1,
+      "id": "talent-combat-aware",
+      "status": "resolved"
+     },
+     {
+      "name": "Combat instinctif",
+      "sourceName": "Combat Reflexes",
+      "rank": 1,
+      "id": "talent-combat-reflexes",
+      "status": "resolved"
+     },
+     {
+      "name": "Déterminé",
+      "sourceName": "Resolute",
+      "rank": 1,
+      "id": "talent-resolute",
+      "status": "resolved"
+     }
+    ],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "bestigor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 354 — profil E0-P-119.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-119",
+       "book": "L06",
+       "page": 354,
+       "name": "Skrakk — Bestigor (Elite)",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 5,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-120",
+    "name": "Ungrakk — Seigneur-bête gor (Commandant)",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 60,
+    "hp": 23,
+    "maxHp": 23,
+    "caracs": {
+     "M": 5,
+     "CC": 65,
+     "CT": 60,
+     "F": 55,
+     "E": 60,
+     "I": 60,
+     "Ag": 55,
+     "Dex": 35,
+     "Int": 20,
+     "FM": 60,
+     "Soc": 25
+    },
+    "armor": {
+     "head": 3,
+     "body": 3,
+     "arms": 3,
+     "legs": 3
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 85,
+      "damage": 9,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-120-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Horns",
+      "type": "attack",
+      "attr": "CC",
+      "base": 65,
+      "damage": 9,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee",
+        "freeAttack": "charge"
+       }
+      },
+      "id": "r20-e0-p-120-action-2",
+      "mod": 0,
+      "note": "Horns",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Calme",
+      "sourceName": "Cool",
+      "total": 80,
+      "id": "skill-43_61_6c_6d_65-base",
+      "group": "Calme",
+      "carac": "fm",
+      "status": "resolved"
+     },
+     {
+      "name": "Esquive",
+      "sourceName": "Dodge",
+      "total": 75,
+      "id": "skill-45_73_71_75_69_76_65-base",
+      "group": "Esquive",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Intimidation",
+      "sourceName": "Intimidate",
+      "total": 75,
+      "id": "skill-49_6e_74_69_6d_69_64_61_74_69_6f_6e-base",
+      "group": "Intimidation",
+      "carac": "f",
+      "status": "resolved"
+     },
+     {
+      "name": "Commandement",
+      "sourceName": "Leadership",
+      "total": 55,
+      "id": "skill-43_6f_6d_6d_61_6e_64_65_6d_65_6e_74-base",
+      "group": "Commandement",
+      "carac": "soc",
+      "status": "resolved"
+     },
+     {
+      "name": "Savoir (Guerre)",
+      "sourceName": "Lore (Warfare)",
+      "total": 55,
+      "id": "skill-53_61_76_6f_69_72-47_75_65_72_72_65",
+      "group": "Savoir",
+      "carac": "int",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 85,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Corps à corps (Deux mains)",
+      "sourceName": "Melee (Two-Handed)",
+      "total": 85,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-44_65_75_78_20_6d_61_69_6e_73",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 80,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [
+     {
+      "name": "Vigilance",
+      "sourceName": "Combat Aware",
+      "rank": 1,
+      "id": "talent-combat-aware",
+      "status": "resolved"
+     },
+     {
+      "name": "Combat instinctif",
+      "sourceName": "Combat Reflexes",
+      "rank": 1,
+      "id": "talent-combat-reflexes",
+      "status": "resolved"
+     },
+     {
+      "name": "Assaut féroce",
+      "sourceName": "Furious Assault",
+      "rank": 1,
+      "id": "talent-furious-assault",
+      "status": "resolved"
+     },
+     {
+      "name": "Exaltant",
+      "sourceName": "Inspiring",
+      "rank": 1,
+      "id": "talent-inspiring",
+      "status": "resolved"
+     },
+     {
+      "name": "Chanceux",
+      "sourceName": "Luck",
+      "rank": 1,
+      "id": "talent-luck",
+      "status": "resolved"
+     },
+     {
+      "name": "Déterminé",
+      "sourceName": "Resolute",
+      "rank": 1,
+      "id": "talent-resolute",
+      "status": "resolved"
+     },
+     {
+      "name": "Inébranlable",
+      "sourceName": "Unshakeable",
+      "rank": 1,
+      "id": "talent-unshakeable",
+      "status": "resolved"
+     },
+     {
+      "name": "Seigneur de guerre",
+      "sourceName": "War Leader",
+      "rank": 1,
+      "id": "talent-war-leader",
+      "status": "resolved"
+     }
+    ],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "gor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 355 — profil E0-P-120.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-120",
+       "book": "L06",
+       "page": 355,
+       "name": "Ungrakk — Gor Beastlord (Commander)",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 6,
+        "parts": [
+         {
+          "name": "Medium Armour",
+          "ap": 3
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-122",
+    "name": "Guzgog — Tirailleur ungor",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 40,
+    "hp": 12,
+    "maxHp": 12,
+    "caracs": {
+     "M": 5,
+     "CC": 30,
+     "CT": 40,
+     "F": 30,
+     "E": 35,
+     "I": 40,
+     "Ag": 45,
+     "Dex": 30,
+     "Int": 20,
+     "FM": 35,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 30,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-122-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Shortbow and Arrows",
+      "type": "attack",
+      "attr": "CT",
+      "base": 50,
+      "damage": 6,
+      "qualities": [
+       {
+        "id": "empaleuse"
+       }
+      ],
+      "rangeYards": 40,
+      "extensions": {
+       "v5": {
+        "kind": "ranged"
+       }
+      },
+      "id": "r20-e0-p-122-action-2",
+      "mod": 0,
+      "note": "Shortbow and Arrows",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Esquive",
+      "sourceName": "Dodge",
+      "total": 55,
+      "id": "skill-45_73_71_75_69_76_65-base",
+      "group": "Esquive",
+      "carac": "ag",
+      "status": "resolved"
+     },
+     {
+      "name": "Projectiles (Arc)",
+      "sourceName": "Ranged (Bow)",
+      "total": 50,
+      "id": "skill-50_72_6f_6a_65_63_74_69_6c_65_73-41_72_63",
+      "group": "Projectiles",
+      "carac": "ct",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion (Rurale)",
+      "sourceName": "Stealth (Rural)",
+      "total": 55,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "ungor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 356 — profil E0-P-122.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-122",
+       "book": "L06",
+       "page": 356,
+       "name": "Guzgog — Ungor Skirmisher",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 3
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-101-1",
+    "name": "Gor 1",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 14,
+    "maxHp": 14,
+    "caracs": {
+     "M": 5,
+     "CC": 35,
+     "CT": 30,
+     "F": 35,
+     "E": 40,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 20,
+     "Int": 20,
+     "FM": 30,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 45,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-101-1-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Horns",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee",
+        "freeAttack": "charge"
+       }
+      },
+      "id": "r20-e0-p-101-1-action-2",
+      "mod": 0,
+      "note": "Horns",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 45,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "gor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-101.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-101",
+       "book": "L06",
+       "page": 345,
+       "name": "Gor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 4,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Medium Armour",
+          "ap": 3,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mark of Chaos",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-101-2",
+    "name": "Gor 2",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 14,
+    "maxHp": 14,
+    "caracs": {
+     "M": 5,
+     "CC": 35,
+     "CT": 30,
+     "F": 35,
+     "E": 40,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 20,
+     "Int": 20,
+     "FM": 30,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 45,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-101-2-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Horns",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee",
+        "freeAttack": "charge"
+       }
+      },
+      "id": "r20-e0-p-101-2-action-2",
+      "mod": 0,
+      "note": "Horns",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 45,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "gor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-101.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-101",
+       "book": "L06",
+       "page": 345,
+       "name": "Gor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 4,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Medium Armour",
+          "ap": 3,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mark of Chaos",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-101-3",
+    "name": "Gor 3",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 14,
+    "maxHp": 14,
+    "caracs": {
+     "M": 5,
+     "CC": 35,
+     "CT": 30,
+     "F": 35,
+     "E": 40,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 20,
+     "Int": 20,
+     "FM": 30,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 45,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-101-3-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Horns",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee",
+        "freeAttack": "charge"
+       }
+      },
+      "id": "r20-e0-p-101-3-action-2",
+      "mod": 0,
+      "note": "Horns",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 45,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "gor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-101.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-101",
+       "book": "L06",
+       "page": 345,
+       "name": "Gor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 4,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Medium Armour",
+          "ap": 3,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mark of Chaos",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-101-4",
+    "name": "Gor 4",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 14,
+    "maxHp": 14,
+    "caracs": {
+     "M": 5,
+     "CC": 35,
+     "CT": 30,
+     "F": 35,
+     "E": 40,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 20,
+     "Int": 20,
+     "FM": 30,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 45,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-101-4-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Horns",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee",
+        "freeAttack": "charge"
+       }
+      },
+      "id": "r20-e0-p-101-4-action-2",
+      "mod": 0,
+      "note": "Horns",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 45,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "gor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-101.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-101",
+       "book": "L06",
+       "page": 345,
+       "name": "Gor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 4,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Medium Armour",
+          "ap": 3,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mark of Chaos",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-101-5",
+    "name": "Gor 5",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 14,
+    "maxHp": 14,
+    "caracs": {
+     "M": 5,
+     "CC": 35,
+     "CT": 30,
+     "F": 35,
+     "E": 40,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 20,
+     "Int": 20,
+     "FM": 30,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 45,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-101-5-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     },
+     {
+      "name": "Horns",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee",
+        "freeAttack": "charge"
+       }
+      },
+      "id": "r20-e0-p-101-5-action-2",
+      "mod": 0,
+      "note": "Horns",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 45,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "gor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-101.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-101",
+       "book": "L06",
+       "page": 345,
+       "name": "Gor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 4,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Medium Armour",
+          "ap": 3,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mark of Chaos",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-102-1",
+    "name": "Ungor 1",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 11,
+    "maxHp": 11,
+    "caracs": {
+     "M": 5,
+     "CC": 30,
+     "CT": 30,
+     "F": 30,
+     "E": 35,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 30,
+     "Int": 20,
+     "FM": 25,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-102-1-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 35,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Pistage",
+      "sourceName": "Track",
+      "total": 40,
+      "id": "skill-50_69_73_74_61_67_65-base",
+      "group": "Pistage",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Projectiles (Arc)",
+      "sourceName": "Ranged (Bow)",
+      "total": 40,
+      "id": "skill-50_72_6f_6a_65_63_74_69_6c_65_73-41_72_63",
+      "group": "Projectiles",
+      "carac": "ct",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion (Rurale)",
+      "sourceName": "Stealth (Rural)",
+      "total": 40,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "ungor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-102.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-102",
+       "book": "L06",
+       "page": 345,
+       "name": "Ungor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 3,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-102-2",
+    "name": "Ungor 2",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 11,
+    "maxHp": 11,
+    "caracs": {
+     "M": 5,
+     "CC": 30,
+     "CT": 30,
+     "F": 30,
+     "E": 35,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 30,
+     "Int": 20,
+     "FM": 25,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-102-2-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 35,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Pistage",
+      "sourceName": "Track",
+      "total": 40,
+      "id": "skill-50_69_73_74_61_67_65-base",
+      "group": "Pistage",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Projectiles (Arc)",
+      "sourceName": "Ranged (Bow)",
+      "total": 40,
+      "id": "skill-50_72_6f_6a_65_63_74_69_6c_65_73-41_72_63",
+      "group": "Projectiles",
+      "carac": "ct",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion (Rurale)",
+      "sourceName": "Stealth (Rural)",
+      "total": 40,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "ungor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-102.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-102",
+       "book": "L06",
+       "page": 345,
+       "name": "Ungor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 3,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-102-3",
+    "name": "Ungor 3",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 11,
+    "maxHp": 11,
+    "caracs": {
+     "M": 5,
+     "CC": 30,
+     "CT": 30,
+     "F": 30,
+     "E": 35,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 30,
+     "Int": 20,
+     "FM": 25,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-102-3-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 35,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Pistage",
+      "sourceName": "Track",
+      "total": 40,
+      "id": "skill-50_69_73_74_61_67_65-base",
+      "group": "Pistage",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Projectiles (Arc)",
+      "sourceName": "Ranged (Bow)",
+      "total": 40,
+      "id": "skill-50_72_6f_6a_65_63_74_69_6c_65_73-41_72_63",
+      "group": "Projectiles",
+      "carac": "ct",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion (Rurale)",
+      "sourceName": "Stealth (Rural)",
+      "total": 40,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "ungor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-102.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-102",
+       "book": "L06",
+       "page": 345,
+       "name": "Ungor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 3,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-102-4",
+    "name": "Ungor 4",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 11,
+    "maxHp": 11,
+    "caracs": {
+     "M": 5,
+     "CC": 30,
+     "CT": 30,
+     "F": 30,
+     "E": 35,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 30,
+     "Int": 20,
+     "FM": 25,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-102-4-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 35,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Pistage",
+      "sourceName": "Track",
+      "total": 40,
+      "id": "skill-50_69_73_74_61_67_65-base",
+      "group": "Pistage",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Projectiles (Arc)",
+      "sourceName": "Ranged (Bow)",
+      "total": 40,
+      "id": "skill-50_72_6f_6a_65_63_74_69_6c_65_73-41_72_63",
+      "group": "Projectiles",
+      "carac": "ct",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion (Rurale)",
+      "sourceName": "Stealth (Rural)",
+      "total": 40,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "ungor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-102.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-102",
+       "book": "L06",
+       "page": 345,
+       "name": "Ungor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 3,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   },
+   {
+    "id": "r20-e0-p-102-5",
+    "name": "Ungor 5",
+    "kind": "Créature",
+    "camp": "ennemi",
+    "zone": "active",
+    "initiative": 30,
+    "hp": 11,
+    "maxHp": 11,
+    "caracs": {
+     "M": 5,
+     "CC": 30,
+     "CT": 30,
+     "F": 30,
+     "E": 35,
+     "I": 30,
+     "Ag": 35,
+     "Dex": 30,
+     "Int": 20,
+     "FM": 25,
+     "Soc": 10
+    },
+    "armor": {
+     "head": 0,
+     "body": 0,
+     "arms": 0,
+     "legs": 0
+    },
+    "actions": [
+     {
+      "name": "Hand Weapon",
+      "type": "attack",
+      "attr": "CC",
+      "base": 35,
+      "damage": 7,
+      "qualities": [],
+      "extensions": {
+       "v5": {
+        "kind": "melee"
+       }
+      },
+      "id": "r20-e0-p-102-5-action-1",
+      "mod": 0,
+      "note": "Hand Weapon",
+      "targetId": null,
+      "valuesX": null,
+      "capacity": null
+     }
+    ],
+    "skills": [
+     {
+      "name": "Corps à corps (Base)",
+      "sourceName": "Melee (Basic)",
+      "total": 35,
+      "id": "skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65",
+      "group": "Corps à corps",
+      "carac": "cc",
+      "status": "resolved"
+     },
+     {
+      "name": "Perception",
+      "sourceName": "Perception",
+      "total": 35,
+      "id": "skill-50_65_72_63_65_70_74_69_6f_6e-base",
+      "group": "Perception",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Pistage",
+      "sourceName": "Track",
+      "total": 40,
+      "id": "skill-50_69_73_74_61_67_65-base",
+      "group": "Pistage",
+      "carac": "i",
+      "status": "resolved"
+     },
+     {
+      "name": "Projectiles (Arc)",
+      "sourceName": "Ranged (Bow)",
+      "total": 40,
+      "id": "skill-50_72_6f_6a_65_63_74_69_6c_65_73-41_72_63",
+      "group": "Projectiles",
+      "carac": "ct",
+      "status": "resolved"
+     },
+     {
+      "name": "Discrétion (Rurale)",
+      "sourceName": "Stealth (Rural)",
+      "total": 40,
+      "id": "skill-44_69_73_63_72_e9_74_69_6f_6e-52_75_72_61_6c_65",
+      "group": "Discrétion",
+      "carac": "ag",
+      "status": "resolved"
+     }
+    ],
+    "talents": [],
+    "traits": [
+     "Night Vision",
+     "Striding Gait (Woodland)"
+    ],
+    "keywords": [
+     "ungor"
+    ],
+    "tags": [],
+    "notes": "Source : Livre de base V5 (L06), p. 345 — profil E0-P-102.",
+    "extensions": {
+     "v5": {
+      "bestiary": {
+       "id": "E0-P-102",
+       "book": "L06",
+       "page": 345,
+       "name": "Ungor",
+       "edition": "V5",
+       "armour": {
+        "toughnessBonus": 3,
+        "parts": [
+         {
+          "name": "Light Armour",
+          "ap": 1,
+          "optional": true
+         },
+         {
+          "name": "Shield",
+          "ap": 2,
+          "optional": true,
+          "slBonus": 1,
+          "condition": "when Opposing an attack with Dodge or Melee"
+         }
+        ]
+       },
+       "traitRefs": {
+        "Night Vision": "E0-T-041",
+        "Striding Gait": "E0-T-051"
+       },
+       "optionalTraits": [
+        "Corruption (Minor)",
+        "Disease (Packer's Pox)",
+        "Infected",
+        "Infestation",
+        "Mutation"
+       ],
+       "abilityRefs": []
+      }
+     }
+    },
+    "states": []
+   }
+  ]
+ },
+ "activeScene": null,
+ "encounters": [],
+ "suspendedScenes": [],
+ "persistentCharacters": [],
+ "log": [],
+ "diceLines": [],
+ "extensions": {
+  "v5": {
+   "turnIndex": 1
+  }
+ }
+}
