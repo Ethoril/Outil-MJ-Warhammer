@@ -1004,16 +1004,16 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     render();
     refs.play.querySelector(`[data-sheet-menu-button][data-menu-owner^="${id}:"]`)?.focus();
   };
-  const openFullSheet = (participant, section = null) => {
+  const openFullSheet = (participant, section = null, role = 'actor') => {
     sheetMenu = null;
-    fullSheet = { id: participant.id, section, focus: true };
+    fullSheet = { id: participant.id, section, role, focus: true };
     if (section === 'magic') setFicheTab(participant.id, 'magic');
     render();
   };
 
   // Menu ⋯ : retrait, sans monture, renommer, changer de camp, fiche complète, sorts et prières.
   function renderSheetMenu(participant) {
-    const key = sheetMenu.key;
+    const key = sheetMenu.key, role = key.endsWith(':cible') ? 'target' : 'actor';
     const menu = node('div', 'workspace-sheet-menu');
     menu.setAttribute('role', 'menu');
     menu.setAttribute('aria-label', `Actions sur ${participant.name}`);
@@ -1068,8 +1068,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       participant.kind === 'PJ' ? { disabled: true, title: 'Le nom d’un PJ vient de sa fiche' } : { title: 'Renommer pour cette rencontre (le pion suit, le bestiaire ne change pas)' }));
     menu.appendChild(item('Changer de camp', () => { sheetMenu = { ...sheetMenu, view: 'camp', focus: true }; render(); }));
     menu.append(separator(),
-      item('Fiche complète', () => openFullSheet(participant), { title: 'Compétences, talents, équipement, rappels, blocs de créature…' }),
-      item('Sorts et prières', () => openFullSheet(participant, 'magic')),
+      item('Fiche complète', () => openFullSheet(participant, null, role), { title: 'Compétences, talents, équipement, rappels, blocs de créature…' }),
+      item('Sorts et prières', () => openFullSheet(participant, 'magic', role)),
       item('Modifier…', () => { sheetMenu = null; render(); refs.play.querySelector(`[data-menu-owner="${key}"]`)?.focus(); callbacks.editParticipant?.(participant.id); }, { disabled: !callbacks.editParticipant || state.actionBusy, title: 'Feuille « Modifier » : nom, PV, initiative, zone, camp, monture, armes, états, actions' }));
     return menu;
   }
@@ -1196,7 +1196,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const author = readParticipants(Store).find(row => row.id === authorId);
       return node('p', 'workspace-muted', `${stateLabel(item)} · Auteur : ${author?.name || authorId} · Cible : ${participant.name}`);
     });
-    const equipment = equipmentChips(participant, participant.id === readCombat(Store).currentActorId ? 'actor' : 'target');
+    const equipment = equipmentChips(participant, fullSheet?.role || 'actor');
     const traits = creatureCommandBlocks(participant);
     const reminders = participantReminderBlock(participant);
     body.append(...[
@@ -1253,9 +1253,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   // Pastilles de la fiche compacte qui renvoient à une section de la fiche complète (ce qui demande une décision ou un clic).
-  const moreChip = (participant, key, label, count) => {
+  const moreChip = (participant, key, label, count, role) => {
     const chip = button(`${label}${count > 1 ? ` ${count}` : ''}`, 'workspace-sheet-chip is-attention', { 'data-focus-key': `sheet-more-${key}-${participant.id}`, title: `${label} : ouvre la fiche complète` });
-    chip.addEventListener('click', event => { event.preventDefault(); openFullSheet(participant, key); });
+    chip.addEventListener('click', event => { event.preventDefault(); openFullSheet(participant, key, role); });
     return chip;
   };
 
@@ -1500,12 +1500,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     // Pastilles vers la fiche complète : rappels, blocs de créature, blessures Critiques, équipement en jeu.
     const more = node('div', 'workspace-sheet-more');
     const ownReminders = !isTarget ? participantReminderBlock(participant) : null;
-    if (ownReminders) more.appendChild(moreChip(participant, 'reminders', 'Rappels', ownReminders.querySelectorAll('.actor-reminder').length || 1));
-    if (creatureCommandBlocks(participant).length) more.appendChild(moreChip(participant, 'traits', 'Traits de créature', 1));
+    if (ownReminders) more.appendChild(moreChip(participant, 'reminders', 'Rappels', ownReminders.querySelectorAll('.actor-reminder').length || 1, role));
+    if (creatureCommandBlocks(participant).length) more.appendChild(moreChip(participant, 'traits', 'Traits de créature', 1, role));
     const criticalCount = (participant.extensions?.v5?.criticalWounds || []).length;
-    if (criticalCount) more.appendChild(moreChip(participant, 'criticals', 'Blessures Critiques', criticalCount));
+    if (criticalCount) more.appendChild(moreChip(participant, 'criticals', 'Blessures Critiques', criticalCount, role));
     const equipmentRow = equipmentChips(participant, role);
-    if (equipmentRow) more.appendChild(moreChip(participant, 'equipment', 'Équipement en jeu', equipmentRow.children.length));
+    if (equipmentRow) more.appendChild(moreChip(participant, 'equipment', 'Équipement en jeu', equipmentRow.children.length, role));
     if (more.children.length) sheet.appendChild(more);
     return sheet;
   }

@@ -29,7 +29,9 @@ try {
     window.__view = view;
     view.setSpace('play');
   });
-  const sheet = page.locator('.workspace-sheet-actor');
+  // Refonte E3 : les blocs de créature sont dans la fiche complète (menu ⋯), ouverte puis refermée.
+  await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click(); await page.getByRole('menuitem', { name: 'Fiche complète' }).click();
+  const sheet = page.locator('.workspace-fullsheet');
   const regeneration = sheet.locator('.actor-regeneration');
   assert.equal(await regeneration.count(), 1, 'la fiche du Troll propose la Régénération');
   await regeneration.locator('input').first().fill('7');
@@ -37,8 +39,10 @@ try {
   await page.waitForFunction(() => window.__store.listParticipants().find(row => row.id === 'troll').hp > 10, null, { timeout: 5000 });
   assert.ok(await page.evaluate(() => window.__store.listParticipants().find(row => row.id === 'troll').hp) > 10, 'Régénérer rend des Blessures');
 
+  await page.locator('.workspace-fullsheet').getByRole('button', { name: 'Fermer' }).click();
   await page.evaluate(async () => { const state = JSON.parse(window.__store.getFullJSON()); state.combat.currentActorId = 'swarm'; await window.__store.loadFromJSON(state); window.__view.setSpace('prepare'); window.__view.setSpace('play'); });
-  const states = page.locator('.workspace-sheet-actor .actor-creature-states');
+  await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click(); await page.getByRole('menuitem', { name: 'Fiche complète' }).click();
+  const states = page.locator('.workspace-fullsheet .actor-creature-states');
   await states.first().waitFor();
   assert.equal(await states.count(), 1, 'la fiche de la Nuée propose Fin de Round et Venin');
   assert.ok(await states.locator('.btn-swarm-end-round').count(), 'bouton de fin de Round de la Nuée');

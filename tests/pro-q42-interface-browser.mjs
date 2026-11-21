@@ -32,14 +32,17 @@ try {
   }, { base });
 
   await page.getByRole('tab', { name: 'Jouer' }).click();
-  const sheet = page.locator('.workspace-actor-sheet.workspace-sheet-actor');
+  // Refonte E3 : les rappels du participant sont dans la fiche complète (menu ⋯), ouverte puis refermée.
+  await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click(); await page.getByRole('menuitem', { name: 'Fiche complète' }).click();
+  const sheet = page.locator('.workspace-fullsheet');
   // Les rappels de Traits (Régénération, Increvable, Infecté : T3/T8, 23/10) s'ajoutent à celui de l'armure : on cible l'armure.
   const armour = sheet.locator('.actor-reminder', { hasText: 'Armure imprimée' });
   check(await armour.count() === 1, 'le rappel d’armure du participant est affiché sur la fiche du personnage actif');
   check(/Armure imprimée/.test(await armour.first().innerText()), 'le texte est celui du rappel d’armure');
   await armour.locator('.btn-reminder[data-decision="resolve"]').click();
-  await page.locator('.workspace-actor-sheet .actor-reminder', { hasText: 'Armure imprimée' }).first().waitFor({ state: 'detached' });
-  check(await page.locator('.workspace-actor-sheet .actor-reminder', { hasText: 'Armure imprimée' }).count() === 0, '« Fait » retire le rappel d’armure');
+  await page.locator('.workspace-fullsheet .actor-reminder', { hasText: 'Armure imprimée' }).first().waitFor({ state: 'detached' });
+  check(await page.locator('.workspace-fullsheet .actor-reminder', { hasText: 'Armure imprimée' }).count() === 0, '« Fait » retire le rappel d’armure');
+  await page.locator('.workspace-fullsheet').getByRole('button', { name: 'Fermer' }).click();
 
   const titles = await page.evaluate(async ({ base }) => {
     const { renderFicheDetails } = await import(base + '/js/ui/fiche-details.js');

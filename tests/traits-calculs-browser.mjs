@@ -124,13 +124,18 @@ try {
 
   // Marqueurs de la fiche : « tour perdu », total d'Increvable, pastille de Bond, dans le vrai navigateur.
   const play = page.locator('#workspace-play');
-  const show = async (id, name) => { await page.locator(`[data-workspace-select="${id}"]`).click(); await expect_(page.locator('.workspace-sheet-name', { hasText: name }).first(), new RegExp(name)); };
+  // Refonte E3 : marqueurs, total d'Increvable et pastille de Bond sont dans la fiche complète (menu ⋯), ouverte puis refermée.
+  const show = async (id, name) => { await page.locator(`[data-workspace-select="${id}"]`).click(); await expect_(page.locator('.workspace-sheet-name', { hasText: name }).first(), new RegExp(name)); await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click(); await page.getByRole('menuitem', { name: 'Fiche complète' }).click(); };
+  const hide = () => page.locator('.workspace-fullsheet').getByRole('button', { name: 'Fermer' }).click();
   await show('stup', 'Stupide');
   await expect_(play, /Tour perdu/);
+  await hide();
   await show('undying', 'Revenant');
   await expect_(play, new RegExp(`Increvable[^\\n]*${revenant.total}\\s*/\\s*6 DR`));
+  await hide();
   await show('horse', 'Destrier');
   await expect_(play, /Bond : Charge, Saut, Sprint à 2 × Course/);
+  await hide();
   console.log(`PASS 3 — fiches : marqueur « tour perdu » du Stupide, Increvable ${revenant.total} / 6 DR du Revenant, pastille de Bond du Destrier`);
 
   // 4. ↶ rétablit chaque commande d'un seul coup, ↷ la rejoue, le rechargement conserve le résultat.
