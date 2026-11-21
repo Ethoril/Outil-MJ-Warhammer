@@ -577,17 +577,18 @@
    sans défiler ; au-delà, seule leur case défile (CA2). Barre du bas : boutons à deux lignes, sans numéro ni raccourci.
    ========================================================================== */
 .workspace-track-column > .workspace-rubric { margin: 0 0 4px; }
-.workspace-plateau[data-part="melees"] { gap: 6px; padding: 6px; max-height: 40vh; overflow: auto; overscroll-behavior: contain; }
+.workspace-plateau[data-part="melees"] { gap: 6px; padding: 6px; max-height: 42vh; overflow: auto; overscroll-behavior: contain; }
 .workspace-plateau > .workspace-track { gap: 6px; }
 .workspace-plateau[data-part="melees"] .workspace-zone { flex: 1 1 260px; gap: 4px; padding: 5px 6px 6px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 124px), 1fr)); }
 .workspace-plateau[data-part="melees"] .workspace-zone.is-melee { border-width: 2px; }
 .workspace-plateau[data-part="melees"] .workspace-zone.is-free { flex: 1 1 100%; }
 .workspace-plateau .workspace-zone-head { margin: 0; }
+.workspace-plateau .workspace-zone.is-melee > .workspace-zone-head { grid-column: auto; flex-direction: column; align-items: flex-start; gap: 2px; justify-content: center; }
 .workspace-plateau .workspace-zone-head strong { font-family: var(--font-ui); font-size: 12.5px; }
 .workspace-plateau .workspace-zone-ratio { font-size: 11px; padding: 0 7px; }
 .workspace-plateau .workspace-track-entry { padding-bottom: 0; gap: 0; }
 .workspace-plateau .workspace-track-entry > .workspace-track-item {
-  gap: 2px; padding: 3px 22px 3px 6px; min-height: 0; cursor: pointer; font-family: var(--font-ui);
+  gap: 2px; padding: 2px 22px 2px 6px; min-height: 0; cursor: pointer; font-family: var(--font-ui);
 }
 .workspace-plateau .workspace-track-top { gap: 4px; align-items: center; }
 .workspace-plateau .workspace-token .workspace-track-marker { flex: none; font-size: 10.5px; }
@@ -627,11 +628,17 @@
   position: absolute; inset: 0; width: 100%; max-width: none; height: 100%; min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 4px;
   opacity: 0; cursor: pointer; font-size: 13px; overflow: hidden;
 }
-.workspace-plateau[data-part="melees"] > .workspace-bench { flex: 1 1 100%; margin: 0; padding: 6px; }
-.workspace-plateau .workspace-bench .workspace-rubric { margin: 0; }
-.workspace-plateau .workspace-bench-item { padding: 3px 6px; gap: 6px; }
-.workspace-plateau .workspace-bench-label { flex: 1 1 0; font-size: 12.5px; }
+.workspace-plateau[data-part="melees"] > .workspace-bench { flex: 1 1 100%; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 4px 10px; margin: 0; padding: 4px 6px; }
+.workspace-plateau .workspace-bench > .workspace-rubric { flex: none; margin: 6px 0 0; }
+.workspace-bench-entry { flex: 1 1 420px; min-width: 0; display: grid; gap: 2px; }
+.workspace-plateau .workspace-bench-item { padding: 2px 6px; gap: 6px; flex-wrap: nowrap; }
+.workspace-plateau .workspace-bench-label { flex: 1 1 0; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .workspace-plateau .workspace-bench-item button { min-height: 24px; padding: 1px 8px; }
+/* Rappels du banc : une ligne (le texte entier au survol), boutons Fait / Ignorer à côté. */
+.workspace-plateau .workspace-bench .actor-reminders { margin: 0; gap: 2px 4px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); }
+.workspace-plateau .workspace-bench .actor-reminder { flex-wrap: nowrap; font-size: 11px; padding: 1px 4px; }
+.workspace-plateau .workspace-bench .actor-reminder > span { flex: 1 1 0; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+.workspace-plateau .workspace-bench .actor-reminder button { min-height: 22px; padding: 0 7px; font-size: 11px; }
 
 /* Barre d'actions du bas : actions préparées de l'acteur, puis « ce qu'il peut faire d'ici ». */
 .workspace-action-bar { margin: 0; padding: 5px 8px 6px; gap: 3px; border-left-width: 3px; }
