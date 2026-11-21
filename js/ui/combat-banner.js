@@ -2,6 +2,8 @@
  * Bandeau de combat, fondu dans la barre du haut (refonte de l'interface, lot E0) : round, au tour de, compteur des
  * décisions en attente, Tour suivant ; hors de Jouer, l'ordre du tour et « Revenir au combat ». Il ne mute rien
  * lui-même : l'avancement du tour et le retour dans Jouer passent par les callbacks fournis par main.js.
+ * « X agit hors de son tour » : écrit quand l'espace Jouer annonce (message `workspace-actor-change`, lot E1) qu'un clic sur la
+ * frise a fait agir un autre combattant que celui dont c'est le tour ; la mention ne vaut que pour ce tour.
  * Le compteur lit `getDecisionCount()` (0 tant que la case « À décider » n'existe pas : lot E2) et reste vide à 0.
  */
 import { showToast } from './toast.js';
@@ -24,6 +26,9 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
 
   const inner = node('div', 'combat-banner-inner');
   const status = node('span', 'combat-banner-status');
+  // Hors de `status` (tronqué quand le nom est long) : la mention reste lisible.
+  const away = node('span', 'combat-banner-offturn');
+  away.hidden = true;
   const decisions = node('span', 'combat-banner-decisions num');
   decisions.dataset.decisionsCount = '0';
   decisions.setAttribute('role', 'status');
@@ -35,7 +40,7 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
   back.type = 'button';
   const primary = node('button', 'combat-banner-primary');
   primary.type = 'button';
-  inner.append(status, decisions, track, spacer, back, primary);
+  inner.append(status, away, decisions, track, spacer, back, primary);
   // D-15 : rappel tant que des Bmax sont divisées par le Fléau des Démons ; la restauration est une action MJ annulable.
   const daemon = node('div', 'combat-banner-reminder');
   daemon.dataset.daemonbaneReminder = '';
@@ -60,6 +65,12 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
   window.addEventListener('resize', () => { if (!mount.hidden) render(); });
 
   let space = 'prepare';
+  // Dernière annonce de l'espace Jouer : { actorId, name, turnActorId, round } ou null.
+  let offTurn = null;
+  mount.ownerDocument.addEventListener('workspace-actor-change', event => {
+    offTurn = event.detail || null;
+    if (!mount.hidden) render();
+  });
 
   // Retire les puces qui ne tiennent pas sur la ligne (jamais celle du tour en
   // cours) et les compte dans « +n ».
@@ -101,6 +112,11 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
     } else {
       status.textContent = 'Pas encore commencé';
     }
+
+    const awayNow = started && offTurn && offTurn.turnActorId === current.id && offTurn.round === Number(combat.round) && offTurn.actorId !== current.id && participants.has(offTurn.actorId);
+    away.hidden = !awayNow;
+    away.textContent = awayNow ? `${offTurn.name} agit hors de son tour` : '';
+    away.title = awayNow ? 'Un clic sur « Tour suivant » reprend l’ordre ; le tour en cours n’a pas changé.' : '';
 
     const outsidePlay = space !== 'play';
     track.hidden = !outsidePlay;

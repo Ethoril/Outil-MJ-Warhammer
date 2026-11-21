@@ -1974,3 +1974,47 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
   .workspace-area-bas:not(:has(.workspace-area-actions:not(:empty))) { grid-template-columns: minmax(0, 1fr); justify-items: end; }
   .workspace-area .workspace-actor-sheet { box-shadow: none; }
 }
+
+/* ==========================================================================
+   REFONTE · LOT E1 : frise d'initiative (js/ui/combat-frise.js)
+   Un portrait par combattant actif, dans l'ordre du round, sur une seule ligne : à 20 combattants, 1 440 px suffisent
+   (les portraits se resserrent, les noms se tronquent, le titre donne le nom entier).
+   ========================================================================== */
+:root { --frise-or: #8a6400; }
+:root[data-theme="dark"] { --frise-or: #f2c14e; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --frise-or: #f2c14e; } }
+.workspace-area[data-zone="frise"] { padding: 10px 6px 4px; overflow: hidden; }
+.frise-list { display: flex; align-items: flex-end; gap: 4px; margin: 0; padding: 0; list-style: none; min-width: 0; }
+.frise-item { flex: 1 1 0; min-width: 0; max-width: 118px; display: block; }
+.frise-item:has(.is-turn) { flex-grow: 1.5; }
+.frise-portrait {
+  position: relative; display: flex; flex-direction: column; justify-content: flex-end; gap: 1px;
+  width: 100%; height: 60px; padding: 14px 3px 4px; box-sizing: border-box;
+  border: 2px solid var(--camp-neutre); border-radius: 8px; background: var(--card-bg-default, var(--j-paper)); color: var(--j-ink);
+  font-family: var(--font-ui); text-align: center; cursor: pointer; overflow: visible;
+}
+.frise-portrait.is-camp-pj { border-color: var(--camp-pj); }
+.frise-portrait.is-camp-allie { border-color: var(--camp-allie); }
+.frise-portrait.is-camp-ennemi { border-color: var(--camp-ennemi); }
+.frise-portrait:hover { background: var(--panel-2, var(--j-line)); }
+.frise-portrait.is-turn { height: 68px; border-color: var(--frise-or); box-shadow: 0 0 0 2px var(--frise-or); }
+.frise-portrait.is-actor:not(.is-turn) { box-shadow: 0 0 0 2px var(--accent); }
+.frise-portrait.is-done { opacity: 0.55; }
+.frise-portrait.is-dead { opacity: 0.4; filter: grayscale(1); }
+.frise-rank { position: absolute; top: 2px; left: 4px; font-size: 10px; color: var(--muted); }
+.frise-momentum { position: absolute; top: 2px; right: 4px; font-size: 10px; font-weight: 700; color: var(--frise-or); }
+.frise-name { display: block; font-size: 11.5px; font-weight: 600; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.frise-meta { display: flex; justify-content: center; gap: 4px; font-size: 10.5px; color: var(--muted); line-height: 1.2; }
+.frise-mount, .frise-dead { color: var(--j-ink); }
+.frise-bar { display: block; height: 4px; margin-top: 2px; border-radius: 2px; background: var(--j-line); overflow: hidden; }
+.frise-bar-fill { display: block; height: 100%; background: var(--hp-ok, var(--success)); }
+.frise-bar.is-warn .frise-bar-fill { background: var(--hp-warn); }
+.frise-bar.is-crit .frise-bar-fill { background: var(--hp-crit); }
+.frise-decision {
+  position: absolute; top: -7px; right: -5px; min-width: 16px; height: 16px; padding: 0 3px; box-sizing: border-box; border-radius: 999px;
+  background: var(--accent); color: #fff; font-size: 11px; font-weight: 800; line-height: 16px; text-align: center;
+}
+.frise-portrait:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+/* Barre du haut : « X agit hors de son tour » (js/ui/combat-banner.js). */
+.combat-banner-offturn { flex: none; white-space: nowrap; padding: 1px 8px; border: 1px solid var(--accent); border-radius: 999px; font-size: 12.5px; font-weight: 700; color: var(--accent-text); }
+.combat-banner-offturn[hidden] { display: none; }

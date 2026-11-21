@@ -21,6 +21,7 @@ import { isMiscastConditionLocked } from '../core/v5-magic-miscasts.js';
 import { prepareMagicOptions } from '../core/v5-magic-talents.js';
 import { recoveryMethodsFor, openV5EffectInputDialog } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
+import { renderFrise, actorOutOfTurn } from './combat-frise.js';
 import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '../core/outnumbering.js';
 // Surnombre, tir engagé et forçage du MJ ne valent que pour la cible où ils ont été saisis (spec engagements CA18).
 const TARGET_ENGAGEMENT_KEYS = ['targetEngaged', 'engagedWithShooter', 'engagedTargetIds', 'engagedTargetRoll', 'engagedDefensesById', 'shooterEngagedElsewhere', 'engagementForced'];
@@ -88,6 +89,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     space: 'prepare',
     // Explicit target for the current actor: null = default, 'none' or an id.
     targetChoice: null,
+    carriedTarget: null,
     // Personnage actif choisi dans la piste : null = celui du tour, sinon { id, turn } (valable pour ce tour seulement).
     actorChoice: null,
     libraryQuery: '',
@@ -291,7 +293,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
 
     if (state.resolution.actorId !== (actor?.id || null)) {
       state.resolution = emptyResolution(actor?.id || null);
-      state.targetChoice = null;
+      // Frise (E1, CA5) : celui qui agit change, la cible reste celle d'avant (sauf si c'est lui-même).
+      state.targetChoice = state.carriedTarget && state.carriedTarget !== actor?.id ? state.carriedTarget : null;
+      state.carriedTarget = null;
     }
     const draft = state.resolution;
     const actions = actorActions(actor);
@@ -3105,6 +3109,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     renderCenter(context);
     placeInZones();
     mountCircumstances();
+    renderFrise(play.zones.frise, context, { selectActor: id => { state.space = 'play'; selectActor(id); } });
+    // La barre du haut (combat-banner.js) écoute ce message pour écrire « X agit hors de son tour ».
+    refs.root.ownerDocument.dispatchEvent(new CustomEvent('workspace-actor-change', { detail: actorOutOfTurn(context) }));
   }
 
   function renderLibrary() {
@@ -3270,9 +3277,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
 
   function selectActor(id) {
-    if(state.resolution.actorId!==id)clearFortuneAdvantageDraft(state.resolution);
+    if(state.resolution.actorId!==id){
+      clearFortuneAdvantageDraft(state.resolution);
+      // Un clic sur la frise (E1) change celui qui agit sans changer la cible : on la retient pour le prochain contexte.
+      const kept=playContext();
+      state.carriedTarget=state.targetChoice==='none'?'none':kept.target?.id??null;
+    }
     state.actorChoice = { id, turn: turnKey(readCombat(Store)) };
     render();
+    state.carriedTarget = null;
   }
 
   function rememberFocus(target) {
