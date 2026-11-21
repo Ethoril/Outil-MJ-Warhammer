@@ -217,15 +217,15 @@ describe('L10 : le moteur tient chaque clause', () => {
     }
   });
 
-  test('pureté de Solkan : Péché ou Corruption refusés, Corruption inconnue refusée', () => {
+  test('pureté de Solkan : Péché ou Corruption refusés, Corruption absente lue comme 0', () => {
     const pretre = (sin, corruption) => ({ extensions: { v5: { divine: { sin }, ...(corruption === undefined ? {} : { corruptionPoints: corruption }) } } });
     const test = (actor) => resolveDivineTalentRestriction(actor, { cult: 'Solkan', talentId: 'talent-bless' });
     assert.equal(test(pretre(0, 0)).allowed, true);
     assert.equal(test(pretre(1, 0)).code, 'SOLKAN_PURITY');
     assert.equal(test(pretre(0, 2)).code, 'SOLKAN_PURITY');
-    const inconnue = test(pretre(0, undefined));
-    assert.equal(inconnue.allowed, false);
-    assert.equal(inconnue.code, 'DIVINE_DATA_REQUIRED');
+    assert.equal(test(pretre(0, undefined)).allowed, true, 'Corruption absente de la fiche = 0');
+    assert.equal(test(pretre(undefined, undefined)).allowed, true, 'Péché et Corruption absents = 0');
+    assert.equal(test(pretre(0, -1)).code, 'DIVINE_DATA_REQUIRED', 'valeur présente mais invalide : toujours refusée');
   });
 
   test('priest-counted : le prêtre porte la Haine sans être désigné, et une seule fois s’il l’est', async () => {

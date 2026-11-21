@@ -1085,8 +1085,8 @@ function calculateWrathRecovery(state,input){
   test=selectV5Test(preview,input.testOptionId||(preview.forcedInversion?'reverse':'keep'));
  }catch(error){return failure('requires-input',error.message,[{field:'roll',label:'Jet d100 explicite'}]);}
  if(!gmWrath){const capped=applyPrayerSLCaps(actor,test);if(!capped.ok)return failure('requires-input','Plafond de Prière non résolu.',capped.needsInput);test=capped.test;}
- const sin=actor.extensions?.v5?.divine?.sin,exempt=divineSinPolicy({deity:lock.cult}).exempt;
- if(!exempt&&(!Number.isSafeInteger(sin)||sin<0))return failure('requires-input','Péchés courants requis.',[{field:'sin',label:'Péchés'}]);
+ const sin=readDivineSin(actor),exempt=divineSinPolicy({deity:lock.cult}).exempt;
+ if(!exempt&&sin===null)return failure('requires-input','Péchés courants requis.',[{field:'sin',label:'Péchés'}]);
  const wrath={triggered:!exempt&&sin>0&&(gmWrath||test.fumble||input.absolution?.kind!=='altdorf'&&test.roll%10<=sin),sinAtTest:exempt?0:sin};
  const next=clone(state),index=parts(next).findIndex(row=>row.id===actor.id),changed=parts(next)[index];let removedCount=0;
  if(test.success&&condition){
