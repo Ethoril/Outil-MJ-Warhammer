@@ -10,13 +10,25 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
-## Non publiée — Poursuite retirée du module Warhammer
+## 3.56.0 — Retours d’un gros combat (publiée le 21/11/2026)
+
+Lots corrigés après un vrai combat, avant la refonte de l’interface.
+
+- **Retirer un participant.** Un participant (PJ, PNJ, créature, monture) se retire en cours de rencontre, avec confirmation dans l’interface. Le retrait suit en cascade : ordre et tour (le tour passe au suivant), engagements, empoignades et leur Enchevêtré, familiers, monture et cavalier liés, suivis de fin de combat, lignes de dés. Son pion disparaît de la carte par la liaison.
+- **PJ « sans monture ».** Un PJ dont la fiche déclare une monture peut être indiqué sans monture pour la rencontre, à l’ajout ou en cours de combat : la monture n’entre plus au combat ni sur la carte. La fiche ne change pas.
+- **Élan visible.** L’Élan de chaque participant s’affiche sur la piste.
+- **Miracle refusé faute de Péché.** Une fiche sans champ `peche` (la fiche affiche alors « Péché 0 ») bloquait les miracles : « Le score de Péché doit être enregistré dans la fiche » (cas d’Elysia, Attaque Rapide). Un Péché ou une Corruption absents valent maintenant 0 dans tout le chemin prière/miracle ; une valeur invalide reste refusée.
+- **Pion actif sur la carte.** L’outil envoie le participant actif à Map Display (`mj.turn`, contrat §10), qui le cerne d’or sur l’écran MJ.
+
+Suites : 6 901 + 280, zéro échec.
+
+### Poursuite retirée du module Warhammer
 
 Décision du MJ après un gros combat : le module de poursuite V5 (3.50.0) est abandonné. Plus d’entrée dans l’interface (carte « Poursuite » de Jouer, modale « Poursuite de scène », bouton de lancement dans le panneau du Brisé), ni de commandes du Store (`getPursuit`, `startPursuit`, etc.). Retirés : `js/core/v5-pursuit.js`, `js/core/store/api-pursuit.js`, `js/data/v5-pursuit-obstacles.js`, `js/ui/v5-pursuit-panel.js`, `js/ui/v5-pursuit-dialog.js`, leurs tests et les deux parcours navigateur.
 
 - **Gardé.** La fuite d’un Brisé engagé (attaque gratuite des adversaires, 3.48.1) et ses règles Flee/Sprint, sans le cas particulier du fuyard d’une poursuite ; les talents qui mentionnent la poursuite (Cavalier, Claquer le fouet, Impitoyable, Nageur endurant : contexte `pursuit`, mesures de Mouvement), qui restent des réglages manuels du MJ ; les notes de créatures (Territorial, Dressage).
 - **Sauvegardes.** Un état `extensions.v5.pursuit`, `scenePursuitReceipts` ou une poursuite rangée avec une scène en pause reste dans les données, jamais lu ni réécrit ; l’historique ↶/↷ d’une ancienne commande de poursuite se rejoue sans erreur.
-- **Spécification.** `docs/specs/poursuite-v5/` est conservée comme archive (abandonnée). Version inchangée (3.55.1), rien publié.
+- **Spécification.** `docs/specs/poursuite-v5/` est conservée comme archive (abandonnée).
 
 ## 3.55.1 — Renommer un PNJ en rencontre (publiée le 20/11/2026)
 
