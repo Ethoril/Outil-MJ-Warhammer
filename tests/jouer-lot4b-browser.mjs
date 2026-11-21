@@ -373,7 +373,7 @@ async function main() {
     await prepOverlay.getByRole('button', { name: 'Ajouter' }).click();
 
     await prepOverlay.getByRole('button', { name: 'Lancer la rencontre' }).last().click();
-    const initiative = realPage.locator('dialog.tool-sheet', { hasText: 'Saisissez l’Initiative' });
+    const initiative = realPage.locator('[data-zone="centre"] .workspace-initiative');
     await initiative.waitFor({ state: 'visible' });
     const characteristics = initiative.locator('input[name^="characteristic:"]:not([readonly])');
     for (let index = 0; index < await characteristics.count(); index += 1) {
@@ -383,8 +383,7 @@ async function main() {
     for (let index = 0; index < await dice.count(); index += 1) {
       await dice.nth(index).fill(String(6 - index));
     }
-    await initiative.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-    await initiative.getByRole('button', { name: 'Confirmer et appliquer' }).click();
+    await initiative.getByRole('button', { name: 'Commencer le round 1' }).click();
     await expect(prepOverlay).toBeHidden();
 
     // Aller dans Jouer

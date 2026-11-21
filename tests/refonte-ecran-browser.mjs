@@ -9,6 +9,10 @@
  * REFONTE_ZONES_STRICT=1 fait aussi échouer sur une zone qui déborde (attendu à partir du lot E6).
  * Captures de chaque étape dans tmp/refonte-ecran/ (non versionné).
  *
+ * Lot E5 (démarrage) : la sauvegarde R20 est transformée en réserve de 20 profils + une rencontre dont toutes les lignes sont
+ * « En attente » ; le parcours la LANCE depuis Préparer (20 actifs d'un geste), saisit l'initiative dans la zone centrale
+ * (sans feuille latérale), ajoute un renfort et retire un combattant pendant la saisie, puis commence le round 1.
+ *
  * Usage : timeout 120 node tests/refonte-ecran-browser.mjs
  */
 import assert from 'node:assert/strict';
@@ -24,9 +28,29 @@ const STRICT_ZONES = process.env.REFONTE_ZONES_STRICT === '1';
 const shots = `${root}tmp/refonte-ecran/`;
 mkdirSync(shots, { recursive: true });
 
-// Combattants de R20 utilisés par le parcours (identifiants stables du générateur tools/build-r20-fixture.mjs).
-const GOR = 'r20-e0-p-101-1', GOR2 = 'r20-e0-p-101-2', UNGOR = 'r20-e0-p-102-1', ARCHER = 'r20-e0-p-122';
-const SHAMAN = 'r20-e0-p-121', PRIEST = 'r20-e0-p-173', ERICH = 'r20-e0-p-536', JORUNN = 'r20-e0-p-537';
+// Combattants de R20 utilisés par le parcours, retrouvés par leur nom après le lancement (la rencontre lancée crée de nouveaux identifiants).
+const NAMES = { GOR: 'Gor 1', GOR2: 'Gor 2', UNGOR: 'Ungor 1', ARCHER: 'Guzgog — Tirailleur ungor', SHAMAN: 'Swilegrakk — Chamane-bray (Lanceur de sorts)', PRIEST: 'Père Pedragar, prêtre de Taal', RIDER: 'Lynathryn Nightsong' };
+const ID = {};
+const PROFILE_PREFIX = 'r20-profil-';
+
+// La sauvegarde R20 (20 combattants actifs, round 0) devient : une réserve de 20 profils, une rencontre « R20 » dont toutes
+// les lignes sont « En attente » (le lancement doit les faire entrer), aucun combat en cours. Lynathryn déclare sa monture.
+function launchableSave() {
+  const save = JSON.parse(fixture.toString('utf8'));
+  const people = save.combat.participants;
+  const horse = people.find(row => row.name === 'Cheval de selle');
+  save.reserve = people.map(person => {
+    const { id, zone, states, ...profile } = structuredClone(person);
+    const v5 = { ...(profile.extensions?.v5 || {}) };
+    delete v5.ownMountId; delete v5.mounted; delete v5.mountId; delete v5.mountOf;
+    if (person.name === NAMES.RIDER) v5.declaredMount = { profileId: PROFILE_PREFIX + horse.id, name: horse.name };
+    return { ...profile, id: PROFILE_PREFIX + id, extensions: { ...(profile.extensions || {}), v5 } };
+  });
+  save.encounters = [{ id: 'r20', title: 'R20', status: 'prepared', entries: people.filter(row => row !== horse).map((person, index) => ({ id: `r20-ligne-${index}`, profileId: PROFILE_PREFIX + person.id, quantity: 1, camp: person.camp, zone: 'bench' })) }];
+  save.combat = { round: 0, currentActorId: null, order: [], orderMode: 'automatic', participants: [] };
+  save.activeScene = null;
+  return Buffer.from(JSON.stringify(save));
+}
 
 const { origin, close } = await startStaticServer({ root });
 const browser = await launchBrowser();
@@ -36,6 +60,8 @@ try {
   const context = await browser.newContext({ viewport: { width: 1440, height: 800 }, serviceWorkers: 'block' });
   await blockExternalNetwork(context, origin);
   const page = await context.newPage();
+  // Dés des PNJ tirés au hasard par l'outil : un tirage fixe rend les égalités (donc la hauteur de la saisie) reproductibles.
+  await page.addInitScript(() => { let seed = 20241121; Math.random = () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296; });
   page.setDefaultTimeout(10000);
   const errors = [], dialogs = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -90,39 +116,89 @@ try {
   const rollInput = (name, value) => page.locator(`[data-roll-input="${name}"]`).first().fill(String(value));
   const press = (name, key = 'Enter') => page.locator(`[data-roll-input="${name}"]`).first().press(key);
 
-  // 1. Lancer : la sauvegarde R20 chargée, 20 combattants actifs dans Jouer.
+  const storeCall = (fn, arg) => page.evaluate(async ([source, argument]) => { const { Store } = await import('/js/main.js'); return new Function('Store', 'arg', `return (${source})(Store, arg)`)(Store, argument); }, [fn.toString(), arg]);
+  const activeCount = () => storeCall(Store => Store.listParticipants().filter(row => row.zone === 'active').length);
+  const board = () => page.locator('[data-zone="centre"] .workspace-initiative');
+  const rows = () => page.locator('[data-initiative-row]');
+  // Lot E5 : la saisie de l'initiative tient dans la zone centrale (aucune zone ni fenêtre ne défile), même hors mode strict.
+  const mustFit = () => { const last = report.at(-1); for (const z of [...last.overflowing, ...last.windowsOverflow]) failures.push(`${last.step} : ${z.name} déborde (${z.scrollHeight}/${z.clientHeight})`); };
+
+  // 1. Lancer la rencontre : 20 combattants actifs d'un geste, aucune feuille latérale.
   await page.goto(`${origin}/index.html`);
   await page.waitForFunction(() => document.querySelector('#app-content')?.style.display === 'block', null, { timeout: 20000 });
-  await page.locator('#file-input').setInputFiles({ name: 'rencontre-r20.json', mimeType: 'application/json', buffer: fixture });
-  await page.locator('#tab-combat').click();
-  await page.waitForFunction(() => document.querySelectorAll('[data-workspace-select]').length >= 20);
-  await measure('lancer la rencontre');
+  await page.locator('#file-input').setInputFiles({ name: 'rencontre-r20.json', mimeType: 'application/json', buffer: launchableSave() });
+  await page.locator('#tab-prepare').click();
+  const launch = page.locator('#workspace-prepare [data-workspace-action="launch-encounter"][data-encounter-id="r20"]');
+  await launch.waitFor({ state: 'visible' });
+  await launch.click();
+  await board().waitFor({ state: 'visible' });
+  assert.equal(await activeCount(), 20, 'le lancement fait entrer les 20 combattants d’un geste');
+  assert.equal(await page.locator('dialog[open]').count(), 0, 'aucune feuille d’initiative : tout se saisit au centre');
+  assert.equal(await rows().count(), 20, 'une case d’initiative par combattant');
+  assert.equal(await page.locator('[data-zone="centre"] .workspace-resolution').count(), 0, 'avant le round 1 le centre porte l’initiative, pas la résolution');
+  await measure('lancer la rencontre'); mustFit();
 
-  // 2. Initiative : la feuille de démarrage, dés des PJ, Combat instinctif, égalités, puis le round 1.
-  await page.locator('#combat-banner .combat-banner-primary').click();
-  const sheet = page.locator('dialog.tool-sheet');
-  await sheet.waitFor({ state: 'visible' });
-  await measure('saisir l’initiative');
-  for (const die of await sheet.locator('input[name^="die:"]:not([readonly])').all()) await die.fill('5');
-  for (const choice of await sheet.locator('select[name^="reflexChoice:"]').all()) await choice.selectOption({ index: 1 });
-  for (let pass = 0; pass < 6 && !(await sheet.getByRole('button', { name: 'Confirmer et appliquer' }).isVisible()); pass += 1) {
-    await sheet.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-    for (const first of await sheet.locator('select[data-kind="tieFirst"]').all()) if (!(await first.inputValue())) await first.selectOption({ index: 1 });
+  // 2. Initiative dans la zone centrale : trois colonnes, dés des PJ, Combat instinctif, égalités, camp surpris, cavalier.
+  const columns = await board().locator('.workspace-initiative-grid').evaluate(grid => getComputedStyle(grid).gridTemplateColumns.split(' ').length);
+  assert.equal(columns, 3, 'grille sur trois colonnes');
+  await measure('saisir l’initiative'); mustFit();
+  for (const die of await board().locator('input[name^="die:"]:not([readonly])').all()) await die.fill('5');
+  for (const first of await board().locator('input[name^="reflexFirst:"]:not([readonly])').all()) await first.fill('4');
+  for (const second of await board().locator('input[name^="reflexSecond:"]:not([readonly])').all()) await second.fill('7');
+  for (const choice of await board().locator('select[name^="reflexChoice:"]').all()) await choice.selectOption({ index: 1 });
+  // Cavalier : « monté » et « sans monture » (la monture déclarée quitte la rencontre, puis revient).
+  const mountGroup = board().locator('.workspace-initiative-mount');
+  await mountGroup.getByRole('button', { name: 'Sans monture' }).click();
+  await page.waitForFunction(async name => (await import('/js/main.js')).Store.listParticipants().some(row => row.name === name && row.extensions?.v5?.mountAbsent === true), NAMES.RIDER);
+  assert.equal(await board().locator('.workspace-initiative-mount [aria-pressed="true"]').innerText(), 'Sans monture');
+  assert.equal(await rows().count(), 19, 'la monture quitte la rencontre : 19 cases');
+  await mountGroup.getByRole('button', { name: 'Monté' }).click();
+  await page.waitForFunction(() => document.querySelector('.workspace-bench'));
+  await page.locator('.workspace-bench').getByRole('button', { name: /^Faire entrer Cheval/ }).click();
+  await page.waitForFunction(() => document.querySelectorAll('[data-initiative-row]').length === 20);
+  // Camp surpris : choisi puis enlevé.
+  await board().locator('select[name="surprisedCamp"]').selectOption('allie');
+  await board().locator('select[name="surprisedCamp"]').selectOption('');
+  // Renfort et retrait PENDANT la saisie : la liste suit, la saisie en cours et la case ne se ferment pas.
+  await board().locator('input[name^="characteristic:"]').first().fill('41');
+  await storeCall(async Store => { const row = Store.listParticipants().find(item => item.name === 'Gor 5'); await Store.moveParticipant(row.id, 'bench'); });
+  await page.waitForFunction(() => document.querySelectorAll('[data-initiative-row]').length === 19);
+  await page.locator('.workspace-bench').getByRole('button', { name: 'Faire entrer Gor 5' }).click();
+  await page.waitForFunction(() => document.querySelectorAll('[data-initiative-row]').length === 20);
+  assert.equal(await board().locator('input[name^="characteristic:"]').first().inputValue(), '41', 'la saisie en cours survit à l’entrée d’un renfort');
+  await storeCall(async Store => { await Store.addProfile({ id: 'r20-renfort', name: 'Renfort ungor', kind: 'Créature', hp: 8, initiative: 30, caracs: { I: 30 } }); await Store.addProfilesToCombat(['r20-renfort'], {}); });
+  await page.locator('.workspace-bench').getByRole('button', { name: 'Faire entrer Renfort ungor' }).click();
+  await page.waitForFunction(() => document.querySelectorAll('[data-initiative-row]').length === 21);
+  await board().getByRole('button', { name: 'Retirer Ungor 4 de la rencontre' }).click();
+  const confirmRemoval = page.locator('dialog[open]').last();
+  await confirmRemoval.waitFor({ state: 'visible' });
+  await confirmRemoval.getByRole('button', { name: /^Retirer/ }).first().click();
+  await page.waitForFunction(() => document.querySelectorAll('[data-initiative-row]').length === 20);
+  assert.equal(await board().locator('input[name^="characteristic:"]').first().inputValue(), '41', 'la saisie en cours survit au retrait d’un combattant');
+  assert.equal(await board().count(), 1, 'la case d’initiative reste ouverte');
+  await measure('renfort et retrait pendant la saisie'); mustFit();
+  // Égalités : tranchées par le parcours (Test opposé à deux, ordre fixé à trois ou plus).
+  const start = board().locator('.workspace-initiative-start');
+  for (let pass = 0; pass < 8 && (await start.getAttribute('data-ready')) !== 'true'; pass += 1) {
+    for (const first of await board().locator('select[data-kind="tieFirst"]').all()) if (!(await first.inputValue())) await first.selectOption({ index: 1 });
     const groups = new Map();
-    for (const position of await sheet.locator('select[data-kind="tieChoice"]').all()) {
+    for (const position of await board().locator('select[data-kind="tieChoice"]').all()) {
       const key = await position.getAttribute('data-group-key');
       const at = groups.get(key) || 0; groups.set(key, at + 1);
-      await position.selectOption({ index: at + 1 });
+      if (!(await position.inputValue())) await position.selectOption({ index: at + 1 });
     }
-    for (const ride of await sheet.locator('input[data-mounted-rider]').all()) if (!(await ride.inputValue())) await ride.fill(await ride.getAttribute('data-field') === 'roll' ? '20' : '40');
-    for (const question of await sheet.locator('select[data-ride-condition]').all()) if (!(await question.inputValue())) await question.selectOption({ index: 1 });
+    for (const ride of await board().locator('input[data-mounted-rider]').all()) if (!(await ride.inputValue())) await ride.fill(await ride.getAttribute('data-field') === 'roll' ? '20' : '40');
+    for (const question of await board().locator('select[data-ride-condition]').all()) if (!(await question.inputValue())) await question.selectOption({ index: 1 });
   }
-  await sheet.getByRole('button', { name: 'Confirmer et appliquer' }).click();
+  assert.equal(await start.getAttribute('data-ready'), 'true', 'saisie complète : l’ordre est calculable');
+  await start.click();
   await page.waitForFunction(async () => (await import('/js/main.js')).Store.getCombat().round === 1);
+  assert.equal(await page.locator('[data-initiative]').count(), 0, 'le round 1 a remplacé la saisie');
   await measure('initiative appliquée, round 1');
+  for (const [key, name] of Object.entries(NAMES)) ID[key] = await storeCall((Store, wanted) => Store.listParticipants().find(row => row.name === wanted)?.id, name);
 
   // 3. Attaque de mêlée : Gor 1 frappe Erich (jet d'attaque, défense, aperçu).
-  await selectActor(GOR);
+  await selectActor(ID.GOR);
   await chooseAction('Hand Weapon');
   await chooseTarget('Erich Massenbach');
   await rollInput('attack', 23);
@@ -132,26 +208,26 @@ try {
   await measure('attaque de mêlée');
 
   // 4. Tir : Guzgog tire à l'arc court sur Jorunn.
-  await selectActor(ARCHER);
+  await selectActor(ID.ARCHER);
   await chooseAction('Shortbow');
   await chooseTarget('Jorunn Gromsdottir');
   await rollInput('attack', 23);
   await measure('tir');
 
   // 5. Sort : le chamane-bray ouvre l'Incantation V5.
-  await selectActor(SHAMAN);
+  await selectActor(ID.SHAMAN);
   await resolution().locator('[data-magic-menu]').click();
   await resolution().getByRole('button', { name: 'Incantation V5' }).click();
   await measure('sort');
 
   // 6. Prière : Père Pedragar ouvre le panneau des prières.
-  await selectActor(PRIEST);
+  await selectActor(ID.PRIEST);
   await resolution().locator('[data-magic-menu]').click();
   await resolution().getByRole('button', { name: 'Prière', exact: true }).click();
   await measure('prière');
 
   // 7. Dégâts avec critique : Gor 2 touche Jorunn sur un double (11), saisie du critique, application.
-  await selectActor(GOR2);
+  await selectActor(ID.GOR2);
   await chooseAction('Hand Weapon');
   await chooseTarget('Jorunn Gromsdottir');
   await rollInput('attack', 11);
@@ -172,18 +248,18 @@ try {
     const { Store } = await import('/js/main.js');
     await Store.setSuddenDeathEnabled(true);
     await Store.updateParticipant(id, { hp: 0 });
-  }, UNGOR);
+  }, ID.UNGOR);
   await page.locator('.workspace-sudden-death-banner').first().waitFor();
   await measure('0 PV, mort subite active');
 
   // 9. Retrait d'un participant : confirmation de l'outil, puis retrait.
-  await selectActor(UNGOR);
+  await selectActor(ID.UNGOR);
   await page.locator('.workspace-sheet-remove').first().click();
   const confirm = page.locator('dialog[open]').last();
   await confirm.waitFor({ state: 'visible' });
   await measure('retrait d’un participant (confirmation)');
   await confirm.getByRole('button', { name: /^Retirer/ }).first().click();
-  await page.waitForFunction(async id => !(await import('/js/main.js')).Store.listParticipants().some(row => row.id === id && row.zone === 'active'), UNGOR);
+  await page.waitForFunction(async id => !(await import('/js/main.js')).Store.listParticipants().some(row => row.id === id && row.zone === 'active'), ID.UNGOR);
   await measure('participant retiré');
 
   // 10. Tour suivant, puis changement de round.

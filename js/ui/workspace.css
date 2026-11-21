@@ -1974,3 +1974,61 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
   .workspace-area-bas:not(:has(.workspace-area-actions:not(:empty))) { grid-template-columns: minmax(0, 1fr); justify-items: end; }
   .workspace-area .workspace-actor-sheet { box-shadow: none; }
 }
+
+/* ==========================================================================
+   REFONTE · LOT E5 : démarrage du combat
+   L'initiative de départ se saisit dans la zone centrale, qui prend toute la largeur (acteur et cible sont vides avant le
+   round 1) : trois colonnes de cases à une ligne. Avant l'initiative, les mêlées se réduisent à la liste « En attente »
+   (renforts à faire entrer), sous la saisie.
+   ========================================================================== */
+.workspace-play-grid.is-initiative .workspace-plateau > .workspace-track,
+.workspace-play-grid.is-initiative .workspace-track-column > .workspace-rubric { display: none; }
+.workspace-play-grid.is-initiative .workspace-track-column { order: 2; }
+.workspace-play-grid.is-initiative .workspace-track-column:not(:has(.workspace-bench)) { display: none; }
+.workspace-play-grid.is-initiative .workspace-plateau > .workspace-bench { margin-top: 0; padding: 6px 8px; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); align-items: start; gap: 4px 8px; }
+.workspace-play-grid.is-initiative .workspace-bench > .workspace-rubric { grid-column: 1 / -1; margin: 0; }
+.workspace-play-grid.is-initiative .workspace-bench-item { padding: 3px 6px; }
+.workspace-play-grid.is-initiative .workspace-bench-label { flex: 1 1 0; min-width: 0; font-size: 13px; }
+.workspace-initiative { display: grid; gap: 8px; align-content: start; min-width: 0; padding: 10px 12px; }
+.workspace-initiative-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; }
+.workspace-initiative-head h2 { margin: 0; font-size: 18px; }
+.workspace-initiative-head p { margin: 0; font-size: 13px; }
+.workspace-initiative-close { margin-left: auto; min-height: 26px; padding: 1px 10px; font-size: 13px; }
+.workspace-initiative-form { display: grid; gap: 8px; min-width: 0; }
+.workspace-initiative-options { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
+.workspace-initiative-field { display: inline-flex; flex-direction: row; align-items: center; gap: 5px; min-width: 0; }
+.workspace-initiative-field-label { font-size: 12px; color: var(--muted); }
+.workspace-initiative-field input { width: 46px; padding: 2px 4px; text-align: center; }
+.workspace-initiative-field select, .workspace-initiative-inputs select { padding: 2px 4px; font-size: 13px; }
+.workspace-initiative-inputs select { max-width: 84px; }
+.workspace-initiative-mount { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.workspace-initiative-mount-name { font-size: 13px; font-weight: 600; margin-right: 2px; }
+.workspace-initiative-chip { min-height: 26px; padding: 1px 10px; font-size: 13px; }
+.workspace-initiative-chip.is-on { border-color: var(--accent); background: var(--accent); color: var(--button-text, #fff); }
+.workspace-initiative-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 8px; }
+.workspace-initiative-grid > p { grid-column: 1 / -1; margin: 0; }
+.workspace-initiative-row { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; min-width: 0; padding: 3px 6px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); }
+.workspace-initiative-top { display: contents; }
+.workspace-initiative-name { order: 1; flex: 1 1 56px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.workspace-initiative-inputs { order: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.workspace-initiative-remove { order: 3; min-height: 22px; padding: 0 6px; line-height: 20px; font-size: 12px; }
+.workspace-initiative-note { order: 4; flex: 1 0 100%; margin: 0; font-size: 12px; }
+.workspace-initiative .workspace-roll-button { min-height: 22px; padding: 0 6px; font-size: 12px; }
+.workspace-initiative-needs:empty { display: none; }
+.workspace-initiative-needs { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4px 8px; font-size: 13px; }
+.workspace-initiative-needs > .card { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; max-width: none; padding: 4px 8px; }
+.workspace-initiative-needs > .card > strong, .workspace-initiative-needs > .card > p { flex: 1 0 100%; margin: 0; }
+.workspace-initiative-needs > .card > p:not([class]) { font-size: 12px; }
+.workspace-initiative-needs label { flex-direction: row; align-items: center; gap: 5px; }
+.workspace-initiative-needs input, .workspace-initiative-needs select { padding: 2px 6px; font-size: 13px; }
+.workspace-initiative-needs input[type="number"] { width: 52px; }
+.workspace-initiative-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.workspace-initiative-status { margin: 0; font-size: 13px; min-width: 0; flex: 1 1 260px; }
+@media (min-width: 1000px) {
+  #workspace-play > .workspace-play-grid.is-initiative { grid-template-areas: "frise frise frise" "centre centre centre" "bas bas bas"; }
+  #workspace-play > .workspace-play-grid.is-initiative .workspace-area[data-zone="acteur"],
+  #workspace-play > .workspace-play-grid.is-initiative .workspace-area[data-zone="droite"] { display: none; }
+  /* Avant le round 1 les onglets du bas (Règles, Profils, Journal) se contentent d'une bande : la saisie garde la place. */
+  #workspace-play > .workspace-play-grid.is-initiative .workspace-area-bas > .workspace-side:not(.is-collapsed) { height: min(30vh, 104px); }
+  #workspace-play > .workspace-play-grid.is-initiative .workspace-table-rules { padding: 4px 12px; }
+}

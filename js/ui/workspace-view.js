@@ -190,6 +190,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     discardOrphanScene: typeof actions.discardOrphanScene === 'function' ? actions.discardOrphanScene : null,
     restartCombat: typeof actions.restartCombat === 'function' ? actions.restartCombat : null,
     showPlay: typeof actions.showPlay === 'function' ? actions.showPlay : null,
+    // Refonte E5 : saisie de l'initiative de départ rendue dans la zone centrale (main.js garde la saisie hors du DOM).
+    renderInitiative: typeof actions.renderInitiative === 'function' ? actions.renderInitiative : null,
+    endInitiative: typeof actions.endInitiative === 'function' ? actions.endInitiative : null,
+    initiativeOpen: typeof actions.initiativeOpen === 'function' ? actions.initiativeOpen : null,
     spaceShown: typeof actions.spaceShown === 'function' ? actions.spaceShown : null,
     createProfile: typeof actions.createProfile === 'function' ? actions.createProfile : null,
     duplicateProfile: typeof actions.duplicateProfile === 'function' ? actions.duplicateProfile : null,
@@ -2684,6 +2688,21 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       details.appendChild(suddenDeath);
       return details;
     };
+    // Refonte E5 : quand la saisie de l'initiative est ouverte (lancement d'une rencontre, « Commencer le combat »), la zone
+    // centrale la porte à la place de la feuille latérale ; les mêlées se réduisent à la liste « En attente » (renforts).
+    // Elle se referme d'elle-même dès que l'initiative est faite ou que le round 1 a commencé.
+    let initiativeDone = false;
+    try { initiativeDone = Number(context.combat.round) > 0 || (typeof Store.isCombatInitiativeInitialized === 'function' && Store.isCombatInitiativeInitialized()); } catch { initiativeDone = false; }
+    if (initiativeDone || !context.participants.length) callbacks.endInitiative?.();
+    const initiativePending = Boolean(callbacks.renderInitiative && callbacks.initiativeOpen?.()) && !initiativeDone && context.participants.length > 0;
+    play.grid.classList.toggle('is-initiative', initiativePending);
+    if (initiativePending) {
+      const board = node('section', 'workspace-card workspace-initiative');
+      board.dataset.initiative = 'board';
+      callbacks.renderInitiative(board);
+      center.append(board, tableRules());
+      return;
+    }
     if (!context.participants.length) {
       const empty = node('div', 'workspace-empty workspace-card workspace-play-empty');
       empty.appendChild(node('h2', '', 'Aucune rencontre en cours'));

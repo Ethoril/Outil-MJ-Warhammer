@@ -8,16 +8,15 @@ import { startStaticServer, blockExternalNetwork } from './helpers/static-server
 const root = fileURLToPath(new URL('..', import.meta.url));
 
 // Les commandes de séance vivent dans le menu ⋯ de la barre du haut.
-// Le lancement ouvre le dialogue d'initiative (F2-A) : saisir des d10 distincts (pas d'égalité), calculer l'ordre, confirmer.
+// Le lancement ouvre la saisie de l'initiative dans la zone centrale (refonte E5) : d10 distincts (pas d'égalité), puis « Commencer le round 1 ».
 async function confirmLaunchInitiative(page) {
-  const initiative = page.locator('dialog.tool-sheet', { hasText: 'Saisissez l’Initiative' });
+  const initiative = page.locator('[data-zone="centre"] .workspace-initiative');
   await initiative.waitFor({ state: 'visible' });
   const characteristics = initiative.locator('input[name^="characteristic:"]:not([readonly])');
   for (let index = 0; index < await characteristics.count(); index += 1) if (!await characteristics.nth(index).inputValue()) await characteristics.nth(index).fill('40');
   const dice = initiative.locator('input[name^="die:"]:not([readonly])');
   for (let index = 0; index < await dice.count(); index += 1) await dice.nth(index).fill(String(6 - index));
-  await initiative.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-  await initiative.getByRole('button', { name: 'Confirmer et appliquer' }).click();
+  await initiative.getByRole('button', { name: 'Commencer le round 1' }).click();
 }
 
 async function openAppMenu(page) {
