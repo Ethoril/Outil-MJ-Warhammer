@@ -2805,6 +2805,19 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         return draft;
       });
     },
+    // Refonte E2 (CA8) : « Pas un figurant » — le MJ écarte ce participant de la mort subite. Champ facultatif, absent = faux.
+    setSuddenDeathDeclined(participantId, declined = true) {
+      if (typeof declined !== 'boolean') throw new TypeError('Choix « Pas un figurant » invalide');
+      return api.executeCommand('set-sudden-death-declined-v5', draft => {
+        const index = (draft.combat?.participants || []).findIndex(row => row.id === participantId);
+        if (index < 0) throw new TypeError('Participant introuvable');
+        const row = draft.combat.participants[index];
+        const v5 = { ...(row.extensions?.v5 || {}) };
+        if (declined) v5.suddenDeathDeclined = true; else delete v5.suddenDeathDeclined;
+        draft.combat.participants[index] = { ...row, extensions: { ...(row.extensions || {}), v5 } };
+        return draft;
+      });
+    },
     previewAmputationShock(input={}) {
       const snapshot=currentEnvelope(),participant=snapshot.combat?.participants?.find(row=>row.id===input.participantId);
       if(!participant)return{status:'blocked',ready:false,reason:'Participant introuvable.',baseRevision:localRevision};

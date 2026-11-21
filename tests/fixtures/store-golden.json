@@ -48,6 +48,7 @@
    "setSuddenDeathEnabled/1",
    "previewSuddenDeath/1",
    "decideSuddenDeath/2",
+   "setSuddenDeathDeclined/1",
    "previewAmputationShock/0",
    "deferAmputationShock/3",
    "applyAmputationShock/0",
@@ -1302,6 +1303,11 @@
    },
    {
     "label": "sweep decideSuddenDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "8979ee0ac6ecda22"
+   },
+   {
+    "label": "sweep setSuddenDeathDeclined",
     "error": "TypeError: Participant introuvable",
     "state": "8979ee0ac6ecda22"
    },
@@ -2736,6 +2742,7 @@
    "setSuddenDeathEnabled/1",
    "previewSuddenDeath/1",
    "decideSuddenDeath/2",
+   "setSuddenDeathDeclined/1",
    "previewAmputationShock/0",
    "deferAmputationShock/3",
    "applyAmputationShock/0",
@@ -3990,6 +3997,11 @@
    },
    {
     "label": "sweep decideSuddenDeath",
+    "error": "TypeError: Participant introuvable",
+    "state": "7b05d2d9367d819b"
+   },
+   {
+    "label": "sweep setSuddenDeathDeclined",
     "error": "TypeError: Participant introuvable",
     "state": "7b05d2d9367d819b"
    },

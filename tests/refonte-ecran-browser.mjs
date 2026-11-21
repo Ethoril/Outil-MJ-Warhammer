@@ -431,14 +431,38 @@ try {
   if (await apply.isEnabled().catch(() => false)) { await apply.click(); await measure('critique appliqué'); }
   else report.push({ step: 'critique appliqué', note: `non appliqué : ${await apply.getAttribute('title').catch(() => '?')}` });
 
-  // 8. 0 PV avec la mort subite des figurants active : la décision du MJ est attendue.
+  // 8. 0 PV avec la mort subite des figurants active : la décision du MJ arrive dans la case « À décider » (lot E2,
+  // CA7 à CA9) : carte visible sans défilement, compteur dans la barre du haut, marque sur la frise, Tour suivant actif,
+  // « Plus tard » réduit la carte sans la retirer, « Mort » se décide en un clic.
   await page.evaluate(async id => {
     const { Store } = await import('/js/main.js');
     await Store.setSuddenDeathEnabled(true);
     await Store.updateParticipant(id, { hp: 0 });
   }, ID.UNGOR);
-  await page.locator('.workspace-sudden-death-banner').first().waitFor();
+  const decisionCard = page.locator(`[data-zone="droite"] [data-decisions] [data-decision-kind="mort-subite"][data-participant-id="${ID.UNGOR}"]`);
+  await decisionCard.waitFor();
   await measure('0 PV, mort subite active');
+  for (const zone of report.at(-1).overflowing.filter(z => z.name === 'droite')) failures.push(`0 PV, mort subite active : la zone droite déborde (${zone.scrollHeight}/${zone.clientHeight})`);
+  assert.ok(await insideWindow(decisionCard), 'la carte « À décider » est dans la fenêtre');
+  assert.ok(await decisionCard.evaluate(el => { const zone = el.closest('[data-zone]'), z = zone.getBoundingClientRect(), r = el.getBoundingClientRect(); return zone.scrollTop === 0 && r.top >= z.top - 1 && r.bottom <= z.bottom + 1; }), 'la carte se voit sans faire défiler sa zone');
+  assert.deepEqual(await decisionCard.locator('[data-decision-option]').allTextContents(), ['Mort', 'Inconscient', 'Plus tard', 'Pas un figurant'], 'options de la mort subite, sans case à cocher préalable');
+  assert.equal(await decisionCard.locator('input[type="checkbox"]').count(), 0, 'aucune case à cocher préalable');
+  const bannerCount = page.locator('#combat-banner [data-decisions-count]');
+  const pending = Number(await page.locator('[data-zone="droite"] [data-decisions] .workspace-decisions-count').getAttribute('data-decisions-count'));
+  assert.ok(pending >= 1, 'la case compte la décision');
+  assert.equal(await bannerCount.getAttribute('data-decisions-count'), String(pending), 'compteur de la barre du haut = case « À décider »');
+  assert.ok(await bannerCount.isVisible(), 'le compteur se voit');
+  assert.equal(await page.locator(`[data-zone="frise"] [data-frise-id="${ID.UNGOR}"] .frise-decision`).count(), 1, 'marque « décision en attente » sur la frise');
+  assert.ok(await page.locator('#combat-banner .combat-banner-primary').isEnabled(), 'Tour suivant reste actif');
+  await decisionCard.locator('[data-decision-option="later"]').click();
+  await decisionCard.locator('.workspace-decision-resume').waitFor();
+  assert.equal(await bannerCount.getAttribute('data-decisions-count'), String(pending), '« Plus tard » laisse la décision en attente');
+  await decisionCard.locator('.workspace-decision-resume').click();
+  await decisionCard.locator('[data-decision-option="dead"]').click();
+  await decisionCard.waitFor({ state: 'detached' });
+  assert.equal(await page.evaluate(async id => (await import('/js/main.js')).Store.listParticipants().find(row => row.id === id)?.extensions?.v5?.dead, ID.UNGOR), true, '« Mort » en un clic');
+  assert.equal(await bannerCount.getAttribute('data-decisions-count'), String(pending - 1), 'la décision prise quitte le compteur');
+  await measure('mort subite décidée');
 
   // 9. Retrait d'un participant : confirmation de l'outil, puis retrait.
   await selectActor(ID.UNGOR);

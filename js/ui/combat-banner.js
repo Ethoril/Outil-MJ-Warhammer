@@ -4,9 +4,10 @@
  * lui-même : l'avancement du tour et le retour dans Jouer passent par les callbacks fournis par main.js.
  * « X agit hors de son tour » : écrit quand l'espace Jouer annonce (message `workspace-actor-change`, lot E1) qu'un clic sur la
  * frise a fait agir un autre combattant que celui dont c'est le tour ; la mention ne vaut que pour ce tour.
- * Le compteur lit `getDecisionCount()` (0 tant que la case « À décider » n'existe pas : lot E2) et reste vide à 0.
+ * Le compteur lit `getDecisionCount()` (par défaut le nombre de la case « À décider », lot E2) et reste vide à 0.
  */
 import { showToast } from './toast.js';
+import { pendingDecisionCount } from './combat-decisions.js';
 const TRACK_LIMIT = 8;
 // PV sous zéro affichés avec le signe moins U+2212.
 const hpText = participant => {
@@ -21,7 +22,7 @@ function node(tag, className, text) {
   return element;
 }
 
-export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecisionCount = () => 0 } = {}) {
+export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecisionCount = pendingDecisionCount } = {}) {
   if (!mount) return { render() {}, isVisible: () => false };
 
   const inner = node('div', 'combat-banner-inner');
@@ -156,7 +157,8 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
     try { count = Math.max(0, Number(getDecisionCount()) || 0); } catch { count = 0; }
     decisions.dataset.decisionsCount = String(count);
     decisions.hidden = count === 0;
-    decisions.textContent = count ? `${count} décision${count > 1 ? 's' : ''} en attente` : '';
+    decisions.textContent = count ? `${count} à décider` : '';
+    decisions.title = count ? `${count} décision${count > 1 ? 's' : ''} en attente : case « À décider », à droite` : '';
 
     const reductions = Store.listDaemonbaneReductions?.() || [];
     daemon.hidden = reductions.length === 0;

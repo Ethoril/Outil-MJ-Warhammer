@@ -2239,3 +2239,40 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 
 /* Lot E5 : avant l'initiative la frise n'a pas d'ordre à montrer ; sa hauteur revient à la saisie. */
 .workspace-play-grid.is-initiative .workspace-area[data-zone="frise"] { display: none; }
+
+/* ==========================================================================
+   REFONTE · LOT E2 : case « À décider » (js/ui/combat-decisions.js), en tête de la zone de droite
+   Toujours visible ; une carte par décision, ses options en boutons (un clic) ; « Plus tard » réduit la carte.
+   La case garde au plus la moitié de la zone : la fiche de la cible prend le reste.
+   ========================================================================== */
+.workspace-decisions { display: grid; gap: 4px; min-width: 0; padding: 6px 8px; border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: var(--radius); background: var(--card, var(--bg)); }
+.workspace-decisions.is-empty { border-left-color: var(--border); padding-block: 3px; }
+.workspace-decisions-head { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; }
+.workspace-decisions-title { font-weight: 700; }
+.workspace-decisions-count { min-width: 20px; padding: 0 6px; border-radius: 10px; background: var(--accent); color: var(--button-text, #fff); text-align: center; font-size: 12px; line-height: 18px; }
+.workspace-decisions.is-empty .workspace-decisions-count { display: none; }
+.workspace-decisions-empty { color: var(--muted); font-size: 12px; }
+.workspace-decisions-list { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.workspace-decision { display: grid; gap: 4px; min-width: 0; padding: 4px 0 0; border-top: 1px dashed var(--chip, var(--border)); }
+.workspace-decision:first-child { border-top: 0; padding-top: 0; }
+.workspace-decision-title { margin: 0; font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.workspace-decision-options { display: flex; flex-wrap: wrap; gap: 4px; }
+.workspace-decision-options > button, .workspace-decision > button { min-height: 28px; padding: 2px 10px; font-size: 13px; }
+.workspace-decision.is-later { grid-template-columns: minmax(0, 1fr) auto; align-items: center; opacity: 0.8; }
+.workspace-decision.is-later .workspace-decision-title { font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.workspace-decision.has-form .workspace-result-line,
+.workspace-decision.has-form .workspace-critical-amputation-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 0; font-size: 13px; }
+.workspace-decision.has-form button { min-height: 28px; padding: 2px 10px; font-size: 13px; }
+.workspace-decision.has-form .workspace-amputation-followup > p { margin: 0; font-size: 12px; }
+.workspace-decision .workspace-error { margin: 0; font-size: 12px; }
+.workspace-decision.has-form .workspace-pending-row { padding: 2px 0; font-size: 13px; }
+.workspace-decision.has-form .workspace-pending-row > span { flex: 1 1 100%; }
+/* Barre du haut : « X agit hors de son tour » cède sa place au compteur et à « Tour suivant ». */
+.combat-banner-offturn { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.combat-banner-status { flex-shrink: 6; }
+@media (min-width: 1000px) {
+  /* La case prend sa hauteur (au plus la moitié de la zone, sa liste défile au-delà) ; la fiche de la cible prend le reste. */
+  .workspace-area[data-zone="droite"] { display: flex; flex-direction: column; }
+  .workspace-area[data-zone="droite"] > .workspace-decisions { flex: 0 0 auto; max-height: 50%; grid-template-rows: auto minmax(0, 1fr); }
+  .workspace-area[data-zone="droite"] > :not(.workspace-decisions) { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+}

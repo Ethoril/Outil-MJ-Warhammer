@@ -267,6 +267,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/familiar-block.js',
   './js/ui/creature-states-block.js',
   './js/ui/combat-banner.js',
+  './js/ui/combat-decisions.js',
   './js/ui/combat-frise.js',
   './js/ui/combat-view.js',
   './js/ui/dice-line.js',
