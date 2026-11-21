@@ -2229,3 +2229,6 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
   #workspace-play > .workspace-play-grid.is-initiative .workspace-area-bas > .workspace-side:not(.is-collapsed) { height: min(30vh, 104px); }
   #workspace-play > .workspace-play-grid.is-initiative .workspace-table-rules { padding: 4px 12px; }
 }
+
+/* Lot E5 : avant l'initiative la frise n'a pas d'ordre à montrer ; sa hauteur revient à la saisie. */
+.workspace-play-grid.is-initiative .workspace-area[data-zone="frise"] { display: none; }
