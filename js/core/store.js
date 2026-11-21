@@ -159,7 +159,7 @@ import { applyFicheSync as applyFicheSyncToDraft, planMountSync } from './fiche-
 import { planFicheWriteback, applyWritebackSuccess, applyConflictChoice, rememberAftermathOwners } from './fiche-writeback.js';
 import { convertLegacyV4Profile } from './v5-legacy-conversion.js';
 import { planMountedFall, V5_RIDE_SKILL_ID } from './v5-mounted-combat.js';
-import { declaredMountOf, linkDeclaredMounts, mountProfileId, buildMountProfile, planMountToggle, applyMountToggle } from './mounts.js';
+import { declaredMountOf, linkDeclaredMounts, mountProfileId, buildMountProfile, planMountToggle, applyMountToggle, mountAbsentOf, linkedMountOf } from './mounts.js';
 import { createAftermathState, validateAftermathState, aftermathHealer, aftermathEnduranceScore, advanceAftermathCalendar } from './v5-aftermath.js';
 import { aftermathSubjects, mutableAftermathSubject, followedCharacters, followedCharacterConflicts, planEncounterEnd, planFollowedCharacterRemoval, settleAftermathSubjects, aftermathRowLabel, aftermathPlaceOf } from './aftermath-subjects.js';
 
@@ -1351,12 +1351,64 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       .map(template => ({ ...JSON.parse(JSON.stringify(template)), id: uid(), participantId, extensions: { ...template.extensions, profileActionId: template.id } }));
   }
 
+  /**
+   * Cascade du retrait (`removeParticipant`, `setMountAbsent`) : rend l'enveloppe sans `removedIds`, sans journal.
+   * Suivis (CA10), poursuite, familiers, montures, empoignades et leur Enchevêtré, engagements, ordre et tour, lignes de dés.
+   */
+  function removeParticipantsFromDraft(initial, removedIds, kept = []) {
+    const gone = new Set(removedIds);
+    const withoutPursuit = removedIds.reduce((envelope, rid) => withoutPursuitParticipant(envelope, rid, 'retiré de la rencontre'), initial);
+    const draft = planEncounterEnd(withoutPursuit, { participantIds: removedIds, keepIds: kept }).envelope;
+    const goneLinkIds = new Set();
+    for (const item of draft.combat?.participants || []) for (const link of item.extensions?.v5?.grapples || [])
+      if (gone.has(link.initiatorId) || gone.has(link.targetId)) goneLinkIds.add(link.id);
+    const stripLinks = item => {
+      let next = item;
+      if (gone.has(next.extensions?.v5?.familiarOf?.masterId)) next = withV5(next, v5 => {
+        const { familiarOf, ...rest } = v5;
+        return rest;
+      });
+      if (familiarLinksOf(next).some(row => gone.has(row.familiarId))) next = withV5(next, v5 => ({ ...v5, familiarLinks: v5.familiarLinks.filter(row => !gone.has(row.familiarId)) }));
+      // Monture restée seule : elle n'est plus la monture de personne.
+      if (gone.has(next.extensions?.v5?.mountOf)) next = withV5(next, v5 => {
+        const { mountOf, ...rest } = v5;
+        return rest;
+      });
+      // Cavalier dont la monture part : à pied, sans monture pour la rencontre (la synchro des fiches ne la ramène pas).
+      if (gone.has(next.extensions?.v5?.ownMountId)) next = withV5(next, v5 => {
+        const { ownMountId, ...rest } = v5;
+        return rest.declaredMount ? { ...rest, mountAbsent: true } : rest;
+      });
+      // Empoignades : le lien disparaît des deux côtés, avec l'Enchevêtré qu'il portait.
+      if ((next.extensions?.v5?.grapples || []).some(link => goneLinkIds.has(link.id))) next = withV5(next, v5 => ({ ...v5, grapples: v5.grapples.filter(link => !goneLinkIds.has(link.id)) }));
+      if ((next.states || []).some(state => state?.source?.kind === 'grapple' && goneLinkIds.has(state.source.linkId)))
+        next = { ...next, states: next.states.filter(state => !(state?.source?.kind === 'grapple' && goneLinkIds.has(state.source.linkId))) };
+      return next;
+    };
+    let participants = (draft.combat?.participants || []).filter(item => !gone.has(item.id)).map(stripLinks);
+    for (const rid of removedIds) participants = withoutEngagements({ participants: dismountLinkedRiders(participants, rid) }, rid).participants;
+    let order = draft.combat?.order || [], currentActorId = draft.combat?.currentActorId, everyone = draft.combat?.participants || [];
+    for (const rid of removedIds) {
+      const leaver = everyone.find(item => item.id === rid);
+      const transition = leaver?.zone === 'active' ? removeFromCombat({ participants: everyone, order, currentActorId, participantId: rid }) : null;
+      order = transition ? transition.order : order.filter(item => item !== rid);
+      currentActorId = transition ? transition.currentActorId : (currentActorId === rid ? null : currentActorId);
+      everyone = everyone.filter(item => item.id !== rid);
+    }
+    return {
+      ...draft,
+      combat: { ...draft.combat, participants, order, currentActorId },
+      diceLines: (draft.diceLines || []).filter(line => !gone.has(line.participantId)).map(line => gone.has(line.targetId) ? { ...line, targetId: null } : line)
+    };
+  }
+
   function addProfilesToDraft(draft, requested) {
     const profiles = new Map((draft.reserve || []).map(profile => [profile.id, profile]));
     // Un PJ entre avec les familiers déclarés par sa fiche et la monture déclarée par son profil (même zone), sauf ceux déjà en combat ou demandés.
     const present = new Set([...(draft.combat?.participants || []).map(item => item.profileId), ...requested.map(item => item.id)]);
-    const companionsOf = profile => [...(profile?.extensions?.v5?.declaredFamiliars || []), ...(declaredMountOf(profile) ? [declaredMountOf(profile)] : [])];
-    const additions = requested.flatMap(addition => [addition, ...companionsOf(profiles.get(addition.id))
+    // `withoutMount` : le PJ entre « sans monture » pour la rencontre (réglage du MJ) ; sa monture déclarée reste dans la Réserve.
+    const companionsOf = (profile, withoutMount) => [...(profile?.extensions?.v5?.declaredFamiliars || []), ...(declaredMountOf(profile) && !withoutMount ? [declaredMountOf(profile)] : [])];
+    const additions = requested.flatMap(addition => [addition, ...companionsOf(profiles.get(addition.id), addition.withoutMount === true)
       .filter(row => profiles.has(row.profileId) && !present.has(row.profileId) && present.add(row.profileId)).map(row => ({ id: row.profileId, zone: addition.zone }))]);
     const participants = [...(draft.combat?.participants || [])];
     const lines = [...(draft.diceLines || [])];
@@ -1369,7 +1421,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     for (const addition of additions) {
       const prof = profiles.get(addition.id);
       if (!prof) continue;
-      const participant = participantFromProfile(prof, { name: uniqueName(prof.name, usedNames), zone: addition.zone, ...(addition.camp ? { camp: addition.camp } : {}), ...(addition.entryId ? { source: { profileId: prof.id, encounterEntryId: addition.entryId } } : {}) });
+      const built = participantFromProfile(prof, { name: uniqueName(prof.name, usedNames), zone: addition.zone, ...(addition.camp ? { camp: addition.camp } : {}), ...(addition.entryId ? { source: { profileId: prof.id, encounterEntryId: addition.entryId } } : {}) });
+      const participant = addition.withoutMount === true && declaredMountOf(built) ? withV5(built, v5 => ({ ...v5, mountAbsent: true })) : built;
       usedNames.add(participant.name);
       participants.push(participant);
       lines.push(...diceLinesFromProfile(prof, participant.id));
@@ -1915,7 +1968,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           const before = (draft.reserve || []).find(row => row.id === entry.profileId) || entry.newProfile;
           if (!before || !planMountSync(entry.snapshot, before, draft.reserve).link) continue;
           const id = mountProfileId(entry.profileId), people = next.combat?.participants || [];
-          const riders = people.filter(row => row.profileId === entry.profileId && !people.some(other => other.id === row.extensions?.v5?.ownMountId));
+          const riders = people.filter(row => row.profileId === entry.profileId && !mountAbsentOf(row) && !people.some(other => other.id === row.extensions?.v5?.ownMountId));
           if (riders.length && (next.reserve || []).some(row => row.id === id)) { const { added, ...built } = addProfilesToDraft(next, riders.map(rider => ({ id, zone: 'bench', camp: rider.camp }))); next = built; }
         }
         return reconcileV5ResourceBindings(draft, next, captured);
@@ -2018,35 +2071,32 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       save();
       emitBus('combat');
     },
-    removeParticipant(id, { keep = false } = {}) {
+    /**
+     * Retrait d'un participant en cours de rencontre, en cascade : ordre et tour, engagements, empoignades, lignes de dés et
+     * cibles, liens de familier et de monture, poursuite. `withMount` retire aussi la monture liée d'un cavalier ; sinon la
+     * monture reste, déliée. Une monture retirée laisse son cavalier « sans monture » pour la rencontre (`mountAbsent`).
+     * `keepIds` : participants à suivi ouvert gardés (CA10), `keep` vaut pour `id` seul.
+     */
+    removeParticipant(id, { keep = false, keepIds = null, withMount = false } = {}) {
       if (!canMutate()) return false;
       const participant = combat.participants.get(id);
       if (!participant) return;
+      const riderMountId = participant.extensions?.v5?.mounted === true ? participant.extensions.v5.mountId : participant.extensions?.v5?.ownMountId;
+      const removedIds = [id, ...(withMount && riderMountId && riderMountId !== id && combat.participants.has(riderMountId) ? [riderMountId] : [])];
+      const kept = Array.isArray(keepIds) ? keepIds.filter(item => removedIds.includes(item)) : keep ? [id] : [];
       // CA10 : le retrait suit les règles de la fin du combat (report, garde ou archivage des suivis).
-      const leaving = planEncounterEnd(currentEnvelope(), { participantIds: [id], keepIds: keep ? [id] : [] });
+      const leaving = planEncounterEnd(currentEnvelope(), { participantIds: removedIds, keepIds: kept });
       const followed = leaving.reports.length + leaving.created.length + leaving.archived.length > 0;
-      // Un participant lié par un familier passe par une commande annulable même sans persistance : l'historique des liens (commandes) ne se mêle pas à l'instantané hérité.
-      const linked = familiarLinksOf(participant).length > 0 || Boolean(participant.extensions?.v5?.familiarOf)
-        || participant.extensions?.v5?.mounted === true
-        || Array.from(combat.participants.values()).some(item => item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id);
-      if (persistence || linked || followed || pursuitInvolves(currentEnvelope(), id)) return api.executeCommand('remove-participant', initial => {
-        const draft = planEncounterEnd(withoutPursuitParticipant(initial, id, 'retiré de la rencontre'), { participantIds: [id], keepIds: keep ? [id] : [] }).envelope;
-        const stripLinks = item => {
-          if (item.extensions?.v5?.familiarOf?.masterId === id) return withV5(item, v5 => {
-            const { familiarOf, ...rest } = v5;
-            return rest;
-          });
-          if (familiarLinksOf(item).some(row => row.familiarId === id)) return withV5(item, v5 => ({ ...v5, familiarLinks: v5.familiarLinks.filter(row => row.familiarId !== id) }));
-          return item;
-        };
-        const participants = withoutEngagements({ participants: dismountLinkedRiders((draft.combat?.participants || []).filter(item => item.id !== id).map(stripLinks), id) }, id).participants;
-        const transition = participant.zone === 'active' ? removeFromCombat({ participants: draft.combat?.participants || [], order: draft.combat?.order || [], currentActorId: draft.combat?.currentActorId, participantId: id }) : null;
-        return {
-          ...draft,
-          combat: { ...draft.combat, participants, order: transition ? transition.order : (draft.combat?.order || []).filter(item => item !== id), currentActorId: transition ? transition.currentActorId : (draft.combat?.currentActorId === id ? null : draft.combat?.currentActorId) },
-          diceLines: (draft.diceLines || []).filter(line => line.participantId !== id).map(line => line.targetId === id ? { ...line, targetId: null } : line),
-          log: [{ id: uid(), ts: Date.now(), kind: 'management', actorId: id, actorName: participant.name, text: `Combat: retiré ${participant.name}` }, ...(draft.log || [])].slice(0, 300)
-        };
+      // Un participant lié (familier, monture, empoignade) passe par une commande annulable même sans persistance : l'historique des liens (commandes) ne se mêle pas à l'instantané hérité.
+      const v5 = participant.extensions?.v5 || {};
+      const linked = removedIds.length > 1 || familiarLinksOf(participant).length > 0 || Boolean(v5.familiarOf)
+        || v5.mounted === true || Boolean(v5.ownMountId) || Boolean(v5.mountOf)
+        || Array.from(combat.participants.values()).some(item => item.extensions?.v5?.mounted === true && item.extensions.v5.mountId === id)
+        || Array.from(combat.participants.values()).some(item => (item.extensions?.v5?.grapples || []).some(link => link.initiatorId === id || link.targetId === id));
+      if (persistence || linked || followed || removedIds.some(rid => pursuitInvolves(currentEnvelope(), rid))) return api.executeCommand('remove-participant', initial => {
+        const draft = removeParticipantsFromDraft(initial, removedIds, kept);
+        const names = removedIds.map(rid => combat.participants.get(rid)?.name).filter(Boolean);
+        return { ...draft, log: [{ id: uid(), ts: Date.now(), kind: 'management', actorId: id, actorName: participant.name, text: `Combat: retiré ${names.join(' et ')}` }, ...(draft.log || [])].slice(0, 300) };
       });
       beginCommand('remove-participant');
       recordSnapshot('remove-participant');
@@ -3043,7 +3093,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       }
       return {kind:'activate-pre-round',participantId:id,baseRevision:localRevision,participants,tieOrders,opposedRolls,tieChoices};
     },
-    previewCombatParticipantAddition(participantOrProfileId) {
+    previewCombatParticipantAddition(participantOrProfileId, { withoutMount = false } = {}) {
       if(stateExtensions?.v5?.combatInitiativeInitialized!==true)return null;
       const current=currentEnvelope(),profiles=new Map((current.reserve||[]).map(row=>[row.id,row]));
       let participant,profile=null;
@@ -3052,6 +3102,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         if(!profile)throw new Error('Profil introuvable');
         const names=new Set((current.combat?.participants||[]).map(row=>row.name));
         participant=participantFromProfile(profile,{name:uniqueName(profile.name,names),zone:'active'});
+        if(withoutMount===true&&declaredMountOf(participant))participant=withV5(participant,v5=>({...v5,mountAbsent:true}));
       }else{
         participant=cloneValue(participantOrProfileId||{});
         if(!participant.id)throw new TypeError('Le participant doit avoir un identifiant.');
@@ -3463,14 +3514,14 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
      * to add several copies). Bench participants stay out of the turn order, as
      * after a launch; with an active scene the combat edit is mirrored into it.
      */
-    addProfilesToCombat(profileIds, { zone = 'bench' } = {}) {
+    addProfilesToCombat(profileIds, { zone = 'bench', withoutMount = false } = {}) {
       const selectedIds = (Array.isArray(profileIds) ? profileIds : [profileIds]).filter(id => reserve.has(id));
       if (!selectedIds.length) throw new Error('Aucun profil à ajouter');
       const targetZone = zone === 'active' ? 'active' : 'bench';
       if(targetZone==='active'&&stateExtensions?.v5?.combatInitiativeInitialized===true)
         throw Object.assign(new Error('Un profil ajouté directement actif doit recevoir son jet d’Initiative dans le dialogue de préparation.'),{code:'COMBAT_INIT_REQUIRED',userFacing:true});
       return api.executeCommand('add-profiles-to-combat', draft => {
-        const { added, ...next } = addProfilesToDraft(draft, selectedIds.map(id => ({ id, zone: targetZone })));
+        const { added, ...next } = addProfilesToDraft(draft, selectedIds.map(id => ({ id, zone: targetZone, ...(withoutMount === true ? { withoutMount: true } : {}) })));
         if (!added.length) throw new Error('Aucun profil à ajouter');
         return {
           ...next,
@@ -3906,11 +3957,46 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         // Cavalier déjà en combat sans monture : elle entre en attente, liée, dans son camp (« Faire entrer » règle son Initiative).
         if (declared) {
           const people = next.combat?.participants || [];
-          const riders = people.filter(row => row.profileId === profileId && !people.some(other => other.id === row.extensions?.v5?.ownMountId));
+          const riders = people.filter(row => row.profileId === profileId && !mountAbsentOf(row) && !people.some(other => other.id === row.extensions?.v5?.ownMountId));
           if (riders.length) { const { added, ...built } = addProfilesToDraft(next, riders.map(rider => ({ id, zone: 'bench', camp: rider.camp }))); next = built; }
         }
         return { ...next,
           log: [{ id: uid(), ts: Date.now(), kind: 'management', text: `Réserve: monture de ${profile.name} ${declared ? `: ${declared.name}` : 'retirée'}` }, ...(draft.log || [])].slice(0, 300) };
+      });
+      return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
+    },
+    /**
+     * « Sans monture » pour la rencontre (réglage du MJ, la fiche et le profil ne changent pas). `absent` true : la monture
+     * liée sort de la rencontre (même cascade qu'un retrait) et la synchro des fiches ne la ramène pas ; false : la monture
+     * déclarée revient en attente, liée (« Faire entrer » règle son Initiative). Annulable.
+     */
+    setMountAbsent(riderId, absent) {
+      if (!canMutate()) return false;
+      const rider = combat.participants.get(riderId);
+      if (!rider) return { ok: false, reason: 'unknown-rider', message: 'Cavalier introuvable.' };
+      const declared = declaredMountOf(rider);
+      if (!declared) return { ok: false, reason: 'no-declared-mount', message: `${rider.name || 'Ce participant'} n’a pas de monture déclarée.` };
+      if (Boolean(absent) === mountAbsentOf(rider)) return { ok: true, changed: false };
+      const result = api.executeCommand('set-mount-absent', initial => {
+        const people = initial.combat?.participants || [];
+        const current = people.find(row => row.id === riderId);
+        if (!current) throw new Error('Cavalier introuvable.');
+        const flag = draft => ({ ...draft, combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(row => row.id === riderId
+          ? withV5(row, v5 => { const { mountAbsent, ...rest } = v5; return absent ? { ...rest, mountAbsent: true } : rest; }) : row) } });
+        let next;
+        if (absent) {
+          const mount = linkedMountOf(current, people);
+          next = flag(mount ? removeParticipantsFromDraft(initial, [mount.id]) : initial);
+        } else {
+          next = flag(initial);
+          const linked = linkedMountOf(next.combat.participants.find(row => row.id === riderId), next.combat.participants);
+          if (!linked && (next.reserve || []).some(row => row.id === declared.profileId)) {
+            const { added, ...built } = addProfilesToDraft(next, [{ id: declared.profileId, zone: 'bench', camp: current.camp }]);
+            next = built;
+          }
+        }
+        return { ...next, log: [{ id: uid(), ts: Date.now(), kind: 'management', actorId: riderId, actorName: rider.name,
+          text: absent ? `Combat: ${rider.name} sans monture pour la rencontre` : `Combat: ${rider.name} retrouve sa monture (${declared.name})` }, ...(initial.log || [])].slice(0, 300) };
       });
       return typeof result?.then === 'function' ? result.then(done => ({ ...done, ok: true })) : { ...result, ok: true };
     },

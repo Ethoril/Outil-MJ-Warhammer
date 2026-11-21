@@ -7,7 +7,7 @@ import {beastFormRestriction} from '../core/v5-magic-arbitrations.js';
 import { magicActionsFor } from '../core/creature-magic.js';
 import { psychologyTraits } from '../core/creature-psychology.js';
 import { familiarOfOf, FAMILIAR_HEALING_SOURCES } from '../core/familiars.js';
-import { canRide, linkedMountOf, mountCandidates, mountLabel, mountOfOf } from '../core/mounts.js';
+import { canRide, linkedMountOf, mountCandidates, mountLabel, mountOfOf, declaredMountOf, mountAbsentOf } from '../core/mounts.js';
 /**
  * Vue de séance E09.
  *
@@ -639,6 +639,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       marker.dataset.rank = String(context.active.indexOf(participant) + 1);
       top.append(marker, node('strong', 'workspace-track-name combatant-name', participant.name));
       if (isTarget) top.appendChild(node('span', 'workspace-track-role', 'cible'));
+      // Élan V5 (booléen `extensions.v5.hasMomentum`) : visible sur la piste, sans clic (lot C).
+      if (hasMomentum(participant)) { const momentum = node('span', 'workspace-track-momentum', 'Élan'); momentum.title = 'A l’Élan'; top.appendChild(momentum); }
       if (actions.isPlacedOnMap?.(participant)) {
         const placed = node('span', 'workspace-track-placed', 'posé');
         placed.title = 'Pion posé sur la carte';
@@ -1042,6 +1044,31 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
     }
     nameRow.appendChild(campChip(participant, context.camp));
+    // Lot C : retrait en cours de rencontre (confirmation dans l'outil) et « sans monture » d'un cavalier à monture déclarée.
+    if (declaredMountOf(participant)) {
+      const absent = mountAbsentOf(participant);
+      const toggle = button(absent ? 'Sans monture' : 'Monture présente', `workspace-secondary workspace-mount-absent${absent ? ' is-absent' : ''}`, {
+        'aria-pressed': String(absent), 'data-focus-key': `mount-absent-${renameKey}`,
+        title: absent ? `Faire revenir ${declaredMountOf(participant).name} dans la rencontre (en attente)` : `Laisser ${declaredMountOf(participant).name} hors de la rencontre : sa monture quitte le combat et la carte` });
+      toggle.addEventListener('click', event => {
+        event.preventDefault();
+        toggle.disabled = true;
+        Promise.resolve().then(() => Store.setMountAbsent(participant.id, !absent))
+          .then(result => { if (result?.ok === false) throw Object.assign(new Error(result.message), { userFacing: true }); })
+          .catch(error => plateauToast('Monture non modifiée', error)).finally(() => render());
+      });
+      nameRow.appendChild(toggle);
+    }
+    if (callbacks.removeParticipant) {
+      const remove = button('Retirer', 'workspace-secondary danger workspace-sheet-remove', { 'data-focus-key': `sheet-remove-${renameKey}`,
+        title: 'Retirer de la rencontre (confirmation, annulable)', 'aria-label': `Retirer ${participant.name} de la rencontre` });
+      remove.addEventListener('click', event => {
+        event.preventDefault();
+        remove.disabled = true;
+        Promise.resolve(callbacks.removeParticipant(participant.id, { confirm: true })).then(() => render(), () => { remove.disabled = false; });
+      });
+      nameRow.appendChild(remove);
+    }
     identity.appendChild(nameRow);
     const hp = node('p', 'workspace-sheet-hp num');
     hp.append(node('span', 'workspace-sheet-hp-label', 'PV'), ' ', hpText(participant));
@@ -2891,6 +2918,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     center.appendChild(tableRules());
   }
 
+  // PJ à ajouter « sans monture » (lot C) : choix de l'onglet Profils, par profil, le temps de la session.
+  const withoutMountChoices = new Set();
   function renderProfilesTab(content) {
     let list = content.querySelector('.workspace-side-profiles');
     if (!list) {
@@ -2933,6 +2962,18 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if (presence) {
         for (const control of [add, addActive]) { control.disabled = true; control.title = presence === 'waiting' ? `${profile.name} est déjà au combat, en attente : « Faire entrer »` : `${profile.name} est déjà au combat`; }
         text.appendChild(node('span', 'workspace-muted', presence === 'waiting' ? 'Au combat · en attente' : 'Au combat'));
+      }
+      const declaredMount = profile.kind === 'PJ' && !presence ? declaredMountOf(profile) : null;
+      if (declaredMount) {
+        // Réglage de la rencontre : la monture déclarée (fiche) n'entre pas ; la fiche et le profil ne changent pas.
+        const label = node('label', 'workspace-muted workspace-without-mount');
+        const box = document.createElement('input');
+        box.type = 'checkbox';
+        box.checked = withoutMountChoices.has(profile.id);
+        box.setAttribute('aria-label', `Ajouter ${profile.name} sans sa monture ${declaredMount.name}`);
+        box.addEventListener('change', () => { if (box.checked) withoutMountChoices.add(profile.id); else withoutMountChoices.delete(profile.id); });
+        label.append(box, ` Sans monture (${declaredMount.name})`);
+        text.appendChild(label);
       }
       item.append(text, add, addActive);
       list.appendChild(item);
@@ -3387,10 +3428,10 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         callbacks.enterParticipant?.(participantId);
         break;
       case 'add-profile-to-combat':
-        callbacks.addProfileToCombat?.(target.dataset.profileId);
+        callbacks.addProfileToCombat?.(target.dataset.profileId, { withoutMount: withoutMountChoices.has(target.dataset.profileId) });
         break;
       case 'add-profile-active-to-combat':
-        callbacks.addProfileToActiveCombat?.(target.dataset.profileId);
+        callbacks.addProfileToActiveCombat?.(target.dataset.profileId, { withoutMount: withoutMountChoices.has(target.dataset.profileId) });
         break;
       case 'open-state-form':
         state.stateForm = state.stateForm?.participantId === participantId

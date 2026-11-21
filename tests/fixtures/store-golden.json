@@ -107,6 +107,7 @@
    "createFamiliar/2",
    "unlinkFamiliar/2",
    "setProfileMount/1",
+   "setMountAbsent/2",
    "setMounted/2",
    "setMountGate/1",
    "setFamiliarRange/3",
@@ -1614,6 +1615,11 @@
     "state": "78e7a46b777ca1a9"
    },
    {
+    "label": "sweep setMountAbsent",
+    "result": "768a2f0f2cc415dc",
+    "state": "78e7a46b777ca1a9"
+   },
+   {
     "label": "sweep setMounted",
     "result": "768a2f0f2cc415dc",
     "state": "78e7a46b777ca1a9"
@@ -2873,6 +2879,7 @@
    "createFamiliar/2",
    "unlinkFamiliar/2",
    "setProfileMount/1",
+   "setMountAbsent/2",
    "setMounted/2",
    "setMountGate/1",
    "setFamiliarRange/3",
@@ -4377,6 +4384,11 @@
    {
     "label": "sweep setProfileMount",
     "result": "78f321085d238bb7",
+    "state": "2e2cd34079b91951"
+   },
+   {
+    "label": "sweep setMountAbsent",
+    "result": "768a2f0f2cc415dc",
     "state": "2e2cd34079b91951"
    },
    {
