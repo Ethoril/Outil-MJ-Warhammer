@@ -38,9 +38,9 @@ try {
   // CA1-CA3 : une mêlée avec son rapport de forces, les Libres, jetons sélectionnables.
   await assert.doesNotReject(zone('Mêlée 1').waitFor({ timeout: 5000 }));
   assert.equal(await zone('Mêlée 1').locator('.workspace-zone-ratio').textContent(), '2 contre 1');
-  assert.equal(await zone('Mêlée 1').locator('[data-workspace-select]').count(), 3);
-  assert.equal(await zone('Libres').locator('[data-workspace-select]').count(), 2);
-  assert.match(await page.locator('.workspace-token').filter({ has: page.locator('[data-workspace-select="orc"]') }).textContent(), /Engagé avec : Gunther, Aldric/);
+  assert.equal(await zone('Mêlée 1').locator('[data-workspace-target]').count(), 3);
+  assert.equal(await zone('Libres').locator('[data-workspace-target]').count(), 2);
+  assert.match(await page.locator('.workspace-token').filter({ has: page.locator('[data-workspace-target="orc"]') }).textContent(), /Engagé avec : Gunther, Aldric/);
   // CA10 : barre d'actions, conséquence annoncée.
   const bar = page.locator('.workspace-action-bar');
   assert.match(await bar.textContent(), /Attaquer · Orc/);
@@ -63,7 +63,7 @@ try {
   // CA6 : « Déplacer… » engage Elsa avec le Gobelin : une deuxième mêlée.
   await page.getByLabel('Déplacer Elsa').selectOption('engage:gob');
   await zone('Mêlée 2').waitFor({ timeout: 5000 });
-  assert.equal(await zone('Mêlée 2').locator('[data-workspace-select]').count(), 2);
+  assert.equal(await zone('Mêlée 2').locator('[data-workspace-target]').count(), 2);
   // CA12 : Se désengager, Test opposé saisi, appliqué : Gunther redevient Libre.
   // Q6 T2 (CA3, CA5) : Gunther À terre, l'Orc Sonné ; le détail montre chaque source. MJ 09/11 CA15 : le désengagement compte
   // toujours comme un mouvement, plus de question de mouvement : le Désavantage d'À terre est là d'emblée.
@@ -96,11 +96,11 @@ try {
   assert.match(await form.textContent(), /Gunther se désengage/);
   await form.getByRole('button', { name: 'Appliquer le désengagement' }).click();
   await page.waitForFunction(() => !window.__store.listEngagedWith('gunther').length, null, { timeout: 5000 });
-  assert.equal(await zone('Libres').locator('[data-workspace-select="gunther"]').count(), 1);
+  assert.equal(await zone('Libres').locator('[data-workspace-target="gunther"]').count(), 1);
   // CA20-CA21 : scène réglée une fois (tiroir), position haute posée depuis le jeton.
   await page.getByLabel('Déplacer Aldric').selectOption('high:on');
   await page.waitForFunction(() => window.__store.listParticipants().find(row => row.id === 'aldric').extensions.v5.position?.higherGround === true, null, { timeout: 5000 });
-  assert.match(await page.locator('.workspace-token').filter({ has: page.locator('[data-workspace-select="aldric"]') }).textContent(), /Position haute/);
+  assert.match(await page.locator('.workspace-token').filter({ has: page.locator('[data-workspace-target="aldric"]') }).textContent(), /Position haute/);
   await page.locator('[data-workspace-select="gunther"]').click();
   if (await page.locator('.workspace-resolution-drawer').getAttribute('hidden') !== null) await page.locator('[data-circumstances-toggle]').click();
   await page.getByLabel('Éclairage de la scène').selectOption('dim');

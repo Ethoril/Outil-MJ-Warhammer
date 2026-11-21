@@ -1,6 +1,7 @@
 // Plateau des mêlées (maquette B, spec engagements S1-S3) : zones (une par mêlée, Libres) et barre d'actions du combattant
-// actif, dont chaque bouton annonce sa conséquence avant le clic. Les jetons eux-mêmes sont construits par workspace-view
-// (mêmes sélecteurs que l'ancienne piste) ; ce module ne fait que le découpage et les commandes.
+// actif, dont chaque bouton annonce sa conséquence avant le clic. Les cartouches eux-mêmes sont construits par workspace-view
+// (refonte, lot E4a : un clic sur un cartouche choisit la cible) ; ce module ne fait que le découpage, les commandes et la
+// barre d'actions du bas, sans numéros ni raccourcis : les actions préparées de l'acteur et « ce qu'il peut faire d'ici ».
 import { meleeGroups, engagedWith, deriveEngagementContext } from '../../core/engagements.js';
 import { outnumberSide, planOutnumbering } from '../../core/outnumbering.js';
 import { inferV5Kind } from '../../core/v5-combat-rules.js';
@@ -8,6 +9,9 @@ import { awakeningMessage, noFleeMessage } from '../../core/v5-spell-restriction
 import { CONDITION_QUESTIONS } from '../../core/condition-effects.js';
 import { MIXED_CONDITION_QUESTION, testQuestionLabel, answeredSequelaFields } from '../../core/v5-test-modifiers.js';
 import { renderObstinateChoice } from '../test-questions.js';
+import { actionHasDamage } from '../../core/damage.js';
+import { describeWeaponDamage } from '../../core/resolution.js';
+import { qualityLabel } from '../../core/quality-normalization.js';
 
 const el = (tag, className = '', text = '') => {
   const node = document.createElement(tag);
@@ -38,6 +42,24 @@ export function plateauZones(active) {
 
 /** Première action d'attaque du combattant d'un genre donné ('melee' | 'ranged'), au sens de l'inférence du moteur. */
 const attackOfKind = (actions, kind) => actions.findIndex(action => ATTACKS.includes(action.type) && inferV5Kind(action, {}) === kind);
+
+/**
+ * Actions préparées de l'acteur pour la barre du bas (refonte E4a) : une entrée par arme ou test préparé, comme les puces
+ * de la résolution ; un clic choisit l'action (la cible ne change pas). Magie et prières restent dans « Autres actions ».
+ */
+export function preparedActionRows({ actor, actions = [], actionKeys = [], selectedKey = null }) {
+  const rows = [];
+  actions.forEach((action, index) => {
+    if (['channelling', 'cast', 'dispel'].includes(action.type) || String(action.id || '').startsWith('activate:overcome-fear')) return;
+    const key = actionKeys[index];
+    if (key == null) return;
+    const qualities = (action.qualities || []).map(quality => qualityLabel(quality)).filter(Boolean);
+    const facts = [action.base != null && action.base !== '' ? `${action.attr ? `${action.attr} ` : ''}${action.base}` : '', ...(actionHasDamage(action) ? [`dégâts ${describeWeaponDamage(action, actor.caracs)}`] : []), ...qualities].filter(Boolean);
+    rows.push({ id: `prepared-${key}`, group: 'actor', label: String(action.note || action.name || action.attr || 'Action'), consequence: facts.join(' · ') || 'action préparée',
+      pressed: key === selectedKey, run: commands => commands.select({ actionKey: key }) });
+  });
+  return rows;
+}
 
 /**
  * Modèle de la barre d'actions : `{ id, label, consequence, disabled?, run }` où `run` reçoit les commandes
@@ -110,22 +132,33 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
   return rows;
 }
 
-/** Barre d'actions : un bouton par entrée, sa conséquence sous le libellé. */
-export function renderActionBar(container, { actor, rows, commands }) {
+/**
+ * Barre d'actions du bas (refonte E4a) : les actions préparées de l'acteur (`prepared`), puis « ce qu'il peut faire d'ici »
+ * (`rows` : attaquer, se désengager, fuir, charger, tirer, viser, se déplacer, autres actions). Un bouton par entrée,
+ * libellé et conséquence ; ni numéro ni raccourci clavier (les touches 1 à 4 gardent les espaces).
+ */
+export function renderActionBar(container, { actor, rows, prepared = [], commands }) {
   const bar = el('section', 'workspace-action-bar');
   bar.setAttribute('aria-label', `Actions de ${actor.name}`);
   bar.appendChild(el('p', 'workspace-action-bar-title', `${actor.name} · ce qu’il peut faire d’ici`));
   const list = el('div', 'workspace-action-bar-list');
-  for (const row of rows) {
-    const action = el('button', 'workspace-action-bar-item');
+  const add = (row, className = '') => {
+    const action = el('button', `workspace-action-bar-item${className}`);
     action.type = 'button';
     action.dataset.focusKey = `plateau-${row.id}`;
+    action.dataset.barAction = row.id;
     action.append(el('strong', '', row.label), el('span', '', row.consequence));
-    action.setAttribute('aria-label', `${row.label} : ${row.consequence}`);
+    // Le nom accessible dit la même chose que l'écran ; la conséquence entière reste lisible au survol.
+    action.setAttribute('aria-label', row.group === 'actor' ? `Choisir l’action ${row.label} : ${row.consequence}` : `${row.label} : ${row.consequence}`);
+    action.title = row.consequence;
+    if (row.group === 'actor') action.setAttribute('aria-pressed', String(row.pressed === true));
     action.disabled = row.disabled === true;
     action.addEventListener('click', () => row.run(commands));
     list.appendChild(action);
-  }
+  };
+  prepared.forEach(row => add(row, ' is-prepared'));
+  if (prepared.length && rows.length) list.appendChild(el('span', 'workspace-action-bar-sep'));
+  rows.forEach(row => add(row));
   bar.appendChild(list);
   container.appendChild(bar);
   return bar;

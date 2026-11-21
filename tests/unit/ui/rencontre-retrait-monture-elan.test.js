@@ -8,7 +8,8 @@ const dialog = readFileSync(new URL('../../../js/ui/encounter-end-dialog.js', im
 const main = readFileSync(new URL('../../../js/main.js', import.meta.url), 'utf8');
 
 test('Élan visible sur la piste, sans clic : pastille posée quand le participant a l’Élan', () => {
-  assert.match(view, /if \(hasMomentum\(participant\)\) \{ const momentum = node\('span', 'workspace-track-momentum', 'Élan'\)/);
+  // Lot E4a : l'Élan du cartouche des mêlées est un glyphe « É » (texte « A l’Élan » pour les lecteurs d'écran), plus une pastille.
+  assert.match(view, /if \(hasMomentum\(participant\)\) glyph\('É', 'A l’Élan', 'is-momentum'\)/);
 });
 
 test('retrait en cours de rencontre : bouton du panneau, confirmation de l’outil, jamais de boîte native', () => {

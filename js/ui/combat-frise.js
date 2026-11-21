@@ -129,7 +129,9 @@ export function renderFrise(zone, context, handlers = {}) {
     bar.append(fill);
     portrait.append(bar);
     if (row.decision) { const mark = el('span', 'frise-decision', '!'); mark.title = 'Décision en attente'; portrait.append(mark); }
-    portrait.addEventListener('click', () => handlers.selectActor?.(row.id));
+    // Lot E4a : les cartouches des mêlées choisissent la cible ; « data-workspace-select » (choisir qui agit) vit désormais ici.
+    // Le clic passe par l'écoute commune de workspace-view (mêmes parcours qu'avant : [data-workspace-select="id"]).
+    portrait.dataset.workspaceSelect = row.id;
     item.append(portrait);
     list.append(item);
   }

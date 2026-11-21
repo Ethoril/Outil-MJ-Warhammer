@@ -55,7 +55,7 @@ import { renderFicheDetails, setFicheTab } from './fiche-details.js';
 import { renderSilhouette, locationZone } from './silhouette.js';
 import { buildParticipantReminders } from '../core/reminders.js';
 import { deriveEngagementContext, deriveSceneContext, engagedWith } from '../core/engagements.js';
-import { plateauZones, actionBarModel, renderActionBar, renderDisengageForm } from './workspace/plateau.js';
+import { plateauZones, actionBarModel, preparedActionRows, renderActionBar, renderDisengageForm } from './workspace/plateau.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { rollMisfortuneDie } from './resolution-panel/dom.js';
@@ -602,10 +602,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     foes.reduce((chain, foe) => chain.then(() => Store.engageParticipants(mover.id, foe.id)), Promise.resolve())
       .catch(error => plateauToast('Engagement impossible', error)).finally(() => render());
   };
+  // Refonte (lot E4a) : les mêlées sont des cartouches compacts (camp, rang, PV, monture, engagements, états), groupés par
+  // mêlée, les libres à part. Un clic sur un cartouche choisit la CIBLE (jamais l'acteur : cela se fait sur la frise) ; ses
+  // commandes (Déplacer…, Engager avec…, Encerclé, Position haute, À couvert, monture, Retirer du combat) restent à son bord.
   function renderTrack(context) {
     const column = play.track;
     column.replaceChildren(rubric('Plateau des mêlées'));
     const board = node('div', 'workspace-plateau');
+    board.dataset.part = 'melees';
     const track = node('div', 'workspace-track');
     track.setAttribute('aria-label', 'Plateau des mêlées');
     if (!context.active.length) track.appendChild(node('p', 'workspace-muted', 'Aucun combattant en jeu.'));
@@ -631,48 +635,65 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const isCurrent = participant.id === context.combat.currentActorId;
       const isTurn = context.started && isCurrent;
       const isTarget = participant.id === context.target?.id;
-      // Pas d'aria-label : le contenu (nom, PV, BE, PA, états) forme le nom accessible.
+      // Pas d'aria-label : le contenu (nom, PV, états) forme le nom accessible. aria-pressed = « est la cible ».
       const item = button('', `workspace-track-item is-camp-${context.camp(participant)}`, {
-        'aria-pressed': String(isActor),
+        'aria-pressed': String(isTarget),
         'data-focus-key': `select-${participant.id}`
       });
-      item.dataset.workspaceSelect = participant.id;
+      item.dataset.workspaceTarget = participant.id;
       item.classList.toggle('is-actor', isActor);
       item.classList.toggle('is-turn', isTurn);
       item.classList.toggle('is-target', isTarget);
       // Comme le ▶ : pas de « tour » annoncé tant que le combat n'a pas commencé.
       if (isTurn) item.setAttribute('aria-current', 'step');
+      item.addEventListener('click', event => {
+        event.preventDefault();
+        resolutionHandlers.select({ targetId: participant.id });
+      });
       const top = node('span', 'workspace-track-top');
       const marker = node('span', 'workspace-track-marker', isTurn ? '▶' : '');
       marker.dataset.rank = String(context.active.indexOf(participant) + 1);
-      top.append(marker, node('strong', 'workspace-track-name combatant-name', participant.name));
-      if (isTarget) top.appendChild(node('span', 'workspace-track-role', 'cible'));
-      // Élan V5 (booléen `extensions.v5.hasMomentum`) : visible sur la piste, sans clic (lot C).
-      if (hasMomentum(participant)) { const momentum = node('span', 'workspace-track-momentum', 'Élan'); momentum.title = 'A l’Élan'; top.appendChild(momentum); }
-      if (actions.isPlacedOnMap?.(participant)) {
-        const placed = node('span', 'workspace-track-placed', 'posé');
-        placed.title = 'Pion posé sur la carte';
-        top.appendChild(placed);
-      }
-      const hp = node('span', 'workspace-track-hp num', hpText(participant));
-      hp.prepend(node('span', 'workspace-sr', 'PV '));
-      top.appendChild(hp);
-      item.append(top, hpBar(participant, pendingHpLoss(participant)),
-        node('span', 'workspace-track-meta num', `BE ${toughnessBonus(participant)} · PA ${armorSummary(participant.armor,displayedArmorLocations(participant))}`));
-      const states = normalizeEffects(participant.states);
-      if (states.length) {
-        const list = node('span', 'workspace-track-states');
-        states.forEach(item => list.appendChild(node('span', 'workspace-state-chip', stateLabel(item))));
-        item.appendChild(list);
-      }
+      // Nom court au cartouche (« Père Pedragar, prêtre de Taal » → « Père Pedragar ») : la suite reste dans le texte pour les lecteurs d'écran et au survol.
+      const [, shortName = participant.name, nameRest = ''] = /^(.*?)((?: — |, ).+)$/.exec(participant.name) || [];
+      const nameNode = node('strong', 'workspace-track-name combatant-name', shortName);
+      if (nameRest) nameNode.appendChild(node('span', 'workspace-sr', nameRest));
       const partners = partnersOf(participant);
       const partnerNames = partners.map(id => context.active.find(row => row.id === id)?.name).filter(Boolean);
       const surrounded = participant.extensions?.v5?.position?.surrounded === true;
-      const entry = node('div', `workspace-track-entry workspace-token is-camp-${context.camp(participant)}`);
-      // Hors du bouton-jeton : son texte (nom accessible, filtres des parcours) reste celui de l'ancienne piste.
       const held = participant.extensions?.v5?.position || {};
       const riderName = mountOfOf(participant) && context.active.find(row => row.id === mountOfOf(participant))?.name;
-      const facts = [...(partnerNames.length ? [`Engagé avec : ${partnerNames.join(', ')}`] : []), ...(surrounded ? ['Encerclé'] : []), ...(held.higherGround ? ['Position haute'] : []), ...(held.cover ? ['À couvert'] : []), ...(riderName ? [`Monture de ${riderName}`] : [])];
+      const states = normalizeEffects(participant.states);
+      // Ordre du DOM = ordre de lecture (nom, PV, BE · PA, États) ; l'ordre visuel est celui du CSS (PV à droite).
+      const hp = node('span', 'workspace-track-hp num', hpText(participant));
+      hp.prepend(node('span', 'workspace-sr', 'PV '));
+      top.append(marker, nameNode, hp, node('span', 'workspace-track-meta workspace-sr', ` BE ${toughnessBonus(participant)} · PA ${armorSummary(participant.armor, displayedArmorLocations(participant))} `));
+      // Glyphes (le signe est caché aux lecteurs d'écran, le texte les renseigne) : Élan V5 (`extensions.v5.hasMomentum`), monture,
+      // pion posé sur la carte, États (nombre ; la liste au survol).
+      const glyph = (text, label, className = '', spoken = label) => {
+        const mark = node('span', `workspace-track-glyph ${className}`.trim());
+        const sign = node('span', '', text);
+        sign.setAttribute('aria-hidden', 'true');
+        mark.title = label;
+        mark.append(sign, node('span', 'workspace-sr', ` ${spoken} `));
+        top.appendChild(mark);
+      };
+      if (states.length) glyph(`⚑${states.length}`, `États : ${states.map(stateLabel).join(', ')}`, '', states.map(stateLabel).join(', '));
+      if (hasMomentum(participant)) glyph('É', 'A l’Élan', 'is-momentum');
+      if (riderName) glyph('♞', `Monture de ${riderName}`);
+      if (actions.isPlacedOnMap?.(participant)) glyph('◉', 'Pion posé sur la carte');
+      // Cible et acteur : anneau autour du cartouche + signe (le texte « cible » / « agit » reste, caché, pour les lecteurs d'écran).
+      if (isTarget) { const role = node('span', 'workspace-track-role', 'cible'); role.title = 'Cible'; top.appendChild(role); }
+      if (isActor) { const role = node('span', 'workspace-track-agit', 'agit'); role.title = 'Agit'; top.appendChild(role); }
+      item.append(top, hpBar(participant, pendingHpLoss(participant)));
+      // Pastilles sous la barre, seulement quand elles existent : positions tenues et monture.
+      const badges = node('span', 'workspace-track-badges');
+      if (surrounded) badges.appendChild(node('span', 'workspace-track-fact', 'Encerclé'));
+      if (held.higherGround) badges.appendChild(node('span', 'workspace-track-fact', 'Position haute'));
+      if (held.cover) badges.appendChild(node('span', 'workspace-track-fact', 'À couvert'));
+      if (badges.childNodes.length) item.appendChild(badges);
+      item.title = [`${participant.name} · PV ${hpText(participant)} · BE ${toughnessBonus(participant)} · PA ${armorSummary(participant.armor, displayedArmorLocations(participant))}`,
+        ...(partnerNames.length ? [`Engagé avec : ${partnerNames.join(', ')}`] : []), ...(states.length ? [`États : ${states.map(stateLabel).join(', ')}`] : []), 'Clic : en faire la cible'].join('\n');
+      const entry = node('div', `workspace-track-entry workspace-token is-camp-${context.camp(participant)}`);
       entry.draggable = true;
       entry.addEventListener('dragstart', event => event.dataTransfer?.setData('text/plain', participant.id));
       const move = document.createElement('select');
@@ -684,16 +705,27 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         move.append(new Option(`Engager avec ${foe.name}`, `engage:${foe.id}`));
       if (partners.length) move.append(new Option('Libre (désengager sans règle)', 'free'));
       move.append(surrounded ? new Option('N’est plus encerclé', 'surround:off') : new Option('Encerclé', 'surround:on'));
-      const position = participant.extensions?.v5?.position || {};
-      move.append(position.higherGround ? new Option('Quitte la position haute', 'high:off') : new Option('Position haute', 'high:on'));
-      move.append(position.cover ? new Option('N’est plus à couvert', 'cover:off') : new Option('À couvert', 'cover:on'));
+      move.append(held.higherGround ? new Option('Quitte la position haute', 'high:off') : new Option('Position haute', 'high:on'));
+      move.append(held.cover ? new Option('N’est plus à couvert', 'cover:off') : new Option('À couvert', 'cover:on'));
       move.addEventListener('change', () => moveCommand(participant, move.value));
-      entry.append(item, ...facts.map(text => node('span', 'workspace-token-engaged', text)));
+      // Outils au bord droit du cartouche : chaque commande native (liste « Déplacer… », monture, Retirer du combat) est posée,
+      // transparente, sur son signe (⋯, ♞, ✕) : rien n'est perdu et le cartouche garde sa hauteur.
+      const tools = node('span', 'workspace-token-tools');
+      const tool = (mark, label, control, className = '') => {
+        const wrap = node('span', `workspace-token-tool ${className}`.trim());
+        wrap.title = label;
+        wrap.append(node('span', 'workspace-token-menu-mark', mark), control);
+        tools.appendChild(wrap);
+      };
       const mount = mountControl(participant, Store.listParticipants());
-      if (mount) entry.appendChild(mount);
-      entry.appendChild(move);
+      if (mount) tool('♞', mount.tagName === 'SELECT' ? (mount.options[mount.selectedIndex]?.text || 'Monture') : mount.textContent, mount, participant.extensions?.v5?.mounted === true ? 'is-mounted' : '');
+      tool('⋯', `Déplacer ${participant.name}…`, move);
       const remove = defeatedParticipantButton(participant, `track-remove-${participant.id}`);
-      if (remove) entry.appendChild(remove);
+      if (remove) tool('✕', `Retirer ${participant.name} du combat`, remove, 'is-remove');
+      entry.style.setProperty('--tools', String(tools.childNodes.length));
+      entry.append(item, tools);
+      // Hors du bouton-cartouche : l'engagement en toutes lettres (lu par les lecteurs d'écran et les parcours).
+      if (partnerNames.length) entry.appendChild(node('span', 'workspace-sr workspace-token-engaged', `Engagé avec : ${partnerNames.join(', ')}`));
       (zoneOf.get(participant.id) || track).appendChild(entry);
     });
     board.appendChild(track);
@@ -755,7 +787,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       }
     };
     const rows = actionBarModel({ actor, active: context.active, actions, actionKeys: keys, previewDisengage: id => Store.previewDisengage(id), turnFacts: Store.getV5TurnFacts?.(actor.id) || {} });
-    renderActionBar(column, { actor, rows, commands });
+    // Refonte (E4a) : actions préparées de l'acteur + « ce qu'il peut faire d'ici » dans la même barre (placée en bas par placeInZones).
+    const prepared = preparedActionRows({ actor, actions, actionKeys: keys, selectedKey: state.resolution.actionKey });
+    renderActionBar(column, { actor, rows, prepared, commands });
     if (state.disengage?.actorId !== actor.id) return;
     const input = { ...state.disengage };
     delete input.actorId;

@@ -94,13 +94,20 @@ try {
           const r = el.getBoundingClientRect();
           return { name: el.getAttribute('aria-label') || el.querySelector('h2,h3,strong')?.textContent?.trim() || 'fenêtre', inside: r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1, ...inner(el) };
         }),
-        fonts: document.fonts ? [...document.fonts].map(face => face.family) : []
+        fonts: document.fonts ? [...document.fonts].map(face => face.family) : [],
+        melees: (el => el ? box(el) : { absent: true })(document.querySelector('[data-zone="centre"] [data-part="melees"]')),
+        actionBar: (el => el ? { height: el.clientHeight, overflow: el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1 } : null)(document.querySelector('[data-zone="bas"] .workspace-action-bar'))
       };
     }, ZONES);
     const pageScrolls = m.page.scrollHeight > m.page.height + 1 || m.page.scrollWidth > m.page.width + 1;
     const absent = m.zones.filter(z => z.absent).map(z => z.name);
     const overflowing = m.zones.filter(z => !z.absent && z.shown && (z.scrollHeight > z.clientHeight + 1 || z.scrollWidth > z.clientWidth + 1));
     const windowsOverflow = m.windows.filter(w => !w.inside || w.scrollHeight > w.clientHeight + 1);
+    // Lot E4a : la barre d'actions (zone bas) et la partie « mêlées » (zone centre) ne débordent jamais sur R20.
+    for (const z of m.zones) if (z.name === 'bas' && z.shown && (z.scrollHeight > z.clientHeight + 1 || z.scrollWidth > z.clientWidth + 1)) failures.push(`${step} : la zone bas déborde (${z.scrollHeight}/${z.clientHeight})`);
+    if (m.melees && !m.melees.absent && m.melees.scrollHeight > m.melees.clientHeight + 1) failures.push(`${step} : les mêlées débordent (${m.melees.scrollHeight}/${m.melees.clientHeight})`);
+    if (m.melees && m.melees.absent && m.zones.find(z => z.name === 'centre')?.shown && report.length >= 3) failures.push(`${step} : partie mêlées absente du centre`);
+    if (m.actionBar && m.actionBar.height > 0 && m.actionBar.overflow) failures.push(`${step} : la barre d'actions déborde (${JSON.stringify(m.actionBar)})`);
     report.push({ step, pageScrolls, page: m.page, absent, overflowing, windows: m.windows, windowsOverflow });
     if (pageScrolls) failures.push(`${step} : la page défile (${m.page.scrollWidth} × ${m.page.scrollHeight} pour ${m.page.width} × ${m.page.height})`);
     if (absent.length) failures.push(`${step} : zones absentes (${absent.join(', ')})`);
@@ -327,6 +334,56 @@ try {
   await page.screenshot({ path: `${shots}fiche-complete-lanceur.png` });
   await page.keyboard.press('Escape');
   await full.waitFor({ state: 'hidden' });
+
+  // 2 ter. Mêlées en cartouches (lot E4a, CA6) : un clic sur un cartouche choisit la cible, jamais l'acteur ni le tour ;
+  // la frise ne change jamais la cible. La barre du bas porte les actions de l'acteur et « ce qu'il peut faire d'ici », sans numéros.
+  const meleeState = () => page.evaluate(async () => {
+    const { Store } = await import('/js/main.js');
+    return { turn: Store.getCombat().currentActorId, actor: document.querySelector('.workspace-sheet-actor')?.dataset.actorId || null, target: document.querySelector('.workspace-sheet-target')?.dataset.actorId || null };
+  });
+  const cartouches = page.locator('[data-zone="centre"] [data-part="melees"] [data-workspace-target]');
+  assert.ok(await cartouches.count() >= 20, `un cartouche par combattant actif (${await cartouches.count()}, 20 au moins attendus)`);
+  assert.equal(await page.locator('[data-zone="centre"] [data-part="melees"] [data-workspace-select]').count(), 0, 'les cartouches ne choisissent pas l’acteur');
+  const wasMelee = await meleeState();
+  const pick = await cartouches.evaluateAll((items, avoid) => items.map(item => item.dataset.workspaceTarget).find(id => !avoid.includes(id)), [wasMelee.actor, wasMelee.target]);
+  await page.locator(`[data-part="melees"] [data-workspace-target="${pick}"]`).click();
+  const nowMelee = await meleeState();
+  assert.equal(nowMelee.target, pick, 'le clic sur le cartouche choisit la cible (fiche de droite)');
+  assert.equal(nowMelee.actor, wasMelee.actor, 'l’acteur ne change pas');
+  assert.equal(nowMelee.turn, wasMelee.turn, 'le tour ne change pas');
+  assert.equal(await page.locator(`[data-part="melees"] [data-workspace-target="${pick}"]`).getAttribute('aria-pressed'), 'true', 'le cartouche choisi est marqué');
+  assert.equal(await page.locator('[data-part="melees"] [data-workspace-target][aria-pressed="true"]').count(), 1, 'une seule cible marquée');
+  await measure('mêlées : un cartouche choisit la cible');
+  // Retour de la cible à celle d'avant ; la frise ne la touche pas.
+  await page.locator(`[data-part="melees"] [data-workspace-target="${wasMelee.target}"]`).click();
+  assert.equal((await meleeState()).target, wasMelee.target);
+  await page.locator(`[data-zone="frise"] [data-frise-id="${pick}"]`).click();
+  assert.equal((await meleeState()).target, wasMelee.target, 'un clic sur la frise ne change jamais la cible');
+  await page.locator(`[data-zone="frise"] [data-frise-id="${wasMelee.actor}"]`).click();
+  // Les cartouches gardent leurs commandes : Déplacer…, Engager avec…, Encerclé, Position haute, À couvert.
+  const gorMove = page.getByLabel('Déplacer Gor 1', { exact: true });
+  const moveOptions = await gorMove.locator('option').allTextContents();
+  for (const label of ['Déplacer…', 'Engager avec Erich Massenbach', 'Encerclé', 'Position haute', 'À couvert']) assert.ok(moveOptions.includes(label), `Déplacer… propose « ${label} » (${moveOptions.join(' | ')})`);
+  // Engagement : Gor 1 contre Erich et Jorunn — une mêlée, des cartouches groupés, aucun débordement.
+  await gorMove.selectOption(`engage:${ERICH}`);
+  await page.getByLabel('Déplacer Gor 1', { exact: true }).selectOption(`engage:${JORUNN}`);
+  await page.locator('.workspace-zone.is-melee').first().waitFor();
+  assert.match(await page.locator('.workspace-token').filter({ has: page.locator(`[data-workspace-target="${GOR}"]`) }).textContent(), /Engagé avec : /, 'l’engagement reste lisible sur le cartouche');
+  await selectActor(GOR);
+  const bar = page.locator('[data-zone="bas"] .workspace-action-bar');
+  const barLabels = await bar.locator('.workspace-action-bar-item strong').allTextContents();
+  for (const label of ['Se désengager', 'Fuir', 'Se déplacer', 'Autres actions']) assert.ok(barLabels.includes(label), `la barre du bas propose « ${label} » (${barLabels.join(' | ')})`);
+  assert.ok(barLabels.some(label => label.startsWith('Attaquer · ')), 'Attaquer · <ennemi engagé>');
+  assert.ok(barLabels.some(label => /^Hand Weapon/.test(label)), `les actions de l’acteur sont dans la barre (${barLabels.join(' | ')})`);
+  assert.equal(await bar.locator('[aria-keyshortcuts]').count(), 0, 'aucun raccourci clavier sur les actions');
+  assert.ok(barLabels.every(label => !/^\s*[1-9][\s.)·]/.test(label)), `actions non numérotées (${barLabels.join(' | ')})`);
+  await bar.getByRole('button', { name: /^Se désengager/ }).click();
+  await page.locator('.workspace-disengage').waitFor();
+  await measure('mêlées : engagement, barre d’actions, désengagement ouvert');
+  await page.locator('.workspace-disengage').getByRole('button', { name: 'Fermer' }).click();
+  await selectActor(wasMelee.actor);
+  await page.getByLabel('Déplacer Gor 1', { exact: true }).selectOption('free');
+  await page.waitForFunction(() => !document.querySelector('.workspace-zone.is-melee'));
 
   // 3. Attaque de mêlée : Gor 1 frappe Erich (jet d'attaque, défense, aperçu).
   await selectActor(ID.GOR);

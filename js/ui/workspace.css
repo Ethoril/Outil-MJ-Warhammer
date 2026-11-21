@@ -571,6 +571,81 @@
 .workspace-bench-item button { flex: none; min-height: 30px; padding: 4px 8px; font-size: 12.5px; }
 
 /* ==========================================================================
+   REFONTE · LOT E4a : mêlées en cartouches compacts et barre d'actions du bas
+   Un cartouche = un combattant (camp en liseré, rang, nom, PV, barre de PV, pastilles) ; un clic le choisit comme cible.
+   Les commandes (« ⋯ » = Déplacer…, monture, Retirer du combat) restent à son bord. À 20 combattants, les mêlées tiennent
+   sans défiler ; au-delà, seule leur case défile (CA2). Barre du bas : boutons à deux lignes, sans numéro ni raccourci.
+   ========================================================================== */
+.workspace-track-column > .workspace-rubric { margin: 0 0 4px; }
+.workspace-plateau[data-part="melees"] { gap: 6px; padding: 6px; max-height: 40vh; overflow: auto; overscroll-behavior: contain; }
+.workspace-plateau > .workspace-track { gap: 6px; }
+.workspace-plateau[data-part="melees"] .workspace-zone { flex: 1 1 260px; gap: 4px; padding: 5px 6px 6px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 124px), 1fr)); }
+.workspace-plateau[data-part="melees"] .workspace-zone.is-melee { border-width: 2px; }
+.workspace-plateau[data-part="melees"] .workspace-zone.is-free { flex: 1 1 100%; }
+.workspace-plateau .workspace-zone-head { margin: 0; }
+.workspace-plateau .workspace-zone-head strong { font-family: var(--font-ui); font-size: 12.5px; }
+.workspace-plateau .workspace-zone-ratio { font-size: 11px; padding: 0 7px; }
+.workspace-plateau .workspace-track-entry { padding-bottom: 0; gap: 0; }
+.workspace-plateau .workspace-track-entry > .workspace-track-item {
+  gap: 2px; padding: 3px 22px 3px 6px; min-height: 0; cursor: pointer; font-family: var(--font-ui);
+}
+.workspace-plateau .workspace-track-top { gap: 4px; align-items: center; }
+.workspace-plateau .workspace-token .workspace-track-marker { flex: none; font-size: 10.5px; }
+.workspace-plateau .workspace-track-name { flex: 1 1 0; font-family: var(--font-ui); font-size: 12.5px; font-weight: 650; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
+.workspace-plateau .workspace-track-hp { font-size: 12px; }
+.workspace-plateau .workspace-hp-bar { height: 4px; }
+.workspace-track-badges { display: flex; flex-wrap: nowrap; gap: 3px; min-width: 0; overflow: hidden; }
+.workspace-track-badges > * { flex: none; padding: 0 5px; min-height: 0; font-family: var(--font-ui); font-size: 10.5px; line-height: 15px; white-space: nowrap; border-radius: 999px; }
+.workspace-plateau .workspace-track-top > .workspace-track-marker { order: 0; }
+.workspace-plateau .workspace-track-top > .workspace-track-name { order: 1; }
+.workspace-plateau .workspace-track-top > .workspace-track-glyph, .workspace-plateau .workspace-track-top > .workspace-track-role, .workspace-plateau .workspace-track-top > .workspace-track-agit { order: 2; }
+.workspace-plateau .workspace-track-top > .workspace-track-hp { order: 3; }
+/* « cible » et « agit » : le mot reste (lecteurs d'écran, parcours), le signe ◎ / ▣ le remplace à l'écran. */
+.workspace-plateau .workspace-track-top .workspace-track-role, .workspace-plateau .workspace-track-top .workspace-track-agit { flex: none; width: 13px; overflow: hidden; font-size: 0; line-height: 1; color: var(--j-ink); }
+.workspace-plateau .workspace-track-top .workspace-track-role::after { content: '◎'; font-size: 12px; }
+.workspace-plateau .workspace-track-top .workspace-track-agit { color: var(--accent-text); }
+.workspace-plateau .workspace-track-top .workspace-track-agit::after { content: '▣'; font-size: 12px; }
+.workspace-plateau .workspace-track-glyph { flex: none; font-size: 11px; font-weight: 700; line-height: 1; color: var(--j-ink); }
+.workspace-plateau .workspace-track-glyph.is-momentum { color: var(--j-green); }
+.workspace-track-fact { border: 1px solid var(--j-red-border); color: var(--j-red); }
+/* Qui agit, qui est visé : l'acteur est cerné d'accent, la cible d'un anneau plein. */
+.workspace-plateau .workspace-track-item.is-actor { box-shadow: inset 0 0 0 2px var(--accent); }
+.workspace-plateau .workspace-track-item.is-target { box-shadow: 0 0 0 2px var(--j-target-ring); }
+.workspace-plateau .workspace-track-item.is-actor.is-target { box-shadow: inset 0 0 0 2px var(--accent), 0 0 0 2px var(--j-target-ring); }
+.workspace-plateau .workspace-track-item.is-actor .workspace-track-name { color: inherit; }
+.workspace-plateau .workspace-track-item:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+/* Outils au bord droit (⋯ Déplacer…, ♞ monture, ✕ Retirer) : la commande native, transparente, posée sur son signe. */
+.workspace-plateau .workspace-track-entry > .workspace-track-item { padding-right: calc(4px + 21px * var(--tools, 1)); }
+.workspace-token-tools { position: absolute; top: 2px; right: 2px; display: flex; gap: 1px; }
+.workspace-token-tool { position: relative; width: 20px; height: 20px; border-radius: 4px; }
+.workspace-token-tool:hover { background: var(--j-chip); }
+.workspace-token-tool:focus-within { outline: 2px solid var(--accent); }
+.workspace-token-tool.is-mounted .workspace-token-menu-mark { color: var(--j-red); font-weight: 800; }
+.workspace-token-tool.is-remove .workspace-token-menu-mark { color: var(--danger); font-size: 12px; }
+.workspace-token-menu-mark { position: absolute; inset: 0; display: grid; place-items: center; font-size: 15px; line-height: 1; color: var(--j-ink); pointer-events: none; }
+.workspace-plateau .workspace-token-tool > select, .workspace-plateau .workspace-token-tool > button {
+  position: absolute; inset: 0; width: 100%; max-width: none; height: 100%; min-height: 0; margin: 0; padding: 0; border: 0; border-radius: 4px;
+  opacity: 0; cursor: pointer; font-size: 13px; overflow: hidden;
+}
+.workspace-plateau[data-part="melees"] > .workspace-bench { flex: 1 1 100%; margin: 0; padding: 6px; }
+.workspace-plateau .workspace-bench .workspace-rubric { margin: 0; }
+.workspace-plateau .workspace-bench-item { padding: 3px 6px; gap: 6px; }
+.workspace-plateau .workspace-bench-label { flex: 1 1 0; font-size: 12.5px; }
+.workspace-plateau .workspace-bench-item button { min-height: 24px; padding: 1px 8px; }
+
+/* Barre d'actions du bas : actions préparées de l'acteur, puis « ce qu'il peut faire d'ici ». */
+.workspace-action-bar { margin: 0; padding: 5px 8px 6px; gap: 3px; border-left-width: 3px; }
+.workspace-action-bar-title { font-family: var(--font-ui); font-size: 12px; color: var(--muted); }
+.workspace-action-bar-list { display: flex; flex-wrap: wrap; align-items: stretch; gap: 5px; }
+.workspace-action-bar-item { flex: 0 1 150px; min-width: 112px; max-width: 200px; min-height: 38px; gap: 0; padding: 3px 8px; font-family: var(--font-ui); font-size: 12.5px; }
+.workspace-action-bar-item strong { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.workspace-action-bar-item span { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-family: var(--font-ui); font-size: 10.5px; line-height: 1.25; }
+.workspace-action-bar-item.is-prepared { border-color: var(--accent); }
+.workspace-action-bar-item[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
+.workspace-action-bar-item[aria-pressed="true"], .workspace-action-bar-item[aria-pressed="true"] span { color: var(--button-text, #fff); }
+.workspace-action-bar-sep { flex: none; width: 1px; margin: 2px 3px; background: var(--j-line); }
+
+/* ==========================================================================
    FICHES DE DUEL : AU TOUR DE & CIBLE (#workspace-play .workspace-duel)
    ========================================================================== */
 .workspace-duel {
@@ -2041,7 +2116,7 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
   .workspace-area[data-zone="centre"] { grid-area: centre; }
   .workspace-area[data-zone="droite"] { grid-area: droite; }
   .workspace-area[data-zone="bas"] { grid-area: bas; grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
-  .workspace-area-actions { min-width: 0; min-height: 0; max-height: 30vh; overflow: auto; }
+  .workspace-area-actions { min-width: 0; min-height: 0; }
   .workspace-area-actions > .workspace-action-bar { margin: 0; }
   /* Onglets Règles, Profils, Circonstances, Journal : dans la barre du bas, le contenu défile dans sa case. */
   .workspace-area-bas > .workspace-side { width: min(620px, 44vw); height: 30vh; max-height: none; min-height: 0; }
