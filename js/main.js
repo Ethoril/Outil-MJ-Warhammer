@@ -30,7 +30,7 @@ import { openV5EffectInputDialog, chooseV5RecoveryMethod, recoveryOptionsFor as 
 import { renderObstinateChoice } from './ui/test-questions.js';
 import { openV5FortuneDialog } from './ui/v5-fortune-dialog.js';
 import { openV5FateDialog } from './ui/v5-fate-dialog.js';
-import { openEncounterEndDialog, removeParticipantWithChoice, confirmInTool } from './ui/encounter-end-dialog.js';
+import { openEncounterEndDialog, removeParticipantWithChoice, confirmInTool, confirmParticipantRemoval } from './ui/encounter-end-dialog.js';
 import { initWorkspaceView } from './ui/workspace-view.js';
 import { initPrepareView } from './ui/prepare-view.js';
 import { initTextImportView } from './ui/import-text-view.js';
@@ -1490,10 +1490,10 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
         dialog.addEventListener('close', restore, { once: true });
       });
     },
-    removeParticipant: async id => {
+    removeParticipant: async (id, { confirm = false } = {}) => {
       try {
-        // CA10 : même question qu'à la fin du combat si ce participant a un suivi ouvert.
-        if (!await removeParticipantWithChoice(Store, id)) return;
+        // CA10 : même question qu'à la fin du combat si ce participant a un suivi ouvert ; `confirm` : retrait en cours de rencontre, confirmé dans l'outil (lot C).
+        if (!await (confirm ? confirmParticipantRemoval(Store, id) : removeParticipantWithChoice(Store, id))) return;
         showToast('Combattant retiré du combat', 'success', { label: 'Annuler', onClick: () => Store.undo() });
       } catch (error) {
         showToast(contextMessage('Combattant non retiré', error, 'réessayez.'), 'error');
@@ -1711,24 +1711,24 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
       return resolveV5EffectOperation((inputs, baseRevision) => Store.recoverCondition(id, state.id || state.key || state.name, { method, ...(method === 'medical-attention' ? { medicalAttention: true } : method === 'surgery' ? { surgery: true } : {}), ...recoveryOptionsFor(inputs[id]), baseRevision }), { title: `Récupérer ${state.name}` });
     },
     setStates: (id, states) => awaitStore(Store.updateParticipant(id, { states: normalizeEffects(states) }), 'États'),
-    addProfileToCombat: async id => {
+    addProfileToCombat: async (id, { withoutMount = false } = {}) => {
       try {
-        await awaitStore(Store.addProfilesToCombat([id]), 'Ajout au combat');
+        await awaitStore(Store.addProfilesToCombat([id], { withoutMount }), 'Ajout au combat');
         showToast(`${Store.getProfile(id)?.name || 'Profil'} ajouté en attente`, 'success');
       } catch (error) { showToast(contextMessage('Profil non ajouté au combat', error, 'réessayez.'), 'error'); }
     },
-    addProfileToActiveCombat: async id => {
+    addProfileToActiveCombat: async (id, { withoutMount = false } = {}) => {
       try {
         const profileName=Store.getProfile(id)?.name||'Profil';
         if(Store.isCombatInitiativeInitialized?.()){
-          const staging=requireStoreApi('previewCombatParticipantAddition')(id);
+          const staging=requireStoreApi('previewCombatParticipantAddition')(id,{withoutMount});
           const initialized=await openCombatInitiativeDialog({staging,title:`Initiative · Ajout actif de ${profileName}`});
           if(initialized?.status==='cancelled')return false;
           if(initialized?.status!=='applied')throw new Error(initialized?.error||initialized?.reason||'Ajout actif non enregistré.');
           showToast(`${profileName} ajouté actif avec Initiative`, 'success');
           return true;
         }
-        await awaitStore(Store.addProfilesToCombat([id],{zone:'active'}),'Ajout actif au combat');
+        await awaitStore(Store.addProfilesToCombat([id],{zone:'active',withoutMount}),'Ajout actif au combat');
         showToast(`${profileName} ajouté actif`, 'success');
         return true;
       } catch (error) { showToast(contextMessage('Profil non ajouté actif', error, 'réessayez.'), 'error'); return false; }

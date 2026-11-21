@@ -78,3 +78,64 @@ export function confirmInTool({ title, text, confirmLabel = 'Confirmer' } = {}) 
     cancel.focus();
   });
 }
+
+/**
+ * Retrait d'un participant en cours de rencontre (lot C du 21/11/2026) : une confirmation dans l'outil, jamais une boîte native.
+ * La fenêtre reprend la question des suivis ouverts (CA10) et, pour un cavalier dont la monture est en jeu, propose de la
+ * retirer avec lui (cochée par défaut). Rend `false` si le MJ annule.
+ */
+export async function confirmParticipantRemoval(Store, id) {
+  const people = Store.listParticipants?.() || [];
+  const participant = people.find(row => row.id === id);
+  if (!participant) return false;
+  const v5 = participant.extensions?.v5 || {};
+  const mountId = v5.mounted === true ? v5.mountId : v5.ownMountId;
+  const mount = mountId && mountId !== id ? people.find(row => row.id === mountId) : null;
+  const ids = [id, ...(mount ? [mount.id] : [])];
+  const candidates = typeof Store.previewEncounterEnd === 'function' ? Store.previewEncounterEnd({ participantIds: ids }) : [];
+  const outcome = await new Promise(resolve => {
+    const opener = document.activeElement;
+    const dialog = el('dialog', null, 'tool-sheet encounter-end-dialog participant-removal-dialog');
+    Object.assign(dialog.style, { inset: '0', margin: 'auto', transform: 'none', width: 'min(520px, calc(100vw - 32px))', maxWidth: 'calc(100vw - 32px)', height: 'fit-content', maxHeight: 'calc(100dvh - 32px)', overflow: 'auto', display: 'block', padding: '16px 20px' });
+    const choice = () => { const label = el('label', null, 'encounter-end-choice'); Object.assign(label.style, { display: 'flex', flexDirection: 'row', gap: '8px', alignItems: 'baseline', margin: '8px 0' }); return label; };
+    const checkbox = () => { const box = el('input'); box.type = 'checkbox'; Object.assign(box.style, { width: 'auto', flex: 'none', margin: '0' }); return box; };
+    const form = el('form');
+    const pj = participant.kind === 'PJ' && participant.persistentCharacterId;
+    form.append(el('h2', `Retirer ${participant.name} de la rencontre ?`),
+      el('p', `Il quitte l’ordre d’initiative, les mêlées et les empoignades ; ce qui le visait perd sa cible. ${pj ? 'Son pion de PJ reste sur la carte, lié.' : 'Son pion quitte la carte.'} Annulable.`, 'workspace-muted'));
+    let mountBox = null;
+    if (mount) {
+      const label = choice();
+      mountBox = checkbox(); mountBox.name = 'withMount'; mountBox.checked = true;
+      label.append(mountBox, document.createTextNode(` Retirer aussi sa monture « ${mount.name} » (sinon elle reste, sans cavalier)`));
+      form.append(label);
+    }
+    const boxes = candidates.map(candidate => {
+      const label = choice();
+      const box = checkbox(); box.name = 'keep'; box.value = candidate.participantId;
+      label.append(box, document.createTextNode(` Garder le suivi de « ${candidate.label || candidate.name} » (${candidate.count} suivi${candidate.count > 1 ? 's' : ''} ouvert${candidate.count > 1 ? 's' : ''}, sinon archivé)`));
+      form.append(label);
+      return box;
+    });
+    const controls = el('div', null, 'row');
+    const confirm = el('button', 'Retirer de la rencontre', 'danger'); confirm.type = 'submit';
+    const cancel = el('button', 'Annuler', 'ghost'); cancel.type = 'button';
+    controls.append(confirm, cancel);
+    form.append(controls);
+    dialog.append(form);
+    document.body.append(dialog);
+    let result = null;
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      result = { withMount: Boolean(mountBox?.checked), keepIds: boxes.filter(box => box.checked).map(box => box.value) };
+      dialog.close();
+    });
+    cancel.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('close', () => { dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(result); }, { once: true });
+    dialog.showModal();
+    cancel.focus();
+  });
+  if (!outcome) return false;
+  await Store.removeParticipant(id, outcome);
+  return true;
+}

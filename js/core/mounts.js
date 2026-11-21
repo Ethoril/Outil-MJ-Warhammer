@@ -18,6 +18,8 @@ export const mountProfileId = riderProfileId => `monture-${riderProfileId}`;
 export const declaredMountOf = subject => (v5Of(subject).declaredMount?.profileId ? v5Of(subject).declaredMount : null);
 export const ownMountIdOf = rider => (typeof v5Of(rider).ownMountId === 'string' && v5Of(rider).ownMountId) || null;
 export const mountOfOf = mount => (typeof v5Of(mount).mountOf === 'string' && v5Of(mount).mountOf) || null;
+/** Cavalier laissé « sans monture » pour la rencontre (réglage du MJ, la fiche ne change pas) : sa monture déclarée n'entre pas. */
+export const mountAbsentOf = rider => v5Of(rider).mountAbsent === true;
 
 /**
  * Déclaration et profil de bibliothèque d'une monture : `mount` = `{ template, bestiaryId, name }` (profil type du bestiaire).
@@ -73,6 +75,7 @@ const freeFor = (rider, row, participants) => row.id !== rider?.id && row.kind !
 export function linkedMountOf(rider, participants = []) {
   const own = participants.find(row => row.id === ownMountIdOf(rider));
   if (own) return own;
+  if (mountAbsentOf(rider)) return null;
   const declared = declaredMountOf(rider);
   return declared ? participants.find(row => row.profileId === declared.profileId && freeFor(rider, row, participants)) || null : null;
 }
@@ -126,7 +129,7 @@ export function linkDeclaredMounts(participants = []) {
   const out = [...participants];
   for (let index = 0; index < out.length; index += 1) {
     const declared = declaredMountOf(out[index]);
-    if (!declared || mountOfOf(out[index])) continue;
+    if (!declared || mountOfOf(out[index]) || mountAbsentOf(out[index])) continue;
     const current = ownMountIdOf(out[index]);
     if (current && out.some(row => row.id === current)) continue;
     const at = out.findIndex(row => row.profileId === declared.profileId && row.id !== out[index].id && !mountOfOf(row));
@@ -139,8 +142,9 @@ export function linkDeclaredMounts(participants = []) {
   return out.every((row, index) => row === participants[index]) ? participants : out;
 }
 
-/** Libellé du cartouche : « Monté · Cheval », « À pied (Cheval) », « À pied ». */
+/** Libellé du cartouche : « Monté · Cheval », « À pied (Cheval) », « Sans monture », « À pied ». */
 export function mountLabel(rider, participants = []) {
+  if (v5Of(rider).mounted !== true && mountAbsentOf(rider) && !participants.some(row => row.id === ownMountIdOf(rider))) return 'Sans monture';
   const id = v5Of(rider).mounted === true ? v5Of(rider).mountId : ownMountIdOf(rider) || linkedMountOf(rider, participants)?.id;
   const mount = participants.find(row => row.id === id);
   const name = mount?.name || (id ? 'monture absente' : declaredMountOf(rider)?.name || '');
