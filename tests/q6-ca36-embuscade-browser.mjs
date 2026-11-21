@@ -18,12 +18,12 @@ try{
   await Store.startTalentSession();
  });
  await page.locator('#tab-combat').click();await page.locator('#combat-banner .combat-banner-primary').click();
- const dialog=page.locator('dialog.tool-sheet');await dialog.waitFor({state:'visible'});
+ const dialog=page.locator('[data-zone="centre"] .workspace-initiative');await dialog.waitFor({state:'visible'});
  for(const [id,die] of [['rider',5],['horse',4],['foe',3]]){const characteristic=dialog.locator(`input[name="characteristic:${id}"]`);if(await characteristic.count()&&await characteristic.isEditable()&&await characteristic.inputValue()==='')await characteristic.fill('40');const input=dialog.locator(`input[name="die:${id}"]`);if(await input.isEditable())await input.fill(String(die));}
- await dialog.locator('select[name="surprisedCamp"]').selectOption('ambush');await dialog.getByRole('button',{name:'Calculer / actualiser l’ordre'}).click();
+ await dialog.locator('select[name="surprisedCamp"]').selectOption('ambush');
  await dialog.locator('[data-focus-key="initiative-ride-obstinate-rider"]').selectOption('strong-minded');
- await dialog.locator('[data-mounted-rider="rider"][data-field="roll"]').fill('40');await dialog.getByRole('button',{name:'Calculer / actualiser l’ordre'}).click();
- await dialog.getByRole('button',{name:'Confirmer et appliquer'}).click();
+ await dialog.locator('[data-mounted-rider="rider"][data-field="roll"]').fill('40');
+ await dialog.getByRole('button',{name:'Commencer le round 1'}).click();
  await page.waitForFunction(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');return Store.getCombat().round===1;});
  assert.equal(await page.evaluate(async()=>(await import('/Outil-MJ-Warhammer/js/main.js')).Store.getObstinateStatus('rider').available),false);
  await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.undo();});

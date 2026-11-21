@@ -1,6 +1,7 @@
 import { withMomentum, momentumAfterChange } from './core/v5-combat-rules.js';
 import { safeLocalStorage } from './core/safe-storage.js';
 import { hasV5Talent } from './core/v5-talents.js';
+import { declaredMountOf, mountAbsentOf } from './core/mounts.js';
 import { APP_VERSION } from './version.js';
 import { Bus } from './ui/bus.js';
 import { DOM, qs, on } from './ui/dom.js';
@@ -345,7 +346,7 @@ function combatInitiativeAlreadyResolved() {
 }
 async function startCombatFromButton() {
   try {
-    const result=combatInitiativeAlreadyResolved()?await Combat.start():await openCombatInitiativeDialog({startCombat:true,title:'Démarrer le combat · Initiative'});
+    const result=combatInitiativeAlreadyResolved()?await Combat.start():await startFromInitiativeBoard();
     if(result?.status==='cancelled')return result;
     await awaitStore(result,'Démarrer le combat'); return result;
   } catch(error) { showToast(contextMessage('Combat non démarré',error,'réessayez.'),'error'); return {status:'error'}; }
@@ -355,7 +356,7 @@ async function advanceTurn() {
   advancingTurn = true;
   try {
     const combat = Store.getCombat();
-    let result = combat.round > 0 ? await Combat.nextTurn() : combatInitiativeAlreadyResolved()?await Combat.start():await openCombatInitiativeDialog({ startCombat: true, title: 'Démarrer le combat · Initiative' });
+    let result = combat.round > 0 ? await Combat.nextTurn() : combatInitiativeAlreadyResolved()?await Combat.start():await startFromInitiativeBoard();
     if (result?.status === 'cancelled') return result;
     if (result?.status === 'requires-input') result = await openV5EffectInputDialog({ pending: result,
       title: 'Terminer le tour : effets V5', getCurrentRevision: () => Store.getLocalRevision(), getObstinateStatus: id => Store.getObstinateStatus(id), getObstinateIdentity: id => Store.getObstinateIdentity(id),
@@ -392,24 +393,378 @@ async function awaitStore(operation, label = 'Opération locale') {
   return result;
 }
 
+// Initiative : état de saisie d'un combattant (I, dés, Combat instinctif), semé une fois ; les dés des PNJ sont tirés une fois et gardés.
+function seedInitiativeActor(state, actor, staging) {
+  const pendingReflexPreparation=actor.extensions?.v5?.combatReflexesPreparation;
+  const existingCombat=actor.extensions?.v5?.combatInitiative;
+  const saved = existingCombat?.initialized?existingCombat.characteristic:Number.isInteger(actor.caracs?.I) && actor.caracs.I >= 0 ? actor.caracs.I : !pendingReflexPreparation&&Number.isInteger(actor.initiative) && actor.initiative > 0 ? actor.initiative : null;
+  state.characteristicById[actor.id] = saved;
+  const reflex=hasV5Talent(actor,'talent-combat-reflexes'),prepared=pendingReflexPreparation;
+  if(reflex&&existingCombat?.initialized&&Array.isArray(existingCombat.dice)&&['first','second'].includes(existingCombat.choice)){
+    state.combatReflexesById[actor.id]={dice:[...existingCombat.dice],choice:existingCombat.choice};
+  }else if(reflex&&prepared?.version===1&&prepared.participantId===actor.id&&prepared.characteristic===saved){
+    state.combatReflexesById[actor.id]={dice:[...prepared.dice],choice:prepared.choice};
+  }else if(reflex){
+    state.combatReflexesById[actor.id]={dice:actor.kind==='PJ'?[null,null]:[Math.floor(Math.random()*10)+1,Math.floor(Math.random()*10)+1],choice:''};
+  }else state.diceById[actor.id] = existingCombat?.initialized?existingCombat.die:actor.kind!=='PJ'?Math.floor(Math.random()*10)+1:undefined;
+}
+function newInitiativeState(staging) {
+  return { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', mountedRideTests: {}, preview: null };
+}
+// `short` : le nom seul (zone centrale, où la place manque) ; sinon nom, camp et type (feuille).
+function initiativeParticipantLabel(active, id, short = false) {
+  const actor = active.find(row => row.id === id); if (!actor) return id;
+  const sameName = active.filter(row => row.name === actor.name).length;
+  const duplicateNumber = sameName > 1 ? ` · ${active.filter(row => row.name === actor.name).findIndex(row => row.id === id) + 1}` : '';
+  return short ? `${actor.name}${duplicateNumber}` : `${actor.name}${duplicateNumber} · ${actor.camp || 'sans camp'} · ${actor.kind}`;
+}
+function captureInitiativeNeeds(state, tieArea, mountedArea) {
+  for (const input of tieArea.querySelectorAll('[data-group-key]')) {
+    const key = input.dataset.groupKey;
+    if (input.dataset.kind === 'tieOrder') state.tieOrders[key] = Array.from(tieArea.querySelectorAll(`[data-group-key="${CSS.escape(key)}"][data-kind="tieOrder"][data-position]`)).sort((a,b)=>Number(a.dataset.position)-Number(b.dataset.position)).map(item=>item.value).filter(Boolean);
+    if (input.dataset.kind === 'tieChoice') state.tieChoices[key] = Array.from(tieArea.querySelectorAll(`[data-group-key="${CSS.escape(key)}"][data-kind="tieChoice"][data-position]`)).sort((a,b)=>Number(a.dataset.position)-Number(b.dataset.position)).map(item=>item.value).filter(Boolean);
+    if (input.dataset.kind === 'tieFirst') { if (input.value) state.tieChoices[key] = [input.value, ...key.split('|').filter(id => id !== input.value)]; else delete state.tieChoices[key]; }
+  }
+  for (const input of tieArea.querySelectorAll('[data-match-id]')) {
+    const match = input.dataset.matchId, side = input.dataset.side, rolls = state.opposedRolls[match] || {};
+    rolls[side] = input.value === '' ? null : input.type === 'number' ? Number(input.value) : input.value; state.opposedRolls[match] = rolls;
+  }
+  for (const input of mountedArea.querySelectorAll('[data-mounted-rider]')) {
+    const riderId = input.dataset.mountedRider, field = input.dataset.field;
+    const answer = state.mountedRideTests[riderId] || {};
+    answer[field] = input.value === '' ? null : Number(input.value); state.mountedRideTests[riderId] = answer;
+  }
+}
+function initiativeStatusText(state, active) {
+  return !active.length ? 'Aucun combattant actif : passez-les en Actif dans la rencontre' : state.preview.ready
+    ? `Ordre calculé : ${state.preview.order.map(id => active.find(row => row.id === id)?.name || id).join(' → ')}`
+    : `À compléter : ${[...new Set(state.preview.needsInput.map(item => {
+      const who = active.find(row => row.id === item.participantId)?.name;
+      const label = INITIATIVE_INPUT_LABELS[item.field] || item.label || item.field;
+      return who ? `${label} (${who})` : label;
+    }))].join(', ')}`;
+}
+// Clé stable d'un champ d'égalité ou de Chevauchée : sert au focus quand la vue ou la saisie se redessine.
+function initiativeNeedKey(element) {
+  const data = element?.dataset || {};
+  if (data.mountedRider) return `init-m-${data.mountedRider}-${data.field}`;
+  if (data.matchId) return `init-o-${data.matchId}-${data.side}`;
+  if (data.groupKey && data.kind) return `init-t-${data.groupKey}-${data.kind}-${data.position || ''}`;
+  if (data.rideCondition) return `init-r-${data.rideCondition}`;
+  return data.focusKey || null;
+}
+// Égalités, Chevauchées de surprise : sections sous la saisie, recalculées après chaque réponse. `onError` reçoit le message d'un calcul refusé.
+function renderInitiativeNeeds({ state, active, staging, tieArea, mountedArea, recalculate, onError, short = false }) {
+  const participantLabel = id => initiativeParticipantLabel(active, id, short);
+  tieArea.replaceChildren(); mountedArea.replaceChildren();
+  for (const need of state.preview.needsInput.filter(item => item.field.startsWith('mountedRide'))) {
+    const riderId = need.field.split(':')[1], field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
+    const rider = active.find(row => row.id === riderId), answer = state.mountedRideTests[riderId] || {};
+    if(field==='roll'){
+      const choice=renderObstinateChoice(rider,answer.conditionContext?.preRollTalent,value=>{
+        state.mountedRideTests[riderId]={...answer,conditionContext:{...(answer.conditionContext||{}),preRollTalent:value}};
+        try { recalculate(); } catch(error) { onError(error.message); }
+      },{focusKey:`initiative-ride-obstinate-${riderId}`,title:`Obstiné avant le jet — Chevaucher de ${rider?.name||riderId}`,status:rider&&Store.getObstinateStatus(rider.id,rider,staging?.scene)});
+      if(choice)mountedArea.append(choice);
+    }
+    const label = document.createElement('label'); label.textContent = `${need.label} `;
+    const input = document.createElement('input'); input.type = 'number'; input.min = String(need.min ?? (field === 'roll' ? 1 : 0)); input.max = String(need.max ?? 100); input.required = true;
+    input.dataset.mountedRider = riderId; input.dataset.field = field;
+    if (Number.isInteger(answer[field])) input.value = String(answer[field]);
+    label.append(input); mountedArea.append(label);
+  }
+  // T10 : questions d'États ou de séquelle du Test de Chevaucher (Surpris à cheval), réponse dans mountedRideTests.<id>.conditionContext.
+  for (const need of state.preview.needsInput.filter(item => /^ride(Condition|Blocked):/.test(item.field || ''))) {
+    const [, riderId, ...rest] = need.field.split(':'), field = rest.join(':');
+    if (need.field.startsWith('rideBlocked:')) { mountedArea.append(Object.assign(document.createElement('p'), { className: 'workspace-field-error', textContent: need.label })); continue; }
+    const answer = state.mountedRideTests[riderId] || {}, context = answer.conditionContext || {};
+    const label = document.createElement('label'); label.textContent = `${need.label} `;
+    const select = document.createElement('select'); select.setAttribute('aria-label', need.label); select.dataset.rideCondition = need.field;
+    if (field === 'conditionPenaltyMode') select.append(new Option('À préciser', ''), new Option('Pénalité en DR', 'sl'), new Option('Désavantage', 'disadvantage'));
+    else select.append(new Option('À préciser', ''), new Option('Oui', 'true'), new Option('Non', 'false'));
+    select.value = context[field] == null ? '' : String(context[field]);
+    select.addEventListener('change', () => {
+      const next = { ...(state.mountedRideTests[riderId]?.conditionContext || {}) };
+      if (select.value === '') delete next[field]; else next[field] = field === 'conditionPenaltyMode' ? select.value : select.value === 'true';
+      state.mountedRideTests[riderId] = { ...(state.mountedRideTests[riderId] || {}), conditionContext: next };
+      try { recalculate(); } catch (error) { onError(error.message); }
+    });
+    label.append(select); mountedArea.append(label);
+  }
+  for (const fall of state.preview.mountedFall || []) if (fall.test) mountedArea.append(Object.assign(document.createElement('p'), { className: 'muted', textContent: `${active.find(row => row.id === fall.participantId)?.name || fall.participantId} : Chevaucher ${fall.test.roll}, ${fall.test.sl} DR${fall.dismount ? ' — désarçonné' : ' — reste en selle'}.` }));
+  for (const group of state.preview.tieGroups) {
+    const section = document.createElement('section'); section.className = 'card';
+    const heading = document.createElement('strong'); heading.textContent = `Égalité : ${group.participantIds.map(participantLabel).join(' / ')}`; section.append(heading);
+    if (group.participantIds.length >= 3) {
+      const note = document.createElement('p'); note.textContent = 'Égalité à trois ou plus : choisissez directement l’ordre des ex aequo :'; section.append(note);
+      for (let position = 0; position < group.participantIds.length; position++) {
+        const label = document.createElement('label'); label.textContent = `Position ${position + 1} `;
+        const select = document.createElement('select'); select.dataset.groupKey = group.key; select.dataset.kind = 'tieChoice'; select.dataset.position = String(position); select.required = true;
+        const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir un participant'; select.append(blank);
+        for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = initiativeParticipantLabel(active, id); select.append(option); }
+        select.value = state.tieChoices[group.key]?.[position] || '';
+        label.append(select); section.append(label);
+      }
+    } else {
+      // Deux ex aequo : un Test opposé d’I (le vainqueur agit en premier), ou le MJ tranche directement.
+      const chosenFirst = state.tieChoices[group.key]?.[0] || '';
+      const firstLabel = document.createElement('label'); firstLabel.textContent = 'Qui agit en premier ? ';
+      const firstSelect = document.createElement('select'); firstSelect.dataset.groupKey = group.key; firstSelect.dataset.kind = 'tieFirst';
+      const byTest = document.createElement('option'); byTest.value = ''; byTest.textContent = 'Le vainqueur du Test opposé d’I'; firstSelect.append(byTest);
+      for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = initiativeParticipantLabel(active, id); firstSelect.append(option); }
+      firstSelect.value = chosenFirst; firstSelect.addEventListener('change', recalculate);
+      firstLabel.append(firstSelect); section.append(firstLabel);
+      for (const match of state.preview.oppositions.filter(item => item.groupKey === group.key)) {
+        const outcome = document.createElement('p'); outcome.className = 'muted';
+        outcome.textContent = `Test opposé : ${participantLabel(match.initiatorId)} (d100 ${match.initiator.roll}, DR ${match.initiator.sl}) contre ${participantLabel(match.opponentId)} (d100 ${match.opponent.roll}, DR ${match.opponent.sl}) · vainqueur : ${participantLabel(match.winnerId)}.`;
+        section.append(outcome);
+      }
+      if (!chosenFirst) {
+        for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && ['initiatorRoll', 'opponentRoll','initiatorChoice','opponentChoice','initiatorConditionPenaltyMode','opponentConditionPenaltyMode'].includes(item.field))) {
+          const who = participantLabel(need.participantId);
+          const label = document.createElement('label');
+          const rolls = state.opposedRolls[need.matchId] || {};
+          if (need.field.endsWith('Roll')) {
+            label.textContent = `${who} · d100 du Test d’I `;
+            const input = document.createElement('input'); input.type = 'number'; input.min = '1'; input.max = '100'; input.dataset.matchId = need.matchId; input.dataset.side = need.field; input.required = true;
+            const existing = rolls[input.dataset.side]; if (Number.isInteger(existing)) input.value = String(existing);
+            label.append(input);
+          } else if (need.field.endsWith('Choice')) {
+            label.textContent = `${who} · inversion du Test `;
+            const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
+            const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir'; select.append(blank);
+            for (const id of need.optionIds || []) { const option = document.createElement('option'); option.value = id; option.textContent = id === 'reverse' ? 'Inverser le d100' : 'Garder le d100'; select.append(option); }
+            select.value = rolls[need.field] || ''; label.append(select);
+          } else {
+            label.textContent = `${who} · pénalités d’États `;
+            const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
+            const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir le mode'; select.append(blank);
+            for (const [value,text] of [['sl','Appliquer les DR'],['disadvantage','Appliquer le Désavantage']]) { const option = document.createElement('option'); option.value = value; option.textContent = text; select.append(option); }
+            select.value = rolls[need.field] || ''; label.append(select);
+          }
+          section.append(label);
+        }
+        for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && item.field === 'oppositionContext')) {
+          const unresolved = document.createElement('p'); unresolved.className = 'muted'; unresolved.textContent = `${participantLabel(need.participantId)} : ${need.label} Vous pouvez aussi choisir directement qui agit en premier.`; section.append(unresolved);
+        }
+      }
+    }
+    tieArea.append(section);
+  }
+  for (const element of [...tieArea.querySelectorAll('input, select'), ...mountedArea.querySelectorAll('input, select')]) {
+    const key = initiativeNeedKey(element);
+    if (key && !element.dataset.focusKey) element.dataset.focusKey = key;
+  }
+}
+
+// ── Refonte E5 : initiative de départ saisie dans la zone centrale de Jouer (au lieu d'une feuille latérale) ──────────
+// La vue de travail appelle renderInitiativeBoard(hôte) à chaque rendu tant que le combat n'a pas d'initiative (round 0) :
+// la liste des combattants est relue du Store à chaque fois (entrée d'un renfort, retrait : elle suit, sans rien fermer),
+// la saisie vit dans `initiativeBoard.state` (hors du DOM) et survit aux rendus. Le calcul reste celui de la feuille :
+// mêmes aperçus (previewCombatInitialization) et même application (applyCombatInitialization, startCombat).
+// `open` : la saisie est ouverte au centre (lancement d'une rencontre, « Commencer le combat ») ; sinon l'écran reste celui d'avant.
+const initiativeBoard = { state: null, controller: null, open: false };
+function endInitiativeBoard() { initiativeBoard.state = null; initiativeBoard.controller = null; initiativeBoard.open = false; }
+function openInitiativeBoard() { initiativeBoard.open = true; goToSpace('play'); workspaceView?.render(); }
+function closeInitiativeBoard() { initiativeBoard.open = false; workspaceView?.render(); }
+
+async function removeFromInitiativeBoard(id) {
+  try {
+    if (!await confirmParticipantRemoval(Store, id)) return;
+    showToast('Combattant retiré du combat', 'success', { label: 'Annuler', onClick: () => Store.undo() });
+  } catch (error) { showToast(contextMessage('Combattant non retiré', error, 'réessayez.'), 'error'); }
+}
+
+function renderInitiativeBoard(host) {
+  const active = Store.listParticipants().filter(row => row.zone === 'active');
+  const state = initiativeBoard.state || (initiativeBoard.state = newInitiativeState(null));
+  for (const actor of active) if (!(actor.id in state.characteristicById)) seedInitiativeActor(state, actor, null);
+  const make = (tag, className, text) => { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = text; return node; };
+  const numberField = (labelText, field, actor, value, { max, readOnly = false, aria }) => {
+    const label = make('label', 'workspace-initiative-field');
+    const input = make('input'); input.type = 'number'; input.name = `${field}:${actor.id}`; input.min = field === 'characteristic' ? '0' : '1'; input.max = String(max);
+    input.required = true; input.readOnly = readOnly; input.dataset.focusKey = `init-${field}-${actor.id}`; input.setAttribute('aria-label', aria);
+    if (readOnly) { input.title = 'Dé de PNJ tiré une fois, gardé pendant les recalculs'; input.dataset.rollButton = 'tiré'; }
+    if (Number.isInteger(value)) input.value = String(value);
+    label.append(make('span', 'workspace-initiative-field-label', labelText), input);
+    return label;
+  };
+
+  host.setAttribute('aria-label', 'Initiative de départ');
+  const head = make('div', 'workspace-initiative-head');
+  const close = make('button', 'workspace-secondary workspace-initiative-close', 'Fermer'); close.type = 'button'; close.dataset.focusKey = 'init-close';
+  close.title = 'Fermer la saisie (rien n’est perdu, « Commencer le combat » la rouvre)';
+  close.addEventListener('click', closeInitiativeBoard);
+  head.append(make('h2', '', 'Démarrer le combat'), make('p', 'workspace-muted', 'I + d10. Dés des PNJ déjà tirés ; dés des PJ à saisir. Combat instinctif : deux d10 et le dé choisi.'), close);
+  // Un ordre manuel du MJ existe : l'initiative le remplacera (même avertissement que la feuille).
+  if (Store.getOrderMode?.() === 'manual' && Store.getCombat().order.length) head.append(make('p', 'workspace-muted workspace-initiative-manual', 'Un ordre manuel existe déjà : l’initialisation va le remplacer par l’ordre calculé ici.'));
+  const form = make('form', 'workspace-initiative-form'); form.addEventListener('submit', event => event.preventDefault());
+  const options = make('div', 'workspace-initiative-options');
+  const camp = make('label', 'workspace-initiative-field'); camp.append(make('span', 'workspace-initiative-field-label', 'Camp surpris'));
+  const surprised = make('select'); surprised.name = 'surprisedCamp'; surprised.setAttribute('aria-label', 'Camp surpris (facultatif)'); surprised.dataset.focusKey = 'init-surprised';
+  surprised.append(new Option('Aucun', ''));
+  for (const value of [...new Set(active.map(row => row.camp).filter(Boolean))]) surprised.append(new Option(value, value));
+  surprised.value = state.surprisedCamp && [...surprised.options].some(option => option.value === state.surprisedCamp) ? state.surprisedCamp : '';
+  camp.append(surprised); options.append(camp);
+
+  // Cavaliers : « monté » ou « sans monture » (déclarée : la monture quitte la rencontre ; sinon : à pied, monture liée).
+  const mountFlip = async promise => {
+    try { const result = await promise; if (result?.ok === false) throw Object.assign(new Error(result.message || 'Monture non modifiée.'), { userFacing: true }); }
+    catch (error) { showToast(contextMessage('Monture non modifiée', error, 'réessayez.'), 'error'); }
+  };
+  for (const actor of active) {
+    const declared = declaredMountOf(actor), mounted = actor.extensions?.v5?.mounted === true;
+    if (!declared && !mounted) continue;
+    const absent = declared ? mountAbsentOf(actor) : !mounted;
+    const group = make('div', 'workspace-initiative-mount'); group.setAttribute('role', 'group'); group.setAttribute('aria-label', `Monture de ${actor.name}`);
+    const choice = (label, pressed, key, title, run) => {
+      const toggle = make('button', `workspace-secondary workspace-initiative-chip${pressed ? ' is-on' : ''}`, label); toggle.type = 'button';
+      toggle.setAttribute('aria-pressed', String(pressed)); toggle.dataset.focusKey = `init-mount-${key}-${actor.id}`; toggle.title = title;
+      toggle.addEventListener('click', () => { if (!pressed) mountFlip(run()); });
+      return toggle;
+    };
+    group.append(make('span', 'workspace-initiative-mount-name', actor.name),
+      choice('Monté', !absent, 'on', 'Monté sur sa monture', () => declared ? Store.setMountAbsent(actor.id, false) : Store.setMounted(actor.id, true)),
+      choice(declared ? 'Sans monture' : 'À pied', absent, 'off', declared ? 'Sans monture pour la rencontre : sa monture quitte le combat' : 'À pied : la monture reste liée', () => declared ? Store.setMountAbsent(actor.id, true) : Store.setMounted(actor.id, false)));
+    options.append(group);
+  }
+
+  // Une case par combattant, trois colonnes.
+  const grid = make('div', 'workspace-initiative-grid');
+  if (!active.length) grid.append(make('p', 'workspace-muted', 'Aucun combattant en jeu : faites-en entrer depuis « En attente ».'));
+  for (const actor of active) {
+    const row = make('div', 'workspace-initiative-row'); row.dataset.initiativeRow = actor.id;
+    const top = make('div', 'workspace-initiative-top');
+    const name = make('strong', 'workspace-initiative-name combatant-name', actor.name); name.title = `${actor.name} · ${actor.kind} · ${actor.camp || 'sans camp'}`;
+    const remove = make('button', 'workspace-secondary danger workspace-initiative-remove', '✕'); remove.type = 'button';
+    remove.title = 'Retirer de la rencontre (confirmation, annulable)'; remove.setAttribute('aria-label', `Retirer ${actor.name} de la rencontre`); remove.dataset.focusKey = `init-remove-${actor.id}`;
+    remove.addEventListener('click', () => { remove.disabled = true; removeFromInitiativeBoard(actor.id).finally(() => { remove.disabled = false; }); });
+    top.append(name, remove); row.append(top);
+    const inputs = make('div', 'workspace-initiative-inputs');
+    inputs.append(numberField('I', 'characteristic', actor, state.characteristicById[actor.id], { max: 100, aria: `I de ${actor.name}` }));
+    if (hasV5Talent(actor, 'talent-combat-reflexes')) {
+      const preparation = actor.extensions?.v5?.combatReflexesPreparation, reflex = state.combatReflexesById[actor.id];
+      if (preparation?.version === 1 && preparation.participantId === actor.id && preparation.characteristic === state.characteristicById[actor.id]) {
+        row.append(make('p', 'workspace-muted workspace-initiative-note', `Combat instinctif déjà choisi : ${preparation.dice.join(' / ')}, dé ${preparation.choice === 'first' ? 'premier' : 'second'} (${preparation.selectedDie}).`));
+      } else {
+        const own = actor.kind === 'PJ';
+        inputs.append(numberField('d10', 'reflexFirst', actor, reflex.dice[0], { max: 10, readOnly: !own, aria: `Combat instinctif de ${actor.name} · premier d10` }),
+          numberField('d10', 'reflexSecond', actor, reflex.dice[1], { max: 10, readOnly: !own, aria: `Combat instinctif de ${actor.name} · second d10` }));
+        const pick = make('select'); pick.name = `reflexChoice:${actor.id}`; pick.required = true; pick.dataset.focusKey = `init-reflexChoice-${actor.id}`; pick.setAttribute('aria-label', `Dé choisi de ${actor.name}`);
+        for (const [value, text] of [['', 'Dé choisi'], ['first', 'Premier'], ['second', 'Second']]) pick.append(new Option(text, value));
+        pick.value = reflex.choice; inputs.append(pick);
+      }
+    } else inputs.append(numberField('d10', 'die', actor, state.diceById[actor.id], { max: 10, readOnly: actor.kind !== 'PJ', aria: `${actor.kind === 'PJ' ? 'd10' : 'd10 tiré'} de ${actor.name}` }));
+    row.append(inputs); grid.append(row);
+  }
+
+  const tieArea = make('div', 'stack workspace-initiative-needs'); tieArea.dataset.tieArea = 'true';
+  const mountedArea = make('div', 'stack workspace-initiative-needs');
+  const foot = make('div', 'workspace-initiative-foot');
+  const status = make('p', 'workspace-muted workspace-initiative-status'); status.setAttribute('aria-live', 'polite');
+  const begin = make('button', 'workspace-primary workspace-initiative-start', 'Commencer le round 1'); begin.type = 'button'; begin.dataset.focusKey = 'init-start';
+  begin.disabled = !active.length;
+  foot.append(begin, status);
+  form.append(options, grid, tieArea, mountedArea, foot);
+  host.replaceChildren(head, form);
+
+  function capture() {
+    for (const actor of active) {
+      const field = name => form.elements.namedItem(`${name}:${actor.id}`);
+      state.characteristicById[actor.id] = field('characteristic')?.value === '' ? null : Number(field('characteristic')?.value);
+      if (hasV5Talent(actor, 'talent-combat-reflexes')) {
+        const first = field('reflexFirst'), second = field('reflexSecond'), choice = field('reflexChoice'), current = state.combatReflexesById[actor.id];
+        if (current) state.combatReflexesById[actor.id] = { dice: [first ? (first.value === '' ? null : Number(first.value)) : current.dice[0], second ? (second.value === '' ? null : Number(second.value)) : current.dice[1]], choice: choice ? choice.value : current.choice };
+      } else if (field('die')) state.diceById[actor.id] = field('die').value === '' ? null : Number(field('die').value);
+    }
+    state.surprisedCamp = surprised.value || '';
+    captureInitiativeNeeds(state, tieArea, mountedArea);
+  }
+  const request = () => { const { preview, ...entries } = state; return { staging: null, startCombat: true, ...entries }; };
+  // Les sections d'égalités et de Chevauchée ne sont reconstruites que si ce qu'il y a à saisir a changé : un champ en cours de saisie n'est pas remplacé sous la main.
+  let needsSignature = null;
+  function recalculate(rebuild = true) {
+    capture();
+    state.preview = Store.previewCombatInitialization(request());
+    const preview = state.preview;
+    const signature = JSON.stringify([preview.needsInput, (preview.tieGroups || []).map(group => [group.key, group.participantIds]), (preview.oppositions || []).map(match => [match.id, match.winnerId, match.initiator?.roll, match.opponent?.roll]), (preview.mountedFall || []).map(fall => [fall.participantId, fall.dismount, fall.test?.roll]), state.tieChoices]);
+    if (rebuild && signature !== needsSignature) {
+      needsSignature = signature;
+      renderInitiativeNeeds({ state, active, staging: null, tieArea, mountedArea, recalculate: refresh, short: true, onError: message => { status.textContent = message; } });
+    }
+    status.textContent = initiativeStatusText(state, active);
+    begin.dataset.ready = String(Boolean(state.preview.ready));
+  }
+  // Les sections d'égalités et de Chevauchée sont reconstruites à chaque calcul : le champ en cours de saisie y retrouve le focus.
+  const needKey = initiativeNeedKey;
+  // Saisie en cours : seuls « prêt » et la ligne d'état suivent chaque frappe ; les sections d'égalités et de Chevauchée
+  // (dont un champ disparaît dès qu'il est valide) attendent une pause, pour ne pas retirer un champ en cours de frappe.
+  function quick() { try { recalculate(false); } catch (error) { status.textContent = error.message; } }
+  let pause = null;
+  const settle = delay => { clearTimeout(pause); pause = setTimeout(() => { pause = null; if (form.isConnected) refresh(); }, delay); };
+  function refresh() {
+    clearTimeout(pause); pause = null;
+    const focused = document.activeElement, key = form.contains(focused) ? needKey(focused) : null;
+    let selection = null;
+    if (key) try { selection = [focused.selectionStart, focused.selectionEnd]; } catch { selection = null; }
+    try { recalculate(); } catch (error) { status.textContent = error.message; }
+    if (!key || focused.isConnected) return;
+    const again = [...form.querySelectorAll('input, select, button')].find(item => needKey(item) === key);
+    if (!again) return;
+    again.focus();
+    if (selection && selection[0] !== null) try { again.setSelectionRange(selection[0], selection[1]); } catch { /* champ sans sélection */ }
+  }
+  function focusFirstMissing() {
+    const empty = [...form.querySelectorAll('input[required]:not([readonly]), select[required]')].find(item => item.value === '')
+      || [...form.querySelectorAll('select[data-kind], input[data-match-id], input[data-mounted-rider], select[data-ride-condition]')].find(item => item.value === '');
+    empty?.focus();
+  }
+  // Une frappe dans une case du tableau relance tout de suite ; dans une section d'égalité ou de Chevauchée, après une pause.
+  form.addEventListener('input', event => {
+    if (!(event.target instanceof HTMLInputElement)) return;
+    if (tieArea.contains(event.target) || mountedArea.contains(event.target)) { quick(); settle(600); } else refresh();
+  });
+  // « change » part au moment où le focus quitte le champ : la reconstruction attend que le champ suivant ait le focus.
+  form.addEventListener('change', () => { quick(); settle(250); });
+
+  let starting = false;
+  async function start() {
+    if (starting) return { status: 'pending' };
+    starting = true; begin.disabled = true;
+    try {
+      capture();
+      const preview = Store.previewCombatInitialization(request());
+      if (!preview.ready) { refresh(); focusFirstMissing(); return { status: 'cancelled' }; }
+      const result = await Store.applyCombatInitialization(preview);
+      if (result?.status === 'stale' || result?.status === 'requires-input') { status.textContent = 'La partie a changé : vérifiez la saisie, puis recommencez.'; refresh(); return { status: 'cancelled' }; }
+      await awaitStore(result, 'Démarrer le combat');
+      return result;
+    } catch (error) {
+      status.textContent = contextMessage('Combat non démarré', error, 'corrigez la saisie, puis réessayez.');
+      return { status: 'cancelled' };
+    } finally { starting = false; begin.disabled = !active.length; }
+  }
+  begin.addEventListener('click', () => { start(); });
+  initiativeBoard.controller = { start, focusFirstMissing };
+  refresh();
+}
+
+// Bouton « Commencer le combat », touche N ou Espace avant le round 1 : applique la saisie si elle est complète, sinon va au premier champ à saisir.
+async function startFromInitiativeBoard() {
+  goToSpace('play');
+  if (!Store.listParticipants().length) { showToast('Aucun combattant : lancez une rencontre ou ajoutez un profil.', 'info'); return { status: 'cancelled' }; }
+  if (!initiativeBoard.open) { openInitiativeBoard(); initiativeBoard.controller?.focusFirstMissing(); return { status: 'cancelled' }; }
+  const board = initiativeBoard.controller;
+  if (!board) return { status: 'cancelled' };
+  const result = await board.start();
+  return result?.status === 'applied' ? result : { status: 'cancelled' };
+}
+
 function openCombatInitiativeDialog({ staging = null, startCombat = false, title = 'Préparer l’initiative', nested = false } = {}) {
   const participants = staging?.scene?.participants || staging?.participants || Store.listParticipants().filter(row => row.zone === 'active');
   const active = participants.filter(row => row.zone === 'active');
-  const state = { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', mountedRideTests: {}, preview: null };
-  for (const actor of active) {
-    const pendingReflexPreparation=actor.extensions?.v5?.combatReflexesPreparation;
-    const existingCombat=actor.extensions?.v5?.combatInitiative;
-    const saved = existingCombat?.initialized?existingCombat.characteristic:Number.isInteger(actor.caracs?.I) && actor.caracs.I >= 0 ? actor.caracs.I : !pendingReflexPreparation&&Number.isInteger(actor.initiative) && actor.initiative > 0 ? actor.initiative : null;
-    state.characteristicById[actor.id] = saved;
-    const reflex=hasV5Talent(actor,'talent-combat-reflexes'),prepared=pendingReflexPreparation;
-    if(reflex&&existingCombat?.initialized&&Array.isArray(existingCombat.dice)&&['first','second'].includes(existingCombat.choice)){
-      state.combatReflexesById[actor.id]={dice:[...existingCombat.dice],choice:existingCombat.choice};
-    }else if(reflex&&prepared?.version===1&&prepared.participantId===actor.id&&prepared.characteristic===saved){
-      state.combatReflexesById[actor.id]={dice:[...prepared.dice],choice:prepared.choice};
-    }else if(reflex){
-      state.combatReflexesById[actor.id]={dice:actor.kind==='PJ'?[null,null]:[Math.floor(Math.random()*10)+1,Math.floor(Math.random()*10)+1],choice:''};
-    }else state.diceById[actor.id] = existingCombat?.initialized?existingCombat.die:actor.kind!=='PJ'?Math.floor(Math.random()*10)+1:undefined;
-  }
+  const state = newInitiativeState(staging);
+  for (const actor of active) seedInitiativeActor(state, actor, staging);
   return new Promise(resolve => {
     let settled = false, form, mountRef;
     const finish = result => { if (settled) return; settled = true; resolve(result); };
@@ -421,12 +776,6 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
       mount.append(help);
       form = document.createElement('form'); form.addEventListener('submit', event => event.preventDefault()); mount.append(form);
       const rows = document.createElement('div'); rows.className = 'stack';
-      const participantLabel = id => {
-        const actor = active.find(row => row.id === id); if (!actor) return id;
-        const sameName = active.filter(row => row.name === actor.name).length;
-        const duplicateNumber = sameName > 1 ? ` · ${active.filter(row => row.name === actor.name).findIndex(row => row.id === id) + 1}` : '';
-        return `${actor.name}${duplicateNumber} · ${actor.camp || 'sans camp'} · ${actor.kind}`;
-      };
       for (const actor of active) {
         const row = document.createElement('div'); row.className = 'card';
         const label = document.createElement('strong'); label.textContent = `${actor.name} · ${actor.kind} · ${actor.camp || 'sans camp'}`; row.append(label);
@@ -482,128 +831,15 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
           }else state.diceById[actor.id] = die?.value === '' ? null : Number(die?.value);
         }
         state.surprisedCamp = form.elements.namedItem('surprisedCamp')?.value || '';
-        for (const input of tieArea.querySelectorAll('[data-group-key]')) {
-          const key = input.dataset.groupKey;
-          if (input.dataset.kind === 'tieOrder') state.tieOrders[key] = Array.from(tieArea.querySelectorAll(`[data-group-key="${CSS.escape(key)}"][data-kind="tieOrder"][data-position]`)).sort((a,b)=>Number(a.dataset.position)-Number(b.dataset.position)).map(item=>item.value).filter(Boolean);
-          if (input.dataset.kind === 'tieChoice') state.tieChoices[key] = Array.from(tieArea.querySelectorAll(`[data-group-key="${CSS.escape(key)}"][data-kind="tieChoice"][data-position]`)).sort((a,b)=>Number(a.dataset.position)-Number(b.dataset.position)).map(item=>item.value).filter(Boolean);
-          if (input.dataset.kind === 'tieFirst') { if (input.value) state.tieChoices[key] = [input.value, ...key.split('|').filter(id => id !== input.value)]; else delete state.tieChoices[key]; }
-        }
-        for (const input of tieArea.querySelectorAll('[data-match-id]')) {
-          const match = input.dataset.matchId, side = input.dataset.side, rolls = state.opposedRolls[match] || {};
-          rolls[side] = input.value === '' ? null : input.type === 'number' ? Number(input.value) : input.value; state.opposedRolls[match] = rolls;
-        }
-        for (const input of mountedArea.querySelectorAll('[data-mounted-rider]')) {
-          const riderId = input.dataset.mountedRider, field = input.dataset.field;
-          const answer = state.mountedRideTests[riderId] || {};
-          answer[field] = input.value === '' ? null : Number(input.value); state.mountedRideTests[riderId] = answer;
-        }
+        captureInitiativeNeeds(state, tieArea, mountedArea);
       }
       const request = () => ({ staging, startCombat, ...state });
       function recalculate() {
         capture();
         state.preview = Store.previewCombatInitialization(request());
-        tieArea.replaceChildren(); mountedArea.replaceChildren(); apply.hidden = !state.preview.ready;
-        for (const need of state.preview.needsInput.filter(item => item.field.startsWith('mountedRide'))) {
-          const riderId = need.field.split(':')[1], field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
-          const rider = active.find(row => row.id === riderId), answer = state.mountedRideTests[riderId] || {};
-          if(field==='roll'){
-            const choice=renderObstinateChoice(rider,answer.conditionContext?.preRollTalent,value=>{
-              state.mountedRideTests[riderId]={...answer,conditionContext:{...(answer.conditionContext||{}),preRollTalent:value}};
-              try { recalculate(); } catch(error) { status.textContent=error.message; }
-            },{focusKey:`initiative-ride-obstinate-${riderId}`,title:`Obstiné avant le jet — Chevaucher de ${rider?.name||riderId}`,status:rider&&Store.getObstinateStatus(rider.id,rider,staging?.scene)});
-            if(choice)mountedArea.append(choice);
-          }
-          const label = document.createElement('label'); label.textContent = `${need.label} `;
-          const input = document.createElement('input'); input.type = 'number'; input.min = String(need.min ?? (field === 'roll' ? 1 : 0)); input.max = String(need.max ?? 100); input.required = true;
-          input.dataset.mountedRider = riderId; input.dataset.field = field;
-          if (Number.isInteger(answer[field])) input.value = String(answer[field]);
-          label.append(input); mountedArea.append(label);
-        }
-        // T10 : questions d'États ou de séquelle du Test de Chevaucher (Surpris à cheval), réponse dans mountedRideTests.<id>.conditionContext.
-        for (const need of state.preview.needsInput.filter(item => /^ride(Condition|Blocked):/.test(item.field || ''))) {
-          const [, riderId, ...rest] = need.field.split(':'), field = rest.join(':');
-          if (need.field.startsWith('rideBlocked:')) { mountedArea.append(Object.assign(document.createElement('p'), { className: 'workspace-field-error', textContent: need.label })); continue; }
-          const answer = state.mountedRideTests[riderId] || {}, context = answer.conditionContext || {};
-          const label = document.createElement('label'); label.textContent = `${need.label} `;
-          const select = document.createElement('select'); select.setAttribute('aria-label', need.label); select.dataset.rideCondition = need.field;
-          if (field === 'conditionPenaltyMode') select.append(new Option('À préciser', ''), new Option('Pénalité en DR', 'sl'), new Option('Désavantage', 'disadvantage'));
-          else select.append(new Option('À préciser', ''), new Option('Oui', 'true'), new Option('Non', 'false'));
-          select.value = context[field] == null ? '' : String(context[field]);
-          select.addEventListener('change', () => {
-            const next = { ...(state.mountedRideTests[riderId]?.conditionContext || {}) };
-            if (select.value === '') delete next[field]; else next[field] = field === 'conditionPenaltyMode' ? select.value : select.value === 'true';
-            state.mountedRideTests[riderId] = { ...(state.mountedRideTests[riderId] || {}), conditionContext: next };
-            try { recalculate(); } catch (error) { status.textContent = error.message; }
-          });
-          label.append(select); mountedArea.append(label);
-        }
-        for (const fall of state.preview.mountedFall || []) if (fall.test) mountedArea.append(Object.assign(document.createElement('p'), { className: 'muted', textContent: `${active.find(row => row.id === fall.participantId)?.name || fall.participantId} : Chevaucher ${fall.test.roll}, ${fall.test.sl} DR${fall.dismount ? ' — désarçonné' : ' — reste en selle'}.` }));
-        for (const group of state.preview.tieGroups) {
-          const section = document.createElement('section'); section.className = 'card';
-          const heading = document.createElement('strong'); heading.textContent = `Égalité : ${group.participantIds.map(participantLabel).join(' / ')}`; section.append(heading);
-          if (group.participantIds.length >= 3) {
-            const note = document.createElement('p'); note.textContent = 'Égalité à trois ou plus : choisissez directement l’ordre des ex aequo :'; section.append(note);
-            for (let position = 0; position < group.participantIds.length; position++) {
-              const label = document.createElement('label'); label.textContent = `Position ${position + 1} `;
-              const select = document.createElement('select'); select.dataset.groupKey = group.key; select.dataset.kind = 'tieChoice'; select.dataset.position = String(position); select.required = true;
-              const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir un participant'; select.append(blank);
-              for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = participantLabel(id); select.append(option); }
-              select.value = state.tieChoices[group.key]?.[position] || '';
-              label.append(select); section.append(label);
-            }
-          } else {
-            // Deux ex aequo : un Test opposé d’I (le vainqueur agit en premier), ou le MJ tranche directement.
-            const chosenFirst = state.tieChoices[group.key]?.[0] || '';
-            const firstLabel = document.createElement('label'); firstLabel.textContent = 'Qui agit en premier ? ';
-            const firstSelect = document.createElement('select'); firstSelect.dataset.groupKey = group.key; firstSelect.dataset.kind = 'tieFirst';
-            const byTest = document.createElement('option'); byTest.value = ''; byTest.textContent = 'Le vainqueur du Test opposé d’I'; firstSelect.append(byTest);
-            for (const id of group.participantIds) { const option = document.createElement('option'); option.value = id; option.textContent = participantLabel(id); firstSelect.append(option); }
-            firstSelect.value = chosenFirst; firstSelect.addEventListener('change', recalculate);
-            firstLabel.append(firstSelect); section.append(firstLabel);
-            for (const match of state.preview.oppositions.filter(item => item.groupKey === group.key)) {
-              const outcome = document.createElement('p'); outcome.className = 'muted';
-              outcome.textContent = `Test opposé : ${participantLabel(match.initiatorId)} (d100 ${match.initiator.roll}, DR ${match.initiator.sl}) contre ${participantLabel(match.opponentId)} (d100 ${match.opponent.roll}, DR ${match.opponent.sl}) · vainqueur : ${participantLabel(match.winnerId)}.`;
-              section.append(outcome);
-            }
-            if (!chosenFirst) {
-              for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && ['initiatorRoll', 'opponentRoll','initiatorChoice','opponentChoice','initiatorConditionPenaltyMode','opponentConditionPenaltyMode'].includes(item.field))) {
-                const who = participantLabel(need.participantId);
-                const label = document.createElement('label');
-                const rolls = state.opposedRolls[need.matchId] || {};
-                if (need.field.endsWith('Roll')) {
-                  label.textContent = `${who} · d100 du Test d’I `;
-                  const input = document.createElement('input'); input.type = 'number'; input.min = '1'; input.max = '100'; input.dataset.matchId = need.matchId; input.dataset.side = need.field; input.required = true;
-                  const existing = rolls[input.dataset.side]; if (Number.isInteger(existing)) input.value = String(existing);
-                  label.append(input);
-                } else if (need.field.endsWith('Choice')) {
-                  label.textContent = `${who} · inversion du Test `;
-                  const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
-                  const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir'; select.append(blank);
-                  for (const id of need.optionIds || []) { const option = document.createElement('option'); option.value = id; option.textContent = id === 'reverse' ? 'Inverser le d100' : 'Garder le d100'; select.append(option); }
-                  select.value = rolls[need.field] || ''; label.append(select);
-                } else {
-                  label.textContent = `${who} · pénalités d’États `;
-                  const select = document.createElement('select'); select.dataset.matchId = need.matchId; select.dataset.side = need.field; select.required = true;
-                  const blank = document.createElement('option'); blank.value = ''; blank.textContent = 'Choisir le mode'; select.append(blank);
-                  for (const [value,text] of [['sl','Appliquer les DR'],['disadvantage','Appliquer le Désavantage']]) { const option = document.createElement('option'); option.value = value; option.textContent = text; select.append(option); }
-                  select.value = rolls[need.field] || ''; label.append(select);
-                }
-                section.append(label);
-              }
-              for (const need of state.preview.needsInput.filter(item => item.groupKey === group.key && item.field === 'oppositionContext')) {
-                const unresolved = document.createElement('p'); unresolved.className = 'muted'; unresolved.textContent = `${participantLabel(need.participantId)} : ${need.label} Vous pouvez aussi choisir directement qui agit en premier.`; section.append(unresolved);
-              }
-            }
-          }
-          tieArea.append(section);
-        }
-        status.textContent = !active.length ? 'Aucun combattant actif : passez-les en Actif dans la rencontre' : state.preview.ready
-          ? `Ordre calculé : ${state.preview.order.map(id => active.find(row => row.id === id)?.name || id).join(' → ')}`
-          : `À compléter : ${[...new Set(state.preview.needsInput.map(item => {
-            const who = active.find(row => row.id === item.participantId)?.name;
-            const label = INITIATIVE_INPUT_LABELS[item.field] || item.label || item.field;
-            return who ? `${label} (${who})` : label;
-          }))].join(', ')}`;
+        apply.hidden = !state.preview.ready;
+        renderInitiativeNeeds({ state, active, staging, tieArea, mountedArea, recalculate, onError: message => { status.textContent = message; } });
+        status.textContent = initiativeStatusText(state, active);
       }
       calculate.addEventListener('click', () => { try { recalculate(); } catch (error) { status.textContent = error.message; } });
       apply.addEventListener('click', async () => {
@@ -832,12 +1068,10 @@ function openPrepareView(encounterId = null) {
         onLaunch: async draft => {
           if (!draft.entries.length) throw userError('Ajoutez au moins un profil à la composition avant de lancer.');
           const model = await persistEncounter(draft);
-          const staging = requireStoreApi('previewEncounterLaunch')(model);
-          const initialized = await openCombatInitiativeDialog({ staging, title: `Initiative · ${model.title}` });
-          if (initialized?.status === 'cancelled') return;
+          await launchWithEveryone(model);
           dialog.close();
-          goToSpace('play');
-          showToast('Rencontre lancée', 'success');
+          openInitiativeBoard();
+          showToast('Rencontre lancée', 'success', { label: 'Annuler', onClick: () => Store.undo() });
         }
       }
     });
@@ -851,6 +1085,14 @@ function openPrepareView(encounterId = null) {
     }, { once: true });
     view.render();
   });
+}
+
+// Refonte E5 : lancer une rencontre fait entrer tous ses combattants d'un geste (une seule commande, annulable). La composition
+// enregistrée n'est pas modifiée : la scène est bâtie sur une copie dont chaque ligne est « actif » (même les lignes « En attente »).
+// Le banc reste disponible pour les renforts (profils ajoutés en attente depuis Jouer). L'initiative se saisit ensuite dans la zone centrale.
+async function launchWithEveryone(encounter) {
+  const everyone = { ...encounter, entries: (encounter.entries || []).map(entry => ({ ...entry, zone: 'active' })) };
+  await awaitStore(Store.launchEncounter(everyone), 'Lancement de la rencontre');
 }
 
 // Recommence le combat (scène active : retour au lancement ; sinon PV et états remis à zéro). Pas de boîte native (décision du MJ du 06/11) :
@@ -881,12 +1123,10 @@ const encounterListActions = {
       const encounter = Store.listEncounters?.().find(item => item.id === id);
       if (!encounter) throw new Error('Rencontre introuvable.');
       if (!encounter.entries.length) throw userError('Ajoutez au moins un profil à la composition avant de lancer.');
-      const staging = requireStoreApi('previewEncounterLaunch')(id);
-      const initialized = await openCombatInitiativeDialog({ staging, title: `Initiative · ${encounter.title}` });
-      if (initialized?.status === 'cancelled') return false;
+      await launchWithEveryone(encounter);
       prepareWindow?.dialog.close();
-      goToSpace('play');
-      showToast('Rencontre lancée', 'success');
+      openInitiativeBoard();
+      showToast('Rencontre lancée', 'success', { label: 'Annuler', onClick: () => Store.undo() });
       return true;
     } catch (error) { showToast(contextMessage('Rencontre non lancée', error, 'réessayez.'), 'error'); return false; }
     finally { launchingEncounter = false; }
@@ -1460,6 +1700,9 @@ const workspaceView = DOM.panels.workspace && qs('#workspace-root') ? initWorksp
   Store, Combat, Bus, mount: qs('#workspace-root'), showNavigation: false,
   actions: {
     ...encounterListActions,
+    renderInitiative: renderInitiativeBoard,
+    initiativeOpen: () => initiativeBoard.open,
+    endInitiative: endInitiativeBoard,
     showToast,
     isPlacedOnMap: participant => mapLinkPlacement?.(participant) === true,
     // La bibliothèque de bestiaire vit sous la vue de travail et ne se montre que dans l'espace Bibliothèque.

@@ -32,16 +32,15 @@ async function addProfileDice(page, { base, note, damage = 1, type = 'attack' })
   await row.locator('.pf-dice-damage').fill(String(damage));
 }
 
-// Le lancement ouvre le dialogue d'initiative (F2-A) : saisir des d10 distincts (pas d'égalité), calculer l'ordre, confirmer.
+// Le lancement ouvre la saisie de l'initiative dans la zone centrale (refonte E5) : saisir des d10 distincts (pas d'égalité) ;
+// « Commencer le combat » (bandeau) applique l'ordre quand la saisie est complète.
 async function confirmLaunchInitiative(page) {
-  const initiative = page.locator('dialog.tool-sheet', { hasText: 'Saisissez l’Initiative' });
+  const initiative = page.locator('[data-zone="centre"] .workspace-initiative');
   await initiative.waitFor({ state: 'visible' });
   const characteristics = initiative.locator('input[name^="characteristic:"]:not([readonly])');
   for (let index = 0; index < await characteristics.count(); index += 1) if (!await characteristics.nth(index).inputValue()) await characteristics.nth(index).fill('40');
   const dice = initiative.locator('input[name^="die:"]:not([readonly])');
   for (let index = 0; index < await dice.count(); index += 1) await dice.nth(index).fill(String(6 - index));
-  await initiative.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
-  await initiative.getByRole('button', { name: 'Confirmer et appliquer' }).click();
 }
 
 async function openWorkspaceSpace(page, space) {

@@ -214,7 +214,7 @@ try {
     state.combat.round = 0; state.combat.currentActorId = null;
     await load(state);
     await page.locator('#combat-banner .combat-banner-primary').click();
-    const dialog = page.locator('dialog.tool-sheet');
+    const dialog = page.locator('[data-zone="centre"] .workspace-initiative');
     await dialog.waitFor({ state: 'visible' });
     for (const [id, die] of [['rider', 5], ['horse', 4], ['foe', 3]]) {
       const characteristic = dialog.locator(`input[name="characteristic:${id}"]`);
@@ -223,22 +223,20 @@ try {
       if (await dieInput.isEditable()) await dieInput.fill(String(die));
     }
     await dialog.locator('select[name="surprisedCamp"]').selectOption('ambush');
-    await dialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
     const roll = dialog.locator('[data-mounted-rider="rider"][data-field="roll"]');
     await roll.waitFor();
     await roll.fill('40');
-    await dialog.getByRole('button', { name: 'Calculer / actualiser l’ordre' }).click();
     const question = dialog.locator('select[data-ride-condition]');
     await question.waitFor();
     assert.equal(await question.getAttribute('data-ride-condition'), 'rideCondition:rider:runningOrHiding');
     assert.match(await question.getAttribute('aria-label'), /fuir ou se cacher/);
     assert.deepEqual(await question.locator('option').allTextContents(), ['À préciser', 'Oui', 'Non']);
-    assert.equal(await dialog.getByRole('button', { name: 'Confirmer et appliquer' }).isHidden(), true, 'le calcul n’est pas prêt tant que la question est ouverte');
+    assert.equal(await dialog.locator('.workspace-initiative-start').getAttribute('data-ready'), 'false', 'le calcul n’est pas prêt tant que la question est ouverte');
     await question.selectOption('false');
-    await dialog.getByRole('button', { name: 'Confirmer et appliquer' }).waitFor({ state: 'visible' });
+    await page.waitForFunction(() => document.querySelector('.workspace-initiative-start')?.dataset.ready === 'true');
     assert.match(await dialog.innerText(), /Cavalier : Chevaucher 40/, 'le Test de Chevaucher est calculé');
     assert.equal(await dialog.locator('select[data-ride-condition]').count(), 0, 'la question répondue ne bloque plus');
-    await dialog.getByRole('button', { name: 'Confirmer et appliquer' }).click();
+    await dialog.getByRole('button', { name: 'Commencer le round 1' }).click();
     await page.waitForFunction(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); return Store.getCombat().round === 1; });
   });
 
