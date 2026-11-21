@@ -748,10 +748,14 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         if (participant.extensions?.sensor === true) row.append(label); else row.append(label, enter);
         const remove = defeatedParticipantButton(participant, `bench-remove-${participant.id}`);
         if (remove) row.appendChild(remove);
-        bench.appendChild(row);
         // Rappels du participant au banc (armure inconnue du bestiaire…) : visibles avant son entrée en combat.
         const reminders = participantReminderBlock(participant);
-        if (reminders) bench.appendChild(reminders);
+        // Une ligne par rappel au banc : le texte entier reste au survol.
+        reminders?.querySelectorAll('.actor-reminder > span').forEach(text => { text.title = text.textContent; });
+        const entry = node('div', 'workspace-bench-entry');
+        entry.append(row);
+        if (reminders) entry.appendChild(reminders);
+        bench.appendChild(entry);
       });
       board.appendChild(bench);
     }
