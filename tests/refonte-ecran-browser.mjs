@@ -121,6 +121,44 @@ try {
   await page.waitForFunction(async () => (await import('/js/main.js')).Store.getCombat().round === 1);
   await measure('initiative appliquée, round 1');
 
+  // 2 bis. Frise d'initiative (lot E1, CA4 à CA6) : un portrait par combattant actif ; un clic fait agir le combattant sans changer le tour ni la cible.
+  const friseState = () => page.evaluate(async () => {
+    const { Store } = await import('/js/main.js');
+    const combat = Store.getCombat();
+    return {
+      turn: combat.currentActorId, round: combat.round,
+      actor: document.querySelector('.workspace-sheet-actor')?.dataset.actorId || null,
+      target: document.querySelector('.workspace-sheet-target')?.dataset.actorId || null,
+      banner: document.querySelector('#combat-banner')?.textContent || '',
+      portraits: [...document.querySelectorAll('[data-zone="frise"] [data-frise-id]')].map(el => ({ id: el.dataset.friseId, turn: el.getAttribute('aria-current') === 'step', dead: el.classList.contains('is-dead') }))
+    };
+  });
+  const before = await friseState();
+  assert.ok(before.portraits.length >= 20, `la frise montre les combattants actifs (${before.portraits.length}, 20 au moins attendus)`);
+  assert.equal(before.portraits.filter(item => item.turn).length, 1, 'un seul portrait a le tour');
+  assert.equal(before.portraits.find(item => item.turn).id, before.turn, 'le portrait du tour est celui du combat');
+  assert.equal(before.actor, before.turn, 'au départ, le tour est celui qui agit');
+  assert.doesNotMatch(before.banner, /hors de son tour/);
+  const other = before.portraits.find(item => !item.turn && !item.dead && item.id !== before.target);
+  await page.locator(`[data-zone="frise"] [data-frise-id="${other.id}"]`).click();
+  const after = await friseState();
+  assert.equal(after.actor, other.id, 'le clic fait de ce combattant celui qui agit (fiche de gauche)');
+  assert.equal(await page.locator('[data-zone="acteur"] .workspace-sheet-actor').count(), 1, 'la fiche de gauche est celle de l’acteur');
+  assert.equal(after.turn, before.turn, 'le tour en cours ne change pas');
+  assert.equal(after.round, before.round, 'le round ne change pas');
+  assert.equal(after.target, before.target, 'la cible ne change pas');
+  assert.match(after.banner, /agit hors de son tour/, 'la barre du haut l’indique');
+  assert.ok(await page.locator('[data-zone="bas"] .workspace-action-bar').count(), 'la barre d’actions est celle de l’acteur');
+  await measure('frise : un autre combattant agit');
+  const friseBox = await page.evaluate(() => { const z = document.querySelector('[data-zone="frise"]'); return { h: z.scrollHeight, c: z.clientHeight, w: z.scrollWidth, cw: z.clientWidth }; });
+  assert.ok(friseBox.h <= friseBox.c + 1 && friseBox.w <= friseBox.cw + 1, `la zone frise ne déborde pas (${JSON.stringify(friseBox)})`);
+  assert.ok(friseBox.c <= 130, `la frise reste basse (${friseBox.c} px)`);
+  await page.locator(`[data-zone="frise"] [data-frise-id="${before.turn}"]`).click();
+  const back = await friseState();
+  assert.equal(back.actor, before.turn, 'un clic sur le portrait du tour ramène l’acteur à celui dont c’est le tour');
+  assert.doesNotMatch(back.banner, /hors de son tour/, 'la mention disparaît');
+  assert.equal(back.target, before.target, 'la cible ne change toujours pas');
+
   // 3. Attaque de mêlée : Gor 1 frappe Erich (jet d'attaque, défense, aperçu).
   await selectActor(GOR);
   await chooseAction('Hand Weapon');
