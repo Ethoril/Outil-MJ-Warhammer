@@ -118,7 +118,7 @@ export function brokenEscapeActionBlock(envelope,actorId){
   ? {ready:false,status:'blocked',code:'BROKEN_ESCAPE_ACTION_SPENT',error:'Le quota Action du Tour est déjà dépensé pour ce personnage Brisé.'}
   : null;
 }
-// Attaque gratuite à la fuite d'un Brisé engagé (spec poursuite-v5, D7) : chaque adversaire joue ou passe la sienne pendant le Tour
+// Attaque gratuite à la fuite d'un Brisé engagé (D7) : chaque adversaire joue ou passe la sienne pendant le Tour
 // du Brisé, avant son Flee ; elle ne prend ni son Action ni son Élan (la case « a dépensé son Élan » nourrit le moteur de fuite).
 export const FLEE_FREE_ATTACK='flee-free-attack';
 const FLEE_FREE_ATTACK_QUOTA={id:'broken-escape:flee-free-attack',scope:'turn',maximum:1};

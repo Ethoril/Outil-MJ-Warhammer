@@ -10,6 +10,14 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## Non publiée — Poursuite retirée du module Warhammer
+
+Décision du MJ après un gros combat : le module de poursuite V5 (3.50.0) est abandonné. Plus d’entrée dans l’interface (carte « Poursuite » de Jouer, modale « Poursuite de scène », bouton de lancement dans le panneau du Brisé), ni de commandes du Store (`getPursuit`, `startPursuit`, etc.). Retirés : `js/core/v5-pursuit.js`, `js/core/store/api-pursuit.js`, `js/data/v5-pursuit-obstacles.js`, `js/ui/v5-pursuit-panel.js`, `js/ui/v5-pursuit-dialog.js`, leurs tests et les deux parcours navigateur.
+
+- **Gardé.** La fuite d’un Brisé engagé (attaque gratuite des adversaires, 3.48.1) et ses règles Flee/Sprint, sans le cas particulier du fuyard d’une poursuite ; les talents qui mentionnent la poursuite (Cavalier, Claquer le fouet, Impitoyable, Nageur endurant : contexte `pursuit`, mesures de Mouvement), qui restent des réglages manuels du MJ ; les notes de créatures (Territorial, Dressage).
+- **Sauvegardes.** Un état `extensions.v5.pursuit`, `scenePursuitReceipts` ou une poursuite rangée avec une scène en pause reste dans les données, jamais lu ni réécrit ; l’historique ↶/↷ d’une ancienne commande de poursuite se rejoue sans erreur.
+- **Spécification.** `docs/specs/poursuite-v5/` est conservée comme archive (abandonnée). Version inchangée (3.55.1), rien publié.
+
 ## 3.55.1 — Renommer un PNJ en rencontre (publiée le 20/11/2026)
 
 **Un PNJ ou une créature se renomme pour la rencontre.** Demande du MJ : changer le libellé d’un pion sur la carte sans toucher au bestiaire. La fiche du participant porte un bouton ✎ à côté du nom ; Entrée enregistre, Échap annule, un nom vide est refusé. Seul le participant change : la liaison renvoie son `label` à Map Display (champ géré par l’outil), l’image du pion, tirée du profil, reste la même, et le profil n’est pas modifié. Les PJ n’ont pas le bouton : leur nom vient de leur fiche. Une modification du profil propagée aux participants rétablit son nom, comme avant.
