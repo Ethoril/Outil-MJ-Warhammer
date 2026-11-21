@@ -1,0 +1,481 @@
+<meta charset="utf-8">
+<title>Refonte de l'écran de combat</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Mise en page : la page est un banc d'essai ; l'écran de 1440 × 800 est réduit pour tenir dans la largeur, cliquable. */
+:root{
+  --bg:#17130f; --panel:#221c17; --panel2:#2b231d; --line:#3b3028; --fg:#ece3d6; --muted:#a89a88;
+  --accent:#e39a55; --gold:#f2c14e; --pj:#d9c9a8; --allie:#79aee0; --ennemi:#e0735a; --ok:#7cc68a; --warn:#f2c14e; --bad:#e0584a;
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,Roboto,"Helvetica Neue",Arial,sans-serif;
+  color-scheme:dark;
+}
+html,body{background:var(--bg);color:var(--fg);font-family:var(--font)}
+body{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 40px}
+h1{font-size:20px;margin:0 0 4px;text-wrap:balance}
+.intro{color:var(--muted);max-width:70ch;margin:0 0 12px;line-height:1.45;font-size:14px}
+.bar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0}
+.bar b{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:4px}
+.pill{border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:7px 12px;font:inherit;font-size:13px;cursor:pointer}
+.pill[aria-pressed=true]{background:var(--accent);color:#1b120a;border-color:var(--accent);font-weight:600}
+.pill:focus-visible,.screen button:focus-visible,.screen input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.stage{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#000;position:relative}
+.stage.real{overflow-x:auto}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:14px}
+.notes section{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
+.notes h2{font-size:14px;margin:0 0 6px}
+.notes ul{margin:0;padding-left:18px;line-height:1.5;font-size:13.5px}
+.notes li+li{margin-top:3px}
+
+/* ===== L'écran simulé ===== */
+.screen{width:1440px;height:800px;transform-origin:0 0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:13px;line-height:1.3;position:relative;overflow:hidden;font-variant-numeric:tabular-nums}
+.screen button{font:inherit;color:inherit;cursor:pointer}
+.screen input{font:inherit;color:var(--fg);background:#130f0c;border:1px solid var(--line);border-radius:6px;padding:4px 6px;width:56px;text-align:center}
+.top{height:44px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#120e0b;border-bottom:1px solid var(--line)}
+.top .brand{font-weight:700;letter-spacing:.02em;color:var(--accent)}
+.top .tabs{display:flex;gap:2px}
+.top .tabs span{padding:6px 10px;border-radius:6px;color:var(--muted)}
+.top .tabs span.on{background:var(--panel2);color:var(--fg)}
+.top .turn{margin-left:14px;font-size:14px}
+.top .turn strong{color:var(--gold)}
+.top .grow{flex:1}
+.top .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);display:inline-block;margin-right:5px}
+.btn{border:1px solid var(--line);background:var(--panel2);border-radius:6px;padding:6px 10px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#1b120a;font-weight:600}
+.btn.danger{background:var(--bad);border-color:var(--bad);color:#fff;font-weight:600}
+.btn.ghost{background:transparent}
+.btn.small{padding:3px 8px;font-size:12px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.kbd{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:3px;padding:0 3px;margin-left:5px}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:9px;background:var(--bad);color:#fff;font-size:11px;font-weight:700;padding:0 5px}
+.muted{color:var(--muted)}
+.lbl{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:8px}
+
+/* Frise d'initiative */
+.frise{display:flex;gap:6px;align-items:flex-end;padding:8px 14px;background:#140f0c;border-bottom:1px solid var(--line);height:96px;box-sizing:border-box}
+.frise .round{font-size:11px;color:var(--muted);writing-mode:vertical-rl;transform:rotate(180deg);margin-right:4px}
+.por{position:relative;width:86px;height:78px;border-radius:8px;background:var(--panel);border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:6px;box-sizing:border-box;cursor:pointer;flex:none}
+.por .ini{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#1b120a}
+.por .nm{font-size:11px;margin-top:3px;max-width:80px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.por .hp{position:absolute;left:6px;right:6px;bottom:5px;height:4px;background:#000;border-radius:2px;overflow:hidden}
+.por .hp i{display:block;height:100%;background:var(--ok)}
+.por .n{position:absolute;top:3px;left:5px;font-size:10px;color:var(--muted)}
+.por .el{position:absolute;top:3px;right:4px;font-size:10px;color:var(--gold);font-weight:700}
+.por .mk{position:absolute;bottom:12px;right:5px;font-size:10px}
+.por.active{border-color:var(--gold);box-shadow:0 0 0 2px rgba(242,193,78,.35);width:104px;height:86px}
+.por.active .ini{width:40px;height:40px}
+.por.target{border-color:var(--ennemi)}
+.por.sel{border-color:var(--accent);box-shadow:0 0 0 2px rgba(227,154,85,.45);transform:translateY(-4px)}
+.por.done{opacity:.55}
+.por.dead{opacity:.35;filter:grayscale(1)}
+.por .alert{position:absolute;top:-7px;right:-7px}
+.por .grp{position:absolute;top:22px;left:4px;width:6px;height:6px;border-radius:50%}
+.por .mount{position:absolute;top:22px;right:5px;font-size:10px;color:var(--muted)}
+.c-pj{background:var(--pj)}.c-allie{background:var(--allie)}.c-ennemi{background:var(--ennemi)}
+.b-pj{border-color:var(--pj)!important}.b-allie{border-color:var(--allie)!important}.b-ennemi{border-color:var(--ennemi)!important}
+
+/* Fiches */
+.sheet{padding:10px 12px;display:flex;flex-direction:column;gap:7px;min-height:0}
+.sheet .head{display:flex;align-items:center;gap:8px}
+.sheet .head .ini{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#1b120a;flex:none}
+.sheet .head .t{flex:1;min-width:0}
+.sheet .head .t div:first-child{font-size:15px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sheet .pv{display:flex;align-items:center;gap:6px}
+.sheet .pv .val{font-size:20px;font-weight:700;min-width:62px}
+.bar2{height:6px;background:#000;border-radius:3px;overflow:hidden;flex:1}.bar2 i{display:block;height:100%;background:var(--ok)}
+.caracs{display:grid;grid-template-columns:repeat(6,1fr);gap:3px}
+.caracs div{background:var(--panel2);border-radius:5px;text-align:center;padding:3px 0}
+.caracs b{display:block;font-size:13px}.caracs span{font-size:10px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{border:1px solid var(--line);border-radius:999px;padding:2px 8px;font-size:11.5px;background:var(--panel2)}
+.chip.on{background:var(--accent);color:#1b120a;border-color:var(--accent);font-weight:600}
+.chip.warn{border-color:var(--warn);color:var(--warn)}
+.chip.bad{border-color:var(--bad);color:#ffb3a8}
+button.chip{cursor:pointer}
+.pa{display:flex;gap:3px;font-size:11px}.pa span{background:var(--panel2);border-radius:4px;padding:1px 5px}
+.menu{position:absolute;z-index:5;background:#120e0b;border:1px solid var(--line);border-radius:8px;padding:4px;display:flex;flex-direction:column;min-width:210px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.menu button{background:none;border:0;text-align:left;padding:6px 10px;border-radius:5px}
+.menu button:hover{background:var(--panel2)}
+.menu .sep{height:1px;background:var(--line);margin:3px 0}
+
+/* Actions */
+.hotbar{display:flex;gap:6px;align-items:stretch}
+.act{border:1px solid var(--line);background:var(--panel2);border-radius:8px;padding:6px 10px;text-align:left;min-width:92px}
+.act b{display:block;font-size:12.5px}.act span{font-size:11px;color:var(--muted)}
+.act.on{border-color:var(--accent);background:#3a2a1d}
+.act .k{float:right;font-size:10px;color:var(--muted)}
+
+/* Résolution */
+.res{display:flex;flex-direction:column;gap:8px;min-height:0}
+.res .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.dice{display:flex;gap:14px;align-items:flex-end}
+.dice label{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--muted)}
+.outcome{background:#1a2419;border:1px solid #2f4a30;border-radius:8px;padding:8px 10px}
+.outcome.miss{background:#241a19;border-color:#4a302f}
+.foot{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line);padding-top:8px;margin-top:auto}
+.foot .need{color:var(--warn);font-size:12px}
+.explain{font-size:12px;color:var(--muted);line-height:1.4}
+
+/* Décisions */
+.dec{border:1px solid var(--warn);background:#2b2211;border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.dec .q{font-weight:650}
+.dec .opts{display:flex;gap:6px;flex-wrap:wrap}
+.dec-empty{font-size:12px;color:var(--muted);padding:6px 2px}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(242,193,78,.0)}50%{box-shadow:0 0 0 4px rgba(242,193,78,.35)}}
+.dec.new{animation:pulse 1.2s ease-in-out 3}
+@media (prefers-reduced-motion:reduce){.dec.new{animation:none}}
+
+/* Mêlées */
+.melee{border:1px dashed var(--line);border-radius:8px;padding:6px;display:flex;flex-direction:column;gap:4px}
+.melee .mh{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.melee .mh i{width:8px;height:8px;border-radius:50%}
+.mline{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.mini{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:6px;padding:2px 6px;font-size:11.5px;background:var(--panel2);cursor:pointer}
+.mini i{width:7px;height:7px;border-radius:50%}
+.mini.active{border-color:var(--gold)}.mini.target{border-color:var(--ennemi)}.mini.dead{opacity:.4;text-decoration:line-through}
+.vs{color:var(--muted);font-size:11px}
+
+/* Journal */
+.journal{font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+.journal div:last-child{color:var(--fg)}
+
+/* Toast */
+.toast{position:absolute;right:16px;bottom:16px;background:#120e0b;border:1px solid var(--line);border-radius:8px;padding:8px 12px;display:flex;gap:10px;align-items:center;z-index:6}
+
+/* Popover circonstances */
+.pop{position:absolute;z-index:7;background:#120e0b;border:1px solid var(--accent);border-radius:10px;padding:12px;box-shadow:0 12px 40px rgba(0,0,0,.6);width:760px}
+.pop .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pop h4{margin:0 0 4px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.pop .opt{display:flex;flex-direction:column;gap:3px}
+
+/* Disposition A */
+.A .main{display:grid;grid-template-columns:330px 1fr 330px;gap:10px;padding:10px 14px;height:calc(800px - 44px - 96px - 86px);box-sizing:border-box}
+.A .bottom{height:86px;box-sizing:border-box;padding:8px 14px;border-top:1px solid var(--line);background:#140f0c;display:flex;gap:10px;align-items:center}
+.A .center{display:flex;flex-direction:column;gap:10px;min-height:0}
+.A .right{display:flex;flex-direction:column;gap:10px;min-height:0}
+
+/* Disposition B */
+.B .main{display:grid;grid-template-columns:270px 1fr 400px;gap:10px;padding:10px 14px;height:calc(800px - 44px);box-sizing:border-box}
+.B .order{display:flex;flex-direction:column;gap:3px;padding:8px}
+.B .orow{display:grid;grid-template-columns:18px 26px 1fr 52px;gap:6px;align-items:center;padding:4px 6px;border-radius:6px;border:1px solid transparent;cursor:pointer}
+.B .orow .ini{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:700;color:#1b120a}
+.B .orow.active{border-color:var(--gold);background:#2c2414}
+.B .orow.target{border-color:var(--ennemi)}
+.B .orow.dead{opacity:.4}
+.B .orow .hp{font-size:11px;text-align:right}
+.B .bracket{border-left:3px solid;padding-left:4px;margin-left:2px}
+.B .steps{display:flex;gap:4px}
+.B .steps span{flex:1;text-align:center;padding:6px;border-radius:6px;background:var(--panel2);color:var(--muted);font-size:12px}
+.B .steps span.on{background:var(--accent);color:#1b120a;font-weight:600}
+.B .steps span.done{color:var(--fg)}
+.B .wizard{padding:12px 14px;display:flex;flex-direction:column;gap:10px;min-height:0}
+
+/* Disposition C */
+.C .frise{height:60px}
+.C .frise .por{height:44px;width:auto;min-width:64px;flex-direction:row;padding:0 8px 0 6px;gap:6px;align-items:center}
+.C .frise .por .ini{width:24px;height:24px;font-size:10px}
+.C .frise .por .nm{margin:0}
+.C .frise .por .n,.C .frise .por .grp,.C .frise .por .mount{display:none}
+.C .frise .por.active{height:48px}
+.C .main{display:grid;grid-template-columns:1fr 520px;gap:10px;padding:10px 14px;height:calc(800px - 44px - 60px);box-sizing:border-box}
+.C .raid{display:flex;flex-direction:column;gap:8px;min-height:0}
+.C .group{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.C .frame{position:relative;border:2px solid var(--line);border-radius:8px;background:var(--panel);padding:6px 8px;display:flex;flex-direction:column;gap:4px;cursor:pointer;min-width:0}
+.C .frame.active{border-color:var(--gold)}.C .frame.target{border-color:var(--ennemi)}.C .frame.dead{opacity:.4}
+.C .frame .fn{display:flex;gap:6px;align-items:center;font-weight:600;font-size:12.5px;min-width:0}
+.C .frame .fn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.C .frame .fn i{width:9px;height:9px;border-radius:50%;flex:none}
+.C .frame .alert{position:absolute;top:-8px;right:-8px}
+.C .console{display:flex;flex-direction:column;gap:8px;min-height:0}
+.C .gtitle{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.C .gtitle i{width:8px;height:8px;border-radius:50%}
+.tabs2{display:flex;gap:4px}.tabs2 span{padding:4px 9px;border-radius:5px;font-size:12px;color:var(--muted)}.tabs2 span.on{background:var(--panel2);color:var(--fg)}
+
+/* Démarrage */
+.initgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.initrow{display:grid;grid-template-columns:22px 1fr 44px 50px;gap:6px;align-items:center;background:var(--panel2);border-radius:6px;padding:4px 6px}
+.initrow .ini{width:22px;height:22px;border-radius:50%;font-size:9.5px;font-weight:700;color:#1b120a;display:flex;align-items:center;justify-content:center}
+.initrow input{width:40px;padding:2px}
+</style>
+
+<h1>Refonte de l'écran de combat</h1>
+<p class="intro">Trois partis pris pour l'écran « Jouer » de l'outil MJ, à la taille de la fenêtre d'un MacBook Air M1 (1440 × 800), sans défilement de page. Choisissez un parti pris, puis un moment du combat ; tout ce qui est en couleur est cliquable (frise, actions, dés, distance, décisions, menu ⋯ d'une fiche). Les combattants sont ceux de la rencontre d'essai ; armes et valeurs sont des exemples.</p>
+
+<div class="bar" role="group" aria-label="Parti pris"><b>Parti pris</b>
+  <button class="pill" data-layout="A">A · Barre d'actions</button>
+  <button class="pill" data-layout="B">B · Assistant de tour</button>
+  <button class="pill" data-layout="C">C · Cadres de groupe</button>
+</div>
+<div class="bar" role="group" aria-label="Moment du combat"><b>Moment</b>
+  <button class="pill" data-sc="init">Début du combat</button>
+  <button class="pill" data-sc="melee">Attaque de mêlée</button>
+  <button class="pill" data-sc="zero">PNJ à 0 PV</button>
+  <button class="pill" data-sc="tir">Tir au contact</button>
+  <button class="pill" data-sc="sort">Sort</button>
+  <span style="flex:1"></span>
+  <button class="pill" id="real" aria-pressed="false">Taille réelle</button>
+</div>
+
+<div class="stage" id="stage"><div class="screen" id="screen"></div></div>
+
+<div class="notes" id="notes"></div>
+
+<script>
+const P=[
+ {id:'sw',n:'Swilegrakk',full:'Swilegrakk — Chamane-bray',camp:'ennemi',kind:'PNJ',hp:15,max:15,be:4,pa:'—',cc:45,ct:30,f:'35·3',e:'40·4',i:40,ag:35,el:0,grp:null},
+ {id:'g2',n:'Gor 2',full:'Gor 2',camp:'ennemi',kind:'PNJ',hp:4,max:14,be:4,pa:'—',cc:40,ct:25,f:'40·4',e:'40·4',i:35,ag:35,el:1,grp:'m1'},
+ {id:'th',n:'Theodosius',full:'Theodosius Schreiber',camp:'pj',kind:'PJ',hp:14,max:14,be:4,pa:'C1',cc:35,ct:40,f:'30·3',e:'40·4',i:45,ag:40,el:1,grp:'m3',chance:2,destin:3},
+ {id:'ly',n:'Lynathryn',full:'Lynathryn Nightsong',camp:'pj',kind:'PJ',hp:15,max:15,be:3,pa:'—',cc:45,ct:57,f:'36·3',e:'35·3',i:55,ag:40,el:2,grp:'m1',mount:'ch',chance:3,destin:3},
+ {id:'sk',n:'Skrakk',full:'Skrakk — Bestigor (Élite)',camp:'ennemi',kind:'PNJ',hp:19,max:19,be:5,pa:'T1 C1 B1 J1',cc:50,ct:30,f:'50·5',e:'55·5',i:45,ag:35,el:0,grp:'m2'},
+ {id:'er',n:'Erich',full:'Erich Massenbach',camp:'pj',kind:'PJ',hp:11,max:11,be:3,pa:'C2',cc:42,ct:35,f:'35·3',e:'35·3',i:38,ag:33,el:0,grp:'m2',chance:1,destin:2},
+ {id:'jo',n:'Jorunn',full:'Jorunn Gromsdottir',camp:'pj',kind:'PJ',hp:15,max:15,be:5,pa:'T2 C2',cc:52,ct:30,f:'45·4',e:'50·5',i:30,ag:28,el:3,grp:'m2',chance:2,destin:2},
+ {id:'u1',n:'Ungor 1',full:'Ungor 1',camp:'ennemi',kind:'PNJ',hp:11,max:11,be:3,pa:'—',cc:30,ct:30,f:'30·3',e:'35·3',i:30,ag:35,el:0,grp:'m1'},
+ {id:'g1',n:'Gor 1',full:'Gor 1',camp:'ennemi',kind:'PNJ',hp:14,max:14,be:4,pa:'—',cc:40,ct:25,f:'40·4',e:'40·4',i:35,ag:35,el:0,grp:'m3'},
+ {id:'u2',n:'Ungor 2',full:'Ungor 2',camp:'ennemi',kind:'PNJ',hp:11,max:11,be:3,pa:'—',cc:30,ct:30,f:'30·3',e:'35·3',i:28,ag:35,el:0,grp:null},
+ {id:'ch',n:'Cheval',full:'Cheval de selle',camp:'pj',kind:'Créature',hp:24,max:24,be:4,pa:'—',cc:25,ct:0,f:'45·4',e:'40·4',i:20,ag:30,el:0,grp:'m1',rider:'ly'},
+ {id:'pe',n:'Pedragar',full:'Père Pedragar, prêtre de Taal',camp:'allie',kind:'PNJ',hp:21,max:21,be:5,pa:'—',cc:40,ct:45,f:'35·3',e:'50·5',i:25,ag:30,el:0,grp:null}
+];
+const GRP={m1:{l:'Mêlée 1',c:'#e39a55'},m2:{l:'Mêlée 2',c:'#b48ee8'},m3:{l:'Mêlée 3',c:'#5fc4b8'}};
+const ACTIONS={
+ ly:[['Épée','CC 45 · BF+4'],['Arc long','CT 57 · 100 m'],['Esquive','Ag 40'],['Test…','compétence'],['Sort, prière…','magie'],['Se déplacer','M 5'],['Charger','—'],['Viser','+1 DR']],
+ th:[['Pistolet','CT 40 · BF+8'],['Dague','CC 35 · BF+2'],['Esquive','Ag 40'],['Test…','compétence'],['Recharger','Action'],['Se déplacer','M 4'],['Viser','+1 DR']],
+ sw:[['Arme simple','CC 45 · BF+4'],['Cornes','CC 35 · BF+3'],['Serres d’Ambre','NI 3 · Vous'],['Forme bestiale','NI 5 · Vous'],['Test…','compétence'],['Se déplacer','M 5']]
+};
+const GEN=[['Attaque','arme principale'],['Esquive','Ag'],['Test…','compétence'],['Sort, prière…','magie'],['Se déplacer','M'],['Charger','—']];
+const SC={
+ init:{actor:null,target:null},
+ melee:{actor:'ly',target:'g2',act:0},
+ zero:{actor:'ly',target:'g2',act:0,applied:true},
+ tir:{actor:'th',target:'g1',act:0},
+ sort:{actor:'sw',target:'sw',act:2}
+};
+let st={layout:'A',sc:'melee'};
+function reset(){
+  const s=SC[st.sc];
+  st.actor=s.actor;st.turn=s.actor;st.target=s.target;st.act=s.act;st.applied=!!s.applied;st.menu=null;st.pop=false;st.toast=null;st.removed=new Set();
+  st.hp=Object.fromEntries(P.map(p=>[p.id,p.hp]));st.dead=new Set();st.unc=new Set();st.decisions=[];
+  st.dist=st.sc==='tir'?'contact':null;st.dice={a:st.sc==='init'?'':'23',d:st.sc==='init'?'':'61'};st.noMount=false;st.newDec=false;
+  if(st.applied){st.hp.g2=0;st.decisions=[{id:'g2',type:'zero'}];st.newDec=true;}
+  st.log=['Round 2 · Swilegrakk : Serres d’Ambre (lancé, DR +2)','Gor 2 attaque Lynathryn : paré (Esquive, DR +1)','Theodosius recharge son pistolet'];
+  if(st.applied)st.log.push('Lynathryn touche Gor 2 : 9 dégâts − BE 4 = 5 → 0 PV');
+}
+const byId=id=>P.find(p=>p.id===id);
+const alive=()=>P.filter(p=>!st.removed.has(p.id));
+const ini=p=>p.n.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+const hpPct=p=>Math.max(0,st.hp[p.id])/p.max*100;
+const hpCol=p=>{const r=st.hp[p.id]/p.max;return r<=0?'var(--bad)':r<.4?'var(--warn)':'var(--ok)'};
+const hasDec=id=>st.decisions.some(d=>d.id===id);
+const isDone=p=>{const o=alive().map(x=>x.id);return st.turn&&o.indexOf(p.id)<o.indexOf(st.turn)};
+
+/* ---------- Composants ---------- */
+function topbar(){
+  const n=st.decisions.length;
+  const who=st.sc==='init'?'<span class="muted">Combat prêt · initiative à saisir</span>':`Round 2 · au tour de <strong>${byId(st.turn).full}</strong>${st.actor!==st.turn?` <span class="chip" style="margin-left:6px">${byId(st.actor).n} agit hors de son tour</span>`:''}`;
+  return `<div class="top"><span class="brand">WFRP · MJ</span><div class="tabs"><span>Préparer</span><span class="on">Jouer</span><span>Campagne</span><span>Bibliothèque</span></div>
+  <span class="turn">${who}</span><span class="grow"></span>
+  ${n?`<span class="chip warn" title="Décisions en attente">${n} décision${n>1?'s':''} en attente</span>`:''}
+  <span class="muted" style="font-size:12px"><span class="dot"></span>Carte liée</span>
+  <button class="btn ghost small" title="Annuler">↶ Annuler</button>
+  ${st.sc==='init'?'<button class="btn primary" data-do="start">Commencer le round 1</button>':`<button class="btn primary">Tour suivant<span class="kbd">Entrée</span></button>`}
+  <button class="btn ghost small" title="Menu : fin du combat, envoi aux fiches, sauvegarde…">⋯</button></div>`;
+}
+function portrait(p,i){
+  const cls=['por','b-'+p.camp];
+  if(p.id===st.turn)cls.push('active');if(p.id===st.actor&&p.id!==st.turn)cls.push('sel');if(p.id===st.target&&p.id!==st.actor)cls.push('target');
+  if(st.dead.has(p.id))cls.push('dead');else if(isDone(p)&&p.id!==st.actor)cls.push('done');
+  const mount=p.mount&&!st.noMount?'<span class="mount" title="Monté">🐎</span>':'';
+  const states=st.unc.has(p.id)?'<span class="mk" title="Inconscient">💤</span>':st.dead.has(p.id)?'<span class="mk">✝</span>':'';
+  return `<div class="${cls.join(' ')}" data-actor="${p.id}" title="${p.full} : clic pour le faire agir${p.rider?' · monture de '+byId(p.rider).n:''}">
+   <span class="n">${i+1}</span>${p.el?`<span class="el" title="Élan">É${p.el}</span>`:''}
+   ${p.grp?`<span class="grp" style="background:${GRP[p.grp].c}" title="${GRP[p.grp].l}"></span>`:''}${mount}
+   <div class="ini c-${p.camp}">${ini(p)}</div><div class="nm">${p.n}</div>${states}
+   <div class="hp"><i style="width:${hpPct(p)}%;background:${hpCol(p)}"></i></div>
+   ${hasDec(p.id)?'<span class="badge alert" title="Décision attendue">!</span>':''}</div>`;
+}
+function frise(){
+  return `<div class="frise" aria-label="Frise d'initiative"><span class="round">Round 2</span>${alive().map(portrait).join('')}</div>`;
+}
+function sheet(id,role){
+  const p=byId(id);if(!p)return '';
+  const menu=st.menu===id?`<div class="menu" style="right:8px;top:40px">
+    <button data-do="remove" data-id="${id}">Retirer du combat…</button>
+    ${p.mount?`<button data-do="nomount">${st.noMount?'Remonter sur le Cheval de selle':'Sans monture pour cette rencontre'}</button>`:''}
+    <button>Renommer</button><button>Changer de camp</button><div class="sep"></div>
+    <button>Fiche complète (compétences, talents, équipement)</button><button>Sorts et prières</button></div>`:'';
+  const pc=p.kind==='PJ'?`<div class="row" style="display:flex;gap:6px"><span class="chip">Chance ${p.chance}</span><span class="chip">Destin ${p.destin}</span><span class="chip" style="border-color:var(--gold);color:var(--gold)">Élan ${p.el}</span></div>`:`<div class="chips"><span class="chip" style="border-color:var(--gold);color:var(--gold)">Élan ${p.el}</span></div>`;
+  const mount=p.mount?`<div class="chips"><span class="chip">${st.noMount?'À pied (sans monture pour la rencontre)':'Monté · Cheval de selle 24/24'}</span></div>`:p.rider?`<div class="chips"><span class="chip">Monture de ${byId(p.rider).n}</span></div>`:'';
+  const states=[...(st.unc.has(id)?['<span class="chip bad">Inconscient</span>']:[]),...(st.dead.has(id)?['<span class="chip bad">Mort</span>']:[]),...(id==='g2'&&!st.dead.has(id)?['<span class="chip warn">Sonné</span>']:[]),'<button class="chip">+ état</button>'].join('');
+  return `<div class="panel sheet" style="position:relative">
+   <div class="lbl">${role}</div>
+   <div class="head"><div class="ini c-${p.camp}">${ini(p)}</div><div class="t"><div>${p.full}</div><div class="muted" style="font-size:11.5px">${p.kind} · ${p.camp==='pj'?'PJ':p.camp==='allie'?'Allié':'Ennemi'}${p.grp?' · '+GRP[p.grp].l:''}</div></div>
+     <button class="btn ghost small" data-menu="${id}" aria-label="Actions sur ${p.full}">⋯</button></div>
+   <div class="pv"><button class="btn small">−</button><span class="val">${Math.max(0,st.hp[id])}<span class="muted" style="font-size:13px">/${p.max}</span></span><button class="btn small">+</button><div class="bar2"><i style="width:${hpPct(p)}%;background:${hpCol(p)}"></i></div></div>
+   <div class="caracs"><div><b>${p.cc}</b><span>CC</span></div><div><b>${p.ct}</b><span>CT</span></div><div><b>${p.f}</b><span>F·BF</span></div><div><b>${p.e}</b><span>E·BE</span></div><div><b>${p.i}</b><span>I</span></div><div><b>${p.ag}</b><span>Ag</span></div></div>
+   <div class="pa"><span class="muted">PA</span><span>${p.pa}</span></div>
+   ${pc}${mount}<div class="chips">${states}</div>${menu}</div>`;
+}
+function actionsList(compact){
+  const a=ACTIONS[st.actor]||GEN;
+  return a.map((x,i)=>`<button class="act ${i===st.act?'on':''}" data-act="${i}"><span class="k">${i+1}</span><b>${x[0]}</b><span>${x[1]}</span></button>`).join('');
+}
+function distanceChips(){
+  const opts=[['contact','Au contact'],['bout','Bout portant ≤ 4 m'],['courte','Courte'],['moy','Moyenne'],['longue','Longue'],['ext','Extrême']];
+  return `<div class="row"><span class="lbl" style="width:64px">Distance</span><div class="chips">${opts.map(([k,l])=>`<button class="chip ${st.dist===k?'on':''}" data-dist="${k}">${l}</button>`).join('')}</div></div>`;
+}
+function distanceExplain(){
+  const t=byId(st.target);
+  if(st.dist==='contact')return `<div class="explain">Déduit du plateau et de la carte (1 m) : <b>${t.n}</b> est engagé avec Theodosius. Le tir se résout comme une mêlée : Corps à corps opposé, sans modificateur de portée. Pistolet : autorisé.</div>`;
+  if(st.dist==='melee-other')return `<div class="explain">${t.n} est engagé avec Erich et Jorunn : Désavantage au tir. Si le Désavantage fait rater un tir qui aurait touché, l'outil demandera alors le d100 qui désigne le combattant touché.</div>`;
+  if(st.dist==='bout')return `<div class="explain">Bout portant : +2 DR. Une Esquive est possible (tireur à moins de BI mètres).</div>`;
+  return st.dist?`<div class="explain">Bande choisie par le MJ.</div>`:'';
+}
+function resolution(){
+  if(st.sc==='init')return initPanel();
+  if(!byId(st.target))return `<div class="res"><div class="explain">Choisissez une cible sur la frise.</div></div>`;
+  const a=byId(st.actor),t=byId(st.target),act=(ACTIONS[st.actor]||GEN)[st.act]||['—',''];
+  const sort=st.sc==='sort';
+  const tir=st.sc==='tir';
+  let dice,out,foot;
+  if(sort){
+    dice=`<div class="dice"><label>Langue (Magick) 50<input value="${st.dice.a}" data-die="a"></label><span class="muted">NI 3 · Vous · durée 4 Rounds</span></div>`;
+    out=`<div class="outcome"><b>Sort lancé</b> · DR +2 (NI 3 atteint) · 1 DR de surpuissance : durée doublée ?</div>`;
+    foot=`<div class="foot"><button class="btn primary">Appliquer : Serres d’Ambre</button><span class="need">Surpuissance : choisir l'usage ou « Aucun »</span><span class="grow" style="flex:1"></span><button class="btn ghost small" data-do="pop">Circonstances (0)</button></div>`;
+  } else {
+    const def=tir&&st.dist!=='contact'?'Esquive (Ag 35)':'Corps à corps (CC 40)';
+    dice=`<div class="dice"><label>Attaque · ${tir&&st.dist!=='contact'?'CT 40':tir?'CC 35 (mêlée)':'CC 45'}<input value="${st.dice.a}" data-die="a"></label><label>Défense de ${t.n} · ${def}<input value="${st.dice.d}" data-die="d"></label><button class="btn small">Lancer les dés PNJ</button></div>`;
+    out=st.applied?`<div class="outcome">Appliqué : ${t.n} perd 5 Blessures (0/${t.max}).</div>`:`<div class="outcome"><b>Touché</b> · DR +3 contre DR −1 · localisation 61 : Corps · ${tir?'BF+8 → 11':'9'} dégâts − BE ${t.be} − PA 0 = <b>${tir?7:5}</b></div>`;
+    foot=`<div class="foot"><button class="btn primary" data-do="apply" ${st.applied?'disabled':''}>Appliquer ${tir?7:5} dégâts à ${t.n}</button>${st.applied?'<span class="muted">Fait · Annuler dans la barre du haut</span>':'<span class="need">Tout est saisi</span>'}<span style="flex:1"></span><button class="btn ghost small" data-do="pop">Circonstances (${tir?1:2})</button></div>`;
+  }
+  const circ=sort?'':`<div class="row"><span class="lbl" style="width:64px">Contexte</span><div class="chips">${tir?'':'<span class="chip on">Surnombre 2 contre 1 (plateau)</span><span class="chip on">Monté contre fantassin</span>'}<span class="chip">Cible à terre</span><span class="chip">Couvert</span><button class="chip" data-do="pop">+ autres…</button></div></div>`;
+  return `<div class="res">
+   <div class="row"><span class="lbl" style="width:64px">Action</span><b>${act[0]}</b><span class="muted">${act[1]}</span><span class="muted">→</span><span>cible <b>${t.n}</b></span><span class="muted" style="font-size:11.5px">(clic sur un cartouche des mêlées pour changer)</span></div>
+   ${tir?distanceChips()+distanceExplain():''}${circ}
+   ${dice}${out}${foot}</div>`;
+}
+function initPanel(){
+  const rows=alive().map(p=>`<div class="initrow"><div class="ini c-${p.camp}">${ini(p)}</div><span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.n}</span><input value="${p.i}" aria-label="I de ${p.n}"><input value="${p.kind==='PJ'?'':Math.ceil(Math.random()*10)}" placeholder="d10" aria-label="dé de ${p.n}"></div>`).join('');
+  return `<div class="res"><div class="row"><b>Démarrer le combat</b><span class="muted">I + d10 · dés des PNJ déjà tirés · dés des PJ à saisir</span></div>
+   <div class="row"><span class="lbl">Camp surpris</span><div class="chips"><span class="chip on">Aucun</span><span class="chip">PJ</span><span class="chip">Ennemis</span><span class="chip">Alliés</span></div>
+   <span class="lbl" style="margin-left:14px">Montures</span><div class="chips"><button class="chip ${st.noMount?'':'on'}" data-do="nomount">Lynathryn montée</button><button class="chip ${st.noMount?'on':''}" data-do="nomount">Lynathryn sans monture</button></div></div>
+   <div class="initgrid">${rows}</div>
+   <div class="foot"><button class="btn primary" data-do="start">Commencer le round 1</button><span class="need">4 dés de PJ à saisir · égalité Ungor 1 / Gor 2 tranchée par Test opposé</span></div></div>`;
+}
+function decisions(){
+  if(!st.decisions.length)return `<div class="dec-empty">Aucune décision en attente.</div>`;
+  return st.decisions.map(d=>{const p=byId(d.id);return `<div class="dec ${st.newDec?'new':''}" role="alert">
+    <div class="q">${p.full} tombe à 0 Blessure</div>
+    <div class="explain">Mort subite des figurants (règle de table active). Bestiaire : figurant.</div>
+    <div class="opts"><button class="btn danger small" data-dec="dead" data-id="${p.id}">Mort</button><button class="btn small" data-dec="unc" data-id="${p.id}">Inconscient</button><button class="btn ghost small" data-dec="later" data-id="${p.id}">Plus tard</button><button class="btn ghost small" data-dec="notfig" data-id="${p.id}">Pas un figurant</button></div></div>`}).join('');
+}
+function melees(){
+  const g=k=>alive().filter(p=>p.grp===k);
+  const mini=p=>`<span class="mini ${p.id===st.actor?'active':''} ${p.id===st.target&&p.id!==st.actor?'target':''} ${st.dead.has(p.id)?'dead':''}" data-target="${p.id}"><i class="c-${p.camp}"></i>${p.n} ${Math.max(0,st.hp[p.id])}</span>`;
+  const side=(k,c)=>g(k).filter(p=>(p.camp==='ennemi')===c).map(mini).join('');
+  return Object.keys(GRP).map(k=>`<div class="melee"><div class="mh"><i style="background:${GRP[k].c}"></i>${GRP[k].l}</div><div class="mline">${side(k,false)}<span class="vs">contre</span>${side(k,true)}</div></div>`).join('')+
+   `<div class="melee"><div class="mh">Libres</div><div class="mline">${alive().filter(p=>!p.grp).map(mini).join('')}</div></div>`;
+}
+function journal(n=4){return `<div class="journal">${st.log.slice(-n).map(l=>`<div>${l}</div>`).join('')}</div>`}
+function popover(){
+  if(!st.pop)return '';
+  const col=(h,items)=>`<div class="opt"><h4>${h}</h4>${items.map(i=>`<label><input type="checkbox" style="width:auto" ${i[1]?'checked':''}> ${i[0]}</label>`).join('')}</div>`;
+  return `<div class="pop" style="left:340px;top:250px" role="dialog" aria-label="Circonstances">
+   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><b>Circonstances de cette action</b><span class="muted" style="font-size:12px">les cases déduites du plateau ou de la carte sont déjà cochées</span><button class="btn small" data-do="pop">Fermer</button></div>
+   <div class="grid">${col('Scène',[['Lumière faible'],['Brouillard'],['Pluie et vent'],['Terrain difficile'],['Espace exigu']])}
+   ${col('Attaque',[['Surnombre (plateau)',1],['Monté contre fantassin',1],['Charge'],['Visée'],['Arme plus longue'],['Cible sans défense']])}
+   ${col('Défense',[['Bouclier'],['Position haute'],['À couvert'],['Cible à terre'],['Encerclé']])}
+   ${col('Talents et fortune',[['Point de Chance'],['Combat instinctif'],['Frappe réactive'],['Issue létale (règle de table)']])}</div></div>`;
+}
+function toast(){return st.toast?`<div class="toast">${st.toast}<button class="btn small" data-do="undo">Annuler</button></div>`:''}
+
+/* ---------- Dispositions ---------- */
+function layoutA(){
+  const right=`<div class="panel" style="padding:8px 10px;display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:6px"><span class="lbl">À décider</span>${st.decisions.length?`<span class="badge">${st.decisions.length}</span>`:''}</div>${decisions()}</div>${st.target&&st.sc!=='sort'?sheet(st.target,'Cible'):`<div class="panel" style="padding:10px;flex:1">${melees()}</div>`}`;
+  const center=st.sc==='init'?`<div class="panel" style="padding:12px;flex:1">${resolution()}</div>`:`<div class="panel" style="padding:8px 10px;display:flex;flex-direction:column;gap:6px">${melees()}</div><div class="panel" style="padding:12px;flex:1;display:flex;flex-direction:column">${resolution()}</div>`;
+  const left=st.sc==='init'?`<div class="panel" style="padding:10px;display:flex;flex-direction:column;gap:6px"><span class="lbl">Journal</span>${journal(6)}</div>`:sheet(st.actor,st.actor===st.turn?'Au tour de':'Agit hors de son tour')+`<div class="panel" style="padding:8px 10px"><span class="lbl">Journal</span>${journal(3)}</div>`;
+  const bottom=st.sc==='init'?`<span class="muted">Les actions apparaissent ici dès le premier tour.</span>`:`<div class="hotbar">${actionsList()}</div><span style="flex:1"></span><div class="tabs2"><span>Règles</span><span>Profils</span><span>Journal</span></div>`;
+  return `<div class="A">${topbar()}${frise()}<div class="main"><div style="display:flex;flex-direction:column;gap:10px;min-height:0">${left}</div><div class="center">${center}</div><div class="right">${right}</div></div><div class="bottom">${bottom}</div>${popover()}${toast()}</div>`;
+}
+function layoutB(){
+  const groups={};alive().forEach(p=>{});
+  const order=alive().map((p,i)=>{const cls=['orow'];if(p.id===st.actor)cls.push('active');if(p.id===st.target&&p.id!==st.actor)cls.push('target');if(st.dead.has(p.id))cls.push('dead');
+    return `<div class="${cls.join(' ')}" data-target="${p.id}" style="${p.grp?`box-shadow:inset 3px 0 0 ${GRP[p.grp].c}`:''}"><span class="muted" style="font-size:11px">${i+1}</span><div class="ini c-${p.camp}">${ini(p)}</div><div style="min-width:0"><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:${p.id===st.actor?700:500}">${p.n}${p.mount&&!st.noMount?' 🐎':''}${hasDec(p.id)?' <span class="badge">!</span>':''}</div><div class="bar2" style="height:4px;margin-top:3px"><i style="width:${hpPct(p)}%;background:${hpCol(p)}"></i></div></div><div class="hp">${Math.max(0,st.hp[p.id])}/${p.max}${p.el?`<div style="color:var(--gold);font-size:10px">Élan ${p.el}</div>`:''}</div></div>`}).join('');
+  const step=st.sc==='init'?0:st.applied?4:3;
+  const steps=['Action','Cible','Contexte','Dés','Résultat'].map((s,i)=>`<span class="${i===step?'on':i<step?'done':''}">${i+1} · ${s}</span>`).join('');
+  const decBanner=st.decisions.length?`<div style="display:flex;flex-direction:column;gap:6px">${decisions()}</div>`:'';
+  const wizard=st.sc==='init'?resolution():`<div class="steps">${steps}</div>${decBanner}<div class="hotbar" style="flex-wrap:wrap">${actionsList()}</div>${resolution()}`;
+  const right=st.sc==='init'?`<div class="panel" style="padding:10px">${melees()}</div><div class="panel" style="padding:10px"><span class="lbl">Journal</span>${journal(6)}</div>`:`${sheet(st.actor,'Au tour de')}${st.sc!=='sort'?sheet(st.target,'Cible'):`<div class="panel" style="padding:10px"><span class="lbl">Journal</span>${journal(5)}</div>`}`;
+  return `<div class="B">${topbar()}<div class="main"><div class="panel order"><div style="display:flex;justify-content:space-between"><span class="lbl">Initiative · Round 2</span><span class="lbl">PV</span></div>${order}<div style="margin-top:auto" class="tabs2"><span>Règles</span><span>Profils</span><span>Journal</span></div></div><div class="panel wizard">${wizard}</div><div style="display:flex;flex-direction:column;gap:10px;min-height:0">${right}</div></div>${popover()}${toast()}</div>`;
+}
+function layoutC(){
+  const frame=p=>{const cls=['frame','b-'+p.camp];if(p.id===st.actor)cls.push('active');if(p.id===st.target&&p.id!==st.actor)cls.push('target');if(st.dead.has(p.id))cls.push('dead');
+    const sts=[st.unc.has(p.id)?'<span class="chip bad">Inconscient</span>':'',st.dead.has(p.id)?'<span class="chip bad">Mort</span>':'',p.id==='g2'&&!st.dead.has(p.id)?'<span class="chip warn">Sonné</span>':'',p.mount&&!st.noMount?'<span class="chip">Monté</span>':'',p.rider?'<span class="chip">Monture</span>':'',p.el?`<span class="chip" style="color:var(--gold);border-color:var(--gold)">Élan ${p.el}</span>`:''].join('');
+    return `<div class="${cls.join(' ')}" data-target="${p.id}"><div class="fn"><i class="c-${p.camp}"></i><span>${p.full}</span></div><div style="display:flex;align-items:center;gap:6px"><b style="min-width:44px">${Math.max(0,st.hp[p.id])}/${p.max}</b><div class="bar2"><i style="width:${hpPct(p)}%;background:${hpCol(p)}"></i></div></div><div class="muted" style="font-size:11px">BE ${p.be} · PA ${p.pa} · CC ${p.cc}</div><div class="chips">${sts}</div>${hasDec(p.id)?'<span class="badge alert">!</span>':''}</div>`};
+  const grp=(k,l,c)=>{const m=alive().filter(p=>k?p.grp===k:!p.grp);return m.length?`<div class="gtitle">${c?`<i style="background:${c}"></i>`:''}${l}</div><div class="group">${m.map(frame).join('')}</div>`:''};
+  const raid=Object.entries(GRP).map(([k,g])=>grp(k,g.l,g.c)).join('')+grp(null,'Libres');
+  const console_=st.sc==='init'?`<div class="panel" style="padding:12px;flex:1">${resolution()}</div>`:`${st.decisions.length?decisions():''}<div class="panel" style="padding:10px"><div class="lbl" style="margin-bottom:6px">Au tour de ${byId(st.actor).full}</div><div class="hotbar" style="flex-wrap:wrap">${actionsList()}</div></div><div class="panel" style="padding:12px;flex:1;display:flex;flex-direction:column">${resolution()}</div><div class="panel" style="padding:8px 10px"><div class="tabs2" style="margin-bottom:4px"><span class="on">Journal</span><span>Fiche</span><span>Règles</span><span>Profils</span></div>${journal(3)}</div>`;
+  return `<div class="C">${topbar()}${frise()}<div class="main"><div class="raid">${raid}</div><div class="console">${console_}</div></div>${st.menu?`<div style="position:absolute;left:300px;top:150px;width:330px">${sheet(st.menu,'Fiche')}</div>`:''}${popover()}${toast()}</div>`;
+}
+
+const NOTES={
+ A:{t:'A · Barre d\'actions (retenu par le MJ le 21/11)',p:['Frise d\'initiative en haut : portraits dans l\'ordre, celui dont c\'est le tour en grand et cerné d\'or, Élan, monture et décision en attente sur le portrait.','Clic sur un portrait de la frise : ce personnage devient celui qui agit (fiche de gauche), même hors de son tour ; le tour reste marqué d\'or.','Clic sur un cartouche des mêlées, au centre : il devient la cible (fiche de droite).','Fiche de celui qui joue à gauche, cible à droite, mêlées et résolution au centre : tout le tour se lit sans bouger les yeux de plus d\'un écran.','Les actions de celui qui joue sont une barre en bas, numérotées (touches 1 à 9).','Les décisions attendues ont une case fixe « À décider » en haut à droite, toujours visible, plus un « ! » sur le portrait et un compteur dans la barre du haut.'],c:['Trois colonnes fixes : la résolution dispose d\'environ 750 × 420 px ; un tour très chargé (sort avec surpuissance, critique et amputation) doit tenir dans cette case.','La fiche complète (compétences, talents, équipement) passe par le menu ⋯ en panneau par-dessus.']},
+ B:{t:'B · Assistant de tour',p:['L\'ordre d\'initiative est une colonne à gauche, avec PV, Élan et mêlées (liseré de couleur).','Au centre, le tour se fait en étapes numérotées : action, cible, contexte, dés, résultat. Une seule chose à regarder.','Une décision attendue s\'insère en tête de l\'assistant, juste au-dessus de ce que le MJ fait, sans bloquer : « Plus tard » la renvoie dans la liste.','Fiches de celui qui joue et de la cible à droite, l\'une sous l\'autre.'],c:['Pas de frise horizontale « jeu vidéo » : la frise est une liste verticale.','Les mêlées ne sont visibles que par le liseré de couleur ; le plateau détaillé devient un onglet.']},
+ C:{t:'C · Cadres de groupe (façon cadres de raid)',p:['Tous les combattants sont visibles en même temps, rangés par mêlée : PV, BE, PA, États, Élan, monture sur chaque cadre.','Clic sur un cadre = cible ; la frise d\'initiative reste en bandeau mince en haut.','À droite, une console fixe : décisions en tête, actions de celui qui joue, résolution, puis journal et fiche en onglets.','Fait le plus « tableau de bord » : idéal pour les grosses rencontres (16 cadres tiennent).'],c:['Pas de fiche détaillée de l\'acteur et de la cible en permanence : elle s\'ouvre au clic (onglet Fiche ou ⋯).','La console fait 520 px de large : la résolution y est plus serrée qu\'en A.']}
+};
+const COMMON=['Police système (San Francisco sur le Mac, Segoe UI sous Windows), sans police gothique.','Aucune page ne défile ; seules quelques listes courtes défilent si une rencontre dépasse 16 combattants.','Bout portant : une seule ligne « Distance » (Au contact, Bout portant, Courte… Extrême), préremplie par le plateau et la carte ; le d100 de déviation n\'est demandé que s\'il sert.','Les circonstances deviennent quelques puces déduites + un panneau « autres… » sur quatre colonnes, sans défilement.','Démarrer le combat se fait dans la même case que la résolution, avec le choix « sans monture » ; les combattants de la rencontre entrent d\'un coup.','Retirer un participant et « sans monture » sont dans le menu ⋯ de chaque fiche ; un retrait s\'annule depuis le message en bas.','Séquelles, convalescence et calendrier quittent l\'écran de combat pour la fin du combat et l\'espace Campagne.'];
+
+/* ---------- Rendu ---------- */
+const screen=document.getElementById('screen'),stage=document.getElementById('stage');
+function fit(){
+  const real=document.getElementById('real').getAttribute('aria-pressed')==='true';
+  stage.classList.toggle('real',real);
+  const s=real?1:Math.min(1,stage.clientWidth/1440);
+  screen.style.transform=`scale(${s})`;stage.style.height=(800*s)+'px';
+}
+function render(){
+  screen.innerHTML=st.layout==='A'?layoutA():st.layout==='B'?layoutB():layoutC();
+  document.querySelectorAll('[data-layout]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.layout===st.layout));
+  document.querySelectorAll('[data-sc]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.sc===st.sc));
+  const n=NOTES[st.layout];
+  document.getElementById('notes').innerHTML=`<section><h2>${n.t}</h2><ul>${n.p.map(x=>`<li>${x}</li>`).join('')}</ul></section><section><h2>Limites de ce parti pris</h2><ul>${n.c.map(x=>`<li>${x}</li>`).join('')}</ul></section><section><h2>Commun aux trois</h2><ul>${COMMON.map(x=>`<li>${x}</li>`).join('')}</ul></section>`;
+  st.newDec=false;fit();
+}
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-layout],[data-sc],#real,[data-actor],[data-target],[data-act],[data-do],[data-dec],[data-menu],[data-dist]');
+  if(!b){if(st.menu){st.menu=null;render();}return;}
+  if(b.dataset.layout){st.layout=b.dataset.layout;reset();}
+  else if(b.dataset.sc){st.sc=b.dataset.sc;reset();}
+  else if(b.id==='real'){b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true');fit();return;}
+  else if(b.dataset.actor&&st.sc!=='init'){st.actor=b.dataset.actor;st.act=0;st.applied=false;if(st.target===st.actor)st.target=null;if(st.sc==='sort'){st.target=st.actor;}}
+  else if(b.dataset.menu){st.menu=st.menu===b.dataset.menu?null:b.dataset.menu;}
+  else if(b.dataset.target&&st.sc!=='init'){
+    if(st.layout==='C'&&e.detail===2){st.menu=b.dataset.target;}
+    const id=b.dataset.target;if(id!==st.actor)st.target=id;
+    if(st.sc==='tir'){const t=byId(st.target);st.dist=t.grp==='m3'?'contact':t.grp?'melee-other':'courte';}
+    st.applied=false;
+  }
+  else if(b.dataset.act){st.act=+b.dataset.act;}
+  else if(b.dataset.dist){st.dist=b.dataset.dist;}
+  else if(b.dataset.dec){
+    const id=b.dataset.id,k=b.dataset.dec;
+    if(k==='later'){st.toast='Décision mise de côté : elle reste dans « À décider ».';render();return;}
+    st.decisions=st.decisions.filter(d=>d.id!==id);
+    if(k==='dead'){st.dead.add(id);st.log.push(byId(id).n+' : mort (mort subite)');}
+    if(k==='unc'){st.unc.add(id);st.log.push(byId(id).n+' : Inconscient');}
+    if(k==='notfig'){st.log.push(byId(id).n+' : pas un figurant, règles ordinaires des 0 Blessure');}
+    st.toast=byId(id).n+' : décision enregistrée.';
+  }
+  else if(b.dataset.do){
+    const d=b.dataset.do;
+    if(d==='apply'){st.applied=true;st.hp[st.target]=Math.max(0,st.hp[st.target]-(st.sc==='tir'?7:5));st.log.push(`${byId(st.actor).n} touche ${byId(st.target).n}`);
+      if(st.hp[st.target]===0&&byId(st.target).kind!=='PJ'){st.decisions.push({id:st.target,type:'zero'});st.newDec=true;}st.toast='Dégâts appliqués.';}
+    if(d==='remove'){const id=b.dataset.id;st.removed.add(id);st.menu=null;st.toast=byId(id).n+' retiré du combat (et de la carte).';if(st.target===id)st.target=null;}
+    if(d==='undo'){st.removed.clear();st.toast=null;}
+    if(d==='nomount'){st.noMount=!st.noMount;st.menu=null;}
+    if(d==='pop'){st.pop=!st.pop;}
+    if(d==='start'){st.sc='melee';reset();}
+  }
+  render();
+});
+addEventListener('resize',fit);
+reset();render();
+</script>
