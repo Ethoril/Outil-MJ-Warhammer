@@ -247,7 +247,7 @@ async function main() {
     await resolution.locator('[data-roll-input="defense"]').press('Enter');
     await resolution.getByRole('button', { name: /^Appliquer \d+ dégâts à Garde importé$/ }).click();
     await expect(page.locator('#toast-container')).toContainText(/\d+ dégâts appliqués à Garde importé/);
-    await expect(page.locator('[data-workspace-select]').filter({ hasText: 'Garde importé' })).toContainText('PV 3/12');
+    await expect(page.locator('[data-workspace-target]').filter({ hasText: 'Garde importé' })).toContainText('PV 3/12');
     await expect(resolution.locator('.workspace-result')).toHaveCount(0);
 
     // Contextual rules must show real reference content and remain reachable
@@ -448,7 +448,7 @@ async function main() {
       await panel.locator('[data-roll-input="defense"]').fill('34');
     };
     // Rangés par combattant : depuis le plateau des mêlées (3.39.0), une attaque appliquée déplace les jetons dans une zone de mêlée.
-    const trackTexts = () => page.locator('.workspace-track .workspace-track-item').evaluateAll(items => items.map(item => `${item.dataset.workspaceSelect}|${item.textContent}`).sort());
+    const trackTexts = () => page.locator('.workspace-track .workspace-track-item').evaluateAll(items => items.map(item => `${item.dataset.workspaceTarget}|${item.textContent}`).sort());
     await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: 'Participant de démonstration 03' }).click();
     await expect(page.locator('.workspace-sheet-target')).toContainText('Participant de démonstration 03');
     const galleryResolution = page.locator('.workspace-resolution');

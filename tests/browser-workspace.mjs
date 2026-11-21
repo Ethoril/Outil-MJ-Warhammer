@@ -218,14 +218,14 @@ async function main() {
     assert.equal(await page.evaluate(() => window.workspaceTestData.combat.participants.get('actor-1').extensions.v5.criticalAftermath[0].amputationShockStatus), 'not-occurred');
     await expect(page.locator('.workspace-track')).toContainText('Un nom de combattant très long');
     await expect(page.locator('.workspace-track')).not.toContainText('Aucun état');
-    await expect(page.locator('[data-workspace-select="actor-1"]')).toContainText('BE 3 · PA C2 B1');
-    await expect(page.locator('[data-workspace-select="actor-1"]')).toContainText('Sonné · 2 t');
-    // Ligne de piste : le contenu forme le nom accessible (PV, BE, PA, états), le personnage actif est pressé.
-    await expect(page.locator('[data-workspace-select="actor-1"]')).not.toHaveAttribute('aria-label', /./);
+    await expect(page.locator('[data-workspace-target="actor-1"]')).toContainText('BE 3 · PA C2 B1');
+    await expect(page.locator('[data-workspace-target="actor-1"]')).toContainText('Sonné · 2 t');
+    // Ligne de piste : le contenu forme le nom accessible (PV, BE, PA, états), l’acteur porte is-actor, la cible est pressée (lot E4a).
+    await expect(page.locator('[data-workspace-target="actor-1"]')).not.toHaveAttribute('aria-label', /./);
     await expect(page.getByRole('button', { name: /Combattant 1 PV 10\/12 BE 3 · PA C2 B1 Sonné · 2 t/ })).toBeVisible();
-    await expect(page.locator('[data-workspace-select="actor-1"]')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('[data-workspace-select="actor-2"]')).toHaveAttribute('aria-pressed', 'false');
-    await expect(page.locator('[data-workspace-select="actor-2"]')).toContainText('−2/12');
+    await expect(page.locator('[data-workspace-target="actor-1"]')).toHaveClass(/is-actor/);
+    await expect(page.locator('[data-workspace-target="actor-2"]')).not.toHaveClass(/is-actor/);
+    await expect(page.locator('[data-workspace-target="actor-2"]')).toContainText('−2/12');
     await expect(actorSheet).toContainText('Combattant 1');
     await expect(actorSheet).toContainText('Au tour de');
     await expect(actorSheet).toContainText('E · BE');
@@ -249,9 +249,9 @@ async function main() {
     await rerender();
     // La cible par défaut porte l’étiquette « cible » dans la piste ; le tour, le marqueur ▶.
     await expect(page.locator('.workspace-track-role')).toHaveCount(1);
-    await expect(page.locator('[data-workspace-select="actor-2"] .workspace-track-role')).toHaveText('cible');
+    await expect(page.locator('[data-workspace-target="actor-2"] .workspace-track-role')).toHaveText('cible');
     await expect(page.locator('.workspace-track-item.is-turn')).toHaveCount(1);
-    await expect(page.locator('[data-workspace-select="actor-1"] .workspace-track-marker')).toHaveText('▶');
+    await expect(page.locator('[data-workspace-target="actor-1"] .workspace-track-marker')).toHaveText('▶');
     await expect(page.locator('.workspace-pending')).toContainText('Rappel courant');
 
     // The bench stays visible, each waiting combatant with « Faire entrer ».
@@ -262,10 +262,10 @@ async function main() {
     await page.evaluate(() => { window.workspaceTestData.combat.currentActorId = 'actor-3'; });
     await rerender();
     await expect(actorSheet).toContainText('Combattant 3');
-    await expect(page.locator('[data-workspace-select="actor-3"]')).toHaveAttribute('aria-current', 'step');
+    await expect(page.locator('[data-workspace-target="actor-3"]')).toHaveAttribute('aria-current', 'step');
 
     await expect(actorSheet).toContainText('Au tour de');
-    await expect(page.locator('[data-workspace-select="actor-3"] .workspace-track-marker')).toHaveText('▶');
+    await expect(page.locator('[data-workspace-target="actor-3"] .workspace-track-marker')).toHaveText('▶');
 
     // Selecting a row makes it the active character (sheet + actions), not the target; the turn marker stays.
     await page.locator('[data-workspace-select="actor-5"]').click();
@@ -273,9 +273,9 @@ async function main() {
     await expect(actorSheet).toContainText('Agit hors tour');
     await expect(page.locator('[data-workspace-select="actor-5"]')).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('[data-workspace-select="actor-3"]')).toHaveAttribute('aria-pressed', 'false');
-    await expect(page.locator('[data-workspace-select="actor-3"] .workspace-track-marker')).toHaveText('▶');
-    await expect(page.locator('[data-workspace-select="actor-5"] .workspace-track-marker')).toHaveText('');
-    await expect(page.locator('[data-workspace-select="actor-3"]')).toHaveAttribute('aria-current', 'step');
+    await expect(page.locator('[data-workspace-target="actor-3"] .workspace-track-marker')).toHaveText('▶');
+    await expect(page.locator('[data-workspace-target="actor-5"] .workspace-track-marker')).toHaveText('');
+    await expect(page.locator('[data-workspace-target="actor-3"]')).toHaveAttribute('aria-current', 'step');
     await rerender();
     await expect(actorSheet).toContainText('Combattant 5');
     // Le combattant du tour redevient « Au tour de ».
@@ -308,7 +308,7 @@ async function main() {
     await page.locator('.workspace-resolution').getByRole('group', { name: 'Alliés' }).getByRole('button', { name: 'Combattant 5', exact: true }).click();
     await expect(targetSheet).toContainText('Combattant 5');
     await expect(actorSheet).toContainText('Combattant 3');
-    await expect(page.locator('[data-workspace-select="actor-5"] .workspace-track-role')).toHaveText('cible');
+    await expect(page.locator('[data-workspace-target="actor-5"] .workspace-track-role')).toHaveText('cible');
     await expect(page.locator('.workspace-track-role')).toHaveCount(1);
     await rerender();
     await expect(targetSheet).toContainText('Combattant 5');
