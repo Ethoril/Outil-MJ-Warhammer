@@ -1,12 +1,10 @@
 // Q6 · T5 (docs/specs/tests-secondaires-agregateur/) : Tests hors combat par le calcul commun (`previewV5SecondaryTest`).
 // - Corruption (exposition et seuil) : Test subi (V5 p. 187 « a Test to resist … Corruption », p. 188 « hold off your
 //   corruption ») : États comptés, Inconscient ne bloque pas (CA21), question d'État en attente (CA8) ;
-// - poursuite (V5 p. 158-159) : Test actif, Inconscient bloque (CA14), mouvement et fuite sont donnés par la poursuite ;
 // - extraction de projectile (Guérison) et déploiement de rune Cadai (Savoir (Magie)) : Tests actifs, Inconscient bloque.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../../../js/core/store.js';
-import { previewPursuitTest } from '../../../js/core/v5-pursuit.js';
 
 const RESISTANCE = 'skill-52_e9_73_69_73_74_61_6e_63_65-base';
 const CALM = 'skill-43_61_6c_6d_65-base';
@@ -86,34 +84,6 @@ test('Corruption (seuil) : une question d’État rend needs-input avec son cham
   assert.deepEqual(preview.missing, ['involvesMovement']);
 });
 
-// --- Poursuite ----------------------------------------------------------------------------------------------------------
-
-const runner = (id, states = []) => person(id, { states, skills: [{ id: 'athl', name: 'Athlétisme', carac: 'Ag', status: 'resolved', total: 50 }] });
-const pursue = (actor, role, extra = {}) => previewPursuitTest(actor, { skill: 'Athlétisme', roll: 25, role, ...extra });
-
-test('poursuite : Sonné compté pour la proie comme pour le poursuivant', () => {
-  const witness = pursue(runner('q'), 'prey');
-  assert.equal(witness.ready, true);
-  assert.equal(pursue(runner('q', [STUNNED]), 'prey').test.sl, witness.test.sl - 1);
-  assert.equal(pursue(runner('p', [STUNNED]), 'pursuer').test.sl, pursue(runner('p'), 'pursuer').test.sl - 1);
-});
-
-test('poursuite : Test actif, un Inconscient ne peut pas le tenter (CA14)', () => {
-  const out = pursue(runner('q', [UNCONSCIOUS]), 'prey');
-  assert.equal(out.ready, false);
-  assert.match(out.restrictions.join(' '), /Inconscient/);
-});
-
-test('poursuite : mouvement donné (À terre compté sans question), la vue reste une question au MJ (CA8)', () => {
-  const prone = pursue(runner('q', [PRONE]), 'prey');
-  assert.equal(prone.ready, true, 'À terre : la poursuite implique un mouvement, pas de question');
-  assert.equal(prone.test.roll, 52, 'Désavantage d’À terre : 25 inversé en 52');
-  const blind = pursue(runner('p', [BLIND]), 'pursuer');
-  assert.equal(blind.ready, false);
-  assert.deepEqual(blind.needsInput.map(row => row.field), ['reliesOnSight']);
-  assert.equal(pursue(runner('p', [BLIND]), 'pursuer', { context: { reliesOnSight: false } }).ready, true);
-});
-
 // --- Extraction de projectile -------------------------------------------------------------------------------------------
 
 const HEAL = { id: 'heal', name: 'Guérison', carac: 'Int', status: 'resolved', total: 50 };
@@ -168,22 +138,8 @@ test('déploiement de rune Cadai : Inconscient bloque, une question d’État au
 const SURPRISED = { key: 'surpris', name: 'Surpris', level: 1 };
 const BROKEN = { key: 'brise', name: 'Brisé', level: 1 };
 
-test('poursuite et rune Cadai : Tests d’action, un Surpris ne les tente pas ce Round (CA14)', async () => {
-  const out = pursue(runner('p', [SURPRISED]), 'pursuer');
-  assert.equal(out.ready, false);
-  assert.match(out.restrictions.join(' '), /Surpris/);
+test('rune Cadai : un Surpris ne la déploie pas ce Round (CA14)', async () => {
   await assert.rejects(async () => { const { result } = await deploy([SURPRISED]); if (result?.ok === false) throw new Error(result.error); }, /Surpris/);
-});
-
-test('poursuite : la proie Brisée fuit (pas de pénalité), le poursuivant Brisé subit Brisé sans question (MJ 09/11 CA32)', () => {
-  const witness = pursue(runner('q'), 'prey'), pursuerWitness = pursue(runner('p'), 'pursuer');
-  assert.equal(pursue(runner('q', [BROKEN]), 'prey').test.sl, witness.test.sl, 'Brisé : pas de pénalité sur un Test pour fuir');
-  const pursuer = pursue(runner('p', [BROKEN]), 'pursuer');
-  assert.equal(pursuer.ready, true, 'CA32 : aucune question de fuite pour le poursuivant');
-  assert.equal(pursuer.test.sl, pursuerWitness.test.sl - 1, 'CA32 : le malus de Brisé s’applique');
-  // Une ancienne réponse « fuit » ne retire pas le malus : le poursuivant ne fuit pas.
-  const answered = pursue(runner('p', [BROKEN]), 'pursuer', { context: { runningOrHiding: true } });
-  assert.equal(answered.test.sl, pursuerWitness.test.sl - 1);
 });
 
 test('Corruption (seuil) : la réponse du MJ est gardée jusqu’à l’application', async () => {

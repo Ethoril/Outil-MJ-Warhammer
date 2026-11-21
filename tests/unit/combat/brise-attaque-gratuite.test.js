@@ -1,4 +1,4 @@
-// Attaque gratuite à la fuite d'un Brisé engagé (docs/specs/poursuite-v5, lot L4) : CA21, CA22, CA23 côté Store ; D7.
+// Attaque gratuite à la fuite d'un Brisé engagé (lot L4 de la spec poursuite-v5, abandonnée depuis) : CA21, CA22, CA23 côté Store ; D7.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createStore } from '../../../js/core/store.js';

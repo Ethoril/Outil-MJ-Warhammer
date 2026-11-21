@@ -187,20 +187,6 @@ try {
       await checkDialog(page, 'Jouer', width, { name, opener: page.locator(id), dialog: sheet, close: () => sheet.getByRole('button', { name: 'Fermer', exact: true }).click() });
     }
     await checkDialog(page, 'Jouer', width, { name: 'Temps de campagne', modal: true, opener: page.locator('#workspace-campaign-time'), dialog: page.locator('dialog.campaign-time-dialog') });
-    // Poursuite de scène (écran Jouer, entre deux participants) : fenêtre modale ; ses contrôles (rôles, jets, Obstacles) sont nommés une fois la poursuite saisie.
-    const pursuit = page.locator('dialog[data-pursuit-dialog]');
-    await checkDialog(page, 'Jouer', width, { name: 'Poursuite de scène', modal: true, opener: page.locator('[data-pursuit-scene-open]'), dialog: pursuit,
-      whileOpen: async () => {
-        await pursuit.getByLabel('Rôle de Hilda Brenner', { exact: true }).selectOption('prey');
-        await pursuit.getByLabel('Rôle de Gobelin', { exact: true }).selectOption('pursuer');
-        // Les profils de ce parcours n'ont pas de Mouvement : sans lui, la paire ne se forme pas (D22). Le MJ le saisit.
-        const movements = pursuit.locator('[data-pursuit-scene-movement]');
-        for (let i = 0, n = await movements.count(); i < n; i++) await movements.nth(i).fill('4');
-        await pursuit.locator('[data-pursuit-test-roll]').first().fill('30');
-        await expect(pursuit.locator('[data-pursuit-test-preview]')).toHaveCount(1);
-        await checkOverflow(page, 'Poursuite de scène', width);
-        await checkNames(page, cdp, 'Poursuite de scène', width);
-      } });
     await checkDialog(page, 'Jouer', width, { name: 'Terminer le combat', modal: true, opener: page.locator('#workspace-end-combat'), dialog: page.locator('dialog.encounter-end-dialog'),
       close: () => page.locator('dialog.encounter-end-dialog').getByRole('button', { name: 'Annuler', exact: true }).click() });
 

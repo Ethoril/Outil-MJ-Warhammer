@@ -1,3 +1,5 @@
+> **Abandonnée** (décision du MJ, 21/11/2026) : le module a été retiré du code ; ce dossier reste comme archive.
+
 # Spec · Poursuite selon le Livre de base V5
 
 Cadrage du 16/11/2026, sur `07d74b8` (prod 3.48.1). Matière : rapport du premier cadrage (`tmp/reprise-pro/cadrage-poursuite-rapport.md`, non versionné) et décisions du MJ du 15/11/2026.

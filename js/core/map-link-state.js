@@ -72,7 +72,7 @@ export function rangeCellsOf(participant) {
 
 /**
  * Portée de Bond en cases (D16) : le double de la Course effective, pour Charge, Saut et Sprint seulement (V5 p.357). `null` sans le Trait
- * ou sans Mouvement connu. Champ optionnel `bondCells` du `token.state` ; `speedCells` et `runCells` (lus aussi par la poursuite) ne changent pas.
+ * ou sans Mouvement connu. Champ optionnel `bondCells` du `token.state` ; `speedCells` et `runCells` ne changent pas.
  */
 export function bondCellsOf(participant) {
   if (!carriesMovement(participant, 'bounce')) return null;

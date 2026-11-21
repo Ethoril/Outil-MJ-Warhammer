@@ -2,7 +2,6 @@ import {participantCamp} from '../core/encounters.js';
 import {v5CombatActionClock} from '../core/v5-resources.js';
 import { engagedWith } from '../core/engagements.js';
 import { renderTestQuestions, renderObstinateChoice, renderSourceDetail } from './test-questions.js';
-import { pursuitFreesBrokenPrey } from '../core/store/api-pursuit.js';
 /** Interface MJ de la séquence obligatoire de Brisé (L06 p.163, 185–186).
  * Les faits restent locaux jusqu’au commit d’un reçu Store.
  */
@@ -56,7 +55,7 @@ function selectField(parent,label,value,key,options,change){
  options.forEach(row=>select.append(new Option(row[1],row[0])));
  select.value=value??'';select.addEventListener('change',()=>change(select.value||null));wrap.append(select);parent.append(wrap);return select;
 }
-export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()=>{},onPlayFreeAttack=()=>{},pursuitPanel=null}={}){
+export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()=>{},onPlayFreeAttack=()=>{}}={}){
  const drafts=new Map();
  const update=(id,draft,patch)=>{Object.assign(draft,patch,{preview:null,error:''});drafts.set(id,draft);refresh();};
  function draftFor(actor,progress,turnId){
@@ -79,7 +78,6 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   }
   drafts.set(actor.id,d);return d;
  }
- function appendPursuit(section,actor,participants,visible){const launch=pursuitPanel?.renderLaunch(actor,participants,{visible});if(launch)section.append(launch);}
  function appendHide(section,actor,draft,isTurn){
   const box=node('div','workspace-broken-hide');
   box.append(node('strong','','Hide reste facultatif après la sortie de vue.'));
@@ -143,10 +141,6 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   section.append(node('p','workspace-muted','Round '+(clock.round||'—')+' · Tour de '+(currentActor?.name||'à établir')));
   const isTurn=clock.actorId===actor.id&&actor.zone==='active';
   if(!isTurn)section.append(node('p','workspace-muted',actor.zone==='active'?'Le Tour actuel appartient à '+(clock.actorId||'un autre combattant')+'.':'Ce personnage n’est pas actif dans la rencontre.'));
-  // D20, D21 : le fuyard Brisé d'une poursuite en cours est quitte de la fuite et du Sprint, Test fait ou non ; le Tour où son Test l'a terminée aussi.
-  if(pursuitFreesBrokenPrey(whole,actor.id,clock.turnId))section.append(node('p','workspace-broken-status',whole.extensions?.v5?.pursuit?.status==='active'
-   ?'Fuyard d’une poursuite en cours : la poursuite vaut pour la fuite et le Sprint, le Tour peut se terminer, Test fait ou non.'
-   :'Son Test de poursuite de ce Tour vaut pour la fuite et le Sprint : le Tour peut se terminer.'));
   if(!progress?.fleeCommitted){
    const attestation=node('div','workspace-broken-attestation');
    attestation.append(node('strong','','Fait canonique de visibilité pour ce Tour'));
@@ -164,7 +158,6 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
   }
   if(progress?.fleeCommitted&&progress.sprintCommitted){
    section.append(node('p','workspace-broken-status','Sprint enregistré pour ce Tour.'+(progress.visibleToAnyEnemy?' Le personnage reste visible d’au moins un ennemi; la sortie de vue est à obtenir.':' Le MJ a confirmé hors de vue de tous les ennemis.')));
-   appendPursuit(section,actor,participants,progress.visibleToAnyEnemy===true);
    appendReceipt(section,actor,whole,clock,d);
    appendHide(section,actor,d,isTurn);return section;
   }
@@ -202,13 +195,13 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
      const free=Store.getFleeFreeAttacks?.(actor.id,d.engaged)||{playedIds:[],passedIds:[]};
      const attacks=node('fieldset','workspace-broken-facts');attacks.dataset.brokenEscapeFreeAttacks=actor.id;attacks.append(node('legend','','Attaques gratuites des adversaires engagés'));
      for(const id of d.engaged){
-      const name=participants.find(row=>row.id===id)?.name||id,done=free.playedIds.includes(id)?'jouée':free.passedIds.includes(id)?'passée':'en attente',row=node('div','workspace-pursuit-row');
+      const name=participants.find(row=>row.id===id)?.name||id,done=free.playedIds.includes(id)?'jouée':free.passedIds.includes(id)?'passée':'en attente',row=node('div','workspace-broken-row');
       row.append(node('strong','',name+' : '+done));
       const play=node('button','workspace-secondary','Jouer l’attaque gratuite');play.type='button';play.dataset.brokenEscapeFreeAttack=id;play.setAttribute('aria-label','Jouer l’attaque gratuite de '+name);play.disabled=!isTurn||done!=='en attente';
       play.addEventListener('click',()=>{if(!play.disabled)onPlayFreeAttack(id,actor.id);});
       const pass=node('button','workspace-secondary','Passer l’attaque gratuite');pass.type='button';pass.dataset.brokenEscapeFreeAttackPass=id;pass.setAttribute('aria-label','Passer l’attaque gratuite de '+name);pass.disabled=!isTurn||done!=='en attente';
       pass.addEventListener('click',async()=>{if(pass.disabled)return;try{await Store.passFleeFreeAttack(actor.id,id);d.error='';}catch(error){d.error=error?.message||'Attaque gratuite non passée.';}refresh();});
-      const spentLabel=node('label','workspace-pursuit-check',name+' a dépensé son Élan'),spent=document.createElement('input');spent.type='checkbox';spent.checked=d.spentMomentum.includes(id);
+      const spentLabel=node('label','workspace-broken-check',name+' a dépensé son Élan'),spent=document.createElement('input');spent.type='checkbox';spent.checked=d.spentMomentum.includes(id);
       spent.setAttribute('aria-label',name+' a dépensé son Élan');spent.dataset.brokenEscapeSpentMomentum=id;
       spent.addEventListener('change',()=>update(actor.id,d,{spentMomentum:spent.checked?[...d.spentMomentum,id]:d.spentMomentum.filter(other=>other!==id)}));
       spentLabel.prepend(spent);row.append(play,pass,spentLabel);attacks.append(row);
@@ -265,7 +258,6 @@ export function createV5BrokenEscapePanel({Store,refresh=()=>{},onPrepareHide=()
    const questions=renderTestQuestions(rows,{root:d.conditionContext||{},onChange:set,subjectOf:()=>actor,title:'À préciser avant le Test d’Athlétisme',focusPrefix:'broken-sprint',answeredAt:['']});
    if(questions)section.append(questions);
   }
-  appendPursuit(section,actor,participants,required==='sprint'?progress?.visibleToAnyEnemy===true:(d.before??progress?.visibleToAnyEnemy??null)===true);
   if(d.error)section.append(node('p','workspace-field-error',d.error));
   appendReceipt(section,actor,whole,clock,d);
   return section;
