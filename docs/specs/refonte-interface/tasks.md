@@ -10,7 +10,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 | E5 | Démarrage : tout faire entrer, initiative dans la case centrale | Sonnet | E0 · [P] avec E1, E3 | 11, 12 |
 | E2 | Case « À décider » : les 26 décisions, mort subite en un clic | **Opus** | E3 | 7-10 |
 | E4a | Mêlées en cartouches (clic = cible) et barre d'actions | Sonnet | E1 | 6 |
-| E4b | Résolution compacte : circonstances en puces, ligne Distance, sortie des suites de combat | **Opus** | E2, E4a | 13-15, 20 |
+| E4b | Résolution compacte : circonstances en puces, ligne Distance, sortie des suites de combat | **Opus** | E2, E4a | 13-15, 15a, 15b, 20 |
 | E6 | Recette : parcours complet, relevé coché, suite complète, notes de version | Sonnet | tous | 1-3, 16-18 |
 | F1-F3 | Préparer, Campagne, Bibliothèque sans défilement de page | Sonnet | publication E | 23 |
 
@@ -58,7 +58,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 
 ## E4b · Résolution compacte
 **Fichiers.** `js/ui/resolution-panel.js`, `js/ui/resolution-panel/*.js`, `js/ui/combat-distance.js` (nouveau), `tests/unit/combat/distance-tir.test.js`, `js/ui/workspace-view.js` (`renderCenter`, panneaux secondaires), `js/ui/encounter-end-dialog.js`, `js/ui/campaign-workspace.js`, `js/ui/workspace.css`.
-**Tests d'abord.** Six cas de tir : même `v5Context` et même aperçu qu'en 3.56.0.
+**Tests d’abord.** Six cas de tir : même `v5Context` et même aperçu qu’en 3.56.0 ; `tests/unit/ui/circonstances-pertinentes.test.js` (CA15a, CA15b).
 **À livrer.** Circonstances : puces déduites + panneau « autres… » en colonnes ; ligne Distance ; d100 de déviation dans le pied seulement s'il sert ; magie, prières et corruption dans la résolution ; suites de combat sorties vers la fin du combat et Campagne.
 **Acceptation.** Test unitaire ; parcours complet sans débordement de la zone `centre` sur R20.
 

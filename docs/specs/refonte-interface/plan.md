@@ -52,6 +52,7 @@ Un seul ajout, facultatif : `participant.extensions.v5.suddenDeathDeclined: true
 | 7, 8, 9, 10 | `tests/unit/ui/combat-decisions.test.js` : une situation par type de décision (26) → une entrée ; parcours : PNJ à 0 PV → carte visible dans la fenêtre, compteur, marque sur la frise ; Tour suivant actif ; mort en un clic. |
 | 11, 12 | Parcours : lancement R20 → 20 actifs ; ajout et retrait d'un combattant pendant la saisie de l'initiative. |
 | 13, 14, 15 | `tests/unit/combat/distance-tir.test.js` : chaque choix → mêmes champs `v5Context` et même aperçu de résolution qu'en 3.56.0 sur six cas (contact, bout portant, arme sans bout portant, courte, mêlée tierce touchée, mêlée tierce déviée). |
+| 15a, 15b | `tests/unit/ui/circonstances-pertinentes.test.js` : pour chaque type d'action, la liste proposée ne contient que des circonstances applicables (≤ 12), chacune avec son effet en clair ; aucune n'a sa valeur déductible du plateau, de la carte, des États ou des armes (celles-là sortent en puces déduites, forçables). |
 | 16 | `recette-fonctions.md` : chaque ligne de `fonctions-jouer.md` §1-10 avec son nouvel emplacement et son nombre de clics, cochée au lot E6. |
 | 17 | Suite unitaire complète au lot E6 (deux commandes de `CLAUDE.md`). |
 | 18 | Garde données : `git diff main -- js/core/ firebase.database.rules.json` ne montre que la lecture du champ du §4 ; `liaison-carte-messages-golden` vert. |

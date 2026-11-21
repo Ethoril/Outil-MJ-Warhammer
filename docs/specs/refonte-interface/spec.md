@@ -48,6 +48,10 @@ Rencontre de référence (R20) : la rencontre d'essai de l'inventaire (4 PJ dont
 - **CA14** « Au contact » donne le même résultat qu'aujourd'hui pour une cible engagée avec le tireur (mêlée opposée, sans modificateur de portée, restriction au pistolet quand elle s'applique). « Bout portant » est grisé, avec la raison, pour une arme sans bout portant.
 - **CA15** Tir sur une cible engagée avec d'autres : le Désavantage s'applique ; les engagés viennent du plateau ; le d100 de déviation n'est demandé, dans le pied de la résolution, que si le Désavantage fait rater un tir qui aurait touché.
 
+### S5 bis · Circonstances lisibles (ajout du MJ, 21/11)
+- **CA15a** L'onglet « Circonstances » disparaît. Le panneau « autres… » de la résolution ne propose que les circonstances qui s'appliquent à l'action en cours (mêlée, tir, sort, prière, test), au plus 12, chacune avec un libellé en clair qui dit son effet (« Cible à terre : +1 DR »).
+- **CA15b** Aucune case ne redemande ce que l'outil sait déjà (plateau, carte, États, armes, talents déclarés) : ces circonstances sont déduites et affichées en puces actives dans la résolution, et un clic suffit pour les forcer ou les retirer.
+
 ### S6 · Rien de perdu, rien de changé dans les règles
 - **CA16** Chaque fonction du relevé ([fonctions-jouer.md](fonctions-jouer.md), sections 1 à 10) reste accessible depuis l'écran de combat, en deux clics au plus.
 - **CA17** Pour les mêmes saisies, chaque résolution donne le même résultat qu'en 3.56.0 ; les tests unitaires existants passent sans modification de leurs attentes de règles.
