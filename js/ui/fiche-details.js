@@ -12,8 +12,12 @@ const LONG_TEXT=110;
 const activeTabs=new Map();
 let instance=0;
 export function resetFicheTabs(){activeTabs.clear();}
-export function renderFicheDetails(subject={}) {
- const root=element('details');root.className='fiche-consultation';root.append(element('summary','Fiche : compétences, talents et équipement'));
+// Refonte E3 : ouvre la fiche complète d'un participant sur l'onglet voulu (« magic » = Magie/Foi).
+export function setFicheTab(subjectId,key){if(subjectId!=null&&TABS.some(([tab])=>tab===key))activeTabs.set(String(subjectId),key);}
+// `embedded` : consultation dans le panneau « Fiche complète » (refonte E3), ouverte d'office et sans titre à replier.
+export function renderFicheDetails(subject={},{embedded=false}={}) {
+ const root=element('details');root.className='fiche-consultation'+(embedded?' is-embedded':'');root.append(element('summary','Fiche : compétences, talents et équipement'));
+ if(embedded)root.open=true;
  const source=subject.ficheSnapshot?.source;
  if(source&&(subject.extensions?.ficheId||subject.ficheSnapshot.charId))root.append(element('p',`Fiche ${subject.extensions?.ficheId || subject.ficheSnapshot.charId} · révision ${source.revision ?? 'non fournie'} · référentiel ${source.resolverVersion ? String(source.resolverVersion).replace(/^references:/,'').slice(0,12) : 'non indiqué'}`));
  const panels=new Map(TABS.map(([key])=>[key,element('div')]));

@@ -100,7 +100,10 @@ async function main() {
     await initiative.getByRole('button', { name: 'Confirmer et appliquer' }).click();
     await page.locator('#tab-combat').click();
     await expect(page.locator('.workspace-track .workspace-track-item')).toHaveCount(1);
-    const sheet = page.locator('.workspace-sheet-actor');
+    // Refonte E3 : la consultation de la fiche est dans le panneau « Fiche complète », ouvert par le menu ⋯ de la fiche.
+    await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click();
+    await page.getByRole('menuitem', { name: 'Fiche complète' }).click();
+    const sheet = page.locator('.workspace-fullsheet');
     await expect(sheet.locator('.fiche-consultation')).toContainText('Béni [Ulric] · rang 1');
     await expect(sheet.locator('.fiche-consultation')).toContainText('Morsure du loup');
 

@@ -113,24 +113,25 @@ try{
 
   // Recharge : la Ratling « Variable » exige un arbitrage positif avant d’avoir
   // un chargeur. La Poivrière réclame son fait de seconde main dans le panneau.
-  const openChip=async label=>{const summary=page.locator('.workspace-sheet-actor details.workspace-equipment-chip > summary',{hasText:label});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();};// U3 : panneaux d’équipement en puces sur la fiche de l’acteur
+  // Refonte E3 : les puces d’équipement sont dans la fiche complète (menu ⋯), panneau modal qu’on referme avant d’agir ailleurs.
+  const openFull=async()=>{await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click();await page.getByRole('menuitem',{name:'Fiche complète'}).click();};const closeFull=async()=>{await page.locator('.workspace-fullsheet').getByRole('button',{name:'Fermer'}).click();};const openChip=async label=>{await openFull();const summary=page.locator('.workspace-fullsheet details.workspace-equipment-chip > summary',{hasText:label});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();};// U3 : panneaux d’équipement en puces sur la fiche de l’acteur
   await openChip('Rechargement');
-  await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('6');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).first().click();
+  await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('6');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).first().click();await closeFull();
   state=await read();let ratling=state.combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-ratling');assert.equal(ratling.extensions.v5.reloadState.repeaterRating,6,'arbitrage Ratling persisté par le Store');
   await selectAttack('d-pepper-action');assert.equal(await confirmationValue(play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière')),'','la Poivrière exige une réponse explicite');
   await chooseBoolean(play.getByLabel('Seconde main libre pour préparer le canon de la Poivrière'),'false');await enterRoll(31);preview=await play.locator('.workspace-result-live').innerText();assert.match(preview,/Touché/u);await apply();
   state=await read();let pepper=state.combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-pepper');assert.equal(pepper.extensions.v5.reloadState.requiresReload,true,'main occupée : le tir perd À répétition et impose une recharge complète (L13 p.103, T2 bis)');
-  assert.ok(await play.getByLabel('Rechargement des armes').count(),'panneau Recharge visible dans l’application');
+  await openChip('Rechargement');assert.ok(await play.getByLabel('Rechargement des armes').count(),'panneau Recharge visible dans l’application');await closeFull();
 
   // Cas négatifs : Ratling vide/non arbitré ne propose aucune capacité inventée;
   // les entrées incohérentes de recharge sont rejetées dans l’interface.
   const negativeActor=structuredClone(actor);negativeActor.equipment=negativeActor.equipment.map(row=>row.id==='d-ratling'?{...row,extensions:{}}:row);
-  await load(combat(negativeActor,structuredClone(targetBase)));await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('0');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).click();
-  const invalidText=await play.innerText();assert.match(invalidText,/Arbitrage Ratling : capacité entière positive requise\./u,'la demande de capacité invalide produit une erreur visible');
+  await load(combat(negativeActor,structuredClone(targetBase)));await openChip('Rechargement');await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('0');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).click();
+  const invalidText=await play.innerText();await closeFull();assert.match(invalidText,/Arbitrage Ratling : capacité entière positive requise\./u,'la demande de capacité invalide produit une erreur visible');
   const negativeState=await read(),negativeRatling=negativeState.combat.participants.find(row=>row.id===actor.id)?.equipment?.find(row=>row.id==='d-ratling');assert.ok(negativeRatling,JSON.stringify(negativeState.combat.participants.find(row=>row.id===actor.id)));assert.equal(negativeRatling.extensions?.v5?.reloadState,undefined,'aucun chargeur créé après saisie invalide');
 
   // Undo/Redo, rechargement de page et persistance IndexedDB réels.
-  await load(combat(actor,target));await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('6');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).first().click();
+  await load(combat(actor,target));await openChip('Rechargement');await play.getByLabel('Capacité arbitrée — Mitrailleuse Ratling Skaven').fill('6');await play.getByRole('button',{name:'Enregistrer l’arbitrage'}).first().click();await closeFull();
   await page.locator('#btn-undo').click();assert.equal((await read()).combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-ratling').extensions?.v5?.reloadState,undefined,'Undo retire l’arbitrage');
   await page.locator('#btn-menu').click();await page.locator('#btn-redo').click();assert.equal((await read()).combat.participants.find(row=>row.id===actor.id).equipment.find(row=>row.id==='d-ratling').extensions?.v5?.reloadState?.repeaterRating,6,'Redo restaure l’arbitrage');
   const beforeReload=await read();await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});state=await read();

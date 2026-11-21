@@ -341,7 +341,7 @@ async function main() {
     await expect(result).toContainText('PV historiques négatifs : migration explicite à 0 requise avant une action V5.');
     await expect(result).not.toContainText('Acharnement');
     await expect(result).toContainText('8 arme + 6 DR − 3 BE − 1 PA = 10');
-    await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveAttribute('data-zone', 'arm-right');
+    await expect(targetSheet.locator('.workspace-sheet-pa-cell.is-hit')).toHaveAttribute('data-pa-zone', 'arm-right');
     await expect(page.getByRole('button', { name: 'Appliquer 10 dégâts à Combattant 2' })).toBeDisabled();
     await page.getByRole('button', { name: 'Annuler le résultat calculé' }).click();
     await expect(result).toHaveCount(0);
@@ -455,7 +455,7 @@ async function main() {
     await criticalLocation.press('Enter');
     await expect(result).toContainText('57 → Corps');
     // La zone touchée et la protection viennent de la localisation de l'attaque (22 → Bras Gauche), pas du critique.
-    await expect(targetSheet.locator('.silhouette-zone.is-hit')).toHaveAttribute('data-zone', 'arm-left');
+    await expect(targetSheet.locator('.workspace-sheet-pa-cell.is-hit')).toHaveAttribute('data-pa-zone', 'arm-left');
     await expect(result).toContainText('8 arme + 2 DR − 3 BE − 1 PA = 6');
     await expect(result).toContainText('PV 3 → 0');
     await expect(result).toContainText('Critique d’excédent : 3 Blessures au-delà de 0');

@@ -31,7 +31,9 @@ try {
   });
   const stateKeys = id => page.evaluate(i => window.__store.listParticipants().find(row => row.id === i).states.map(state => state.key), id);
   // Peur (2) : la commande est sur la fiche du combattant actif, pas chez un combattant sans le Trait.
-  const sheet = page.locator('.workspace-sheet-actor');
+  // Refonte E3 : la commande Peur/Terreur et le familier sont dans la fiche complète (menu ⋯), qui reste ouverte pour ce parcours.
+  await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click(); await page.getByRole('menuitem', { name: 'Fiche complète' }).click();
+  const sheet = page.locator('.workspace-fullsheet');
   const psychology = sheet.locator('.actor-psychology');
   assert.equal(await psychology.count(), 1, 'la fiche du combattant avec Peur (2) doit proposer « Au contact ou à la vue »');
   assert.match(await psychology.innerText(), /Au contact ou à la vue/);
@@ -43,7 +45,10 @@ try {
   // Familier : plus de création dans le cartouche (déclaré par la fiche du site ou le profil) ; un lien existant reste affiché.
   await page.evaluate(() => { window.__store.setCurrentActor?.('hero'); });
   await page.evaluate(async () => { await window.__store.updateParticipant('wraith', { zone: 'bench' }); });
-  assert.equal(await page.locator('.btn-create-familiar').count(), 0, 'le cartouche du PJ ne propose plus la création de familier');
+  // La fiche complète ouverte était celle du Spectre (acteur d'alors) : on la referme et on ouvre celle du PJ, devenu l'acteur.
+  await page.locator('.workspace-fullsheet').getByRole('button', { name: 'Fermer' }).click();
+  await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click(); await page.getByRole('menuitem', { name: 'Fiche complète' }).click();
+  assert.equal(await page.locator('.workspace-fullsheet .btn-create-familiar').count(), 0, 'la fiche du PJ ne propose plus la création de familier');
   const created = await page.evaluate(async () => window.__store.createFamiliar('hero', 'imp', { system: 'homunculus', kind: 'power', wind: 'aqshy', resource: 'fate' }));
   assert.equal(created?.ok, true, JSON.stringify(created));
   await page.evaluate(() => window.__view.setSpace('play'));

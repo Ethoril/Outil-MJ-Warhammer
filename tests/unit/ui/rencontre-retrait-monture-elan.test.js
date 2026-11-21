@@ -25,3 +25,25 @@ test('sans monture : case de l’onglet Profils transmise à l’ajout, bascule 
   assert.match(view, /Store\.setMountAbsent\(participant\.id, !absent\)/);
   assert.match(main, /Store\.addProfilesToCombat\(\[id\], \{ withoutMount \}\)/);
 });
+
+// Refonte E3 (21/11/2026) : structure du DOM seulement. Le retrait et « sans monture » passent par le menu ⋯ de la fiche compacte ;
+// le reste de la fiche est dans le panneau « Fiche complète » (parcours : tests/refonte-ecran-browser.mjs).
+test('menu ⋯ de la fiche : retrait, sans monture, renommer, camp, fiche complète, sorts et prières', () => {
+  for (const label of ['Retirer du combat…', 'Sans monture pour cette rencontre', 'Renommer', 'Changer de camp', 'Fiche complète', 'Sorts et prières']) {
+    assert.ok(view.includes(`'${label}'`), `entrée du menu : ${label}`);
+  }
+  assert.match(view, /workspace-sheet-menu-item/);
+  assert.match(view, /role: 'menuitem'/);
+  assert.match(view, /dataset\.sheetMenuButton/);
+});
+
+test('fiche complète : panneau superposé accessible, qui reprend ce que la fiche compacte ne montre plus', () => {
+  assert.match(view, /panel\.setAttribute\('role', 'dialog'\)/);
+  assert.match(view, /panel\.setAttribute\('aria-modal', 'true'\)/);
+  for (const key of ['body', 'states', 'reminders', 'traits', 'equipment', 'criticals', 'magic', 'fiche']) assert.ok(view.includes(`section('${key}'`), `section ${key}`);
+  assert.match(view, /renderFicheDetails\(participant, \{ embedded: true \}\)/);
+  // La fiche compacte n'embarque plus la consultation ni les blocs de créature.
+  const compact = view.slice(view.indexOf('function renderSheet('), view.indexOf('function calculationError('));
+  assert.doesNotMatch(compact, /renderFicheDetails\(/);
+  assert.doesNotMatch(compact, /createMagicListPicker\(/);
+});

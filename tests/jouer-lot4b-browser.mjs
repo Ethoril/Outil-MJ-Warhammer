@@ -222,7 +222,7 @@ async function main() {
 
     // Vérifier aperçu des dégâts sur la fiche cible (silhouette + PV après)
     await expect(targetSheet.locator('.workspace-sheet-hp-after')).toBeVisible();
-    await expect(targetSheet.locator('.silhouette-zone.is-hit')).toBeVisible();
+    await expect(targetSheet.locator('.workspace-sheet-pa-cell.is-hit')).toBeVisible();
 
     // Vérifier aussi les commandes et badges qui ne sont pas toujours présents dans le scénario.
     await page.evaluate(() => {

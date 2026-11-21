@@ -969,6 +969,84 @@
 }
 
 /* ==========================================================================
+   REFONTE · LOT E3 : fiches compactes (zones acteur et droite), menu ⋯, fiche complète
+   La fiche tient dans sa zone sur R20 ; tout le reste est dans le panneau « Fiche complète ».
+   ========================================================================== */
+.workspace-actor-sheet { gap: 6px; padding: 8px 10px; }
+.workspace-actor-sheet > * { min-width: 0; }
+.workspace-sheet-heading { flex-wrap: nowrap; align-items: flex-start; gap: 6px; }
+.workspace-sheet-identity { flex: 1 1 auto; }
+.workspace-sheet-name-row { gap: 2px 8px; }
+.workspace-sheet-name { font-size: 17px; line-height: 1.2; }
+.workspace-sheet-menu-button { flex: none; min-width: 34px; min-height: 30px; padding: 0 8px; font-size: 18px; font-weight: 800; line-height: 1; letter-spacing: 0.05em; }
+.workspace-sheet-pvrow { display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap; }
+.workspace-sheet-pvrow .workspace-sheet-hp { font-size: 20px; }
+.workspace-sheet-pvrow .workspace-hp-controls { margin: 0; gap: 4px; }
+.workspace-sheet-pvrow .workspace-hp-controls button { min-width: 30px; min-height: 28px; padding: 0 6px; }
+.workspace-sheet-pvrow .workspace-hp-amount { width: 3.2em; min-height: 28px; padding: 0 4px; }
+.workspace-sheet-pvrow .workspace-hp-controls select { min-width: 0; max-width: 8em; min-height: 28px; font-size: 12px; }
+.workspace-caracs { gap: 3px; margin: 0; }
+.workspace-carac { padding: 3px 1px; }
+.workspace-carac dd { font-size: 14px; }
+.workspace-sheet-pa { display: flex; align-items: stretch; gap: 3px; }
+.workspace-sheet-pa-label { display: flex; align-items: center; padding-right: 2px; font-size: 10.5px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--j-soft); }
+.workspace-sheet-pa-cell { flex: 1 1 0; min-width: 0; display: flex; align-items: baseline; justify-content: center; gap: 2px; padding: 2px 0; border: 1px solid var(--j-token-border); border-radius: 5px; background: var(--j-token-bg); font-size: 13px; font-weight: 700; color: var(--j-ink); }
+.workspace-sheet-pa-cell small { font-size: 9.5px; font-weight: 700; color: var(--j-soft); }
+.workspace-sheet-pa-cell.is-hit { background: var(--j-red); border-color: var(--j-red); color: #ffffff; }
+.workspace-sheet-pa-cell.is-hit small { color: #ffffff; }
+.workspace-sheet-resources { display: flex; flex-wrap: wrap; gap: 4px; }
+.workspace-sheet-resources > button, .workspace-sheet-more > button { min-height: 26px; padding: 2px 8px; font-size: 12px; font-weight: 600; border: 1px solid var(--j-line); border-radius: 5px; background: var(--j-wash); color: var(--j-ink); cursor: pointer; }
+.workspace-sheet-resources > button:hover:not(:disabled), .workspace-sheet-more > button:hover:not(:disabled) { background: var(--j-token-bg); border-color: var(--j-red-border); }
+.workspace-sheet-resources > button[aria-pressed="true"] { border-color: var(--j-red-border); box-shadow: inset 0 0 0 1px var(--j-red-border); }
+.workspace-sheet-mount { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 12.5px; }
+.workspace-sheet-mount > .workspace-mount-toggle { min-height: 26px; padding: 2px 8px; font-size: 12px; max-width: 100%; }
+.workspace-sheet-mount .workspace-without-mount { display: inline; }
+.workspace-sheet-states { display: block; }
+.workspace-sheet-states-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--j-soft); margin-right: 2px; }
+.workspace-sheet-states .workspace-state-list { gap: 4px; }
+.workspace-sheet-states .workspace-state-chip { white-space: normal; }
+.workspace-sheet-more { display: flex; flex-wrap: wrap; gap: 4px; }
+.workspace-sheet-chip.is-attention { border-color: var(--j-red-border); color: var(--j-red); }
+
+/* Couche des fiches : menu ⋯, formulaire d'état, fiche complète. Tout est en position fixe : aucune zone ne défile pour eux. */
+.workspace-sheet-layer { display: contents; }
+.workspace-sheet-menu-scrim { position: fixed; inset: 0; z-index: 70; background: transparent; }
+.workspace-sheet-menu {
+  position: fixed; z-index: 71; left: 8px; top: 8px; min-width: 230px; max-width: calc(100vw - 16px);
+  display: grid; gap: 1px; padding: 4px; border: 1px solid var(--j-line); border-radius: 8px;
+  background: var(--j-panel); color: var(--j-ink); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.workspace-sheet-menu-item { display: block; width: 100%; padding: 6px 10px; border: 0; border-radius: 5px; background: transparent; color: var(--j-ink); font: inherit; font-size: 14px; text-align: left; cursor: pointer; }
+.workspace-sheet-menu-item:hover:not(:disabled), .workspace-sheet-menu-item:focus-visible { background: var(--j-token-bg); }
+.workspace-sheet-menu-item:disabled { opacity: 0.55; cursor: not-allowed; }
+.workspace-sheet-menu-item.is-danger { color: var(--j-red); }
+.workspace-sheet-menu-sep { height: 1px; margin: 3px 0; background: var(--j-line); }
+.workspace-sheet-menu-title { padding: 4px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--j-soft); }
+.workspace-state-popover {
+  position: fixed; z-index: 69; left: 8px; top: 8px; width: min(340px, calc(100vw - 16px)); max-height: calc(100dvh - 16px);
+  padding: 8px; border: 1px solid var(--j-line); border-radius: 8px; background: var(--j-panel); color: var(--j-ink);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35); overflow: auto;
+}
+.workspace-state-popover .workspace-state-form { margin-top: 0; }
+.workspace-fullsheet-backdrop { position: fixed; inset: 0; z-index: 68; display: grid; place-items: center; padding: 12px; box-sizing: border-box; background: rgba(0, 0, 0, 0.5); }
+.workspace-fullsheet {
+  display: flex; flex-direction: column; gap: 8px; width: min(1180px, 100%); max-height: 100%; box-sizing: border-box;
+  padding: 12px 14px; border: 1px solid var(--j-line); border-top: 3px solid var(--j-red); border-radius: 8px;
+  background: var(--j-panel); color: var(--j-ink); box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+.workspace-fullsheet-head { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; }
+.workspace-fullsheet-title { margin: 0; margin-right: auto; font-size: 19px; line-height: 1.2; }
+.workspace-fullsheet-body { min-height: 0; overflow: auto; column-width: 330px; column-gap: 16px; overscroll-behavior: contain; }
+.workspace-fullsheet-section { break-inside: avoid; margin: 0 0 10px; display: grid; gap: 6px; min-width: 0; }
+.workspace-fullsheet-section[data-fullsheet-section="fiche"] { break-inside: auto; column-span: all; }
+.workspace-fullsheet .silhouette svg { width: 88px; }
+.workspace-fullsheet .fiche-consultation { margin-top: 0; }
+.workspace-fullsheet .fiche-consultation.is-embedded { padding: 0; border: 0; }
+.workspace-fullsheet .fiche-consultation.is-embedded > summary { display: none; }
+.workspace-fullsheet .fiche-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+.workspace-fullsheet .actor-mount { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ==========================================================================
    ZONE DE RÉSOLUTION : 3 ÉTAPES & PIED COLLANT (#workspace-play .workspace-resolution)
    ========================================================================== */
 .workspace-resolution {

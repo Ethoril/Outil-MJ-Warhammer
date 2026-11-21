@@ -55,8 +55,11 @@ try{
   await page.locator('[data-action-key="focus-test"]').click();
   assert.equal(await workspace.getByLabel('Objet de focalisation utilisé').count(),1);
   assert.equal(await workspace.getByText('Le bonus s’applique uniquement à Focalisation dans le domaine indiqué; le bâton ne réduit pas le niveau d’incantation.',{exact:true}).count(),1);
+  // Refonte E3 : les puces d’équipement sont dans la fiche complète (menu ⋯), panneau modal qu’on referme avant d’agir ailleurs.
+  const openFull=async()=>{await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click();await page.getByRole('menuitem',{name:'Fiche complète'}).click();};const closeFull=async()=>{await page.locator('.workspace-fullsheet').getByRole('button',{name:'Fermer'}).click();};
+  await openFull();
   assert.equal(await workspace.getByLabel('Encombrement de la pièce métallique équivalente (MJ)').count(),1);
-  const openChip=async label=>{const summary=page.locator('.workspace-sheet-actor details.workspace-equipment-chip > summary',{hasText:label});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();};// U3 : panneaux d’équipement en puces sur la fiche de l’acteur
+  const openChip=async label=>{const summary=page.locator('.workspace-fullsheet details.workspace-equipment-chip > summary',{hasText:label});if(!await summary.evaluate(el=>el.parentElement.open))await summary.click();};// U3 : panneaux d’équipement en puces
   await openChip('Plate de léviathan');
   await workspace.getByLabel('Encombrement de la pièce métallique équivalente (MJ)').fill('4');
   await workspace.getByRole('button',{name:'Enregistrer la référence métal'}).click();
@@ -68,7 +71,9 @@ try{
   const secondAction=workspace.getByRole('button',{name:'Dépenser la seconde Action au prochain Tour'});
   assert.equal(await secondAction.isDisabled(),true,'l’action restante est désactivée après la première dépense du Tour');
   await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.nextTurn();});
+  await closeFull();
   await page.locator('[data-workspace-select="f-review-actor"]').click();
+  await openFull();
   await page.waitForFunction(()=>{const button=[...document.querySelectorAll('.workspace-pavise-setup button')].find(row=>row.textContent.includes('seconde Action'));return button?.disabled===true;});
   await page.evaluate(async()=>{const {Store}=await import('/Outil-MJ-Warhammer/js/main.js');do await Store.nextTurn();while(Store.getCombat().currentActorId!=='f-review-actor');});
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('seconde Action au prochain Tour'));
@@ -76,6 +81,7 @@ try{
   await openChip('Pavois');
   await secondAction.click();
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('Planté face au north'));
+  await closeFull();
   assert.equal(await workspace.getByLabel('Objet porté contenant de la malepierre').count(),1);
   await openCorruption();
   await workspace.getByLabel('Objet porté contenant de la malepierre').selectOption(`equipment:${ratling.id}`);

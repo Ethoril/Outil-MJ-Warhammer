@@ -61,8 +61,10 @@ try {
     await page.waitForFunction(() => (JSON.parse(window.__store.getFullJSON()).extensions.v5.standardTurnActions || []).length === 2);
   });
   await check('C50 : recharge d’une arme jamais tirée refusée avec la raison en français ; compteur « chargée »', async () => {
-    // U3 : le rechargement est une puce sur la fiche de l’acteur ; le MJ l’ouvre.
-    const chip = page.locator('.workspace-sheet-actor details.workspace-equipment-chip > summary', { hasText: 'Rechargement' });
+    // U3 : le rechargement est une puce de l’équipement en jeu ; refonte E3 : elle est dans la fiche complète (menu ⋯), que le MJ ouvre puis referme.
+    await page.locator('.workspace-sheet-actor [data-sheet-menu-button]').click();
+    await page.getByRole('menuitem', { name: 'Fiche complète' }).click();
+    const chip = page.locator('.workspace-fullsheet details.workspace-equipment-chip > summary', { hasText: 'Rechargement' });
     if (!await chip.evaluate(el => el.parentElement.open)) await chip.click();
     const panel = page.locator('.workspace-weapon-reload');
     assert.match(await panel.innerText(), /Pistolet · chargée/);
@@ -71,6 +73,7 @@ try {
     const message = await panel.locator('.workspace-error').innerText();
     assert.match(message, /pas été tirée/);
     assert.doesNotMatch(message, /non enregistré|weapon-not-fired/);
+    await page.locator('.workspace-fullsheet').getByRole('button', { name: 'Fermer' }).click();
   });
   assert.deepEqual(errors, []);
 } finally { await browser.close(); server.close(); }
