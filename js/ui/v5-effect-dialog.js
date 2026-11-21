@@ -2,6 +2,7 @@
 import { userMessage, userError } from './messages.js';
 import { formatV5Balance } from '../core/v5-resources.js';
 import { resolveTraitAnswer } from '../core/trait-effects.js';
+import { publishDecision, withdrawDecision } from './combat-decisions.js';
 
 const BOOLEAN_FIELDS = new Set(['silkCut','minuteElapsed','restSatisfied','engaged','fullRoundHidden','causeEnded','medicalAttention','surgery','outOfCombat','overrideRecovery']);
 const el = (tag, text, className = '') => { const node = document.createElement(tag); if (text != null) node.textContent = text; if (className) node.className = className; return node; };
@@ -55,7 +56,11 @@ export function chooseV5RecoveryMethod({ participantName, condition, getFortune,
     fortuneEdit.addEventListener('click', async () => { fortuneEdit.disabled = true; try { await editFortune(); refreshFortune(); } finally { fortuneEdit.disabled = false; } });
     form.append(heading, label, fortuneHint, fortuneEdit, controls); dialog.append(form); document.body.append(dialog); refreshFortune();
     form.addEventListener('submit', event => { event.preventDefault(); if (!select.value) { select.focus(); return; } refreshFortune(); if (confirm.disabled) return; selected = select.value; dialog.close(); });
-    cancel.addEventListener('click', () => dialog.close()); dialog.addEventListener('close', () => { dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(selected); }, { once: true });
+    // Refonte E2 (décision 14) : la question figure aussi dans la case « À décider » tant que la fenêtre est ouverte.
+    const decisionId = `recuperation:${participantName}:${condition.key || condition.name}`;
+    publishDecision({ id: decisionId, kind: 'recuperation', titre: `${participantName} · récupérer ${condition.name}`, options: methods.map(([key, text]) => ({ key, label: text })),
+      onChoose: key => { select.value = key; select.dispatchEvent(new Event('change')); select.focus(); } });
+    cancel.addEventListener('click', () => dialog.close()); dialog.addEventListener('close', () => { withdrawDecision(decisionId); dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(selected); }, { once: true });
     dialog.showModal(); select.focus();
   });
 }
@@ -199,7 +204,10 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, g
       }catch(error){busy=false;confirm.disabled=false;cancel.disabled=false;showError(userMessage(error,'Les effets n’ont pas été enregistrés : vérifiez les résultats.'));}
     });
     cancel.addEventListener('click',()=>finish({status:'cancelled'}));dialog.addEventListener('cancel',event=>{if(busy)event.preventDefault();});
-    dialog.addEventListener('close',()=>{dialog.remove();opener?.isConnected&&opener.focus();resolve(outcome);},{once:true});
+    // Refonte E2 (décision 13) : la saisie attendue figure aussi dans la case « À décider » tant que la fenêtre est ouverte.
+    const decisionId=`effets-v5:${Date.now()}`;
+    publishDecision({id:decisionId,kind:'effets-v5',titre:title,options:[{key:'open',label:'Saisir les résultats'}],onChoose:()=>fields.querySelector('input,select')?.focus()});
+    dialog.addEventListener('close',()=>{withdrawDecision(decisionId);dialog.remove();opener?.isConnected&&opener.focus();resolve(outcome);},{once:true});
     render();dialog.showModal();fields.querySelector('input,select')?.focus();
   });
 }

@@ -22,6 +22,7 @@ import { prepareMagicOptions } from '../core/v5-magic-talents.js';
 import { recoveryMethodsFor, openV5EffectInputDialog } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { renderFrise, actorOutOfTurn } from './combat-frise.js';
+import { collectDecisions, renderDecisions, rememberDecisionCount, publishedDecisions, onPublishedDecisions } from './combat-decisions.js';
 import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '../core/outnumbering.js';
 // Surnombre, tir engagé et forçage du MJ ne valent que pour la cible où ils ont été saisis (spec engagements CA18).
 const TARGET_ENGAGEMENT_KEYS = ['targetEngaged', 'engagedWithShooter', 'engagedTargetIds', 'engagedTargetRoll', 'engagedDefensesById', 'shooterEngagedElsewhere', 'engagementForced'];
@@ -95,6 +96,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     carriedTarget: null,
     // Personnage actif choisi dans la piste : null = celui du tour, sinon { id, turn } (valable pour ce tour seulement).
     actorChoice: null,
+    // Case « À décider » (E2) : entrées réduites par « Plus tard » et celles écartées par « Non » (réglage de mort subite).
+    decisionsLater: new Set(),
+    decisionsDismissed: new Set(),
     libraryQuery: '',
     librarySection: 'profiles',
     sideQuery: '',
@@ -2870,49 +2874,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const suddenDeathCandidates = !suddenDeathEnabled ? [] : (context.participants || []).filter(row => ['PNJ', 'Créature'].includes(row.kind)
       && Number(row.hp) === 0 && row.extensions?.v5?.dead !== true
       && !(row.states || []).some(state => state.key === 'inconscient' || state.name === 'Inconscient'));
-    if (suddenDeathCandidates.length) {
-      const banner = node('section', 'workspace-card workspace-sudden-death workspace-sudden-death-banner');
-      banner.setAttribute('aria-label', 'Mort subite : décision du MJ attendue');
-      banner.appendChild(rubric('Mort subite — décision attendue'));
-      for (const participant of suddenDeathCandidates) {
-        const row = node('div', 'workspace-result-line');
-        row.appendChild(node('span', '', `${participant.name || participant.id} · 0 Blessure`));
-        const confirmLabel = node('label', 'workspace-type', 'Confirmer que c’est un PNJ secondaire');
-        const confirm = document.createElement('input');
-        confirm.type = 'checkbox';
-        confirm.setAttribute('aria-label', `${participant.name || participant.id} : confirmer PNJ secondaire`);
-        confirmLabel.prepend(confirm);
-        row.appendChild(confirmLabel);
-        const preview = () => Store.previewSuddenDeath(participant.id, confirm.checked);
-        const status = node('span', 'workspace-muted', 'Choix MJ requis après confirmation du statut de figurant.');
-        row.appendChild(status);
-        for (const [outcome, label] of [['dead', 'Choisir : mort'], ['unconscious', 'Choisir : inconscient']]) {
-          const choose = button(label, 'workspace-secondary');
-          choose.type = 'button';
-          choose.disabled = true;
-          confirm.addEventListener('change', () => {
-            const plan = preview();
-            choose.disabled = !plan.ready;
-            status.textContent = plan.ready ? 'Éligible — le MJ choisit une issue.' : plan.reason;
-          });
-          choose.addEventListener('click', async () => {
-            choose.disabled = true;
-            try {
-              const plan = preview();
-              if (!plan.ready) throw new Error(plan.reason);
-              await Store.decideSuddenDeath(participant.id, outcome, { secondaryNpcConfirmed: true, baseRevision: plan.baseRevision });
-              render();
-            } catch (error) {
-              choose.disabled = false;
-              status.textContent = userMessage(error, 'Décision non enregistrée.');
-            }
-          });
-          row.appendChild(choose);
-        }
-        banner.appendChild(row);
-      }
-      center.appendChild(banner);
-    }
+    // Refonte E2 : la bannière de mort subite est remplacée par la case « À décider » (zone de droite, combat-decisions.js).
+    decisionForms.clear();
     const tableRules = () => {
       const details = node('details', 'workspace-card workspace-table-rules');
       details.appendChild(node('summary', '', 'Règles de table'));
@@ -2937,7 +2900,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       optionLabel.prepend(option);
       suddenDeath.appendChild(optionLabel);
       if (suddenDeathEnabled) suddenDeath.appendChild(node('p', 'workspace-muted', suddenDeathCandidates.length
-        ? 'Décision attendue : voir la bannière en haut de la colonne.'
+        ? 'Décision attendue : voir la case « À décider ».'
         : 'Aucun figurant à 0 Blessure à arbitrer.'));
       details.appendChild(suddenDeath);
       return details;
@@ -3046,15 +3009,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if(['countdown','awaiting-mj'].includes(v5.criticalDeath?.status))criticalDecisions.push({kind:'countdown',participant,countdown:v5.criticalDeath});
       if(v5.pendingStateDeath&&v5.dead!==true)criticalDecisions.push({kind:'state',participant,pending:v5.pendingStateDeath});
     }
-    if(criticalDecisions.length){
-      const section=node('section','workspace-card workspace-critical-death-decisions');
-      section.setAttribute('aria-label','Décisions MJ sur les morts critiques');
-      section.appendChild(rubric('Décisions du MJ — mort critique'));
+    // Refonte E2 : chaque ligne de décision part dans sa carte de la case « À décider » (même identifiant que collectDecisions).
+    {
       for(const item of criticalDecisions){
         const stateCause={bleeding:'hémorragie',poison:'poison','fire-critical':'flammes',suffocation:'asphyxie'}[item.pending?.source]||'état';
         const participant=item.participant,label=item.kind==='state'?`${participant.name} · décès proposé par ${stateCause} (Round ${item.pending.round})`:item.kind==='table'?`${participant.name} · ${item.record.effectName} (${item.record.source?.printedName||item.record.table})`:`${participant.name} · décompte arrivé à l’échéance du Round ${item.countdown.dueRound}`;
-        const row=node('div','workspace-result-line');
-        row.appendChild(node('span','',label));
+        const row=node('div','workspace-result-line workspace-critical-death-decision');
+        row.setAttribute('aria-label',label);
         const bodyIntact=buildBodyIntactControl(tag=>document.createElement(tag),participant);
         if(bodyIntact)row.appendChild(bodyIntact);
         // Crâne fracassé (V5 p. 173) : une arme tranchante peut décapiter ; le MJ le constate, la carte joue la décapitation.
@@ -3072,15 +3033,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             }catch(error){
               button.disabled=false;
               const message=userMessage(error,'Décision MJ non enregistrée.');
-              section.appendChild(node('p','workspace-error',message));
+              row.appendChild(node('p','workspace-error',message));
             }
           });
           row.appendChild(button);
         }
-        if(item.kind==='countdown'&&item.countdown.status==='countdown')row.appendChild(node('span','workspace-muted',` — échéance Round ${item.countdown.dueRound}`));
-        section.appendChild(row);
+        decisionForms.set(item.kind==='state'?`mort-critique:${participant.id}:etat:${item.pending.id}`:item.kind==='table'?`mort-critique:${participant.id}:${item.record.id}`:`mort-critique:${participant.id}:decompte`,row);
       }
-      center.appendChild(section);
     }
     const amputationFollowups=[];
     for(const participant of context.participants||[])for(const record of participant.extensions?.v5?.criticalAftermath||[]){
@@ -3089,13 +3048,13 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       if(preview?.status==='deferred')continue;
       if(preview?.status!=='duplicate'&&preview?.requirements?.length)amputationFollowups.push({participant,record,requirements:preview.requirements,shockPart:preview.shockPart||preview.requirements[0]?.part});
     }
-    if(amputationFollowups.length){
-      const section=node('section','workspace-card workspace-amputation-followups');
-      section.setAttribute('aria-label','Chocs d’amputation à résoudre');
-      section.appendChild(rubric('Chocs d’amputation — Test de Résistance'));
+    {
       for(const item of amputationFollowups){
         const {participant,record,requirements}=item,parts=[...new Set(requirements.map(row=>AMPUTATION_PART_LABELS[row.part]||row.part).filter(Boolean))].join(', ')||'membre',canReject= requirements.length>0&&requirements.every(row=>row.conditional===true);
-        section.appendChild(node('p','workspace-result-line',`${participant.name} · ${record.effectName} · amputation : ${parts} · Résistance ${requirements[0].difficultyDR} DR${(record.sequela?.durableEffects||[]).some(effect=>effect.kind==='surgery-required')?' · chirurgie requise':''}`));
+        const section=node('div','workspace-amputation-followup');
+        section.setAttribute('aria-label',`Choc d’amputation : ${participant.name}`);
+        decisionForms.set(`choc-amputation:${participant.id}:${record.id}`,section);
+        section.appendChild(node('p','workspace-muted',`${participant.name} · ${record.effectName} · amputation : ${parts} · Résistance ${requirements[0].difficultyDR} DR${(record.sequela?.durableEffects||[]).some(effect=>effect.kind==='surgery-required')?' · chirurgie requise':''}`));
         const row=node('div','workspace-critical-amputation-controls');
         const allFingersLost=requirements.some(requirement=>requirement.trigger==='all-fingers-lost'),factLabel=allFingersLost?'Tous les doigts ont été perdus':'Amputation effectivement survenue';
         const occurrenceLabel=node('label','workspace-type',factLabel),occurrence=document.createElement('select');
@@ -3165,7 +3124,6 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         row.append(apply,error);
         section.append(row);
       }
-      center.appendChild(section);
     }
 
     if (callbacks.renderOverview) {
@@ -3173,11 +3131,12 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const rendered = callbacks.renderOverview(content);
       if (rendered instanceof Node) content.appendChild(rendered);
       else if (typeof rendered === 'string' && rendered) content.textContent = rendered;
+      // Refonte E2 : rappels et événements de scène (« À traiter », main.js) déplacés tels quels dans la case « À décider ».
       if (content.childNodes.length) {
-        const pending = node('section', 'workspace-pending workspace-card');
+        const pending = node('div', 'workspace-pending');
         pending.setAttribute('aria-label', 'À traiter');
-        pending.append(rubric('À traiter'), content);
-        center.appendChild(pending);
+        pending.append(content);
+        decisionForms.set('overview', pending);
       }
     }
     center.appendChild(tableRules());
@@ -3270,6 +3229,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return preview && !preview.choiceRequired && preview.targetId === participant.id ? previewHpLoss(preview) : 0;
   }
   let playReady = false;
+  // Formulaires de décision construits par renderCenter (morts critiques, chocs d'amputation, « À traiter ») et déplacés
+  // tels quels dans la case « À décider » : identifiant d'entrée (ou formKey) → nœud.
+  const decisionForms = new Map();
   // Refonte de l'interface (lot E0) : grille fixe de l'espace Jouer, une zone par case de la maquette A, repérée par
   // `data-zone` (frise, acteur, centre, droite, bas) pour les tests et les lots suivants. Les blocs existants y sont
   // relogés tels quels par renderPlay() ; chaque zone défile seule tant que les lots E1 à E4b ne l'ont pas compactée.
@@ -3306,9 +3268,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     refs.play.appendChild(grid);
     return { grid, zones, track, center, actionsSlot, side };
   })();
-  // Blocs relogés hors du centre après chaque rendu (lot E0) : fiches de l'acteur et de la cible, décisions attendues,
-  // barre d'actions du combattant. Les nœuds gardent leurs écouteurs ; ils sont reconstruits à chaque rendu.
-  const DECISION_BLOCKS = '.workspace-sudden-death-banner, .workspace-critical-death-decisions, .workspace-amputation-followups';
+  // Blocs relogés hors du centre après chaque rendu (lot E0) : fiches de l'acteur et de la cible, barre d'actions du
+  // combattant. Les nœuds gardent leurs écouteurs ; ils sont reconstruits à chaque rendu. Les décisions vont dans la case
+  // « À décider » (E2, renderDecisionsZone).
   function placeInZones() {
     const { zones, center, track, actionsSlot } = play;
     zones.acteur.replaceChildren();
@@ -3318,7 +3280,6 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const actorSheet = duel?.querySelector('.workspace-sheet-actor');
     const targetSheet = duel?.querySelector('.workspace-sheet-target');
     if (actorSheet) zones.acteur.appendChild(actorSheet);
-    zones.droite.append(...center.querySelectorAll(`:scope > :is(${DECISION_BLOCKS})`));
     if (targetSheet) zones.droite.appendChild(targetSheet);
     if (duel && !duel.children.length) duel.remove();
     const actionBar = track.querySelector(':scope > .workspace-action-bar');
@@ -3373,12 +3334,109 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   const rollButtonsObserver = pressDocument.defaultView?.MutationObserver ? new pressDocument.defaultView.MutationObserver(() => addRollButtons(refs.play)) : null;
   rollButtonsObserver?.observe(refs.play, { childList: true, subtree: true });
 
+  // ——— Case « À décider » (refonte E2, CA7 à CA10) ———
+  // Les décisions se lisent après renderCenter (aperçu de résolution et formulaires à jour) ; aucune ne bloque « Tour suivant ».
+  function decisionsContext(context) {
+    let initiativePending = false;
+    try { initiativePending = play.grid.classList.contains('is-initiative'); } catch { initiativePending = false; }
+    return { ...context, resolution: state.resolution, initiativePending, requests: publishedDecisions(), dismissed: state.decisionsDismissed };
+  }
+  function playDecisions(context) {
+    let entries = [];
+    try { entries = collectDecisions(decisionsContext(context), Store); } catch { entries = []; }
+    // Filet : un bloc « À traiter » rendu par main.js sans entrée reconnue reste visible dans la case.
+    if (decisionForms.has('overview') && !entries.some(entry => entry.formKey === 'overview')) entries.push({ id: 'a-traiter', kind: 'rappel', participantId: null, titre: 'À traiter', formKey: 'overview', options: [{ key: 'open', label: 'Voir' }] });
+    return entries;
+  }
+  // Après une décision : l'entrée réglée disparaît au rendu suivant ; « Plus tard » reste compté (CA9).
+  const SHOW_PANEL = { corruption: '[data-secondary-panel="corruption"]', jugement: '[data-divine-panel]', brise: '.workspace-broken-escape, [data-broken-escape]', familier: '.actor-familiar', peur: '.workspace-action-bar' };
+  function revealDecision(entry) {
+    const root = refs.play;
+    if (entry.kind === 'initiative') {
+      const board = root.querySelector('[data-initiative="board"]');
+      board?.querySelector('input, select, button')?.focus();
+      return;
+    }
+    if (['maladresse', 'deviation', 'incident-magie', 'questions-etats', 'equipement'].includes(entry.kind)) {
+      const links = [...root.querySelectorAll('.workspace-blocking-link')];
+      const link = links.find(item => entry.detail && item.textContent.includes(entry.detail.slice(0, 24))) || links[0];
+      if (link) { link.click(); return; }
+      root.querySelector('.workspace-resolution')?.scrollIntoView({ block: 'start' });
+      return;
+    }
+    if (entry.participantId && entry.participantId !== playContext().actor?.id) selectActor(entry.participantId);
+    const panel = SHOW_PANEL[entry.kind] && root.querySelector(SHOW_PANEL[entry.kind]);
+    if (panel) {
+      if (panel.tagName === 'DETAILS') panel.open = true;
+      panel.scrollIntoView({ block: 'nearest' });
+      panel.querySelector('summary, button, input, select')?.focus();
+    }
+  }
+  const decisionErrors = new Map();
+  async function chooseDecision(entry, key) {
+    const id = entry.participantId;
+    const fail = error => { decisionErrors.set(entry.id, userMessage(error, 'Décision non enregistrée.')); render(); };
+    decisionErrors.delete(entry.id);
+    if (key === 'resume') { state.decisionsLater.delete(entry.id); render(); return; }
+    if (key === 'later') { state.decisionsLater.add(entry.id); render(); return; }
+    if (typeof entry.onChoose === 'function') { try { await entry.onChoose(key); } catch (error) { fail(error); } return; }
+    try {
+      if (entry.kind === 'mort-subite') {
+        if (key === 'declined') await Store.setSuddenDeathDeclined(id, true);
+        else {
+          // Un clic suffit (CA8) : « Mort » ou « Inconscient » vaut confirmation du statut de figurant.
+          const plan = Store.previewSuddenDeath(id, true);
+          if (!plan.ready) throw new Error(plan.reason || 'Choix MJ requis.');
+          await Store.decideSuddenDeath(id, key, { secondaryNpcConfirmed: true, baseRevision: plan.baseRevision });
+        }
+      } else if (entry.kind === 'reglage-mort-subite') {
+        if (key === 'enable') await Store.setSuddenDeathEnabled(true);
+        else state.decisionsDismissed.add(entry.id);
+      } else if (entry.kind === 'issue-letale') {
+        const v5Context = state.resolution.v5Context || {};
+        resolutionHandlers.select({ v5Context: key === 'confirm' ? { ...v5Context, confirmLethalDeath: true } : { ...v5Context, lethalIntent: false, confirmLethalDeath: false } });
+        return;
+      } else if (entry.kind === 'rappel' && ['resolve', 'ignore', 'snooze'].includes(key) && entry.id.startsWith('rappel:')) {
+        await Store.resolveReminder(entry.id.slice('rappel:'.length), key);
+      } else {
+        revealDecision(entry);
+        return;
+      }
+      state.decisionsLater.delete(entry.id);
+      render();
+    } catch (error) { fail(error); }
+  }
+  function renderDecisionsZone(entries) {
+    renderDecisions(play.zones.droite, entries, { choose: chooseDecision, forms: decisionForms, later: state.decisionsLater, errors: decisionErrors });
+  }
+  // Une question publiée (fenêtre des effets, méthode de récupération…) redessine la case, la frise et le compteur au
+  // prochain cycle, sans reconstruire le centre ni les fiches (la fenêtre ouverte garde son contexte et son focus).
+  let decisionsRefresh = 0;
+  function refreshDecisions() {
+    const context = playContext();
+    play.zones.droite.querySelector(':scope > [data-decisions]')?.remove();
+    const decisions = playDecisions(context);
+    context.decisions = decisions;
+    renderDecisionsZone(decisions);
+    rememberDecisionCount(decisions.length);
+    renderFrise(play.zones.frise, context, { selectActor: id => { state.space = 'play'; selectActor(id); } });
+    refs.root.ownerDocument.dispatchEvent(new CustomEvent('workspace-actor-change', { detail: actorOutOfTurn(context) }));
+  }
+  onPublishedDecisions(() => {
+    if (decisionsRefresh) return;
+    decisionsRefresh = setTimeout(() => { decisionsRefresh = 0; if (refs.root.isConnected) refreshDecisions(); }, 0);
+  });
+
   function renderPlay() {
     const context = playContext();
     renderTrack(context);
     renderCenter(context);
     placeInZones();
     mountCircumstances();
+    const decisions = playDecisions(context);
+    context.decisions = decisions;
+    renderDecisionsZone(decisions);
+    rememberDecisionCount(decisions.length);
     renderFrise(play.zones.frise, context, { selectActor: id => { state.space = 'play'; selectActor(id); } });
     // La barre du haut (combat-banner.js) écoute ce message pour écrire « X agit hors de son tour ».
     refs.root.ownerDocument.dispatchEvent(new CustomEvent('workspace-actor-change', { detail: actorOutOfTurn(context) }));
