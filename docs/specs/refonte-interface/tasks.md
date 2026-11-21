@@ -11,6 +11,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 | E2 | Case « À décider » : les 26 décisions, mort subite en un clic | **Opus** | E3 | 7-10 |
 | E4a | Mêlées en cartouches (clic = cible) et barre d'actions | Sonnet | E1 | 6 |
 | E4b | Résolution compacte : circonstances en puces, ligne Distance, sortie des suites de combat | **Opus** | E2, E4a | 13-15, 15a, 15b, 20 |
+| E2b | Fin de « À décider » : décisions 6, 12, 16, 17, 20, 21 branchées ; fenêtres d'effets V5 non modales ; fiche de la cible sans défilement avec une décision en attente | Sonnet | E4b | 7, 10 |
 | E6 | Recette : parcours complet, relevé coché, suite complète, notes de version | Sonnet | tous | 1-3, 16-18 |
 | F1-F3 | Préparer, Campagne, Bibliothèque sans défilement de page | Sonnet | publication E | 23 |
 
@@ -64,3 +65,8 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 
 ## E6 · Recette
 **À livrer.** `recette-fonctions.md` coché (chaque fonction du relevé, emplacement, clics) ; parcours complet vert ; suite unitaire complète verte ; notes de version ; captures avant/après pour le MJ ; recette du MJ à la table sur localhost, puis publication à son feu vert.
+
+## E2b · Fin de la case « À décider » (ajouté le 21/11 après E2)
+**Contexte.** E2 (commit 38fa9738, notes `refonte-e2-a-decider.md` du dossier partagé) a branché 20 des 26 décisions. `js/ui/combat-decisions.js` expose `publishDecision({ id, kind, titre, options, onChoose })` et `withdrawDecision(id)`.
+**Fichiers.** `js/ui/workspace/plateau.js` (6 fuite et désengagement), `js/ui/v5-divine-panel.js` ou le panneau des prières (12 Péché et Courroux : si le moteur n'expose aucun état « Courroux en attente », le dire au rapport au lieu de l'inventer), `js/ui/encounter-end-dialog.js` (16 retrait, 17 fin de combat), `js/ui/map-link-feedback.js` (20 engagement suggéré par la carte), `js/main.js` (21 course sur la carte), `js/ui/v5-effect-dialog.js` (fenêtres d'effets V5 non modales : panneau dans la case ou superposé sans bloquer le reste, CA10), `js/ui/workspace.css` (zone droite), `tests/unit/ui/combat-decisions.test.js`, `tests/refonte-ecran-browser.mjs`.
+**Acceptation.** Les six décisions publiées et retirées dans la case (tests unitaires) ; aucune `dialog` modale ouverte pendant le combat dans le parcours, sauf la confirmation de « Terminer le combat » ; fiche de la cible sans défilement interne quand une décision attend ; parcours vert.
