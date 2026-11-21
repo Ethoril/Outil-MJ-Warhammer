@@ -140,8 +140,8 @@
   --j-outcome-crit-border: #d99a94;
 
   /* Polices système et empattement local (aucune ressource distante) */
-  --j-serif: Georgia, "Times New Roman", Times, serif;
-  --j-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --j-serif: var(--font-ui);
+  --j-sans: var(--font-ui);
 
   /* Redéfinition circonscrite des variables génériques pour les composants enfants de Jouer */
   --bg: var(--j-paper);
@@ -1933,3 +1933,44 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-chip-panel { margin-top: 6px; padding: 8px 10px; border: 1px solid var(--chip); border-radius: var(--radius); background: var(--bg); }
 .workspace-chip-panel > .workspace-card-title { display: none; }
 .workspace-table-rules > summary, .workspace-aftermath > summary { cursor: pointer; }
+
+/* ==========================================================================
+   REFONTE · LOT E0 : grille fixe de l'espace Jouer (maquette A)
+   frise en haut ; acteur à gauche ; mêlées et résolution au centre ; « À décider » et cible à droite ;
+   barre d'actions et onglets en bas. Chaque zone porte data-zone et défile seule tant qu'un lot ne l'a pas compactée.
+   ========================================================================== */
+#workspace-play > .workspace-play-grid { grid-template-columns: minmax(0, 1fr); align-items: stretch; }
+.workspace-area { min-width: 0; min-height: 0; display: grid; gap: var(--workspace-gap); align-content: start; }
+.workspace-area[data-zone="frise"]:empty { display: none; }
+.workspace-area-actions:empty { display: none; }
+.workspace-area-bas { grid-template-columns: minmax(0, 1fr); }
+
+@media (min-width: 1000px) {
+  body:has(#panel-workspace.is-active #workspace-play:not([hidden])) .workspace-view { height: 100%; margin: 0; padding-block: 8px; grid-template-rows: minmax(0, 1fr); }
+  #workspace-play:not([hidden]) { height: 100%; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+  #workspace-play > .workspace-play-grid {
+    --zone-side: 330px;
+    height: 100%;
+    gap: 8px;
+    grid-template-columns: var(--zone-side) minmax(0, 1fr) var(--zone-side);
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "frise frise frise" "acteur centre droite" "bas bas bas";
+  }
+  #workspace-play > .workspace-play-grid.is-side-collapsed { grid-template-columns: var(--zone-side) minmax(0, 1fr) var(--zone-side); }
+  .workspace-area { overflow: auto; overscroll-behavior: contain; }
+  .workspace-area[data-zone="frise"] { grid-area: frise; }
+  .workspace-area[data-zone="acteur"] { grid-area: acteur; }
+  .workspace-area[data-zone="centre"] { grid-area: centre; }
+  .workspace-area[data-zone="droite"] { grid-area: droite; }
+  .workspace-area[data-zone="bas"] { grid-area: bas; grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+  .workspace-area-actions { min-width: 0; min-height: 0; max-height: 30vh; overflow: auto; }
+  .workspace-area-actions > .workspace-action-bar { margin: 0; }
+  /* Onglets Règles, Profils, Circonstances, Journal : dans la barre du bas, le contenu défile dans sa case. */
+  .workspace-area-bas > .workspace-side { width: min(620px, 44vw); height: 30vh; max-height: none; min-height: 0; }
+  .workspace-area-bas > .workspace-side.is-collapsed { width: auto; height: auto; }
+  .workspace-area-bas > .workspace-side.is-collapsed .workspace-side-header { flex-direction: row; align-items: stretch; padding: 6px; border-radius: 7px; }
+  .workspace-area-bas > .workspace-side.is-collapsed .workspace-side-tabs { flex-direction: row; }
+  .workspace-area-bas > .workspace-side.is-collapsed .workspace-side-tab { writing-mode: horizontal-tb; padding: 4px 8px; min-height: 32px; }
+  .workspace-area-bas:not(:has(.workspace-area-actions:not(:empty))) { grid-template-columns: minmax(0, 1fr); justify-items: end; }
+  .workspace-area .workspace-actor-sheet { box-shadow: none; }
+}

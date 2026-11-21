@@ -55,7 +55,14 @@ try {
         page: { scrollHeight: doc.scrollHeight, height: innerHeight, scrollWidth: doc.scrollWidth, width: innerWidth },
         zones: zones.map(name => {
           const el = document.querySelector(`[data-zone="${name}"]`);
-          return el ? { name, shown: el.getClientRects().length > 0, ...box(el) } : { name, absent: true };
+          if (!el) return { name, absent: true };
+          // Débordement en largeur : l'élément qui dépasse le plus à droite, pour orienter les lots suivants.
+          const edge = el.getBoundingClientRect().right;
+          const widest = el.scrollWidth > el.clientWidth + 1 ? [...el.querySelectorAll('*')].reduce((most, item) => {
+            const right = item.getBoundingClientRect().right;
+            return right > most.right ? { right, label: `${item.tagName.toLowerCase()}.${[...item.classList].join('.')}` } : most;
+          }, { right: edge, label: '' }).label : '';
+          return { name, shown: el.getClientRects().length > 0, widest, ...box(el) };
         }),
         windows: [...document.querySelectorAll('dialog[open]')].map(el => {
           const r = el.getBoundingClientRect();
@@ -119,7 +126,7 @@ try {
   await chooseAction('Hand Weapon');
   await chooseTarget('Erich Massenbach');
   await rollInput('attack', 23);
-  await rollInput('defense', 88);
+  await rollInput('defense', 87);
   await press('defense');
   await page.locator('.workspace-result').first().waitFor();
   await measure('attaque de mêlée');
@@ -208,7 +215,7 @@ try {
 console.log('\nRefonte · mesure de l’écran de combat sur R20, 1440 × 800');
 for (const row of report) {
   if (row.note) { console.log(`- ${row.step} : ${row.note}`); continue; }
-  const zones = row.overflowing.map(z => `${z.name} ${z.scrollHeight}/${z.clientHeight}${z.scrollWidth > z.clientWidth + 1 ? ` (largeur ${z.scrollWidth}/${z.clientWidth})` : ''}`);
+  const zones = row.overflowing.map(z => `${z.name} ${z.scrollHeight}/${z.clientHeight}${z.scrollWidth > z.clientWidth + 1 ? ` (largeur ${z.scrollWidth}/${z.clientWidth}, ${z.widest})` : ''}`);
   const windows = row.windows.map(w => `${w.name.slice(0, 40)} ${w.scrollHeight}/${w.clientHeight}${w.inside ? '' : ' hors fenêtre'}`);
   console.log(`- ${row.step} : page ${row.pageScrolls ? `DÉFILE (${row.page.scrollHeight} px)` : 'fixe'}`
     + `${row.absent.length ? ` · zones absentes : ${row.absent.join(', ')}` : ''}`

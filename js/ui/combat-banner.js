@@ -1,7 +1,8 @@
 /**
- * Bandeau de combat persistant, affiché sous la barre du haut dans les trois
- * espaces. Il ne mute rien lui-même : l'avancement du tour et le retour dans
- * Jouer passent par les callbacks fournis par main.js.
+ * Bandeau de combat, fondu dans la barre du haut (refonte de l'interface, lot E0) : round, au tour de, compteur des
+ * décisions en attente, Tour suivant ; hors de Jouer, l'ordre du tour et « Revenir au combat ». Il ne mute rien
+ * lui-même : l'avancement du tour et le retour dans Jouer passent par les callbacks fournis par main.js.
+ * Le compteur lit `getDecisionCount()` (0 tant que la case « À décider » n'existe pas : lot E2) et reste vide à 0.
  */
 import { showToast } from './toast.js';
 const TRACK_LIMIT = 8;
@@ -18,12 +19,15 @@ function node(tag, className, text) {
   return element;
 }
 
-export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay } = {}) {
+export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecisionCount = () => 0 } = {}) {
   if (!mount) return { render() {}, isVisible: () => false };
 
-  const inner = node('div', 'wrap combat-banner-inner');
-  const title = node('span', 'combat-banner-title');
+  const inner = node('div', 'combat-banner-inner');
   const status = node('span', 'combat-banner-status');
+  const decisions = node('span', 'combat-banner-decisions num');
+  decisions.dataset.decisionsCount = '0';
+  decisions.setAttribute('role', 'status');
+  decisions.hidden = true;
   const track = node('ol', 'combat-banner-track');
   track.setAttribute('aria-label', 'Ordre du tour');
   const spacer = node('div', 'spacer');
@@ -31,9 +35,9 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay } = {}) {
   back.type = 'button';
   const primary = node('button', 'combat-banner-primary');
   primary.type = 'button';
-  inner.append(title, status, track, spacer, back, primary);
+  inner.append(status, decisions, track, spacer, back, primary);
   // D-15 : rappel tant que des Bmax sont divisées par le Fléau des Démons ; la restauration est une action MJ annulable.
-  const daemon = node('div', 'wrap combat-banner-reminder');
+  const daemon = node('div', 'combat-banner-reminder');
   daemon.dataset.daemonbaneReminder = '';
   daemon.setAttribute('role', 'status');
   const daemonText = node('span', 'combat-banner-reminder-text');
@@ -85,14 +89,15 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay } = {}) {
     mount.hidden = !visible;
     if (!visible) return;
 
-    title.textContent = scene?.status === 'active' && scene.title ? scene.title : 'Combat en cours';
+    // Le titre de la scène n'occupe plus de place dans la barre : il reste lisible au survol.
+    status.title = scene?.status === 'active' && scene.title ? scene.title : 'Combat en cours';
 
     const current = combat.currentActorId ? participants.get(combat.currentActorId) : null;
     const started = Number(combat.round) > 0 && Boolean(current);
     status.replaceChildren();
     if (started) {
       const name = node('strong', 'combatant-name', current.name);
-      status.append(node('span', 'num', `Round ${combat.round}`), ' · tour de ', name);
+      status.append(node('span', 'num', `Round ${combat.round}`), ' · au tour de ', name);
     } else {
       status.textContent = 'Pas encore commencé';
     }
@@ -130,6 +135,12 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay } = {}) {
       primary.title = 'Commencer le combat (N)';
     }
     primary.disabled = participants.size === 0;
+
+    let count = 0;
+    try { count = Math.max(0, Number(getDecisionCount()) || 0); } catch { count = 0; }
+    decisions.dataset.decisionsCount = String(count);
+    decisions.hidden = count === 0;
+    decisions.textContent = count ? `${count} décision${count > 1 ? 's' : ''} en attente` : '';
 
     const reductions = Store.listDaemonbaneReductions?.() || [];
     daemon.hidden = reductions.length === 0;
