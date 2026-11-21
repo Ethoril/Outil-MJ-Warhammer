@@ -69,14 +69,28 @@ export function resolveDivineTalentRestriction(actor,{cult,talentId}={}){
  const key=fold(cult);if(!['solkan','stromfels'].includes(key))return {allowed:true,status:'ready',needsInput:[]};
  const source=registry.contracts.find(row=>row.id==='divine:blessing:'+key+':battle')?.source;
  if(!source)return blocked('DIVINE_SOURCE_REQUIRED','Source du culte absente du registre.');
- const sin=actor?.extensions?.v5?.divine?.sin;
- if(!Number.isSafeInteger(sin)||sin<0)return blocked('DIVINE_DATA_REQUIRED','Total de Péchés connu requis pour '+cult+'.',[{field:'actor.extensions.v5.divine.sin',label:'Péchés connus du prêtre'}],source);
+ const sin=readDivineSin(actor);
+ if(sin===null)return blocked('DIVINE_DATA_REQUIRED','Total de Péchés connu requis pour '+cult+'.',[{field:'actor.extensions.v5.divine.sin',label:'Péchés connus du prêtre'}],source);
  if(key==='solkan'){
-  const corruption=actor?.extensions?.v5?.corruptionPoints;
-  if(!Number.isSafeInteger(corruption)||corruption<0)return blocked('DIVINE_DATA_REQUIRED','Solkan : valeur connue de Corruption requise, aucune valeur zéro supposée (L02 p.55).',[{field:'actor.extensions.v5.corruptionPoints',label:'Corruption connue, entière et positive ou nulle'}],source);
+  const corruption=readDivineCorruption(actor);
+  if(corruption===null)return blocked('DIVINE_DATA_REQUIRED','Solkan : valeur de Corruption invalide (entière, positive ou nulle).',[{field:'actor.extensions.v5.corruptionPoints',label:'Corruption connue, entière et positive ou nulle'}],source);
   if(sin>0||corruption>0)return blocked('SOLKAN_PURITY','Solkan refuse Bénédiction et Miracle avec le moindre Péché ou Point de Corruption (L02 p.55).',[],source);
  }else if(sin>=(talentId==='talent-invoke'?2:5))return blocked('STROMFELS_SIN','Stromfels refuse Invocation dès 2 Péchés et Béni dès 5 (L25 p.91).',[],source);
  return {allowed:true,status:'ready',needsInput:[],source:clone(source)};
+}
+
+/** Péchés courants d'un acteur : une absence (fiche sans `peche`, profil sans `divine.sin`) se lit comme 0 ; une valeur présente mais invalide donne `null`. */
+export function readDivineSin(actor){
+ const sin=actor?.extensions?.v5?.divine?.sin;
+ if(sin===undefined||sin===null)return 0;
+ return Number.isSafeInteger(sin)&&sin>=0?sin:null;
+}
+
+/** Points de Corruption d'un acteur : même règle que les Péchés, l'absence (fiche sans `corruption`) vaut 0 ; une valeur invalide donne `null`. */
+export function readDivineCorruption(actor){
+ const value=actor?.extensions?.v5?.corruptionPoints;
+ if(value===undefined||value===null)return 0;
+ return Number.isSafeInteger(value)&&value>=0?value:null;
 }
 
 /** Resolve canonical-sheet access first, then an exact active exception. */

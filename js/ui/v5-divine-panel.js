@@ -462,7 +462,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    content.append(node('p','workspace-muted',`${contract.deity} : culte elfe exempt du Péché et du Courroux (Guide des Hauts Elfes, p. 99).`));
   }
   if(!divineSinPolicy(contract).exempt){
-   const sin=node('details','workspace-v5-context-details');sin.append(node('summary','','Péchés : '+(actor.extensions?.v5?.divine?.sin??'à renseigner')));if(state.sinOpen)sin.open=true;sin.addEventListener('toggle',()=>{state.sinOpen=sin.open;});content.append(sin);
+   const sin=node('details','workspace-v5-context-details');sin.append(node('summary','','Péchés : '+(actor.extensions?.v5?.divine?.sin??0)));if(state.sinOpen)sin.open=true;sin.addEventListener('toggle',()=>{state.sinOpen=sin.open;});content.append(sin);
    field(sin,'Total de Péchés','sinEdit');field(sin,'Raison de l’ajustement des Péchés','sinReason',{type:'text'});
    button(sin,'Enregistrer les Péchés',()=>run(async()=>{const result=await Store.setDivineSin(actor.id,Number(state.sinEdit),{reason:state.sinReason,cult:contract.deity,baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Péchés non enregistrés.');state.preview=null;}),state.sinEdit==='','sin');
    if(Store.canManageDivinePenances?.()===true){
@@ -502,7 +502,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   const recovery=recoveryPanel(actor,participants);if(recovery)content.append(recovery);
   if(contract.status==='blocked'){renderConfirmationButtons(panel);return panel;}
   if(contract.deity==='Solkan'){
-   const box=node('div','workspace-divine-corruption');box.append(node('p','workspace-muted','Pureté de Solkan : Péchés et Corruption doivent être connus et nuls. Corruption actuelle : '+(Number.isSafeInteger(actor.extensions?.v5?.corruptionPoints)?actor.extensions.v5.corruptionPoints:'inconnue')+'. Source : Archives of the Empire 3 p.55.'));
+   const box=node('div','workspace-divine-corruption');box.append(node('p','workspace-muted','Pureté de Solkan : Péchés et Corruption doivent être nuls (une valeur absente de la fiche vaut 0). Corruption actuelle : '+(actor.extensions?.v5?.corruptionPoints??0)+'. Source : Archives of the Empire 3 p.55.'));
    field(box,'Points de Corruption connus','corruptionEdit',{min:0});field(box,'Motif de la valeur de Corruption','corruptionReason',{type:'text'});
    const expectedLocalRevision=Store.getLocalRevision();
    button(box,'Enregistrer la Corruption connue',()=>run(async()=>{const value=Number(state.corruptionEdit),reason=(state.corruptionReason||'').trim();if(state.corruptionEdit===''||!Number.isSafeInteger(value)||value<0||!reason)throw Error('Valeur entière positive ou nulle et motif MJ requis.');const result=await Store.updateParticipant(actor.id,{extensions:{...clone(actor.extensions||{}),v5:{...clone(actor.extensions?.v5||{}),corruptionPoints:value,corruptionEntry:{kind:'gm-fact',value,reason,sourceRule:'solkan-purity'}}}},{expectedLocalRevision});if(result?.ok===false)throw Error(result.error||'Valeur non enregistrée.');state.preview=null;}),state.corruptionEdit===''||!(state.corruptionReason||'').trim(),'corruption-fact');content.append(box);

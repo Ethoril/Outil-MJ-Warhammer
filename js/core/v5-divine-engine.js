@@ -4,7 +4,7 @@ import { acquireV5Conditions, healV5Wounds } from './v5-effects.js';
 import DIVINE_REGISTRY from '../data/v5-divine-contracts.json' with { type: 'json' };
 import { SUPPLEMENT_DIVINE_CONTRACTS, isSupplementDivineContract } from './supplement-loader.js';
 import {creaturePrayerBase} from './creature-magic-traits.js';
-import {resolveDivineAccess,emptyDivineAccess,resolveDivineTalentRestriction} from './v5-divine-access.js';
+import {resolveDivineAccess,emptyDivineAccess,resolveDivineTalentRestriction,readDivineSin} from './v5-divine-access.js';
 import {applyPrayerSLCaps,getPrayerSLModifiers} from './v5-divine-prayer-caps.js';
 import {v5ResourceIdentity} from './v5-resources.js';
 import {resolveV5ConditionTestContext,withV5TestTalents} from './v5-test-context.js';
@@ -311,10 +311,7 @@ export function resolveSinAdjustmentCult(actor,requestedCult) {
   return {ok:true,cult};
 }
 
-function readSin(actor) {
-  const sin = actor?.extensions?.v5?.divine?.sin;
-  return Number.isSafeInteger(sin) && sin >= 0 ? sin : null;
-}
+const readSin = readDivineSin;
 
 function readObjectValueCaseInsensitive(record, key) {
   if (!objectValue(record)) return { found: false, value: undefined, invalid: false };

@@ -6,7 +6,7 @@ import {readDivineRelics,previewDivineExecution,applyDivineExecution,expireDivin
 import {calculateArmor,spellObjectChoices} from './equipment.js';
 import {refreshEffectLayers,rebaseMagicLayers} from './v5-magic-effects.js';
 import {uid,normalizeAction} from './models.js';
-import {resolveDivineAccess,createDivineAccessGrant,revokeDivineAccessGrant,consumeDivineAccessGrant,emptyDivineAccess,wrathAccessRules,validateDivineAccessSuspensions,readDivineRejections} from './v5-divine-access.js';
+import {resolveDivineAccess,createDivineAccessGrant,revokeDivineAccessGrant,consumeDivineAccessGrant,emptyDivineAccess,wrathAccessRules,validateDivineAccessSuspensions,readDivineRejections,readDivineSin} from './v5-divine-access.js';
 import {v5ResourceIdentity,getV5Fortune,refreshV5Fortune,getV5Fate,spendV5Temporary} from './v5-resources.js';
 import {advanceGameClock,readCombatPosition,defaultFirstMorningAt} from './v5-game-time.js';
 import {validatePrayerSLCaps,getPrayerSLModifiers,applyPrayerSLCaps,wrathRoundRules,validateWrathRounds,wrathPrayerBan,wrathForcedPrayerGate,wrathTurnPosition,wrathActionSpent} from './v5-divine-prayer-caps.js';
@@ -1037,7 +1037,7 @@ function absolutionPlan(state,actor,input){
  if(!['absolution','altdorf','gm-wrath'].includes(a.kind))return bad('Type d’absolution inconnu.','kind');
  if(!text(a.cult)||!entries().some(row=>row.deity===a.cult))return bad('Culte connu requis.','cult');
  if(divineSinPolicy({deity:a.cult}).exempt)return failure('blocked','Ce culte est exempté du Péché : aucune absolution possible.');
- const sin=actor.extensions?.v5?.divine?.sin;if(!Number.isSafeInteger(sin)||sin<0)return bad('Péchés courants requis.','sin');
+ const sin=readDivineSin(actor);if(sin===null)return bad('Péchés courants requis.','sin');
  if(sin<1)return failure('blocked','Aucun Péché à retirer : aucune absolution (et jamais de Courroux à zéro Péché).');
  let count;
  if(a.kind==='gm-wrath'){if(!text(a.reason))return bad('Motif MJ du Courroux requis.','reason');
@@ -1085,8 +1085,8 @@ function calculateWrathRecovery(state,input){
   test=selectV5Test(preview,input.testOptionId||(preview.forcedInversion?'reverse':'keep'));
  }catch(error){return failure('requires-input',error.message,[{field:'roll',label:'Jet d100 explicite'}]);}
  if(!gmWrath){const capped=applyPrayerSLCaps(actor,test);if(!capped.ok)return failure('requires-input','Plafond de Prière non résolu.',capped.needsInput);test=capped.test;}
- const sin=actor.extensions?.v5?.divine?.sin,exempt=divineSinPolicy({deity:lock.cult}).exempt;
- if(!exempt&&(!Number.isSafeInteger(sin)||sin<0))return failure('requires-input','Péchés courants requis.',[{field:'sin',label:'Péchés'}]);
+ const sin=readDivineSin(actor),exempt=divineSinPolicy({deity:lock.cult}).exempt;
+ if(!exempt&&sin===null)return failure('requires-input','Péchés courants requis.',[{field:'sin',label:'Péchés'}]);
  const wrath={triggered:!exempt&&sin>0&&(gmWrath||test.fumble||input.absolution?.kind!=='altdorf'&&test.roll%10<=sin),sinAtTest:exempt?0:sin};
  const next=clone(state),index=parts(next).findIndex(row=>row.id===actor.id),changed=parts(next)[index];let removedCount=0;
  if(test.success&&condition){
@@ -1222,7 +1222,7 @@ function planSinEvent(state,input){
  if(event.cults&&!event.cults.some(name=>foldCult(name)===foldCult(input.cult)))return bad('Cet événement ne concerne pas ce culte : '+event.cults.join(', ')+'.','cult');
  const actor=penanceSubject(state,input.actorId);if(!actor)return failure('blocked','Personnage introuvable.');
  const policy=resolveSinAdjustmentCult(actor,input.cult);if(!policy.ok)return failure('blocked',policy.error);
- const before=actor.extensions?.v5?.divine?.sin;if(!Number.isSafeInteger(before)||before<0)return bad('Péchés courants requis : renseignez-les d’abord.','sin');
+ const before=readDivineSin(actor);if(before===null)return bad('Péchés courants invalides : corrigez-les d’abord.','sin');
  let delta;const e=event.effect;
  if(e.kind==='add')delta=e.amount;
  else if(e.kind==='add-mj'){if(!Number.isSafeInteger(input.amount)||input.amount<e.min||e.max&&input.amount>e.max)return bad('Nombre de Péchés à attribuer : entier de '+e.min+(e.max?' à '+e.max:' ou plus')+'.','amount');delta=input.amount;}
@@ -1305,7 +1305,7 @@ function changeDailyWrath(state,actorId,id,input,mutate,label){
 }
 export function waiveStoreDivineDailyWrathDay(state,actorId,id,input={}){
  return changeDailyWrath(state,actorId,id,input,(record,actor)=>{
-  const sin=actor.extensions?.v5?.divine?.sin;if(sin!==0)throw ruleError('Péché positif ou inconnu : la table de Courroux se joue, le jour ne s’écarte pas.');
+  const sin=readDivineSin(actor);if(sin!==0)throw ruleError('Péché positif ou inconnu : la table de Courroux se joue, le jour ne s’écarte pas.');
   const due=dailyWrathDue(state,record);if(!(due>=1))throw ruleError('Aucun jour dû à écarter.');
   return {...record,waivedDays:record.waivedDays+1};},'jour écarté (aucun Péché)');
 }
@@ -1337,8 +1337,8 @@ export function enterStoreSanctifiedGround(state,participantId,id,input={}){
  const ground=groundsOf(state).find(row=>row.id===id);if(!ground)throw ruleError('Terre sanctifiée introuvable.');
  if(!['character','monster'].includes(input.kind))throw ruleError('Précisez s’il s’agit d’un personnage ou d’un monstre (fait MJ).');if(!text(input.reason))throw ruleError('Motif MJ requis.');
  const next=clone(state),index=parts(next).findIndex(row=>row.id===participantId);if(index<0)throw ruleError('Participant introuvable.');
- const who=parts(next)[index],sin=who.extensions?.v5?.divine?.sin;
- if(input.kind==='character'&&!Number.isSafeInteger(sin))throw ruleError('Péchés courants inconnus : renseignez-les avant l’entrée.');
+ const who=parts(next)[index],sin=readDivineSin(who);
+ if(input.kind==='character'&&sin===null)throw ruleError('Péchés courants inconnus : renseignez-les avant l’entrée.');
  const affected=input.kind==='monster'||sin>=ground.sinThreshold;let outcome=affected?ground.effect:'none';
  if(affected&&ground.effect==='ablaze'&&!(who.states||[]).some(row=>row?.source?.groundId===id)){
   const acquired=acquireV5Conditions(who,[{name:'Enflammé',level:1,source:{kind:'sanctified-ground',groundId:id}}],{authorId:who.id,targetId:who.id,round:state.combat?.round});
@@ -1366,7 +1366,7 @@ function planNavalEvent(state,input){
  if(input.kind!=='stromfels-mood'&&(!text(input.ship)||input.ship.trim().length>120))return bad('Nom du navire requis.','ship');
  const actor=penanceSubject(state,input.actorId);if(!actor)return failure('blocked','Personnage introuvable.');
  const policy=resolveSinAdjustmentCult(actor,cult);if(!policy.ok)return failure('blocked',policy.error);
- const before=actor.extensions?.v5?.divine?.sin;if(!Number.isSafeInteger(before)||before<0)return bad('Péchés courants requis.','sin');
+ const before=readDivineSin(actor);if(before===null)return bad('Péchés courants requis.','sin');
  const plan={ready:true,kind:input.kind,cult:policy.cult||cult,sinBefore:before,sinDelta:0,sinAfter:before};
  if(input.kind==='manann-overuse'){
   if(!Number.isSafeInteger(input.shipsBlessed)||input.shipsBlessed<4)return bad('Plus de trois navires bénis entre deux pleines lunes (nombre fourni par le MJ).','shipsBlessed');
