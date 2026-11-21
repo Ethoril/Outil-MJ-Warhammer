@@ -32,6 +32,9 @@ import { createMagicListPicker } from './magic-list-picker.js';
 const magicListOpen = new Set();
 // Fiche dont le nom est en cours de saisie (`<id>:acteur|cible`) : survit aux rendus déclenchés pendant la frappe.
 let renamingSheet = null;
+// Refonte E3 : menu ⋯ ouvert (`{ key, id, view, focus }`) et fiche complète ouverte (`{ id, section, focus }`), gardés d'un rendu à l'autre.
+let sheetMenu = null;
+let fullSheet = null;
 import { d100, d10 } from '../core/dice.js';
 import { inferActionType, previewHpLoss, ResolutionError } from '../core/resolution.js';
 import { userMessage, userError, contextMessage, refusalError } from './messages.js';
@@ -47,8 +50,8 @@ import { formatV5Balance } from '../core/v5-resources.js';
 import { normalizeEffects } from '../core/effects.js';
 import { CAMP_LABELS, normalizeCamp, participantCamp, encounterDisplayStatus, encounterSummary, sortEncountersForDisplay, orphanScenes } from '../core/encounters.js';
 import { uid } from '../core/models.js';
-import { renderFicheDetails } from './fiche-details.js';
-import { renderSilhouette } from './silhouette.js';
+import { renderFicheDetails, setFicheTab } from './fiche-details.js';
+import { renderSilhouette, locationZone } from './silhouette.js';
 import { buildParticipantReminders } from '../core/reminders.js';
 import { deriveEngagementContext, deriveSceneContext, engagedWith } from '../core/engagements.js';
 import { plateauZones, actionBarModel, renderActionBar, renderDisengageForm } from './workspace/plateau.js';
@@ -775,12 +778,6 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       .catch(error => import('./toast.js').then(({ showToast }) => showToast(contextMessage(`${label} impossible`, error, 'réessayez.'), 'error'))).finally(() => render());
     const toast = (message, type = 'error') => import('./toast.js').then(({ showToast }) => showToast(message, type));
     const make = tag => document.createElement(tag), id = participant.id, blocks = [];
-    const mount = mountControl(participant, Store.listParticipants());
-    if (mount) {
-      const block = node('div', 'actor-mount');
-      block.append(node('span', '', 'Monture :'), mount);
-      blocks.push(block);
-    }
     const psychology = buildPsychologyBlock(make, participant, Store.listParticipants());
     if (psychology) {
       psychology.addEventListener('click', event => {
@@ -971,11 +968,301 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return remove;
   }
 
+  // ==========================================================================================================
+  // Refonte E3 · fiches compactes, menu ⋯ et panneau « Fiche complète ».
+  // La fiche de la zone `acteur` et celle de la zone `droite` tiennent dans leur zone : identité, PV ±, caractéristiques,
+  // PA, Élan, Chance et Destin (PJ), monture, États. Tout le reste (compétences, talents, équipement, sorts et prières,
+  // rappels, blocs de créature, familier, psychologie…) est dans le panneau superposé « Fiche complète », que le menu ⋯
+  // et les pastilles de la fiche ouvrent. Menu, panneau et formulaire d'état vivent dans la couche `.workspace-sheet-layer`
+  // (reconstruite après chaque rendu par syncSheetLayer, appelée par placeInZones) : ils ne font défiler aucune zone.
+  // ==========================================================================================================
+  const PA_CELLS = [['T', 'head', 'Tête', 'head'], ['C', 'body', 'Corps', 'body'], ['BD', 'rightArm', 'Bras droit', 'arm-right'], ['BG', 'leftArm', 'Bras gauche', 'arm-left'], ['JD', 'rightLeg', 'Jambe droite', 'leg-right'], ['JG', 'leftLeg', 'Jambe gauche', 'leg-left']];
+  const PA_COARSE = { head: 'head', body: 'body', rightArm: 'arms', leftArm: 'arms', rightLeg: 'legs', leftLeg: 'legs' };
+  function paRow(participant, hit) {
+    const precise = displayedArmorLocations(participant), coarse = participant.armor || {};
+    const hitZone = hit?.location ? locationZone(hit.location) : null;
+    const row = node('div', 'workspace-sheet-pa');
+    row.setAttribute('role', 'group');
+    row.setAttribute('aria-label', `Points d’armure de ${participant.name}`);
+    row.appendChild(node('span', 'workspace-sheet-pa-label', 'PA'));
+    for (const [letter, key, label, zone] of PA_CELLS) {
+      const raw = precise ? precise[key] : coarse[PA_COARSE[key]];
+      const shown = raw === null ? '?' : Number.isFinite(Number(raw)) ? String(Number(raw)) : '0';
+      const cell = node('span', `workspace-sheet-pa-cell num${zone === hitZone ? ' is-hit' : ''}`);
+      cell.title = `${label} : PA ${shown}${zone === hitZone ? ' (zone touchée)' : ''}`;
+      cell.dataset.paZone = zone;
+      cell.append(node('small', '', letter), shown);
+      row.appendChild(cell);
+    }
+    return row;
+  }
+
+  const closeSheetMenu = () => { sheetMenu = null; render(); };
+  const closeFullSheet = () => {
+    const id = fullSheet?.id;
+    fullSheet = null;
+    render();
+    refs.play.querySelector(`[data-sheet-menu-button][data-menu-owner^="${id}:"]`)?.focus();
+  };
+  const openFullSheet = (participant, section = null) => {
+    sheetMenu = null;
+    fullSheet = { id: participant.id, section, focus: true };
+    if (section === 'magic') setFicheTab(participant.id, 'magic');
+    render();
+  };
+
+  // Menu ⋯ : retrait, sans monture, renommer, changer de camp, fiche complète, sorts et prières.
+  function renderSheetMenu(participant) {
+    const key = sheetMenu.key;
+    const menu = node('div', 'workspace-sheet-menu');
+    menu.setAttribute('role', 'menu');
+    menu.setAttribute('aria-label', `Actions sur ${participant.name}`);
+    menu.dataset.sheetMenu = '';
+    const item = (label, handler, { disabled = false, title = '', className = '' } = {}) => {
+      const entry = button(label, `workspace-sheet-menu-item ${className}`.trim(), { role: 'menuitem' });
+      entry.disabled = disabled;
+      if (title) entry.title = title;
+      entry.addEventListener('click', event => { event.preventDefault(); if (!entry.disabled) handler(entry); });
+      return entry;
+    };
+    const separator = () => { const line = node('div', 'workspace-sheet-menu-sep'); line.setAttribute('role', 'separator'); return line; };
+    if (sheetMenu.view === 'camp') {
+      const current = participantCamp(participant);
+      menu.append(node('div', 'workspace-sheet-menu-title', `Camp de ${participant.name}`));
+      for (const [value, label] of Object.entries(CAMP_LABELS)) {
+        menu.appendChild(item(`${value === current ? '✓ ' : ''}${label}`, async entry => {
+          entry.disabled = true;
+          try {
+            if (value !== current) {
+              // Même écriture que la feuille « Modifier » : « neutre » est marqué explicite sur un PJ (C24).
+              const live = readParticipants(Store).find(row => row.id === participant.id) || participant;
+              const result = await Store.updateParticipant(participant.id, { camp: value, extensions: { ...(live.extensions || {}), campExplicit: value === 'neutre' } });
+              if (result === false || result?.ok === false) throw new Error(result?.error || 'Camp non enregistré.');
+            }
+            closeSheetMenu();
+          } catch (cause) { entry.disabled = false; plateauToast('Camp non modifié', cause); }
+        }));
+      }
+      menu.append(separator(), item('← Retour', () => { sheetMenu = { ...sheetMenu, view: 'main', focus: true }; render(); }));
+      return menu;
+    }
+    if (callbacks.removeParticipant) {
+      menu.appendChild(item('Retirer du combat…', entry => {
+        entry.disabled = true;
+        sheetMenu = null;
+        Promise.resolve(callbacks.removeParticipant(participant.id, { confirm: true })).then(() => render(), () => render());
+      }, { className: 'is-danger workspace-sheet-remove', title: 'Retirer de la rencontre (confirmation, avec ou sans sa monture, annulable)' }));
+    }
+    const declared = declaredMountOf(participant);
+    if (declared) {
+      const absent = mountAbsentOf(participant);
+      menu.appendChild(item(absent ? `Remettre la monture (${declared.name})` : 'Sans monture pour cette rencontre', entry => {
+        entry.disabled = true;
+        sheetMenu = null;
+        Promise.resolve().then(() => Store.setMountAbsent(participant.id, !absent))
+          .then(result => { if (result?.ok === false) throw Object.assign(new Error(result.message), { userFacing: true }); })
+          .catch(error => plateauToast('Monture non modifiée', error)).finally(() => render());
+      }, { title: absent ? `Faire revenir ${declared.name} dans la rencontre (en attente)` : `Laisser ${declared.name} hors de la rencontre : sa monture quitte le combat et la carte` }));
+    }
+    menu.appendChild(item('Renommer', () => { sheetMenu = null; renamingSheet = key; render(); },
+      participant.kind === 'PJ' ? { disabled: true, title: 'Le nom d’un PJ vient de sa fiche' } : { title: 'Renommer pour cette rencontre (le pion suit, le bestiaire ne change pas)' }));
+    menu.appendChild(item('Changer de camp', () => { sheetMenu = { ...sheetMenu, view: 'camp', focus: true }; render(); }));
+    menu.append(separator(),
+      item('Fiche complète', () => openFullSheet(participant), { title: 'Compétences, talents, équipement, rappels, blocs de créature…' }),
+      item('Sorts et prières', () => openFullSheet(participant, 'magic')),
+      item('Modifier…', () => { sheetMenu = null; render(); refs.play.querySelector(`[data-menu-owner="${key}"]`)?.focus(); callbacks.editParticipant?.(participant.id); }, { disabled: !callbacks.editParticipant || state.actionBusy, title: 'Feuille « Modifier » : nom, PV, initiative, zone, camp, monture, armes, états, actions' }));
+    return menu;
+  }
+
+  // Place un élément `position: fixed` près de son ancre sans dépasser la fenêtre (retourné au-dessus si le bas manque).
+  function placeNear(element, anchor, { align = 'end', gap = 4 } = {}) {
+    const box = anchor?.getBoundingClientRect?.();
+    const view = { width: pressDocument.defaultView.innerWidth, height: pressDocument.defaultView.innerHeight };
+    const size = element.getBoundingClientRect();
+    const left = box ? (align === 'end' ? box.right - size.width : box.left) : (view.width - size.width) / 2;
+    let top = box ? box.bottom + gap : (view.height - size.height) / 2;
+    if (box && top + size.height > view.height - 8) top = Math.max(8, box.top - size.height - gap);
+    element.style.left = `${Math.max(8, Math.min(left, view.width - size.width - 8))}px`;
+    element.style.top = `${Math.max(8, Math.min(top, view.height - size.height - 8))}px`;
+  }
+
+  // Armure portée pour cette rencontre seulement : la fiche n'est pas modifiée.
+  function armourWornBlock(participant) {
+    const armourPieces = (participant.equipment || []).filter(item => item?.kind === 'armour');
+    if (!armourPieces.length) return null;
+    const worn = node('div', 'workspace-armour-worn');
+    worn.appendChild(rubric('Armure portée', 'p'));
+    const error = node('p', 'workspace-error');
+    for (const item of armourPieces) {
+      const label = node('label', 'workspace-type'), check = document.createElement('input');
+      check.type = 'checkbox';
+      check.checked = isArmourWorn(participant, item);
+      check.dataset.focusKey = `armour-worn-${participant.id}-${item.id}`;
+      const zones = (item.locations || []).map(id => HIT_LOCATIONS.find(row => row.id === id)?.label || id).join(', ');
+      check.setAttribute('aria-label', `${item.name} porté par ${participant.name}`);
+      check.addEventListener('change', async () => {
+        check.disabled = true;
+        error.textContent = '';
+        try {
+          const fresh = readParticipants(Store).find(row => row.id === participant.id) || participant;
+          const result = await Store.updateParticipant(fresh.id, { extensions: extensionsWithArmourWorn(fresh, item.id, check.checked) });
+          if (result === false || result?.ok === false) throw new Error(result?.error || 'Armure non enregistrée.');
+          render();
+        } catch (cause) {
+          error.textContent = userMessage(cause, 'Armure non enregistrée.');
+          check.checked = !check.checked;
+          check.disabled = false;
+        }
+      });
+      label.append(check, ` ${item.name}${zones ? ` (${zones})` : ''}${Number.isInteger(item.ap) ? ` · PA ${item.ap}` : ''}`);
+      worn.appendChild(label);
+    }
+    worn.appendChild(error);
+    return worn;
+  }
+
+  // Sorts et prières d'un PNJ pour cette rencontre (le profil n'est pas modifié) ; ceux d'un PJ viennent de sa fiche.
+  function magicListBlock(participant) {
+    if (participant.extensions?.ficheId || participant.ficheSnapshot) return null;
+    const magic = node('details', 'workspace-magic-list');
+    magic.open = magicListOpen.has(participant.id) || fullSheet?.section === 'magic';
+    magic.addEventListener('toggle', () => { if (magic.open) magicListOpen.add(participant.id); else magicListOpen.delete(participant.id); });
+    const count = (participant.spells?.length || 0) + (participant.prayers?.length || 0);
+    magic.appendChild(node('summary', 'workspace-rubric', `Sorts et prières${count ? ` (${count})` : ' · tout le catalogue'}`));
+    const error = node('p', 'workspace-error'), holder = node('div', '');
+    magic.append(holder, error);
+    createMagicListPicker({ container: holder, subject: participant, onChange: async value => {
+      error.textContent = '';
+      try {
+        const result = await Store.updateParticipant(participant.id, value);
+        if (result === false || result?.ok === false) throw new Error(result?.error || 'Liste non enregistrée.');
+        render();
+      } catch (cause) { error.textContent = userMessage(cause, 'Liste non enregistrée.'); }
+    } });
+    return magic;
+  }
+
+  function criticalWoundsBlock(participant) {
+    const criticals = participant.extensions?.v5?.criticalWounds || [];
+    if (!criticals.length) return null;
+    const registry = node('div', 'workspace-critical-wounds');
+    registry.appendChild(rubric('Blessures Critiques', 'p'));
+    for (const critical of criticals) {
+      const row = node('div', 'workspace-inline-actions');
+      row.appendChild(node('span', '', `${critical.name || 'Blessure Critique'} · ${critical.location || 'Localisation inconnue'} · Round ${critical.round ?? '?'}`));
+      const heal = button('Guérir', 'workspace-secondary', { 'aria-label': `Guérir ${critical.name || 'Blessure Critique'} de ${participant.name}` });
+      heal.dataset.workspaceAction = 'heal-critical';
+      heal.dataset.actorId = participant.id;
+      heal.dataset.criticalId = critical.id;
+      heal.disabled = !callbacks.healCriticalWound;
+      row.appendChild(heal);
+      registry.appendChild(row);
+    }
+    return registry;
+  }
+
+  // Panneau superposé « Fiche complète » : tout ce que la fiche compacte ne montre pas, rien n'est perdu.
+  function renderFullSheet(participant) {
+    const hitPreview = state.resolution.preview;
+    const hit = hitPreview && !hitPreview.choiceRequired && hitPreview.targetId === participant.id ? hitPreview : null;
+    const backdrop = node('div', 'workspace-fullsheet-backdrop');
+    backdrop.addEventListener('click', event => { if (event.target === backdrop) closeFullSheet(); });
+    const panel = node('section', 'workspace-fullsheet');
+    panel.setAttribute('role', 'dialog');
+    panel.setAttribute('aria-modal', 'true');
+    panel.setAttribute('aria-label', `Fiche complète de ${participant.name}`);
+    panel.dataset.detailsOwner = `participant:${participant.id}`;
+    const head = node('div', 'workspace-fullsheet-head');
+    head.append(node('h2', 'workspace-fullsheet-title', participant.name), node('span', `workspace-camp is-${participantCamp(participant)}`, CAMP_LABELS[participantCamp(participant)]),
+      node('span', 'workspace-muted', `${participant.kind || ''} · ${hpText(participant)} PV`));
+    const edit = button('Modifier…', 'workspace-secondary', { 'aria-label': `Modifier ${participant.name}`, 'data-focus-key': `edit-${participant.id}` });
+    edit.dataset.workspaceAction = 'edit-participant';
+    edit.dataset.actorId = participant.id;
+    edit.disabled = state.actionBusy || !callbacks.editParticipant;
+    const close = button('Fermer', 'workspace-secondary workspace-fullsheet-close', { 'data-focus-key': 'fullsheet-close' });
+    close.addEventListener('click', event => { event.preventDefault(); closeFullSheet(); });
+    head.append(edit, close);
+    const body = node('div', 'workspace-fullsheet-body');
+    const section = (key, ...children) => {
+      const kids = children.filter(Boolean);
+      if (!kids.length) return null;
+      const block = node('div', 'workspace-fullsheet-section');
+      block.dataset.fullsheetSection = key;
+      block.append(...kids);
+      return block;
+    };
+    const stateAuthors = normalizeEffects(participant.states).filter(item => item.authorId || item.v5Timing?.authorId).map(item => {
+      const authorId = item.authorId || item.v5Timing.authorId;
+      const author = readParticipants(Store).find(row => row.id === authorId);
+      return node('p', 'workspace-muted', `${stateLabel(item)} · Auteur : ${author?.name || authorId} · Cible : ${participant.name}`);
+    });
+    const equipment = equipmentChips(participant, participant.id === readCombat(Store).currentActorId ? 'actor' : 'target');
+    const traits = creatureCommandBlocks(participant);
+    const reminders = participantReminderBlock(participant);
+    body.append(...[
+      section('body', renderSilhouette({ armor: participant.armor, armorLocations: displayedArmorLocations(participant), location: hit?.location || null, name: participant.name }), armourWornBlock(participant)),
+      section('states', stateAuthors.length ? rubric('États : origine', 'p') : null, ...stateAuthors),
+      section('reminders', reminders ? rubric('Rappels', 'p') : null, reminders),
+      section('traits', traits.length ? rubric('Traits et créature', 'p') : null, ...traits),
+      section('equipment', equipment ? rubric('Équipement en jeu', 'p') : null, equipment),
+      section('criticals', criticalWoundsBlock(participant)),
+      section('magic', magicListBlock(participant)),
+      section('fiche', renderFicheDetails(participant, { embedded: true }))
+    ].filter(Boolean));
+    panel.append(head, body);
+    backdrop.appendChild(panel);
+    return backdrop;
+  }
+
+  // Couche des fiches : menu ⋯, formulaire d'état et fiche complète, au-dessus des zones (position fixe).
+  function sheetLayer() {
+    let layer = refs.play.querySelector(':scope > .workspace-sheet-layer');
+    if (!layer) { layer = node('div', 'workspace-sheet-layer'); refs.play.appendChild(layer); }
+    return layer;
+  }
+  function syncSheetLayer() {
+    const layer = sheetLayer();
+    layer.replaceChildren();
+    const people = readParticipants(Store);
+    if (sheetMenu && !people.some(row => row.id === sheetMenu.id)) sheetMenu = null;
+    if (fullSheet && !people.some(row => row.id === fullSheet.id)) fullSheet = null;
+    if (state.stateForm && !people.some(row => row.id === state.stateForm.participantId)) state.stateForm = null;
+    if (state.stateForm) {
+      const owner = people.find(row => row.id === state.stateForm.participantId);
+      const popover = node('div', 'workspace-state-popover');
+      popover.append(renderStateForm(owner));
+      layer.appendChild(popover);
+      placeNear(popover, refs.play.querySelector(`[data-focus-key="state-add-${owner.id}"]`), { align: 'start' });
+    }
+    if (fullSheet) {
+      const owner = people.find(row => row.id === fullSheet.id);
+      const overlay = renderFullSheet(owner);
+      layer.appendChild(overlay);
+      if (fullSheet.section) overlay.querySelector(`[data-fullsheet-section="${fullSheet.section}"]`)?.scrollIntoView?.({ block: 'nearest' });
+      if (fullSheet.focus) { fullSheet.focus = false; overlay.querySelector('.workspace-fullsheet-close')?.focus(); }
+    }
+    if (sheetMenu) {
+      const owner = people.find(row => row.id === sheetMenu.id);
+      const scrim = node('div', 'workspace-sheet-menu-scrim');
+      scrim.addEventListener('click', () => closeSheetMenu());
+      const menu = renderSheetMenu(owner);
+      layer.append(scrim, menu);
+      placeNear(menu, refs.play.querySelector(`[data-sheet-menu-button][data-menu-owner="${sheetMenu.key}"]`));
+      if (sheetMenu.focus) { sheetMenu.focus = false; menu.querySelector('[role="menuitem"]:not(:disabled)')?.focus(); }
+    }
+  }
+
+  // Pastilles de la fiche compacte qui renvoient à une section de la fiche complète (ce qui demande une décision ou un clic).
+  const moreChip = (participant, key, label, count) => {
+    const chip = button(`${label}${count > 1 ? ` ${count}` : ''}`, 'workspace-sheet-chip is-attention', { 'data-focus-key': `sheet-more-${key}-${participant.id}`, title: `${label} : ouvre la fiche complète` });
+    chip.addEventListener('click', event => { event.preventDefault(); openFullSheet(participant, key); });
+    return chip;
+  };
+
   function renderSheet(participant, role, context) {
     const isTarget = role === 'target';
     const sheet = node('article', `workspace-actor-sheet workspace-card workspace-sheet-${role}`);
     sheet.dataset.sheetRole = role;
-    const heading = node('div', 'workspace-sheet-heading');
     const actorLabel = !context.started ? 'Personnage actif' : participant?.id === context.turnActor?.id ? 'Au tour de' : 'Agit hors tour';
     const roleLabel = rubric(isTarget ? 'Cible' : actorLabel, 'p');
     if (!participant) {
@@ -990,11 +1277,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const preview = state.resolution.preview;
     const hit = isTarget && preview && !preview.choiceRequired && preview.targetId === participant.id ? preview : null;
 
+    // Identité : rôle, nom (renommable pour la rencontre), camp, menu ⋯.
+    const heading = node('div', 'workspace-sheet-heading');
     const identity = node('div', 'workspace-sheet-identity');
     identity.append(roleLabel);
     const nameRow = node('div', 'workspace-sheet-name-row');
-    // Renommer un PNJ ou une créature pour cette rencontre : le libellé de son pion suit, le profil du bestiaire ne change pas.
-    // Le nom d'un PJ vient de sa fiche.
     const renameKey = `${participant.id}:${isTarget ? 'cible' : 'acteur'}`;
     if (participant.kind !== 'PJ' && renamingSheet === renameKey) {
       const input = document.createElement('input');
@@ -1034,47 +1321,26 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       queueMicrotask(() => { if (input.isConnected && document.activeElement !== input) { input.focus(); input.select(); } });
     } else {
       nameRow.appendChild(node('h2', 'workspace-sheet-name combatant-name', participant.name));
-      if (participant.kind !== 'PJ') {
-        const rename = button('✎', 'workspace-secondary workspace-rename', { 'data-focus-key': `rename-button-${renameKey}`, title: 'Renommer pour cette rencontre (le pion suit, le bestiaire ne change pas)', 'aria-label': `Renommer ${participant.name}` });
-        rename.addEventListener('click', () => { renamingSheet = renameKey; render(); });
-        nameRow.appendChild(rename);
-      }
     }
     nameRow.appendChild(campChip(participant, context.camp));
-    // Lot C : retrait en cours de rencontre (confirmation dans l'outil) et « sans monture » d'un cavalier à monture déclarée.
-    if (declaredMountOf(participant)) {
-      const absent = mountAbsentOf(participant);
-      const toggle = button(absent ? 'Sans monture' : 'Monture présente', `workspace-secondary workspace-mount-absent${absent ? ' is-absent' : ''}`, {
-        'aria-pressed': String(absent), 'data-focus-key': `mount-absent-${renameKey}`,
-        title: absent ? `Faire revenir ${declaredMountOf(participant).name} dans la rencontre (en attente)` : `Laisser ${declaredMountOf(participant).name} hors de la rencontre : sa monture quitte le combat et la carte` });
-      toggle.addEventListener('click', event => {
-        event.preventDefault();
-        toggle.disabled = true;
-        Promise.resolve().then(() => Store.setMountAbsent(participant.id, !absent))
-          .then(result => { if (result?.ok === false) throw Object.assign(new Error(result.message), { userFacing: true }); })
-          .catch(error => plateauToast('Monture non modifiée', error)).finally(() => render());
-      });
-      nameRow.appendChild(toggle);
-    }
-    if (callbacks.removeParticipant) {
-      const remove = button('Retirer', 'workspace-secondary danger workspace-sheet-remove', { 'data-focus-key': `sheet-remove-${renameKey}`,
-        title: 'Retirer de la rencontre (confirmation, annulable)', 'aria-label': `Retirer ${participant.name} de la rencontre` });
-      remove.addEventListener('click', event => {
-        event.preventDefault();
-        remove.disabled = true;
-        Promise.resolve(callbacks.removeParticipant(participant.id, { confirm: true })).then(() => render(), () => { remove.disabled = false; });
-      });
-      nameRow.appendChild(remove);
-    }
     identity.appendChild(nameRow);
+    const menuButton = button('⋯', 'workspace-secondary workspace-sheet-menu-button', {
+      'aria-label': `Actions sur ${participant.name}`, 'aria-haspopup': 'menu', 'aria-expanded': String(sheetMenu?.key === renameKey),
+      'data-focus-key': `sheet-menu-${renameKey}`, title: 'Retirer, sans monture, renommer, camp, fiche complète, sorts et prières' });
+    menuButton.dataset.sheetMenuButton = '';
+    menuButton.dataset.menuOwner = renameKey;
+    menuButton.addEventListener('click', event => {
+      event.preventDefault();
+      sheetMenu = sheetMenu?.key === renameKey ? null : { key: renameKey, id: participant.id, view: 'main', focus: true };
+      render();
+    });
+    heading.append(identity, menuButton);
+    sheet.appendChild(heading);
+
+    // PV : valeur, −, quantité, +, barre (perte prévisualisée).
     const hp = node('p', 'workspace-sheet-hp num');
     hp.append(node('span', 'workspace-sheet-hp-label', 'PV'), ' ', hpText(participant));
     if (hit?.damage || hit?.critical?.application?.extraWounds) hp.appendChild(node('span', 'workspace-sheet-hp-after', ` → ${minusSigned(Math.max(0, (Number(participant.hp) || 0) - previewHpLoss(hit)))}`));
-    heading.append(identity, hp);
-    sheet.append(heading, hpBar(participant, hit ? previewHpLoss(hit) : 0));
-    const ownReminders = !isTarget ? participantReminderBlock(participant) : null;
-    if (ownReminders) sheet.appendChild(ownReminders);
-
     const amount = state.hpAmounts[participant.id] ?? '1';
     const hpControls = node('div', 'workspace-hp-controls');
     const minus = button('−', 'workspace-secondary', { 'data-focus-key': `hp-minus-${participant.id}` });
@@ -1116,8 +1382,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       source.addEventListener('change', () => { state.healSources[participant.id] = source.value; });
       hpControls.insertBefore(source, plus);
     }
-    sheet.appendChild(hpControls);
+    const pvRow = node('div', 'workspace-sheet-pvrow');
+    pvRow.append(hp, hpControls);
+    sheet.append(pvRow, hpBar(participant, hit ? previewHpLoss(hit) : 0));
 
+    // Caractéristiques et PA.
     const caracs = participant.caracs || {};
     const value = key => (Number.isFinite(Number(caracs[key])) && caracs[key] !== null && caracs[key] !== '' ? Number(caracs[key]) : null);
     const bonus = (key, bonusKey) => value(bonusKey) ?? (value(key) === null ? null : Math.floor(value(key) / 10));
@@ -1131,13 +1400,62 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         cell.append(node('dt', '', label), node('dd', 'num', String(content)));
         grid.appendChild(cell);
       });
-    sheet.appendChild(grid);
+    sheet.append(grid, paRow(participant, hit));
 
-    const body = node('div', 'workspace-sheet-body');
-    body.appendChild(renderSilhouette({ armor: participant.armor, armorLocations: displayedArmorLocations(participant), location: hit?.location || null, name: participant.name }));
+    // Élan, Chance et Destin (PJ), Assaut féroce quand il est offert.
+    const resources = node('div', 'workspace-sheet-resources');
+    const momentumButton = button(`Élan : ${hasMomentum(participant) ? 'oui' : 'non'}`, 'workspace-secondary', {
+      'aria-label': `Modifier l’Élan de ${participant.name}`, 'aria-pressed': String(hasMomentum(participant)),
+      'data-focus-key': `momentum-${participant.id}` });
+    momentumButton.dataset.workspaceAction = 'toggle-momentum';
+    momentumButton.dataset.actorId = participant.id;
+    momentumButton.disabled = !callbacks.setMomentum;
+    resources.appendChild(momentumButton);
+    if (participant.kind === 'PJ') {
+      if (callbacks.getFortune || callbacks.editFortune) {
+        const fortune = callbacks.getFortune?.(participant.id);
+        const fortuneButton = button('Chance : ' + formatV5Balance(fortune), 'workspace-secondary', {
+          'aria-label': 'Modifier la Chance de ' + participant.name, 'data-focus-key': 'fortune-' + participant.id });
+        fortuneButton.dataset.workspaceAction = 'edit-fortune';
+        fortuneButton.dataset.actorId = participant.id;
+        fortuneButton.disabled = !callbacks.editFortune;
+        resources.appendChild(fortuneButton);
+      }
+      if (callbacks.getFate || callbacks.editFate) {
+        const fate = callbacks.getFate?.(participant.id), fateButton = button('Destin : ' + (fate?.balance ?? '?'), 'workspace-secondary', { 'aria-label': 'Modifier le Destin de ' + participant.name, 'data-focus-key': 'fate-' + participant.id });
+        fateButton.dataset.workspaceAction = 'edit-fate';
+        fateButton.dataset.actorId = participant.id;
+        fateButton.disabled = !callbacks.editFate;
+        resources.appendChild(fateButton);
+      }
+    }
+    for (const offer of Store.getReactionOpportunities?.(participant.id) || []) {
+      const use = button('Assaut féroce (1 Élan)', 'workspace-secondary', {
+        'aria-label': 'Utiliser Assaut féroce de ' + participant.name, 'data-focus-key': 'reaction-' + participant.id, title: 'Assaut féroce : attaque supplémentaire (1 Élan)' });
+      use.dataset.workspaceAction = 'use-reaction';
+      use.dataset.actorId = participant.id;
+      use.dataset.reactionId = offer.id;
+      use.disabled = state.resolution.busy || state.resolution.reactionId === offer.id;
+      resources.appendChild(use);
+    }
+    sheet.appendChild(resources);
+
+    // Monture : bascule À pied / Monté ou choix de la monture ; « sans monture pour la rencontre » se voit ici, se change dans le menu ⋯.
+    const mount = mountControl(participant, Store.listParticipants());
+    const declared = declaredMountOf(participant);
+    const mountOut = Boolean(declared && mountAbsentOf(participant));
+    if (mount || mountOut) {
+      const mountRow = node('div', 'actor-mount workspace-sheet-mount');
+      mountRow.append(node('span', '', 'Monture :'));
+      if (mount) mountRow.appendChild(mount);
+      if (mountOut) mountRow.appendChild(node('span', 'workspace-without-mount', `${declared.name} hors de la rencontre`));
+      sheet.appendChild(mountRow);
+    }
+
+    // États : puces avec × et Récupérer, « + état » (le formulaire s'ouvre dans la couche des fiches).
     const states = node('div', 'workspace-sheet-states');
-    states.appendChild(rubric('États', 'p'));
     const list = node('div', 'workspace-state-list');
+    list.appendChild(node('span', 'workspace-sheet-states-label', 'États'));
     normalizeEffects(participant.states).forEach((item, index) => {
       const entry = node('span', 'workspace-state-chip');
       entry.appendChild(node('span', '', stateLabel(item)));
@@ -1152,16 +1470,16 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       remove.disabled = !callbacks.setStates || lockedByMiscast;
       if (lockedByMiscast) remove.title = 'Lié à un incident magique en cours : se retire à son terme';
       if (callbacks.recoverState && !lockedByMiscast && recoveryMethodsFor(item).length) {
-        const recover=button('Récupérer','workspace-state-recover',{'aria-label':`Récupérer ${item.name} de ${participant.name}`,'data-focus-key':`state-recover-${participant.id}-${index}`});
-        recover.dataset.workspaceAction='recover-state';
-        recover.dataset.actorId=participant.id;
-        recover.dataset.stateIndex=String(index);
+        const recover = button('Récupérer', 'workspace-state-recover', { 'aria-label': `Récupérer ${item.name} de ${participant.name}`, 'data-focus-key': `state-recover-${participant.id}-${index}` });
+        recover.dataset.workspaceAction = 'recover-state';
+        recover.dataset.actorId = participant.id;
+        recover.dataset.stateIndex = String(index);
         entry.appendChild(recover);
       }
-      if(item.authorId||item.v5Timing?.authorId) {
-        const authorId=item.authorId||item.v5Timing.authorId;
-        const author=readParticipants(Store).find(actor=>actor.id===authorId);
-        entry.appendChild(node('small','workspace-state-origin',`Auteur : ${author?.name||authorId} · Cible : ${participant.name}`));
+      if (item.authorId || item.v5Timing?.authorId) {
+        const authorId = item.authorId || item.v5Timing.authorId;
+        const author = readParticipants(Store).find(actor => actor.id === authorId);
+        entry.title = `Auteur : ${author?.name || authorId} · Cible : ${participant.name}`;
       }
       entry.appendChild(remove);
       list.appendChild(entry);
@@ -1177,124 +1495,18 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     add.disabled = !callbacks.acquireStates && !callbacks.setStates;
     list.appendChild(add);
     states.appendChild(list);
-    const armourPieces = (participant.equipment || []).filter(item => item?.kind === 'armour');
-    if (armourPieces.length) {
-      // Armure portée pour cette rencontre seulement : la fiche n'est pas modifiée.
-      const worn = node('div', 'workspace-armour-worn');
-      worn.appendChild(rubric('Armure portée', 'p'));
-      const error = node('p', 'workspace-error');
-      for (const item of armourPieces) {
-        const label = node('label', 'workspace-type'), check = document.createElement('input');
-        check.type = 'checkbox';
-        check.checked = isArmourWorn(participant, item);
-        check.dataset.focusKey = `armour-worn-${participant.id}-${item.id}`;
-        const zones = (item.locations || []).map(id => HIT_LOCATIONS.find(row => row.id === id)?.label || id).join(', ');
-        check.setAttribute('aria-label', `${item.name} porté par ${participant.name}`);
-        check.addEventListener('change', async () => {
-          check.disabled = true;
-          error.textContent = '';
-          try {
-            const fresh = readParticipants(Store).find(row => row.id === participant.id) || participant;
-            const result = await Store.updateParticipant(fresh.id, { extensions: extensionsWithArmourWorn(fresh, item.id, check.checked) });
-            if (result === false || result?.ok === false) throw new Error(result?.error || 'Armure non enregistrée.');
-            render();
-          } catch (cause) {
-            error.textContent = userMessage(cause, 'Armure non enregistrée.');
-            check.checked = !check.checked;
-            check.disabled = false;
-          }
-        });
-        label.append(check, ` ${item.name}${zones ? ` (${zones})` : ''}${Number.isInteger(item.ap) ? ` · PA ${item.ap}` : ''}`);
-        worn.appendChild(label);
-      }
-      worn.appendChild(error);
-      states.appendChild(worn);
-    }
-    if (!participant.extensions?.ficheId && !participant.ficheSnapshot) {
-      // Sorts et prières d'un PNJ pour cette rencontre (le profil n'est pas modifié) ; ceux d'un PJ viennent de sa fiche.
-      const magic = node('details', 'workspace-magic-list');
-      magic.open = magicListOpen.has(participant.id);
-      magic.addEventListener('toggle', () => { if (magic.open) magicListOpen.add(participant.id); else magicListOpen.delete(participant.id); });
-      const count = (participant.spells?.length || 0) + (participant.prayers?.length || 0);
-      magic.appendChild(node('summary', 'workspace-rubric', `Sorts et prières${count ? ` (${count})` : ' · tout le catalogue'}`));
-      const error = node('p', 'workspace-error'), holder = node('div', '');
-      magic.append(holder, error);
-      createMagicListPicker({ container: holder, subject: participant, onChange: async value => {
-        error.textContent = '';
-        try {
-          const result = await Store.updateParticipant(participant.id, value);
-          if (result === false || result?.ok === false) throw new Error(result?.error || 'Liste non enregistrée.');
-          render();
-        } catch (cause) { error.textContent = userMessage(cause, 'Liste non enregistrée.'); }
-      } });
-      states.appendChild(magic);
-    }
-    const criticals =participant.extensions?.v5?.criticalWounds || [];
-    if (criticals.length) {
-      const registry = node('div', 'workspace-critical-wounds');
-      registry.appendChild(rubric('Blessures Critiques', 'p'));
-      for (const critical of criticals) {
-        const row = node('div', 'workspace-inline-actions');
-        row.appendChild(node('span', '', `${critical.name || 'Blessure Critique'} · ${critical.location || 'Localisation inconnue'} · Round ${critical.round ?? '?'}`));
-        const heal = button('Guérir', 'workspace-secondary', { 'aria-label': `Guérir ${critical.name || 'Blessure Critique'} de ${participant.name}` });
-        heal.dataset.workspaceAction = 'heal-critical';
-        heal.dataset.actorId = participant.id;
-        heal.dataset.criticalId = critical.id;
-        heal.disabled = !callbacks.healCriticalWound;
-        row.appendChild(heal);
-        registry.appendChild(row);
-      }
-      states.appendChild(registry);
-    }
-    if (formOpen) states.appendChild(renderStateForm(participant));
-    const momentumButton = button(`Élan : ${hasMomentum(participant) ? 'oui' : 'non'}`, 'workspace-secondary', {
-      'aria-label': `Modifier l’Élan de ${participant.name}`, 'aria-pressed': String(hasMomentum(participant)),
-      'data-focus-key': `momentum-${participant.id}` });
-    momentumButton.dataset.workspaceAction = 'toggle-momentum';
-    momentumButton.dataset.actorId = participant.id;
-    momentumButton.disabled = !callbacks.setMomentum;
-    body.appendChild(momentumButton);
-    if (callbacks.getFortune || callbacks.editFortune) {
-      const fortune = callbacks.getFortune?.(participant.id);
-      const fortuneButton = button('Chance : ' + formatV5Balance(fortune), 'workspace-secondary', {
-        'aria-label': 'Modifier la Chance de ' + participant.name, 'data-focus-key': 'fortune-' + participant.id });
-      fortuneButton.dataset.workspaceAction = 'edit-fortune';
-      fortuneButton.dataset.actorId = participant.id;
-      fortuneButton.disabled = !callbacks.editFortune;
-      body.appendChild(fortuneButton);
-    }
-    if(callbacks.getFate||callbacks.editFate){
-      const fate=callbacks.getFate?.(participant.id),fateButton=button('Destin : '+(fate?.balance??'?'),'workspace-secondary',{'aria-label':'Modifier le Destin de '+participant.name,'data-focus-key':'fate-'+participant.id});
-      fateButton.dataset.workspaceAction='edit-fate';
-      fateButton.dataset.actorId=participant.id;
-      fateButton.disabled=!callbacks.editFate;
-      body.appendChild(fateButton);
-    }
-    for (const offer of Store.getReactionOpportunities?.(participant.id) || []) {
-      const use = button('Assaut féroce : attaque supplémentaire (1 Élan)', 'workspace-secondary', {
-        'aria-label': 'Utiliser Assaut féroce de ' + participant.name, 'data-focus-key': 'reaction-' + participant.id });
-      use.dataset.workspaceAction = 'use-reaction';
-      use.dataset.actorId = participant.id;
-      use.dataset.reactionId = offer.id;
-      use.disabled = state.resolution.busy || state.resolution.reactionId === offer.id;
-      body.appendChild(use);
-    }
-    body.append(...creatureCommandBlocks(participant), states);
-    sheet.appendChild(body);
-    const equipment = equipmentChips(participant, role);
-    if (equipment) sheet.appendChild(equipment);
-    sheet.appendChild(renderFicheDetails(participant));
+    sheet.appendChild(states);
 
-    const actionsRow = node('div', 'workspace-inline-actions');
-    const edit = button('Modifier', 'workspace-secondary', { 'aria-label': `Modifier ${participant.name}`, 'data-focus-key': `edit-${participant.id}` });
-    edit.dataset.workspaceAction = 'edit-participant';
-    edit.dataset.actorId = participant.id;
-    edit.disabled = state.actionBusy || !callbacks.editParticipant;
-    if (!callbacks.editParticipant) edit.title = 'Action indisponible';
-    actionsRow.appendChild(edit);
-    const remove = defeatedParticipantButton(participant, `remove-${participant.id}`);
-    if (remove) actionsRow.appendChild(remove);
-    sheet.appendChild(actionsRow);
+    // Pastilles vers la fiche complète : rappels, blocs de créature, blessures Critiques, équipement en jeu.
+    const more = node('div', 'workspace-sheet-more');
+    const ownReminders = !isTarget ? participantReminderBlock(participant) : null;
+    if (ownReminders) more.appendChild(moreChip(participant, 'reminders', 'Rappels', ownReminders.querySelectorAll('.actor-reminder').length || 1));
+    if (creatureCommandBlocks(participant).length) more.appendChild(moreChip(participant, 'traits', 'Traits de créature', 1));
+    const criticalCount = (participant.extensions?.v5?.criticalWounds || []).length;
+    if (criticalCount) more.appendChild(moreChip(participant, 'criticals', 'Blessures Critiques', criticalCount));
+    const equipmentRow = equipmentChips(participant, role);
+    if (equipmentRow) more.appendChild(moreChip(participant, 'equipment', 'Équipement en jeu', equipmentRow.children.length));
+    if (more.children.length) sheet.appendChild(more);
     return sheet;
   }
 
@@ -3050,6 +3262,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (duel && !duel.children.length) duel.remove();
     const actionBar = track.querySelector(':scope > .workspace-action-bar');
     if (actionBar) actionsSlot.appendChild(actionBar);
+    syncSheetLayer();
   }
 
   // U6 (05/11, D5) : Circonstances est un onglet du panneau latéral. Le bloc construit par la résolution
@@ -3530,6 +3743,22 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (event.code === 'Space' && event.target.closest('button')) {
       event.stopPropagation();
       return;
+    }
+    // Refonte E3 : menu ⋯ (flèches, Échap) et fiche complète (Échap, Tab gardé dans le panneau).
+    if (sheetMenu && event.target.closest('.workspace-sheet-menu')) {
+      const items = [...event.target.closest('.workspace-sheet-menu').querySelectorAll('[role="menuitem"]:not(:disabled)')], at = items.indexOf(event.target);
+      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); const key = sheetMenu.key; closeSheetMenu(); refs.play.querySelector(`[data-menu-owner="${key}"]`)?.focus(); return; }
+      if ((event.key === 'ArrowDown' || event.key === 'ArrowUp') && items.length) { event.preventDefault(); items[(at + (event.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length].focus(); return; }
+    }
+    if (fullSheet && event.target.closest('.workspace-fullsheet')) {
+      if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closeFullSheet(); return; }
+      if (event.key === 'Tab') {
+        const focusable = [...event.target.closest('.workspace-fullsheet').querySelectorAll('button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"])')].filter(el => !el.disabled && el.getClientRects().length);
+        if (focusable.length) {
+          const first = focusable[0], last = focusable[focusable.length - 1];
+          if (event.shiftKey && event.target === first) { event.preventDefault(); last.focus(); } else if (!event.shiftKey && event.target === last) { event.preventDefault(); first.focus(); }
+        }
+      }
     }
     if (event.key === 'Escape' && state.stateForm && event.target.closest('.workspace-state-form')) {
       event.preventDefault();

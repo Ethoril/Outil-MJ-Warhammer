@@ -26,7 +26,7 @@ mkdirSync(shots, { recursive: true });
 
 // Combattants de R20 utilisés par le parcours (identifiants stables du générateur tools/build-r20-fixture.mjs).
 const GOR = 'r20-e0-p-101-1', GOR2 = 'r20-e0-p-101-2', UNGOR = 'r20-e0-p-102-1', ARCHER = 'r20-e0-p-122';
-const SHAMAN = 'r20-e0-p-121', PRIEST = 'r20-e0-p-173', ERICH = 'r20-e0-p-536', JORUNN = 'r20-e0-p-537';
+const SHAMAN = 'r20-e0-p-121', PRIEST = 'r20-e0-p-173', ERICH = 'r20-e0-p-536', JORUNN = 'r20-e0-p-537', LYNATHRYN = 'r20-e0-p-538', CHEVAL = 'r20-e0-p-458';
 
 const { origin, close } = await startStaticServer({ root });
 const browser = await launchBrowser();
@@ -83,6 +83,15 @@ try {
     await page.screenshot({ path: `${shots}${String(report.length).padStart(2, '0')}-${step.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/gi, '-').replace(/-$/, '')}.png` });
   }
 
+  // Lot E3 : fiches compactes (zones acteur et droite sans débordement), menu ⋯ et fiche complète.
+  async function sheetsStep(step) {
+    await measure(step);
+    const row = report.at(-1);
+    for (const zone of row.overflowing.filter(z => ['acteur', 'droite'].includes(z.name))) failures.push(`${step} : la zone ${zone.name} déborde (${zone.scrollHeight}/${zone.clientHeight})`);
+  }
+  const sheetMenu = role => page.locator(`[data-zone="${role}"] [data-sheet-menu-button]`).first();
+  const menuItem = name => page.locator('[role="menu"][data-sheet-menu]').getByRole('menuitem', { name });
+  const insideWindow = locator => locator.evaluate(el => { const r = el.getBoundingClientRect(); return r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1; });
   const resolution = () => page.locator('.workspace-resolution');
   const selectActor = id => page.locator(`[data-workspace-select="${id}"]`).first().click();
   const chooseAction = name => resolution().locator('[data-action-key]').filter({ hasText: name }).first().click();
@@ -120,6 +129,91 @@ try {
   await sheet.getByRole('button', { name: 'Confirmer et appliquer' }).click();
   await page.waitForFunction(async () => (await import('/js/main.js')).Store.getCombat().round === 1);
   await measure('initiative appliquée, round 1');
+
+  // 2 bis (E3). Fiches compactes : une créature qui agit sur un PJ, puis le PJ monté ; menu ⋯, fiche complète, retrait, sans monture.
+  await selectActor(GOR);
+  await chooseAction('Hand Weapon');
+  await chooseTarget('Erich Massenbach');
+  await sheetsStep('fiches : créature et PJ');
+  assert.ok(await page.locator('[data-zone="droite"] [data-sheet-role="target"]').getByText('Chance').count(), 'la fiche d’un PJ montre Chance');
+  assert.ok(await page.locator('[data-zone="droite"] [data-sheet-role="target"]').getByText('Destin').count(), 'la fiche d’un PJ montre Destin');
+  // La fixture ne déclare pas la monture sur la fiche de Lynathryn : on la déclare (profil de son cheval) pour « sans monture ».
+  await page.evaluate(async ids => {
+    const { Store } = await import('/js/main.js');
+    const list = Store.listParticipants(), rider = list.find(row => row.id === ids[0]), mount = list.find(row => row.id === ids[1]);
+    const profileId = mount.source?.profileId || mount.profileId || mount.id;
+    await Store.updateParticipant(rider.id, { extensions: { ...rider.extensions, v5: { ...rider.extensions?.v5, declaredMount: { profileId, name: mount.name } } } });
+  }, [LYNATHRYN, CHEVAL]);
+  await selectActor(LYNATHRYN);
+  await sheetsStep('fiches : PJ monté');
+  await sheetMenu('acteur').click();
+  await menuItem(/Fiche complète/).waitFor();
+  assert.ok(await insideWindow(page.locator('[role="menu"][data-sheet-menu]')), 'le menu ⋯ tient dans la fenêtre');
+  for (const name of [/Retirer du combat/, /Sans monture pour cette rencontre/, /Renommer/, /Changer de camp/, /Fiche complète/, /Sorts et prières/]) assert.equal(await menuItem(name).count(), 1, `menu ⋯ : ${name}`);
+  await measure('menu ⋯ ouvert');
+  await menuItem(/Fiche complète/).click();
+  const full = page.locator('.workspace-fullsheet[role="dialog"]');
+  await full.waitFor({ state: 'visible' });
+  await page.waitForTimeout(150);
+  const fullBox = await full.evaluate(el => {
+    const r = el.getBoundingClientRect();
+    const inner = [el, ...el.querySelectorAll('*')].filter(item => item === el || /(auto|scroll)/.test(getComputedStyle(item).overflowY)).reduce((most, item) => (item.scrollHeight - item.clientHeight > most ? item.scrollHeight - item.clientHeight : most), 0);
+    return { inside: r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1, overflow: inner };
+  });
+  report.push({ step: 'fiche complète (PJ monté)', note: `panneau ${fullBox.inside ? 'dans la fenêtre' : 'HORS fenêtre'}, débordement interne ${fullBox.overflow} px` });
+  if (!fullBox.inside || fullBox.overflow > 1) failures.push(`fiche complète : panneau ${fullBox.inside ? '' : 'hors fenêtre, '}débordement interne ${fullBox.overflow} px`);
+  await page.screenshot({ path: `${shots}fiche-complete-pj.png` });
+  await full.getByRole('button', { name: 'Fermer' }).click();
+  await full.waitFor({ state: 'hidden' });
+  // Retrait annulé : le cavalier reste, le choix de la monture est proposé.
+  await sheetMenu('acteur').click();
+  await menuItem(/Retirer du combat/).click();
+  const removal = page.locator('dialog[open]').last();
+  await removal.waitFor({ state: 'visible' });
+  assert.ok(await removal.getByText(/Retirer aussi sa monture/).count(), 'le retrait d’un cavalier propose de retirer aussi sa monture');
+  await removal.getByRole('button', { name: 'Annuler' }).click();
+  await removal.waitFor({ state: 'detached' });
+  assert.equal(await page.evaluate(async id => (await import('/js/main.js')).Store.listParticipants().some(row => row.id === id && row.zone === 'active'), LYNATHRYN), true, 'Annuler garde le cavalier');
+  // Sans monture pour cette rencontre, puis retour de la monture.
+  const mountState = () => page.evaluate(async ids => { const { Store } = await import('/js/main.js'); const list = Store.listParticipants(); return { absent: list.find(row => row.id === ids[0])?.extensions?.v5?.mountAbsent === true, mount: list.some(row => row.id === ids[1] && row.zone === 'active') }; }, [LYNATHRYN, CHEVAL]);
+  await sheetMenu('acteur').click();
+  await menuItem(/Sans monture pour cette rencontre/).click();
+  await page.waitForFunction(async ids => (await import('/js/main.js')).Store.listParticipants().find(row => row.id === ids[0])?.extensions?.v5?.mountAbsent === true, [LYNATHRYN]);
+  assert.deepEqual(await mountState(), { absent: true, mount: false }, 'sans monture : la monture quitte la rencontre');
+  await sheetsStep('fiches : sans monture');
+  await sheetMenu('acteur').click();
+  await menuItem(/Remettre la monture|Monture présente/).click();
+  await page.waitForFunction(async ids => (await import('/js/main.js')).Store.listParticipants().find(row => row.id === ids[0])?.extensions?.v5?.mountAbsent !== true, [LYNATHRYN]);
+
+  // Formulaire « + état » (couche des fiches), renommer, changer de camp, sorts et prières d'un lanceur : tout tient dans la fenêtre.
+  await selectActor(SHAMAN);
+  await page.locator('[data-zone="acteur"] .workspace-state-add').click();
+  const stateForm = page.locator('.workspace-state-popover .workspace-state-form');
+  await stateForm.waitFor({ state: 'visible' });
+  assert.ok(await insideWindow(page.locator('.workspace-state-popover')), 'le formulaire d’état tient dans la fenêtre');
+  await sheetsStep('fiches : formulaire d’état ouvert');
+  await stateForm.locator('select').first().selectOption('Sonné');
+  await stateForm.getByRole('button', { name: 'Ajouter' }).click();
+  await page.locator('[data-zone="acteur"] .workspace-state-chip').filter({ hasText: 'Sonné' }).waitFor();
+  await sheetsStep('fiches : état ajouté');
+  await sheetMenu('acteur').click();
+  await menuItem(/Changer de camp/).click();
+  await page.locator('[role="menu"][data-sheet-menu]').getByRole('menuitem', { name: 'Neutre' }).click();
+  await page.waitForFunction(async id => (await import('/js/main.js')).Store.listParticipants().find(row => row.id === id)?.camp === 'neutre', SHAMAN);
+  await sheetMenu('acteur').click();
+  await menuItem(/Renommer/).click();
+  await page.locator('[data-zone="acteur"] .workspace-sheet-name-input').fill('Swilegrakk le Bray');
+  await page.locator('[data-zone="acteur"] .workspace-sheet-name-input').press('Enter');
+  await page.locator('[data-zone="acteur"] .workspace-sheet-name', { hasText: 'Swilegrakk le Bray' }).waitFor();
+  await sheetMenu('acteur').click();
+  await menuItem(/Sorts et prières/).click();
+  await full.waitFor({ state: 'visible' });
+  await page.waitForTimeout(150);
+  const magicBox = await full.evaluate(el => { const r = el.getBoundingClientRect(); return { inside: r.top >= 0 && r.bottom <= innerHeight + 1 && r.left >= 0 && r.right <= innerWidth + 1, details: el.querySelector('.workspace-magic-list')?.open === true }; });
+  assert.deepEqual(magicBox, { inside: true, details: true }, 'sorts et prières : panneau dans la fenêtre, liste ouverte');
+  await page.screenshot({ path: `${shots}fiche-complete-lanceur.png` });
+  await page.keyboard.press('Escape');
+  await full.waitFor({ state: 'hidden' });
 
   // 3. Attaque de mêlée : Gor 1 frappe Erich (jet d'attaque, défense, aperçu).
   await selectActor(GOR);
@@ -178,7 +272,8 @@ try {
 
   // 9. Retrait d'un participant : confirmation de l'outil, puis retrait.
   await selectActor(UNGOR);
-  await page.locator('.workspace-sheet-remove').first().click();
+  await sheetMenu('acteur').click();
+  await menuItem(/Retirer du combat/).click();
   const confirm = page.locator('dialog[open]').last();
   await confirm.waitFor({ state: 'visible' });
   await measure('retrait d’un participant (confirmation)');

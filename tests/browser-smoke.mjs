@@ -291,8 +291,10 @@ async function main() {
     // Éditeur de combattant non modal : PV et états changés sur la fiche pendant
     // qu'il est ouvert ne sont pas écrasés à l'enregistrement.
     const actorName = (await actorSheet.locator('.workspace-sheet-name').textContent()).trim();
-    const actorEdit = () => actorSheet.getByRole('button', { name: `Modifier ${actorName}`, exact: true });
-    await actorEdit().click();
+    // Refonte E3 : « Modifier… » est une entrée du menu ⋯ de la fiche ; le focus revient sur le bouton ⋯.
+    const actorMenu = actorSheet.locator('[data-sheet-menu-button]');
+    const actorEdit = { click: async () => { await actorMenu.click(); await page.getByRole('menuitem', { name: /^Modifier/ }).click(); } };
+    await actorEdit.click();
     let editor = page.getByRole('dialog');
     await expect(editor.locator('.participant-state-list')).toBeEmpty();
     const hpField = editor.locator('[name=hp]');
@@ -300,15 +302,16 @@ async function main() {
     await actorSheet.getByRole('button', { name: `−1 PV pour ${actorName}` }).click();
     await expect(hpField).toHaveValue(String(hpBefore - 1));
     await actorSheet.getByRole('button', { name: `Ajouter un état à ${actorName}` }).click();
-    await actorSheet.getByRole('button', { name: 'Ajouter', exact: true }).click();
+    // Refonte E3 : le formulaire d'état s'ouvre dans la couche des fiches, hors de la fiche.
+    await page.locator('.workspace-state-popover').getByRole('button', { name: 'Ajouter', exact: true }).click();
     await expect(editor.locator('.state-edit-row')).toHaveCount(1);
     await editor.getByRole('button', { name: 'Enregistrer', exact: true }).click();
     await expect(editor).toBeHidden();
     await expect(actorSheet).toContainText(`PV ${hpBefore - 1}/`);
     await expect(actorSheet.locator('.workspace-state-chip')).toHaveCount(1);
     // Le bouton d'origine, recréé par le re-rendu, reprend le focus.
-    await expect(actorEdit()).toBeFocused();
-    await actorEdit().click();
+    await expect(actorMenu).toBeFocused();
+    await actorEdit.click();
     editor = page.getByRole('dialog');
     await actorSheet.getByRole('button', { name: new RegExp(`^Retirer .+ de ${actorName}$`) }).click();
     await expect(editor.locator('.state-edit-row')).toHaveCount(0);
@@ -319,22 +322,24 @@ async function main() {
     await editor.getByRole('button', { name: 'Enregistrer', exact: true }).click();
     await expect(editor).toBeHidden();
     await expect(actorSheet.locator('.workspace-state-chip')).toHaveCount(0);
-    await actorEdit().click();
+    await actorEdit.click();
     editor = page.getByRole('dialog');
     await editor.locator('[name=name]').focus();
     await page.keyboard.press('Escape');
     await expect(editor).toBeHidden();
-    await expect(actorEdit()).toBeFocused();
+    await expect(actorMenu).toBeFocused();
 
     // Edit the second live participant and remove only that instance.
     // The participant editor is a non-modal tool window with its own camp list.
-    await page.getByRole('button', { name: `Modifier ${secondName}`, exact: true }).click();
+    await page.locator('.workspace-actor-sheet', { has: page.getByRole('heading', { name: secondName, exact: true }) }).locator('[data-sheet-menu-button]').click();
+    await page.getByRole('menuitem', { name: /^Modifier/ }).click();
     let participantDialog = page.getByRole('dialog');
     await expect(participantDialog.getByRole('heading', { level: 2 })).toHaveText(`Modifier ${secondName}`);
     await participantDialog.getByRole('combobox', { name: 'Camp' }).selectOption('allie');
     await participantDialog.getByRole('button', { name: 'Enregistrer', exact: true }).click();
     await expect(participantDialog).toBeHidden();
-    await page.getByRole('button', { name: `Modifier ${secondName}`, exact: true }).click();
+    await page.locator('.workspace-actor-sheet', { has: page.getByRole('heading', { name: secondName, exact: true }) }).locator('[data-sheet-menu-button]').click();
+    await page.getByRole('menuitem', { name: /^Modifier/ }).click();
     participantDialog = page.getByRole('dialog');
     await expect(participantDialog.getByRole('combobox', { name: 'Camp' })).toHaveValue('allie');
     await participantDialog.getByRole('button', { name: 'Retirer du combat' }).click();
