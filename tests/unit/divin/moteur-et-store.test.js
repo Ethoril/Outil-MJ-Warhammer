@@ -393,7 +393,7 @@ test('B02 — exemption par culte et pas par race ou saisie client',()=>{
  assert.equal(result.preview.wrath.triggered,true);
  assert.equal(result.preview.wrath.sinAtTest,2);
  const missing=clone(priest);delete missing.extensions.v5.divine.sin;
- assert.equal(previewDivineExecution(missing,getDivineContract(HUMAN),[missing],input()).status,'needs-input');
+ const absent=previewDivineExecution(missing,getDivineContract(HUMAN),[missing],input());assert.notEqual(absent.status,'needs-input','Péché absent = 0 (règle du 21/11)');assert.equal(absent.preview.wrath.sinAtTest,0);
 });
 
 test('B02 — attribution de Péchés refusée à Mathlann sans mutation',()=>{
