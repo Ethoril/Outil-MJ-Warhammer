@@ -2188,6 +2188,14 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 /* Barre du haut : « X agit hors de son tour » (js/ui/combat-banner.js). */
 .combat-banner-offturn { flex: none; white-space: nowrap; padding: 1px 8px; border: 1px solid var(--accent); border-radius: 999px; font-size: 12.5px; font-weight: 700; color: var(--accent-text); }
 .combat-banner-offturn[hidden] { display: none; }
+/* Lot E9 : deux rangées quand « Jouer son tour maintenant » ou « N à décider » s'ajoutent, sans changer la hauteur de la barre. */
+.combat-banner-inner.is-stacked { flex-wrap: wrap; align-content: center; gap: 2px 8px; }
+.combat-banner-inner.is-stacked > .combat-banner-status { flex: 1 1 100%; font-size: 12.5px; }
+.combat-banner-inner.is-stacked > .spacer { display: block; flex: 1 1 0; }
+.combat-banner-inner.is-stacked > button, .combat-banner-inner.is-stacked > .combat-banner-decisions { min-height: 24px; padding-block: 1px; font-size: 12.5px; line-height: 1.3; }
+.combat-banner-inner.is-stacked > .combat-banner-decisions { display: inline-flex; align-items: center; }
+.combat-banner-inner.is-stacked > .combat-banner-decisions[hidden] { display: none; }
+.topbar .combat-banner-inner.is-stacked > .combat-banner-primary { padding: 1px 14px; }
 
 /* ==========================================================================
    REFONTE · LOT E5 : démarrage du combat

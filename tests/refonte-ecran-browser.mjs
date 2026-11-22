@@ -601,6 +601,25 @@ try {
   await decisionCard.locator('[data-decision-option="later"]').click();
   await decisionCard.locator('.workspace-decision-resume').waitFor();
   assert.equal(await bannerCount.getAttribute('data-decisions-count'), String(pending), '« Plus tard » laisse la décision en attente');
+  // 8 bis (lot E9, d) : barre du haut à 1440 × 800 avec un nom d'acteur long, quand « Jouer son tour maintenant » et
+  // « N à décider » s'affichent ensemble : « Round N · au tour de … » ne doit pas être tronqué.
+  const longName = NAMES.SHAMAN; // le nom d'acteur le plus long de la fixture R20 (44 caractères)
+  const barHeightBefore = await page.evaluate(() => document.querySelector('.topbar').getBoundingClientRect().height);
+  const turnId = (await friseState()).turn;
+  const turnOldName = await page.evaluate(async id => (await import('/js/main.js')).Store.listParticipants().find(row => row.id === id).name, turnId);
+  await page.evaluate(async ([id, name]) => (await import('/js/main.js')).Store.updateParticipant(id, { name }), [turnId, longName]);
+  const awayId = (await friseState()).portraits.find(item => !item.turn && !item.dead && item.id !== ID.UNGOR && item.id !== other.id)?.id;
+  assert.ok(awayId, 'un combattant disponible pour agir hors de son tour');
+  await page.locator(`[data-zone="frise"] [data-frise-id="${awayId}"]`).click();
+  await page.locator('#combat-banner .combat-banner-play-now:not([hidden])').waitFor();
+  await page.locator('#combat-banner [data-decisions-count]:not([hidden])').waitFor();
+  const roundText = await page.locator('#combat-banner .combat-banner-status').evaluate(el => ({ text: el.textContent, scrollWidth: el.scrollWidth, clientWidth: el.clientWidth, barHeight: document.querySelector('.topbar').getBoundingClientRect().height }));
+  assert.match(roundText.text, /^Round \d+ · au tour de Swilegrakk/, 'le texte du round est complet dans le DOM');
+  assert.equal(roundText.barHeight, barHeightBefore, 'la hauteur de la barre du haut ne change pas');
+  assert.equal(await page.evaluate(() => document.documentElement.scrollHeight <= innerHeight), true, 'la page ne défile pas');
+  assert.ok(roundText.scrollWidth <= roundText.clientWidth, `« Round N · au tour de … » est tronqué dans la barre du haut (${roundText.scrollWidth} > ${roundText.clientWidth})`);
+  await page.locator(`[data-zone="frise"] [data-frise-id="${turnId}"]`).click();
+  await page.evaluate(async ([id, name]) => (await import('/js/main.js')).Store.updateParticipant(id, { name }), [turnId, turnOldName]);
   await decisionCard.locator('.workspace-decision-resume').click();
   await decisionCard.locator('[data-decision-option="dead"]').click();
   await decisionCard.waitFor({ state: 'detached' });
