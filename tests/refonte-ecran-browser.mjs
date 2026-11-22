@@ -356,6 +356,19 @@ try {
   }, [ID.LYNATHRYN, ID.CHEVAL]);
   await selectActor(ID.LYNATHRYN);
   await sheetsStep('fiches : PJ monté');
+  // 2 ter (E7b). Chance puis Destin : fenêtres non modales, page fixe, le reste de l'écran reste cliquable.
+  await page.locator('[data-zone="acteur"] [data-workspace-action="edit-fortune"]').click();
+  await page.locator('dialog.v5-effect-dialog[open]').waitFor();
+  await page.locator('[data-zone="acteur"] [data-workspace-action="edit-fate"]').click();
+  await page.waitForFunction(() => document.querySelectorAll('dialog.v5-effect-dialog[open]').length === 2);
+  await measure('Chance et Destin ouverts');
+  assert.equal(await page.locator('dialog:modal').count(), 0, 'Chance et Destin ne sont pas modaux');
+  assert.equal(await page.evaluate(() => document.body.scrollHeight <= innerHeight && document.documentElement.scrollWidth <= innerWidth), true, 'page fixe avec les deux fenêtres');
+  await page.locator('[data-zone="frise"] [data-frise-id]').nth(1).click();
+  assert.ok(await page.locator('#combat-banner .combat-banner-primary').isEnabled(), 'le reste de l’écran répond pendant que les fenêtres sont ouvertes');
+  while (await page.locator('dialog.v5-effect-dialog[open]').count()) await page.locator('dialog.v5-effect-dialog[open]').first().getByRole('button', { name: 'Annuler' }).click();
+  assert.equal(await page.locator('dialog[open]').count(), 0, 'Annuler ferme Chance et Destin');
+  await selectActor(ID.LYNATHRYN);
   await sheetMenu('acteur').click();
   await menuItem(/Fiche complète/).waitFor();
   assert.ok(await insideWindow(page.locator('[role="menu"][data-sheet-menu]')), 'le menu ⋯ tient dans la fenêtre');

@@ -333,8 +333,16 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
           detail.append(sequelaeBox);
         }
 
+        // Refonte E7b (CA16, CA20) : ses maladies, sous l'arbitrage des séquelles.
+        const absentDiseases = chosen.absent && typeof aftermath.renderAbsentDiseases === 'function' ? aftermath.renderAbsentDiseases(chosen.id, participants) : null;
+        if (absentDiseases) {
+          const diseasesBox = node('section', 'campaign-detail-diseases-box');
+          diseasesBox.append(node('h4', '', 'Maladies de l’absent'), absentDiseases);
+          detail.append(diseasesBox);
+        }
+
         detail.append(node('p', 'campaign-help', chosen.absent
-          ? (absentSequelae ? 'Un suivi en consultation ne reçoit ni soin ni Test de soin ; ses séquelles s’arbitrent ci-dessus.' : 'Un suivi en consultation ne reçoit ni soin ni Test.')
+          ? (absentSequelae || absentDiseases ? 'Un suivi en consultation ne reçoit ni soin ni Test de soin ; ses séquelles et ses maladies se gèrent ci-dessus.' : 'Un suivi en consultation ne reçoit ni soin ni Test.')
           : (chosen.off ? 'Les soins et décisions appliqués ici mettent à jour le registre et les PV du personnage suivi, hors rencontre.'
             : 'Les soins et décisions appliqués ici mettent à jour le registre et les PV de la partie.')));
       }

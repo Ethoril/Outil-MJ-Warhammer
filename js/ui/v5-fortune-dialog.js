@@ -11,7 +11,7 @@ export function fortuneDialogState(fortune) {
 export function openV5FortuneDialog({ participantName, fortune, submit, getCurrentRevision } = {}) {
   if (!fortune || typeof submit !== 'function') throw new TypeError('Compteur de Chance requis');
   return new Promise(resolve => {
-    const opener = document.activeElement, dialog = el('dialog', null, 'tool-sheet v5-effect-dialog'), form = el('form');
+    const opener = document.activeElement, dialog = el('dialog', null, 'tool-sheet v5-effect-dialog v5-fortune-dialog'), form = el('form');
     // La feuille commune est dockée ; ce formulaire modal doit rester entièrement dans le viewport.
     Object.assign(dialog.style,{inset:'0',margin:'auto',transform:'none',width:'min(640px, calc(100vw - 32px))',maxWidth:'calc(100vw - 32px)',maxHeight:'calc(100dvh - 32px)',overflow:'auto',display:'block'});
     const heading = el('h2', 'Chance — ' + participantName); heading.id = 'v5-fortune-title'; dialog.setAttribute('aria-labelledby', heading.id);
@@ -46,6 +46,6 @@ export function openV5FortuneDialog({ participantName, fortune, submit, getCurre
     });
     cancel.addEventListener('click', () => dialog.close()); dialog.addEventListener('cancel', event => { if (busy) event.preventDefault(); });
     dialog.addEventListener('close', () => { dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(outcome); }, { once: true });
-    dialog.showModal(); amount.focus();
+    dialog.show(); amount.focus();
   });
 }
