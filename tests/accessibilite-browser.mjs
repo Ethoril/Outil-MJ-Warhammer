@@ -117,14 +117,15 @@ const activeDescription = page => page.evaluate(`(() => { ${DESCRIBE} return des
 /** Ouvre une fenêtre par `opener`, vérifie que le focus y entre (et y reste si elle est modale), la ferme, vérifie le retour du focus.
  * `modal` : la fenêtre doit être modale (showModal) ; une fenêtre modale devenue non modale laisserait sortir le focus sans signal.
  * `whileOpen` : vérifications supplémentaires faites fenêtre ouverte, avant sa fermeture. */
-async function checkDialog(page, screen, width, { name, opener, dialog, modal = false, close = page => page.keyboard.press('Escape'), returnTo = opener, whileOpen = async () => {} }) {
+async function checkDialog(page, screen, width, { name, opener, dialog, modal = undefined, close = page => page.keyboard.press('Escape'), returnTo = opener, whileOpen = async () => {} }) {
   await opener.focus();
   await page.keyboard.press('Enter');
   await expect(dialog).toBeVisible();
   const inside = () => dialog.evaluate(element => element.contains(document.activeElement) && document.activeElement !== element.ownerDocument.body);
   await expect.poll(inside, { timeout: 3000 }).toBe(true).catch(async () => fail(screen, width, `fenêtre « ${name} »`, `focus hors de la fenêtre à l'ouverture : ${await activeDescription(page)}`));
   const isModal = await dialog.evaluate(element => element.matches(':modal'));
-  if (modal && !isModal) fail(screen, width, `fenêtre « ${name} »`, 'la fenêtre n’est plus modale');
+  if (modal === true && !isModal) fail(screen, width, `fenêtre « ${name} »`, 'la fenêtre n’est plus modale');
+  if (modal === false && isModal) fail(screen, width, `fenêtre « ${name} »`, 'la fenêtre devrait être non modale (décision du MJ, lot E7b)');
   if (isModal) {
     const count = await dialog.evaluate(element => element.querySelectorAll('button, [href], input, select, textarea, summary, [tabindex]:not([tabindex="-1"])').length);
     for (const key of [...Array(count + 2).fill('Tab'), 'Shift+Tab', 'Shift+Tab', 'Shift+Tab']) {
@@ -186,13 +187,13 @@ try {
       const sheet = page.locator('dialog.tool-sheet').filter({ has: page.getByRole('heading', { name: title, exact: true }) });
       await checkDialog(page, 'Jouer', width, { name, opener: page.locator(id), dialog: sheet, close: () => sheet.getByRole('button', { name: 'Fermer', exact: true }).click() });
     }
-    await checkDialog(page, 'Jouer', width, { name: 'Temps de campagne', modal: true, opener: page.locator('#workspace-campaign-time'), dialog: page.locator('dialog.campaign-time-dialog') });
+    await checkDialog(page, 'Jouer', width, { name: 'Temps de campagne', modal: false, opener: page.locator('#workspace-campaign-time'), dialog: page.locator('dialog.campaign-time-dialog') });
     await checkDialog(page, 'Jouer', width, { name: 'Terminer le combat', modal: true, opener: page.locator('#workspace-end-combat'), dialog: page.locator('dialog.encounter-end-dialog'),
       close: () => page.locator('dialog.encounter-end-dialog').getByRole('button', { name: 'Annuler', exact: true }).click() });
 
     // Campagne, et sa fenêtre « Avancer le temps » (le bouton est reconstruit : le focus revient au bouton du même rôle).
     await screen('Campagne', '#tab-campaign', () => expect(page.locator('#workspace-campaign [data-campaign-focus="advance"]')).toBeVisible());
-    await checkDialog(page, 'Campagne', width, { name: 'Avancer le temps', modal: true, opener: page.locator('#workspace-campaign [data-campaign-focus="advance"]'),
+    await checkDialog(page, 'Campagne', width, { name: 'Avancer le temps', modal: false, opener: page.locator('#workspace-campaign [data-campaign-focus="advance"]'),
       dialog: page.locator('dialog.campaign-time-dialog') });
 
     // Bibliothèque, une fois le bestiaire affiché.
