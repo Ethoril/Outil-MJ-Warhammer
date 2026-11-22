@@ -2635,3 +2635,6 @@ dialog.v5-fate-dialog[open] { left:calc(50% + 8px) !important; right:auto !impor
   body:has(#panel-workspace.is-active #workspace-library:not([hidden])) #bestiary-library { min-height: 0; margin: 0 clamp(16px, 2vw, 24px) 8px; padding: 8px 12px; }
   body:has(#panel-workspace.is-active #workspace-library:not([hidden])) #bestiary-library-body { max-height: calc(50dvh - 48px); overflow: auto; overscroll-behavior: contain; }
 }
+
+/* LOT G7 — quitter une mêlée : « X quitte la mêlée de Y » tient sur une ligne (texte complet en infobulle), pour ne pas faire déborder la zone de droite. */
+.workspace-decision[data-decision-id^="quitte:"] .workspace-decision-title { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

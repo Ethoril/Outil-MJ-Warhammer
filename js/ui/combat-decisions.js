@@ -95,6 +95,27 @@ export const publishedDecisions = () => [...published.values()];
 /** Abonnement de l'espace Jouer : une question publiée ou retirée redessine la case. Renvoie la fonction de désabonnement. */
 export function onPublishedDecisions(listener) { listeners.add(listener); return () => listeners.delete(listener); }
 
+// Passe G, lot G7 (R4, p. 163) : un combattant qui quitte une mêlée par un déplacement du MJ pose une décision (kind « fuite »).
+// Pas d'attaque d'opportunité sur un simple déplacement : seule la Fuite donne l'attaque gratuite ; « Sans règle » ne change rien.
+export const leaveMeleeId = moverId => `quitte:${moverId}`;
+/** Adversaires engagés avant le déplacement et qui ne le sont plus après. */
+export const leftMelee = (before = [], after = []) => before.filter(id => !after.includes(id));
+export function leaveMeleeEntry({ mover, foes = [], onChoose } = {}) {
+  return { id: leaveMeleeId(mover.id), kind: 'fuite', participantId: mover.id, titre: `${nameOf(mover)} quitte la mêlée de ${foes.map(nameOf).join(', ')}`,
+    detail: 'Quitter une mêlée : se désengager ou fuir (p. 163). Fuir donne l’Élan aux adversaires engagés (attaque gratuite) et un Brisé par adversaire.',
+    options: [{ key: 'disengage', label: 'Se désengager' }, { key: 'flee', label: 'Fuir' }, { key: 'none', label: 'Sans règle' }], onChoose };
+}
+/**
+ * Adversaires encore à régler d'une décision de départ (`{ moverId, foeIds }`), ou `null` si elle doit se retirer : combattant
+ * absent ou hors du combat, réengagé avec tous les mêmes adversaires, ou adversaires partis. `engagedIds` = ses engagements actuels.
+ */
+export function leaveMeleeRemaining({ moverId, foeIds = [] } = {}, people = [], engagedIds = []) {
+  const mover = people.find(row => row.id === moverId);
+  if (!mover || !isActive(mover)) return null;
+  const remaining = foeIds.filter(id => !engagedIds.includes(id) && isActive(people.find(row => row.id === id) || { zone: 'gone' }));
+  return remaining.length ? remaining : null;
+}
+
 // Compteur de la barre du haut (combat-banner.js) : le nombre de la dernière case rendue.
 let lastCount = 0;
 export function rememberDecisionCount(count) { lastCount = Math.max(0, Number(count) || 0); }
