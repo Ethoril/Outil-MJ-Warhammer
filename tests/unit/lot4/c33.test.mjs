@@ -53,12 +53,14 @@ describe('C33 arme non reliée : saisie manuelle au lieu du blocage', () => {
     assert.equal(imprecise.sl, plain.sl - 1, 'Imprécise l’emporte sur Précise');
   });
 
-  test('Taille sans pièce identifiable : le MJ nomme la pièce frappée (ligne cliquable), 1 PA retiré, plus d’avertissement', () => {
-    const blocked = shoot([q('taille')], { kind: 'melee' });
-    assert.deepEqual(blocked.mechanicalWarnings, []);
-    assert.ok(blocked.unresolved.includes('Taille : saisir la pièce d’armure ou le bouclier frappé (aucune pièce identifiable sur la fiche).'), JSON.stringify(blocked.unresolved));
-    assert.ok(focusOf(blocked).includes('hack-piece'));
+  // G5-a (R2, 22/11) : « Appliquer » n'est plus jamais grisé par la Taille ; le nom de la pièce reste facultatif (usure non suivie).
+  test('Taille sans pièce identifiable : 1 PA retiré sans blocage ; le MJ peut nommer la pièce frappée', () => {
+    const unnamed = shoot([q('taille')], { kind: 'melee' });
+    assert.deepEqual(unnamed.mechanicalWarnings, []);
+    assert.equal(unnamed.unresolved.some(row => /Taille/.test(row)), false, JSON.stringify(unnamed.unresolved));
+    assert.equal(unnamed.hack.manual, true);
     const plain = shoot([], { kind: 'melee' });
+    assert.equal(unnamed.protection.ap, plain.protection.ap - 1);
     const named = shoot([q('taille')], { kind: 'melee', context: { struckPieceManual: 'Cotte de mailles' } });
     assert.equal(named.unresolved.some(row => /Taille/.test(row)), false);
     assert.equal(named.hack.manual, true);

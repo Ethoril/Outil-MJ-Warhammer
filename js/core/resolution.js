@@ -937,30 +937,32 @@ function resolvedV5Action(normalized, actorPlan, actorTest, defenderPlan, defend
       if(appendageAp===undefined||appendageAp===null||appendageAp===''||!Number.isSafeInteger(Number(appendageAp))||Number(appendageAp)<0)unresolved.push('Appendice : saisissez les PA de l’appendice atteint.');
       else protection={...protection,ap:Number(appendageAp)+(protection.shieldAp||0),baseAp:Number(appendageAp),counted:[],appendage:context.hitAppendage};
     }
-    if(hit&&action.qualities.some(row=>isQuality(row,'taille'))){
-      const struckItemId=context.struckItemId;
-      const struck=(protection.counted||[]).find(item=>item.id===struckItemId)||[protection.shield].find(item=>item?.id===struckItemId);
-      // No armour or shield piece at this location: Hack has nothing to damage and must not block the attack.
-      const pieceAvailable=(protection.counted||[]).length>0||Boolean(protection.shield);
-      hack=protection.ap===null?{ready:false,unresolved:['Taille : PA effectifs de la localisation à préciser avant réduction.']}
-        :!pieceAvailable?{ready:false,unresolved:[],none:true}
-        :previewV5Hack({qualities:action.qualities,hit:true,struckItemId,currentAp:struck?.ap});
-      if(hack.none){
-        hack=null;
-        // Aucune pièce identifiable sur la fiche (C33) : le MJ nomme la pièce frappée ; son usure n'est pas suivie.
-        const manualPiece=String(context.struckPieceManual??'').trim();
-        if(protection.ap>0){
-          if(!manualPiece)unresolved.push('Taille : saisir la pièce d’armure ou le bouclier frappé (aucune pièce identifiable sur la fiche).');
-          else {
-            protection={...protection,ap:Math.max(0,protection.ap-1)};
-            hack={ready:true,unresolved:[],manual:true,damage:null,struckItemName:manualPiece};
-          }
+    // Qualité d'arme Taille (Hack, p. 304) : une pièce d'armure ou un bouclier touché perd 1 PA avant les Dégâts.
+    // G5-a : la pièce se déduit de la localisation (pièces comptées, bouclier s'il a servi à la défense) ; seul le choix
+    // entre pièces superposées reste au MJ, la plus forte en PA précochée (décision du MJ du 22/11). Jamais bloquant :
+    // des PA inconnus bloquent déjà par la protection elle-même.
+    if(hit&&action.qualities.some(row=>isQuality(row,'taille'))&&protection.ap!==null){
+      const counted=(protection.counted||[]).map(item=>({...item,kind:item.kind==='shield'?'shield':'armour'}));
+      const shieldUsed=Boolean(protection.shield)&&(protection.shieldAp||0)>0;
+      const candidates=[...counted,...(shieldUsed?[{...protection.shield,kind:'shield'}]:[])];
+      const chosen=candidates.find(item=>item.id===context.struckItemId);
+      const strongest=counted.reduce((best,item)=>!best||Number(item.ap)>Number(best.ap)?item:best,null);
+      const struck=chosen||strongest||(shieldUsed?candidates.at(-1):null);
+      const choices=candidates.map(item=>({id:item.id,name:item.name,ap:item.ap,kind:item.kind}));
+      if(struck){
+        hack=previewV5Hack({qualities:action.qualities,hit:true,struckItemId:struck.id,currentAp:struck.ap});
+        if(!hack.ready)unresolved.push(...hack.unresolved);
+        else {
+          protection={...protection,ap:Math.max(0,protection.ap-1),...(struck.kind==='shield'?{shieldAp:Math.max(0,(protection.shieldAp||0)-1)}:{})};
+          hack={...hack,struckItemId:struck.id,struckItemName:struck.name,deduced:!chosen,candidates:choices};
         }
       }
-      else if(!hack.ready)unresolved.push(...hack.unresolved);
-      else {
-        protection={...protection,ap:Math.max(0,protection.ap-1),...(struck.kind==='shield'?{shieldAp:Math.max(0,(protection.shieldAp||0)-1)}:{})};
-        hack={...hack,struckItemId,struckItemName:struck.name};
+      else if(protection.ap>0){
+        // PA sans pièce identifiable sur la fiche (C33) : la protection de la localisation perd 1 PA ; le MJ peut nommer
+        // la pièce frappée, son usure n'est pas suivie.
+        const manualPiece=String(context.struckPieceManual??'').trim();
+        protection={...protection,ap:Math.max(0,protection.ap-1)};
+        hack={ready:true,unresolved:[],manual:true,damage:null,struckItemName:manualPiece||null,candidates:[]};
       }
     }
     protectionReceipts.push(protection);
