@@ -4,7 +4,7 @@ Lis d'abord `CLAUDE.md` à la racine, puis dans `docs/specs/refonte-interface/` 
 
 Retours du MJ visés : R14 (esquive contre un tir : bouton trop long, règle non calculée, ancien panneau des circonstances), f4-tirer (écran trop complexe), g-distance (ligne Distance incomprise). Règle : p. 164 et p. 165 (réponses de règles de `tasks.md`).
 
-Réponse du MJ à Q1 (sans carte, précoche de « tireur à portée d'esquive ») : <REPONSE-Q1>. Si ce champ est resté tel quel, applique le défaut de `tasks.md` (oui) et dis-le au rapport.
+Réponse du MJ à Q1 (sans carte, précoche de « tireur à portée d'esquive ») : aucune précoche. Si la cible a un bouclier de 2 PA ou plus, ou si la carte est branchée et donne une distance ≤ BI m (ou la cible engagée avec le tireur), le droit est acquis sans aucune question. Sinon (pas de carte, pas de bouclier), l outil affiche dans la résolution même, en une ligne, la distance exigée (« Esquive permise si le tireur est à 4 m ou moins (BI 4) ») avec un choix Oui / Non à cliquer, sans ouvrir le panneau des circonstances. Carte branchée et distance > BI m sans bouclier : esquive interdite, raison courte, sans question.
 
 `js/core/` reste intact : la permission se déduit dans l'interface et passe par le champ existant `v5Context.rangedOppositionAllowed`. Avant tout, vérifie sur la base que le moteur résout déjà un tir sans défense comme un Test non opposé (p. 164) ; s'il ne le fait pas, arrête-toi à ce constat pour ce point et dis-le au rapport.
 

@@ -4,7 +4,7 @@ Lis d'abord le `CLAUDE.md` de la carte et ses documents normatifs (`docs/ARCHITE
 
 Retour R9 : « un adversaire qui finit son mouvement dans la zone éclairée par la torche d'un PJ n'est pas détecté ». **Reproduction d'abord** : règle du MJ, aucun correctif sans un test qui échoue aujourd'hui.
 
-Précisions du MJ (question Q4 : comment la torche était posée, taille de l'ennemi, niveau dans le noir ou non) : <REPONSE-Q4>. Si ce champ est resté tel quel, essaie toutes les pistes ci-dessous.
+Précisions du MJ (question Q4 : comment la torche était posée, taille de l'ennemi, niveau dans le noir ou non) : torche posée par le panneau de la carte (écran MJ) ; taille de l ennemi et obscurité du niveau non précisées : commence par la torche du panneau MJ, puis essaie les autres pistes ci-dessous.
 
 Repérage (non prouvé) : visibilité = (ligne de vue ∩ éclairé) ∪ (portée `visionDim` dans le noir) (`js/render/layers/fogLayer.js` `updateVision` ~l. 331, composition dans `vision/fog.js` `composeVisibleMask`) ; les torches de pion (`emitsLight`) entrent dans la signature et le champ lumineux (`fogLayer.js` ~l. 126-135, `js/render/layers/light.js` ~l. 89, 187) ; visibilité d'un pion pour les joueurs = case d'ancrage seule (`js/render/layers/tokens.js` ~l. 334). Pistes, une par test (`tests/lights.spec.mjs`, `tests/fogLayer.test.mjs` ou `tests/lightField.test.mjs`) : (1) `emitsLight` absent d'un pion lié envoyé par l'outil (l'outil ne l'envoie pas) ; (2) ligne de vue du PJ coupée par erreur ; (3) ennemi de grande taille testé sur sa seule case d'ancrage ; (4) masque de session non republié après le mouvement de l'ennemi ; (5) ennemi caché.
 
