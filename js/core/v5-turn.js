@@ -3,7 +3,7 @@ import {wrathForcedPrayerGate} from './v5-divine-prayer-caps.js';
 import {expireDivineEffects,expireDivineStasis} from './v5-divine-engine.js';
 import { withExpiredEngagements } from './store/api-engagements.js';
 import {refreshEffectLayers} from './v5-magic-effects.js';
-import { effectiveOrder, nextTurn } from './turn-order.js';
+import { effectiveOrder, nextTurn, readAdvancedTurn } from './turn-order.js';
 import { advanceV5Effects, acquireV5Conditions } from './v5-effects.js';
 import { getV5CriticalEffect } from '../data/v5-crits.js';
 import { processCombatTurnSpells, shieldAtTurnStart, recurringSpellHits, roundSpellEffects } from './v5-magic-turn.js';
@@ -32,6 +32,12 @@ function brokenEscapeTurnGate(state){
  if(actionSpent&&!(sequence?.turnId===turnId&&sequence?.fleeCommitted))return {status:'blocked',code:'DIV-BROKEN-MIDTURN-01',error:'Une Action a été dépensée avant Move (Flee) : décision MJ explicite requise pour cette occurrence.',needsInput:[{field:'decision.DIV-BROKEN-MIDTURN-01',label:'Décision MJ explicite requise; aucune Action supplémentaire ni report automatique.'}]};
  return {status:'blocked',code:'BROKEN_ESCAPE_REQUIRED',error:'Brisé exige Move (Flee), puis Action (Sprint) si visible, ou une attestation MJ hors vue.',needsInput:[{field:'brokenEscapeFacts.visibleToAnyEnemy',label:'Résoudre Flee/Sprint ou confirmer explicitement hors vue.'}]};
 }
+// Tour avancé : `undefined` laisse le champ tel quel (absent reste absent), `null` l'efface, un objet le remplace.
+function withAdvancedTurn(v5, value) {
+  if (value === undefined) return v5;
+  const { advancedTurn, ...rest } = v5;
+  return value ? { ...rest, advancedTurn: value } : rest;
+}
 export function previewV5Turn(state, { inputs = {} } = {}) {
   const before = structuredClone(state);
   const combat = before.combat || {};
@@ -40,7 +46,11 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   const brokenGate=brokenEscapeTurnGate(before);if(brokenGate)return {...brokenGate,ready:false,baseRevision:before.localRevision||0,requests:[]};
   // Le froid prend effet sur l'ordre automatique au prochain Round, jamais sur les Tours en cours.
   const order = before.extensions?.v5?.orderRound===combat.round?effectiveOrder(combat.participants || [],{mode:'manual',order:combat.order}):effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:combat.round });
-  const transition = nextTurn({ participants: combat.participants, order, currentActorId: combat.currentActorId, round: combat.round });
+  // Tour avancé (refonte E4c) : `advancedTurn` est retiré de la transition (il vit dans extensions.v5, pas dans combat).
+  const { advancedTurn: nextAdvancedTurn, ...transition } = nextTurn({ participants: combat.participants, order, currentActorId: combat.currentActorId, round: combat.round, advanced: before.extensions?.v5?.advancedTurn });
+  // Celui qui reprend son tour après un tour avancé a déjà eu son début de Tour : il n'est pas rejoué.
+  const resumingTurn = Boolean(readAdvancedTurn(before.extensions?.v5?.advancedTurn, combat.round)?.resumeActorId) && transition.round === combat.round
+    && transition.currentActorId === before.extensions.v5.advancedTurn.resumeActorId;
   if (!transition.currentActorId) return { status: 'idle', ready: false, baseRevision: state.localRevision || 0, requests: [] };
   const fromPosition = readCombatPosition(before);
   const turn = fromPosition.turnIndex;
@@ -177,6 +187,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   toPosition = { ...fromPosition, round: transition.round, turnIndex: turn + 1, currentActorId: transition.currentActorId };
   try { phasePlan = deriveTurnPhasePlan({ from: fromPosition, to: toPosition }); }
   catch (error) { return { status: 'clock-conflict', ready: false, baseRevision: before.localRevision || 0, requests: [], error: error.message }; }
+  if (!resumingTurn) {
   runPhase('startOfTurn', phaseRows('startOfTurn'));
   const starting=phaseRow('startOfTurn');
   holdStasis(()=>{
@@ -190,6 +201,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   effectLogs.push(...recurring.logs);
   noteTests(recurring);
   });
+  }
   const nextActor = participants.find(participant => participant.id === transition.currentActorId);
   const uniqueRequests = requests.filter((request, index) => requests.findIndex(other => other.participantId === request.participantId && other.field === request.field) === index);
   const clockEvent = {
@@ -204,7 +216,8 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   if (!clockResult.ok) return { status: `clock-${clockResult.status}`, ready: false, baseRevision: before.localRevision || 0, requests: [], error: 'La transition de Tour n’a pas pu être validée sur l’horloge.' };
   let stateAfter = { ...before,
     ...(before.activeScene ? { activeScene: { ...before.activeScene, extensions: { ...(before.activeScene.extensions || {}), v5: { ...(before.activeScene.extensions?.v5 || {}), turnIndex: turn + 1 } } } } : {}),
-    extensions: { ...(before.extensions || {}), v5: { ...(before.extensions?.v5 || {}), turnIndex: turn + 1,orderRound:transition.round, gameClock: clockResult.clock } },
+    extensions: { ...(before.extensions || {}), v5: withAdvancedTurn({ ...(before.extensions?.v5 || {}), turnIndex: turn + 1,orderRound:transition.round, gameClock: clockResult.clock },
+      transition.round > combat.round ? null : nextAdvancedTurn) },
     combat: { ...combat, participants, ...transition },
     log: [{ id: `v5-turn:${before.localRevision || 0}:${turn}:management`,  kind: 'management', actorId: nextActor?.id, actorName: nextActor?.name,
       text: `▶ ${transition.round !== combat.round ? `Round ${transition.round} — ` : ''}Tour de ${nextActor?.name || '—'}` }, ...effectLogs, ...(before.log || [])].slice(0, 300) };

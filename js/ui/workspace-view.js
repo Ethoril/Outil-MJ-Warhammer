@@ -798,7 +798,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         Promise.resolve().then(() => Store.applyFlee(actor.id)).catch(error => plateauToast('Fuite impossible', error)).finally(() => render());
       }
     };
-    const rows = actionBarModel({ actor, active: context.active, actions, actionKeys: keys, previewDisengage: id => Store.previewDisengage(id), turnFacts: Store.getV5TurnFacts?.(actor.id) || {} });
+    const rows = actionBarModel({ actor, active: context.active, actions, actionKeys: keys, previewDisengage: id => Store.previewDisengage(id), turnFacts: Store.getV5TurnFacts?.(actor.id) || {}, targetId: context.target?.id ?? null });
     // Refonte (E4a) : actions préparées de l'acteur + « ce qu'il peut faire d'ici » dans la même barre (placée en bas par placeInZones).
     const prepared = preparedActionRows({ actor, actions, actionKeys: keys, selectedKey: state.resolution.actionKey });
     renderActionBar(column, { actor, rows, prepared, commands });
@@ -3414,6 +3414,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function renderDecisionsZone(entries) {
     renderDecisions(play.zones.droite, entries, { choose: chooseDecision, forms: decisionForms, later: state.decisionsLater, errors: decisionErrors });
   }
+  // Lot E4c (CA24-CA25) : la frise lit au store qui a joué ce round (tours avancés compris) et si « Jouer son tour
+  // maintenant » est permis ; la commande passe par le store (annulable), le pion actif de la carte suit le tour.
+  function withPlayedTurns(context) {
+    if (typeof Store.getPlayedThisRound === 'function') context.playedIds = Store.getPlayedThisRound();
+    if (typeof Store.playTurnNowCheck === 'function') context.playNow = id => Store.playTurnNowCheck(id);
+    return context;
+  }
+  const friseHandlers = {
+    selectActor: id => { state.space = 'play'; selectActor(id); },
+    playTurnNow: id => Promise.resolve().then(() => Store.playTurnNow(id)).then(result => {
+      if (result === false || result?.ok === false) throw new Error(result?.message || 'commande refusée.');
+    }).catch(error => plateauToast('Tour non avancé', error)).finally(() => render())
+  };
   // Une question publiée (fenêtre des effets, méthode de récupération…) redessine la case, la frise et le compteur au
   // prochain cycle, sans reconstruire le centre ni les fiches (la fenêtre ouverte garde son contexte et son focus).
   let decisionsRefresh = 0;
@@ -3424,7 +3437,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     context.decisions = decisions;
     renderDecisionsZone(decisions);
     rememberDecisionCount(decisions.length);
-    renderFrise(play.zones.frise, context, { selectActor: id => { state.space = 'play'; selectActor(id); } });
+    renderFrise(play.zones.frise, withPlayedTurns(context), friseHandlers);
     refs.root.ownerDocument.dispatchEvent(new CustomEvent('workspace-actor-change', { detail: actorOutOfTurn(context) }));
   }
   onPublishedDecisions(() => {
@@ -3441,7 +3454,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     context.decisions = decisions;
     renderDecisionsZone(decisions);
     rememberDecisionCount(decisions.length);
-    renderFrise(play.zones.frise, context, { selectActor: id => { state.space = 'play'; selectActor(id); } });
+    renderFrise(play.zones.frise, withPlayedTurns(context), friseHandlers);
     // La barre du haut (combat-banner.js) écoute ce message pour écrire « X agit hors de son tour ».
     refs.root.ownerDocument.dispatchEvent(new CustomEvent('workspace-actor-change', { detail: actorOutOfTurn(context) }));
   }

@@ -4,6 +4,8 @@
  * lui-même : l'avancement du tour et le retour dans Jouer passent par les callbacks fournis par main.js.
  * « X agit hors de son tour » : écrit quand l'espace Jouer annonce (message `workspace-actor-change`, lot E1) qu'un clic sur la
  * frise a fait agir un autre combattant que celui dont c'est le tour ; la mention ne vaut que pour ce tour.
+ * Lot E4c (CA24-CA25) : à côté de la mention, « Jouer son tour maintenant » donne le tour à ce combattant par la commande
+ * annulable du store (`Store.playTurnNow`) ; grisé avec la raison quand le store la refuse (déjà joué ce round…).
  * Le compteur lit `getDecisionCount()` (par défaut le nombre de la case « À décider », lot E2) et reste vide à 0.
  */
 import { showToast } from './toast.js';
@@ -30,6 +32,10 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
   // Hors de `status` (tronqué quand le nom est long) : la mention reste lisible.
   const away = node('span', 'combat-banner-offturn');
   away.hidden = true;
+  const playNow = node('button', 'ghost small combat-banner-play-now', 'Jouer son tour maintenant');
+  playNow.type = 'button';
+  playNow.dataset.playTurnNow = '';
+  playNow.hidden = true;
   const decisions = node('span', 'combat-banner-decisions num');
   decisions.dataset.decisionsCount = '0';
   decisions.setAttribute('role', 'status');
@@ -41,7 +47,7 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
   back.type = 'button';
   const primary = node('button', 'combat-banner-primary');
   primary.type = 'button';
-  inner.append(status, away, decisions, track, spacer, back, primary);
+  inner.append(status, away, playNow, decisions, track, spacer, back, primary);
   // D-15 : rappel tant que des Bmax sont divisées par le Fléau des Démons ; la restauration est une action MJ annulable.
   const daemon = node('div', 'combat-banner-reminder');
   daemon.dataset.daemonbaneReminder = '';
@@ -62,6 +68,15 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
   });
 
   back.addEventListener('click', () => onGoToPlay?.());
+  playNow.addEventListener('click', () => {
+    const id = playNow.dataset.playTurnNow;
+    if (!id) return;
+    playNow.disabled = true;
+    Promise.resolve().then(() => Store.playTurnNow?.(id))
+      .then(result => { if (result === false || result?.ok === false) throw new Error(result?.message || 'commande refusée.'); })
+      .catch(error => showToast(`Tour non avancé : ${error?.message || 'réessayez.'}`, 'error'))
+      .finally(() => render());
+  });
   primary.addEventListener('click', () => onAdvance?.());
   window.addEventListener('resize', () => { if (!mount.hidden) render(); });
 
@@ -118,6 +133,13 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
     away.hidden = !awayNow;
     away.textContent = awayNow ? `${offTurn.name} agit hors de son tour` : '';
     away.title = awayNow ? 'Un clic sur « Tour suivant » reprend l’ordre ; le tour en cours n’a pas changé.' : '';
+    const check = awayNow && typeof Store.playTurnNow === 'function' ? (Store.playTurnNowCheck?.(offTurn.actorId) || { ok: true }) : null;
+    playNow.hidden = !check;
+    playNow.dataset.playTurnNow = check ? offTurn.actorId : '';
+    playNow.disabled = !check?.ok;
+    playNow.title = !check ? '' : check.ok ? `${offTurn.name} joue son tour tout de suite ; « Tour suivant » reviendra ensuite à ${current.name}.`
+      : `${offTurn.name} ne peut pas jouer son tour maintenant : ${check.reason}`;
+    if (check && !check.ok) away.textContent += ` · ${check.reason}`;
 
     const outsidePlay = space !== 'play';
     track.hidden = !outsidePlay;

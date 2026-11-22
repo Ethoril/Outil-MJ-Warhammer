@@ -298,6 +298,35 @@ try {
   const friseBox = await page.evaluate(() => { const z = document.querySelector('[data-zone="frise"]'); return { h: z.scrollHeight, c: z.clientHeight, w: z.scrollWidth, cw: z.clientWidth }; });
   assert.ok(friseBox.h <= friseBox.c + 1 && friseBox.w <= friseBox.cw + 1, `la zone frise ne déborde pas (${JSON.stringify(friseBox)})`);
   assert.ok(friseBox.c <= 130, `la frise reste basse (${friseBox.c} px)`);
+  // 2 ter (lot E4c, CA24-CA25) : « Jouer son tour maintenant » depuis la frise (et le bandeau) ; Tour suivant reprend où on
+  // en était, le combattant avancé est marqué « a joué » ; Annuler rétablit tout.
+  const waitTurn = async id => { for (let n = 0; n < 40; n += 1) { const now = await friseState(); if (now.turn === id) return now; await page.waitForTimeout(50); } return friseState(); };
+  const playNowFrise = page.locator(`[data-zone="frise"] [data-play-turn-now="${other.id}"]`);
+  assert.equal(await playNowFrise.count(), 1, 'la frise propose « Jouer son tour maintenant » sur celui qui agit hors de son tour');
+  assert.equal(await playNowFrise.isEnabled(), true, 'permis : il n’a pas encore joué ce round');
+  assert.equal(await page.locator('#combat-banner .combat-banner-play-now:not([hidden])').count(), 1, 'le bandeau le propose aussi');
+  await playNowFrise.click();
+  const advancedNow = await waitTurn(other.id);
+  assert.equal(advancedNow.turn, other.id, 'le tour passe tout de suite à ce combattant');
+  assert.equal(advancedNow.round, before.round, 'même round');
+  assert.deepEqual(advancedNow.portraits.map(item => item.id), before.portraits.map(item => item.id), 'l’ordre d’initiative ne change pas');
+  assert.doesNotMatch(advancedNow.banner, /hors de son tour/, 'il joue son tour : plus « hors de son tour »');
+  await measure('jouer son tour maintenant');
+  await page.locator('#combat-banner .combat-banner-primary').click();
+  const resumed = await waitTurn(before.turn);
+  assert.equal(resumed.turn, before.turn, 'Tour suivant revient à celui qui devait jouer');
+  assert.ok(await page.locator(`[data-zone="frise"] [data-frise-id="${other.id}"].is-done`).count(), 'le combattant avancé est marqué « a joué »');
+  await page.locator(`[data-zone="frise"] [data-frise-id="${other.id}"]`).click();
+  assert.equal(await page.locator(`[data-zone="frise"] [data-play-turn-now="${other.id}"]`).isDisabled(), true, 'déjà joué : la commande est grisée');
+  assert.match((await friseState()).banner, /a déjà joué ce round/, 'avec la raison');
+  await measure('jouer son tour maintenant : reprise');
+  for (const step of ['Tour suivant', 'Jouer son tour maintenant']) {
+    assert.equal(await page.locator('#btn-undo').isEnabled(), true, `Annuler (${step}) disponible`);
+    await page.locator('#btn-undo').click();
+    await page.waitForTimeout(150);
+  }
+  assert.equal((await waitTurn(before.turn)).turn, before.turn, 'Annuler rétablit le tour');
+  assert.equal(await storeCall(Store => JSON.parse(Store.getFullJSON()).extensions?.v5?.advancedTurn ?? null), null, 'Annuler efface le tour avancé');
   await page.locator(`[data-zone="frise"] [data-frise-id="${before.turn}"]`).click();
   const back = await friseState();
   assert.equal(back.actor, before.turn, 'un clic sur le portrait du tour ramène l’acteur à celui dont c’est le tour');
@@ -437,6 +466,26 @@ try {
   await selectActor(wasMelee.actor);
   await page.getByLabel('Déplacer Gor 1', { exact: true }).selectOption('free');
   await page.waitForFunction(() => !document.querySelector('.workspace-zone.is-melee'));
+  // 2 quater (lot E4c, CA26) : « Charger » sur la cible choisie par son cartouche, pour chaque ennemi libre, sans limite.
+  await selectActor(ID.GOR);
+  const gorFoes = await page.evaluate(async id => {
+    const { Store } = await import('/js/main.js');
+    const { outnumberSide } = await import('/js/core/outnumbering.js');
+    const list = Store.listParticipants().filter(row => row.zone === 'active'), gor = list.find(row => row.id === id);
+    return list.filter(row => row.id !== id && outnumberSide(row) !== outnumberSide(gor)).map(row => ({ id: row.id, name: row.name }));
+  }, ID.GOR);
+  assert.ok(gorFoes.length > 4, `plus de quatre ennemis pour Gor 1 (${gorFoes.length})`);
+  for (const foe of gorFoes) {
+    await page.locator(`[data-part="melees"] [data-workspace-target="${foe.id}"]`).click();
+    const charge = page.locator('[data-zone="bas"] .workspace-action-bar [data-bar-action="charge-' + foe.id + '"]');
+    assert.equal(await charge.count(), 1, `Charger · ${foe.name} proposé une fois la cible choisie`);
+    assert.equal(await charge.isEnabled(), true, `Charger · ${foe.name} actif`);
+  }
+  const lastFoe = gorFoes.at(-1);
+  await page.locator('[data-zone="bas"] .workspace-action-bar [data-bar-action="charge-' + lastFoe.id + '"]').click();
+  assert.equal((await meleeState()).target, lastFoe.id, 'la charge porte sur la cible choisie');
+  await measure('charger');
+  await selectActor(wasMelee.actor);
 
   // 3. Attaque de mêlée : Gor 1 frappe Erich (jet d'attaque, défense, aperçu).
   await selectActor(ID.GOR);

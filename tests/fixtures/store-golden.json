@@ -72,6 +72,9 @@
    "moveInOrder/1",
    "insertReinforcement/1",
    "nextTurn/0",
+   "playTurnNowCheck/1",
+   "getPlayedThisRound/0",
+   "playTurnNow/1",
    "consumeTurnSelection/0",
    "usesPersistence/0",
    "getCombat/0",
@@ -1427,6 +1430,21 @@
     "state": "bf73377433a508c8"
    },
    {
+    "label": "sweep playTurnNowCheck",
+    "result": "ab8cbf5828788650",
+    "state": "bf73377433a508c8"
+   },
+   {
+    "label": "sweep getPlayedThisRound",
+    "result": "4f53cda18c2baa0c",
+    "state": "bf73377433a508c8"
+   },
+   {
+    "label": "sweep playTurnNow",
+    "result": "99c3aba1be997e26",
+    "state": "bf73377433a508c8"
+   },
+   {
     "label": "sweep consumeTurnSelection",
     "result": "fcbcf165908dd18a",
     "state": "bf73377433a508c8"
@@ -2766,6 +2784,9 @@
    "moveInOrder/1",
    "insertReinforcement/1",
    "nextTurn/0",
+   "playTurnNowCheck/1",
+   "getPlayedThisRound/0",
+   "playTurnNow/1",
    "consumeTurnSelection/0",
    "usesPersistence/0",
    "getCombat/0",
@@ -4118,6 +4139,21 @@
    {
     "label": "sweep nextTurn",
     "result": "956aa1a63eb40a26",
+    "state": "c71607298cf92cd9"
+   },
+   {
+    "label": "sweep playTurnNowCheck",
+    "result": "ab8cbf5828788650",
+    "state": "c71607298cf92cd9"
+   },
+   {
+    "label": "sweep getPlayedThisRound",
+    "result": "4f53cda18c2baa0c",
+    "state": "c71607298cf92cd9"
+   },
+   {
+    "label": "sweep playTurnNow",
+    "result": "99c3aba1be997e26",
     "state": "c71607298cf92cd9"
    },
    {
