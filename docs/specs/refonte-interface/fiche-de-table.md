@@ -33,6 +33,22 @@ Ailleurs : séquelles, maladies, convalescence et calendrier sont dans **Campagn
 
 Autres points à regarder si tu en as l'occasion : la barre du haut coupe « Round N · au tour de … » quand « Jouer son tour maintenant » ou « N à décider » s'y ajoutent ; lisibilité de la police système ; temps pour trancher une mort subite ; un combat à 20 combattants sans jamais faire défiler.
 
+## Liaison avec la carte : tour de jeu
+
+Outil connecté à la carte : les deux servis par le même serveur local (même origine), la carte depuis sa branche `tour-de-jeu-turnreset` (lot C1). La liaison est en **version 2** des deux côtés ; si un seul côté l'est, l'indicateur affiche « versions de liaison différentes » et rien ne passe : recharge les deux onglets. Combat lancé, au moins deux PJ liés posés sur la carte et un ennemi.
+
+1. **Donne le tour à un PJ** : lui seul se sélectionne et se déplace sur la tablette ; toucher un autre PJ ouvre un encart en lecture seule, sans rien publier.
+2. **Avance de deux cases, ouvre une porte par son bouton, repars** : la zone disponible vaut le **reste** du mouvement, pas le budget entier, et le palier de Course a reculé d'autant.
+3. Vérifie qu'un **PJ non lié** à l'outil n'est jamais bridé par le tour.
+4. **Passe le tour à un ennemi** (« Tour suivant ») : plus aucun PJ ne bouge, et les boutons de porte des PJ sont grisés.
+5. **Annule le mouvement du tour** sur la tablette : le pion revient à sa case de départ sur **les deux écrans**, le brouillard déjà exploré **ne régresse pas**, et une porte ouverte en route **reste ouverte**.
+6. **Ferme l'outil** : au bout de 15 s, la table retrouve sa liberté entière.
+7. **Recharge la tablette (F5) en cours de tour** : elle retrouve le tour et le mouvement déjà consommé.
+8. **« Jouer son tour maintenant » puis Annuler (↶)** : le PJ jouable sur la tablette suit, celui qui joue en avance, puis de nouveau celui qui devait jouer.
+9. **Un PJ court** (Course proposée dans « À décider », clique « Action utilisée ») **puis annule son mouvement sur la tablette** : l'Action revient dans l'outil (toast « mouvement annulé sur la carte (Action rendue…) ») ; ↶ la redépense. S'il court deux fois dans le même tour, une seule question et une seule Action ; une question laissée sans réponse disparaît au « Tour suivant ».
+
+Laissé tel quel par ta décision du 22/11 : pendant le tour d'un **ennemi qui n'est pas posé sur la carte**, l'outil envoie « personne » (`null`) et les PJ peuvent bouger.
+
 ## Si quelque chose manque
 
 Note le geste voulu et l'écran : le relevé de départ est [fonctions-jouer.md](fonctions-jouer.md). Publication seulement après ton feu vert et la suite unitaire verte.
