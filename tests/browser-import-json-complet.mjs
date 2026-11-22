@@ -80,8 +80,11 @@ async function main() {
     // 4. La bibliothèque montre la fiche du profil : talents et prières.
     await page.locator('#tab-library').click();
     const card = page.locator('.workspace-space-library .workspace-profile-card').filter({ hasText: priest.nom });
-    await expect(card.locator('.fiche-consultation')).toContainText('Talents (2)');
-    await expect(card.locator('.fiche-consultation')).toContainText('Prières — consultation (13)');
+    // Refonte F3 : la fiche du profil choisi est à droite de la liste, plus dans sa carte.
+    await card.getByRole('button', { name: /Afficher la fiche/ }).click();
+    const libraryFiche = page.locator('.workspace-library-sheet .fiche-consultation');
+    await expect(libraryFiche).toContainText('Talents (2)');
+    await expect(libraryFiche).toContainText('Prières — consultation (13)');
 
     // 5. Ajouté à une rencontre et lancé, le prêtre arrive en combat avec son talent et sa prière.
     await page.locator('#tab-prepare').click();

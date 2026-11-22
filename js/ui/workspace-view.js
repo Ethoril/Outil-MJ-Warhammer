@@ -3502,52 +3502,61 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     refs.library.appendChild(subnav);
 
     const content = node('div', 'workspace-library-content');
-    if (state.librarySection === 'profiles') {
-      const term = profileSearchText({ name: state.libraryQuery });
-      const profiles = readProfiles(Store).filter(profile => profileSearchText(profile).includes(term));
-      if (!profiles.length) content.appendChild(node('p', 'workspace-muted', 'Aucun profil correspondant.'));
-      else {
-        const list = node('div', 'workspace-profile-grid');
-        profiles.forEach(profile => {
-          const card=profileSummary(profile, {
-          canEdit: Boolean(callbacks.editProfile),
-          canDuplicate: Boolean(callbacks.duplicateProfile),
-          canRemove: Boolean(callbacks.removeProfile),
-          onEdit: callbacks.editProfile,
-          onDuplicate: callbacks.duplicateProfile,
-          onRemove: callbacks.removeProfile
-        });
-          card.dataset.detailsOwner=`profile:${profile.id}`;card.appendChild(renderFicheDetails(profile));
-        list.appendChild(card);
-        });
-        content.appendChild(list);
-      }
-    } else if (state.librarySection === 'rules') {
+    if (state.librarySection === 'rules') {
+      // Lot F3 : le texte des règles défile dans sa case de lecture (comme l'onglet Règles du combat), la page reste fixe.
+      content.classList.add('is-reading');
+      const reading = node('div', 'workspace-library-reading');
+      reading.dataset.libraryZone = 'lecture';
+      reading.dataset.scrollKey = 'bibliotheque-lecture';
       const renderer = callbacks.renderRules;
       if (renderer) {
-        const rendered = renderer(content);
-        if (rendered instanceof Node) content.appendChild(rendered);
-        else if (typeof rendered === 'string') content.textContent = rendered;
+        const rendered = renderer(reading);
+        if (rendered instanceof Node) reading.appendChild(rendered);
+        else if (typeof rendered === 'string') reading.textContent = rendered;
       } else {
-        content.appendChild(node('p', 'workspace-muted', 'Les règles et mots-clés restent consultables sans modifier la séance.'));
+        reading.appendChild(node('p', 'workspace-muted', 'Les règles et mots-clés restent consultables sans modifier la séance.'));
       }
+      content.appendChild(reading);
     } else {
-      const profiles = readProfiles(Store).filter(profile => profile.favorite);
-      if (!profiles.length) content.appendChild(node('p', 'workspace-muted', 'Aucun favori enregistré.'));
-      else {
-        const list = node('div', 'workspace-profile-grid');
-        profiles.forEach(profile => {
-          const card=profileSummary(profile, {
-          canEdit: Boolean(callbacks.editProfile),
-          onEdit: callbacks.editProfile
-        });
-          card.dataset.detailsOwner=`profile:${profile.id}`;card.appendChild(renderFicheDetails(profile));
-        list.appendChild(card);
-        });
-        content.appendChild(list);
-      }
+      const favorites = state.librarySection === 'favorites';
+      const profiles = favorites
+        ? readProfiles(Store).filter(profile => profile.favorite)
+        : readProfiles(Store).filter(profile => profileSearchText(profile).includes(profileSearchText({ name: state.libraryQuery })));
+      if (!profiles.length) content.appendChild(node('p', 'workspace-muted', favorites ? 'Aucun favori enregistré.' : 'Aucun profil correspondant.'));
+      else renderLibraryProfiles(content, profiles, favorites);
     }
     refs.library.appendChild(content);
+  }
+
+  // Lot F3 : liste à gauche (défile dans sa case), fiche du profil choisi à droite (ne défile pas : ses onglets la contiennent).
+  let libraryProfileId = null;
+  function renderLibraryProfiles(content, profiles, favorites) {
+    content.classList.add('is-split');
+    if (!profiles.some(profile => profile.id === libraryProfileId)) libraryProfileId = profiles[0].id;
+    const list = node('div', 'workspace-library-list');
+    list.dataset.libraryZone = 'liste';
+    list.dataset.scrollKey = favorites ? 'bibliotheque-favoris' : 'bibliotheque-liste';
+    const select = id => { libraryProfileId = id; renderLibrary(); refs.library.querySelector(`[data-library-select="${CSS.escape(id)}"]`)?.focus({ preventScroll: true }); };
+    profiles.forEach(profile => {
+      const card = profileSummary(profile, favorites
+        ? { canEdit: Boolean(callbacks.editProfile), onEdit: callbacks.editProfile }
+        : { canEdit: Boolean(callbacks.editProfile), canDuplicate: Boolean(callbacks.duplicateProfile), canRemove: Boolean(callbacks.removeProfile), onEdit: callbacks.editProfile, onDuplicate: callbacks.duplicateProfile, onRemove: callbacks.removeProfile });
+      const chosen = profile.id === libraryProfileId;
+      card.classList.toggle('is-selected', chosen);
+      const choose = button('Afficher la fiche', 'workspace-secondary', { 'aria-label': `Afficher la fiche de ${profile.name || 'Sans-nom'}`, 'aria-pressed': String(chosen) });
+      choose.dataset.librarySelect = profile.id;
+      choose.addEventListener('click', event => { event.stopPropagation(); select(profile.id); });
+      card.querySelector('.workspace-inline-actions')?.prepend(choose);
+      card.addEventListener('click', event => { if (!event.target.closest('button, a, input, select, textarea') && libraryProfileId !== profile.id) select(profile.id); });
+      list.appendChild(card);
+    });
+    const chosenProfile = profiles.find(profile => profile.id === libraryProfileId);
+    const sheet = node('section', 'workspace-library-sheet');
+    sheet.dataset.libraryZone = 'fiche';
+    sheet.dataset.detailsOwner = `profile:${chosenProfile.id}`;
+    sheet.setAttribute('aria-label', `Fiche de ${chosenProfile.name || 'Sans-nom'}`);
+    sheet.append(node('h3', '', chosenProfile.name || 'Sans-nom'), renderFicheDetails(chosenProfile, { embedded: true }));
+    content.append(list, sheet);
   }
 
   // U2 (05/11) : chaque rendu reconstruit la colonne centrale et les fiches. On note avant le rendu les <details>

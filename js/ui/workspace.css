@@ -2552,3 +2552,34 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-center-panel .workspace-divine-col.is-targets fieldset > p { font-size: 11.5px; }
 .workspace-center-panel .workspace-divine-col.is-targets fieldset > label.workspace-type { gap: 4px; font-size: 11.5px; line-height: 1.2; }
 .workspace-center-panel .workspace-divine-col.is-targets input[type="checkbox"] { width: 13px; height: 13px; margin: 0; }
+
+/* ==========================================================================
+   LOT F3 · Bibliothèque sans défilement de page (CA23)
+   À partir de 1000 px de large, quand la Bibliothèque est affichée, la page occupe exactement la fenêtre. Profils et Favoris :
+   liste à gauche (défile dans sa case), fiche du profil à droite. Règles et mots-clés : le texte défile dans sa case de lecture.
+   La bibliothèque de bestiaire, en dessous, partage la hauteur : sa liste défile dans sa case.
+   ========================================================================== */
+.workspace-library-content.is-split .workspace-profile-card.is-selected { border-color: var(--accent-text, var(--border)); outline: var(--ring); }
+.workspace-library-sheet { min-width: 0; background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px; }
+.workspace-library-sheet > h3 { margin: 0 0 4px; overflow-wrap: anywhere; }
+.workspace-library-sheet .fiche-consultation { margin-top: 0; }
+.workspace-library-sheet .fiche-consultation.is-embedded { padding: 0; border: 0; }
+.workspace-library-sheet .fiche-consultation.is-embedded > summary { display: none; }
+
+@media (min-width: 1000px) {
+  body:has(#panel-workspace.is-active #workspace-library:not([hidden])) main.wrap { height: calc(100dvh - var(--header-h, 64px)); padding: 0; overflow: hidden; }
+  body:has(#panel-workspace.is-active #workspace-library:not([hidden])) #panel-workspace { height: 100%; margin: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 8px; min-height: 0; }
+  body:has(#panel-workspace.is-active #workspace-library:not([hidden])) #workspace-root { height: auto; min-height: 0; display: grid; }
+  body:has(#panel-workspace.is-active #workspace-library:not([hidden])) .workspace-view { height: 100%; min-height: 0; margin: 0; padding-block: 8px 0; grid-template-rows: minmax(0, 1fr); }
+  #workspace-library:not([hidden]) { min-height: 0; grid-template-rows: auto auto minmax(0, 1fr); align-content: stretch; }
+  #workspace-library > .workspace-section-heading { margin: 0; }
+  #workspace-library .workspace-library-content { min-height: 0; overflow: hidden; }
+  #workspace-library .workspace-library-content.is-split { display: grid; grid-template-columns: minmax(340px, 460px) minmax(0, 1fr); gap: var(--workspace-gap); align-items: stretch; }
+  #workspace-library .workspace-library-list { min-height: 0; overflow: auto; overscroll-behavior: contain; display: grid; gap: 8px; align-content: start; padding-right: 4px; }
+  #workspace-library .workspace-library-list .workspace-profile-card { padding: 8px 10px; gap: 3px; }
+  #workspace-library .workspace-library-sheet { min-height: 0; overflow: auto; overscroll-behavior: contain; }
+  #workspace-library .workspace-library-reading { min-height: 0; height: 100%; overflow: auto; overscroll-behavior: contain; padding-right: 6px; }
+  /* Bibliothèque de bestiaire : sous le contenu, repliée par défaut ; ouverte, sa liste prend au plus 50 % de la hauteur et défile dans sa case. */
+  body:has(#panel-workspace.is-active #workspace-library:not([hidden])) #bestiary-library { min-height: 0; margin: 0 clamp(16px, 2vw, 24px) 8px; padding: 8px 12px; }
+  body:has(#panel-workspace.is-active #workspace-library:not([hidden])) #bestiary-library-body { max-height: calc(50dvh - 48px); overflow: auto; overscroll-behavior: contain; }
+}
