@@ -8,6 +8,8 @@ import { createStore } from '../../../js/core/store.js';
 import { createCombatEngine } from '../../../js/core/combat.js';
 import { createGameClock } from '../../../js/core/v5-game-time.js';
 import { nextTurn, playTurnNow, playTurnNowCheck } from '../../../js/core/turn-order.js';
+import { getAllDivineContracts } from '../../../js/core/v5-divine-store.js';
+import { effectHandlers } from '../../../js/core/v5-divine-effect-handlers.js';
 
 const clone = value => structuredClone(value);
 const memory = () => { let saved = null; return { async load() { return saved && clone(saved); }, async saveAtomic({ state }) { saved = clone(state); return { ok: true }; } }; };
@@ -173,6 +175,99 @@ describe('commande du store et Tour suivant (moteur V5)', () => {
     await store.nextTurn();
     assert.equal(where(store), '2:a');
     assert.equal(advanced(store), undefined);
+  });
+});
+
+// Lot E7a (CA25 bis) : les effets de début de tour de l'avancé se déclenchent quand il joue en avance, pas une seconde fois à
+// sa place normale ; celui qui reprend ne rejoue pas son début de tour ; Annuler rétablit tout, horloge comprise.
+// Effet pris dans les tests existants : Fureur d'Ulric (miracles-narratifs-tour.test.js), Test de Frénésie gratuit au début
+// du Tour du porteur (LdB V5 p.228), demandé par le Tour V5 sous forme de saisies.
+describe('lot E7a : effets de début de tour de l’avancé (Fureur d’Ulric)', () => {
+  const contract = getAllDivineContracts().find(row => row.type === 'miracle' && row.name === 'Fureur d\'Ulric');
+  const FURY = { label: 'Fureur d\'Ulric', test: { skill: 'willpower', slModifier: 0 }, subjects: 'targets', when: 'turn', optional: true, onSuccess: [{ type: 'frenzy' }] };
+  const furyOn = targetId => ({ id: `exec-${targetId}:${targetId}:${contract.id}:imposed-test`, executionId: `exec-${targetId}`, prayerId: contract.id, casterId: 'priest', targetId,
+    source: clone(contract.source), sourceReceipt: clone(contract.sourceReceipt), type: 'imposed-test',
+    expiry: { phase: 'endOfRound', round: 6, moment: 'afterEffects' }, ...effectHandlers['imposed-test'].buildLayer({ type: 'imposed-test', ...FURY }, { targetId }) });
+  const fieldOf = id => `divineImposedTest:${furyOn(id).id}`;
+  const believer = (id, initiative, extra = {}) => fighter(id, initiative, { kind: 'PJ', camp: 'pj', hp: 20, maxHp: 30,
+    caracs: { CC: 40, CT: 40, F: 30, E: 30, I: initiative, Ag: 40, Dex: 40, Int: 50, FM: 50, Soc: 60, M: 4 },
+    extensions: { v5: { divine: { sin: 0 }, divineEffects: [furyOn(id)] } }, ...extra });
+  async function openFury() {
+    const store = createStore({ persistence: memory(), storage: null }); await store.ready;
+    const snapshot = { schemaVersion: 3, reserve: [], combat: { round: 1, currentActorId: 'priest', order: ['priest', 'ally', 'foe'],
+      participants: [believer('priest', 60), fighter('ally', 30), believer('foe', 20, { camp: 'ennemi', kind: 'PNJ' })] },
+      log: [], diceLines: [], extensions: { v5: { turnIndex: 1 } } };
+    snapshot.extensions.v5.gameClock = createGameClock(snapshot);
+    await store.loadFromJSON(snapshot);
+    return { store, engine: createCombatEngine(store) };
+  }
+  const states = (store, id) => (full(store).combat.participants.find(row => row.id === id).states || []).map(row => row.key);
+  const asks = (result, id) => (result.requests || []).filter(row => row.participantId === id);
+  const yes = id => ({ [id]: { [`${fieldOf(id)}:attempt`]: true, [fieldOf(id)]: { success: true, sl: 2 } } });
+
+  test('(1) l’effet se déclenche quand l’avancé joue maintenant : demande de saisie, puis application en une commande', async () => {
+    const { store } = await openFury();
+    const before = full(store);
+    const pending = await store.playTurnNow('foe');
+    assert.equal(pending.status, 'requires-input', JSON.stringify(pending));
+    assert.ok(asks(pending, 'foe').some(row => row.field === `${fieldOf('foe')}:attempt`), JSON.stringify(pending.requests));
+    assert.equal(asks(pending, 'priest').length, 0, 'celui qu’on interrompt ne rejoue rien');
+    assert.equal(where(store), '1:priest', 'rien n’est appliqué tant que la saisie manque');
+    const done = await store.playTurnNow('foe', { inputs: yes('foe') });
+    assert.notEqual(done?.ok, false, JSON.stringify(done));
+    assert.equal(where(store), '1:foe');
+    assert.ok(states(store, 'foe').includes('frenzy'), 'Frénésie acquise au début du tour avancé');
+    const after = full(store);
+    assert.equal(after.extensions.v5.turnIndex, before.extensions.v5.turnIndex + 1, 'le tour avancé est une transition de tour');
+    assert.equal(after.extensions.v5.gameClock.revision, before.extensions.v5.gameClock.revision + 1);
+    assert.equal(after.extensions.v5.gameClock.combat.currentActorId, 'foe');
+    assert.equal(after.extensions.v5.gameClock.campaignSeconds, before.extensions.v5.gameClock.campaignSeconds, 'pas de temps écoulé dans le round');
+    assert.deepEqual(after.extensions.v5.advancedTurn, { round: 1, playedIds: ['foe'], resumeActorId: 'priest', resumeIndex: 0 });
+    assert.ok(after.log.some(row => /FOE joue son tour maintenant \(puis reprise : PRIEST\)/.test(row.text)), 'journal du tour avancé');
+  });
+
+  test('(2) pas une seconde fois à sa place normale ; (3) celui qui reprend ne rejoue pas son début de tour', async () => {
+    const { store, engine } = await openFury();
+    // L'avancé renonce au Test (déjà en Frénésie, la Fureur ne serait plus demandée : règle existante, v5-divine-recurring.js).
+    assert.notEqual((await store.playTurnNow('foe', { inputs: { foe: { [`${fieldOf('foe')}:attempt`]: false } } }))?.ok, false);
+    assert.equal(where(store), '1:foe');
+    const resume = await engine.nextTurn();
+    assert.equal(resume.status, 'applied', `reprise sans saisie de début de tour : ${JSON.stringify(resume)}`);
+    assert.equal(where(store), '1:priest');
+    await next(engine);
+    assert.equal(where(store), '1:ally');
+    // foe a joué par anticipation : il est sauté, sa Fureur n'est pas redemandée ; le round 2 commence par priest.
+    const wrap = await engine.nextTurn();
+    assert.equal(asks(wrap, 'foe').length, 0, `aucune demande pour l’avancé à sa place normale : ${JSON.stringify(wrap.requests)}`);
+    assert.equal((await engine.nextTurn({ inputs: { priest: { [`${fieldOf('priest')}:attempt`]: false } } })).status, 'applied');
+    assert.equal(where(store), '2:priest');
+    // Au round suivant, foe retrouve son début de tour à sa place.
+    await next(engine);
+    const own = await engine.nextTurn();
+    assert.ok(asks(own, 'foe').some(row => row.field === `${fieldOf('foe')}:attempt`), 'au round 2, la Fureur revient à sa place normale');
+  });
+
+  test('(4) Annuler rétablit tout, horloge comprise', async () => {
+    const { store } = await openFury();
+    const before = full(store);
+    await store.playTurnNow('foe', { inputs: yes('foe') });
+    assert.equal(where(store), '1:foe');
+    await store.undo();
+    const back = full(store);
+    assert.equal(where(store), '1:priest');
+    assert.deepEqual(back.extensions.v5.gameClock, before.extensions.v5.gameClock);
+    assert.equal(back.extensions.v5.turnIndex, before.extensions.v5.turnIndex);
+    assert.equal('advancedTurn' in back.extensions.v5, false);
+    assert.deepEqual(back.combat.participants, before.combat.participants);
+  });
+
+  test('saisie périmée : le combat a changé depuis l’aperçu', async () => {
+    const { store } = await openFury();
+    const pending = await store.playTurnNow('foe');
+    await store.updateParticipant('ally', { hp: 5 });
+    const stale = await store.playTurnNow('foe', { inputs: yes('foe'), baseRevision: pending.baseRevision });
+    assert.equal(stale.status, 'stale');
+    assert.equal(where(store), '1:priest');
   });
 });
 
