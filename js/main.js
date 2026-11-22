@@ -39,7 +39,7 @@ import { initFicheSyncView } from './ui/fiche-sync-view.js';
 import { parseProfileJson, parseProfileInput, PROFILE_JSON_EXAMPLE } from './core/json-profile-import.js';
 import { createActionEditor, preserveEditedV5Modifier } from './ui/action-editor.js';
 import { createEncounter, normalizeEncounter, normalizeCamp, participantCamp, CAMP_LABELS } from './core/encounters.js';
-import { userError, userMessage, contextMessage, refusalError } from './ui/messages.js';
+import { userError, userMessage, contextMessage, refusalError, storeFailure } from './ui/messages.js';
 import { deriveReminders, pendingReminders, resolveReminder, REMINDER_DECISIONS } from './core/reminders.js';
 import { createScene, proposeSceneEvent } from './core/scene-events.js';
 import { normalizeEffects, normalizeState } from './core/effects.js';
@@ -56,7 +56,8 @@ import { setMapDistanceProvider } from './ui/resolution-panel.js';
 const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
   combatReflexesChoice: 'choix du Combat instinctif', tieChoice: 'départage de l’égalité', tieOrder: 'ordre de l’égalité',
   initiatorRoll: 'jet du départage', opponentRoll: 'jet de l’adversaire au départage', surprisedCamp: 'camp surpris',
-  initiatorChoice: 'résultat retenu au départage', opponentChoice: 'résultat retenu par l’adversaire au départage' });
+  initiatorChoice: 'résultat retenu au départage', opponentChoice: 'résultat retenu par l’adversaire au départage',
+  vigilanceRoll: 'd100 de Vigilance', vigilanceScore: 'Perception (Vigilance)' });
 
 // Indicateur unique de la barre du haut : il résume les deux statuts détaillés
 // (#local-status, #sync-status), qui restent lisibles dans la section « État » du menu.
@@ -430,8 +431,23 @@ function seedInitiativeActor(state, actor, staging) {
     state.combatReflexesById[actor.id]={dice:actor.kind==='PJ'?[null,null]:[Math.floor(Math.random()*10)+1,Math.floor(Math.random()*10)+1],choice:''};
   }else state.diceById[actor.id] = existingCombat?.initialized?existingCombat.die:actor.kind!=='PJ'?Math.floor(Math.random()*10)+1:undefined;
 }
+// G6 : d100 de Vigilance (p. 116) d'un PNJ surpris qui a le talent, tiré une fois (comme ses dés d'initiative) dès que son camp est surpris ; saisi pour un PJ.
+function rollNpcVigilance(state, active) {
+  if (!state.surprisedCamp) return;
+  for (const actor of active) if (actor.kind !== 'PJ' && actor.camp === state.surprisedCamp && hasV5Talent(actor, 'talent-combat-aware') && !Number.isInteger(state.vigilanceRolls[actor.id]))
+    state.vigilanceRolls[actor.id] = Math.floor(Math.random() * 100) + 1;
+}
 function newInitiativeState(staging) {
-  return { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', mountedRideTests: {}, preview: null };
+  return { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', mountedRideTests: {}, vigilanceRolls: {}, preview: null };
+}
+// G6-c : la déclaration de la Surprise, en tête de la saisie.
+function surpriseHeadline(camp) {
+  return camp ? `Surprise : camp ${CAMP_LABELS[camp] || camp} surpris` : 'Surprise : aucune';
+}
+// G6-b : résultat du Test de Vigilance d'un combattant, d'après l'aperçu.
+function vigilanceOutcome(preview, id) {
+  const row = (preview?.vigilance || []).find(item => item.participantId === id);
+  return row ? `${row.success ? 'Réussi' : 'Raté'} (${row.sl >= 0 ? '+' : ''}${row.sl} DR) : ${row.success ? 'pas Surpris' : 'Surpris'}` : '';
 }
 // `short` : le nom seul (zone centrale, où la place manque) ; sinon nom, camp et type (feuille).
 function initiativeParticipantLabel(active, id, short = false) {
@@ -451,6 +467,7 @@ function captureInitiativeNeeds(state, tieArea, mountedArea) {
     const match = input.dataset.matchId, side = input.dataset.side, rolls = state.opposedRolls[match] || {};
     rolls[side] = input.value === '' ? null : input.type === 'number' ? Number(input.value) : input.value; state.opposedRolls[match] = rolls;
   }
+  for (const input of mountedArea.querySelectorAll('input[data-vigilance]:not([readonly])')) state.vigilanceRolls[input.dataset.vigilance] = input.value === '' ? null : Number(input.value);
   for (const input of mountedArea.querySelectorAll('[data-mounted-rider]')) {
     const riderId = input.dataset.mountedRider, field = input.dataset.field;
     const answer = state.mountedRideTests[riderId] || {};
@@ -469,6 +486,7 @@ function initiativeStatusText(state, active) {
 // Clé stable d'un champ d'égalité ou de Chevauchée : sert au focus quand la vue ou la saisie se redessine.
 function initiativeNeedKey(element) {
   const data = element?.dataset || {};
+  if (data.vigilance) return `init-v-${data.vigilance}`;
   if (data.mountedRider) return `init-m-${data.mountedRider}-${data.field}`;
   if (data.matchId) return `init-o-${data.matchId}-${data.side}`;
   if (data.groupKey && data.kind) return `init-t-${data.groupKey}-${data.kind}-${data.position || ''}`;
@@ -476,9 +494,21 @@ function initiativeNeedKey(element) {
   return data.focusKey || null;
 }
 // Égalités, Chevauchées de surprise : sections sous la saisie, recalculées après chaque réponse. `onError` reçoit le message d'un calcul refusé.
-function renderInitiativeNeeds({ state, active, staging, tieArea, mountedArea, recalculate, onError, short = false }) {
+function renderInitiativeNeeds({ state, active, staging, tieArea, mountedArea, recalculate, onError, short = false, vigilanceInRows = false }) {
   const participantLabel = id => initiativeParticipantLabel(active, id, short);
   tieArea.replaceChildren(); mountedArea.replaceChildren();
+  // G6-b : Vigilance des surpris qui ont le talent (feuille ; la saisie centrale la met dans la ligne du combattant).
+  if (!vigilanceInRows && state.surprisedCamp) for (const actor of active.filter(row => row.camp === state.surprisedCamp && hasV5Talent(row, 'talent-combat-aware'))) {
+    const label = document.createElement('label'); label.textContent = `${participantLabel(actor.id)} · Vigilance, d100 de Perception (+0) `;
+    label.title = 'Vigilance (p. 116) : réussi, le combattant n’est pas Surpris';
+    const input = document.createElement('input'); input.type = 'number'; input.min = '1'; input.max = '100'; input.required = true; input.dataset.vigilance = actor.id;
+    input.readOnly = actor.kind !== 'PJ';
+    if (Number.isInteger(state.vigilanceRolls[actor.id])) input.value = String(state.vigilanceRolls[actor.id]);
+    label.append(input);
+    const outcome = vigilanceOutcome(state.preview, actor.id);
+    if (outcome) label.append(Object.assign(document.createElement('span'), { className: 'muted', textContent: ` ${outcome}` }));
+    mountedArea.append(label);
+  }
   for (const need of state.preview.needsInput.filter(item => item.field.startsWith('mountedRide'))) {
     const riderId = need.field.split(':')[1], field = need.field.startsWith('mountedRideScore') ? 'score' : 'roll';
     const rider = active.find(row => row.id === riderId), answer = state.mountedRideTests[riderId] || {};
@@ -617,6 +647,8 @@ function renderInitiativeBoard(host) {
   const close = make('button', 'workspace-secondary workspace-initiative-close', 'Fermer'); close.type = 'button'; close.dataset.focusKey = 'init-close';
   close.title = 'Fermer la saisie (rien n’est perdu, « Commencer le combat » la rouvre)';
   close.addEventListener('click', closeInitiativeBoard);
+  const surpriseLine = make('p', 'workspace-initiative-surprise', surpriseHeadline(state.surprisedCamp)); surpriseLine.dataset.surprise = state.surprisedCamp || '';
+  surpriseLine.title = 'Surprise (p. 161) : choisissez le camp surpris dans « Camp surpris » ; la Vigilance (p. 116) est tirée ici, avant le round 1.';
   head.append(make('h2', '', 'Démarrer le combat'), make('p', 'workspace-muted', 'I + d10. Dés des PNJ déjà tirés ; dés des PJ à saisir. Combat instinctif : deux d10 et le dé choisi.'), close);
   // Un ordre manuel du MJ existe : l'initiative le remplacera (même avertissement que la feuille).
   if (Store.getOrderMode?.() === 'manual' && Store.getCombat().order.length) head.append(make('p', 'workspace-muted workspace-initiative-manual', 'Un ordre manuel existe déjà : l’initialisation va le remplacer par l’ordre calculé ici.'));
@@ -627,7 +659,7 @@ function renderInitiativeBoard(host) {
   surprised.append(new Option('Aucun', ''));
   for (const value of [...new Set(active.map(row => row.camp).filter(Boolean))]) surprised.append(new Option(value, value));
   surprised.value = state.surprisedCamp && [...surprised.options].some(option => option.value === state.surprisedCamp) ? state.surprisedCamp : '';
-  camp.append(surprised); options.append(camp);
+  camp.append(surprised); options.append(surpriseLine, camp);
 
   // Cavaliers : « monté » ou « sans monture » (déclarée : la monture quitte la rencontre ; sinon : à pied, monture liée).
   const mountFlip = async promise => {
@@ -677,6 +709,13 @@ function renderInitiativeBoard(host) {
         pick.value = reflex.choice; inputs.append(pick);
       }
     } else inputs.append(numberField('d10', 'die', actor, state.diceById[actor.id], { max: 10, readOnly: actor.kind !== 'PJ', aria: `${actor.kind === 'PJ' ? 'd10' : 'd10 tiré'} de ${actor.name}` }));
+    // G6-b : colonne Vigilance, visible seulement si le camp de ce porteur du talent est déclaré surpris.
+    if (hasV5Talent(actor, 'talent-combat-aware')) {
+      const vigil = numberField('Vigil.', 'vigilance', actor, state.vigilanceRolls[actor.id], { max: 100, readOnly: actor.kind !== 'PJ', aria: `Vigilance de ${actor.name} · d100 de Perception` });
+      vigil.dataset.vigilanceField = actor.id; vigil.title = 'Vigilance (p. 116) : Test de Perception (+0) ; réussi, pas Surpris';
+      const outcome = make('span', 'workspace-initiative-vigilance-result'); outcome.dataset.vigilanceResult = actor.id;
+      inputs.append(vigil, outcome);
+    }
     row.append(inputs); grid.append(row);
   }
 
@@ -698,9 +737,11 @@ function renderInitiativeBoard(host) {
         const first = field('reflexFirst'), second = field('reflexSecond'), choice = field('reflexChoice'), current = state.combatReflexesById[actor.id];
         if (current) state.combatReflexesById[actor.id] = { dice: [first ? (first.value === '' ? null : Number(first.value)) : current.dice[0], second ? (second.value === '' ? null : Number(second.value)) : current.dice[1]], choice: choice ? choice.value : current.choice };
       } else if (field('die')) state.diceById[actor.id] = field('die').value === '' ? null : Number(field('die').value);
+      if (field('vigilance') && !field('vigilance').readOnly) state.vigilanceRolls[actor.id] = field('vigilance').value === '' ? null : Number(field('vigilance').value);
     }
     state.surprisedCamp = surprised.value || '';
     captureInitiativeNeeds(state, tieArea, mountedArea);
+    rollNpcVigilance(state, active);
   }
   const request = () => { const { preview, ...entries } = state; return { staging: null, startCombat: true, ...entries }; };
   // Les sections d'égalités et de Chevauchée ne sont reconstruites que si ce qu'il y a à saisir a changé : un champ en cours de saisie n'est pas remplacé sous la main.
@@ -712,7 +753,17 @@ function renderInitiativeBoard(host) {
     const signature = JSON.stringify([preview.needsInput, (preview.tieGroups || []).map(group => [group.key, group.participantIds]), (preview.oppositions || []).map(match => [match.id, match.winnerId, match.initiator?.roll, match.opponent?.roll]), (preview.mountedFall || []).map(fall => [fall.participantId, fall.dismount, fall.test?.roll]), state.tieChoices]);
     if (rebuild && signature !== needsSignature) {
       needsSignature = signature;
-      renderInitiativeNeeds({ state, active, staging: null, tieArea, mountedArea, recalculate: refresh, short: true, onError: message => { status.textContent = message; } });
+      renderInitiativeNeeds({ state, active, staging: null, tieArea, mountedArea, recalculate: refresh, short: true, vigilanceInRows: true, onError: message => { status.textContent = message; } });
+    }
+    surpriseLine.textContent = surpriseHeadline(state.surprisedCamp); surpriseLine.dataset.surprise = state.surprisedCamp || '';
+    for (const actor of active) {
+      const vigil = grid.querySelector(`[data-vigilance-field="${CSS.escape(actor.id)}"]`); if (!vigil) continue;
+      const shown = Boolean(state.surprisedCamp) && actor.camp === state.surprisedCamp;
+      const vigilInput = vigil.querySelector('input');
+      vigil.hidden = !shown; vigilInput.required = shown;
+      if (vigilInput.readOnly) vigilInput.value = Number.isInteger(state.vigilanceRolls[actor.id]) ? String(state.vigilanceRolls[actor.id]) : '';
+      const outcome = grid.querySelector(`[data-vigilance-result="${CSS.escape(actor.id)}"]`);
+      outcome.hidden = !shown; outcome.textContent = shown ? vigilanceOutcome(preview, actor.id) : '';
     }
     status.textContent = initiativeStatusText(state, active);
     begin.dataset.ready = String(Boolean(state.preview.ready));
@@ -759,6 +810,7 @@ function renderInitiativeBoard(host) {
       if (!preview.ready) { refresh(); focusFirstMissing(); return { status: 'cancelled' }; }
       const result = await Store.applyCombatInitialization(preview);
       if (result?.status === 'stale' || result?.status === 'requires-input') { status.textContent = 'La partie a changé : vérifiez la saisie, puis recommencez.'; refresh(); return { status: 'cancelled' }; }
+      const failure = storeFailure(result); if (failure) throw failure;
       await awaitStore(result, 'Démarrer le combat');
       return result;
     } catch (error) {
@@ -795,7 +847,8 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
       const help = document.createElement('p'); help.className = 'muted';
       help.textContent = 'Saisissez l’Initiative (I) et les dés des PJ. Les dés PNJ sont tirés une fois et gardés pendant les recalculs. Combat instinctif demande deux d10 et le choix explicite de l’un. À deux, une égalité se résout par Test opposé V5 ; à trois ou plus, fixez directement leur ordre.';
       if((!staging||staging.kind!=='launch')&&Store.getOrderMode?.()==='manual'&&Store.getCombat().order.length){const note=document.createElement('p');note.className='muted';note.textContent='Un ordre manuel existe déjà : l’initialisation va le remplacer par l’ordre calculé ici.';mount.append(note);}
-      mount.append(help);
+      const surpriseLine = document.createElement('p'); surpriseLine.className = 'workspace-initiative-surprise'; surpriseLine.textContent = surpriseHeadline(state.surprisedCamp);
+      mount.append(surpriseLine, help);
       form = document.createElement('form'); form.addEventListener('submit', event => event.preventDefault()); mount.append(form);
       const rows = document.createElement('div'); rows.className = 'stack';
       for (const actor of active) {
@@ -854,6 +907,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
         }
         state.surprisedCamp = form.elements.namedItem('surprisedCamp')?.value || '';
         captureInitiativeNeeds(state, tieArea, mountedArea);
+        rollNpcVigilance(state, active);
       }
       const request = () => ({ staging, startCombat, ...state });
       function recalculate() {
@@ -861,14 +915,18 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
         state.preview = Store.previewCombatInitialization(request());
         apply.hidden = !state.preview.ready;
         renderInitiativeNeeds({ state, active, staging, tieArea, mountedArea, recalculate, onError: message => { status.textContent = message; } });
+        surpriseLine.textContent = surpriseHeadline(state.surprisedCamp); surpriseLine.dataset.surprise = state.surprisedCamp || '';
         status.textContent = initiativeStatusText(state, active);
       }
+      select.addEventListener('change', () => { try { recalculate(); } catch (error) { status.textContent = error.message; } });
       calculate.addEventListener('click', () => { try { recalculate(); } catch (error) { status.textContent = error.message; } });
       apply.addEventListener('click', async () => {
         try {
           capture(); const finalPreview = Store.previewCombatInitialization(request());
           if (!finalPreview.ready) { recalculate(); return; }
-          const result = await awaitStore(Store.applyCombatInitialization(finalPreview), 'Initiative');
+          const applied = await Store.applyCombatInitialization(finalPreview);
+          const failure = storeFailure(applied); if (failure) throw failure;
+          const result = await awaitStore(applied, 'Initiative');
           if (result?.status === 'stale') { status.textContent = 'La partie a changé : fermez et recommencez la préparation.'; return; }
           // Le résultat d’abord : la fermeture émet « close », qui conclurait sinon par une annulation.
           finish(result); sheet.close();

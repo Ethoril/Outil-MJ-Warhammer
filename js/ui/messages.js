@@ -6,6 +6,7 @@
  */
 
 const FILE_INVALID = 'Ce fichier n’est pas une sauvegarde de l’outil MJ.';
+const PERSISTENCE_FAILED = 'Enregistrement local impossible, réessayez.';
 
 // Ordre significatif : la première correspondance l'emporte.
 const KNOWN_ERRORS = [
@@ -25,6 +26,8 @@ const KNOWN_ERRORS = [
   [error => /^Rencontre d’origine introuvable/.test(error?.message || ''), 'La rencontre d’origine n’existe plus : supprimez le combat associé, puis relancez une rencontre.'],
   [error => /^La rencontre n’a plus aucun combattant/.test(error?.message || ''), 'La rencontre n’a plus aucun combattant : complétez sa composition avant de recommencer.'],
   [error => /^Aucun combat à recommencer/.test(error?.message || ''), 'Aucun combat en cours à recommencer.'],
+  // G6-d (R7) : échec d'écriture IndexedDB (connexion fermée…), distinct d'une erreur de données.
+  [error => error?.code === 'PERSISTENCE' || error?.name === 'InvalidStateError' && /IDB|database|transaction/i.test(error?.message || '') || /database connection is closing/i.test(error?.message || ''), PERSISTENCE_FAILED],
   [error => error?.name === 'QuotaExceededError' || /QuotaExceeded|IndexedDB indisponible|Persistance non prête/i.test(error?.message || ''), 'Stockage du navigateur plein ou bloqué : exportez une sauvegarde, puis libérez de l’espace.'],
   [error => error?.name === 'MigrationError' && (error.details?.reason === 'version-future' || /future/i.test(error.message || '')), 'Cette sauvegarde vient d’une version plus récente de l’outil : mettez l’application à jour. Elle n’a pas été modifiée.'],
   [error => error?.name === 'MigrationError' || error instanceof SyntaxError, FILE_INVALID]
@@ -50,6 +53,17 @@ export function userMessage(error, fallback = 'L’action a échoué : réessaye
 export function contextMessage(prefix, error, fallback) {
   const message = userMessage(error, fallback);
   return `${prefix} : ${message.charAt(0).toLocaleLowerCase('fr-FR')}${message.slice(1)}`;
+}
+
+/** Échec d'enregistrement local ; `cause` (erreur d'IndexedDB) reste dans la console. */
+export function persistenceFailure(cause = null) {
+  if (cause) console.error(cause);
+  return Object.assign(new Error(PERSISTENCE_FAILED), { code: 'PERSISTENCE', userFacing: true, cause });
+}
+
+/** Erreur d'enregistrement pour un résultat de commande du Store `{ status: 'persistence-error' }`, sinon null. */
+export function storeFailure(result) {
+  return result?.status === 'persistence-error' ? persistenceFailure(result.error || null) : null;
 }
 
 /** Erreur à montrer pour un refus de commande `{ ok:false, message }` (la raison du refus), ou pour `false`. */

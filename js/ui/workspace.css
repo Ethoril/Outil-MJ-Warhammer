@@ -2674,3 +2674,9 @@ dialog.v5-fate-dialog[open] { left:calc(50% + 8px) !important; right:auto !impor
 /* ===== LOT G5 : « Arbitrer » met en évidence la raison ou la décision visée (G5-c) ; PA conditionnels (G5-e) ===== */
 .is-spotlight { outline: 3px solid var(--accent, #8a0707); outline-offset: 2px; border-radius: 4px; }
 .workspace-sheet-pa-cell.is-conditional { font-style: italic; }
+/* ==========================================================================
+   LOT G6 · Surprise et Vigilance dans la saisie de l'initiative
+   ========================================================================== */
+.workspace-initiative-surprise { margin: 0; font-size: 13px; font-weight: 600; }
+.workspace-initiative-vigilance-result { font-size: 12px; color: var(--muted); }
+.workspace-initiative-inputs > [hidden] { display: none; }
