@@ -42,11 +42,73 @@ test('Claude T2 — Taille ne bloque pas une touche sans pièce d’armure ni bo
   assert.ok(!otherLocation.unresolved.some(line => /Taille/.test(line)), JSON.stringify(otherLocation.unresolved));
 });
 
-test('Claude T2 — Taille exige toujours la pièce frappée quand une pièce couvre la localisation', () => {
+// G5-a (R2, recette du 22/11) : l'ancienne attente « pièce exigée » devient « pièce déduite » (seule pièce de la localisation).
+test('Claude T2 — Taille déduit la seule pièce qui couvre la localisation, sans rien exiger', () => {
   const mail = { id: 'M', kind: 'armour', name: 'Cotte', category: 'Mailles', ap: 2,
     locations: ['head', 'body', 'leftArm', 'rightArm', 'leftLeg', 'rightLeg'], layer: 'chain', keywords: [] };
   const armoured = hackPreview(mk('t', 'foes', { equipment: [mail] }), 'mail');
-  assert.ok(armoured.unresolved.some(line => /Taille : pièce ou bouclier touché requis/.test(line)));
+  assert.ok(!armoured.unresolved.some(line => /Taille/.test(line)), JSON.stringify(armoured.unresolved));
+  assert.equal(armoured.hack.struckItemId, 'M');
+});
+
+describe('G5-a Taille (arme) : pièce touchée déduite de la localisation (p. 304)', () => {
+  // Jet 54 inversé = 45 : Corps.
+  const piece = (id, name, ap, locations = ['body'], layer = 'chain') => ({ id, kind: 'armour', name, category: layer === 'leather' ? 'Cuir' : 'Mailles', ap, locations, layer, keywords: [] });
+  const hack = (equipment, context = {}, extra = {}) => {
+    const actor = mk('actor', 'allies'), target = mk('t', 'foes', { equipment });
+    return previewResolution({ resolutionId: 'g5-hack', actor, target, baseRevision: 0, round: 1, roll: 54,
+      action: { id: 'x', type: 'attack', attr: 'CC', base: 70, damage: 'BF+4', qualities: [{ id: 'taille', parameter: '' }] },
+      defense: { type: 'skill', label: 'CC', attr: 'CC', base: 30, roll: 90, qualities: [], v5: { kind: 'melee', context: {} } },
+      v5: { kind: 'melee', context }, attackContext: { ranged: false }, v5State: { participants: [actor, target] }, ...extra });
+  };
+  const q = (id, parameter = '') => ({ id, parameter });
+  const noHackBlock = preview => assert.ok(!preview.unresolved.some(line => /Taille/.test(line)), JSON.stringify(preview.unresolved));
+
+  test('une seule pièce comptée : elle perd 1 PA, mêmes Blessures que la pièce saisie à la main', () => {
+    const deduced = hack([piece('mail', 'Cotte', 2)]);
+    noHackBlock(deduced);
+    assert.equal(deduced.hack.struckItemId, 'mail');
+    assert.equal(deduced.hack.deduced, true);
+    assert.equal(deduced.protection.ap, 1);
+    const manual = hack([piece('mail', 'Cotte', 2)], { struckItemId: 'mail' });
+    assert.equal(manual.hack.deduced, false);
+    assert.equal(deduced.damage.finalDamage, manual.damage.finalDamage);
+    assert.deepEqual(deduced.hack.damage, manual.hack.damage);
+  });
+
+  test('plusieurs pièces : la plus forte en PA est précochée, le MJ peut en choisir une autre de la localisation', () => {
+    const equipment = [piece('jack', 'Veste de cuir', 1, ['body', 'leftArm', 'rightArm'], 'leather'), piece('mail', 'Chemise de mailles', 2), piece('helm', 'Casque', 2, ['head'])];
+    const deduced = hack(equipment);
+    noHackBlock(deduced);
+    assert.equal(deduced.hack.struckItemId, 'mail');
+    assert.deepEqual(deduced.hack.candidates.map(row => row.id).sort(), ['jack', 'mail'], 'liste limitée aux pièces de la localisation');
+    const chosen = hack(equipment, { struckItemId: 'jack' });
+    noHackBlock(chosen);
+    assert.equal(chosen.hack.damage.itemId, 'jack');
+    assert.equal(chosen.protection.ap, deduced.protection.ap, 'le total de la localisation baisse de 1 dans tous les cas');
+    assert.equal(chosen.damage.finalDamage, deduced.damage.finalDamage);
+  });
+
+  test('pièce choisie absente de la localisation (cible changée) : la déduction reprend', () => {
+    const preview = hack([piece('mail', 'Cotte', 2)], { struckItemId: 'autre' });
+    noHackBlock(preview);
+    assert.equal(preview.hack.struckItemId, 'mail');
+  });
+
+  test('aucune pièce et défense au bouclier : le bouclier perd 1 PA', () => {
+    const shield = { id: 'buckler', kind: 'shield', name: 'Bouclier', ap: 2, locations: [], keywords: [q('bouclier')] };
+    const preview = hack([shield], {}, { protectionContext: { shieldId: 'buckler', shieldAvailable: true, opposedWithShield: true, defenseProvided: true, ranged: false } });
+    noHackBlock(preview);
+    assert.equal(preview.hack.struckItemId, 'buckler');
+    assert.deepEqual(preview.hack.candidates.map(row => row.id), ['buckler']);
+  });
+
+  test('ni pièce ni bouclier ayant servi : rien à abîmer, aucun blocage', () => {
+    const shield = { id: 'buckler', kind: 'shield', name: 'Bouclier', ap: 2, locations: [], keywords: [q('bouclier')] };
+    const preview = hack([shield, piece('helm', 'Casque', 2, ['head'])]);
+    noHackBlock(preview);
+    assert.equal(preview.hack, null);
+  });
 });
 
 test('Claude T2 — le Mortier de main du catalogue explose sur maladresse au rechargement (L13 p.103)', () => {

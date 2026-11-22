@@ -2671,3 +2671,6 @@ dialog.v5-fate-dialog[open] { left:calc(50% + 8px) !important; right:auto !impor
 .workspace-center-panel .workspace-divine-col.is-targets .workspace-divine-fact-line { flex:1 1 100%; padding-left:18px; gap:0 8px; }
 .workspace-center-panel .workspace-divine-col.is-targets .workspace-divine-fact { font-size:11.5px; line-height:1.2; gap:3px; }
 .workspace-divine-fact-who { font-weight:600; }
+/* ===== LOT G5 : « Arbitrer » met en évidence la raison ou la décision visée (G5-c) ; PA conditionnels (G5-e) ===== */
+.is-spotlight { outline: 3px solid var(--accent, #8a0707); outline-offset: 2px; border-radius: 4px; }
+.workspace-sheet-pa-cell.is-conditional { font-style: italic; }

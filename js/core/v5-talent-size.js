@@ -1,4 +1,4 @@
-import{smallSource}from'./v5-talent-small.js';
+import{smallSource,sizeRanksOf,ASSUMED_SIZE_REMINDER}from'./v5-talent-small.js';
 import{situationPlan}from'./v5-talent-situations.js';
 import{hasV5Talent}from'./v5-talents.js';
 import{getReferenceCatalogue}from'./reference-catalog.js';
@@ -7,19 +7,20 @@ export function previewLarge(n){
  const plans=[],unresolved=[],c=n.v5.context||{},attack=['attack','attaque'].includes(n.action.type),melee=attack&&n.v5.kind==='melee';
  // Trait Taille (Grande ou plus) : même barème que le talent Grande taille, une seule source de vérité ; les rangs saisis à l'écran priment.
  const traitSize=p=>{const s=creatureSizeOf(p);return s.assumed?null:s;},traitA=traitSize(n.actor),traitB=traitSize(n.target),traitLargeA=(traitA?.rank??0)>=4,traitLargeB=(traitB?.rank??0)>=4;
- const rank=(manual,p,t,other)=>Number.isSafeInteger(manual)?manual:t?t.rank:other?creatureSizeOf(p).rank:undefined;
- const sizes=[rank(n.v5.actorSize,n.actor,traitA,traitB),rank(n.v5.targetSize,n.target,traitB,traitA)],known=sizes.every(Number.isSafeInteger);
+ // G5-d (R13) : à défaut de saisie, la catégorie connue (Trait, champ `size`, espèce), sinon Moyenne supposée avec un rappel.
+ const ranks=sizeRanksOf(n),sizes=ranks.sizes,known=sizes.every(Number.isSafeInteger);
  const ownerA=hasV5Talent(n.actor,'talent-large'),ownerB=hasV5Talent(n.target,'talent-large');
  const a=ownerA?situationPlan(n.actor,'large'):null,b=ownerB?situationPlan(n.target,'large'):null;if(a)plans.push(a);if(b)plans.push(b);
  const talentA=Boolean(a?.proposals.length),onA=talentA||traitLargeA,onB=Boolean(b?.proposals.length)||traitLargeB,strength=Boolean(n.defense&&n.action.attr==='F'&&n.defense.attr==='F');
  if((onA||onB)&&(melee||strength)&&!known)unresolved.push('Grande taille : catégories de Taille explicites requises.');
+ const reminders=(onA||onB)&&(melee||strength)&&known&&ranks.assumed?[ASSUMED_SIZE_REMINDER]:[];
  const normal=melee&&!n.v5.extraAttack&&(c.freeAttackTalent==null||c.freeAttackTalent==='none')&&c.talentAction!=='stomp';
  const bf=Number.isSafeInteger(n.actor?.caracs?.F)?Math.floor(n.actor.caracs.F/10):null;
  if(normal&&talentA&&bf==null)unresolved.push('Grande taille : Bonus de Force requis pour les dégâts normaux.');
  // Taille Grande ou plus venue de l'espèce d'un PJ (fiche) : dégâts calculés depuis la fiche, donc +BF par cran au-dessus de Moyenne (V5 p. 360) ; un Trait est déjà imprimé.
  const speciesA=creatureSizeOf(n.actor),speciesBonus=normal&&!talentA&&speciesA.source==='species'&&speciesA.rank>=4;
  if(speciesBonus&&bf==null)unresolved.push('Taille : Bonus de Force requis pour les dégâts normaux.');
- return{plans,unresolved,damageBonus:normal&&talentA&&bf!=null?bf:speciesBonus&&bf!=null?bf*(speciesA.rank-3):0,defensePenalty:melee&&onA&&known&&sizes[0]>sizes[1]?2:0,forceWinner:strength&&known&&(onA||onB)&&sizes[0]!==sizes[1]?{larger:sizes[0]>sizes[1]?'attacker':'defender',gap:Math.abs(sizes[0]-sizes[1])}:null};
+ return{plans,unresolved,reminders,damageBonus:normal&&talentA&&bf!=null?bf:speciesBonus&&bf!=null?bf*(speciesA.rank-3):0,defensePenalty:melee&&onA&&known&&sizes[0]>sizes[1]?2:0,forceWinner:strength&&known&&(onA||onB)&&sizes[0]!==sizes[1]?{larger:sizes[0]>sizes[1]?'attacker':'defender',gap:Math.abs(sizes[0]-sizes[1])}:null};
 }
 export function resolveSizeOpposition(opposed,large,actorTest,defenderTest){
  if(!opposed||!large?.forceWinner)return opposed;const{larger,gap}=large.forceWinner,small=larger==='attacker'?defenderTest:actorTest;
@@ -27,7 +28,8 @@ export function resolveSizeOpposition(opposed,large,actorTest,defenderTest){
 }
 export function prepareStomp(n){
  if(n.v5.context?.talentAction!=='stomp')return{plans:[],unresolved:[]};const plan=smallSource(n.actor,n.target)||situationPlan(n.actor,'stomp'),unresolved=[];
- if(!plan.proposals.length||!Number.isSafeInteger(n.v5.actorSize)||!Number.isSafeInteger(n.v5.targetSize)||n.v5.actorSize<=n.v5.targetSize)unresolved.push('Piétinement : cible plus petite et source Grande taille requises.');
+ const[stompA,stompB]=n.target?sizeRanksOf(n).sizes:[n.v5.actorSize,n.v5.targetSize];
+ if(!plan.proposals.length||!Number.isSafeInteger(stompA)||!Number.isSafeInteger(stompB)||stompA<=stompB)unresolved.push('Piétinement : cible plus petite et source Grande taille requises.');
  const skill=getReferenceCatalogue().skills.find(s=>s.nom==='Corps à corps (Bagarre)'),base=n.actor.skills?.find(s=>s.id===skill.id&&s.status==='resolved')?.total??n.actor.caracs?.CC;
  if(!Number.isSafeInteger(base)||!Number.isSafeInteger(n.actor.caracs?.F))unresolved.push('Piétinement : Corps à corps (Bagarre) et Force requis.');
  n.action={...n.action,type:'attack',attr:'CC',base:base??n.action.base,damage:0,damageFormula:'BF',qualities:[],extensions:{fiche:{skillId:skill.id}}};n.v5.kind='melee';
