@@ -6,7 +6,7 @@ import { createMapLink } from '../../../js/core/map-link.js';
 // actif sur l'écran MJ, pour que le MJ le voie sans cliquer sur chaque pion.
 const pj = (patch = {}) => ({ id: 'a', kind: 'PJ', persistentCharacterId: 'c1', profileId: 'prof', name: 'Renaut', hp: 9, maxHp: 15, states: [], movement: 4, extensions: { v5: {} }, ...patch });
 const orc = (patch = {}) => ({ id: 'o', kind: 'PNJ', name: 'Orc', hp: 10, maxHp: 10, states: [], movement: 4, extensions: { v5: {} }, ...patch });
-const map = (type, payload = {}) => ({ v: 1, type, from: 'map', payload });
+const map = (type, payload = {}) => ({ v: 2, type, from: 'map', payload });
 
 function setup(scene, { active = null, withActive = true } = {}) {
   const sent = [];

@@ -41,27 +41,27 @@ test('enveloppe : version, seq croissant, émetteur', () => {
   const t = setup([gob('g1')]);
   t.set([gob('g1', { hp: 1 })]);
   t.link.refresh();
-  assert.deepEqual(t.channel.sent.map(m => [m.type, m.v, m.seq, m.from]), [['mj.hello', 1, 1, 'outil-mj'], ['token.state', 1, 2, 'outil-mj'], ['fx.wound', 1, 3, 'outil-mj']]);
+  assert.deepEqual(t.channel.sent.map(m => [m.type, m.v, m.seq, m.from]), [['mj.hello', 2, 1, 'outil-mj'], ['token.state', 2, 2, 'outil-mj'], ['fx.wound', 2, 3, 'outil-mj']]);
 });
 
 test('map.hello → instantané complet et statut connecté ; version inconnue signalée', () => {
   const t = setup([pj, gob('g1')]);
-  t.channel.onmessage({ data: { v: 1, type: 'map.hello', from: 'map', payload: {} } });
+  t.channel.onmessage({ data: { v: 2, type: 'map.hello', from: 'map', payload: {} } });
   // L'instantané est suivi de mj.engagements, envoyé même vide (audit A6).
   const snap = t.channel.sent.find(message => message.type === 'mj.snapshot');
   assert.ok(snap);
   assert.equal(t.channel.sent.at(-1).type, 'mj.engagements');
   assert.deepEqual(snap.payload.tokens.map(s => s.ref).sort(), ['p:g1', 'pj:c9']);
   assert.equal(t.link.status(), 'connected');
-  t.link.onMessage({ v: 2, type: 'map.ping', from: 'map' });
+  t.link.onMessage({ v: 1, type: 'map.ping', from: 'map' });
   assert.equal(t.link.status(), 'version-mismatch');
-  t.link.onMessage({ v: 1, type: 'token.state', from: 'outil-mj' });
+  t.link.onMessage({ v: 2, type: 'token.state', from: 'outil-mj' });
   assert.deepEqual(t.statuses, ['connected', 'version-mismatch'], 'ses propres messages sont ignorés');
 });
 
 test('battement : déconnecté après 15 s sans nouvelles de la carte', () => {
   const t = setup();
-  t.link.onMessage({ v: 1, type: 'map.ping', from: 'map' });
+  t.link.onMessage({ v: 2, type: 'map.ping', from: 'map' });
   t.advance(MAP_LINK_TIMEOUT_MS);
   t.link.tick();
   assert.equal(t.link.status(), 'connected');
@@ -107,7 +107,7 @@ test('la liaison transmet la cause de mort enregistrée uniquement pour un mort'
 test('écho du battement : onglet caché, l’outil MJ répond au ping de la carte, sans boucle (contrat §2.3, 05/11)', () => {
   const t = setup();
   const pings = () => types(t.channel).filter(type => type === 'mj.ping').length;
-  const mapPing = () => t.link.onMessage({ v: 1, type: 'map.ping', seq: 1, at: 0, from: 'map', payload: {} });
+  const mapPing = () => t.link.onMessage({ v: 2, type: 'map.ping', seq: 1, at: 0, from: 'map', payload: {} });
   t.link.tick();
   assert.equal(pings(), 1);
   t.advance(1000);
@@ -136,7 +136,7 @@ test('liaison durable des PJ (§3) : PJ hors scène émis depuis le persistant, 
 
   const t = setup(alone);
   const rosters = () => t.channel.all.filter(m => m.type === 'mj.roster');
-  t.link.onMessage({ v: 1, type: 'map.hello', seq: 1, at: 0, from: 'map', payload: {} });
+  t.link.onMessage({ v: 2, type: 'map.hello', seq: 1, at: 0, from: 'map', payload: {} });
   const snap = t.channel.sent.find(m => m.type === 'mj.snapshot');
   assert.deepEqual(snap.payload.tokens.map(s => s.ref).sort(), ['pj:c7', 'pj:c9']);
   assert.deepEqual(rosters().at(-1).payload.characters, [{ ref: 'pj:c7', label: 'Bertold' }, { ref: 'pj:c9', label: 'Ulrika' }]);

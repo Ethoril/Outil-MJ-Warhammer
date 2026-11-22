@@ -6,7 +6,7 @@ import { createStore } from '../../../js/core/store.js';
 
 // Course signalée par la carte (L6-MJ) : `map.ran { ref }` → proposition « X a couru : Action utilisée ? », rien sans le clic du MJ.
 const fakeChannel = () => ({ sent: [], postMessage(message) { this.sent.push(message); }, onmessage: null });
-const map = (type, payload = {}) => ({ v: 1, type, from: 'map', payload });
+const map = (type, payload = {}) => ({ v: 2, type, from: 'map', payload });
 const pj = { id: 'a', kind: 'PJ', persistentCharacterId: 'c9', name: 'Ulrika', hp: 10, maxHp: 10, states: [] };
 const gob = { id: 'g1', kind: 'PNJ', name: 'Gobelin 1', hp: 8, maxHp: 8, states: [] };
 
@@ -15,7 +15,7 @@ test('map.ran transmis au rappel onRan avec le ref ; sans ref, ignoré', () => {
   const link = createMapLink({ channel: fakeChannel(), getParticipants: () => [pj], onRan: ref => ran.push(ref) });
   link.onMessage(map('map.ran', { ref: 'pj:c9' }));
   link.onMessage(map('map.ran', {}));
-  link.onMessage({ v: 1, type: 'map.ran', from: 'outil-mj', payload: { ref: 'pj:c9' } });
+  link.onMessage({ v: 2, type: 'map.ran', from: 'outil-mj', payload: { ref: 'pj:c9' } });
   assert.deepEqual(ran, ['pj:c9']);
 });
 

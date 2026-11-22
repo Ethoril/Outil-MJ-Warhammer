@@ -59,9 +59,9 @@ test('consommateurs de l’outil branchés sur le registre : Blessures, Mouvemen
 });
 
 test('liaison carte : constantes de l’outil lues dans la source commune', () => {
-  assert.deepEqual(LIAISON_CARTE, { canal: 'wfrp-map-link', version: 1, battementMs: 5000, delaiDeconnexionMs: 15000, echoMs: 4000 });
+  assert.deepEqual(LIAISON_CARTE, { canal: 'wfrp-map-link', version: 2, battementMs: 5000, delaiDeconnexionMs: 15000, echoMs: 4000 });
   assert.deepEqual([MAP_LINK_CHANNEL, MAP_LINK_VERSION, MAP_LINK_PING_MS, MAP_LINK_TIMEOUT_MS, MAP_LINK_ECHO_MS],
-    ['wfrp-map-link', 1, 5000, 15000, 4000]);
+    ['wfrp-map-link', 2, 5000, 15000, 4000]);
 });
 
 test('source en LF, précachée par le service worker', () => {

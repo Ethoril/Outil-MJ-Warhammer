@@ -166,7 +166,7 @@ function feedback(people) {
   const store = { listParticipants: () => people, listEngagedWith: () => [], engageParticipants: (a, b) => { engaged.push([a, b]); return { ok: true }; } };
   const node = { hidden: true, textContent: '', removeAttribute() {} };
   const ui = mountMapLinkFeedback({ mapLink: link, store, pendingNode: node, showToast: (message, type, action) => toasts.push({ message, action }) });
-  const map = (type, payload = {}) => channel.onmessage({ data: { v: 1, type, from: 'map', payload } });
+  const map = (type, payload = {}) => channel.onmessage({ data: { v: 2, type, from: 'map', payload } });
   return { ui, toasts, engaged, map };
 }
 
@@ -208,9 +208,11 @@ test('21 · course sur la carte : « Action utilisée » ne décompte qu’au cl
   await entry.onChoose('used');
   assert.deepEqual(spent, ['a']);
   assert.equal(runDecision({ actorId: 'a', canSpend: false, message: 'hors de son Tour' }, { spend: () => {} }), null, 'rien à décompter : pas de question');
-  // main.js publie la question à la course et la retire au clic du toast.
-  const main = source('js/main.js');
-  assert.match(main, /publishDecision\(runDecision\(/);
-  assert.match(main, /withdrawDecision\(`course-carte:\$\{proposal\.actorId\}`\)/);
+  // main.js branche la course sur createMapTurnFlow (lot E10), qui publie la question et la retire au clic du toast
+  // (comportement vérifié dans tests/unit/chapeau/liaison-carte-tour-de-jeu.test.mjs).
+  assert.match(source('js/main.js'), /onRan: ref => mapTurn\.onRan\(ref\)/);
+  const flow = source('js/ui/map-link-feedback.js');
+  assert.match(flow, /publishDecision\(runDecision\(/);
+  assert.match(flow, /onClick: \(\) => \{ close\(id\);/);
   for (const row of publishedDecisions()) withdrawDecision(row.id);
 });

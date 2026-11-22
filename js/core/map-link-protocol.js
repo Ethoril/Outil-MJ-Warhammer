@@ -14,6 +14,9 @@
  * ou `null`. Un jeu qui ne le fournit pas n'envoie jamais `mj.turn` ; sinon le message part à chaque changement et toujours
  * dans l'instantané, `ref: null` hors tour.
  *
+ * Annulation du mouvement du tour sur la carte (`map.turnReset { ref }`, contrat §10, version 2 du 22/11/2026) : transmise
+ * telle quelle à `onTurnReset(ref)`, comme `map.ran` à `onRan(ref)` ; le jeu décide de ce qu'elle rend.
+ *
  * Le cycle de vie se lit sur les instantanés : un `ref` qui apparaît part en `token.add`, un `ref` qui change en `token.state`,
  * un `ref` non PJ qui disparaît en `token.remove`. Mort et banc gardent le participant, donc le pion.
  */
@@ -122,12 +125,13 @@ export function effectsOf(prev, next, { formChanged = false } = {}) {
 /**
  * `getParticipants()` rend la liste des participants de la scène (vide hors combat) ; `projection` les traduit en pions
  * (voir en tête) ; `onStatus(status)` reçoit 'connected' | 'disconnected' | 'version-mismatch' ; `onRan(ref)` reçoit
- * `map.ran` (palier Course franchi sur la carte, L6) ; `setTimer`/`clearTimer` servent aux délais de `mount.request` et
+ * `map.ran` (palier Course franchi sur la carte, L6) ; `onTurnReset(ref)` reçoit `map.turnReset` (mouvement du tour annulé
+ * sur la carte, version 2) ; `setTimer`/`clearTimer` servent aux délais de `mount.request` et
  * `mj.distanceQuery`. Retours de la carte (§10, L5) : `on('placement', fn)` reçoit `{ connected, placed, pending }` à
  * chaque changement, `on('adjacency', fn)` les paires de `map.adjacency` ; `queryDistance(de, vers)` interroge la carte.
  */
 export function createMapLinkProtocol({ channel, projection, getParticipants, getActiveId = null, now = () => Date.now(), onStatus = () => {},
-  onRan = () => {}, setTimer = (fn, ms) => setTimeout(fn, ms), clearTimer = id => clearTimeout(id) }) {
+  onRan = () => {}, onTurnReset = () => {}, setTimer = (fn, ms) => setTimeout(fn, ms), clearTimer = id => clearTimeout(id) }) {
   if (typeof projection?.tokenStates !== 'function' || typeof projection?.refOf !== 'function') {
     throw new Error('Liaison carte : la projection du jeu doit fournir tokenStates et refOf.');
   }
@@ -242,6 +246,7 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, ge
     if (message.type === 'map.distance') settleDistance(payload.queryId, Number.isFinite(payload.cells) && payload.cells >= 0
       ? { ok: true, cells: payload.cells } : { ok: false, reason: 'unmeasurable', message: 'La carte n’a pas pu mesurer la distance.' });
     if (message.type === 'map.ran' && payload.ref) onRan(payload.ref);
+    if (message.type === 'map.turnReset' && payload.ref) onTurnReset(payload.ref);
     if (message.type === 'mount.accepted') settleMount(payload.riderRef, { ok: true });
     if (message.type === 'mount.refused') settleMount(payload.riderRef, payload.reason === 'not-adjacent'
       ? { ok: false, reason: 'not-adjacent', message: MOUNT_NOT_ADJACENT_MESSAGE }

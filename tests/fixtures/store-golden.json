@@ -173,6 +173,7 @@
    "previewResolution/0",
    "previewV5CombatAction/0",
    "spendV5RunAction/1",
+   "resetV5TurnFromMap/1",
    "getV5TurnFacts/1",
    "declareV5CombatMovement/0",
    "applyV5CombatAction/1",
@@ -1935,6 +1936,11 @@
     "state": "68c8ab7d431c0e71"
    },
    {
+    "label": "sweep resetV5TurnFromMap",
+    "result": "2f569e489ac1bf5e",
+    "state": "68c8ab7d431c0e71"
+   },
+   {
     "label": "sweep getV5TurnFacts",
     "result": "7e89d3c262fd5790",
     "state": "68c8ab7d431c0e71"
@@ -2885,6 +2891,7 @@
    "previewResolution/0",
    "previewV5CombatAction/0",
    "spendV5RunAction/1",
+   "resetV5TurnFromMap/1",
    "getV5TurnFacts/1",
    "declareV5CombatMovement/0",
    "applyV5CombatAction/1",
@@ -4644,6 +4651,11 @@
    {
     "label": "sweep spendV5RunAction",
     "result": "639fba694f971f80",
+    "state": "4bd34c4c9a63fc31"
+   },
+   {
+    "label": "sweep resetV5TurnFromMap",
+    "result": "2f569e489ac1bf5e",
     "state": "4bd34c4c9a63fc31"
    },
    {
