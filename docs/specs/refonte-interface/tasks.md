@@ -11,7 +11,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 | E2 | Case « À décider » : les 26 décisions, mort subite en un clic | **Opus** | E3 | 7-10 |
 | E4a | Mêlées en cartouches (clic = cible) et barre d'actions | Sonnet | E1 | 6 |
 | E4b | Résolution compacte : circonstances en puces, ligne Distance, sortie des suites de combat | **Opus** | E2, E4a | 13-15, 15a, 15b, 20 |
-| E2b | Fin de « À décider » : décisions 6, 12, 16, 17, 20, 21 branchées ; fenêtres d'effets V5 non modales ; fiche de la cible sans défilement avec une décision en attente | Sonnet | E4b · [P] avec E4c | 7, 10 |
+| E2b | Fin de « À décider » : décisions 6, 12, 16, 17, 20, 21 branchées ; fenêtres d'effets V5 non modales ; fiche de la cible sans défilement avec une décision en attente ; arbitrage des séquelles d'un absent ; panneau de prière et résultat avec critique sans défilement | **Opus** | E4b · [P] avec E4c | 3, 7, 10, 16, 20 |
 | E4c | Jouer son tour maintenant (commande annulable) et Charger sur la cible | **Opus** | E4b · [P] avec E2b | 24-27 |
 | E6 | Recette : parcours complet, relevé coché, suite complète, notes de version | Sonnet | tous | 1-3, 16-18 |
 | F1-F3 | Préparer, Campagne, Bibliothèque sans défilement de page | Sonnet | publication E | 23 |
@@ -79,3 +79,9 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 **Tests d'abord.** Tour avancé : Tour suivant revient au combattant attendu ; l'avancé est sauté à sa place ; round suivant dans l'ordre d'initiative ; Annuler rétablit tout ; refus si déjà joué. Charger : présent pour chaque ennemi non engagé avec l'acteur choisi comme cible, sans limite ; mention p. 163 et forçage si l'acteur est engagé ailleurs.
 **Garde données.** `js/core/` change seulement pour cette commande et la lecture de ses champs facultatifs (absents = rien d'avancé) ; aucune migration ; `liaison-carte-messages-golden` vert (le pion actif suit le tour avancé comme le tour normal).
 **Acceptation.** Tests unitaires verts ; parcours de mesure vert avec les étapes « jouer son tour maintenant » et « charger » ; aucun nouveau rouge dans `npm run test:browser-socle`.
+
+**Ajouts du 22/11 après E4b (35ac22c3, notes `refonte-e4b-fin.md` du dossier partagé).**
+- **Arbitrage des séquelles d'un participant absent** : en 3.56.0 il se faisait dans le panneau des suites de combat de l'écran Jouer, retiré par E4b ; Campagne ne les montre qu'en consultation. Le rendre possible dans Campagne (et à la fin du combat s'il y a lieu), avec les mêmes appels au store qu'en 3.56.0 (CA16, CA20). Fichiers en plus : `js/ui/campaign-workspace.js`, `js/ui/v5-aftermath-panel.js`.
+- **Panneau de prière sans défilement** (mesuré 1 257 px pour 495 à l'étape « prière » du parcours) : compacter sans rien retirer. Fichiers en plus : `js/ui/v5-divine-panel.js`, `js/ui/v5-divine-form-model.js` (présentation seulement).
+- **Colonne Résultat avec critique sans défilement** (mesuré 391 px pour 225 à l'étape « dégâts avec critique ») : compacter. Fichiers en plus : `js/ui/resolution-panel/result.js`, `js/ui/resolution-panel/critical.js`.
+- Le parcours de mesure doit rapporter zéro défilement interne pour ces deux panneaux.
