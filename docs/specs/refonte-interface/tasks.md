@@ -168,3 +168,154 @@ Version 2 d'un côté seulement = liaison coupée (« version différente »), s
 3. **Carte** : fusion de `tour-de-jeu-turnreset` dans `main` (le travail en cours de l'autre session restant à part), `pnpm run verify`, push `main`, juste après l'outil.
 4. **Fiches** : depuis `main` de l'outil, `node tools/recopier-donnees-communes.mjs` (la copie de la carte est déjà identique ; celle des fiches prend la version 2, sans effet sur elles), commit et push du dépôt des fiches.
 5. Recharger `gm.html` et l'outil (service workers) : l'indicateur repasse à « connecté ».
+
+## Passe G · Corrections de la recette du MJ (22/11 au soir)
+
+Entrées : retours R1 à R17 et sélecteur de recette (`tmp/recette-refonte/retours-mj.md` du checkout principal, captures dans le même dossier). Base : `claude/refonte-interface-f76af4` après le commit de cette section (correctif IndexedDB 0aa34eb8 compris). Briefs Team : `docs/specs/refonte-interface/briefs-team/` (`<HASH>` = commit de base ; `<REPONSE-Q1>`, `<OPTION-Q2>`, `<REPONSE-Q3>`, `<REPONSE-Q4>`, `<REPONSE-Q5>` = réponses du MJ aux questions de fin de section, à remplacer au lancement). Rien n'est publié avant la recette du MJ et son feu vert.
+
+Demandes d'interface du MJ, valables pour tous les lots G : écrans de tir, de magie et de miracles réduits au nécessaire ; questions précochées à « oui », le MJ met un « non » ; **aucun texte long dans un bouton** (libellé court, texte complet en infobulle ou en aide) ; **un clic ne rouvre jamais l'ancien panneau des circonstances** : seul le bouton « autres… » l'ouvre ; ligne Distance lisible.
+
+### Retour → lot
+
+| Retour | Constat (code à 0aa34eb8) | Lot |
+|---|---|---|
+| R1 · ligne « Action » en double | Puces `[data-action-key]` de la résolution (`resolution-panel.js` ~l. 421) répètent la barre du bas (`plateau.js:50`). | G1 |
+| R2 · « Taille : pièce ou bouclier touché requis » | « Taille » est ici la **qualité d'arme** (Hack, p. 304), pas la Taille de la créature. `struckItemId` n'est jamais rempli (`resolution.js` ~l. 944, `v5-weapon-qualities.js:48`) ; la liste du panneau (`resolution-panel.js` ~l. 1708) propose toutes les pièces et n'est pas reliée à la raison ; « Arbitrer » (`workspace-view.js` `revealDecision` ~l. 3383) ne trouve aucun lien et ne fait rien. | G5 |
+| R3 · Vigilance hors surprise | `combat-aware` proposé à tout porteur du talent (`v5-talent-situations.js:25`, `v5-talent-actions.js:39`), sans lien avec une surprise ; aucun jet de Vigilance à l'initiative (`store.js` ~l. 3199 pose « Surpris » à tout le camp). | G6 |
+| R4 · pas d'attaque gratuite quand un engagé part | Aucun chemin : « Déplacer… » et le glisser (`workspace-view.js` `moveCommand` ~l. 608, `dropOnZone`) modifient l'engagement sans règle. Seule la Fuite donne l'attaque gratuite (p. 163). | G7 |
+| R5 · « Tour suivant » refusé par la fin de tour | **Réglé par 0aa34eb8.** `advanceTurn` (`main.js:353`) → `nextTurn` → `previewV5Turn` ne lisent aucun rappel ; le refus venait de `awaitStore(…, 'Fin du tour')` (`main.js:364`) sur la connexion IndexedDB morte. Le rappel « Fin du tour de … » passe par « À décider » (`reminders.js:94`, `combat-decisions.js:175`). Test de non-régression à ajouter. | G8 |
+| R6 · « Enregistrement local » en échec | **Réglé par 0aa34eb8** (`persistance-connexion-fermee.test.js`). | — |
+| R7 · Recommencer : « corriger les données » en boucle | Même cause d'écriture ; le message de `main.js:875` (« corrigez les données ») est trompeur pour un échec d'enregistrement. | G6 |
+| R8 · PJ hors tour déplaçables (carte) | Bridage au toucher seulement (`tokenHit.js:67`, `bootstrap.js:329`) ; un trajet préparé avant le changement de tour reste validable (`movePlanning.js` `reconcile` ~l. 194, `validate` ~l. 155) ; `selectionStrip.js:132,223` et `gameHelp.js:1909,1939` appellent sans le tour ; `gm.js:1325,1358` accepte un `token.move` des joueurs hors tour. | C2 (carte) |
+| R9 · ennemi non détecté dans la torche d'un PJ | Cause non localisée : les torches de pion entrent dans le champ lumineux (`fogLayer.js` ~l. 126, `light.js` ~l. 89) ; pistes : `emitsLight` absent du pion lié, ligne de vue, ancrage seul pour un grand pion (`tokens.js:334`), masque non republié. À reproduire d'abord. | C3 (carte) |
+| R10 · vision dans le noir « à 1 » | **Côté outil** : `visionDimOf` (`map-link-state.js:93`) ne lit que les Traits (`creature-senses.js` `traitsOf`) ; le talent Vision nocturne d'un PJ (p. 123 ; Nains, Halfelins, Elfes p. 29-35) est ignoré → 1. La carte interprète correctement. | G8 |
+| R11 · « Autres actions » sans effet | `plateau.js:135` → `commands.focus('action')` (`workspace-view.js` ~l. 797) met le focus sur une puce déjà visible ; le menu magie/prière/Test (`resolution-panel.js` ~l. 442-448) reste fermé. | G1 |
+| R12 · « Charger » sans effet | Le clic pose `draft.charging` (`workspace-view.js` ~l. 788, 1846) mais rien ne le montre : la case « Charge donnant Élan » est dans le tiroir « autres… » fermé. | G1 |
+| R13 · « Petit : catégories de Taille explicites requises » | `previewSmall` (`v5-talent-small.js:13,17`) n'a pas de repli sur `creatureSizeOf` ; l'interface affiche la Taille par défaut sans l'envoyer (`workspace-view.js` ~l. 334, 1625). Même motif dans `v5-talent-size.js:15`. | G5 |
+| R14 · esquive contre un tir | Bouton = texte du moteur (`resolution.js:869`) ; la distance en mètres de la carte n'est pas gardée (`resolution-panel.js` ~l. 3329-3345) donc « tireur à moins de BI m » n'est pas calculé ; le clic ouvre le tiroir des circonstances (`resolution-panel.js` ~l. 105-117). | G2 |
+| f4-tirer · écran de tir trop complexe | Voir R14 ; tout ce qui n'est pas déductible ou nécessaire doit passer sous « autres… ». | G2 |
+| g-distance · ligne Distance incomprise | `combat-distance.js`, `compact.js:12-33` : six puces mêlant engagement et bandes, source peu visible, mètres de la carte non affichés. | G2 |
+| R15 · magie trop grande | `v5-magic-controls.js`, `resolution-panel/magic.js` : tous les jets et variantes affichés ; seuls d100, dés `missing` et perte de réserve sont nécessaires (`resolution-panel.js` ~l. 71-82). | G3 |
+| R16 · case vide comme cible de zone | Aucun mode « point d'impact » : les cibles sont toujours des participants ; la carte ne renvoie ni case ni rayon. | G4 (après la réponse du MJ, question Q2) |
+| R17 · miracles : quatre questions par cible | `v5-divine-form-model.js` `targetFactFields` (l. 58-92) : seul `withinRange` est précoché ; « Allié admissible » incompris. | G3 |
+| f5-armure · coiffe de maille seule = « ? » | `displayedArmorLocations` (`workspace/helpers.js` ~l. 99) recalcule sans jet de localisation ; une pièce Partielle (p. 306) rend alors `null` → « ? ». | G5 |
+
+### Réponses de règles (livre de base V5, v3 anglaise, pages imprimées)
+
+- **Esquive contre un tir (R14).** p. 165 : un tir ne s'oppose pas avec une compétence de mêlée ; on peut l'opposer par Esquive si le tireur est à au plus Bonus d'Initiative mètres (yards = mètres), ou à toute portée avec un bouclier de 2 PA ou plus. Tir sur une cible engagée avec le tireur : résolu comme une attaque de mêlée, Capacité de Tir opposée à la Mêlée de la cible (p. 165), sans être un tir dans la mêlée (p. 167). **Sans droit à l'esquive**, le tir n'est pas opposé : c'est un simple Test de Capacité de Tir, réussi = touché, raté = manqué (p. 164, « Roll to Hit »).
+- **Surprise et Vigilance (R3).** p. 161 : l'ordre d'initiative se fixe au début du combat ; « Déterminer la Surprise » est la première étape, avant le début du round, normalement au premier round seulement ; le MJ a le dernier mot ; s'il y a une chance de repérer l'embuscade, **un seul** Test opposé Discrétion/Perception (pire Discrétion des embusqués contre meilleure Perception des adversaires) ; si les embusqués gagnent, chaque adversaire reçoit l'État Surpris. p. 187 : Surpris = ni Action ni Mouvement, pas de défense en Test opposé, +2 DR aux attaques de mêlée contre lui ; perdu en fin de round ou après la première attaque. p. 116 : la **Vigilance** (talent Combat Aware) permet un Test de Perception Challenging (+0 DR) pour éviter Surpris. Donc : la Vigilance ne concerne que les surpris qui ont le talent ; ces jets se font juste après l'initiative, avant le round 1, comme le demande le MJ.
+- **« Taille : pièce ou bouclier touché requis » (R2).** « Taille » est la qualité d'arme Hack (hallebarde) : en cas de touche, une pièce d'armure ou un bouclier touché perd 1 PA avant l'application des Dégâts (p. 304). La localisation se lit en inversant le jet d'attaque (p. 164). Le livre ne dit pas quelle pièce perd le point quand plusieurs se superposent ; le total de PA de la localisation baisse de 1 dans tous les cas, donc les Blessures de la cible ne dépendent pas de ce choix. L'outil peut tout calculer sauf ce choix-là, qu'il précoche.
+- **« Petit : catégories de Taille explicites requises » (R13).** « Petit » est une règle maison approuvée par le MJ (`v5-talent-small.js:1`), pas une règle du livre. L'exigence venait d'une donnée non transmise : les catégories sont connues (Trait, champ `size`, espèce du PJ via `creatureSizeOf`) et l'interface les affiche déjà. Taille des créatures et ses effets : p. 360.
+- **Coiffe de maille (f5-armure).** Partielle : une touche dont le numéro de localisation est pair ignore les PA de la pièce (p. 306) ; Coiffe de mailles : tête, 2 PA, Flexible, Partielle (`reference-snapshot.json`). Sans jet, la valeur affichable est la valeur nominale, conditionnelle.
+- **Quitter une mêlée (R4).** p. 163 : pour quitter une mêlée, se désengager (perdre son Élan, ou réussir le test prévu) ou fuir ; en fuyant, chaque adversaire engagé gagne un Élan qu'il peut perdre pour une attaque de mêlée gratuite, et le fuyard gagne un État Brisé par ennemi engagé. Il n'y a pas d'« attaque d'opportunité » sur un simple déplacement.
+- **Vision nocturne (R10).** Talent p. 123 et Trait p. 360 : vision claire à 20 m dans l'obscurité naturelle et lumière utile prolongée de 20 m ; le contrat de liaison traduit en `visionDim` 10 cases (§4).
+
+### Lots
+
+| Lot | But | Modèle | Après | Retours |
+|---|---|---|---|---|
+| G1 | Barre d'actions : ligne Action sans doublon, « Autres actions » ouvre le menu, « Charger » visible | Sonnet | — · [P] | R1, R11, R12 |
+| G3 | Magie et miracles réduits au nécessaire, tout précoché à oui | **Opus** | — · [P] | R15, R17 |
+| G5 | Taille (Hack), Petit, armure « ? », « Arbitrer » | **Opus** | — · [P] | R2, R13, f5-armure |
+| G6 | Surprise : jets de Vigilance après l'initiative, message d'erreur d'enregistrement | **Opus** | — · [P] | R3, R7 |
+| G7 | Quitter une mêlée : Se désengager, Fuir ou Sans règle | Sonnet | — · [P] | R4 |
+| G8 | Non-régression de « Tour suivant », vision nocturne des PJ envoyée à la carte | Sonnet | — · [P] | R5, R10 |
+| G2 | Tir : esquive calculée, raisons courtes et en ligne, ligne Distance lisible | **Opus** | G1, G5 | R14, f4-tirer, g-distance |
+| G4 | Sorts de zone : point d'impact | **Opus** | G3 et réponse du MJ (Q2) | R16 |
+| C2 | Carte : bridage du tour sur tous les chemins | Sonnet | — · [P] (dépôt de la carte) | R8 |
+| C3 | Carte : ennemi dans la lumière d'un PJ, reproduction d'abord | Sonnet | — · [P] (dépôt de la carte) | R9 |
+| G9 | Recette de la passe G : parcours, suite complète, fiche de table | Sonnet | tous | tous |
+
+**Ordre de lancement.** Vague 1, en parallèle : G1, G3, G5, G6, G7, G8 (outil), C2, C3 (carte). Vague 2 : G2 après la fusion de G1 et G5 ; G4 après G3 et la réponse du MJ à Q2. Vague 3 : G9.
+
+**Partage de fichiers en vague 1.** `js/ui/workspace-view.js` : G1 seulement l'objet `commands` (~l. 785-802) ; G5 seulement `revealDecision` (~l. 3383-3390) et la transmission des Tailles (~l. 334-335, 1625) ; G7 seulement `moveCommand` et `dropOnZone` (~l. 608-621) ; G3, G6, G8 n'y touchent pas. `js/ui/resolution-panel.js` : G1 seulement la ligne Action (~l. 421-448 pour l'ouverture du menu, pas son contenu) et le regroupement (~l. 3378-3398) ; G5 seulement la liste « Taille » (~l. 1708-1719) ; G3 seulement le bloc magie (~l. 71-82) ; personne d'autre en vague 1 (G2 y vient ensuite). `js/main.js` : G6 seulement la saisie et l'application de l'initiative ; personne d'autre. `js/ui/workspace.css` : une section par lot en fin de fichier (« LOT G1 »…). **Parcours navigateur : chaque lot écrit le sien** (`tests/recette-g<N>-browser.mjs`, sur le modèle de `tests/refonte-ecran-browser.mjs`) et ne modifie pas `refonte-ecran-browser.mjs`, qui doit seulement rester vert. `tests/fixtures/store-golden.json` : G6 seul.
+
+**Garde `js/core/`** (règles communes) : vide, sauf G5 (`resolution.js` partie Taille, `v5-talent-small.js`, `v5-talent-size.js`), G6 (`store.js` initialisation du combat, `turn-order.js`, `v5-talent-actions.js`, `v5-talent-situations.js`), G8 (`creature-senses.js` ou `map-link-state.js`). Aucune règle changée : chaque lot ne fait que **déduire** une donnée déjà connue ou appliquer une page citée ci-dessus ; aucune migration ; aucun message de liaison ajouté (sauf G4 si le MJ choisit l'option carte).
+
+### G1 · Barre d'actions et ligne Action
+**Fichiers.** `js/ui/resolution-panel.js` (ligne Action et regroupement), `js/ui/workspace/plateau.js` (lignes `other` et Charger), `js/ui/workspace-view.js` (`commands`), `js/ui/workspace.css` (« LOT G1 »), un test unitaire du modèle de barre (fichier existant de `plateau.js` s'il y en a un, sinon `tests/unit/ui/barre-actions-g1.test.js`), `tests/recette-g1-browser.mjs` (nouveau).
+**Critères.**
+- **G1-a (R1)** La case de résolution ne montre plus aucune puce d'action préparée (`[data-action-key]` hors menu magie) ; « Test… », « Sort, prière, Corruption… » et « Actions du Tour… » restent, faute d'équivalent dans la barre du bas (CA16 : chaque fonction à deux clics au plus).
+- **G1-b (R11)** « Autres actions » ouvre le menu magie, prière et Test (il n'est plus `hidden`) et met le focus sur sa première entrée ; testé au tour d'un PNJ qui ne sait faire que de la magie (fixture R20).
+- **G1-c (R12)** Après « Charger » sur une cible : `draft.charging` vrai, une puce « Charge » active visible hors du tiroir « autres… » dans la résolution, le bouton « Charger » de la barre marqué `aria-pressed="true"` ; un second clic sur la puce ou le bouton retire la charge. CA26 et CA27 restent verts.
+**Acceptation.** Test unitaire ; `timeout 120 node tests/recette-g1-browser.mjs` (rouge sur la base pour G1-a, G1-b, G1-c) ; `timeout 120 node tests/refonte-ecran-browser.mjs` vert.
+
+### G2 · Tir, esquive et ligne Distance (après G1 et G5)
+**Fichiers.** `js/ui/resolution-panel.js` (raisons bloquantes ~l. 83-117, champ « ranged-opposition » ~l. 1870-1890, ligne Distance et requête de la carte ~l. 3329-3345), `js/ui/resolution-panel/compact.js`, `js/ui/resolution-panel/circonstances.js`, `js/ui/combat-distance.js`, `js/ui/workspace.css` (« LOT G2 »), `tests/unit/combat/distance-tir.test.js`, `tests/unit/ui/circonstances-pertinentes.test.js`, un test unitaire neuf `tests/unit/ui/esquive-tir.test.js`, `tests/recette-g2-browser.mjs` (nouveau). `js/core/` intact : la permission se déduit dans l'interface et passe par le champ existant `v5Context.rangedOppositionAllowed`.
+**Critères.**
+- **G2-a (R14, p. 165)** Le droit d'esquiver un tir est calculé : distance de la carte ≤ BI m, ou bouclier de 2 PA ou plus, ou cible engagée avec le tireur (alors Corps à corps opposé, déjà fait). Il s'affiche en puce déduite courte (« Esquive permise : 3 m ≤ BI 4 », « Esquive interdite : 9 m > BI 4 ») forçable d'un clic. Sans droit, la défense par Esquive est grisée avec sa raison courte et le tir se résout comme un Test non opposé (p. 164), sans rien bloquer. Sans distance connue (pas de carte) : puce « Tireur à ≤ BI m ? » précochée selon la réponse du MJ à Q1 (par défaut : oui).
+- **G2-b** La distance en mètres renvoyée par la carte est gardée dans le brouillon (pour G2-a) et affichée sur la ligne Distance.
+- **G2-c** Aucun bouton de la résolution ne porte plus de 40 caractères ; chaque raison bloquante a un libellé court (≤ 60 caractères) et son texte complet en infobulle.
+- **G2-d** Cliquer une raison bloquante n'ouvre jamais le tiroir « autres… » : elle donne le contrôle en ligne (Oui / Non, ou le champ) dans la résolution. Seul le bouton « autres… » ouvre le tiroir.
+- **G2-e (f4-tirer)** Écran de tir avant les jets : cible, ligne Distance, puces déduites, jets, résultat ; rien du tiroir n'est affiché par défaut. Le parcours compte les contrôles visibles à l'étape « tir » avant et après (rapport).
+- **G2-f (g-distance)** La ligne Distance dit en clair ce qui est retenu et d'où (« Courte · 12 m · carte », « Au contact · plateau », « Choisi par le MJ ») ; « Au contact » est séparé visuellement des bandes de portée ; la puce retenue est marquée (`aria-pressed`). CA13 à CA15 restent verts (six cas de `distance-tir.test.js`).
+**Acceptation.** Tests unitaires ; `timeout 120 node tests/recette-g2-browser.mjs` (esquive permise, interdite, sans carte, raison cliquée sans tiroir) ; `refonte-ecran-browser.mjs` vert.
+
+### G3 · Magie et miracles
+**Fichiers.** `js/ui/v5-magic-controls.js`, `js/ui/resolution-panel/magic.js`, `js/ui/resolution-panel.js` (bloc magie ~l. 71-82 seulement), `js/ui/v5-divine-form-model.js`, `js/ui/v5-divine-panel.js`, `js/ui/workspace.css` (« LOT G3 »), `tests/unit/ui/` (test du modèle de formulaire divin existant à étendre, ou neuf), `tests/recette-g3-browser.mjs` (nouveau).
+**Critères.**
+- **G3-a (R15)** Panneau d'un sort : sort, cible(s), jet d100 du lanceur, puis seulement les dés que le moteur réclame (`missing`, incident sur maladresse ou double, perte de réserve) et « Appliquer ». Tout le reste (talents, Haute Magie, dissipation, familier, recommencer, choix du d100, surpuissance…) est dans **un seul** repli « Options » fermé par défaut. Parcours : un PNJ lanceur de la fixture R20 lance un sort jusqu'au résultat appliqué, sans défilement du panneau ni de la page ; nombre de contrôles visibles avant le jet rapporté (avant / après).
+- **G3-b (R17)** Miracles : tous les faits de cible sont précochés à « oui » (portée, faits de scène comme « Regarde le prêtre » ou « Ne vénère pas Myrmidia », allié) ; le MJ décoche. Une ligne par cible, faits en cases compactes, pas quatre questions empilées. « Allié admissible » devient « Allié du prêtre », avec une aide d'une ligne. Test : « Soleil flamboyant » → tous les faits vrais par défaut ; un fait décoché est lu comme « non » comme aujourd'hui.
+- **G3-c** Les prières (qui marchaient) gardent leur résultat : mêmes appels au store, mêmes effets pour les mêmes réponses (CA17).
+**Acceptation.** Tests unitaires ; `timeout 120 node tests/recette-g3-browser.mjs` ; `refonte-ecran-browser.mjs` vert (étapes « sort » et « prière » sans défilement).
+
+### G4 · Sorts de zone : point d'impact (après G3 et la réponse du MJ)
+**Option A (recommandée, outil seul).** Pour un sort dont le contrat a une zone (`hasAoeEffect`, `v5-spell-contracts.js` ~l. 1134), la cible peut être « Point d'impact (case) » au lieu d'un combattant ; le rayon s'affiche en mètres (calculé par le contrat, ex. BFM) ; une liste de tous les combattants actifs permet de cocher ceux qui sont dans la zone (aucun précoché) ; les effets s'appliquent à ceux-là, comme aujourd'hui avec `magicTargetIds`. Le lanceur peut cibler une case vide sans combattant.
+**Option B (carte, deux dépôts).** En plus de A : le MJ clique une case sur la carte, la carte renvoie les pions dans le rayon ; nouveau message de liaison, version 3, contrat amendé et lot jumeau dans la carte, publication conjointe.
+**Fichiers (A).** `js/ui/resolution-panel/magic.js`, `js/ui/v5-magic-controls.js`, `js/ui/workspace.css` (« LOT G4 »), tests unitaires du modèle des cibles, `tests/recette-g4-browser.mjs`.
+**Acceptation (A).** Un sort de zone lancé sur une case vide touche les combattants cochés et eux seuls ; sans aucun coché, il s'applique sans cible et le journal le dit ; un sort sans zone ne propose pas le point d'impact.
+
+### G5 · Taille (Hack), Petit, armure « ? », « Arbitrer »
+**Fichiers.** `js/core/resolution.js` (partie Taille ~l. 940-965), `js/core/v5-talent-small.js`, `js/core/v5-talent-size.js`, `js/ui/resolution-panel.js` (liste « Taille » ~l. 1708-1719 seulement), `js/ui/workspace-view.js` (`revealDecision` et transmission des Tailles), `js/ui/workspace/helpers.js` (`displayedArmorLocations`, `armorSummary`), `tests/unit/combat/qualites-darmes.test.js`, `tests/unit/combat/traits-calculs-petits.test.js` ou un test neuf du talent Petit, un test unitaire de `helpers.js`, `tests/recette-g5-browser.mjs` (nouveau).
+**Critères.**
+- **G5-a (R2, p. 304)** La pièce touchée par une arme à Taille est déduite : une seule pièce comptée sur la localisation → elle ; aucune pièce et défense au bouclier → le bouclier ; ni pièce ni bouclier → rien à abîmer, aucun blocage ; plusieurs pièces → celle de plus fort PA précochée, modifiable dans une liste limitée aux pièces de la localisation (et au bouclier s'il a servi). « Appliquer » n'est plus jamais grisé par la Taille. Les Blessures de la cible sont identiques à celles d'aujourd'hui pour la même pièce saisie à la main.
+- **G5-b** Le libellé dit « Taille (arme) » partout où la qualité est nommée dans l'écran de combat, pour ne plus la confondre avec la Taille de la créature.
+- **G5-c** « Arbitrer » (et tout bouton d'ouverture de la case « À décider ») mène toujours à un contrôle visible : le champ s'il existe, sinon la raison mise en évidence et amenée à l'écran. Test unitaire : chaque type de décision qui « ouvre » quelque chose a une cible.
+- **G5-d (R13)** Petit et Grande taille lisent la catégorie connue (`creatureSizeOf` : Trait, champ `size`, espèce du PJ) quand le MJ n'a rien choisi ; plus de « catégories de Taille explicites requises » dans ce cas. Une Taille seulement supposée (Moyenne par défaut) donne un rappel non bloquant. Mêmes résultats qu'aujourd'hui quand les Tailles sont saisies.
+- **G5-e (f5-armure, p. 306)** Une pièce Partielle seule (coiffe de mailles) affiche sa valeur nominale marquée conditionnelle (« 2* », infobulle « Partielle : ignorée sur une localisation paire ») au lieu de « ? ».
+**Acceptation.** Tests unitaires (rouges d'abord) ; `timeout 120 node tests/recette-g5-browser.mjs` (Vermine de choc à la hallebarde contre un PJ : « Appliquer » actif, pièce précochée) ; `refonte-ecran-browser.mjs` vert.
+
+### G6 · Surprise et Vigilance
+**Fichiers.** `js/core/store.js` (initialisation du combat ~l. 3199-3205 seulement), `js/core/turn-order.js`, `js/core/v5-talent-actions.js`, `js/core/v5-talent-situations.js`, `js/main.js` (saisie et application de l'initiative, y compris le `catch` ~l. 875), `js/ui/messages.js` si besoin, `js/ui/workspace.css` (« LOT G6 »), `tests/fixtures/store-golden.json` (ajouts seulement), tests unitaires (talents ou combat), `tests/recette-g6-browser.mjs` (nouveau).
+**Critères.**
+- **G6-a (R3)** « Vigilance : éviter une Surprise identifiée » n'est plus proposée hors surprise : seulement à un combattant qui porte le talent **et** l'État Surpris.
+- **G6-b (p. 116, 161, 187)** Dans la saisie de l'initiative, dès qu'un camp est déclaré surpris, une colonne « Vigilance » apparaît pour chaque surpris qui a le talent : Test de Perception Challenging (+0 DR), d100 du PJ saisi, PNJ tiré comme ses dés d'initiative ; réussite = pas Surpris ; Surpris n'est posé qu'aux autres, avant le round 1. L'identifiant de la surprise est généré, jamais saisi. Annuler rétablit tout.
+- **G6-c** La déclaration de la surprise est visible en tête de la saisie (« Surprise : aucune / camp … surpris »).
+- **G6-d (R7)** Un échec d'enregistrement à l'application de l'initiative dit « Enregistrement local impossible, réessayez » (message de persistance) et non « corrigez les données » ; une vraie erreur de données garde son message.
+- Hors périmètre (le MJ déclare la surprise) : le Test opposé Discrétion/Perception de la p. 161 n'est pas automatisé.
+**Acceptation.** Tests unitaires (rouges d'abord) ; `store-golden` régénéré, ajouts seulement (diff au rapport) ; `timeout 120 node tests/recette-g6-browser.mjs` (camp surpris, un PJ avec Vigilance réussit et n'est pas Surpris, un autre l'est) ; `refonte-ecran-browser.mjs` vert.
+
+### G7 · Quitter une mêlée
+**Fichiers.** `js/ui/workspace-view.js` (`moveCommand`, `dropOnZone`), `js/ui/combat-decisions.js` (seulement si un type de décision doit être déclaré ; API `publishDecision` et `withdrawDecision` existantes), `js/ui/workspace.css` (« LOT G7 »), `tests/unit/ui/combat-decisions.test.js` ou un test neuf, `tests/recette-g7-browser.mjs` (nouveau).
+**Critères.**
+- **G7-a (R4, p. 163)** Quand le MJ fait quitter une mêlée à un combattant engagé (« Déplacer… » → Libre, engagement avec un autre, ou glisser vers une autre zone), une décision naît dans « À décider » : « X quitte la mêlée de Y » avec « Se désengager » (formulaire existant), « Fuir » (`applyFlee` existant : attaque gratuite de chaque adversaire engagé, Brisé) et « Sans règle ». Le déplacement déjà fait n'est pas refait ; « Sans règle » ne change rien.
+- **G7-b** Un déplacement qui ne quitte aucune mêlée ne crée rien ; la décision se retire si le combattant est réengagé avec les mêmes adversaires ou retiré du combat ; elle ne bloque pas « Tour suivant » (CA9).
+**Acceptation.** Tests unitaires ; `timeout 120 node tests/recette-g7-browser.mjs` (PNJ engagé avec un PJ, Libre → décision → Fuir → attaque gratuite proposée au PJ) ; `refonte-ecran-browser.mjs` vert.
+
+### G8 · « Tour suivant » et vision nocturne
+**Fichiers.** `tests/unit/combat/tour-suivant-rappel.test.js` (nouveau), `js/core/creature-senses.js` ou `js/core/map-link-state.js` (lecture des talents), `tests/unit/combat/liaison-carte-*.test.*` concerné (nouveau test ou extension), référence de `liaison-carte-messages-golden` seulement si sa fixture contient un PJ concerné (ajouts seulement, diff au rapport).
+**Critères.**
+- **G8-a (R5)** Test de non-régression : un rappel de fin de tour en attente ne bloque pas `nextTurn` (statut appliqué). Il doit passer sur la base : le dire au rapport.
+- **G8-b (R10, p. 123, 360)** Un PJ dont la fiche ou le participant porte le talent Vision nocturne part vers la carte avec `visionDim: 10` ; Vision dans le noir (Infravision) : 20 ; rien : 1. Les Traits des PNJ donnent les mêmes valeurs qu'aujourd'hui. Le talent est lu là où les talents du PJ sont déjà lus par le moteur (`hasV5Talent` ou équivalent), pas par une liste d'espèces inventée.
+**Acceptation.** `node --test` des fichiers touchés et de `liaison-carte-messages-golden.test.mjs`, `liaison-carte-protocole.test.mjs` verts.
+
+### C2 · Carte : bridage du tour partout (dépôt `E:/rpg-map-display`)
+**Fichiers.** `js/app/movePlanning.js`, `js/ui/player/selectionStrip.js`, `js/ui/player/gameHelp.js`, `js/app/gm.js` (réception des `token.move` des joueurs), `tests/tourDeJeu.spec.mjs` (ou le test unitaire du bridage), `docs/ETAT.md`.
+**Critères.** (1) Un trajet préparé pour un PJ lié n'est plus validable après un `mj.turn` qui donne le tour à un autre (le plan est invalidé). (2) Bandeau de sélection et aide passent le tour au calcul de « manipulable ». (3) L'écran MJ refuse un `token.move` des joueurs pour un PJ lié hors de son tour. (4) Inchangés : PJ non lié jamais bridé ; le MJ déplace librement ; `ref: null` = tout libre (décision du MJ du 22/11). Chaque effet est muté pour voir le rouge. Aucun message de liaison changé.
+**Acceptation.** `PW_PORT=4180 pnpm run verify` vert ; commit local sur sa branche.
+
+### C3 · Carte : ennemi dans la lumière d'un PJ (dépôt `E:/rpg-map-display`)
+**Approche.** Reproduction d'abord (règle du MJ : pas de correctif sans reproduction). Un test par piste, dans `tests/lights.spec.mjs` ou `tests/fogLayer.test.mjs` : PJ lié avec torche (posée par le panneau MJ, puis par la voie que le MJ indiquera, question Q4), ennemi qui finit son mouvement dans la lumière et en ligne de vue → pion visible des joueurs. Pistes : `emitsLight` absent du pion lié ; ligne de vue ; ancrage seul d'un grand pion (`tokens.js:334`) ; masque non republié après le mouvement de l'ennemi ; ennemi caché.
+**Critères.** Si une piste reproduit : correctif de la cause, test vert, mutation rouge. Si aucune ne reproduit : rien n'est modifié dans le code, le rapport liste les scénarios essayés et ce qu'il faut demander au MJ.
+**Acceptation.** `PW_PORT=4180 pnpm run verify` vert.
+
+### G9 · Recette de la passe G
+**À livrer.** Toutes les branches G fusionnées : `tests/recette-g*-browser.mjs` et `refonte-ecran-browser.mjs` verts, `npm run test:browser-socle` sans nouveau rouge, suite unitaire complète (deux commandes de `CLAUDE.md`), `fiche-de-table.md` complétée d'une section « Passe G » (un geste par retour, R1 à R17, à refaire à la table), notes de version (brouillon). Ni version ni publication.
+
+### Questions au MJ
+- **Q1 (R14)** Sans carte, la distance du tireur est inconnue : précocher « tireur à portée d'esquive » à oui (recommandé, comme « tout précoché ») ou à non ?
+- **Q2 (R16)** Sort de zone : option A, point d'impact dans l'outil et cases à cocher pour les touchés (recommandé, outil seul) ; ou option B, clic sur une case de la carte qui renvoie les pions dans le rayon (nouveau message, version 3, les deux dépôts) ?
+- **Q3 (R4)** Choix par défaut, à infirmer : quitter une mêlée par un déplacement du MJ crée une décision « Se désengager / Fuir / Sans règle » (p. 163), sans attaque d'opportunité hors Fuite.
+- **Q4 (R9)** Comment la torche du PJ était-elle posée (panneau de la carte, autre) ? Quelle taille avait l'ennemi ? Le niveau était-il dans le noir ?
+- **Q5 (R8)** Les PJ hors tour bougeaient-ils sur la tablette ou sur la vue des joueurs, pendant le tour d'un PJ ou d'un ennemi non posé sur la carte (« personne », laissé libre par décision du 22/11) ?
+- Choix par défaut, à infirmer : Taille (arme) sur plusieurs pièces superposées → celle de plus fort PA précochée (le livre ne tranche pas).
