@@ -785,3 +785,91 @@
 .campaign-conflict-choices { display: flex; flex-wrap: wrap; gap: 8px; }
 .workspace-aftermath-external { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-end; }
 .workspace-aftermath-external[hidden] { display: none; }
+
+/* ===== LOT F2 · Campagne sans défilement (refonte, CA23) =====
+   À partir de 1000 px de large, quand Campagne est affiché : la fenêtre est découpée (barre du haut, espace de travail) et
+   l'espace est une grille fixe : temps · à traiter · (liste | détail) · opérations d'ensemble. Seules défilent, dans leur case :
+   la liste des suivis, la liste des décisions à traiter, le pli ouvert du détail et les opérations d'ensemble dépliées. */
+.campaign-workspace { --cw-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, sans-serif; }
+.campaign-fold-toggle { display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%; padding: 8px 10px; text-align: left; font-weight: 700; font-size: 13.5px; color: var(--cw-ink); background: var(--cw-wash); border: 1px solid var(--cw-line); }
+.campaign-fold-toggle:hover { background: var(--cw-card); border-color: var(--cw-red-border); }
+.campaign-fold { margin-top: 8px; }
+.campaign-fold-body { padding: 8px 2px 2px; }
+.campaign-fold-body[hidden] { display: none; }
+.campaign-fold-body .campaign-detail-followups,
+.campaign-fold-body .campaign-decisions { border-top: 0; padding-top: 0; margin-top: 0; }
+.campaign-fold-body .campaign-decisions { margin-bottom: 12px; }
+.campaign-detail > .campaign-help { margin-top: 8px; }
+
+@media (min-width: 1000px) {
+  body:has(#panel-workspace.is-active #workspace-campaign:not([hidden])) { height: 100dvh; overflow: hidden; }
+  body:has(#panel-workspace.is-active #workspace-campaign:not([hidden])) #app-content { height: 100%; display: flex !important; flex-direction: column; } /* !important : le script pose display:block en ligne */
+  body:has(#panel-workspace.is-active #workspace-campaign:not([hidden])) .topbar { flex: none; }
+  body:has(#panel-workspace.is-active #workspace-campaign:not([hidden])) main.wrap { flex: 1 1 0; min-height: 0; padding: 0; }
+  body:has(#panel-workspace.is-active #workspace-campaign:not([hidden])) #panel-workspace { height: 100%; margin: 0; }
+  body:has(#panel-workspace.is-active #workspace-campaign:not([hidden])) #workspace-root { height: 100%; }
+  body:has(#panel-workspace.is-active #workspace-campaign:not([hidden])) .workspace-view { height: 100%; margin: 0; padding-block: 0; grid-template-rows: minmax(0, 1fr); }
+  #workspace-campaign:not([hidden]) { height: 100%; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+
+  #workspace-campaign .campaign-workspace {
+    height: 100%; min-height: 0; overflow: hidden; padding: 8px clamp(12px, 1.6vw, 24px);
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  #workspace-campaign .campaign-workspace > * { flex: none; }
+  #workspace-campaign .campaign-workspace > .campaign-layout { flex: 1 1 0; }
+  #workspace-campaign .campaign-workspace > .campaign-conflict { margin: 0; }
+
+  /* Temps : titre et horloge sur une ligne. */
+  #workspace-campaign .campaign-topbar { display: flex; align-items: center; gap: 16px; min-width: 0; }
+  #workspace-campaign .campaign-topbar .campaign-heading { margin: 0; flex: none; }
+  #workspace-campaign .campaign-topbar .campaign-heading h2 { margin: 0; font-size: 22px; }
+  #workspace-campaign .campaign-topbar .campaign-clock { flex: 1 1 auto; min-width: 0; padding: 6px 14px; gap: 12px; border-top-width: 2px; box-shadow: none; }
+  #workspace-campaign .campaign-topbar .campaign-clock-info { min-width: 0; gap: 10px; }
+  #workspace-campaign .campaign-topbar .campaign-clock-icon { font-size: 22px; }
+  #workspace-campaign .campaign-topbar .campaign-clock-info > div { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; }
+  #workspace-campaign .campaign-topbar .campaign-clock-value { display: inline; margin: 0; font-size: 18px; }
+  #workspace-campaign .campaign-topbar .campaign-clock p { max-width: none; margin: 0; }
+  #workspace-campaign .campaign-topbar .campaign-primary { padding: 6px 14px; white-space: nowrap; }
+
+  /* À traiter : une ligne de pastilles ; une liste longue défile dans sa case. */
+  #workspace-campaign .campaign-tasks { margin: 0; display: flex; align-items: flex-start; gap: 4px 12px; max-height: 64px; overflow-y: auto; min-width: 0; }
+  #workspace-campaign .campaign-tasks .campaign-kicker { flex: none; padding-top: 6px; }
+  #workspace-campaign .campaign-tasks h3 { display: none; }
+  #workspace-campaign .campaign-tasks > p { margin: 0; padding-top: 4px; font-size: 13px; }
+  #workspace-campaign .campaign-task-list { flex: 1 1 auto; gap: 6px; min-width: 0; }
+  #workspace-campaign .campaign-task { flex: 0 1 auto; }
+  #workspace-campaign .campaign-task-button { display: flex; align-items: baseline; gap: 8px; padding: 4px 10px; height: auto; }
+  #workspace-campaign .campaign-task-button strong { font-size: 13px; }
+  #workspace-campaign .campaign-task-button span { font-size: 12px; }
+
+  /* Corps : la liste à gauche, le détail à droite. */
+  #workspace-campaign .campaign-layout { margin: 0; min-height: 0; grid-template-columns: minmax(0, 1fr) minmax(380px, 0.9fr); grid-template-rows: minmax(0, 1fr) auto; gap: 8px 16px; align-items: stretch; }
+  #workspace-campaign .campaign-layout > .campaign-group, .campaign-layout > .campaign-detail { grid-row: 1; }
+  #workspace-campaign .campaign-group { display: flex; flex-direction: column; min-height: 0; gap: 6px; }
+  #workspace-campaign .campaign-group .campaign-section-heading { margin: 0; }
+  #workspace-campaign .campaign-group .campaign-section-heading h3 { font-size: 17px; }
+  #workspace-campaign .campaign-filters { margin: 0; }
+  #workspace-campaign .campaign-person-list { flex: 1 1 0; min-height: 0; overflow-y: auto; }
+  #workspace-campaign .campaign-legend { flex: none; font-size: 12px; }
+
+  #workspace-campaign .campaign-detail { display: flex; flex-direction: column; min-height: 0; overflow: hidden; padding: 10px 14px; }
+  #workspace-campaign .campaign-detail-top { flex: none; }
+  #workspace-campaign .campaign-detail .campaign-profile { margin: 4px 0 6px; }
+  #workspace-campaign .campaign-detail .campaign-avatar.large { width: 40px; height: 40px; }
+  #workspace-campaign .campaign-detail-title { font-size: 18px; }
+  #workspace-campaign .campaign-detail > .campaign-notice, .campaign-detail > .campaign-help, .campaign-detail > .workspace-aftermath-status { flex: none; margin-top: 6px; }
+  #workspace-campaign .campaign-folds { display: flex; flex-direction: column; flex: 1 1 0; min-height: 0; margin-top: 6px; }
+  #workspace-campaign .campaign-fold { flex: none; margin-top: 6px; }
+  #workspace-campaign .campaign-fold.is-open { flex: 1 1 0; min-height: 0; display: flex; flex-direction: column; }
+  #workspace-campaign .campaign-fold.is-open > .campaign-fold-body { flex: 1 1 0; min-height: 0; overflow-y: auto; }
+
+  /* Opérations d'ensemble : repliées en une ligne ; dépliées, elles défilent dans leur case (au plus 45 % de la hauteur). */
+  #workspace-campaign .campaign-global-section { margin: 0; padding: 0; border-top: 0; min-width: 0; }
+  /* Dépliées, elles passent en troisième colonne (la liste et le détail restent utilisables) et défilent dans leur case. */
+  #workspace-campaign .campaign-layout > .campaign-global-section { grid-column: 1 / -1; grid-row: 2; }
+  #workspace-campaign .campaign-layout:has(> .campaign-global-section.is-open) { grid-template-columns: minmax(460px, 0.9fr) minmax(360px, 0.85fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); }
+  #workspace-campaign .campaign-layout > .campaign-global-section.is-open { grid-column: 3; grid-row: 1; overflow-y: auto; min-height: 0; }
+  #workspace-campaign .campaign-global-details { padding: 6px 12px; }
+  #workspace-campaign .campaign-global-details > summary { font-size: 14px; }
+  #workspace-campaign .campaign-context { margin: 10px 0 0; padding: 8px 0 0; }
+}

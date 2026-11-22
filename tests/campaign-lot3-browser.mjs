@@ -428,7 +428,7 @@ try {
 
   // Cohérence de l'interface pour un absent :
   // Le bloc d'actions est intitulé 'Archivage du suivi' (et NON 'Soins et décisions disponibles')
-  await expect(detail.locator('.campaign-detail-actions-box > h4')).toHaveText('Archivage du suivi');
+  await expect(detail.locator('.campaign-detail-actions-box > [data-campaign-fold-toggle]')).toContainText('Archivage du suivi');
   // Aucun formulaire de soin de blessure n'est proposé dans le bloc d'archivage de l'absent (ses maladies ont leur bloc : refonte E7b, plus bas)
   await expect(detail.locator('.campaign-detail-actions-box input[name*="disease"]')).toHaveCount(0);
   await expect(detail.getByRole('button', { name: 'Enregistrer le Test de soin' })).toHaveCount(0);
@@ -462,8 +462,10 @@ try {
 
   // Refonte E2b (CA16, CA20) : l'arbitrage des séquelles d'un participant absent, que permettait le panneau « Suites de
   // combat » de Jouer en 3.56.0 (mêmes contrôles, mêmes appels au Store), se fait dans le détail Campagne de l'absent.
+  // Refonte F2 : le détail est un accordéon ; un pli s'ouvre par son en-tête.
   const absentSequelae = detail.locator('.campaign-detail-sequelae-box');
-  await expect(absentSequelae.locator(':scope > h4')).toHaveText('Arbitrage des séquelles');
+  await expect(absentSequelae.locator(':scope > [data-campaign-fold-toggle]')).toContainText('Arbitrage des séquelles');
+  await absentSequelae.locator(':scope > [data-campaign-fold-toggle]').click();
   const detailGhostSequela = absentSequelae.locator('.workspace-aftermath-sequela', { hasText: 'Fracture spectrale' });
   await expect(detailGhostSequela).toBeVisible();
   await expect(detailGhostSequela).not.toContainText('consultation seule');
@@ -472,9 +474,10 @@ try {
   // Refonte E7b (CA16, CA20) : les maladies d'un participant absent se gèrent dans Campagne, sous l'arbitrage de ses séquelles,
   // avec les mêmes contrôles et les mêmes appels au Store qu'en 3.56.0 (`allowAbsentActions`).
   const absentDiseases = detail.locator('.campaign-detail-diseases-box');
-  await expect(absentDiseases.locator(':scope > h4')).toHaveText('Maladies de l’absent');
+  await expect(absentDiseases.locator(':scope > [data-campaign-fold-toggle]')).toContainText('Maladies de l’absent');
+  await absentDiseases.locator(':scope > [data-campaign-fold-toggle]').click();
   const diseasesOrder = await detail.evaluate(el => {
-    const boxes = [...el.querySelectorAll('.campaign-detail-sequelae-box, .campaign-detail-diseases-box')].map(box => box.className);
+    const boxes = [...el.querySelectorAll('.campaign-detail-sequelae-box, .campaign-detail-diseases-box')].map(box => [...box.classList].find(name => name.startsWith('campaign-detail-')));
     return boxes;
   });
   assert.deepEqual(diseasesOrder, ['campaign-detail-sequelae-box', 'campaign-detail-diseases-box'], 'les maladies viennent sous l’arbitrage des séquelles');
