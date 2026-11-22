@@ -19,6 +19,38 @@ function tagMiscastDie(input, key, incident) {
   input.dataset.npcRollKey = key; input.dataset.npcRollOwner = 'actor';
   input.dataset.npcRollField = incident.missingSecondaryDiceKinds?.[die] || 'd10';
 }
+// Passe G, G3-a (R15) : dés de l'incantation affichés hors du repli « Options », et seulement quand le moteur les réclame.
+const REQUESTED_DICE = Object.freeze({
+  magicMiscastRoll: ['Jet d’incident si double / maladresse (1d100)', 100],
+  magicMajorRoll: ['Jet Majeur d’incident si cascade (1d100)', 100],
+  magicSecondaryDurationRoll: ['Dé secondaire : Durée / États (1d10 ou 2d10)', 20],
+  magicSecondaryDamageRoll: ['Dé secondaire : Dégâts / Perte (1d10)', 10],
+  magicSecondaryDistanceRoll: ['Dé secondaire : Distance (1d10 ou 1d100)', 100]
+});
+/**
+ * Champs du brouillon que l'incantation réclame maintenant : jet d'incident sur un double ou une maladresse (V5 p. 237),
+ * jet Majeur et dés secondaires que l'incident déclare manquants (`missing`, `missingSecondaryDice`), membre gelé demandé ;
+ * un dé déjà saisi reste en vue. Le reste des réglages du sort est dans le repli « Options ».
+ */
+export function requestedMagicDice(draft = {}) {
+  const pv = draft.preview, incident = pv?.castPreview?.miscast || pv?.miscast;
+  const missing = [pv?.missing, pv?.castPreview?.missing, pv?.spellPreview?.missing].flat().filter(Boolean);
+  const roll = Number(draft.attackRoll), keys = new Set();
+  if ((roll > 0 && roll % 11 === 0) || roll === 100 || incident || missing.includes('miscastRoll') || draft.magicMiscastRoll != null) keys.add('magicMiscastRoll');
+  if (missing.includes('majorRoll') || incident?.missingSecondaryDice?.includes('majorRoll') || draft.magicMajorRoll != null) keys.add('magicMajorRoll');
+  for (const die of incident?.missingSecondaryDice || []) if (MISCAST_DIE_FIELDS[die]) keys.add(MISCAST_DIE_FIELDS[die]);
+  for (const key of ['magicSecondaryDurationRoll', 'magicSecondaryDamageRoll', 'magicSecondaryDistanceRoll']) if (draft[key] != null) keys.add(key);
+  if (incident?.missingSecondaryDice?.includes('location') || draft.magicSecondaryLocation) keys.add('magicSecondaryLocation');
+  return [...keys];
+}
+const FROZEN_LIMBS = [['', '— Membre gelé (si incident) —'], ['Bras principal', 'Bras principal'], ['Bras secondaire', 'Bras secondaire'], ['Jambe gauche', 'Jambe gauche'], ['Jambe droite', 'Jambe droite']];
+/** Un ancien repli devient un groupe à plat dans « Options » (un seul repli), titre gardé en tête. */
+function flatGroup(title, ...children) {
+  const group = node('div', 'workspace-magic-options-group');
+  group.append(node('p', 'workspace-res-label workspace-magic-options-title', title), ...children.filter(Boolean));
+  return group;
+}
+
 export function missingMagicDice(preview) {
   if (!preview) return false;
   return [preview.missing, preview.spellPreview?.missing, preview.castPreview?.missing, preview.castPreview?.miscast?.missingSecondaryDice, preview.miscast?.missingSecondaryDice]
@@ -72,9 +104,12 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     handlers.select({ magicConditionContext: next });
     handlers.calculate?.();
   }, { focusKey: 'magic-pre-roll-talent', status: castingTalentStatus }) : null;
-  if (obstinate) v5.appendChild(obstinate);
+  // G3-a (R15) : pour un sort, tout ce qui n'est ni le sort, ni sa cible, ni un dé réclamé va dans un seul repli « Options ».
+  const optionsBox = type === 'cast' ? node('div', 'workspace-v5-context workspace-magic-options-body') : null;
+  const requestedBox = type === 'cast' ? node('div', 'workspace-magic-requested') : null;
+  if (obstinate) (optionsBox || v5).appendChild(obstinate);
 
-  const selectField = (key, labelText, options, currentVal) => {
+  const selectField = (key, labelText, options, currentVal, container = v5) => {
     const label = node('label', 'workspace-type', labelText);
     const select = document.createElement('select');
     select.setAttribute('aria-label', labelText);
@@ -83,11 +118,11 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     select.value = currentVal;
     select.addEventListener('change', () => handlers.select({ [key]: select.value }));
     label.appendChild(select);
-    v5.appendChild(label);
+    container.appendChild(label);
     return select;
   };
 
-  const numberField = (key, labelText, value, min = null, max = null) => {
+  const numberField = (key, labelText, value, min = null, max = null, container = v5) => {
     const label = node('label', 'workspace-type', labelText);
     const input = document.createElement('input');
     input.type = 'number';
@@ -115,12 +150,13 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       });
       label.appendChild(roll);
     }
-    v5.appendChild(label);
+    container.appendChild(label);
     return input;
   };
 
   const magicTargetIds = type === 'cast' ? magicTargetIdsOf(draft, getSpellContract(defaultMagicSpellId(draft, actor)), actor, target, participants) : [];
-  v5.appendChild(renderMagicControls({actor,participants,type,draft,handlers,targetIds:magicTargetIds,getObstinateStatus}));
+  const controls = renderMagicControls({actor,participants,type,draft,handlers,targetIds:magicTargetIds,getObstinateStatus,flat:type==='cast',requestedBox});
+  (optionsBox || v5).appendChild(controls);
   if (type === 'dispel') return v5;
   if (type === 'channelling') {
     v5.prepend(rubric('Focalisation V5'));
@@ -156,7 +192,8 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     selectField('magicSecondaryLocation', 'Membre gelé (incident)', [['', '— Membre gelé (si incident) —'], ['Bras principal', 'Bras principal'], ['Bras secondaire', 'Bras secondaire'], ['Jambe gauche', 'Jambe gauche'], ['Jambe droite', 'Jambe droite']], draft.magicSecondaryLocation || '');
     }
   } else if (type === 'cast') {
-    v5.prepend(rubric('Incantation & Contrat de sort V5'));
+    // G3-a : le tiroir est déjà titré « Magie » ; une réserve vide n'est qu'une information, rangée dans « Options ».
+    if (!reserve.sl) optionsBox.prepend(reserveLine);
     // Liste du lanceur seule quand il en a une ; « Tous les sorts » rouvre le catalogue (magic-lists.js).
     const choices = spellChoices(actor, { showAll: draft.magicShowAllSpells === true });
     const actorSpells = choices.own.map(s => ({ id: s.id, label: `${s.name} (NI ${s.cn})` }));
@@ -185,6 +222,9 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     spellSelect.addEventListener('change', () => handlers.select({ magicSpellId: spellSelect.value }));
     spellLabel.appendChild(spellSelect);
     v5.appendChild(spellLabel);
+    // G3-a (R15) : le sort affiché est celui que le calcul lance. Sans choix du MJ, le calcul prenait son propre défaut
+    // (premier contrat du catalogue) alors que la liste en montrait un autre : le défaut affiché est retenu dans le brouillon.
+    if (!draft.magicSpellId && defaultSpellId) draft.magicSpellId = defaultSpellId;
     if (choices.hasList) {
       const allLabel = node('label', 'workspace-type workspace-magic-all-spells'), allBox = document.createElement('input');
       allBox.type = 'checkbox';
@@ -192,12 +232,12 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       allBox.dataset.focusKey = 'magic-all-spells';
       allBox.addEventListener('change', () => handlers.select({ magicShowAllSpells: allBox.checked }));
       allLabel.append(allBox, ' Tous les sorts (hors de la liste de ' + actor.name + ')');
-      v5.appendChild(allLabel);
+      optionsBox.appendChild(allLabel);
     }
 
     const contract = getSpellContract(defaultSpellId);
-    const recipientControls = contract && renderSpellRecipientControls({ actor, participants, contract, draft, handlers, targetIds: magicTargetIds, target, getObstinateStatus });
-    if (recipientControls) v5.appendChild(recipientControls);
+    const recipientControls = contract && renderSpellRecipientControls({ actor, participants, contract, draft, handlers, targetIds: magicTargetIds, target, getObstinateStatus, flat: true });
+    if (recipientControls) optionsBox.appendChild(recipientControls);
     if (contract) {
       const summary = node('p', 'workspace-muted workspace-magic-contract-summary',
         `${contract.name} (${contract.canonicalName || contract.domain}) · NI ${contract.cn} · Portée : ${contract.range} · Cible : ${contract.target} · Durée : ${contract.duration}`);
@@ -217,14 +257,19 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       mjChoiceSelect.dataset.action = 'set-magic-mj-choice';
     }
 
-    numberField('v5SlModifier', 'Modificateur V5 (DR)', draft.v5SlModifier ?? 0);
+    // Dés réclamés par le moteur (incident sur double ou maladresse, jet Majeur, dés secondaires, membre gelé) : en vue.
+    const requested = requestedMagicDice(draft);
+    for (const [key, [labelText, max]] of Object.entries(REQUESTED_DICE)) if (requested.includes(key)) numberField(key, labelText, draft[key] ?? '', 1, max, requestedBox);
+    if (requested.includes('magicSecondaryLocation')) selectField('magicSecondaryLocation', 'Membre gelé (incident)', FROZEN_LIMBS, draft.magicSecondaryLocation || '', requestedBox);
+    if (requestedBox.childElementCount) v5.appendChild(requestedBox);
+
+    numberField('v5SlModifier', 'Modificateur V5 (DR)', draft.v5SlModifier ?? 0, null, null, optionsBox);
     selectField('magicCriticalChoice', 'Effet critique d’incantation', [
       ['', 'Aucun / Non applicable'],
       ['critical-wound', 'Blessure Critique'],
       ['total-power', 'Puissance totale (+dizaines DR)'],
       ['unstoppable-force', 'Force irrésistible (non dissipable)']
-    ], draft.magicCriticalChoice || '');
-    if(Number(draft.attackRoll)%11===0 && Number(draft.attackRoll)>0 || Number(draft.attackRoll)===100 || draft.preview?.castPreview?.miscast || draft.magicMiscastRoll!=null)numberField('magicMiscastRoll', 'Jet d’incident si double / maladresse (1d100)', draft.magicMiscastRoll ?? '', 1, 100);
+    ], draft.magicCriticalChoice || '', optionsBox);
 
     // Options propres au sort (une seule rubrique, uniquement pour le sort concerné) ; la surpuissance générique reste dans le bloc suivant.
     const specificBox = node('div', 'workspace-v5-context');
@@ -304,34 +349,8 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       addNum(specificBox, 'magicVortexDistance', 'Distance du Vortex (2d10 m)', 2, 20);
     }
     if (isArcane) specificBox.appendChild(renderArcaneFields(draft, actor, target, participants, handlers, getObstinateStatus));
-    if (specificBox.childElementCount) {
-      const specificDetails = node('details', 'workspace-v5-context-details');
-      specificDetails.open = draft.magicOptionsOpen ?? true;
-      const specificSummary = node('summary', '', `Options du sort : ${contract?.name || 'sort choisi'}`);
-      specificSummary.addEventListener('click', () => handlers.input('magicOptionsOpen', !specificDetails.open));
-      specificDetails.append(specificSummary, specificBox);
-      v5.appendChild(specificDetails);
-    }
+    if (specificBox.childElementCount) optionsBox.appendChild(flatGroup(`Options du sort : ${contract?.name || 'sort choisi'}`, specificBox));
 
-    const overcastDetails = node('details', 'workspace-v5-context-details');
-    if (
-      draft.magicOvercastDamage != null ||
-      draft.magicOvercastTargets != null ||
-      draft.magicOvercastRange != null ||
-      draft.magicOvercastDuration != null ||
-      draft.magicOvercastAoe != null ||
-      draft.magicDurationAmount != null ||
-      draft.magicResistanceRoll != null ||
-      draft.magicMajorRoll != null ||
-      draft.magicSecondaryDurationRoll != null ||
-      draft.magicSecondaryDamageRoll != null ||
-      draft.magicSecondaryDistanceRoll != null ||
-      draft.magicNoOtherTargets ||
-      missingMagicDice(draft.preview)
-    ) {
-      overcastDetails.open = true;
-    }
-    overcastDetails.appendChild(node('summary', '', 'Surpuissance & Paramètres du sort'));
     const overcastBox = node('div', 'workspace-v5-context');
     const addOvercastNum = (key, lbl, min = 0, max = 100) => addNum(overcastBox, key, lbl, min, max);
     const overcastAllowed=contract?.overcast?.allowed!==false && !contract?.isPetty;
@@ -367,31 +386,16 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     }
     addCheck(overcastBox, 'magicUnmemorized', 'Sort lancé depuis un grimoire sans être mémorisé (surpuissance interdite)');
     if(missingMagicDice(draft.preview) || draft.preview?.castPreview?.miscast || draft.preview?.miscast){
-    addOvercastNum('magicMajorRoll', 'Jet Majeur d’incident si cascade (1d100)', 1, 100);
-    addOvercastNum('magicSecondaryDurationRoll', 'Dé secondaire : Durée / États (1d10 ou 2d10)', 1, 20);
-    addOvercastNum('magicSecondaryDamageRoll', 'Dé secondaire : Dégâts / Perte (1d10)', 1, 10);
-    addOvercastNum('magicSecondaryDistanceRoll', 'Dé secondaire : Distance (1d10 ou 1d100)', 1, 100);
-    const limbLabel = node('label', 'workspace-type', 'Membre gelé (incident)');
-    const limbSelect = document.createElement('select');
-    limbSelect.setAttribute('aria-label', 'Membre gelé (incident)');
-    limbSelect.dataset.focusKey = 'magicSecondaryLocation';
-    for (const [val, txt] of [['', '— Membre gelé (si incident) —'], ['Bras principal', 'Bras principal'], ['Bras secondaire', 'Bras secondaire'], ['Jambe gauche', 'Jambe gauche'], ['Jambe droite', 'Jambe droite']]) limbSelect.appendChild(new Option(txt, val));
-    limbSelect.value = draft.magicSecondaryLocation || '';
-    limbSelect.addEventListener('change', () => handlers.select({ magicSecondaryLocation: limbSelect.value }));
-    limbLabel.appendChild(limbSelect);
-    overcastBox.appendChild(limbLabel);
+    // Dés d'incident non réclamés : restent saisissables dans « Options » ; les réclamés sont en vue, sans doublon.
+    for (const [key, [labelText, max]] of Object.entries(REQUESTED_DICE)) if (key !== 'magicMiscastRoll' && !requested.includes(key)) addOvercastNum(key, labelText, 1, max);
+    if (!requested.includes('magicSecondaryLocation')) selectField('magicSecondaryLocation', 'Membre gelé (incident)', FROZEN_LIMBS, draft.magicSecondaryLocation || '', overcastBox);
     // Contre-réaction aéthyrique (Majeur 96+, Livre de base p. 239) : le lanceur n'est jamais sa propre cible.
     addCheck(overcastBox, 'magicNoOtherTargets', 'Aucune autre cible à portée (Contre-réaction 96+ : la tête du lanceur explose)');
     }
-    overcastDetails.appendChild(overcastBox);
-    v5.appendChild(overcastDetails);
+    optionsBox.appendChild(flatGroup('Surpuissance & Paramètres du sort', overcastBox));
 
     if (participants.length >= 1) {
-      const multiBox = node('details', 'workspace-v5-context-details');
-      multiBox.open = draft.magicTargetsOpen ?? Boolean(draft.magicTargetIds?.length > 1);
-      const targetSummary=node('summary', '', `Cibles multiples (Contrat : ${contract?.target || '1'})`);
-      targetSummary.addEventListener('click',()=>handlers.input('magicTargetsOpen',!multiBox.open));
-      multiBox.appendChild(targetSummary);
+      const multiBox = flatGroup(`Cibles multiples (Contrat : ${contract?.target || '1'})`);
       const isSelfSpell = /^vous$/i.test((contract?.target || '').trim()) || /^vous$/i.test((contract?.range || '').trim());
       const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);
       const isAllyExcludingCaster = contract?.effects?.special === 'monstrous-regiment';
@@ -431,8 +435,23 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
         lbl.append(chk, ` ${p.name}`);
         multiBox.appendChild(lbl);
       }
-      v5.appendChild(multiBox);
+      optionsBox.appendChild(multiBox);
     }
+    // Un seul repli « Options », fermé par défaut ; il s'ouvre de lui-même quand le calcul attend une saisie qui n'est pas
+    // en vue (dé d'un sort, attribut, Protection…), le geste du MJ (ouvrir, fermer) l'emportant ensuite.
+    const pv = draft.preview;
+    const requestedPending = requested.some(key => draft[key] == null || draft[key] === '');
+    const blockedInside = Boolean(pv?.v5MagicKind === 'cast' && !requestedPending
+      && (pv.ready === false || pv.spellPreview?.valid === false || (pv.castPreview?.spellSuccess && pv.spellPreview?.ready === false)));
+    const options = node('details', 'workspace-v5-context-details workspace-magic-options');
+    options.dataset.magicOptions = '';
+    options.open = draft.magicOptionsMoreOpen ?? blockedInside;
+    const optionsSummary = node('summary', '', 'Options');
+    optionsSummary.dataset.blockingField = 'magic-options';
+    optionsSummary.title = 'Talents, Haute Magie, dissipation, familier, choix du d100, surpuissance, cibles multiples…';
+    optionsSummary.addEventListener('click', () => handlers.input('magicOptionsMoreOpen', !options.open));
+    options.append(optionsSummary, optionsBox);
+    v5.appendChild(options);
   }
 
   return v5;

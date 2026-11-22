@@ -8,7 +8,9 @@ import {missingMagicDiceMessage} from '../core/v5-magic-miscasts.js';
 import {normalizeLoreId,arcaneMagicLores} from '../core/v5-magic-attributes.js';
 import {renderTestQuestions,renderObstinateChoice} from './test-questions.js';
 const loreOptions=[['','Aucun attribut'],['beasts','Bêtes'],['death','Mort'],['fire','Feu'],['heavens','Cieux'],['life','Vie'],['light','Lumière'],['metal','Métal'],['shadow','Ombres']];
-export function renderMagicControls({actor,participants,type,draft,handlers,targetIds,getObstinateStatus}){
+// Passe G, G3-a (R15) : `flat` = groupe à plat dans le repli « Options » du sort (pas de repli propre) ; `requestedBox` reçoit
+// les jets supplémentaires de l'incident 91-95 quand le moteur les réclame, pour qu'ils restent en vue.
+export function renderMagicControls({actor,participants,type,draft,handlers,targetIds,getObstinateStatus,flat=false,requestedBox=null}){
  // T10 : questions d'États ou de séquelle (et Obstiné) des Tests lancés par un bouton du panneau (méditation, déploiement et relance
  // Cadai) : la commande refusée rend ses questions (`magicSecondaryNeeds[nom]`), la réponse part dans `magicSecondaryContexts[nom]`.
  const secondaryQuestions=(container,name)=>{
@@ -23,8 +25,11 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
  const baseRevision=handlers.magicRevision?.();
  // U-01 : clé d'opération créée au rendu, consommée une fois ; null = opération déjà appliquée, bouton inactif jusqu'à la prochaine saisie.
  const opKey=name=>handlers.magicOperationKey?.(name),opSpent=name=>Boolean(handlers.magicOperationKey)&&!opKey(name);
- const box=document.createElement('details');box.className='workspace-v5-context-details';const pv=draft.preview,missingDice=pv&&[pv.missing,pv.spellPreview?.missing,pv.castPreview?.missing].some(list=>Array.isArray(list)&&list.length>0);box.open=(draft.magicControlsOpen ?? true)||Boolean(missingDice);
- const summary=document.createElement('summary');summary.textContent=type==='dispel'?'Dissiper un sort persistant':'Talents, Haute Magie et dissipation';box.append(summary);summary.addEventListener('click',()=>handlers.input('magicControlsOpen',!box.open));
+ const pv=draft.preview;let box;
+ if(flat){box=document.createElement('div');box.className='workspace-magic-options-group';const title=document.createElement('p');title.className='workspace-res-label workspace-magic-options-title';title.textContent='Talents, Haute Magie et dissipation';box.append(title);}
+ else{box=document.createElement('details');box.className='workspace-v5-context-details';const missingDice=pv&&[pv.missing,pv.spellPreview?.missing,pv.castPreview?.missing].some(list=>Array.isArray(list)&&list.length>0);box.open=(draft.magicControlsOpen ?? true)||Boolean(missingDice);
+ const summary=document.createElement('summary');summary.textContent=type==='dispel'?'Dissiper un sort persistant':'Talents, Haute Magie et dissipation';box.append(summary);summary.addEventListener('click',()=>handlers.input('magicControlsOpen',!box.open));}
+ let into=box;
  const field=(key,label,kind='number',options=[])=>{
   const line=document.createElement('label');line.className=kind==='checkbox'?'workspace-type workspace-recipient-check':'workspace-type';line.append(document.createTextNode(label));
   const input=document.createElement(kind==='select'?'select':'input');input.setAttribute('aria-label',label);input.dataset.focusKey=key;
@@ -33,7 +38,7 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
   const actorDice = ['magicMiscastRoll2','magicBurnoutRoll','magicMeditationRoll','magicRuneKnowledgeRoll','magicCadaiTestRoll','magicCadaiMiscastRoll','magicCadaiBurnoutRoll','magicCorruptionInitialRoll','magicCadaiCorruptionRoll'];
   if (actorDice.includes(key)) input.dataset.npcRollKey = key;
   if (key === 'magicDispelRoll' && draft.magicDispellerId) { input.dataset.npcRollKey = key; input.dataset.npcRollOwnerId = draft.magicDispellerId; }
-  input.addEventListener(kind==='number'||kind==='text'?'input':'change',()=>{const value=kind==='checkbox'?input.checked:kind==='number'?input.value===''?null:Number(input.value):input.value;if(kind==='number'||kind==='text')handlers.input(key,value);else handlers.select({[key]:value});});if(kind==='checkbox')line.prepend(input);else line.append(input);box.append(line);return input;
+  input.addEventListener(kind==='number'||kind==='text'?'input':'change',()=>{const value=kind==='checkbox'?input.checked:kind==='number'?input.value===''?null:Number(input.value):input.value;if(kind==='number'||kind==='text')handlers.input(key,value);else handlers.select({[key]:value});});if(kind==='checkbox')line.prepend(input);else line.append(input);into.append(line);return input;
  };
  // D-18 : distance et visibilité sont toujours saisies, sans valeur par défaut (visibilité à trois états).
  const distanceField=(key,label)=>{const input=field(key,label);input.min='0';input.removeAttribute('max');};
@@ -64,6 +69,7 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
  const extraMissing=[pv?.missing,pv?.spellPreview?.missing,pv?.castPreview?.missing,pv?.castPreview?.miscast?.missingSecondaryDice,pv?.miscast?.missingSecondaryDice].flat().filter(key=>/^additional/.test(key));
  const firstMiscast=Number(draft.magicMiscastRoll);
  if(extraMissing.length||draft.magicExtraRoll1!=null||draft.magicExtraRoll2!=null||firstMiscast>=91&&firstMiscast<=95){
+  if(requestedBox)into=requestedBox;
   for(const n of [1,2]){
    const roll=field('magicExtraRoll'+n,'Incident 91-95 : jet supplémentaire n° '+n+' (1d100, de 1 à 90)');roll.max='90';roll.dataset.npcRollKey='magicExtraRoll'+n;
    field('magicExtraDuration'+n,'Jet supplémentaire n° '+n+' : dé de durée / États (1d10 ou 2d10)');
@@ -74,7 +80,8 @@ export function renderMagicControls({actor,participants,type,draft,handlers,targ
    if(isMiscastDistanceD100('MINOR',max))distance.dataset.npcRollKey='magicExtraDistance'+n;
    field('magicExtraLocation'+n,'Jet supplémentaire n° '+n+' : membre gelé','select',[['','—'],['Bras principal','Bras principal'],['Bras secondaire','Bras secondaire'],['Jambe gauche','Jambe gauche'],['Jambe droite','Jambe droite']]);
   }
-  if(extraMissing.length){const note=document.createElement('p');note.className='workspace-muted';note.dataset.magicExtraMissing='true';note.textContent=missingDiceText(extraMissing);box.append(note);}
+  if(extraMissing.length){const note=document.createElement('p');note.className='workspace-muted';note.dataset.magicExtraMissing='true';note.textContent=missingDiceText(extraMissing);into.append(note);}
+  into=box;
  }
  if(type==='cast'){
   const selected=getSpellContract(draft.magicSpellId);
@@ -175,7 +182,7 @@ export function natureSelects(target,getCurrent,onChange,base={}){
 
 const ATTRIBUTE_LORES=new Set(['fire','death','light']);
 /** S-07 : destinataires secondaires (ennemis engagés, attaquant) et choix par cible des attributs facultatifs, tous désignés par le MJ. */
-export function renderSpellRecipientControls({actor,participants,contract,draft,handlers,targetIds,getObstinateStatus}){
+export function renderSpellRecipientControls({actor,participants,contract,draft,handlers,targetIds,getObstinateStatus,flat=false}){
  const effects=contract?.effects||{};
  const groups=[['engaged',effects.secondaryLabel || 'Ennemis engagés ou créatures affectées (désignés par le MJ)',effects.engagedEnemyConditions?.length||effects.engagedEnemyDamage||effects.engagedEnemyTestModifiers],['attacker','Attaquant visé par la réaction (désigné par le MJ)',effects.attackerConditions?.length],['collision','Créatures heurtées par Poussée (déclarées par le MJ)',effects.collisionConditions?.length]].filter(g=>g[2]);
  const mainTargets=participants.filter(p=>(targetIds?.length?targetIds:draft.magicTargetIds||[]).includes(p.id));
@@ -190,8 +197,8 @@ export function renderSpellRecipientControls({actor,participants,contract,draft,
  }
  const deathTargets=effects.special==='verdant-apotheosis'?mainTargets:[];
  if(!groups.length&&!attributeTargets.length&&!natureFields.length&&!deathTargets.length&&!effects.chainAttack&&!effects.breath&&!effects.rolledDamage)return null;
- const box=document.createElement('details');box.className='workspace-v5-context-details';box.open=true;
- const summary=document.createElement('summary');summary.textContent='Destinataires et choix par cible';box.append(summary);
+ const box=document.createElement(flat?'div':'details');box.className=flat?'workspace-magic-options-group':'workspace-v5-context-details';if(!flat)box.open=true;
+ const summary=document.createElement(flat?'p':'summary');if(flat)summary.className='workspace-res-label workspace-magic-options-title';summary.textContent='Destinataires et choix par cible';box.append(summary);
  const note=text=>{const p=document.createElement('p');p.className='workspace-muted';p.textContent=text;box.append(p);};
  const perTargetNumber=(p,key,title,min=0,max=999)=>{
   const label=document.createElement('label');label.className='workspace-type';label.textContent=title+' — '+p.name;

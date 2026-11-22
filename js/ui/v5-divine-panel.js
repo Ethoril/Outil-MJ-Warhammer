@@ -12,7 +12,7 @@ import {isBrokenActor,renderBrokenEscapeVisibilityControl} from './v5-broken-esc
 import {d100} from '../core/dice.js';
 import {counterLayerLabel} from '../core/v5-divine-effects-counters.js';
 import {renderConfirmationButtons} from './resolution-panel/dom.js';
-import {emptyDivineForm,defaultDivineSelection,confirmRangeByDefault,confirmAllyByDefault,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,reminderLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
+import {emptyDivineForm,defaultDivineSelection,confirmFactsByDefault,formWarnings,buildDivineForm,toEngineInput,buildExpiry,isSelfTargeted,classifyNeeds,describeEffectResult,summonLayerLabel,reminderLayerLabel,summarizeExecution,deadlineLines,formatCampaignTime,fieldValue,setFieldValue,focusKey} from './v5-divine-form-model.js';
 const node=(tag,klass,text)=>{const el=document.createElement(tag);if(klass)el.className=klass;if(text!==undefined)el.textContent=text;return el;};
 const clone=value=>structuredClone(value);
 const labels={implemented:'Effet calculable',assisted:'Effets calculés + rappels MJ',manual:'Effet assisté / rappel MJ',blocked:'Source ou arbitrage requis'};
@@ -191,6 +191,16 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
  function select(container,label,value,options,handler,key){
   const wrap=node('label','workspace-type',label),input=node('select');input.setAttribute('aria-label',label);input.dataset.focusKey='divine-'+(key||label);
   for(const [id,text] of options)input.append(new Option(text,id));input.value=value??'';input.addEventListener('change',()=>handler(input.value));wrap.append(input);container.append(wrap);return input;
+ }
+ /** G3-b (R17) : fait de cible en case compacte ; cochée = « oui » (précoche), décochée = « non » ; aide en infobulle. */
+ function factCheck(container,field,invalid){
+  const wrap=node('label','workspace-divine-fact'),input=node('input');input.type='checkbox';
+  input.checked=fieldValue(state.form,field)!=='false';
+  input.setAttribute('aria-label',field.label);input.dataset.focusKey=focusKey(field.anchor);
+  if(invalid)input.setAttribute('aria-invalid','true');
+  if(field.help)wrap.title=field.help;
+  input.addEventListener('change',()=>{setFieldValue(state.form,field,input.checked?'true':'false');state.testOptionId='';state.preview=null;state.error='';refresh();});
+  wrap.append(input,document.createTextNode(field.shortLabel||field.label));container.append(wrap);return input;
  }
  function formField(container,field,invalid){
   const wrap=node('label','workspace-type',field.label),help=node('small','workspace-divine-help',field.help);help.id='divine-help-'+focusKey(field.id);
@@ -591,25 +601,34 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   const rollPrayer=node('button','workspace-secondary','Lancer');rollPrayer.type='button';rollPrayer.setAttribute('aria-label','Lancer le jet de Prière');
   rollPrayer.addEventListener('click',()=>{prayerRoll.value=String(d100());prayerRoll.dispatchEvent(new Event('input',{bubbles:true}));});prayerRoll.parentElement.append(rollPrayer);
   const effectTargets=isSelfTargeted(contract)?[actor]:participants.filter(row=>row.zone==='active'&&state.targetIds.includes(row.id));
-  for (const target of effectTargets) confirmRangeByDefault(state.form, target.id);
   const model=buildDivineForm(contract,{actor,targets:effectTargets,participants,form:state.form,choices:state.choices}),descr=model.descr;
-  for(const target of effectTargets)if((model.factFields[target.id]||[]).some(fact=>fact.field==='ally'&&fact.required))confirmAllyByDefault(state.form,target,actor);
+  // Passe G, G3-b (R17, décision du MJ du 22/11) : tous les faits de cible précochés à « oui », faits de scène compris ; le MJ décoche.
+  confirmFactsByDefault(state.form,model.factFields);
+  model.warnings=formWarnings(descr,actor,effectTargets,state.form);
   const needs=state.preview&&!state.preview.ready?classifyNeeds(state.preview.needsInput||[],{targets:effectTargets,fields:model.effectFields}):[];
   const blocking=new Set(needs.map(row=>row.anchor).filter(Boolean));
-  const factsGroup=(container,fields)=>{const group=node('div','workspace-divine-target-facts');for(const fact of fields)formField(group,fact,blocking.has(fact.anchor));container.append(group);};
+  // Une ligne par cible : son nom, puis ses faits en cases compactes (libellé court, aide en infobulle).
+  const factsGroup=(container,fields,who,showName=true)=>{
+   const line=node('div','workspace-divine-target-facts workspace-divine-fact-line');line.setAttribute('role','group');line.setAttribute('aria-label','Faits · '+(who?.name||''));
+   if(who&&showName)line.append(node('span','workspace-divine-fact-who',who.name));
+   for(const fact of fields)factCheck(line,fact,blocking.has(fact.anchor));
+   container.append(line);
+  };
   if(descr.implicitTarget){
    content.append(node('p','workspace-muted','Cible : le prêtre (cible implicite).'));
   }else if(descr.selfTargeted){
    content.append(node('p','workspace-muted','Cible : le personnage priant.'));
-   if(model.factFields[actor.id])factsGroup(content,model.factFields[actor.id]);
+   if(model.factFields[actor.id])factsGroup(content,model.factFields[actor.id],actor);
   }else{
    const targets=node('fieldset','workspace-resolution-row');targets.append(node('legend','','Destinataires de la prière'));
    if(descr.targetLimit!==null)targets.append(node('p','workspace-muted',`Jusqu’à ${descr.targetLimit} destinataire(s) avant extensions.`));
    for(const [index,participant] of participants.filter(row=>row.zone==='active').entries()){
     const wrap=node('label','workspace-type'),check=node('input');check.type='checkbox';check.checked=state.targetIds.includes(participant.id);check.setAttribute('aria-label','Destinataire '+participant.name);
     if(!index)check.dataset.focusKey='divine-targets';
-    check.addEventListener('change',()=>{state.targetIds=check.checked?[...state.targetIds,participant.id]:state.targetIds.filter(id=>id!==participant.id);state.preview=null;refresh();});wrap.append(check,document.createTextNode(participant.name));targets.append(wrap);
-    if(check.checked&&model.factFields[participant.id])factsGroup(targets,model.factFields[participant.id]);
+    check.addEventListener('change',()=>{state.targetIds=check.checked?[...state.targetIds,participant.id]:state.targetIds.filter(id=>id!==participant.id);state.preview=null;refresh();});wrap.append(check,document.createTextNode(participant.name));
+    // G3-b : le destinataire coché et ses faits sur une même ligne.
+    if(check.checked&&model.factFields[participant.id]){const row=node('div','workspace-divine-target-row');row.append(wrap);factsGroup(row,model.factFields[participant.id],participant,false);targets.append(row);}
+    else targets.append(wrap);
    }
    for(const text of model.warnings){const warning=node('p','workspace-field-error',text);warning.setAttribute('role','status');targets.append(warning);}
    content.append(targets);

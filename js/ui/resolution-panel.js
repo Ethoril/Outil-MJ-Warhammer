@@ -75,7 +75,8 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     add(secondaryDice.length > 0, missingMagicDiceMessage(secondaryDice), 'magic-secondary');
     add(invalid, 'Vérifiez les éléments requis pour le sort');
     const magicMissing = [preview.missing, preview.castPreview?.missing].flat().filter(Boolean);
-    const magicFocus = magicMissing.includes('lossRoll') ? 'magic-loss' : magicMissing.includes('miscastRoll') ? 'magic-miscast' : preview.spellPreview?.attributeDice ? 'magic-attribute-dice' : undefined;
+    // G3-a (R15) : ce qui n'a pas de champ désigné se règle dans le repli « Options » du sort (le lien l'ouvre).
+    const magicFocus = magicMissing.includes('lossRoll') ? 'magic-loss' : magicMissing.includes('miscastRoll') ? 'magic-miscast' : preview.spellPreview?.attributeDice ? 'magic-attribute-dice' : preview.v5MagicKind === 'cast' ? 'magic-options' : undefined;
     add(preview.ready === false, 'Complétez les éléments requis pour la magie', magicFocus);
     return finish();
   }

@@ -37,6 +37,21 @@ export function confirmRangeByDefault(form, targetId) {
   form.facts[targetId] ??= {};
   if (!Object.hasOwn(form.facts[targetId], 'withinRange')) form.facts[targetId].withinRange = 'true';
 }
+/**
+ * Passe G, G3-b (R17, décision du MJ du 22/11) : chaque fait de cible demandé est précoché à « oui », faits de scène compris ;
+ * le MJ décoche ce qui est faux. Une réponse déjà donnée (« true » ou « false ») n'est jamais touchée ; une réponse
+ * « À préciser » (chaîne vide) laissée par l'ancien formulaire devient « oui ». `factFields` = { [cibleId]: [champ de fait] }.
+ */
+export function confirmFactsByDefault(form, factFields = {}) {
+  form.facts ??= {};
+  for (const [targetId, fields] of Object.entries(factFields || {})) {
+    form.facts[targetId] ??= {};
+    for (const fact of fields || []) {
+      const current = form.facts[targetId][fact.field];
+      if (current !== 'true' && current !== 'false') form.facts[targetId][fact.field] = 'true';
+    }
+  }
+}
 
 /** Texte de source : « Livre de base V5 EN, p. 227 ». */
 export function sourceText(contract) {
@@ -49,17 +64,18 @@ export function sourceText(contract) {
 
 // Faits de cible de la liste blanche (targetRuleFactFields) + `judgement` (requiresFact des dégâts directs).
 export const FACT_FIELDS = Object.freeze({
-  withinRange: { label: 'Portée / zone confirmée', help: 'La cible est à portée ou dans la zone, telle que résolue après les extensions.' },
-  withinTouch: { label: 'Cible à portée de contact', help: 'Le prêtre touche réellement la cible (portée Contact, jamais étendue).' },
-  ally: { label: 'Allié admissible', help: 'Allié du prêtre ; sert aussi à signaler un allié pris dans une zone.' },
-  nonMyrmidian: { label: 'Ne vénère pas Myrmidia', help: 'Fait MJ : la cible ne vénère pas Myrmidia.' },
+  // `short` (G3-b) : libellé de la case compacte d'une ligne de cible ; le libellé complet reste dans l'aide et l'aria-label.
+  withinRange: { label: 'Portée / zone confirmée', short: 'À portée', help: 'La cible est à portée ou dans la zone, telle que résolue après les extensions.' },
+  withinTouch: { label: 'Cible à portée de contact', short: 'Au contact', help: 'Le prêtre touche réellement la cible (portée Contact, jamais étendue).' },
+  ally: { label: 'Allié du prêtre', help: 'La cible est du côté du prêtre (décocher pour un ennemi).' },
+  nonMyrmidian: { label: 'Ne vénère pas Myrmidia', short: 'Non myrmidien', help: 'Fait MJ : la cible ne vénère pas Myrmidia.' },
   lookingAtPriest: { label: 'Regarde le prêtre', help: 'Fait MJ : la cible regarde le prêtre au moment de la prière.' },
-  undead: { label: 'Mort-vivant (fait MJ)', help: 'Fait MJ : la cible est un mort-vivant, si le Trait Mort-vivant n’est pas déjà sur sa fiche.' },
-  ruinServant: { label: 'Serviteur de la Ruine, orque ou gobelin', help: 'Fait MJ : serviteur des Puissances de la Ruine, orque ou gobelin (laisser « À préciser » si inconnu).' },
+  undead: { label: 'Mort-vivant (fait MJ)', short: 'Mort-vivant', help: 'Fait MJ : la cible est un mort-vivant, si le Trait Mort-vivant n’est pas déjà sur sa fiche.' },
+  ruinServant: { label: 'Serviteur de la Ruine, orque ou gobelin', short: 'Ruine, orque, gobelin', help: 'Fait MJ : serviteur des Puissances de la Ruine, orque ou gobelin.' },
   seesPriest: { label: 'Voit le prêtre', help: 'Fait MJ : la cible a le prêtre en ligne de vue.' },
   zeroWounds: { label: 'À 0 Blessure', help: 'La cible est bien à 0 Blessure.' },
   consenting: { label: 'Consentante', help: 'La cible consent à l’effet.' },
-  criminal: { label: 'A commis un crime (décision MJ)', help: 'Décision MJ : la cible a commis un crime.' },
+  criminal: { label: 'A commis un crime (décision MJ)', short: 'A commis un crime', help: 'Décision MJ : la cible a commis un crime.' },
   deniesCrime: { label: 'Nie ce crime', help: 'La cible nie le crime dont elle est accusée.' }
 });
 
@@ -247,7 +263,7 @@ export function buildDivineForm(contract, { actor, targets = [], participants = 
   const factFields = {};
   const wanted = descr.selfTargeted ? descr.targetFacts.filter(fact => fact.required) : descr.targetFacts;
   if (wanted.length) for (const target of targets) factFields[target.id] = wanted.map(fact => ({ ...fact, id: `fact:${target.id}:${fact.field}`, anchor: `fact:${target.id}:${fact.field}`,
-    scope: 'target', targetId: target.id, kind: 'tri', path: ['facts', target.id, fact.field], label: `${nameOf(target)} · ${fact.label}` }));
+    scope: 'target', targetId: target.id, kind: 'tri', path: ['facts', target.id, fact.field], label: `${nameOf(target)} · ${fact.label}`, shortLabel: (!fact.custom && FACT_FIELDS[fact.field]?.short) || fact.label }));
   return { descr, effectFields, factFields, extensions: descr.extensions, warnings: formWarnings(descr, actor, targets, form),
     info: descr.removal && !descr.removal.chosen ? [`Retrait automatique : ${descr.removal.key} (${descr.removal.amount === 'all' ? 'tous les niveaux' : descr.removal.amount + ' niveau'}) chez chaque cible.`] : [], notes: descr.targetNotes };
 }
