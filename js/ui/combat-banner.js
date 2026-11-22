@@ -184,6 +184,9 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
     decisions.dataset.decisionsCount = String(count);
     decisions.hidden = count === 0;
     decisions.textContent = count ? `${count} à décider` : '';
+    // Lot E9 : avec « Jouer son tour maintenant » ou « N à décider », la barre se range sur deux rangées (le round et le
+    // nom en haut, les commandes dessous) : le texte du round garde toute la largeur du bandeau, sans « Rou… ».
+    inner.classList.toggle('is-stacked', space === 'play' && started && (!playNow.hidden || count > 0));
     decisions.title = count ? `${count} décision${count > 1 ? 's' : ''} en attente : case « À décider », à droite` : '';
 
     const reductions = Store.listDaemonbaneReductions?.() || [];
