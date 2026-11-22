@@ -38,7 +38,7 @@ test('CA9 — les 16 marqueurs du contrat §5, liste figée', () => {
   assert.ok(Object.isFrozen(MARQUEURS_CARTE));
 });
 
-const map = (type, payload = {}) => ({ v: 1, type, seq: 0, at: 0, from: 'map', payload });
+const map = (type, payload = {}) => ({ v: 2, type, seq: 0, at: 0, from: 'map', payload });
 
 /** Branche une projection d'essai sur le protocole avec un faux canal ; `set` change la scène et relit. */
 function linked(projection, initial = []) {

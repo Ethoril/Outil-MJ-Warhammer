@@ -5,7 +5,7 @@ import { createMapLink, MAP_LINK_TIMEOUT_MS } from '../../../js/core/map-link.js
 // Audit côté carte du 08/11 (A5) : indicateurs « posé » périmés.
 const pj = (patch = {}) => ({ id: 'a', kind: 'PJ', persistentCharacterId: 'c1', profileId: 'prof', name: 'Renaut', hp: 9, maxHp: 15, states: [], movement: 4, extensions: { v5: {} }, ...patch });
 const orc = (patch = {}) => ({ id: 'o', kind: 'PNJ', name: 'Orc', hp: 10, maxHp: 10, states: [], movement: 4, extensions: { v5: {} }, ...patch });
-const map = (type, payload = {}) => ({ v: 1, type, from: 'map', payload });
+const map = (type, payload = {}) => ({ v: 2, type, from: 'map', payload });
 
 function setup(scene) {
   const sent = [];

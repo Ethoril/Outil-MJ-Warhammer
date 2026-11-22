@@ -50,9 +50,7 @@ import { renderMapLinkIndicator } from './ui/map-link-indicator.js';
 import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-link.js';
 import { offScenePjParticipants, mapMaxHpOf } from './core/map-link-state.js';
 import { participantTokenImageUrl, formImageOf } from './core/token-image.js';
-import { runProposalOf } from './core/map-link-run.js';
-import { mountMapLinkFeedback, runDecision } from './ui/map-link-feedback.js';
-import { publishDecision, withdrawDecision } from './ui/combat-decisions.js';
+import { mountMapLinkFeedback, createMapTurnFlow } from './ui/map-link-feedback.js';
 import { setMapDistanceProvider } from './ui/resolution-panel.js';
 // Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
 const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
@@ -2172,18 +2170,15 @@ if (typeof BroadcastChannel === 'function') {
     colorOf: participant => Store.getProfile(participant.profileId)?.tokenColor ?? null,
     maxHpOf: participant => mapMaxHpOf(participant, Store.getProfile(participant.profileId)),
     onStatus: showMapLinkStatus,
-    // Course (L6) : proposition au MJ, rien n'est décompté sans son clic.
-    onRan: ref => {
-      const proposal = runProposalOf(ref, { participants: Store.listParticipants(), currentActorId: Store.getCombat().currentActorId,
-        actionSpent: id => Store.listTurnActions(id).length > 0 });
-      if (!proposal) return;
-      if (!proposal.canSpend) { showToast(`🗺️ ${proposal.message}`, 'info'); return; }
-      // Refonte E2b (décision 21) : la question reste dans la case « À décider » jusqu'au clic, ici ou sur le toast.
-      publishDecision(runDecision(proposal, { spend: id => Store.spendV5RunAction(id), showToast }));
-      showToast(`🗺️ ${proposal.message}`, 'warning', { label: 'Action utilisée', onClick: () => { withdrawDecision(`course-carte:${proposal.actorId}`); return Promise.resolve(Store.spendV5RunAction(proposal.actorId))
-        .then(result => { if (result?.ok === false) showToast(result.message, 'error'); }); } }, 15000);
-    }
+    // Course (L6) : proposition au MJ, rien n'est décompté sans son clic ; la question reste dans la case « À décider »
+    // (E2b, décision 21), une seule par Tour, retirée au changement de Tour (E10, CA30).
+    onRan: ref => mapTurn.onRan(ref),
+    // Mouvement du tour annulé sur la carte (contrat §10, version 2 ; E10, CA31) : Action de la Course et déplacement rendus.
+    onTurnReset: ref => mapTurn.onTurnReset(ref)
   });
+  const mapTurn = createMapTurnFlow({ store: Store, showToast });
+  Bus.on('combat', mapTurn.onCombatChange);
+  Bus.on('combat:update', mapTurn.onCombatChange);
   // Retours de la carte (L5) : « À poser (N) », suggestions d'engagement, distance préremplie, pastille « posé ».
   const mapLinkFeedback = mountMapLinkFeedback({ mapLink, store: Store, showToast, pendingNode: qs('#map-link-pending') });
   setMapDistanceProvider(mapLinkFeedback.distanceBetween);

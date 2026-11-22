@@ -39,7 +39,7 @@ const sauteur = {
 const persistantRenaut = { id: 'c1', profileId: 'prof-r', name: 'Renaut', hp: 12, maxHp: 12, states: [] };
 const persistantElsa = { id: 'c2', profileId: 'prof-e', name: 'Elsa', hp: 8, maxHp: 11, states: [{ name: 'Exténué', level: 2 }] };
 
-const map = (type, payload = {}) => ({ v: 1, type, seq: 0, at: 0, from: 'map', payload });
+const map = (type, payload = {}) => ({ v: 2, type, seq: 0, at: 0, from: 'map', payload });
 const withV5 = (participant, patch) => ({ ...participant, extensions: { ...participant.extensions, v5: { ...participant.extensions.v5, ...patch } } });
 
 /** Joue le scénario Warhammer et rend tout ce que la liaison a produit (messages sans `at`, statuts, vues, réponses). */

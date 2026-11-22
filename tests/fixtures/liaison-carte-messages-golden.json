@@ -1,14 +1,14 @@
 {
   "messages": [
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.hello",
       "seq": 1,
       "from": "outil-mj",
       "payload": {}
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.snapshot",
       "seq": 2,
       "from": "outil-mj",
@@ -17,7 +17,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.roster",
       "seq": 3,
       "from": "outil-mj",
@@ -26,7 +26,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.engagements",
       "seq": 4,
       "from": "outil-mj",
@@ -35,7 +35,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.add",
       "seq": 5,
       "from": "outil-mj",
@@ -66,7 +66,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.roster",
       "seq": 6,
       "from": "outil-mj",
@@ -80,7 +80,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.add",
       "seq": 7,
       "from": "outil-mj",
@@ -115,7 +115,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.add",
       "seq": 8,
       "from": "outil-mj",
@@ -146,7 +146,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 9,
       "from": "outil-mj",
@@ -181,7 +181,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "fx.wound",
       "seq": 10,
       "from": "outil-mj",
@@ -193,7 +193,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mount.request",
       "seq": 11,
       "from": "outil-mj",
@@ -203,7 +203,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 12,
       "from": "outil-mj",
@@ -245,7 +245,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mount.split",
       "seq": 13,
       "from": "outil-mj",
@@ -255,7 +255,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 14,
       "from": "outil-mj",
@@ -286,7 +286,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mount.request",
       "seq": 15,
       "from": "outil-mj",
@@ -296,7 +296,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 16,
       "from": "outil-mj",
@@ -327,7 +327,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 17,
       "from": "outil-mj",
@@ -358,7 +358,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "fx.wound",
       "seq": 18,
       "from": "outil-mj",
@@ -370,7 +370,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 19,
       "from": "outil-mj",
@@ -401,7 +401,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.add",
       "seq": 20,
       "from": "outil-mj",
@@ -435,7 +435,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 21,
       "from": "outil-mj",
@@ -467,7 +467,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.engagements",
       "seq": 22,
       "from": "outil-mj",
@@ -481,7 +481,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.add",
       "seq": 23,
       "from": "outil-mj",
@@ -516,7 +516,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.roster",
       "seq": 24,
       "from": "outil-mj",
@@ -534,7 +534,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.distanceQuery",
       "seq": 25,
       "from": "outil-mj",
@@ -545,21 +545,21 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.ping",
       "seq": 26,
       "from": "outil-mj",
       "payload": {}
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.ping",
       "seq": 27,
       "from": "outil-mj",
       "payload": {}
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 28,
       "from": "outil-mj",
@@ -594,7 +594,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "fx.wound",
       "seq": 29,
       "from": "outil-mj",
@@ -606,7 +606,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "fx.death",
       "seq": 30,
       "from": "outil-mj",
@@ -616,7 +616,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.engagements",
       "seq": 31,
       "from": "outil-mj",
@@ -625,7 +625,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 32,
       "from": "outil-mj",
@@ -656,7 +656,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.remove",
       "seq": 33,
       "from": "outil-mj",
@@ -665,7 +665,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "token.state",
       "seq": 34,
       "from": "outil-mj",
@@ -696,7 +696,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.snapshot",
       "seq": 35,
       "from": "outil-mj",
@@ -811,7 +811,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.roster",
       "seq": 36,
       "from": "outil-mj",
@@ -829,7 +829,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.engagements",
       "seq": 37,
       "from": "outil-mj",
@@ -838,7 +838,7 @@
       }
     },
     {
-      "v": 1,
+      "v": 2,
       "type": "mj.ping",
       "seq": 38,
       "from": "outil-mj",

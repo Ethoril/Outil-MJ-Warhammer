@@ -4585,6 +4585,42 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       });
       return saved&&typeof saved.then==='function'?saved.then(result=>(result?.ok===false?{ok:false,reason:'error',message:result.error}:{ok:true})):{ok:true};
     },
+    /**
+     * Mouvement du tour annulé sur la carte (`map.turnReset`, contrat §10, version 2 ; E10, CA31). Pour le combattant actif,
+     * dans son Tour : rend l'Action si seule la Course signalée par la carte (`v5-run-action`) l'a dépensée, et remet à zéro
+     * le déplacement du Tour (déplacement déclaré et quota `system:turn-move`). Une seule commande annulable ; idempotente :
+     * rien à rendre ni à remettre à zéro, `{ ok: false, reason: 'nothing' }` sans rien écrire. Hors du Tour : `not-turn`.
+     */
+    resetV5TurnFromMap(actorId){
+      const plan=draft=>{
+        const clock=v5StoreActionClock(draft),actor=draft.combat?.participants?.find(row=>row.id===actorId);
+        if(!actor||draft.combat?.currentActorId!==actorId||!clock.turnId)return {ok:false,reason:'not-turn',message:'Ce n’est pas le Tour de ce combattant : rien à rendre.'};
+        const sameTurn=row=>row?.actorId===actorId&&row.encounterId===clock.encounterId&&row.turnId===clock.turnId;
+        const spent=(draft.extensions?.v5?.standardTurnActions||[]).filter(sameTurn),runId=`run:${actorId}:${clock.turnId}`;
+        const actionRestored=spent.length>0&&spent.every(row=>row.actionId===runId)&&!combatActionBlock(draft,actorId);
+        const movement=combatActionState(draft).movementByActorId?.[actorId],moveKey=JSON.stringify([clock.encounterId,clock.turnId]);
+        const declared=Boolean(movement&&movement.turnId===clock.turnId&&movement.encounterId===clock.encounterId);
+        const quota=(draft.extensions?.v5?.actionLedger?.quotaUsage||[]).some(row=>row.actorId===actorId&&row.quotaId==='system:turn-move'&&row.scope==='turn'&&row.scopeKey===moveKey);
+        if(!actionRestored&&!declared&&!quota)return {ok:false,reason:'nothing',message:`${actor.name} : ni Action de Course ni déplacement à rendre pour ce Tour.`};
+        return {ok:true,clock,actor,runId,moveKey,actionRestored,moveReset:declared||quota};
+      };
+      const first=plan(currentEnvelope());
+      if(!first.ok)return first;
+      const saved=api.executeCommand('v5-map-turn-reset',draft=>{
+        const again=plan(draft);
+        if(!again.ok)throw Object.assign(new Error(again.message),{userFacing:true});
+        const v5=draft.extensions.v5;
+        if(again.actionRestored)v5.standardTurnActions=v5.standardTurnActions.filter(row=>row.actionId!==again.runId);
+        const movement=v5.combatActions?.movementByActorId?.[actorId];
+        if(movement&&movement.turnId===again.clock.turnId&&movement.encounterId===again.clock.encounterId)delete v5.combatActions.movementByActorId[actorId];
+        if(v5.actionLedger?.quotaUsage)v5.actionLedger.quotaUsage=v5.actionLedger.quotaUsage.filter(row=>!(row.actorId===actorId&&row.quotaId==='system:turn-move'&&row.scope==='turn'&&row.scopeKey===again.moveKey));
+        const what=[again.actionRestored?'Action rendue':'',again.moveReset?'déplacement remis à zéro':''].filter(Boolean).join(', ');
+        draft.log=[{id:uid(),ts:Date.now(),kind:'effect',actorId,text:`${again.actor.name} : mouvement annulé sur la carte (${what})`,detail:{kind:'map-turn-reset'}},...(draft.log||[])].slice(0,300);
+        return draft;
+      });
+      const done={ok:true,actionRestored:first.actionRestored,moveReset:first.moveReset};
+      return saved&&typeof saved.then==='function'?saved.then(result=>(result?.ok===false?{ok:false,reason:'error',message:result.error}:done)):done;
+    },
     // Faits du Tour affichés par la barre d'actions : déplacement déclaré ce Tour, Visée en cours.
     getV5TurnFacts(actorId){
       const snapshot=currentEnvelope(),clock=v5StoreActionClock(snapshot),actions=combatActionState(snapshot),movement=actions.movementByActorId?.[actorId],aim=actions.byActorId?.[actorId];
