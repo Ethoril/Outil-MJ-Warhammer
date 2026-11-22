@@ -66,7 +66,7 @@ export function preparedActionRows({ actor, actions = [], actionKeys = [], selec
  * (`select`, `disengage`, `flee`, `brokenFlee`). `actions` : actions préparées de l'acteur (avec leur clé) ;
  * `targetId` : la cible choisie par son cartouche (« Charger » porte sur elle).
  */
-export function actionBarModel({ actor, active, actions = [], actionKeys = [], previewDisengage, turnFacts = {}, targetId = null }) {
+export function actionBarModel({ actor, active, actions = [], actionKeys = [], previewDisengage, turnFacts = {}, targetId = null, charging = false }) {
   if (!actor || actor.zone !== 'active') return [];
   const engagedIds = engagedWith({ participants: active }, active, actor.id), engagedFoes = enemiesOf(actor, active).filter(foe => engagedIds.includes(foe.id));
   const freeFoes = enemiesOf(actor, active);
@@ -98,7 +98,9 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
     const foe = chargeTarget && freeFoes.includes(chargeTarget) ? chargeTarget : null;
     if (foe && !engagedIds.includes(foe.id)) rows.push({ id: `charge-${foe.id}`, label: `Charger · ${foe.name}`,
       consequence: engagedFoes.length ? 'interdit : déjà engagé (p. 163) · clic = forcer (MJ)' : 'Élan si la distance de charge est atteinte (p. 163)',
-      run: commands => commands.select({ targetId: foe.id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
+      // G1-c : bouton enfoncé tant que la charge est déclarée ; un second clic la retire, sans changer ni cible ni arme.
+      pressed: charging === true,
+      run: commands => charging === true ? commands.select({ charging: false }) : commands.select({ targetId: foe.id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
     else rows.push({ id: 'charge', label: 'Charger', disabled: true, run: () => {},
       consequence: foe ? `déjà engagé avec ${foe.name} : Attaquer (p. 163)` : chargeTarget && chargeTarget.id !== actor.id ? 'la cible n’est pas un adversaire'
         : 'choisir la cible : clic sur son cartouche' });
@@ -132,7 +134,7 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
     rows.unshift({ id: 'overcome-fear', label: 'Surmonter la Peur', consequence: `Test de Calme étendu, une tentative par Round : ${fears.map(row => `${name(row.authorId) || row.name} ${Number(row.successes) || 0}/${row.rating} DR`).join(', ') || 'Peur en cours'}`,
       run: commands => commands.select({ actionKey: actionKeys[fearIndex], targetId: 'none' }) });
   }
-  rows.push({ id: 'other', label: 'Autres actions', consequence: 'magie, prière ou Test : panneau complet', run: commands => commands.focus('action') });
+  rows.push({ id: 'other', label: 'Autres actions', consequence: 'magie, prière ou Test : ouvre le menu', run: commands => commands.openOther() });
   // REGLES-10 : Chant vivifiant, la créature qui s'éveille perd son Tour ; seul le panneau complet reste ouvert (le moteur refuse l'Action).
   const awakening = awakeningMessage(actor);
   if (awakening) return rows.map(row => row.id === 'other' ? row : { ...row, disabled: true, consequence: `impossible : ${awakening}` });
@@ -158,7 +160,7 @@ export function renderActionBar(container, { actor, rows, prepared = [], command
     // Le nom accessible dit la même chose que l'écran ; la conséquence entière reste lisible au survol.
     action.setAttribute('aria-label', row.group === 'actor' ? `Choisir l’action ${row.label} : ${row.consequence}` : `${row.label} : ${row.consequence}`);
     action.title = row.consequence;
-    if (row.group === 'actor') action.setAttribute('aria-pressed', String(row.pressed === true));
+    if (row.group === 'actor' || 'pressed' in row) action.setAttribute('aria-pressed', String(row.pressed === true));
     action.disabled = row.disabled === true;
     action.addEventListener('click', () => row.run(commands));
     list.appendChild(action);

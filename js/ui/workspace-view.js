@@ -787,8 +787,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const commands = {
       select: patch => {
         const { charging, ...rest } = patch;
-        resolutionHandlers.select(rest);
-        if (charging) resolutionHandlers.select({ charging: true });
+        if (Object.keys(rest).length || charging === undefined) resolutionHandlers.select(rest);
+        if (charging !== undefined) resolutionHandlers.select({ charging });
+      },
+      // « Autres actions » : ouvre le menu sort, prière et Test de la résolution et met le focus sur sa première entrée (G1-b).
+      openOther: () => {
+        const menu = play.center.querySelector('.workspace-resolution #workspace-magic-menu');
+        const opener = play.center.querySelector('.workspace-resolution [data-magic-menu]');
+        if (menu?.hidden) opener?.click();
+        (menu?.querySelector('button:not(:disabled)') || opener)?.focus?.();
       },
       disengage: () => { state.disengage = { actorId: actor.id }; render(); },
       move: () => resolutionHandlers.declareCombatMovement(),
@@ -808,7 +815,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         Promise.resolve().then(() => Store.applyFlee(actor.id)).catch(error => plateauToast('Fuite impossible', error)).finally(() => render());
       }
     };
-    const rows = actionBarModel({ actor, active: context.active, actions, actionKeys: keys, previewDisengage: id => Store.previewDisengage(id), turnFacts: Store.getV5TurnFacts?.(actor.id) || {}, targetId: context.target?.id ?? null });
+    const rows = actionBarModel({ actor, active: context.active, actions, actionKeys: keys, previewDisengage: id => Store.previewDisengage(id), turnFacts: Store.getV5TurnFacts?.(actor.id) || {}, targetId: context.target?.id ?? null, charging: state.resolution.charging === true });
     // Refonte (E4a) : actions préparées de l'acteur + « ce qu'il peut faire d'ici » dans la même barre (placée en bas par placeInZones).
     const prepared = preparedActionRows({ actor, actions, actionKeys: keys, selectedKey: state.resolution.actionKey });
     renderActionBar(column, { actor, rows, prepared, commands });
