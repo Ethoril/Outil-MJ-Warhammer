@@ -2500,8 +2500,9 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
      d'écran), effet en face du dé, case d'effet et rappel côte à côte, titre du bloc pour les lecteurs d'écran seulement
      (« Critique du jet » / « Critique de la défense » restent affichés). */
 @media (min-width: 1000px) {
-  .workspace-area[data-zone="centre"] .workspace-resolution.has-result:has(.workspace-critical) { grid-template-areas: "action resultat" "jets resultat" "pied resultat"; }
-  .workspace-area[data-zone="centre"] .workspace-resolution.has-result:has(.workspace-critical) > .workspace-resolution-footer { flex-wrap: wrap; padding: 3px 0 0; border-top: 0; }
+  /* Seulement quand le pied tient sur une ligne (aucune raison de blocage) : sinon il garde toute la largeur. */
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result:has(.workspace-critical):not(:has(> .workspace-resolution-footer > .workspace-field-error)) { grid-template-rows: auto auto minmax(auto, 1fr); grid-template-areas: "action resultat" "jets resultat" "pied resultat"; }
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result:has(.workspace-critical):not(:has(> .workspace-resolution-footer > .workspace-field-error)) > .workspace-resolution-footer { align-self: end; padding: 3px 0 0; border-top: 0; }
   .workspace-area[data-zone="centre"] .workspace-result { row-gap: 2px; padding: 3px 6px; }
   .workspace-area[data-zone="centre"] .workspace-result .workspace-outcome { padding: 0 4px; font-size: 10px; line-height: 16px; letter-spacing: 0; }
   .workspace-area[data-zone="centre"] .workspace-result .workspace-critical { grid-template-columns: auto minmax(0, 1fr); column-gap: 8px; row-gap: 1px; align-items: center; padding: 2px 6px; }
@@ -2514,11 +2515,11 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
   .workspace-area[data-zone="centre"] .workspace-result .workspace-roll > .workspace-critical-location { flex: none; margin: 0; white-space: nowrap; }
   .workspace-area[data-zone="centre"] .workspace-result-pills > .workspace-v5-calculations { margin-left: auto; }
   .workspace-area[data-zone="centre"] .workspace-result-pills > .workspace-v5-calculations > summary { line-height: 17px; }
-  .workspace-area[data-zone="centre"] :is(.workspace-result p, .workspace-result-line) { font-size: 12px; line-height: 1.22; }
+  .workspace-area[data-zone="centre"] :is(.workspace-result p, .workspace-result-line) { font-size: 12px; line-height: 1.18; }
   .workspace-area[data-zone="centre"] .workspace-result .workspace-roll { min-height: 0; }
   .workspace-area[data-zone="centre"] .workspace-resolution .workspace-result .workspace-roll-input { height: 24px; min-height: 24px; font-size: 13px; }
   .workspace-area[data-zone="centre"] .workspace-result .workspace-roll button { min-height: 24px; height: 24px; padding: 0 7px; font-size: 12px; }
-  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical > .workspace-rubric { line-height: 12px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical > .workspace-rubric { line-height: 12px; text-transform: none; letter-spacing: 0; font-size: 11px; }
   .workspace-area[data-zone="centre"] .workspace-result-pills > .workspace-v5-calculations[open] { flex: 1 1 100%; margin-left: 0; }
   .workspace-area[data-zone="centre"] .workspace-result .workspace-critical-item input { width: 15px; height: 15px; }
 }

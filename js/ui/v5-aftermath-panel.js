@@ -700,9 +700,26 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     return container;
   }
 
+  /**
+   * Refonte E2b (CA16, CA20) : arbitrage des séquelles d'un participant absent de la scène, que permettait le panneau
+   * « Suites de combat » de Jouer en 3.56.0 (`allowAbsentActions`, mêmes appels au Store). Rend `null` sans séquelle.
+   */
+  function renderAbsentSequelae(participantId, participants = []) {
+    ui.participants = participants;
+    let state;
+    try { state = Store.getAftermathState(); } catch { return null; }
+    const overview = Store.listAftermathSequelae();
+    const has = (overview.sequelae || []).some(row => row.participantId === participantId)
+      || (overview.pending || []).some(row => row.participantId === participantId)
+      || (overview.incidents || []).some(row => row.participantId === participantId && row.needsOpening);
+    if (!has) return null;
+    return renderSequelae(state, participants, id => subjectName(participants, id), (prefix, purpose) => healerFields(prefix, purpose, participants), { participantId, allowAbsentActions: true });
+  }
+
   return {
     renderReceiptStatus,
     renderParticipantConvalescence,
+    renderAbsentSequelae,
     renderGlobalConvalescence,
     getLastReceipt: () => ui.lastReceipt,
     render(participants = []) {

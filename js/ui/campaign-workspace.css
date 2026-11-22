@@ -422,7 +422,8 @@
 
 .campaign-detail-followups,
 .campaign-decisions,
-.campaign-detail-actions-box {
+.campaign-detail-actions-box,
+.campaign-detail-sequelae-box {
   border-top: 1px solid var(--cw-line);
   padding-top: 16px;
   margin-top: 16px;
