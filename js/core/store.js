@@ -3051,7 +3051,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         plan.status='requires-input';
       }
       const mountedAmbush = [];
-      if (captured.surprisedCamp) for (const rider of participants.filter(row => row.zone === 'active' && row.camp === captured.surprisedCamp && row.extensions?.v5?.mounted === true && row.extensions?.v5?.mountId)) {
+      // G6 : un cavalier dont la Vigilance a réussi n'est pas Surpris, donc pas de Chevaucher.
+      const vigilant = new Set((plan.vigilance || []).filter(row => row.success).map(row => row.participantId));
+      if (captured.surprisedCamp) for (const rider of participants.filter(row => row.zone === 'active' && row.camp === captured.surprisedCamp && !vigilant.has(row.id) && row.extensions?.v5?.mounted === true && row.extensions?.v5?.mountId)) {
         const fall = planMountedFall({ event: 'rider-surprised' });
         if (!fall.requiredTest) continue;
         const skill = (rider.skills || []).find(row => row?.id === V5_RIDE_SKILL_ID && row.status !== 'unresolved');
@@ -3084,7 +3086,7 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         ...(scenePreview?{scenePreview}:{}),
         ...(staging?{staging}:{}),
         mountedFall: mountedAmbush,
-        request:{diceById:captured.diceById||{},combatReflexesById:captured.combatReflexesById||{},characteristicById:captured.characteristicById||{},tieOrders:captured.tieOrders??staging?.tieOrders??{},opposedRolls:captured.opposedRolls??staging?.opposedRolls??{},tieChoices:captured.tieChoices??staging?.tieChoices??{},surprisedCamp:captured.surprisedCamp??null,mountedRideTests:captured.mountedRideTests||{}}};
+        request:{diceById:captured.diceById||{},combatReflexesById:captured.combatReflexesById||{},characteristicById:captured.characteristicById||{},tieOrders:captured.tieOrders??staging?.tieOrders??{},opposedRolls:captured.opposedRolls??staging?.opposedRolls??{},tieChoices:captured.tieChoices??staging?.tieChoices??{},surprisedCamp:captured.surprisedCamp??null,mountedRideTests:captured.mountedRideTests||{},vigilanceRolls:captured.vigilanceRolls||{}}};
     },
     previewCombatParticipantActivation(id) {
       const participant=(currentEnvelope().combat?.participants||[]).find(row=>row.id===id);
@@ -3197,9 +3199,16 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           return {participantIds:[...group.participantIds],directChoice:group.participantIds.length>=3,bracketOrder:[...(captured.request?.tieOrders?.[group.key]||[])],matches:matches.map(match=>({id:match.id,initiatorId:match.initiatorId,opponentId:match.opponentId,initiatorRoll:match.initiator.roll,initiatorDR:match.initiator.sl,initiatorOptionId:match.initiator.optionId,initiatorConditionPenaltyMode:match.initiatorConditionPenaltyMode,opponentRoll:match.opponent.roll,opponentDR:match.opponent.sl,opponentOptionId:match.opponent.optionId,opponentConditionPenaltyMode:match.opponentConditionPenaltyMode,winnerId:match.winnerId,netDR:match.netSl,tie:match.tie})),winnerId:matches.at(-1)?.winnerId||null,chosenOrder:[...(captured.request?.tieChoices?.[group.key]||[])]};
         })};
         if(plan.surprisedCamp){
+          // G6 (p. 116, 161) : identifiant de la Surprise généré ; une Vigilance réussie évite Surpris, les autres le reçoivent.
+          const surpriseEventId=uid(),avoided=new Set((plan.vigilance||[]).filter(row=>row.success).map(row=>row.participantId));
+          for(const row of plan.vigilance||[]){
+            const name=nextParticipants.find(item=>item.id===row.participantId)?.name||row.participantId;
+            log=[{id:uid(),ts:Date.now(),kind:'effect',targetId:row.participantId,text:`${name} : Vigilance, Test de Perception (${row.score}, d100 ${row.roll}, ${row.sl>=0?'+':''}${row.sl} DR)${row.success?' — Surprise évitée':' — Surpris'}`,
+              detail:{kind:'vigilance',surpriseEventId,vigilance:cloneValue(row)}},...log].slice(0,300);
+          }
           nextParticipants=nextParticipants.map(row=>{
-            if(row.zone!=='active'||row.camp!==plan.surprisedCamp)return row;
-            const acquired=acquireV5Conditions(row,[{name:'Surpris',source:{kind:'combat-ambush'}}],{round:sourceScene||staging?0:Number(draft.combat?.round)||0});
+            if(row.zone!=='active'||row.camp!==plan.surprisedCamp||avoided.has(row.id))return row;
+            const acquired=acquireV5Conditions(row,[{name:'Surpris',source:{kind:'combat-ambush',eventId:surpriseEventId}}],{round:sourceScene||staging?0:Number(draft.combat?.round)||0});
             if(acquired.reminders.length)log=[...acquired.reminders.map(text=>({kind:'reminder',actorId:row.id,text})),...log];
             return acquired.participant;
           });

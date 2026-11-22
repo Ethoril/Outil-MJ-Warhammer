@@ -1,7 +1,15 @@
 /** Pure E08 order and turn transitions. */
-import { selectV5Test, resolveV5Opposition } from './v5-roll.js';
+import { selectV5Test, resolveV5Opposition, previewV5Test } from './v5-roll.js';
 import { buildCombatTest } from './v5-combat-rules.js';
 import { hasV5Talent } from './v5-talents.js';
+import { getReferenceCatalogue } from './reference-catalog.js';
+
+// Vigilance (talent Combat Aware, p. 116) : Test de Perception Challenging (+0 DR) ; sans la compétence, l'Initiative.
+function vigilanceScore(participant) {
+  const perceptionId = getReferenceCatalogue().skills.find(row => row.nom === 'Perception')?.id;
+  const skill = (participant.skills || []).find(row => row?.id === perceptionId && row.status !== 'unresolved');
+  return Number.isSafeInteger(skill?.total) && skill.total >= 0 ? skill.total : Number.isSafeInteger(participant.caracs?.I) && participant.caracs.I >= 0 ? participant.caracs.I : null;
+}
 
 export const ORDER_MODES = Object.freeze({ AUTOMATIC: 'automatic', MANUAL: 'manual' });
 
@@ -93,7 +101,7 @@ export function effectiveOrder(participants, { mode = ORDER_MODES.AUTOMATIC, ord
 
 /** Pure F2-A preparation. All random dice and opposed-test results are supplied by the caller. */
 export function prepareCombatInitiative(participants, {
-  diceById = {}, combatReflexesById = {}, characteristicById = {}, tieOrders = {}, opposedRolls = {}, tieChoices = {}, surprisedCamp = null
+  diceById = {}, combatReflexesById = {}, characteristicById = {}, tieOrders = {}, opposedRolls = {}, tieChoices = {}, surprisedCamp = null, vigilanceRolls = {}
 } = {}) {
   const active=activeParticipants(participants),needsInput=[],rows=[];
   for(const participant of active){
@@ -179,7 +187,17 @@ export function prepareCombatInitiative(participants, {
   rows.forEach(row=>{const metadata=combatInitiativeOf(row);if(metadata?.initialized)metadata.orderIndex=order.indexOf(row.id);});
   const validCamps=new Set(rows.filter(row=>row.zone==='active').map(row=>row.camp));
   if(surprisedCamp!==null&&surprisedCamp!==undefined&&surprisedCamp!==''&&!validCamps.has(surprisedCamp))needsInput.push({field:'surprisedCamp',camp:surprisedCamp});
-  return {ready:needsInput.length===0,status:needsInput.length?'requires-input':'ready',participants:rows,order,tieGroups,oppositions,needsInput,surprisedCamp:surprisedCamp||null};
+  // G6 (p. 116, 161, 187) : chaque surpris qui a la Vigilance fait son Test de Perception avant le round 1 ; réussi, il n'est pas Surpris.
+  const vigilance=[];
+  if(surprisedCamp&&validCamps.has(surprisedCamp))for(const row of rows){
+    if(row.zone!=='active'||row.camp!==surprisedCamp||!hasV5Talent(row,'talent-combat-aware'))continue;
+    const score=vigilanceScore(row),roll=(vigilanceRolls||{})[row.id];
+    if(score===null){needsInput.push({participantId:row.id,field:'vigilanceScore'});continue;}
+    if(!Number.isInteger(roll)||roll<1||roll>100){needsInput.push({participantId:row.id,field:'vigilanceRoll'});continue;}
+    const test=selectV5Test(previewV5Test({score,roll,kind:'test'}),'keep');
+    vigilance.push({participantId:row.id,roll,score,success:test.success===true,sl:test.sl});
+  }
+  return {ready:needsInput.length===0,status:needsInput.length?'requires-input':'ready',participants:rows,order,tieGroups,oppositions,needsInput,surprisedCamp:surprisedCamp||null,vigilance};
 }
 
 /** Explicitly reorder the manual track; the caller can pass null to append. */
