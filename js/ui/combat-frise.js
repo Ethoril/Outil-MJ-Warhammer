@@ -149,7 +149,13 @@ export function renderFrise(zone, context, handlers = {}) {
       now.setAttribute('aria-label', text);
       now.title = row.maintenant.ok ? `${text} (« Tour suivant » reviendra ensuite à celui qui devait jouer)` : text;
       now.disabled = !row.maintenant.ok;
-      now.addEventListener('click', event => { event.stopPropagation(); handlers.playTurnNow?.(row.id); });
+      // Lot E7a : la demande passe d'abord par `main.js` (fenêtre des jets de début de tour) ; sinon, appel direct.
+      now.addEventListener('click', event => {
+        event.stopPropagation();
+        const View = now.ownerDocument?.defaultView;
+        const request = View?.CustomEvent ? new View.CustomEvent('combat-play-turn-now', { bubbles: true, cancelable: true, detail: { id: row.id } }) : null;
+        if (!request || now.dispatchEvent(request)) handlers.playTurnNow?.(row.id);
+      });
       item.append(now);
     }
     list.append(item);

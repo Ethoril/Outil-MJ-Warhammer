@@ -369,6 +369,29 @@ async function advanceTurn() {
   finally { advancingTurn = false; }
 }
 
+// Lot E7a (CA25 bis) : « Jouer son tour maintenant » (frise ou bandeau) passe par le même aperçu que « Tour suivant » ;
+// les jets du début de tour de l'avancé se saisissent dans la même fenêtre d'effets, puis une seule commande annulable.
+async function playTurnNowFromUi(id) {
+  if (advancingTurn) return { status: 'pending' };
+  advancingTurn = true;
+  try {
+    let result = await Store.playTurnNow(id);
+    if (result?.status === 'requires-input') result = await openV5EffectInputDialog({ pending: result,
+      title: 'Jouer son tour maintenant : effets V5', getCurrentRevision: () => Store.getLocalRevision(), getObstinateStatus: id => Store.getObstinateStatus(id), getObstinateIdentity: id => Store.getObstinateIdentity(id),
+      submit: (inputs, baseRevision) => Store.playTurnNow(id, { inputs, baseRevision }) });
+    if (result?.status === 'stale') showToast('La partie a changé : recalculez les effets avant de jouer ce tour.', 'info');
+    else if (result?.status !== 'cancelled') await awaitStore(result, 'Jouer son tour maintenant');
+    return result;
+  } catch (error) { showToast(contextMessage('Tour non avancé', error, 'réessayez.'), 'error'); return { status: 'error' }; }
+  finally { advancingTurn = false; }
+}
+document.addEventListener('combat-play-turn-now', event => {
+  const id = event.detail?.id;
+  if (!id) return;
+  event.preventDefault();
+  playTurnNowFromUi(id);
+});
+
 initKeyboardShortcuts(Store, Combat, goToSpace, {
   advanceTurn,
   isCombatVisible: () => Boolean(combatBanner?.isVisible())

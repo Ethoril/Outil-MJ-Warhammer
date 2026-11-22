@@ -6,6 +6,7 @@ import {previewMagicMeditation,activeMagicTalent,magicTalentRank,effectiveSkillS
 import { previewV5Test, selectV5Test, normalizeV5Roll } from './v5-roll.js';
 import { previewV5SecondaryTest, secondaryTestDetail } from './v5-test-modifiers.js';
 import { obstinateStatus, findObstinateActor, consumeObstinate } from './v5-obstinate.js';
+import { previewV5Turn } from './v5-turn.js';
 import {
   applyCorruptionAbsolution as applyCorruptionAbsolutionPure,
   calculateCorruptionThreshold,
@@ -148,7 +149,7 @@ import { sanitizeArray, sanitizeProfile, sanitizeParticipant, sanitizeMagicEnvel
 import { MigrationError, migrateSnapshot, migrateLegacyStorage, applySchemaMigrations, legacySchemaVersion, LEGACY_SCHEMA_KEY, CURRENT_SCHEMA_VERSION } from './migrations.js';
 import { createStateCommand, createCompactStateCommand, applyStateChanges } from './commands.js';
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
-import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative, playTurnNow as computePlayTurnNow, playTurnNowCheck as computePlayTurnNowCheck, playedThisRound as computePlayedThisRound } from './turn-order.js';
+import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative, playTurnNowCheck as computePlayTurnNowCheck, playedThisRound as computePlayedThisRound } from './turn-order.js';
 import { createEncounter, normalizeEncounter, setEncounterEntry, removeEncounterEntry, duplicateEncounter, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene } from './encounters.js';
 import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution, previewMountedSecondaryTest, withTriggeringStun } from './resolution.js';
 import { simulateAction, applySimulation as applyActionSimulation, discardSimulation } from './simulation.js';
@@ -3426,22 +3427,38 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       return computePlayedThisRound({ participants: Array.from(combat.participants.values()), order: effectiveCombatOrder(), currentActorId: combat.currentActorId,
         round: combat.round, advanced: stateExtensions?.v5?.advancedTurn });
     },
-    playTurnNow(participantId) {
+    // Lot E7a (CA25 bis) : même chemin que « Tour suivant » (aperçu `previewV5Turn` avec le combattant imposé, puis
+    // application en une seule commande annulable) : début de Tour de l'avancé, horloge et turnIndex avancés comme une
+    // transition de Tour. Rend l'aperçu `requires-input` quand des jets sont à saisir (`{ inputs, baseRevision }` au second appel).
+    playTurnNow(participantId, { inputs = {}, baseRevision } = {}) {
       if (!canMutate()) return false;
       const check = api.playTurnNowCheck(participantId);
       const name = combat.participants.get(participantId)?.name || 'Ce combattant';
-      if (!check.ok) return { ok: false, message: `${name} ne peut pas jouer son tour maintenant : ${check.reason}.` };
-      const order = effectiveCombatOrder();
-      return api.executeCommand('play-turn-now', draft => {
-        const result = computePlayTurnNow({ participants: draft.combat?.participants || [], order, currentActorId: draft.combat?.currentActorId || null,
-          round: draft.combat?.round || 0, advanced: draft.extensions?.v5?.advancedTurn, participantId });
-        if (!result.ok) throw Object.assign(new Error(`${name} ne peut pas jouer son tour maintenant : ${result.reason}.`), { userFacing: true });
-        const resumeName = (draft.combat?.participants || []).find(row => row.id === result.advancedTurn.resumeActorId)?.name || '—';
-        return { ...draft, combat: { ...draft.combat, currentActorId: result.currentActorId },
-          extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), advancedTurn: result.advancedTurn } },
-          log: [{ id: uid(), ts: Date.now(), kind: 'management', actorId: participantId, actorName: name,
-            text: `▶ ${name} joue son tour maintenant (puis reprise : ${resumeName})` }, ...(draft.log || [])].slice(0, 300) };
-      });
+      const refused = reason => ({ ok: false, message: `${name} ne peut pas jouer son tour maintenant : ${reason}.` });
+      if (!check.ok) return refused(check.reason);
+      const options = { inputs: cloneValue(inputs || {}), playNow: participantId };
+      const expected = baseRevision ?? localRevision;
+      if (expected !== localRevision) return { status: 'stale', requiresPreview: true };
+      const preview = previewV5Turn(JSON.parse(api.getFullJSON()), options);
+      if (preview.status === 'requires-input') return preview;
+      if (!preview.ready) return { ...refused(preview.error || 'transition de tour refusée'), status: preview.status };
+      const finish = result => result?.ok === false ? result : { status: 'applied', ok: true, persistence: result };
+      const fail = error => {
+        if (error.code === 'V5_TURN_STALE') return { status: 'stale', requiresPreview: true };
+        if (error.code === 'V5_TURN_INPUT') return error.preview;
+        throw error;
+      };
+      try {
+        const commit = api.executeCommand('play-turn-now', draft => {
+          if (draft.localRevision !== expected) throw Object.assign(new Error('Le combat a changé'), { code: 'V5_TURN_STALE' });
+          const current = previewV5Turn(draft, options);
+          if (current.status === 'refused') throw Object.assign(new Error(refused(current.error).message), { userFacing: true });
+          if (!current.ready) throw Object.assign(new Error('Des données sont requises'), { code: 'V5_TURN_INPUT', preview: current });
+          for (const test of current.performedTests || []) consumeObstinate(current.state, findObstinateActor(draft, test.participantId), test);
+          return current.state;
+        });
+        return commit && typeof commit.then === 'function' ? commit.then(finish).catch(fail) : finish(commit);
+      } catch (error) { return fail(error); }
     },
     consumeTurnSelection() {
       const pending = turnSelectionPending;

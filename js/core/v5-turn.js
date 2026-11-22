@@ -3,7 +3,7 @@ import {wrathForcedPrayerGate} from './v5-divine-prayer-caps.js';
 import {expireDivineEffects,expireDivineStasis} from './v5-divine-engine.js';
 import { withExpiredEngagements } from './store/api-engagements.js';
 import {refreshEffectLayers} from './v5-magic-effects.js';
-import { effectiveOrder, nextTurn, readAdvancedTurn } from './turn-order.js';
+import { effectiveOrder, nextTurn, readAdvancedTurn, playTurnNow } from './turn-order.js';
 import { advanceV5Effects, acquireV5Conditions } from './v5-effects.js';
 import { getV5CriticalEffect } from '../data/v5-crits.js';
 import { processCombatTurnSpells, shieldAtTurnStart, recurringSpellHits, roundSpellEffects } from './v5-magic-turn.js';
@@ -38,18 +38,32 @@ function withAdvancedTurn(v5, value) {
   const { advancedTurn, ...rest } = v5;
   return value ? { ...rest, advancedTurn: value } : rest;
 }
-export function previewV5Turn(state, { inputs = {} } = {}) {
+// Refonte E7a (CA25 bis) : `playNow` = « Jouer son tour maintenant » de ce combattant. Même transition de Tour que « Tour
+// suivant » (horloge, turnIndex, début de Tour du combattant imposé, demandes de saisie), sans fin de Tour de celui qu'on
+// interrompt : il reprend ensuite son Tour (sans rejouer son début) et sa fin de Tour garde son moment d'aujourd'hui.
+export function previewV5Turn(state, { inputs = {}, playNow = null } = {}) {
   const before = structuredClone(state);
   const combat = before.combat || {};
   if (!combat.round) return { status: 'idle', ready: false, baseRevision: state.localRevision || 0, requests: [] };
+  // Les verrous de fin de Tour (prière forcée du Courroux, fuite de Brisé) portent sur le Tour interrompu : ils jouent à sa reprise.
+  if (!playNow) {
   const prayerGate=wrathForcedPrayerGate(before,combat.currentActorId,{endingTurn:true});if(prayerGate)return {...prayerGate,baseRevision:before.localRevision||0,requests:[]};
   const brokenGate=brokenEscapeTurnGate(before);if(brokenGate)return {...brokenGate,ready:false,baseRevision:before.localRevision||0,requests:[]};
+  }
   // Le froid prend effet sur l'ordre automatique au prochain Round, jamais sur les Tours en cours.
   const order = before.extensions?.v5?.orderRound===combat.round?effectiveOrder(combat.participants || [],{mode:'manual',order:combat.order}):effectiveOrder(combat.participants || [], { mode: combat.orderMode, order: combat.order,autoOrder:before.extensions?.v5?.combatInitiativeResolution?.order,round:combat.round });
   // Tour avancé (refonte E4c) : `advancedTurn` est retiré de la transition (il vit dans extensions.v5, pas dans combat).
-  const { advancedTurn: nextAdvancedTurn, ...transition } = nextTurn({ participants: combat.participants, order, currentActorId: combat.currentActorId, round: combat.round, advanced: before.extensions?.v5?.advancedTurn });
+  let nextAdvancedTurn, transition;
+  if (playNow) {
+    // L'ordre ne change pas ; le combattant imposé prend le Tour dans le même Round.
+    const advanced = playTurnNow({ participants: combat.participants, order, currentActorId: combat.currentActorId, round: combat.round,
+      advanced: before.extensions?.v5?.advancedTurn, participantId: playNow });
+    if (!advanced.ok) return { status: 'refused', ready: false, baseRevision: state.localRevision || 0, requests: [], error: advanced.reason };
+    transition = { currentActorId: advanced.currentActorId, round: combat.round };
+    nextAdvancedTurn = advanced.advancedTurn;
+  } else ({ advancedTurn: nextAdvancedTurn, ...transition } = nextTurn({ participants: combat.participants, order, currentActorId: combat.currentActorId, round: combat.round, advanced: before.extensions?.v5?.advancedTurn }));
   // Celui qui reprend son tour après un tour avancé a déjà eu son début de Tour : il n'est pas rejoué.
-  const resumingTurn = Boolean(readAdvancedTurn(before.extensions?.v5?.advancedTurn, combat.round)?.resumeActorId) && transition.round === combat.round
+  const resumingTurn = !playNow && Boolean(readAdvancedTurn(before.extensions?.v5?.advancedTurn, combat.round)?.resumeActorId) && transition.round === combat.round
     && transition.currentActorId === before.extensions.v5.advancedTurn.resumeActorId;
   if (!transition.currentActorId) return { status: 'idle', ready: false, baseRevision: state.localRevision || 0, requests: [] };
   const fromPosition = readCombatPosition(before);
@@ -156,6 +170,10 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     const out = collectDivineRecurringEffects({ participants, phase, round: row.round, turnIndex: row.turnIndex, actorId: row.actorId, inputs });
     participants = out.participants; requests.push(...out.requests); effectLogs.push(...out.logs);
   };
+  if (playNow) {
+    // Tour avancé : rien ne se termine pour celui qu'on interrompt ; seules les échéances « au prochain Tour de » l'avancé tombent.
+    holdStasis(()=>{ participants = processCombatTurnSpells(participants, transition.round, transition.currentActorId, null); });
+  } else {
   runPhase('endOfTurn', phaseRows('endOfTurn'));
   const ending=phaseRow('endOfTurn');
   const expiry=phaseRow('expiry'),caster=phaseRow('endOfCasterTurn');
@@ -166,6 +184,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
   participants = processCombatTurnSpells(participants, transition.round, transition.currentActorId, { actorId: combat.currentActorId, round: combat.round });
   const casterSpells=roundSpellEffects(participants,caster.phase,caster.round,inputs,caster.actorId);participants=casterSpells.participants;requests.push(...casterSpells.requests);effectLogs.push(...casterSpells.logs);noteTests(casterSpells);
   });
+  }
   if (transition.round > combat.round) {
     // Recette G-DIV-2 : les effets de sort de fin de Round (étouffement…) se résolvent avant l'expiration des couches
     // divines de ce même Round ; un Souffle « jusqu'à la fin du Round 6 » protège encore à ce passage.
@@ -208,7 +227,7 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
     // A repeated preview of the same state is the same CAS payload (safe to
     // retry); every accepted transition changes the base revision, while this
     // producer marker keeps it distinct from legacy Store.nextTurn events.
-    id: `clock-v1:${clock.revision}:v5-preview-${before.localRevision || 0}-${turn}-${toPosition.turnIndex}-${encodeURIComponent(toPosition.currentActorId)}`,
+    id: `clock-v1:${clock.revision}:v5-${playNow ? 'play-now' : 'preview'}-${before.localRevision || 0}-${turn}-${toPosition.turnIndex}-${encodeURIComponent(toPosition.currentActorId)}`,
     baseRevision: clock.revision, kind: 'combat-transition', sceneId: fromPosition.sceneId,
     from: fromPosition, to: toPosition, phases: phasePlan
   };
@@ -220,7 +239,8 @@ export function previewV5Turn(state, { inputs = {} } = {}) {
       transition.round > combat.round ? null : nextAdvancedTurn) },
     combat: { ...combat, participants, ...transition },
     log: [{ id: `v5-turn:${before.localRevision || 0}:${turn}:management`,  kind: 'management', actorId: nextActor?.id, actorName: nextActor?.name,
-      text: `▶ ${transition.round !== combat.round ? `Round ${transition.round} — ` : ''}Tour de ${nextActor?.name || '—'}` }, ...effectLogs, ...(before.log || [])].slice(0, 300) };
+      text: playNow ? `▶ ${nextActor?.name || '—'} joue son tour maintenant (puis reprise : ${participants.find(participant => participant.id === nextAdvancedTurn.resumeActorId)?.name || '—'})`
+        : `▶ ${transition.round !== combat.round ? `Round ${transition.round} — ` : ''}Tour de ${nextActor?.name || '—'}` }, ...effectLogs, ...(before.log || [])].slice(0, 300) };
   const combatActions=stateAfter.extensions?.v5?.combatActions;
   if(combatActions?.byActorId?.[nextActor?.id]?.kind==='defensive'){
     const expired={...combatActions.byActorId};delete expired[nextActor.id];

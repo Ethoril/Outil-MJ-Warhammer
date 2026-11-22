@@ -71,6 +71,10 @@ export function initCombatBanner({ Store, mount, onAdvance, onGoToPlay, getDecis
   playNow.addEventListener('click', () => {
     const id = playNow.dataset.playTurnNow;
     if (!id) return;
+    // Lot E7a : `main.js` intercepte la demande pour saisir les jets du début de tour de l'avancé ; sinon, appel direct.
+    const View = playNow.ownerDocument?.defaultView;
+    const request = View?.CustomEvent ? new View.CustomEvent('combat-play-turn-now', { bubbles: true, cancelable: true, detail: { id } }) : null;
+    if (request && !playNow.dispatchEvent(request)) return;
     playNow.disabled = true;
     Promise.resolve().then(() => Store.playTurnNow?.(id))
       .then(result => { if (result === false || result?.ok === false) throw new Error(result?.message || 'commande refusée.'); })
