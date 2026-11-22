@@ -33,6 +33,12 @@ Rencontre de référence (R20) : la rencontre d'essai de l'inventaire (4 PJ dont
 - **CA5** Un clic sur un portrait fait de ce combattant celui qui agit (fiche de gauche et barre d'actions), sans changer le tour en cours ; le bandeau l'indique (« agit hors de son tour ») ; « Tour suivant » reprend l'ordre.
 - **CA6** La cible se choisit par un clic sur son cartouche dans les mêlées ; un clic sur la frise ne change jamais la cible.
 
+### S2 bis · Jouer un tour maintenant (ajout du MJ, 22/11)
+Demande du MJ : « une possibilité de "déplacer" un tour, en choisissant un personnage qui reprend le statut actif (puis le tour poursuit son cours normal) » ; « On reprend où on était ».
+- **CA24** Depuis le portrait de la frise ou le bandeau « agit hors de son tour », « Jouer son tour maintenant » donne le tour à ce combattant tout de suite ; à la fin de son tour, « Tour suivant » revient à celui qui devait jouer.
+- **CA25** Ce combattant est marqué « a joué » dans la frise et ne rejoue pas à sa place normale dans ce round ; au round suivant, l'ordre d'initiative reprend tel quel. L'action s'annule avec « Annuler ». Un combattant qui a déjà joué dans ce round ne peut pas jouer son tour maintenant : la commande est grisée, avec la raison.
+- CA5 reste : agir hors de son tour sans rien marquer (réaction, action gratuite) ne change ni le tour ni l'ordre.
+
 ### S3 · Les demandes apparaissent à la vue du MJ
 - **CA7** Chaque décision attendue du MJ (les 26 du relevé, §A) apparaît, dès qu'elle naît, dans la case fixe « À décider », toujours visible ; le nombre de décisions en attente s'affiche dans la barre du haut et une marque sur le portrait concerné.
 - **CA8** Mort subite d'un figurant à 0 PV : « Mort », « Inconscient », « Plus tard », « Pas un figurant », chacun en un clic, sans case à cocher préalable.
@@ -51,6 +57,11 @@ Rencontre de référence (R20) : la rencontre d'essai de l'inventaire (4 PJ dont
 ### S5 bis · Circonstances lisibles (ajout du MJ, 21/11)
 - **CA15a** L'onglet « Circonstances » disparaît. Le panneau « autres… » de la résolution ne propose que les circonstances qui s'appliquent à l'action en cours (mêlée, tir, sort, prière, test), au plus 12, chacune avec un libellé en clair qui dit son effet (« Cible à terre : +1 DR »).
 - **CA15b** Aucune case ne redemande ce que l'outil sait déjà (plateau, carte, États, armes, talents déclarés) : ces circonstances sont déduites et affichées en puces actives dans la résolution, et un clic suffit pour les forcer ou les retirer.
+
+### S5 ter · Charger (ajout du MJ, 22/11)
+Constat du MJ : il n'a pas trouvé comment déclencher une charge pendant le combat du 21/11 (en 3.56.0, « Charger · nom » n'apparaissait que pour quatre ennemis au plus). Choix du MJ : « Bouton sur la cible ».
+- **CA26** Une fois la cible choisie par son cartouche, « Charger » est dans la barre d'actions pour tout ennemi qui n'est pas déjà engagé avec l'acteur, quel que soit le nombre d'ennemis.
+- **CA27** Si l'acteur est engagé avec un autre adversaire, « Charger » reste proposé avec la mention « interdit : déjà engagé (p. 163) » ; un clic force la charge (décision du MJ), comme en 3.56.0. La charge garde ses effets actuels (Élan si la distance de charge est atteinte, engagement).
 
 ### S6 · Rien de perdu, rien de changé dans les règles
 - **CA16** Chaque fonction du relevé ([fonctions-jouer.md](fonctions-jouer.md), sections 1 à 10) reste accessible depuis l'écran de combat, en deux clics au plus.

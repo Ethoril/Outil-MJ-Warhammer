@@ -36,7 +36,7 @@ On ne réécrit pas l'interface : on **reloge** les blocs existants dans une gri
 
 ## 4. Données
 
-Un seul ajout, facultatif : `participant.extensions.v5.suddenDeathDeclined: true` quand le MJ répond « Pas un figurant ». Absent = faux, lu au point de lecture (règle du projet), sans migration ni changement de `schemaVersion` ; les règles Firebase ne décrivent pas les participants (vérifié : aucune clé `participants` ni `extensions` dans `firebase.database.rules.json`), rien à déployer. Rien d'autre : sauvegardes, synchronisation, fiches et messages de la carte inchangés (CA18).
+Un seul ajout, facultatif : `participant.extensions.v5.suddenDeathDeclined: true` quand le MJ répond « Pas un figurant ». Absent = faux, lu au point de lecture (règle du projet), sans migration ni changement de `schemaVersion` ; les règles Firebase ne décrivent pas les participants (vérifié : aucune clé `participants` ni `extensions` dans `firebase.database.rules.json`), rien à déployer. Second ajout (lot E4c, CA24-CA25) : une commande annulable du store, « jouer son tour maintenant », qui donne le tour au combattant choisi et garde dans des champs facultatifs du combat (sous `combat.extensions.v5`) qui reprendra ensuite et qui a déjà joué par anticipation dans ce round ; absents = rien d'avancé, lus au point de lecture, sans migration ni `schemaVersion`. Le calcul de l'ordre d'initiative ne change pas. Rien d'autre : sauvegardes, synchronisation, fiches et messages de la carte inchangés (CA18).
 
 ## 5. Tests existants
 
@@ -53,6 +53,8 @@ Un seul ajout, facultatif : `participant.extensions.v5.suddenDeathDeclined: true
 | 11, 12 | Parcours : lancement R20 → 20 actifs ; ajout et retrait d'un combattant pendant la saisie de l'initiative. |
 | 13, 14, 15 | `tests/unit/combat/distance-tir.test.js` : chaque choix → mêmes champs `v5Context` et même aperçu de résolution qu'en 3.56.0 sur six cas (contact, bout portant, arme sans bout portant, courte, mêlée tierce touchée, mêlée tierce déviée). |
 | 15a, 15b | `tests/unit/ui/circonstances-pertinentes.test.js` : pour chaque type d'action, la liste proposée ne contient que des circonstances applicables (≤ 12), chacune avec son effet en clair ; aucune n'a sa valeur déductible du plateau, de la carte, des États ou des armes (celles-là sortent en puces déduites, forçables). |
+| 24, 25 | `tests/unit/combat/jouer-tour-maintenant.test.js` : commande du store, annulable ; Tour suivant revient au combattant attendu, le combattant avancé est sauté à sa place, le round suivant reprend l'ordre ; refus pour un combattant qui a déjà joué ; parcours : bouton sur la frise et dans le bandeau. |
+| 26, 27 | Test unitaire du modèle de la barre d'actions (`plateau.js`) : « Charger » présent pour chaque ennemi non engagé avec l'acteur choisi comme cible, sans limite ; mention p. 163 et forçage si l'acteur est engagé ailleurs ; parcours : cible choisie puis Charger. |
 | 16 | `recette-fonctions.md` : chaque ligne de `fonctions-jouer.md` §1-10 avec son nouvel emplacement et son nombre de clics, cochée au lot E6. |
 | 17 | Suite unitaire complète au lot E6 (deux commandes de `CLAUDE.md`). |
 | 18 | Garde données : `git diff main -- js/core/ firebase.database.rules.json` ne montre que la lecture du champ du §4 ; `liaison-carte-messages-golden` vert. |
