@@ -69,15 +69,15 @@ try {
 
   await boot();
 
-  // 1. Heavy Warhorse en Réserve ; le panneau s'ouvre à l'édition, six cases facultatives, aucune modification.
+  // 1. Heavy Warhorse en Réserve ; le panneau s'ouvre à l'édition, sept cases facultatives (dont Cavalerie de choc, ajoutée en 3.54.0), aucune modification.
   const warhorse = await copyFromLibrary('Heavy Warhorse', /^Cheval de guerre lourd/, 'E0-P-766');
   assert.equal(warhorse.name, 'Cheval de guerre lourd');
   let editor = await openEditor(warhorse.id);
   await expect(panel(editor)).toBeVisible();
   await expect(panel(editor)).toContainText('Ajouter un Trait');
-  assert.deepEqual((await caseKeys(editor)).sort(), ['Champion', 'Clever', 'Elite', 'Hardy', 'Rear', 'Tough']);
+  assert.deepEqual((await caseKeys(editor)).sort(), ['Champion', 'Clever', 'Elite', 'Hardy', 'Rear', 'Tough', 'Trained:Shock Cavalry']);
   await expect(panel(editor).locator('[data-optional-change]')).toHaveCount(0);
-  console.log('PASS 1 — copie en Réserve, panneau ouvert à l’édition : 6 cases facultatives, aucun changement');
+  console.log('PASS 1 — copie en Réserve, panneau ouvert à l’édition : 7 cases facultatives, aucun changement');
 
   // 2. Tough : « imprimé → modifié » sur E (et FM), la valeur imprimée reste visible.
   await box(editor, 'Tough').click();
