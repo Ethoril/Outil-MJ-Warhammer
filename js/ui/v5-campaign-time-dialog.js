@@ -116,6 +116,6 @@ export function openCampaignTimeDialog({ Store, returnFocus } = {}) {
       if (target?.isConnected && (typeof target.checkVisibility !== 'function' || target.checkVisibility())) target.focus();
       resolve(outcome);
     }, { once: true });
-    dialog.showModal(); amount.focus();
+    dialog.show(); amount.focus();
   });
 }

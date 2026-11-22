@@ -429,8 +429,8 @@ try {
   // Cohérence de l'interface pour un absent :
   // Le bloc d'actions est intitulé 'Archivage du suivi' (et NON 'Soins et décisions disponibles')
   await expect(detail.locator('.campaign-detail-actions-box > h4')).toHaveText('Archivage du suivi');
-  // Aucun formulaire de soin ni de maladie n'est proposé dans le détail de l'absent
-  await expect(detail.locator('input[name*="disease"]')).toHaveCount(0);
+  // Aucun formulaire de soin de blessure n'est proposé dans le bloc d'archivage de l'absent (ses maladies ont leur bloc : refonte E7b, plus bas)
+  await expect(detail.locator('.campaign-detail-actions-box input[name*="disease"]')).toHaveCount(0);
   await expect(detail.getByRole('button', { name: 'Enregistrer le Test de soin' })).toHaveCount(0);
 
   // Refus effectif par le Store de toute mutation de soin sur le participant absent
@@ -468,6 +468,29 @@ try {
   await expect(detailGhostSequela).toBeVisible();
   await expect(detailGhostSequela).not.toContainText('consultation seule');
   await expect(detailGhostSequela.locator('details, button')).not.toHaveCount(0);
+
+  // Refonte E7b (CA16, CA20) : les maladies d'un participant absent se gèrent dans Campagne, sous l'arbitrage de ses séquelles,
+  // avec les mêmes contrôles et les mêmes appels au Store qu'en 3.56.0 (`allowAbsentActions`).
+  const absentDiseases = detail.locator('.campaign-detail-diseases-box');
+  await expect(absentDiseases.locator(':scope > h4')).toHaveText('Maladies de l’absent');
+  const diseasesOrder = await detail.evaluate(el => {
+    const boxes = [...el.querySelectorAll('.campaign-detail-sequelae-box, .campaign-detail-diseases-box')].map(box => box.className);
+    return boxes;
+  });
+  assert.deepEqual(diseasesOrder, ['campaign-detail-sequelae-box', 'campaign-detail-diseases-box'], 'les maladies viennent sous l’arbitrage des séquelles');
+  const diseasesDetails = absentDiseases.locator('details.workspace-aftermath-diseases');
+  if (!await diseasesDetails.evaluate(el => el.open)) await diseasesDetails.locator(':scope > summary').click();
+  const absentDisease = absentDiseases.locator('.workspace-aftermath-disease', { hasText: 'Maladie spectrale' });
+  await expect(absentDisease).toBeVisible();
+  await expect(absentDisease).not.toContainText('consultation seule');
+  await absentDisease.locator('select[name="care-disease:ghost-healer"]').selectOption('hero');
+  await absentDisease.locator('input[name="care-disease:ghost-roll"]').fill('30');
+  await absentDisease.getByRole('button', { name: 'Enregistrer les soins du jour' }).click();
+  // Même appel au Store qu'en 3.56.0 : sans sujet en rencontre ni suivi hors rencontre, c'est le Store qui refuse (CA13), avec sa raison.
+  await expect(detail.locator('.workspace-aftermath-status')).toContainText('Refus · Suivi en consultation seule');
+  saved = await read();
+  const treatedGhost = saved.extensions.v5.aftermathRegister.diseases.find(row => row.id === 'disease:ghost');
+  assert.equal(treatedGhost.careLog.length, 0, 'aucun soin écrit sur un suivi sans sujet : le Store refuse');
 
   // 6b. Préservation des fonctionnalités dans l'onglet Jouer (non-régression Lot 2 / Phase F2) :
   // Le panneau suites de combat de Jouer conserve ses contrôles d'arbitrage pour les séquelles

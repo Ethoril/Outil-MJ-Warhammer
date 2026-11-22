@@ -2552,3 +2552,10 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 .workspace-center-panel .workspace-divine-col.is-targets fieldset > p { font-size: 11.5px; }
 .workspace-center-panel .workspace-divine-col.is-targets fieldset > label.workspace-type { gap: 4px; font-size: 11.5px; line-height: 1.2; }
 .workspace-center-panel .workspace-divine-col.is-targets input[type="checkbox"] { width: 13px; height: 13px; margin: 0; }
+
+/* ===== LOT E7b · Chance et Destin non modaux : côte à côte sur la zone centrale, jamais l'une sur l'autre ===== */
+/* Les fiches (zones acteur et droite) et leurs boutons Chance / Destin restent découverts. */
+/* !important : le script pose un style en ligne (inset, marge, largeur) prévu pour une fenêtre modale centrée. */
+dialog.v5-fortune-dialog[open], dialog.v5-fate-dialog[open] { position:fixed !important; margin:0 !important; transform:none !important; top:150px !important; bottom:auto !important; width:min(350px, calc(50vw - 16px)) !important; max-height:calc(100dvh - 250px) !important; z-index:30; box-sizing:border-box; }
+dialog.v5-fortune-dialog[open] { left:calc(50% - 358px) !important; right:auto !important; }
+dialog.v5-fate-dialog[open] { left:calc(50% + 8px) !important; right:auto !important; }

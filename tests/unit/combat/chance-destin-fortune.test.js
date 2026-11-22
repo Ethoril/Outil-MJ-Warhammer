@@ -234,6 +234,7 @@ test('counter-review: Destiny dialog exposes and submits the V4 permanent Resili
     addEventListener(name, handler) { this.listeners[name] = handler; }
     remove() { this.isConnected = false; }
     focus() {}
+    show() {}
     showModal() {}
     close() { this.listeners.close?.(); }
   }

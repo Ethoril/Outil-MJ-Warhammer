@@ -716,10 +716,23 @@ export function createV5AftermathPanel({ Store, refresh = () => {} } = {}) {
     return renderSequelae(state, participants, id => subjectName(participants, id), (prefix, purpose) => healerFields(prefix, purpose, participants), { participantId, allowAbsentActions: true });
   }
 
+  /**
+   * Refonte E7b (CA16, CA20) : les maladies d'un participant absent de la scène, que permettait le panneau « Suites de combat »
+   * de Jouer en 3.56.0 (`allowAbsentActions`, mêmes appels au Store). Rend `null` sans maladie suivie pour ce participant.
+   */
+  function renderAbsentDiseases(participantId, participants = []) {
+    ui.participants = participants;
+    let state;
+    try { state = Store.getAftermathState(); } catch { return null; }
+    if (!(state.diseases || []).some(row => row.participantId === participantId)) return null;
+    return renderDiseases(state, participants, id => subjectName(participants, id), participantId, { allowAbsentActions: true });
+  }
+
   return {
     renderReceiptStatus,
     renderParticipantConvalescence,
     renderAbsentSequelae,
+    renderAbsentDiseases,
     renderGlobalConvalescence,
     getLastReceipt: () => ui.lastReceipt,
     render(participants = []) {
