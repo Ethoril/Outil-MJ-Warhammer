@@ -27,6 +27,8 @@ try {
   const card = id => page.locator(`[data-decisions] [data-decision-kind="mort-subite"][data-participant-id="${id}"]`);
   await page.locator('[data-decisions] [data-decision-kind="reglage-mort-subite"]').first().waitFor();
   assert.equal(await card('extra').count(), 0, 'pas de mort subite avec la règle désactivée, même avec un figurant à 0');
+  // Refonte E4b : « Règles de table » vit en tête de l'onglet Règles, replié à l'ouverture de l'écran.
+  if (await rules.isHidden()) await page.locator('.workspace-side-tab[data-side-tab="rules"]').click();
   await rules.locator('summary').click();
   const panel = page.getByLabel('Réglage de table : mort subite des figurants');
   await panel.waitFor({ state: 'visible' });
@@ -35,6 +37,8 @@ try {
   await option.check();
   await card('extra').getByText('Figurant · 0 Blessure').waitFor();
   assert.equal(await rules.evaluate(el => el.open), true, 'Règles de table reste ouvert après le rendu');
+  // Refonte E4b : l'onglet Règles s'ouvre par-dessus l'écran ; le replier rend la case « À décider » entière.
+  await page.locator('.workspace-side-toggle').click();
   assert.equal(await card('extra').locator('input[type="checkbox"]').count(), 0, 'aucune case à cocher préalable');
   const chooseUnconscious = card('extra').getByRole('button', { name: 'Inconscient', exact: true });
   assert.equal(await chooseUnconscious.isEnabled(), true, 'le choix est actif d’emblée');

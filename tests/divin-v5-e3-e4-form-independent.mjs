@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import {chooseBoolean} from './helpers/confirmation.mjs';
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
@@ -30,9 +31,10 @@ try {
   const page = await context.newPage(); page.setDefaultTimeout(6000);
   const errors=[]; page.on('pageerror',error=>errors.push(error.message));
   await page.goto(`http://127.0.0.1:${server.address().port}/__form__`,{waitUntil:'networkidle'});
+  await openCenterPanel(page,'prayer');/* Refonte E4b : la prière s'ouvre dans la case centrale. */
   await page.waitForSelector('[data-divine-panel]');
   const panel=page.locator('[data-divine-panel]');
-  await panel.locator('summary').first().click();
+  if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();
 
   // Create then revoke a once grant through the actual panel controls.
   const prayerSelect=page.locator('[aria-label="Prière divine"]');
@@ -157,7 +159,7 @@ try {
   assert.equal(applied.sin,0,'l’application du Courroux retire le Péché après résolution');
   assert.deepEqual(applied.summoned,['Démon mineur'],'B14 : le démon confirmé par le MJ est créé comme participant');
   assert.ok(applied.states.some(key=>/aveugle|blind/i.test(key)),'l’effet du Soleil aveugle sa cible admissible; le démon du Courroux reste un rappel MJ distinct');
-  await page.reload({waitUntil:'networkidle'}); await page.waitForSelector('[data-divine-panel]');
+  await page.reload({waitUntil:'networkidle'}); await openCenterPanel(page,'prayer');/* Refonte E4b : la prière s'ouvre dans la case centrale. */ await page.waitForSelector('[data-divine-panel]');
   const reloaded=await page.evaluate(()=>({sin:window.__TEST__.Store.listParticipants().find(p=>p.id==='priest').extensions.v5.divine.sin,
     states:window.__TEST__.Store.listParticipants().find(p=>p.id==='ally').states.map(s=>s.key||s.name)}));
   assert.equal(reloaded.sin,0); assert.ok(reloaded.states.some(key=>/aveugle|blind/i.test(key)),'l’effet du Courroux persiste au reload');

@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** Independent UI gesture control for Courroux 11–15, real app + IndexedDB. */
 import assert from 'node:assert/strict';
@@ -15,7 +16,8 @@ const check=description=>receipt.checks.push(description);let browser,page;
 const state=()=>page.evaluate(async()=>{const{Store}=await import('/js/main.js');await Store.whenIdle();const value=JSON.parse(Store.getFullJSON());delete value.exportedAt;return value;});
 const effect=async()=>((await state()).combat.participants.find(p=>p.id==='priest').extensions?.v5?.divineEffects||[]).find(e=>e.ruleId==='wrath:11-15:pray-sl-modifier');
 const ready=()=>page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block');
-const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor({state:'attached'});if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
+// Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+const openPanel=async()=>{await openCenterPanel(page,'prayer');const panel=page.locator('[data-divine-panel]');await panel.waitFor({state:'attached'});if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 const prepare=async(roll)=>{
  const panel=await openPanel();await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption('divine:blessing:myrmidia:battle');
  assert.equal(await panel.evaluate(el=>el.open),true,'le panneau reste ouvert après sélection de prière');

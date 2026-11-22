@@ -101,11 +101,9 @@ try {
   // 1. Navigation depuis Jouer vers Campagne via le lien dans Suites de combat
   await page.locator('#tab-combat').click();
   const combatRoot = page.locator('#workspace-root');
-  const aftermathDetails = combatRoot.locator('details.workspace-aftermath');
-  await aftermathDetails.locator(':scope > summary').click();
-  const linkToCampaign = aftermathDetails.locator('.workspace-aftermath-link');
-  await expect(linkToCampaign).toBeVisible();
-  await linkToCampaign.click();
+  // Refonte E4b (CA20) : « Suites de combat » a quitté Jouer ; on passe par l'onglet Campagne.
+  await expect(combatRoot.locator('details.workspace-aftermath')).toHaveCount(0);
+  await page.locator('#tab-campaign').click();
 
   // Vérifier qu'on est basculé dans l'espace Campagne
   const campaignTab = page.locator('#tab-campaign');
@@ -466,14 +464,9 @@ try {
   // Le panneau suites de combat de Jouer conserve ses contrôles d'arbitrage pour les séquelles
   const playNavBtn = page.locator('[data-workspace-space="play"]');
   await playNavBtn.click();
-  const playAftermath = page.locator('#workspace-play section.workspace-aftermath');
-  await expect(playAftermath).toBeVisible();
-
-  // Dans Jouer, la séquelle de fracture n'est pas bridée en consultation seule
-  const playGhostSequela = playAftermath.locator('.workspace-aftermath-sequela', { hasText: 'Fracture spectrale' });
-  await expect(playGhostSequela).toBeVisible();
-  await expect(playGhostSequela).not.toContainText('consultation seule');
-  await expect(playGhostSequela.locator('details, button')).not.toHaveCount(0);
+  // Refonte E4b (CA20) : plus de panneau des suites dans Jouer. L'arbitrage d'une séquelle d'un participant absent
+  // (contrôles de ce panneau) n'a plus d'emplacement : point remonté au cadrage, pas d'attente de règle modifiée.
+  await expect(page.locator('#workspace-play section.workspace-aftermath')).toHaveCount(0);
 
   // Retour à Campagne
   const campaignNavBtn = page.locator('#tab-campaign');

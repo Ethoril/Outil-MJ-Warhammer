@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
@@ -39,10 +40,13 @@ try {
   const none = await open(null);
   const panel = none.locator('[data-divine-panel]');
   assert.equal(await panel.count(), 0, 'pas de section « Prières divines » pour un PJ sans culte ni prière');
-  await none.getByRole('button', { name: 'Prières divines…' }).click();
+  // Refonte E4b : plus de bouton discret sous la résolution ; « Prière » du menu « Sort, prière, Corruption… » ouvre la
+  // section dans la case centrale.
+  await openCenterPanel(none, 'prayer');
   await panel.waitFor();
   assert.match(await panel.textContent(), /Prières divines · Attaquant/, 'le bouton discret ouvre la section');
   const priest = await open('Sigmar');
+  await openCenterPanel(priest, 'prayer');
   assert.equal(await priest.locator('[data-divine-panel]').count(), 1, 'un personnage avec un culte garde la section');
   assert.equal(await priest.getByRole('button', { name: 'Prières divines…' }).count(), 0);
   assert.deepEqual(errors, []);

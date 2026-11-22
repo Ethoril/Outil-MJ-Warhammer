@@ -1,4 +1,4 @@
-import { openU1Settings } from './helpers/u1-drawer.mjs';
+import { openU1Settings, openCenterPanel } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import reference from '../js/data/reference-snapshot.json' with { type: 'json' };
@@ -32,10 +32,8 @@ try{
   await page.locator('[data-action-key="antler-attack"]').click();
   const workspace=page.locator('#workspace-root');
   const openSettings=async()=>openU1Settings(workspace);
-  const openCorruption=async()=>{
-    const section=workspace.locator('[data-secondary-panel="corruption"]');
-    if(!await section.evaluate(el=>el.open))await section.locator('summary').click();
-  };
+  // Refonte E4b : la corruption s'ouvre dans la case centrale (menu « Sort, prière, Corruption… ») ; un changement d'acteur la referme.
+  const openCorruption=async()=>openCenterPanel(workspace,'corruption');
   await openSettings();
   assert.equal(await workspace.getByLabel('Origine de la poignée en bois de Grand Cerf').count(),1);
   // Warp Blade : score et d100 du Test de Résistance saisis dans le panneau, gardés d’un rendu à l’autre, oubliés au changement de cible.
@@ -82,15 +80,15 @@ try{
   await secondAction.click();
   await page.waitForFunction(()=>document.querySelector('.workspace-pavise-setup')?.textContent.includes('Planté face au north'));
   await closeFull();
-  assert.equal(await workspace.getByLabel('Objet porté contenant de la malepierre').count(),1);
   await openCorruption();
+  assert.equal(await workspace.getByLabel('Objet porté contenant de la malepierre').count(),1);
   await workspace.getByLabel('Objet porté contenant de la malepierre').selectOption(`equipment:${ratling.id}`);
   await workspace.getByLabel('Jour déclaré par le MJ').fill('Jour navigateur');
   await workspace.getByRole('button',{name:'Déclarer l’exposition quotidienne'}).click();
   await page.waitForFunction(()=>document.querySelector('.workspace-corruption-panel')?.textContent.includes('Malepierre portée : Mitrailleuse Ratling Skaven · Jour navigateur'));
   await page.locator('[data-workspace-select="f-bonebreaker"]').click();
-  await page.waitForFunction(()=>document.querySelector('.workspace-corruption-panel')?.textContent.includes('Rat Ogre Bonebreaker — Warpstone Shard*'));
   await openCorruption();
+  await page.waitForFunction(()=>document.querySelector('.workspace-corruption-panel')?.textContent.includes('Rat Ogre Bonebreaker — Warpstone Shard*'));
   await workspace.getByLabel('Objet porté contenant de la malepierre').selectOption(`attack:${bonebreaker.actions.find(row=>row.name==='Warpstone Shard*').id}`);
   await workspace.getByLabel('Jour déclaré par le MJ').fill('Jour Bonebreaker');
   await workspace.getByRole('button',{name:'Déclarer l’exposition quotidienne'}).click();

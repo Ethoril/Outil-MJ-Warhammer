@@ -89,7 +89,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   } });
   const secondaryOpen = new Map();
   const secondaryDirty = new Set();
+  // Refonte E4b : panneaux qui peuvent s'ouvrir dans la case centrale pour l'acteur affiché (prière, corruption).
+  const centerPanelsAvailable = new Set();
   const state = {
+    // Panneau ouvert dans la case centrale à la place de la résolution : null ou { panel: 'prayer' | 'corruption', actorId }.
+    centerPanel: null,
     space: 'prepare',
     // Explicit target for the current actor: null = default, 'none' or an id.
     targetChoice: null,
@@ -2917,6 +2921,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const board = node('section', 'workspace-card workspace-initiative');
       board.dataset.initiative = 'board';
       callbacks.renderInitiative(board);
+      mountTableRules(null);
       center.append(board, tableRules());
       return;
     }
@@ -2931,6 +2936,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       center.appendChild(empty);
       const prepared = encounterList({ compact: true });
       if (prepared.list) center.append(rubric('Rencontres préparées'), prepared.list);
+      mountTableRules(null);
       center.appendChild(tableRules());
       return;
     }
@@ -2967,34 +2973,59 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       canDeclareCombatAction: Boolean(callbacks.declareCombatAction),
       canDeclareCombatMovement: Boolean(callbacks.declareCombatMovement),
       scene: Store.getSceneCircumstances?.() || null,
+      turnFacts: (() => { try { return Store.getV5TurnFacts?.(context.actor?.id) || {}; } catch { return {}; } })(),
       handlers: resolutionHandlers
     }));
 
+    // Refonte E4b : prières et corruption s'ouvrent DANS la case centrale (menu « Sort, prière, Corruption… » de la
+    // résolution, ou décision de la case « À décider »), à la place des mêlées et de la résolution ; « Fermer » les rend.
+    // Les suites de combat (séquelles, convalescence, calendrier) ont quitté l'écran de combat : fin du combat et
+    // espace Campagne (CA20).
     const prayers=divinePanel.render(context.actor,context.participants);
-    if(prayers){prayers.dataset.secondaryPanel='prayer';if((context.actor?.extensions?.v5?.divineJudgments||[]).some(row=>row.status==='departed'))prayers.open=true;center.appendChild(prayers);}
     const corruption=corruptionPanel.render(context.actor);
+    centerPanelsAvailable.clear();
+    if(prayers){prayers.dataset.secondaryPanel='prayer';centerPanelsAvailable.add('prayer');}
+    let corruptionDetails=null;
     if(corruption){
-      const id=`corruption:${context.actor.id}`, details=node('details','workspace-card workspace-secondary-panel');
-      details.dataset.secondaryPanel='corruption';
-      let pending=false;
-      try { const status=Store.getCorruptionStatus?.(context.actor.id); pending=Boolean(status?.pendingThresholdTest || status?.pendingMutation || status?.pendingCharacterLoss || status?.pendingExposureSources?.length); } catch { pending=true; }
-      details.open=Boolean(secondaryOpen.get(id) || secondaryDirty.has(id) || pending);
-      details.append(node('summary','','Corruption'),corruption);
-      details.addEventListener('toggle',()=>secondaryOpen.set(id,details.open));
-      for(const event of ['input','change'])details.addEventListener(event,()=>secondaryDirty.add(id),true);
-      center.appendChild(details);
+      const id=`corruption:${context.actor.id}`;
+      corruptionDetails=node('details','workspace-card workspace-secondary-panel');
+      corruptionDetails.dataset.secondaryPanel='corruption';
+      corruptionDetails.open=true;
+      corruptionDetails.append(node('summary','','Corruption'),corruption);
+      for(const event of ['input','change'])corruptionDetails.addEventListener(event,()=>secondaryDirty.add(id),true);
+      centerPanelsAvailable.add('corruption');
     }
-    const aftermath=aftermathPanel.render(context.participants);
-    // U3 (05/11) : fermé pendant le combat, ouvert hors combat ; s'il est ouvert par le MJ, U2 (captureView) le garde ouvert.
-    if(aftermath){
-      const linkToCampaign = button('Ouvrir dans l’espace Campagne (suivi et soins) →', 'workspace-aftermath-link');
-      linkToCampaign.type = 'button';
-      linkToCampaign.dataset.workspaceSpace = 'campaign';
-      aftermath.prepend(linkToCampaign);
-      const details=node('details','workspace-card workspace-secondary-panel workspace-aftermath');
-      details.open=!context.started;
-      details.append(node('summary','','Suites de combat'),aftermath);
-      center.appendChild(details);
+    // Refonte E4b (CA15a) : le panneau « autres… » de la résolution s'ouvre dans la case centrale, à la place des mêlées et
+    // au-dessus de la résolution, qui reste entièrement utilisable ; « Fermer » ou Échap rend les mêlées.
+    const resolutionSection=center.querySelector(':scope > .workspace-resolution');
+    const othersDrawer=resolutionSection?.querySelector(':scope > .workspace-resolution-drawer');
+    if(othersDrawer){
+      const owner=othersDrawer.closest('[data-details-owner]')?.dataset.detailsOwner;
+      if(owner)othersDrawer.dataset.detailsOwner=owner;
+      center.insertBefore(othersDrawer,resolutionSection);
+    }
+    play.grid.classList.toggle('has-circumstances-open',Boolean(othersDrawer&&!othersDrawer.hidden));
+    // Refonte E4b : le formulaire de désengagement (barre d'actions, « Se désengager ») s'ouvre à la place de la résolution.
+    const disengageForm=play.track.querySelector(':scope > .workspace-disengage');
+    if(disengageForm){center.querySelector(':scope > .workspace-resolution')?.setAttribute('hidden','');center.appendChild(disengageForm);}
+    // Un panneau ouvert pour un autre acteur se referme (il ne revient pas plus tard par surprise).
+    if(state.centerPanel&&state.centerPanel.actorId!==context.actor?.id)state.centerPanel=null;
+    const wantedPanel=state.centerPanel?state.centerPanel.panel:null;
+    const shownPanel=wantedPanel==='prayer'?prayers:wantedPanel==='corruption'?corruptionDetails:null;
+    play.grid.classList.toggle('has-center-panel',Boolean(shownPanel));
+    if(shownPanel){
+      const host=node('section','workspace-card workspace-center-panel');
+      host.dataset.centerPanel=wantedPanel;
+      host.setAttribute('aria-label',wantedPanel==='prayer'?'Prière':'Corruption');
+      const head=node('div','workspace-center-panel-head');
+      head.appendChild(node('h3','workspace-rubric',`${wantedPanel==='prayer'?'Prière':'Corruption'} · ${context.actor?.name||''}`));
+      const close=button('Fermer','workspace-secondary',{'data-focus-key':'center-panel-close'});
+      close.addEventListener('click',()=>{state.centerPanel=null;render();});
+      head.appendChild(close);
+      if(shownPanel.tagName==='DETAILS')shownPanel.open=true;
+      host.append(head,shownPanel);
+      center.querySelector(':scope > .workspace-resolution')?.setAttribute('hidden','');
+      center.appendChild(host);
     }
 
     // Projectiles fichés des combattants absents du duel (ni acteur ni cible) : pas de fiche où poser la puce.
@@ -3139,7 +3170,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
         decisionForms.set('overview', pending);
       }
     }
-    center.appendChild(tableRules());
+    mountTableRules(tableRules());
   }
 
   // PJ à ajouter « sans monture » (lot C) : choix de l'onglet Profils, par profil, le temps de la session.
@@ -3235,6 +3266,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   // Refonte de l'interface (lot E0) : grille fixe de l'espace Jouer, une zone par case de la maquette A, repérée par
   // `data-zone` (frise, acteur, centre, droite, bas) pour les tests et les lots suivants. Les blocs existants y sont
   // relogés tels quels par renderPlay() ; chaque zone défile seule tant que les lots E1 à E4b ne l'ont pas compactée.
+  let sideRef = null;
   const PLAY_ZONES = [['frise', 'Frise d’initiative'], ['acteur', 'Celui qui agit'], ['centre', 'Mêlées et résolution'], ['droite', 'À décider et cible'], ['bas', 'Actions et onglets']];
   const play = (() => {
     const grid = node('div', 'workspace-play-grid');
@@ -3254,14 +3286,15 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       tabs: [
         { id: 'rules', label: 'Règles', render: content => renderRenderer(callbacks.renderRules, content, 'Les règles et mots-clés restent consultables sans modifier la séance.') },
         { id: 'profiles', label: 'Profils', render: renderProfilesTab },
-        { id: 'circumstances', label: 'Circonstances', render: content => { if (!content.firstChild) content.appendChild(circumstancesPlaceholder()); } },
         { id: 'log', label: 'Journal', render: content => renderRenderer(callbacks.renderLog, content, 'Aucun événement récent.') }
       ],
       onToggle: collapsed => {
         grid.classList.toggle('is-side-collapsed', collapsed);
-        onSideChange();
-      }
+      },
+      // Refonte E4b : repli d'ouverture passager (non mémorisé) ; un clic sur un onglet ou sur le bouton le lève.
+      onTemporaryReveal: () => sideRef?.setTemporaryCollapsed(false)
     });
+    sideRef = side;
     zones.centre.append(track, center);
     zones.bas.append(actionsSlot, side.element);
     grid.append(...PLAY_ZONES.map(([name]) => zones[name]));
@@ -3287,47 +3320,16 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     syncSheetLayer();
   }
 
-  // U6 (05/11, D5) : Circonstances est un onglet du panneau latéral. Le bloc construit par la résolution
-  // (aside .workspace-resolution-drawer) est déplacé à chaque rendu dans l'onglet ; il est « ouvert » quand
-  // l'onglet est affiché et le panneau déplié. Rien ne recouvre plus le plateau.
-  const CIRC_TAB = 'circumstances';
-  let previousSideTab = 'rules';
-  const circumstancesAutoOpened = new WeakSet();
+  // Refonte E4b (CA15a) : l'onglet « Circonstances » a disparu ; le panneau « autres… » vit dans la résolution.
+  // Les onglets du bas (Règles, Profils, Journal) s'ouvrent par-dessus l'écran, au-dessus de la barre d'actions : repliés
+  // à l'ouverture de l'outil, ils ne prennent pas de hauteur à la case centrale.
   playReady = true;
-  function circumstancesPlaceholder() { return node('p', 'workspace-muted', 'Aucune résolution en cours : les circonstances apparaissent avec l’action à résoudre.'); }
-  const circumstancesPanel = () => play.side.element.querySelector(`#workspace-side-panel-${CIRC_TAB}`);
-  function syncCircumstancesOpen() {
-    const drawer = circumstancesPanel()?.querySelector('.workspace-resolution-drawer');
-    if (!drawer) return;
-    const { tab, collapsed } = play.side.getState();
-    const open = tab === CIRC_TAB && !play.side.element.classList.contains('is-collapsed') && !collapsed;
-    drawer.hidden = !open;
-    play.center.querySelector('[data-circumstances-toggle]')?.setAttribute('aria-expanded', String(open));
-  }
-  function onSideChange() {
-    if (!playReady) return;
-    const { tab } = play.side.getState();
-    if (tab !== CIRC_TAB) previousSideTab = tab;
-    const { collapsed } = play.side.getState();
-    play.grid.classList.toggle('is-side-circumstances', tab === CIRC_TAB && !collapsed);
-    syncCircumstancesOpen();
-  }
-  function mountCircumstances() {
-    const panel = circumstancesPanel();
-    if (!panel) return;
-    const drawer = play.center.querySelector('.workspace-resolution-drawer');
-    if (!drawer) { panel.replaceChildren(circumstancesPlaceholder()); return; }
-    // Clé de préservation (U2) : le participant dont relève la résolution, comme avant le déplacement.
-    const owner = drawer.closest('[data-details-owner]')?.dataset.detailsOwner;
-    if (owner) drawer.dataset.detailsOwner = owner;
-    panel.replaceChildren(drawer);
-    // Ouverture par défaut (la résolution ouvre le bloc tant que le MJ n'a pas choisi) : l'onglet est affiché une seule
-    // fois par brouillon, puis le choix d'onglet du MJ prime d'un rendu à l'autre.
-    if (!drawer.hidden && !circumstancesAutoOpened.has(state.resolution)) {
-      circumstancesAutoOpened.add(state.resolution);
-      play.side.open(CIRC_TAB, { remember: false });
-    }
-    syncCircumstancesOpen();
+  play.side.setTemporaryCollapsed(true);
+  // « Règles de table » (réglage de la mort subite) : en tête de l'onglet Règles pendant le combat.
+  function mountTableRules(details) {
+    const panel = play.side.element.querySelector('#workspace-side-panel-rules');
+    panel?.querySelector(':scope > .workspace-table-rules')?.remove();
+    if (panel && details) panel.prepend(details);
   }
   // Bouton « Lancer » de chaque saisie de dé, y compris dans les panneaux qui se redessinent seuls (désengagement, fuite, suites…).
   addRollButtons(refs.play);
@@ -3365,6 +3367,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       return;
     }
     if (entry.participantId && entry.participantId !== playContext().actor?.id) selectActor(entry.participantId);
+    // Refonte E4b : corruption et jugement dernier s'ouvrent dans la case centrale.
+    if (entry.kind === 'corruption' && openCenterPanel('corruption')) return;
+    if (entry.kind === 'jugement' && openCenterPanel('prayer')) return;
     const panel = SHOW_PANEL[entry.kind] && root.querySelector(SHOW_PANEL[entry.kind]);
     if (panel) {
       if (panel.tagName === 'DETAILS') panel.open = true;
@@ -3432,7 +3437,6 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     renderTrack(context);
     renderCenter(context);
     placeInZones();
-    mountCircumstances();
     const decisions = playDecisions(context);
     context.decisions = decisions;
     renderDecisionsZone(decisions);
@@ -3636,42 +3640,40 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       });
   }
 
-  refs.root.addEventListener('workspace-open-secondary', event => {
-    let panel = refs.root.querySelector(`[data-secondary-panel="${event.detail?.panel}"]`);
-    if (!panel) return;
-    event.detail.opened = true;
-    if (event.detail.panel === 'prayer') {
-      divinePanel.show();
-      // Personnage sans culte ni prière : le menu « Prière » révèle la section au lieu de laisser le bouton discret.
-      if (panel.matches('[data-divine-reveal]')) {
-        panel.click();
-        panel = refs.root.querySelector('[data-secondary-panel="prayer"]');
-        if (!panel) return;
-      }
-    }
-    if (panel.tagName === 'DETAILS') panel.open = true;
-    panel.scrollIntoView({ block: 'start', behavior: 'auto' });
+  // Refonte E4b : « Prière » et « Corruption » (menu de la résolution, case « À décider ») ouvrent leur panneau dans la
+  // case centrale, à la place des mêlées et de la résolution, jusqu'à « Fermer » ou au changement d'acteur.
+  function openCenterPanel(name) {
+    const actorId = playContext().actor?.id;
+    if (!actorId) return false;
+    if (name === 'prayer') divinePanel.show();
+    else if (!centerPanelsAvailable.has(name)) return false;
+    state.centerPanel = { panel: name, actorId };
+    render();
+    // Personnage sans culte ni prière : « Prière » révèle le panneau au lieu de laisser le bouton discret.
+    refs.root.querySelector(`[data-center-panel="${name}"] [data-divine-reveal]`)?.click();
+    const panel = refs.root.querySelector(`[data-center-panel="${name}"]`);
+    if (!panel) { state.centerPanel = null; render(); return false; }
     // Prière : on amène directement le jet de Prière, sans repasser par Pénitences et Péchés.
-    const prayerRoll = event.detail.panel === 'prayer' ? panel.querySelector('[data-focus-key="divine-roll"]') : null;
-    prayerRoll?.scrollIntoView({ block: 'center', behavior: 'auto' });
-    (prayerRoll || panel.querySelector('summary, input, select, button'))?.focus({ preventScroll: true });
+    const prayerRoll = name === 'prayer' ? panel.querySelector('[data-focus-key="divine-roll"]') : null;
+    prayerRoll?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    (prayerRoll || panel.querySelector('input, select, button:not([data-focus-key="center-panel-close"])'))?.focus({ preventScroll: true });
+    return true;
+  }
+  refs.root.addEventListener('workspace-open-secondary', event => {
+    if (!event.detail?.panel) return;
+    event.detail.opened = openCenterPanel(event.detail.panel);
   });
 
-  // Geste du MJ (bouton Circonstances ou Fermer) : on affiche l'onglet, ou on revient à l'onglet précédent.
-  // L'ouverture par défaut (remember = false) ne change jamais l'onglet choisi.
   refs.root.addEventListener('workspace-circumstances-toggle', event => {
-    if (!event.detail?.remember) return;
-    if (event.detail.open) play.side.open(CIRC_TAB, { remember: false });
-    else if (play.side.getState().tab === CIRC_TAB && !play.side.restore()) play.side.open(previousSideTab);
-    syncCircumstancesOpen();
+    play.grid.classList.toggle('has-circumstances-open', event.detail?.open === true);
   });
 
   pressDocument.addEventListener('keydown', event => {
-    const dialogOpen = [...(pressDocument.querySelectorAll?.('dialog[open], [role="dialog"]') || [])].some(dialog => dialog.getClientRects().length > 0);
-    if (event.key !== 'Escape' || event.defaultPrevented || dialogOpen || (event.composedPath?.() || []).some(node => node.matches?.('dialog, [role="dialog"]'))) return;
+    const dialogOpen = [...(pressDocument.querySelectorAll?.('dialog[open], [role="dialog"]:not(.workspace-resolution-drawer)') || [])].some(dialog => dialog.getClientRects().length > 0);
+    if (event.key !== 'Escape' || event.defaultPrevented || dialogOpen || (event.composedPath?.() || []).some(node => node.matches?.('dialog'))) return;
     const drawer = refs.root.querySelector('.workspace-resolution-drawer:not([hidden])');
     const toggle = refs.root.querySelector('[data-circumstances-toggle]');
-    // Tiroir réellement affiché (onglet Jouer) et aucun menu en surimpression.
+    // Panneau « autres… » réellement affiché (onglet Jouer) et aucun menu en surimpression.
     if (!drawer || !toggle || !drawer.getClientRects().length || pressDocument.querySelector?.(':popover-open')) return;
     event.preventDefault();
     toggle.click();

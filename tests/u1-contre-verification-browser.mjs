@@ -31,7 +31,10 @@ try {
     window.__u1 = { view };
   });
   const drawer = page.locator('.workspace-resolution-drawer');
-  assert.equal(await drawer.isVisible(), true, 'tiroir ouvert par défaut sur une compétence, comme l’ancienne zone Test V5');
+  // Refonte E4b : le panneau « autres… » est replié par défaut (les circonstances utiles sont en puces) ; le MJ l'ouvre.
+  assert.equal(await drawer.isHidden(), true, 'panneau « autres… » replié par défaut');
+  await page.locator('[data-circumstances-toggle]').click();
+  assert.equal(await drawer.isVisible(), true, 'le bouton ouvre le panneau');
   await page.getByRole('button', { name: /^Hallebarde/ }).first().click();
   assert.equal(await drawer.isVisible(), true, 'toujours ouvert après le passage à une attaque');
   await drawer.getByRole('button', { name: 'Fermer', exact: true }).click();
@@ -40,8 +43,9 @@ try {
   await page.locator('[data-circumstances-toggle]').click();
 
   const toggle = page.locator('[data-circumstances-toggle]');
-  assert.match(await toggle.textContent(), /Circonstances · 0 active/, 'une valeur déduite de l’arme ne compte pas comme circonstance active');
-  assert.doesNotMatch(await page.locator('.workspace-circumstances-line').textContent(), /Attaque à distance/);
+  // Refonte E4b : « + autres… » sans compte quand rien n'est actif ; le titre du bouton liste les circonstances actives.
+  assert.equal(await toggle.textContent(), '+ autres…', 'une valeur déduite de l’arme ne compte pas comme circonstance active');
+  assert.doesNotMatch(await toggle.getAttribute('title'), /Attaque à distance/);
 
   await page.evaluate(() => window.__u1.view.setSpace('prepare'));
   await page.keyboard.press('Escape');

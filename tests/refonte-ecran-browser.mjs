@@ -25,6 +25,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const fixture = readFileSync(new URL('./fixtures/rencontre-r20.json', import.meta.url));
 const ZONES = ['frise', 'acteur', 'centre', 'droite', 'bas'];
 const STRICT_ZONES = process.env.REFONTE_ZONES_STRICT === '1';
+const DUMP = process.env.REFONTE_DUMP === '1';
 const shots = `${root}tmp/refonte-ecran/`;
 mkdirSync(shots, { recursive: true });
 
@@ -71,7 +72,7 @@ try {
 
   async function measure(step) {
     await page.waitForTimeout(150);
-    const m = await page.evaluate(zones => {
+    const m = await page.evaluate(([zones, dumpCentre]) => {
       const doc = document.documentElement;
       const box = el => ({ scrollHeight: el.scrollHeight, clientHeight: el.clientHeight, scrollWidth: el.scrollWidth, clientWidth: el.clientWidth });
       // Une fenêtre peut ne pas défiler elle-même mais contenir un corps qui défile : on retient le plus grand débordement interne.
@@ -95,20 +96,72 @@ try {
           return { name: el.getAttribute('aria-label') || el.querySelector('h2,h3,strong')?.textContent?.trim() || 'fenêtre', inside: r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1, ...inner(el) };
         }),
         fonts: document.fonts ? [...document.fonts].map(face => face.family) : [],
+        // REFONTE_DUMP=1 : hauteur des blocs de la zone centre (trois niveaux), pour savoir ce qui la remplit.
+        dump: (() => {
+          if (!dumpCentre) return null;
+          const out = [];
+          const walk = (el, depth) => {
+            for (const child of el.children) {
+              const h = Math.round(child.getBoundingClientRect().height);
+              if (!h) continue;
+              out.push(`${'  '.repeat(depth)}${h} ${child.tagName.toLowerCase()}.${[...child.classList].join('.')}${child.dataset.part ? `[${child.dataset.part}]` : ''} ${(child.querySelector('h4,h5,summary,strong')?.textContent || '').trim().slice(0, 40)}`);
+              if ((depth < 3 || child.closest(".is-resultat")) && h > 30 && depth < 9) walk(child, depth + 1);
+            }
+          };
+          const centre = document.querySelector('[data-zone="centre"]');
+          if (centre) walk(centre, 0);
+          return out;
+        })(),
         melees: (el => el ? box(el) : { absent: true })(document.querySelector('[data-zone="centre"] [data-part="melees"]')),
+        // Lot E4b : la résolution et les panneaux ouverts dans la case centrale (prière, corruption, désengagement) ne
+        // débordent pas, même coupés : on compare la hauteur NATURELLE de leur contenu (hauteur libérée le temps de la
+        // mesure) à la hauteur qu'ils occupent. Le panneau « autres… » tient dans la fenêtre.
+        centreParts: [...document.querySelectorAll('[data-zone="centre"] .workspace-resolution:not([hidden]), [data-zone="centre"] .workspace-resolution.has-result > .workspace-resolution-step.is-resultat, [data-zone="centre"] .workspace-center-panel, [data-zone="centre"] .workspace-disengage')]
+          .filter(el => el.getClientRects().length).map(el => {
+            // Résolution : mesure géométrique — aucune étape (hors colonne Résultat, mesurée à part) ne passe sous le pied, et
+            // le pied reste dans la case.
+            if (el.classList.contains('workspace-resolution')) {
+              const r = el.getBoundingClientRect(), foot = el.querySelector(':scope > .workspace-resolution-footer');
+              const footBox = foot && foot.getClientRects().length ? foot.getBoundingClientRect() : null;
+              const lowest = Math.max(r.top, ...[...el.querySelectorAll(':scope > .workspace-resolution-step:not(.is-resultat)')].filter(item => item.getClientRects().length).map(item => item.getBoundingClientRect().bottom));
+              const overflow = Math.max(0, lowest - (footBox ? footBox.top : r.bottom)) + Math.max(0, (footBox ? footBox.bottom : lowest) - r.bottom);
+              return { name: 'résolution', scrollHeight: Math.ceil(r.height + overflow), clientHeight: Math.floor(r.height) };
+            }
+            const clientHeight = el.clientHeight, saved = el.getAttribute('style');
+            el.style.cssText += ';height:auto !important;max-height:none !important;min-height:0 !important;flex:none !important;overflow:visible !important;align-self:start !important';
+            const natural = Math.ceil(el.getBoundingClientRect().height);
+            if (saved === null) el.removeAttribute('style'); else el.setAttribute('style', saved);
+            return { name: el.classList.contains('workspace-resolution') ? 'résolution' : el.classList.contains('is-resultat') ? 'résultat' : el.classList.contains('workspace-disengage') ? 'désengagement' : `panneau ${el.dataset.centerPanel}`, scrollHeight: Math.max(natural, el.scrollHeight), clientHeight };
+          }),
+        drawer: (el => el && el.getClientRects().length ? (r => ({ inside: r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1, ...box(el) }))(el.getBoundingClientRect()) : null)(document.querySelector('.workspace-resolution-drawer:not([hidden])')),
         actionBar: (el => el ? { height: el.clientHeight, overflow: el.scrollHeight > el.clientHeight + 1 || el.scrollWidth > el.clientWidth + 1 } : null)(document.querySelector('[data-zone="bas"] .workspace-action-bar'))
       };
-    }, ZONES);
+    }, [ZONES, DUMP]);
+    if (m.dump) {
+      console.log(['', `### ${step}`, ...m.dump].join('\n'));
+      // Capture de toute la zone centre dépliée (hors mesure) : la fenêtre s'allonge le temps de la capture.
+      const height = await page.evaluate(() => { const z = document.querySelector('[data-zone="centre"]'); z.dataset.dumpStyle = z.getAttribute('style') || ''; z.style.cssText = 'position:fixed;top:0;left:0;width:760px;height:auto;max-height:none;overflow:visible;z-index:99999;background:var(--bg,#fff)'; return Math.ceil(z.getBoundingClientRect().height); });
+      await page.setViewportSize({ width: 1440, height: Math.max(800, height) });
+      await page.screenshot({ path: `${shots}centre-${String(report.length + 1).padStart(2, '0')}.png`, clip: { x: 0, y: 0, width: 760, height: Math.max(100, height) } }).catch(() => {});
+      await page.evaluate(() => { const z = document.querySelector('[data-zone="centre"]'); z.setAttribute('style', z.dataset.dumpStyle); delete z.dataset.dumpStyle; });
+      await page.setViewportSize({ width: 1440, height: 800 });
+    }
     const pageScrolls = m.page.scrollHeight > m.page.height + 1 || m.page.scrollWidth > m.page.width + 1;
     const absent = m.zones.filter(z => z.absent).map(z => z.name);
     const overflowing = m.zones.filter(z => !z.absent && z.shown && (z.scrollHeight > z.clientHeight + 1 || z.scrollWidth > z.clientWidth + 1));
     const windowsOverflow = m.windows.filter(w => !w.inside || w.scrollHeight > w.clientHeight + 1);
     // Lot E4a : la barre d'actions (zone bas) et la partie « mêlées » (zone centre) ne débordent jamais sur R20.
     for (const z of m.zones) if (z.name === 'bas' && z.shown && (z.scrollHeight > z.clientHeight + 1 || z.scrollWidth > z.clientWidth + 1)) failures.push(`${step} : la zone bas déborde (${z.scrollHeight}/${z.clientHeight})`);
+    // Lot E4b : zone centre, résolution et panneaux centraux sans débordement sur R20, à chaque étape.
+    for (const z of m.zones) if (z.name === 'centre' && z.shown && (z.scrollHeight > z.clientHeight + 1 || z.scrollWidth > z.clientWidth + 1)) failures.push(`${step} : la zone centre déborde (${z.scrollHeight}/${z.clientHeight})`);
+    // La colonne Résultat (critique long) et le panneau de prière (toutes les sections du culte) peuvent défiler en dernier
+    // recours : rapportés, pas en échec ; tout le reste de la case centrale doit tenir.
+    for (const part of m.centreParts || []) if (!['résultat', 'panneau prayer'].includes(part.name) && part.scrollHeight > part.clientHeight + 1) failures.push(`${step} : ${part.name} déborde (${part.scrollHeight}/${part.clientHeight})`);
+    if (m.drawer && !m.drawer.inside) failures.push(`${step} : le panneau « autres… » sort de la fenêtre`);
     if (m.melees && !m.melees.absent && m.melees.scrollHeight > m.melees.clientHeight + 1) failures.push(`${step} : les mêlées débordent (${m.melees.scrollHeight}/${m.melees.clientHeight})`);
     if (m.melees && m.melees.absent && m.zones.find(z => z.name === 'centre')?.shown && report.length >= 3) failures.push(`${step} : partie mêlées absente du centre`);
     if (m.actionBar && m.actionBar.height > 0 && m.actionBar.overflow) failures.push(`${step} : la barre d'actions déborde (${JSON.stringify(m.actionBar)})`);
-    report.push({ step, pageScrolls, page: m.page, absent, overflowing, windows: m.windows, windowsOverflow });
+    report.push({ step, pageScrolls, page: m.page, absent, overflowing, windows: m.windows, windowsOverflow, centreParts: m.centreParts || [] });
     if (pageScrolls) failures.push(`${step} : la page défile (${m.page.scrollWidth} × ${m.page.scrollHeight} pour ${m.page.width} × ${m.page.height})`);
     if (absent.length) failures.push(`${step} : zones absentes (${absent.join(', ')})`);
     if (STRICT_ZONES) for (const z of [...overflowing, ...windowsOverflow]) failures.push(`${step} : ${z.name} déborde (${z.scrollHeight}/${z.clientHeight})`);
@@ -394,6 +447,10 @@ try {
   await press('defense');
   await page.locator('.workspace-result').first().waitFor();
   await measure('attaque de mêlée');
+  // Lot E4b (CA15a, CA20) : plus d'onglet « Circonstances » ; séquelles, convalescence et calendrier hors de l'écran de combat.
+  assert.equal(await page.locator('[data-side-tab="circumstances"]').count(), 0, 'l’onglet « Circonstances » a disparu');
+  assert.equal(await page.locator('[data-zone] .workspace-aftermath').count(), 0, 'pas de suites de combat dans l’écran de combat');
+  assert.equal(await page.locator('[data-zone]').getByText('Suites de combat').count(), 0);
 
   // 4. Tir : Guzgog tire à l'arc court sur Jorunn.
   await selectActor(ID.ARCHER);
@@ -401,6 +458,19 @@ try {
   await chooseTarget('Jorunn Gromsdottir');
   await rollInput('attack', 23);
   await measure('tir');
+  // Lot E4b (CA13, CA15a) : une ligne « Distance » de six choix, plus de case « Tir à bout portant » ; panneau « autres… »
+  // de 12 circonstances au plus, dans la fenêtre.
+  assert.equal(await resolution().locator('[data-distance] [data-distance-choice]').count(), 6, 'ligne Distance : six choix');
+  assert.equal(await page.getByLabel('Tir à bout portant', { exact: true }).count(), 0, 'plus de case « Tir à bout portant »');
+  await resolution().locator('[data-circumstances-toggle]').click();
+  const others = page.locator('.workspace-resolution-drawer');
+  await others.waitFor({ state: 'visible' });
+  const pertinent = await others.locator('.workspace-circumstances-pertinent [data-circumstance]').count();
+  assert.ok(pertinent > 0 && pertinent <= 12, `panneau « autres… » : ${pertinent} circonstances (1 à 12)`);
+  assert.equal(await others.locator('.workspace-circumstances-more').evaluate(el => el.open), false, 'réglages détaillés repliés');
+  await measure('tir : panneau « autres… » ouvert');
+  await others.getByRole('button', { name: 'Fermer', exact: true }).click();
+  await others.waitFor({ state: 'hidden' });
 
   // 5. Sort : le chamane-bray ouvre l'Incantation V5.
   await selectActor(ID.SHAMAN);
@@ -412,7 +482,11 @@ try {
   await selectActor(ID.PRIEST);
   await resolution().locator('[data-magic-menu]').click();
   await resolution().getByRole('button', { name: 'Prière', exact: true }).click();
+  // Lot E4b : la prière s'ouvre dans la case centrale, à la place des mêlées et de la résolution.
+  await page.locator('[data-zone="centre"] [data-center-panel="prayer"] [data-divine-panel]').waitFor();
   await measure('prière');
+  await page.locator('[data-center-panel="prayer"]').getByRole('button', { name: 'Fermer', exact: true }).click();
+  await page.locator('[data-zone="centre"] [data-part="melees"]').waitFor();
 
   // 7. Dégâts avec critique : Gor 2 touche Jorunn sur un double (11), saisie du critique, application.
   await selectActor(ID.GOR2);
@@ -509,7 +583,8 @@ for (const row of report) {
   console.log(`- ${row.step} : page ${row.pageScrolls ? `DÉFILE (${row.page.scrollHeight} px)` : 'fixe'}`
     + `${row.absent.length ? ` · zones absentes : ${row.absent.join(', ')}` : ''}`
     + ` · zones qui débordent : ${zones.length ? zones.join(', ') : 'aucune'}`
-    + `${windows.length ? ` · fenêtres : ${windows.join(', ')}` : ''}`);
+    + `${windows.length ? ` · fenêtres : ${windows.join(', ')}` : ''}`
+    + `${row.centreParts?.length ? ` · centre : ${row.centreParts.map(part => `${part.name} ${part.scrollHeight}/${part.clientHeight}`).join(', ')}` : ''}`);
 }
 failures = [...new Set(failures)];
 if (failures.length) {

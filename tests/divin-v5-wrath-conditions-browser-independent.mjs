@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** Contrôle indépendant des gestes Courroux 61–65 / 89–95, navigateur + IndexedDB natif. */
 import assert from 'node:assert/strict';
@@ -14,7 +15,8 @@ const receipt={passed:false,scope:'Courroux 61–65/89–95: gestes réels, aper
 const check=description=>receipt.checks.push(description);let browser,page,serverStarted=false;
 const state=()=>page.evaluate(async()=>{const{Store}=await import('/js/main.js');await Store.whenIdle();const value=JSON.parse(Store.getFullJSON());delete value.exportedAt;return value;});
 const ready=()=>page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block');
-const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor({state:'attached'});if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
+// Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+const openPanel=async()=>{await openCenterPanel(page,'prayer');const panel=page.locator('[data-divine-panel]');await panel.waitFor({state:'attached'});if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 const seed=async()=>page.evaluate(async()=>{
  const{Store}=await import('/js/main.js');const{getAllDivineContracts}=await import('/js/core/v5-divine-store.js');
  const battle=getAllDivineContracts().find(c=>c.id==='divine:blessing:myrmidia:battle');

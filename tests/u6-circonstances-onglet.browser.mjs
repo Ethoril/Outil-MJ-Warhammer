@@ -1,5 +1,7 @@
-// U6 (05/11, D5) : Circonstances est un onglet du panneau latéral ; il ne recouvre plus le plateau et l'onglet
-// actif survit à un rendu (−1 PV). Application complète, vrai Store, harnais de u2-preserve-view.
+// U6 (05/11, D5), revu par la refonte E4b (CA15a, 21/11) : l'onglet « Circonstances » du panneau latéral a disparu ; les
+// circonstances vivent dans la résolution (puces déduites + panneau « autres… », replié par défaut). Le panneau survit à un
+// rendu (−1 PV), Fermer le replie, et une ancienne mémoire d'onglet « Circonstances » ne casse rien au rechargement.
+// Application complète, vrai Store, harnais de u2-preserve-view.
 import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
@@ -20,37 +22,38 @@ try{
  await page.evaluate(async s=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(s);},JSON.stringify(fixture));
  const combat=page.locator('#workspace-root');await combat.locator('[data-workspace-select="hero"]').click();
  const side=combat.locator('.workspace-side'),toggle=combat.locator('[data-circumstances-toggle]'),drawer=combat.locator('.workspace-resolution-drawer');
- await side.getByRole('tab',{name:'Règles',exact:true}).click();
- // Avant : aucun tiroir flottant, le bloc vit dans l'onglet.
- assert.equal(await drawer.evaluate(el=>el.closest('#workspace-side-panel-circumstances')!==null),true,'le bloc est dans le panneau latéral');
- assert.equal(await drawer.isHidden(),true,'fermé tant que l’onglet n’est pas affiché');
+ assert.equal(await side.getByRole('tab',{name:'Circonstances',exact:true}).count(),0,'plus d’onglet « Circonstances »');
+ assert.equal(await drawer.evaluate(el=>el.closest('.workspace-center')!==null),true,'le panneau « autres… » vit dans la case centrale, avec la résolution');
+ assert.equal(await drawer.isHidden(),true,'replié par défaut : les circonstances utiles sont en puces');
  await toggle.click();
- const tab=side.getByRole('tab',{name:'Circonstances',exact:true});
- assert.equal(await tab.getAttribute('aria-selected'),'true','le bouton affiche l’onglet Circonstances');
- assert.equal(await drawer.isVisible(),true,'contenu visible');
- assert.notEqual(await drawer.evaluate(el=>getComputedStyle(el).position),'fixed','plus de tiroir flottant');
- // Rien ne recouvre le plateau : le bloc reste dans la boîte du panneau latéral.
- const [sb,db]=await Promise.all([side.boundingBox(),drawer.boundingBox()]);
- assert.ok(db.x>=sb.x-1&&db.x+db.width<=sb.x+sb.width+1,'le bloc ne déborde pas du panneau');
- // L'onglet survit à un rendu.
+ assert.equal(await drawer.isVisible(),true,'« + autres… » ouvre le panneau');
+ assert.equal(await toggle.getAttribute('aria-expanded'),'true');
+ const pertinent=drawer.locator('.workspace-circumstances-pertinent [data-circumstance]');
+ const count=await pertinent.count();
+ assert.ok(count>0&&count<=12,`au plus 12 circonstances pertinentes (${count})`);
+ // Le panneau survit à un rendu.
  await combat.locator('[data-sheet-role="actor"][data-actor-id="hero"] [data-focus-key="hp-minus-hero"]').evaluate(el=>el.click());
  await page.waitForTimeout(300);
- assert.equal(await tab.getAttribute('aria-selected'),'true','onglet Circonstances conservé après le rendu');
- assert.equal(await drawer.isVisible(),true,'contenu toujours visible après le rendu');
- // Aucune perte de fonction : un réglage du bloc reste utilisable et le bouton affiche le compte.
- const box=drawer.locator('input[type="checkbox"]').first();
- if(await box.count()){const was=await box.isChecked();await box.setChecked(!was);assert.equal(await box.isChecked(),!was,'une case du bloc se coche depuis l’onglet');}
- // Fermer revient à l'onglet précédent.
+ assert.equal(await drawer.isVisible(),true,'panneau toujours ouvert après le rendu');
+ // Aucune perte de fonction : une case se coche, le bouton compte les circonstances actives.
+ const box=pertinent.first();const was=await box.isChecked();await box.setChecked(!was);
+ await page.waitForTimeout(200);
+ assert.equal(await drawer.locator('.workspace-circumstances-pertinent [data-circumstance]').first().isChecked(),!was,'une case du panneau se coche');
+ assert.match(await toggle.textContent(),was?/^\+ autres…$/:/\(1\)/,'le bouton compte les circonstances actives');
+ // Les réglages détaillés restent accessibles, repliés.
+ const more=drawer.locator('.workspace-circumstances-more');
+ assert.equal(await more.evaluate(el=>el.open),false,'réglages détaillés repliés');
+ await more.locator(':scope > summary').click();
+ assert.equal(await more.evaluate(el=>el.open),true,'réglages détaillés dépliables');
+ // Fermer replie le panneau.
  await drawer.getByRole('button',{name:'Fermer',exact:true}).click();
- assert.equal(await side.getByRole('tab',{name:'Règles',exact:true}).getAttribute('aria-selected'),'true','Fermer revient à Règles');
+ assert.equal(await drawer.isHidden(),true,'Fermer replie le panneau');
  assert.equal(await toggle.getAttribute('aria-expanded'),'false','bouton replié');
- // Choisir un autre onglet ferme aussi le bloc (aria-expanded suit).
- await toggle.click();await side.getByRole('tab',{name:'Journal',exact:true}).click();
- assert.equal(await toggle.getAttribute('aria-expanded'),'false','changer d’onglet replie l’état du bouton');
- // Rechargement avec l'onglet Circonstances mémorisé : le panneau s'initialise sans erreur (placeholder avant tout rendu).
- await toggle.click();
+ // Rechargement avec un ancien onglet « Circonstances » mémorisé : le panneau latéral se construit sans erreur.
+ await page.evaluate(()=>{for(const key of Object.keys(localStorage)){try{const value=JSON.parse(localStorage.getItem(key));if(value&&typeof value==='object'&&!Array.isArray(value)&&'tab' in value&&'collapsed' in value)localStorage.setItem(key,JSON.stringify({...value,tab:'circumstances'}));}catch{}}});
  await page.reload({waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();
- assert.equal(await page.locator('.workspace-side').getByRole('tab',{name:'Circonstances',exact:true}).count(),1,'le panneau latéral se construit avec l’onglet mémorisé');
+ assert.equal(await page.locator('.workspace-side').getByRole('tab',{name:'Règles',exact:true}).count(),1,'le panneau latéral se construit');
+ assert.equal(await page.locator('.workspace-side').getByRole('tab',{name:'Circonstances',exact:true}).count(),0);
  assert.deepEqual(errors,[],'aucune erreur JavaScript');
- console.log('U6 navigateur : Circonstances en onglet, rien ne recouvre le plateau, onglet conservé, Fermer revient à l’onglet précédent.');
+ console.log('U6 navigateur (E4b) : plus d’onglet Circonstances, panneau « autres… » dans la case centrale, conservé au rendu, Fermer le replie.');
 }finally{await browser.close();await new Promise(done=>server.close(done));}

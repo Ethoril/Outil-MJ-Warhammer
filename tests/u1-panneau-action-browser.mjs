@@ -35,12 +35,15 @@ try {
   await magicMenu.click();
   assert.equal(await magicMenu.getAttribute('aria-expanded'), 'true');
   for (const name of ['Focalisation V5', 'Incantation V5', 'Dissipation persistante V5', 'Prière', 'Corruption']) assert.equal(await page.locator('#workspace-magic-menu').getByRole('button', { name, exact: true }).isVisible(), true);
+  // Refonte E4b : la prière ne vit plus sous la résolution ; « Prière » l'ouvre dans la case centrale (bouton Fermer).
   const prayer = page.locator('[data-secondary-panel="prayer"]');
-  assert.equal(await prayer.evaluate(el => el.matches('button[data-divine-reveal]')), true, 'C44 : sans culte ni prière, seul le bouton discret est affiché au départ');
+  assert.equal(await prayer.count(), 0, 'C44 : sans culte ni prière, rien n’occupe la résolution au départ');
   await page.locator('#workspace-magic-menu').getByRole('button', { name: 'Prière', exact: true }).click();
-  assert.equal(await prayer.evaluate(el => el.open), true, 'le menu ouvre le panneau de prière existant');
-  await prayer.locator(':scope > summary').click();
-  await magicMenu.click();
+  const centerPrayer = page.locator('[data-center-panel="prayer"]');
+  assert.equal(await centerPrayer.isVisible(), true, 'le menu ouvre le panneau de prière dans la case centrale');
+  assert.equal(await centerPrayer.locator('[data-secondary-panel="prayer"]').evaluate(el => el.open), true, 'le menu ouvre le panneau de prière existant');
+  await centerPrayer.getByRole('button', { name: 'Fermer', exact: true }).click();
+  assert.equal(await centerPrayer.count(), 0, 'Fermer rend la résolution');
   await page.getByRole('button', { name: 'Test…', exact: true }).click();
   assert.equal(await page.getByLabel('Type d’action', { exact: true }).isVisible(), true);
   await page.getByLabel('Type d’action', { exact: true }).selectOption('test');
@@ -73,7 +76,8 @@ try {
   assert.match(await page.locator('.workspace-result-live').innerText(), /En attente du jet de défense/, 'le texte suit la saisie sans recalcul');
   assert.doesNotMatch(await footer.innerText(), /Jet de Garde/, 'le pied retire le jet renseigné');
   await page.locator('[data-roll-input="attack"]').fill('');
-  const bulk = page.getByRole('button', { name: 'Lancer tous les dés des PNJ', exact: true });
+  // Refonte E4b : une fois le résultat affiché, le bouton inactif est masqué (place gagnée) ; on le lit par sa clé.
+  const bulk = page.locator('[data-focus-key="roll-all-npc"]');
   assert.equal(await bulk.isEnabled(), true);
   await page.evaluate(() => { window.__u1.originalRandom = Math.random; Math.random = () => 0.34; });
   await bulk.click();
@@ -88,45 +92,37 @@ try {
   const toggle = page.locator('[data-circumstances-toggle]');
   assert.equal(await drawer.isVisible(), true, 'le tiroir est ouvert par défaut en attaque');
   assert.equal(await page.locator('.workspace-resolution-settings').evaluate(el => el.open), true, 'le bloc historique reste ouvert en attaque');
-  assert.equal(await page.getByRole('tab', { name: 'Circonstances', exact: true }).getAttribute('aria-selected'), 'true', 'U6 : le bloc est l’onglet Circonstances du panneau latéral');
-  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'true', 'le panneau reste déplié');
-  await toggle.click();
-  assert.equal(await drawer.isHidden(), true);
-  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'true', 'le panneau garde sa largeur');
-  await page.locator('.workspace-side-toggle').click();
+  // Refonte E4b (CA15a) : plus d’onglet « Circonstances » ; le panneau « autres… » s’ouvre dans la case centrale.
+  assert.equal(await page.getByRole('tab', { name: 'Circonstances', exact: true }).count(), 0, 'E4b : plus d’onglet Circonstances dans le panneau latéral');
+  assert.equal(await drawer.evaluate(el => Boolean(el.closest('[data-zone="centre"]'))), true, 'E4b : le panneau « autres… » vit dans la case centrale');
   const savedSide = await page.evaluate(() => localStorage.getItem('wfrp.sidePanel'));
   await toggle.click();
-  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'true', 'U6 : ouvrir Circonstances déplie un panneau replié');
-  assert.equal(await drawer.isVisible(), true, 'le bloc est visible dans l’onglet');
+  assert.equal(await drawer.isHidden(), true);
+  await toggle.click();
+  assert.equal(await drawer.isVisible(), true, 'le bouton rouvre le bloc');
   assert.equal(await page.evaluate(() => localStorage.getItem('wfrp.sidePanel')), savedSide, 'l’ouverture passagère ne modifie pas la préférence latérale');
   await drawer.getByRole('button', { name: 'Fermer', exact: true }).click();
   assert.equal(await drawer.isHidden(), true, 'Fermer referme le bloc');
   assert.equal(await toggle.evaluate(el => document.activeElement === el), true, 'après Fermer, le focus revient au bouton Circonstances');
-  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'false', 'un panneau déjà replié reste replié après fermeture');
   assert.equal(await page.evaluate(() => localStorage.getItem('wfrp.sidePanel')), savedSide, 'la fermeture ne modifie pas la préférence latérale');
   await toggle.click();
   await page.keyboard.press('Escape');
   assert.equal(await drawer.isHidden(), true, 'Échap referme le bloc');
   assert.equal(await toggle.evaluate(el => document.activeElement === el), true, 'après Échap, le focus revient au bouton Circonstances');
-  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'false', 'replié après Échap');
   assert.equal(await page.evaluate(() => localStorage.getItem('wfrp.sidePanel')), savedSide, 'Échap ne modifie pas la préférence latérale');
-  await page.locator('.workspace-side-toggle').click();
   await toggle.click();
-  assert.equal(await drawer.isVisible(), true, 'bloc visible avec un panneau déplié');
-  await toggle.click();
-  assert.equal(await drawer.isHidden(), true, 'le bouton referme le bloc');
-  await toggle.click();
-  await page.locator('.workspace-side-tab[data-side-tab="rules"]').click();
-  assert.equal(await drawer.isHidden(), true, 'ouvrir un onglet latéral ferme le tiroir');
-  assert.equal(await page.locator('.workspace-side-toggle').getAttribute('aria-expanded'), 'true');
-  await toggle.click();
+  // Refonte E4b : les réglages détaillés sont repliés sous les cases pertinentes.
+  const moreSettings = drawer.locator('.workspace-circumstances-more');
+  if (!await moreSettings.evaluate(el => el.open)) await moreSettings.locator(':scope > summary').click();
   assert.equal(await page.getByLabel('Nature du Test', { exact: true }).evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-combat'))), true);
   assert.equal(await page.getByLabel('Nature de la défense', { exact: true }).evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-defense'))), true);
   assert.equal(await page.locator('[data-focus-key="v5Advantages"]').evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-fortune'))), true);
   assert.equal(await page.getByLabel('Modificateur V5 (DR)', { exact: true }).inputValue(), '2');
-  assert.match(await toggle.textContent(), /0 actives/, 'le modificateur par défaut de l’action n’est pas compté');
-  await page.locator('.workspace-resolution').scrollIntoViewIfNeeded();
-  assert.ok(await drawer.evaluate(el => el.getBoundingClientRect().top >= 0), 'le tiroir reste visible pendant le défilement');
+  // Refonte E4b : le bouton affiche « + autres… (N) », ou « + autres… » sans circonstance active.
+  const activeCount = async () => Number((await toggle.textContent()).match(/\((\d+)\)/)?.[1] || 0);
+  assert.equal(await activeCount(), 0, 'le modificateur par défaut de l’action n’est pas compté');
+  // Refonte E4b : le panneau n’est plus un tiroir latéral collant ; il prend la place des mêlées, juste au-dessus de la résolution.
+  assert.equal(await drawer.evaluate(el => el.nextElementSibling?.matches('.workspace-resolution') === true), true, 'le panneau « autres… » se place juste au-dessus de la résolution');
   const calm = page.getByLabel('Test de Calme de l’attaquant (Bénédiction de Protection)', { exact: true });
   assert.equal(await calm.count(), 1);
   assert.equal(await calm.evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-required'))), true, 'le Test de Calme manquant est regroupé dans Obligatoire');
@@ -139,7 +135,7 @@ try {
   assert.equal(await calm.evaluate(el => Boolean(el.closest('.workspace-circumstances-group.is-required'))), true);
   await page.locator('[data-focus-key="v5Advantages"]').fill('1');
   await page.locator('[data-focus-key="v5Advantages"]').dispatchEvent('change');
-  assert.match(await toggle.textContent(), /1 active/);
+  assert.equal(await activeCount(), 1);
   assert.equal(await drawer.isVisible(), true, 'le tiroir reste ouvert après nouveau rendu');
   assert.equal(await page.locator('[data-focus-key="v5Advantages"]').inputValue(), '1');
   await page.evaluate(async () => {
@@ -151,9 +147,9 @@ try {
   await page.locator('[data-roll-input="attack"]').fill('34');
   assert.match(await footer.innerText(), /Choisissez une cible/, 'l’absence de cible est signalée par le moteur');
   await page.locator('[data-roll-input="attack"]').fill('');
-  assert.match(await toggle.textContent(), /1 active/, 'changer de cible ne transforme pas un avantage saisi en valeur par défaut');
+  assert.equal(await activeCount(), 1, 'changer de cible ne transforme pas un avantage saisi en valeur par défaut');
   await page.locator('[data-focus-key="target-pj"]').click();
-  assert.match(await toggle.textContent(), /1 active/, 'le compteur conserve l’avantage au retour à la cible');
+  assert.equal(await activeCount(), 1, 'le compteur conserve l’avantage au retour à la cible');
   await page.evaluate(() => {
     const draft=window.__u1.view.getViewState().resolution;
     window.__u1.savedDraft=structuredClone(draft);
@@ -178,19 +174,18 @@ try {
   await page.getByLabel('Engagé avec la cible : Bandit', { exact: true }).check();
   await page.getByLabel('Engagé avec la cible : Dagmar', { exact: true }).check();
   await page.locator('[data-roll-input="attack"]').fill('35');
-  await bulk.click();
-  assert.equal(await page.locator('[data-roll-input="attack"]').inputValue(), '35', 'un jet déjà saisi est conservé');
-  const selectionRoll = page.getByLabel('Jet d100 pour désigner le combattant touché', { exact: true });
-  await selectionRoll.fill('');
-  await selectionRoll.dispatchEvent('change');
-  const countBeforeRoll = Number((await toggle.textContent()).match(/\d+/)[0]);
-  await selectionRoll.fill('61');
-  await selectionRoll.dispatchEvent('change');
-  assert.equal(Number((await toggle.textContent()).match(/\d+/)[0]), countBeforeRoll + 1, 'un champ conditionnel renseigné est compté');
+  // Refonte E4b (CA15) : le d100 du combattant touché n'est plus un champ du panneau « autres… » ; il n'apparaît dans le
+  // pied que si le moteur le demande (couvert par f2-b-combat-actions). Les cases conditionnelles des engagés restent.
+  assert.equal(await drawer.locator('[data-focus-key="engaged-target-roll"]').count(), 0, 'plus de d100 de désignation dans le panneau');
+  const engagedBandit = page.getByLabel('Engagé avec la cible : Bandit', { exact: true });
+  const countWithEngaged = await activeCount();
+  await engagedBandit.uncheck();
+  assert.equal(await activeCount(), countWithEngaged - 1, 'un champ conditionnel renseigné est compté');
+  await engagedBandit.check();
   await chooseBoolean(engaged,'false');
   await chooseBoolean(engaged,'true');
-  assert.equal(await selectionRoll.inputValue(), '61', 'le champ conditionnel conserve sa valeur');
-  assert.equal(Number((await toggle.textContent()).match(/\d+/)[0]), countBeforeRoll + 1, 'le compteur retrouve la valeur conditionnelle');
+  assert.equal(await engagedBandit.isChecked(), true, 'le champ conditionnel conserve sa valeur');
+  assert.equal(await activeCount(), countWithEngaged, 'le compteur retrouve la valeur conditionnelle');
   await page.getByLabel('Nature du Test', { exact: true }).selectOption('melee');
   await page.setViewportSize({ width: 900, height: 900 });
   assert.notEqual(await drawer.evaluate(el => getComputedStyle(el).position), 'fixed', 'U6 : plus de tiroir flottant');

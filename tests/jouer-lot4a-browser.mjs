@@ -175,6 +175,9 @@ async function main() {
     const lightTextContrast = getContrast(lightInk, lightBg);
     assert.ok(lightTextContrast >= 4.5, `Contraste texte clair insuffisant : ${lightTextContrast.toFixed(2)}:1 (attendu >= 4.5:1)`);
 
+    // Refonte E4b : les onglets du bas sont repliés à l'ouverture ; on ouvre « Règles » pour mesurer l'onglet actif.
+    await side.getByRole('tab', { name: 'Règles' }).click();
+    await page.waitForTimeout(250); // fin de la transition de couleur de l'onglet
     const lightActiveTabStyle = await side.locator('.workspace-side-tab[aria-selected="true"]').evaluate(el => ({
       color: getComputedStyle(el).color,
       bg: getComputedStyle(el).backgroundColor
@@ -278,13 +281,14 @@ async function main() {
     // 6. Panneau latéral et ses 4 onglets (Règles, Profils, Circonstances, Journal)
     await expect(side.getByRole('tab', { name: 'Règles' })).toBeVisible();
     await expect(side.getByRole('tab', { name: 'Profils' })).toBeVisible();
-    await expect(side.getByRole('tab', { name: 'Circonstances' })).toBeVisible();
+    // Refonte E4b (CA15a) : plus d'onglet « Circonstances » (panneau « autres… » de la résolution).
+    await expect(side.getByRole('tab', { name: 'Circonstances' })).toHaveCount(0);
     await expect(side.getByRole('tab', { name: 'Journal' })).toBeVisible();
 
     // Vérification de l'absence de coupure au milieu des mots sur les onglets du volet latéral
     const sideTabs = side.locator('.workspace-side-tab');
     const tabCount = await sideTabs.count();
-    assert.equal(tabCount, 4, 'Les 4 onglets sont présents dans le volet');
+    assert.equal(tabCount, 3, 'Les 3 onglets (Règles, Profils, Journal) sont présents dans le volet');
     for (let i = 0; i < tabCount; i++) {
       const tab = sideTabs.nth(i);
       const text = await tab.innerText();
@@ -377,7 +381,7 @@ async function main() {
     // Vérification des libellés du volet latéral sur écran réel
     const realSideTabs = realPage.locator('#workspace-play .workspace-side-tab');
     const realTabCount = await realSideTabs.count();
-    assert.equal(realTabCount, 4, 'Les 4 onglets sont présents dans l\'application réelle');
+    assert.equal(realTabCount, 3, 'Les 3 onglets sont présents dans l\'application réelle');
     for (let i = 0; i < realTabCount; i++) {
       const tab = realSideTabs.nth(i);
       const text = await tab.innerText();

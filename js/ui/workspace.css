@@ -2276,3 +2276,198 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
   .workspace-area[data-zone="droite"] > .workspace-decisions { flex: 0 0 auto; max-height: 50%; grid-template-rows: auto minmax(0, 1fr); }
   .workspace-area[data-zone="droite"] > :not(.workspace-decisions) { flex: 1 1 auto; min-height: 0; overflow: auto; overscroll-behavior: contain; }
 }
+
+/* ==========================================================================
+   REFONTE · LOT E4b : résolution compacte (js/ui/resolution-panel.js, js/ui/resolution-panel/compact.js, js/ui/combat-distance.js)
+   - Le bas ne garde que la barre d'actions et une bande d'onglets : Règles, Profils et Journal s'ouvrent par-dessus l'écran,
+     au-dessus de la barre (repliés à l'ouverture de l'outil).
+   - La case centrale empile les mêlées (hauteur de leur contenu) puis la résolution (le reste), qui ne défile pas.
+   - Résolution : ligne Action (actions en bande + outils), ligne Cible (bande), ligne Distance (tir), ligne Contexte (puces
+     déduites), jets, puis pied (Appliquer, ce qui manque). Avec un résultat : deux colonnes, saisies à gauche, résultat à droite.
+   - Panneau « autres… » par-dessus l'écran ; prière, corruption et désengagement à la place de la résolution.
+   ========================================================================== */
+.workspace-visually-hidden,
+.workspace-resolution > .workspace-rubric { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+@media (min-width: 1000px) {
+  /* --- Bas : barre d'actions + bande d'onglets ; l'onglet ouvert se pose au-dessus. --- */
+  .workspace-area[data-zone="bas"] { position: relative; overflow: visible; }
+  .workspace-area-bas > .workspace-side,
+  .workspace-area-bas > .workspace-side.is-collapsed { width: auto; height: auto; max-height: none; align-self: end; grid-template-rows: auto; }
+  .workspace-area-bas > .workspace-side .workspace-side-header { flex-direction: row; align-items: stretch; padding: 4px; border-radius: 7px; border-bottom: 0; }
+  .workspace-area-bas > .workspace-side .workspace-side-tabs { flex-direction: row; }
+  .workspace-area-bas > .workspace-side .workspace-side-tab { writing-mode: horizontal-tb; padding: 4px 10px; min-height: 30px; }
+  .workspace-area-bas > .workspace-side > .workspace-side-panel:not([hidden]) {
+    position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 30;
+    width: min(620px, 46vw); height: min(62vh, 480px); box-sizing: border-box;
+    background: var(--j-panel); border: 1px solid var(--j-line); border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+  }
+  #workspace-play > .workspace-play-grid.is-initiative .workspace-area-bas > .workspace-side:not(.is-collapsed) { height: auto; }
+
+  /* --- Case centrale : mêlées puis résolution (ou prière, corruption, désengagement). --- */
+  .workspace-area[data-zone="centre"] { display: flex; flex-direction: column; gap: 6px; }
+  .workspace-area[data-zone="centre"] > .workspace-track-column { flex: none; }
+  .workspace-area[data-zone="centre"] > .workspace-track-column > .workspace-rubric { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .workspace-area[data-zone="centre"] > .workspace-center { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+  .workspace-area[data-zone="centre"] > .workspace-center > * { flex: none; }
+  .workspace-area[data-zone="centre"] > .workspace-center > :is(.workspace-resolution, .workspace-center-panel, .workspace-disengage) { flex: 1 1 auto; min-height: 0; }
+  .workspace-play-grid.has-center-panel .workspace-area[data-zone="centre"] > .workspace-track-column { display: none; }
+  /* « En attente » sur une ligne ; ses rappels défilent en largeur. */
+  .workspace-area[data-zone="centre"] .workspace-plateau[data-part="melees"] > .workspace-bench { flex-wrap: nowrap; align-items: center; padding: 2px 6px; }
+  .workspace-area[data-zone="centre"] .workspace-plateau .workspace-bench > .workspace-rubric { margin: 0; }
+  .workspace-area[data-zone="centre"] .workspace-bench-entry { display: flex; flex-wrap: nowrap; align-items: center; gap: 4px; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; }
+  .workspace-area[data-zone="centre"] .workspace-bench-entry > * { flex: none; }
+  .workspace-area[data-zone="centre"] .workspace-plateau .workspace-bench .actor-reminders { display: flex; flex-wrap: nowrap; gap: 4px; }
+  .workspace-area[data-zone="centre"] .workspace-plateau .workspace-bench .actor-reminder { flex: none; max-width: 260px; }
+
+  /* --- Résolution : grille ; une colonne sans résultat, deux avec. --- */
+  .workspace-area[data-zone="centre"] .workspace-resolution {
+    position: relative; display: grid; overflow: hidden; padding: 4px 10px; column-gap: 12px; row-gap: 3px;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "action resultat" "jets resultat" "pied pied"; align-content: stretch;
+  }
+  .workspace-area[data-zone="centre"] .workspace-resolution[hidden] { display: none; }
+  .workspace-area[data-zone="centre"] .workspace-resolution:not(.has-result) { grid-template-columns: minmax(0, 1fr); grid-template-areas: "action" "jets" "pied"; }
+  .workspace-area[data-zone="centre"] .workspace-resolution:not(.has-result) > .workspace-resolution-step.is-resultat { display: none; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-step { display: flex; flex-direction: column; gap: 3px; padding: 0; border: 0; background: none; flex: none; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-step.is-action { grid-area: action; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-step.is-jets { grid-area: jets; align-self: start; flex-wrap: nowrap; }
+  /* Dernier recours : un résultat très long (critique, choc, détail) défile dans sa colonne plutôt que d'être coupé. */
+  .workspace-area[data-zone="centre"] .workspace-resolution-step.is-resultat { grid-area: resultat; min-height: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; border-left: 1px solid var(--j-line); padding-left: 10px; }
+
+  /* Lignes Action, Cible, Distance, Contexte. */
+  .workspace-area[data-zone="centre"] .workspace-resolution-row { grid-template-columns: 64px minmax(0, 1fr); gap: 2px 8px; align-items: center; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row > .workspace-rubric,
+  .workspace-area[data-zone="centre"] .workspace-res-label { margin: 0; font-family: var(--font-ui); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--j-soft); }
+  .workspace-area[data-zone="centre"] .workspace-resolution .workspace-chip-list { gap: 3px 4px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution .workspace-chip { min-height: 24px; padding: 1px 8px; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution .workspace-chip.combatant-name { font-family: var(--font-ui); font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-chip-group-label { font-size: 11px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row:is(.is-action, .is-target) > .workspace-chip-list { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; padding-bottom: 1px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row:is(.is-action, .is-target) > .workspace-chip-list .workspace-chip { flex: none; white-space: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-target .workspace-chip-group { flex-wrap: nowrap; flex: none; gap: 3px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-target.has-toggle { grid-template-columns: 64px minmax(0, 1fr) auto; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-action { grid-template-columns: 64px minmax(0, 1fr) auto; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-action .workspace-chip { font-size: 11.5px; padding: 1px 6px; min-height: 22px; }
+  .workspace-area[data-zone="centre"] .workspace-action-tools { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 3px 4px; min-width: 0; }
+  .workspace-area[data-zone="centre"] .workspace-action-tools .workspace-chip { white-space: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-action > :is(.workspace-action-menu, .workspace-action-type) { grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px; margin: 0; font-size: 12px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-action > :is(.workspace-action-menu, .workspace-action-type)[hidden] { display: none; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-action > .workspace-action-menu button { min-height: 24px; padding: 1px 8px; font-size: 12px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-action > .workspace-action-type select { min-height: 26px; padding: 1px 4px; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-combat-actions { display: inline-block; margin: 0; padding: 0; border: 0; background: none; }
+  .workspace-area[data-zone="centre"] .workspace-combat-actions > summary { display: inline-block; width: auto; height: auto; min-height: 0; padding: 1px 6px; border-radius: 999px; font-size: 11.5px; }
+  .workspace-area[data-zone="centre"] .workspace-combat-actions[open] { display: block; flex: 1 1 100%; }
+  /* « Actions du Tour… » déplié : le groupe d'outils passe sous la ligne Action, la bande des actions garde sa largeur. */
+  .workspace-area[data-zone="centre"] .workspace-resolution-row.is-action > .workspace-action-tools:has(> .workspace-combat-actions[open]) { grid-column: 2 / -1; justify-content: flex-start; }
+  /* Avec un résultat, la bande des actions garde la largeur de sa colonne ; les outils passent dessous. */
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result .workspace-resolution-row.is-action { grid-template-columns: 64px minmax(0, 1fr); }
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result .workspace-action-tools { grid-column: 2; justify-content: flex-start; }
+  .workspace-distance-row .workspace-chip[disabled] { opacity: 0.45; cursor: not-allowed; text-decoration: line-through; }
+  .workspace-distance-explain { grid-column: 2; margin: 0; font-size: 12px; line-height: 1.3; color: var(--j-soft); }
+  .workspace-deduced-chip.is-on { border-color: var(--j-red-border, var(--accent)); background: var(--j-token-bg, var(--panel-2)); font-weight: 600; }
+  .workspace-deduced-chip.is-off { text-decoration: line-through; opacity: 0.7; }
+  .workspace-deduced-chip.is-fixed { cursor: default; }
+  .workspace-circumstances-toggle { border-style: dashed; }
+
+  /* Jets : étiquette, dé et « Lancer » sur une ligne ; défense = intitulé, caractéristique, valeur, dé. */
+  .workspace-area[data-zone="centre"] .workspace-resolution-rolls { display: flex; flex-direction: row; flex-wrap: wrap; align-items: flex-end; gap: 3px 14px; }
+  .workspace-area[data-zone="centre"] .workspace-roll { display: flex !important; flex-wrap: nowrap; align-items: center; gap: 2px 6px; }
+  .workspace-area[data-zone="centre"] .workspace-roll > .workspace-roll-label { margin: 0; font-size: 12px; }
+  .workspace-area[data-zone="centre"] .workspace-roll-owner { font-size: 10px; padding: 0 5px; margin-right: 4px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution .workspace-roll-input { height: 30px; min-height: 30px; width: 3.6em; padding: 0 4px; box-sizing: border-box; font-size: 16px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution :is(.workspace-roll-row button, .workspace-resolution-commands button) { min-height: 30px; padding: 2px 10px; font-size: 13px; }
+  .workspace-area[data-zone="centre"] .workspace-defense { display: flex !important; flex: 1 1 100%; flex-wrap: wrap; align-items: center; gap: 2px 8px; margin: 0; padding: 0 0 0 6px; border-left: 2px solid var(--j-line); }
+  .workspace-area[data-zone="centre"] .workspace-resolution:not(.has-result) .workspace-defense { flex-wrap: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-defense > .workspace-roll-label { flex: 1 1 100%; min-width: 0; margin: 0; font-size: 11.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .workspace-area[data-zone="centre"] .workspace-resolution:not(.has-result) .workspace-defense > .workspace-roll-label { flex: 0 1 auto; }
+  .workspace-area[data-zone="centre"] .workspace-defense > :is(.workspace-roll-row, .workspace-roll) { flex: none; gap: 4px; }
+  .workspace-area[data-zone="centre"] .workspace-defense > .workspace-roll > .workspace-roll-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-defense .workspace-roll-row select { max-width: 130px; min-height: 30px; padding: 2px 4px; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-defense-base { width: 3.6em; min-height: 30px; padding: 2px 4px; }
+  .workspace-area[data-zone="centre"] .workspace-roll-hint { display: none; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-calc { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; padding: 0; border: 0; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-calc > button { min-height: 28px; padding: 1px 10px; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result .workspace-resolution-calc { flex-wrap: nowrap; gap: 4px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result .workspace-resolution-calc > button { min-height: 26px; padding: 0 7px; font-size: 12px; white-space: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result .workspace-resolution-calc > [data-focus-key="roll-all-npc"]:disabled { display: none; }
+
+  /* Résultat dense : pastilles côte à côte, lignes serrées, dés du critique en ligne. */
+  .workspace-area[data-zone="centre"] .workspace-result-live { gap: 4px; min-height: 0; }
+  .workspace-area[data-zone="centre"] .workspace-result { gap: 3px; padding: 4px 6px; border-left-width: 3px; font-size: 13px; }
+  .workspace-area[data-zone="centre"] .workspace-result-waiting { margin: 0; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-result-pills { display: flex; flex-wrap: wrap; gap: 3px; margin: 0; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-outcome { padding: 0 6px; font-size: 11px; line-height: 18px; }
+  .workspace-area[data-zone="centre"] :is(.workspace-result p, .workspace-result-line) { margin: 0; font-size: 12.5px; line-height: 1.3; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-roll { flex-wrap: nowrap; align-items: center; gap: 4px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-roll > .workspace-roll-label { flex: 0 1 auto; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-roll-row { gap: 4px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution .workspace-result .workspace-roll-input { height: 26px; min-height: 26px; width: 3.2em; font-size: 14px; }
+  .workspace-area[data-zone="centre"] .workspace-result button { min-height: 26px; padding: 0 8px; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical { display: grid; gap: 2px; margin: 2px 0 0; padding: 3px 6px; }
+  .workspace-area[data-zone="centre"] .workspace-result :is(h4, h5, .workspace-rubric) { margin: 0; font-size: 10.5px; line-height: 13px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical-item { margin: 0; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-result details > summary { padding: 0; font-size: 12px; }
+
+  /* Pied sur une ligne : (Calculer avant un résultat,) Appliquer, Effacer, puis ce qui manque — d100 de déviation compris. */
+  .workspace-area[data-zone="centre"] .workspace-resolution-footer { grid-area: pied; position: static; flex: none; display: flex; flex-wrap: nowrap; align-items: center; justify-content: flex-start; gap: 4px 12px; margin: 0; padding: 4px 8px; overflow: hidden; box-shadow: none; border-top-width: 1px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-footer > * { flex: none; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-footer .workspace-resolution-commands { flex-wrap: nowrap; gap: 6px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-footer button[data-focus-key="apply"] { min-height: 30px; padding: 2px 14px; font-size: 13.5px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution:not(.has-result) .workspace-resolution-footer button[data-focus-key="apply"]:disabled { display: none; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-footer > .workspace-field-error { flex: 1 1 auto; min-width: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; margin: 0; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-footer .workspace-field-error > p { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-resolution-footer .workspace-field-error ul { display: flex; flex-wrap: nowrap; gap: 2px 10px; margin: 0; padding: 0; list-style: none; overflow: hidden; }
+  .workspace-area[data-zone="centre"] .workspace-blocking-reason { display: flex; align-items: center; gap: 4px; }
+  .workspace-area[data-zone="centre"] .workspace-blocking-link { white-space: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-blocking-reason .workspace-roll-input { min-height: 26px; height: 26px; width: 3.4em; font-size: 14px; }
+  .workspace-area[data-zone="centre"] .workspace-blocking-reason button { min-height: 26px; padding: 1px 8px; font-size: 12.5px; }
+  .workspace-deviation-roll { display: inline-flex; align-items: center; gap: 4px; }
+
+  /* Panneau « autres… » : dans la case centrale, à la place des mêlées, au-dessus de la résolution. */
+  .workspace-play-grid.has-circumstances-open .workspace-area[data-zone="centre"] > .workspace-track-column { display: none; }
+  .workspace-area[data-zone="centre"] > .workspace-center > .workspace-resolution-drawer:not([hidden]) {
+    flex: 0 1 auto; min-height: 0; max-height: max(40%, calc(100% - 290px)); overflow: auto; overscroll-behavior: contain;
+    padding: 6px 10px; gap: 4px; background: var(--j-panel); border: 1px solid var(--j-red-border, var(--accent)); border-radius: 8px;
+  }
+
+  /* Désengagement à la place de la résolution : compact, en ligne. */
+  .workspace-area[data-zone="centre"] > .workspace-center > .workspace-disengage { display: flex; flex-wrap: wrap; align-content: flex-start; align-items: flex-end; gap: 4px 12px; margin: 0; padding: 6px 10px; overflow: hidden; }
+  .workspace-area[data-zone="centre"] .workspace-disengage > p { flex: 1 1 100%; margin: 0; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-disengage > .workspace-action-bar-title { font-size: 13px; font-weight: 700; }
+  .workspace-area[data-zone="centre"] .workspace-disengage label.workspace-type { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; margin: 0; font-size: 12.5px; }
+  .workspace-area[data-zone="centre"] .workspace-disengage :is(input, select) { min-height: 28px; padding: 2px 6px; font-size: 13px; }
+  .workspace-area[data-zone="centre"] .workspace-disengage input { width: 4em; }
+  .workspace-area[data-zone="centre"] .workspace-disengage button { min-height: 28px; padding: 2px 10px; font-size: 13px; }
+  .workspace-area[data-zone="centre"] .workspace-disengage > :is(.workspace-disengage-detail, .workspace-inline-actions) { flex: 1 1 100%; margin: 0; }
+}
+
+/* Panneau « autres… » : cases pertinentes en quatre colonnes, puis « À régler maintenant », puis réglages détaillés repliés. */
+.workspace-circumstances-heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.workspace-circumstances-heading h4 { margin: 0; }
+.workspace-circumstances-pertinent h5 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.workspace-circumstances-heading h4 { font-size: 14px; }
+.workspace-circumstances-heading button { min-height: 26px; padding: 1px 10px; font-size: 12.5px; }
+.workspace-circumstances-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px 12px; }
+.workspace-circumstances-grid .workspace-circumstance-option { display: flex; flex-direction: row; align-items: flex-start; gap: 5px; font-size: 12.5px; line-height: 1.25; }
+.workspace-circumstances-more > summary { cursor: pointer; font-weight: 600; font-size: 13px; }
+.workspace-circumstances-more[open] { display: grid; gap: 8px; }
+.workspace-circumstances-more[open] > .workspace-circumstances-group > .workspace-v5-context { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 4px 12px; }
+
+/* Prière et corruption dans la case centrale : en colonnes, sous un en-tête avec « Fermer » (le panneau défile en dernier recours). */
+.workspace-center-panel { display: flex; flex-direction: column; gap: 6px; padding: 6px 10px; min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.workspace-center-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: none; }
+.workspace-center-panel-head .workspace-rubric { margin: 0; }
+.workspace-center-panel > details > summary { display: none; }
+.workspace-center-panel > details { margin: 0; padding: 0; border: 0; background: none; box-shadow: none; }
+.workspace-center-panel :is(.workspace-divine-content, .workspace-corruption-panel) { display: block; column-width: 210px; column-gap: 14px; }
+.workspace-center-panel :is(.workspace-divine-content, .workspace-corruption-panel) > * { break-inside: avoid; margin: 0 0 6px; }
+.workspace-center-panel :is(.workspace-divine-content, .workspace-corruption-panel) :is(label.workspace-type, p) { font-size: 12.5px; }
+.workspace-center-panel :is(.workspace-divine-content, .workspace-corruption-panel) :is(select, input:not([type="checkbox"]):not([type="radio"])) { min-height: 28px; padding: 2px 6px; font-size: 12.5px; }
+.workspace-center-panel :is(.workspace-divine-content, .workspace-corruption-panel) button { min-height: 28px; padding: 2px 10px; font-size: 12.5px; }
+.workspace-center-panel :is(.workspace-divine-content, .workspace-corruption-panel) :is(h3, h4, strong) { font-size: 13px; }
+.workspace-center-panel fieldset { margin: 0; padding: 4px 6px; }
+.workspace-center-panel fieldset label { font-size: 12px; }
+
+/* Fin du combat : renvoi vers l'espace Campagne (séquelles, convalescence, calendrier). */
+.encounter-end-campaign { display: flex; align-items: center; gap: 6px; margin: 8px 0; }

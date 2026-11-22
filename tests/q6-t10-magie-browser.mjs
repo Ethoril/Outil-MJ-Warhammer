@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
 import { createStaticServer } from './helpers/static-server.mjs';
-import { clickU1Magic } from './helpers/u1-drawer.mjs';
+import { clickU1Magic, openCenterPanel } from './helpers/u1-drawer.mjs';
 import { chooseBoolean, confirmationValue } from './helpers/confirmation.mjs';
 
 // Q6 T10 (docs/specs/tests-secondaires-agregateur/) : chaque question que le calcul commun pose au MJ a son champ de réponse
@@ -500,8 +500,10 @@ try {
     await boot({ mage: { talents: [{ id: shield.requiredTalent.catalogueTalentId, status: 'resolved', specialization: 'Myrmidia', rank: 1 }, talent('strong-minded')],
       skills: [{ id: 'pray', name: 'Pray', status: 'resolved', total: 80 }], prayers: [{ nom: shield.catalogueName }], states: [{ id: 'stun-1', key: 'sonne', name: 'Sonné', level: 1 }],
       caracs: { CC: 35, CT: 35, F: 30, E: 40, I: 45, Ag: 40, Dex: 40, Int: 50, FM: 50, Soc: 80, M: 4 } }, v5: { divine: { sin: 0 }, baseCaracs: { Soc: 80 } } });
+    // Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+    await openCenterPanel(page, 'prayer');
     const panel = page.locator('[data-divine-panel]');
-    await panel.locator('summary').first().click();
+    if (!await panel.evaluate(el => el.open)) await panel.locator('summary').first().click();
     const prayerId = await page.locator('[aria-label="Prière divine"] option').evaluateAll(options => options.find(option => option.textContent.includes('Bouclier de Myrmidia'))?.value);
     assert.ok(prayerId, 'Bouclier de Myrmidia proposé');
     await page.locator('[aria-label="Prière divine"]').selectOption(prayerId);
@@ -544,8 +546,10 @@ try {
     await boot({ mage: { talents: [{ id: shield.requiredTalent.catalogueTalentId, status: 'resolved', specialization: 'Myrmidia', rank: 1 }, talent('strong-minded')],
       skills: [{ id: 'pray', name: 'Pray', status: 'resolved', total: 80 }], prayers: [{ nom: shield.catalogueName }], states: [{ id: 'stun-1', key: 'sonne', name: 'Sonné', level: 1 }],
       caracs: { CC: 35, CT: 35, F: 30, E: 40, I: 45, Ag: 40, Dex: 40, Int: 50, FM: 50, Soc: 80, M: 4 } }, v5: { divine: { sin: 0 }, baseCaracs: { Soc: 80 } } });
+    // Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+    await openCenterPanel(page, 'prayer');
     const panel = page.locator('[data-divine-panel]');
-    await panel.locator('summary').first().click();
+    if (!await panel.evaluate(el => el.open)) await panel.locator('summary').first().click();
     const prayerId = await page.locator('[aria-label="Prière divine"] option').evaluateAll(options => options.find(option => option.textContent.includes('Bouclier de Myrmidia'))?.value);
     assert.ok(prayerId, 'Bouclier de Myrmidia proposé');
     await page.locator('[aria-label="Prière divine"]').selectOption(prayerId);

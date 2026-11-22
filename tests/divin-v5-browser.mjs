@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import {chooseBoolean} from './helpers/confirmation.mjs';
 import assert from 'node:assert/strict';
 import { mkdir } from 'node:fs/promises';
@@ -29,9 +30,10 @@ try {
   const context=await browser.newContext({viewport:{width:1440,height:900}});
   const page=await context.newPage();page.setDefaultTimeout(5000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(`${base}/__divine__.html`,{waitUntil:'networkidle'});
+  await openCenterPanel(page,'prayer');/* Refonte E4b : la prière s'ouvre dans la case centrale. */
   await page.waitForSelector('[data-divine-panel]');
   await page.evaluate(()=>document.documentElement.setAttribute('data-theme','dark'));
-  const panel=page.locator('[data-divine-panel]');await panel.locator('summary').first().click();
+  const panel=page.locator('[data-divine-panel]');if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();
   const shieldId=await page.locator('[aria-label="Prière divine"] option').evaluateAll(options=>options.find(option=>option.textContent.includes('Bouclier de Myrmidia'))?.value);
   assert.ok(shieldId,'option Bouclier de Myrmidia visible');await page.locator('[aria-label="Prière divine"]').selectOption(shieldId);
   await page.locator('[aria-label="Destinataire Allié"]').check();
@@ -88,7 +90,7 @@ try {
   await page.locator('[data-divine-action="apply"]').click();
   await page.waitForFunction(()=>window.__TEST__.Store.listParticipants().find(p=>p.id==='ally').extensions?.v5?.divineEffects?.length>0);
   await page.screenshot({path:join(EVIDENCE,'divine-v5-mobile-parchment.png'),fullPage:true});
-  await page.reload({waitUntil:'networkidle'});await page.waitForSelector('[data-divine-panel]');
+  await page.reload({waitUntil:'networkidle'});await openCenterPanel(page,'prayer');/* Refonte E4b : la prière s'ouvre dans la case centrale. */await page.waitForSelector('[data-divine-panel]');
   assert.equal(await page.evaluate(()=>window.__TEST__.Store.listParticipants().find(p=>p.id==='ally').extensions.v5.divineEffects.length),1,'rechargement conserve la couche du Bouclier');
   await page.evaluate(async()=>window.__TEST__.Store.undo());
   assert.equal(await page.evaluate(()=>window.__TEST__.Store.listParticipants().find(p=>p.id==='ally').extensions.v5.divineEffects?.length||0),0,'Undo retire la seule couche ajoutée par la prière');

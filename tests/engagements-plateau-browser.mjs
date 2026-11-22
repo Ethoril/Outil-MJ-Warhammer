@@ -49,7 +49,11 @@ try {
   // CA11 + CA15 : Attaquer prépare le panneau ; le surnombre est déduit, sans cases.
   await bar.getByRole('button', { name: /^Attaquer · Orc/ }).click();
   await page.waitForTimeout(200);
+  // Refonte E4b : le surnombre déduit est une puce de la résolution ; le détail (Forcer, Laisser au récit, scène) est dans
+  // « Réglages détaillés et arbitrages » du panneau « autres… », replié par défaut.
   if (await page.locator('.workspace-resolution-drawer').getAttribute('hidden') !== null) await page.locator('[data-circumstances-toggle]').click();
+  if (!(await page.locator('.workspace-circumstances-more').evaluate(el => el.open))) await page.locator('.workspace-circumstances-more > summary').click();
+  assert.equal(await page.locator('[data-deduced="surnombre"]').getAttribute('aria-pressed'), 'true', 'puce « Surnombre » déduite du plateau (CA15b)');
   assert.match(await page.locator('.workspace-engagement-derived').first().textContent(), /Déduit du plateau : 2 contre 1 : surnombre, \+1 DR/);
   assert.equal(await page.getByLabel(/Engagés avec la cible, du côté de l’attaquant/).count(), 0, 'pas de case à cocher tant que le MJ ne force pas');
   if (process.env.ENGAGEMENTS_SHOT) await page.screenshot({ path: process.env.ENGAGEMENTS_SHOT, fullPage: true });
@@ -60,6 +64,8 @@ try {
   await page.getByRole('button', { name: 'Revenir au plateau' }).first().click();
   await page.locator('.workspace-engagement-derived').first().waitFor();
   assert.ok(await page.locator('.workspace-engagement-derived').count() > 0);
+  // Refonte E4b : le panneau « autres… » tient la place des mêlées tant qu'il est ouvert ; on le ferme pour revenir au plateau.
+  await page.locator('.workspace-resolution-drawer').getByRole('button', { name: 'Fermer', exact: true }).click();
   // CA6 : « Déplacer… » engage Elsa avec le Gobelin : une deuxième mêlée.
   await page.getByLabel('Déplacer Elsa').selectOption('engage:gob');
   await zone('Mêlée 2').waitFor({ timeout: 5000 });
@@ -102,7 +108,10 @@ try {
   await page.waitForFunction(() => window.__store.listParticipants().find(row => row.id === 'aldric').extensions.v5.position?.higherGround === true, null, { timeout: 5000 });
   assert.match(await page.locator('.workspace-token').filter({ has: page.locator('[data-workspace-target="aldric"]') }).textContent(), /Position haute/);
   await page.locator('[data-workspace-select="gunther"]').click();
+  // Refonte E4b : le surnombre déduit est une puce de la résolution ; le détail (Forcer, Laisser au récit, scène) est dans
+  // « Réglages détaillés et arbitrages » du panneau « autres… », replié par défaut.
   if (await page.locator('.workspace-resolution-drawer').getAttribute('hidden') !== null) await page.locator('[data-circumstances-toggle]').click();
+  if (!(await page.locator('.workspace-circumstances-more').evaluate(el => el.open))) await page.locator('.workspace-circumstances-more > summary').click();
   await page.getByLabel('Éclairage de la scène').selectOption('dim');
   await page.waitForFunction(() => window.__store.getSceneCircumstances().lighting === 'dim', null, { timeout: 5000 });
   assert.equal(await page.getByLabel('Éclairage de la scène').inputValue(), 'dim');

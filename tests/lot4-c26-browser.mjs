@@ -35,14 +35,16 @@ try {
   const toggle = page.locator('[data-circumstances-toggle]');
   const drawer = page.locator('.workspace-resolution-drawer');
   if (await drawer.isHidden()) await toggle.click();
-  const terrain = () => page.locator('.workspace-resolution-drawer').getByRole('group', { name: 'Terrain difficile (−1 DR)', exact: true });
-  await terrain().getByRole('button', { name: 'Oui', exact: true }).click();
-  assert.match(await toggle.textContent(), /Circonstances · 1 active/, 'point de départ : une circonstance active');
+  // Refonte E4b (CA15a) : Terrain difficile est une case pertinente du panneau « autres… », libellé avec son effet ;
+  // le bouton affiche « + autres… (N) ».
+  const terrain = () => page.locator('.workspace-resolution-drawer [data-circumstance="terrain"]');
+  await terrain().check();
+  assert.match(await toggle.textContent(), /\(1\)$/, 'point de départ : une circonstance active');
   await page.getByRole('button', { name: /^Dague/ }).first().click();
   await page.getByRole('button', { name: /^Épée/ }).first().click();
-  assert.match(await toggle.textContent(), /Circonstances · 1 active/, 'le compteur ne doit pas retomber à 0 après un aller-retour Épée → Dague → Épée');
+  assert.match(await toggle.textContent(), /\(1\)$/, 'le compteur ne doit pas retomber à 0 après un aller-retour Épée → Dague → Épée');
   if (await drawer.isHidden()) await toggle.click();
-  assert.equal(await terrain().getByRole('button', { name: 'Oui', exact: true }).getAttribute('aria-pressed'), 'true', 'Terrain difficile reste « Oui »');
+  assert.equal(await terrain().isChecked(), true, 'Terrain difficile reste coché');
   assert.deepEqual(errors, []);
   console.log('lot4-c26-browser: OK');
 } finally { await browser.close(); server.close(); }

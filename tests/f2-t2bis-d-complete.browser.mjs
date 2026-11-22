@@ -28,7 +28,7 @@ const withWeapons=()=>{const cutter={item:{id:'d-cutter',kind:'weapon',name:'Arm
 await new Promise(done=>server.listen(0,'127.0.0.1',done));
 const browser=await launchBrowser();
 try{
-  const context=await browser.newContext({serviceWorkers:'block'}),page=await context.newPage(),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',error=>errors.push(error.message));
+  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}}/* Refonte E4b : taille cible de l'écran ; à 1280 × 720 le panneau « autres… » n'a que 145 px */),page=await context.newPage(),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',error=>errors.push(error.message));
   const origin=`http://127.0.0.1:${server.address().port}${base}`;
   await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();
   const load=async state=>page.evaluate(async value=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(value);},state);

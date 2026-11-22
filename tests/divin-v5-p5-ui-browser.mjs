@@ -60,7 +60,12 @@ try {
         handlers
       });
       document.querySelector('#mount').appendChild(section);
-      if (!spec.interactive) section.querySelector('.workspace-resolution-settings').open = true;
+      if (!spec.interactive) {
+        section.querySelector('.workspace-resolution-settings').open = true;
+        // Refonte E4b : panneau « autres… » replié par défaut, réglages détaillés repliés dessous.
+        if (section.querySelector('.workspace-resolution-drawer').hidden) section.querySelector('[data-circumstances-toggle]').click();
+        section.querySelector('.workspace-circumstances-more').open = true;
+      }
       window.__calls = calls;
     };
   }, { moduleUrl: `http://127.0.0.1:${port}/js/ui/resolution-panel.js` });
@@ -72,14 +77,15 @@ try {
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true, interactive: true }));
   check((await page.locator('.workspace-resolution-step > h4').allTextContents()).join('|') === '1 · Action et cible|2 · Jets|3 · Résultat', 'U1-1 : les trois étapes sont présentes et ordonnées');
   check((await page.locator('.workspace-resolution-rolls .workspace-roll-owner').allTextContents()).join('|') === 'PNJ|PJ', 'U1-1 : les jets indiquent le type du combattant');
-  check(await page.getByRole('button', { name: /Circonstances ·/ }).count() === 1, 'U1-2 : un bouton ouvre le tiroir des circonstances');
-  check(await page.locator('.workspace-resolution-drawer').isVisible() && await page.locator('.workspace-resolution-settings').evaluate(el => el.open) && await page.getByText('Circonstances des Tests', { exact: true }).evaluate(el => el.parentElement.open), 'U1-2 : en attaque, le tiroir et les réglages historiques sont ouverts par défaut');
+  check(await page.locator('[data-circumstances-toggle]').count() === 1, 'U1-2 : un bouton ouvre le tiroir des circonstances');
+  // Refonte E4b : le panneau « autres… » est replié par défaut (circonstances utiles en puces).
+  check(await page.locator('.workspace-resolution-drawer').isHidden(), 'U1-2 : en attaque, le panneau « autres… » est replié par défaut');
   const applyButton = page.locator('[data-focus-key="apply"]');
   const reason = page.getByRole('button', { name: /saisir le Test de Calme/ });
   check(await applyButton.isDisabled() && await reason.count() === 1, 'C1 : la saisie manquante est expliquée près du bouton');
-  await page.getByRole('button', { name: /Circonstances ·/ }).click();
+  // Refonte E4b : le panneau est déjà replié ; le motif doit le rouvrir.
   await reason.click();
-  check(await page.getByRole('button', { name: /Circonstances ·/ }).getAttribute('aria-expanded') === 'true', 'U1-2 : le motif rouvre le tiroir fermé');
+  check(await page.locator('[data-circumstances-toggle]').getAttribute('aria-expanded') === 'true', 'U1-2 : le motif rouvre le tiroir fermé');
   check(await calmSelect.evaluate(el => document.activeElement === el) && await calmSelect.getAttribute('aria-required') === 'true', 'C1 : le motif dirige vers le champ obligatoire');
   await calmSelect.selectOption('pass');
   check(await applyButton.isEnabled(), 'C1 : la réussite active l’application (' + await applyButton.getAttribute('title') + ')');
@@ -87,19 +93,19 @@ try {
   check((await lastCall())?.kind === 'apply', 'C1 : le bouton actif transmet la demande d’application');
 
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj' }));
-  const circumstances = page.getByRole('button', { name: /Circonstances ·/ });
+  const circumstances = page.locator('[data-circumstances-toggle]');
   const advantages = page.locator('[data-focus-key="v5Advantages"]');
   const beforeCount = await circumstances.textContent();
   await advantages.fill('1');
   await advantages.dispatchEvent('change');
-  check(beforeCount !== await circumstances.textContent() && /1 active/.test(await circumstances.textContent()), 'U1-2 : une valeur modifiée augmente le compteur');
+  check(beforeCount !== await circumstances.textContent() && /\(1\)$/.test(await circumstances.textContent()), 'U1-2 : une valeur modifiée augmente le compteur');
 
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', ranged: true, rerenderAdvantage: true }));
-  check(/0 actives/.test(await circumstances.textContent()), 'U1-2 : la nature de tir par défaut ne compte pas comme circonstance');
+  check(/^\+ autres…$/.test(await circumstances.textContent()), 'U1-2 : la nature de tir par défaut ne compte pas comme circonstance');
   await advantages.fill('1'); await advantages.dispatchEvent('change');
-  check(/1 active/.test(await circumstances.textContent()), 'U1-2 : le compteur survit au nouveau rendu');
+  check(/\(1\)$/.test(await circumstances.textContent()), 'U1-2 : le compteur survit au nouveau rendu');
   await advantages.fill('0'); await advantages.dispatchEvent('change');
-  check(/0 actives/.test(await circumstances.textContent()), 'U1-2 : revenir à la valeur par défaut retire la circonstance');
+  check(/^\+ autres…$/.test(await circumstances.textContent()), 'U1-2 : revenir à la valeur par défaut retire la circonstance');
 
   // a) Attaque d’un ennemi sur une cible porteuse d’une couche attackDeterrent.
   await page.evaluate(() => window.__render({ actorCamp: 'ennemi', targetCamp: 'pj', targetDivine: true }));

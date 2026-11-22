@@ -33,6 +33,9 @@ try {
       groups: { adversaries: [target, other], allies: [] }, previousWeaponAttacks: previous, defense: { options: [], value: 'Ag', option: { value: 'Ag', statLabel: 'Ag', mod: 0, v5: { kind: 'test', slModifier: 0 } } }, canCalculate: false, canApply: false, handlers });
     document.getElementById('lot5a-host')?.remove();
     const host = document.createElement('div'); host.id = 'lot5a-host'; host.append(el); document.body.append(host);
+    // Refonte E4b : panneau « autres… » replié par défaut, réglages détaillés repliés dessous.
+    if (el.querySelector('.workspace-resolution-drawer')?.hidden) el.querySelector('[data-circumstances-toggle]')?.click();
+    const more = el.querySelector('.workspace-circumstances-more'); if (more) more.open = true;
   }, { qualities, v5Context, previous });
   const check = async (name, fn) => { try { await fn(); console.log('ok  -', name); } catch (error) { failures++; console.log('FAIL -', name, '\n   ', error.message); } };
   const doubleShotBoxes = () => page.locator('#lot5a-host [aria-label*="À répétition : tir double"]').count();

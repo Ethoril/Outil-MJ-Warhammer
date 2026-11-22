@@ -23,10 +23,9 @@ try{
  const participant=async id=>(await read()).combat.participants.find(row=>row.id===id);
 
  // 1. Un critique appliqué par l'interface crée l'occurrence F2-I ; aucune occurrence, aucun suivi proposé avant.
- // U3 : « Suites de combat » est fermé pendant le combat ; le MJ l'ouvre, U2 le garde ouvert ensuite.
- const aftermath=combat.locator('details.workspace-aftermath');assert.equal(await aftermath.evaluate(el=>el.open),false,'Suites de combat fermé pendant le combat');await aftermath.locator(':scope > summary').click();
- await panel.waitFor();
- await panel.locator('summary',{hasText:'Critiques à suivre (0)'}).waitFor();
+ // Refonte E4b (CA20) : les suites de combat ont quitté l'écran Jouer ; elles se suivent dans Campagne.
+ assert.equal(await combat.locator('details.workspace-aftermath').count(),0,'plus de « Suites de combat » dans Jouer');
+ assert.equal((await participant('foe')).extensions?.v5?.criticalAftermath?.length||0,0,'aucune occurrence avant le critique');
  await combat.locator('[data-workspace-select="hero"]').click();
  await openU1Settings(combat);await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
  await combat.getByRole('textbox',{name:'Attaque (CC 60)'}).fill('1');await combat.getByRole('button',{name:'Calculer'}).click();
@@ -35,7 +34,7 @@ try{
  const occurrence=(await participant('foe')).extensions.v5.criticalAftermath;assert.ok(occurrence?.length,'le critique appliqué par l’interface crée l’occurrence F2-I');
 
  // Même partie : ouvrir et soigner dans Campagne le critique réellement appliqué dans Jouer.
- await aftermath.locator('.workspace-aftermath-link').click();
+ await page.locator('#tab-campaign').click();
  await page.locator('#tab-campaign[aria-selected="true"]').waitFor();
  const campaign=page.locator('#workspace-campaign');
  await campaign.locator('[data-campaign-person="foe"]').click();
@@ -56,7 +55,7 @@ try{
  await page.waitForFunction(()=>/Blessure\(s\) rendue\(s\)/.test(document.querySelector('#workspace-campaign .workspace-aftermath-status')?.textContent||''));
  assert.equal((await participant('foe')).hp,9);
  await page.locator('#tab-combat').click();
- await card('Garde').waitFor();
+ await combat.locator('[data-workspace-select="hero"]').waitFor();
  assert.equal((await participant('foe')).hp,9);
  await page.reload({waitUntil:'domcontentloaded'});
  await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});
