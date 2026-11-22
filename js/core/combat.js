@@ -7,6 +7,8 @@ export function computeEndOfTurn(p, d10Roll = 1) {
   return advanceEndOfTurn(p, { d10Roll });
 }
 
+const withoutAdvancedTurn = ({ advancedTurn, ...v5 } = {}) => v5;
+
 export function createCombatEngine(Store) {
   function orderedActiveParticipants() {
     const st = Store.getCombat();
@@ -37,7 +39,8 @@ export function createCombatEngine(Store) {
       ? Store.executeCommand('start-combat', draft => ({
         ...draft,
         combat: { ...draft.combat, round, currentActorId: firstActor.id },
-        extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), turnIndex: st.round === 0 ? 1 : draft.extensions?.v5?.turnIndex || 1,
+        // Un tour avancé (E4c) d'un combat précédent ne survit pas au démarrage.
+        extensions: { ...(draft.extensions || {}), v5: { ...(st.round === 0 ? withoutAdvancedTurn(draft.extensions?.v5) : draft.extensions?.v5 || {}), turnIndex: st.round === 0 ? 1 : draft.extensions?.v5?.turnIndex || 1,
           combatId: st.round === 0 ? uid() : draft.extensions?.v5?.combatId || uid() } },
         log: [{ kind: 'management', actorId: firstActor.id, actorName: firstActor.name, text: `Combat démarré. Round ${round}. Tour: ${firstActor.name}` }, ...(draft.log || [])].slice(0, 300)
       }))

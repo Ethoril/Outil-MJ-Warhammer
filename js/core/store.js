@@ -148,7 +148,7 @@ import { sanitizeArray, sanitizeProfile, sanitizeParticipant, sanitizeMagicEnvel
 import { MigrationError, migrateSnapshot, migrateLegacyStorage, applySchemaMigrations, legacySchemaVersion, LEGACY_SCHEMA_KEY, CURRENT_SCHEMA_VERSION } from './migrations.js';
 import { createStateCommand, createCompactStateCommand, applyStateChanges } from './commands.js';
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
-import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative } from './turn-order.js';
+import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative, playTurnNow as computePlayTurnNow, playTurnNowCheck as computePlayTurnNowCheck, playedThisRound as computePlayedThisRound } from './turn-order.js';
 import { createEncounter, normalizeEncounter, setEncounterEntry, removeEncounterEntry, duplicateEncounter, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene } from './encounters.js';
 import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution, previewMountedSecondaryTest, withTriggeringStun } from './resolution.js';
 import { simulateAction, applySimulation as applyActionSimulation, discardSimulation } from './simulation.js';
@@ -3262,7 +3262,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         }
         const firstActorId=order[0]||null,round=captured.startCombat===true?1:Number(draft.combat?.round)||0;
         const startedLog=captured.startCombat===true&&firstActorId?[{id:uid(),kind:'management',actorId:firstActorId,actorName:nextParticipants.find(row=>row.id===firstActorId)?.name,text:`Combat démarré. Round 1. Tour: ${nextParticipants.find(row=>row.id===firstActorId)?.name}`},...log]:log;
-        const nextV5=captured.startCombat===true?{...extensions.v5,turnIndex:1,combatId:uid()} : extensions.v5;
+        // Un tour avancé (E4c) d'un combat précédent ne survit pas au démarrage.
+        const nextV5=captured.startCombat===true?(({advancedTurn,...rest})=>({...rest,turnIndex:1,combatId:uid()}))(extensions.v5||{}) : extensions.v5;
         return {...draft,extensions:{...extensions,v5:nextV5},combat:{...draft.combat,round,currentActorId:captured.startCombat===true?firstActorId:draft.combat?.currentActorId||null,participants:nextParticipants,order,orderMode:ORDER_MODES.AUTOMATIC},log:startedLog.slice(0,300)};
       });
       const finish=result=>result?.ok===false?{...result,status:'persistence-error'}:{...result,status:'applied',order:[...plan.order]};
@@ -3334,9 +3335,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         const order = effectiveOrder(draft.combat?.participants || [], {
           mode: draft.combat?.orderMode || ORDER_MODES.AUTOMATIC, order: draft.combat?.order || [], autoOrder:draft.extensions?.v5?.combatInitiativeResolution?.order, round: draft.combat?.round || 0
         });
-        const result = computeNextTurn({
+        const { advancedTurn: nextAdvancedTurn, ...result } = computeNextTurn({
           participants: draft.combat?.participants || [], order,
-          currentActorId: draft.combat?.currentActorId || null, round: draft.combat?.round || 0
+          currentActorId: draft.combat?.currentActorId || null, round: draft.combat?.round || 0, advanced: draft.extensions?.v5?.advancedTurn
         });
         const fumbleEffects=(draft.combat?.participants||[]).flatMap(participant=>participant.extensions?.v5?.combatEffects||[]).filter(effect=>effect.kind==='acts-last-next-round');
         const legacyFumble=!draft.extensions?.v5?.combatInitiativeInitialized&&fumbleEffects.length>0;
@@ -3391,6 +3392,9 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           clock = reconcileGameClockPosition(clock, positionAfter).clock;
           v5 = { ...v5, gameClock: clock };
         }
+        // Tour avancé (E4c) : remis à zéro au round suivant, sinon mis à jour ; absent reste absent.
+        const advancedTurn = result.round > (draft.combat?.round || 0) ? null : nextAdvancedTurn;
+        if (advancedTurn !== undefined) { const { advancedTurn: dropped, ...rest } = v5; v5 = advancedTurn ? { ...rest, advancedTurn } : rest; }
         extensions = { ...extensions, v5 };
         const unshielded = shieldAtTurnStart(combat.participants, result.currentActorId);
         const processed = processCombatTurnSpells(unshielded, result.round, result.currentActorId,
@@ -3410,6 +3414,33 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         reconcileCriticalDeathForRound(nextState,result.round);
         transitionResult = { ...result, phases, clock: cloneValue(clock) };
         return nextState;
+      });
+    },
+    // Refonte E4c (CA24-CA25) : « Jouer son tour maintenant ». Commande annulable ; l'ordre ne change pas ; le combattant
+    // avancé et celui qui reprendra sont gardés dans `extensions.v5.advancedTurn` (facultatif, absent = rien d'avancé).
+    playTurnNowCheck(participantId) {
+      return computePlayTurnNowCheck({ participants: Array.from(combat.participants.values()), order: effectiveCombatOrder(), currentActorId: combat.currentActorId,
+        round: combat.round, advanced: stateExtensions?.v5?.advancedTurn, participantId });
+    },
+    getPlayedThisRound() {
+      return computePlayedThisRound({ participants: Array.from(combat.participants.values()), order: effectiveCombatOrder(), currentActorId: combat.currentActorId,
+        round: combat.round, advanced: stateExtensions?.v5?.advancedTurn });
+    },
+    playTurnNow(participantId) {
+      if (!canMutate()) return false;
+      const check = api.playTurnNowCheck(participantId);
+      const name = combat.participants.get(participantId)?.name || 'Ce combattant';
+      if (!check.ok) return { ok: false, message: `${name} ne peut pas jouer son tour maintenant : ${check.reason}.` };
+      const order = effectiveCombatOrder();
+      return api.executeCommand('play-turn-now', draft => {
+        const result = computePlayTurnNow({ participants: draft.combat?.participants || [], order, currentActorId: draft.combat?.currentActorId || null,
+          round: draft.combat?.round || 0, advanced: draft.extensions?.v5?.advancedTurn, participantId });
+        if (!result.ok) throw Object.assign(new Error(`${name} ne peut pas jouer son tour maintenant : ${result.reason}.`), { userFacing: true });
+        const resumeName = (draft.combat?.participants || []).find(row => row.id === result.advancedTurn.resumeActorId)?.name || '—';
+        return { ...draft, combat: { ...draft.combat, currentActorId: result.currentActorId },
+          extensions: { ...(draft.extensions || {}), v5: { ...(draft.extensions?.v5 || {}), advancedTurn: result.advancedTurn } },
+          log: [{ id: uid(), ts: Date.now(), kind: 'management', actorId: participantId, actorName: name,
+            text: `▶ ${name} joue son tour maintenant (puis reprise : ${resumeName})` }, ...(draft.log || [])].slice(0, 300) };
       });
     },
     consumeTurnSelection() {

@@ -35,7 +35,8 @@ test('actions préparées : aucune action, aucune entrée', () => {
 
 test('barre « d’ici » : se désengager, fuir, charger et autres actions restent proposés, sans numéro', () => {
   const foe = { id: 'e', name: 'Erich', zone: 'active', camp: 'pj' };
-  const rows = actionBarModel({ actor, active: [actor, foe], actions, actionKeys: keys, previewDisengage: () => ({ mode: 'test', bestOpponentId: 'e' }) });
+  // E4c : « Charger » porte sur la cible choisie par son cartouche (ici Erich).
+  const rows = actionBarModel({ actor, active: [actor, foe], actions, actionKeys: keys, targetId: 'e', previewDisengage: () => ({ mode: 'test', bestOpponentId: 'e' }) });
   const labels = rows.map(row => row.label);
   for (const expected of ['Se déplacer', 'Autres actions']) assert.ok(labels.includes(expected), expected);
   assert.ok(labels.some(label => label.startsWith('Charger · ')));

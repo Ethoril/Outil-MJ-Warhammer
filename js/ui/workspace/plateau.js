@@ -63,9 +63,10 @@ export function preparedActionRows({ actor, actions = [], actionKeys = [], selec
 
 /**
  * Modèle de la barre d'actions : `{ id, label, consequence, disabled?, run }` où `run` reçoit les commandes
- * (`select`, `disengage`, `flee`, `brokenFlee`). `actions` : actions préparées de l'acteur (avec leur clé).
+ * (`select`, `disengage`, `flee`, `brokenFlee`). `actions` : actions préparées de l'acteur (avec leur clé) ;
+ * `targetId` : la cible choisie par son cartouche (« Charger » porte sur elle).
  */
-export function actionBarModel({ actor, active, actions = [], actionKeys = [], previewDisengage, turnFacts = {} }) {
+export function actionBarModel({ actor, active, actions = [], actionKeys = [], previewDisengage, turnFacts = {}, targetId = null }) {
   if (!actor || actor.zone !== 'active') return [];
   const engagedIds = engagedWith({ participants: active }, active, actor.id), engagedFoes = enemiesOf(actor, active).filter(foe => engagedIds.includes(foe.id));
   const freeFoes = enemiesOf(actor, active);
@@ -90,12 +91,18 @@ export function actionBarModel({ actor, active, actions = [], actionKeys = [], p
     rows.push({ id: 'flee', label: 'Fuir', consequence: noFlee ? `impossible : ${noFlee}` : orderly ? `En Bon Ordre : pas d’Élan pour ${engagedFoes.map(foe => foe.name).join(', ')} ; Brisé dû`
       : `Élan et attaque gratuite pour ${engagedFoes.map(foe => foe.name).join(', ')} ; +${engagedFoes.length} Brisé`, ...(noFlee ? { disabled: true } : {}), run: commands => commands.flee() });
   }
-  // Charge (p. 163) : seulement si non engagé ; engagé, la raison est annoncée et le clic vaut forçage par le MJ.
-  for (const foe of freeFoes.filter(foe => !engagedIds.includes(foe.id)).slice(0, 4)) rows.push({ id: `charge-${foe.id}`, label: `Charger · ${foe.name}`,
-    consequence: engagedFoes.length ? 'interdit : déjà engagé (p. 163) · clic = forcer (MJ)' : 'Élan si la distance de charge est atteinte',
-    run: commands => commands.select({ targetId: foe.id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
-  if (engagedFoes.length && !freeFoes.some(foe => !engagedIds.includes(foe.id))) rows.push({ id: 'charge-blocked', label: 'Charger', consequence: 'interdit : déjà engagé (p. 163) · clic = forcer (MJ)',
-    run: commands => commands.select({ targetId: engagedFoes[0].id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
+  // Charge (p. 163, refonte E4c, CA26-CA27) : sur la cible choisie par son cartouche, pour tout ennemi non engagé avec
+  // l'acteur, sans limite de nombre. Engagé ailleurs, la règle est annoncée et le clic vaut forçage par le MJ.
+  const chargeTarget = targetId ? active.find(row => row.id === targetId) : null;
+  if (freeFoes.length) {
+    const foe = chargeTarget && freeFoes.includes(chargeTarget) ? chargeTarget : null;
+    if (foe && !engagedIds.includes(foe.id)) rows.push({ id: `charge-${foe.id}`, label: `Charger · ${foe.name}`,
+      consequence: engagedFoes.length ? 'interdit : déjà engagé (p. 163) · clic = forcer (MJ)' : 'Élan si la distance de charge est atteinte (p. 163)',
+      run: commands => commands.select({ targetId: foe.id, charging: true, ...(meleeKey ? { actionKey: meleeKey } : {}) }) });
+    else rows.push({ id: 'charge', label: 'Charger', disabled: true, run: () => {},
+      consequence: foe ? `déjà engagé avec ${foe.name} : Attaquer (p. 163)` : chargeTarget && chargeTarget.id !== actor.id ? 'la cible n’est pas un adversaire'
+        : 'choisir la cible : clic sur son cartouche' });
+  }
   if (rangedKey) {
     const target = enemiesOf(actor, active).find(foe => !engagedIds.includes(foe.id)) || enemiesOf(actor, active)[0];
     if (target) {

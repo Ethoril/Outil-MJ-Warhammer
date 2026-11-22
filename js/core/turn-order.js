@@ -246,18 +246,80 @@ export function setOrderMode(participants, { mode = ORDER_MODES.AUTOMATIC, order
   };
 }
 
+/**
+ * Tour avancé (« Jouer son tour maintenant », refonte E4c, CA24-CA25) : champ facultatif `extensions.v5.advancedTurn`
+ * `{ round, playedIds, resumeActorId, resumeIndex }`. Absent, mal formé ou d'un autre round = rien d'avancé (null),
+ * lu ainsi au point de lecture sans réécrire les données.
+ */
+export function readAdvancedTurn(value, round) {
+  if (!value || typeof value !== 'object' || !(Number(round) > 0) || Number(value.round) !== Number(round)) return null;
+  const playedIds = (Array.isArray(value.playedIds) ? value.playedIds : []).filter(id => typeof id === 'string' && id);
+  const resumeActorId = typeof value.resumeActorId === 'string' && value.resumeActorId ? value.resumeActorId : null;
+  const resumeIndex = resumeActorId && Number.isSafeInteger(value.resumeIndex) && value.resumeIndex >= 0 ? value.resumeIndex : null;
+  return { round: Number(round), playedIds: [...new Set(playedIds)], resumeActorId, resumeIndex };
+}
+
+/** Ceux qui ont joué ce round : avant le tour en cours (ou avant celui qui reprend) dans l'ordre, plus les tours avancés. */
+export function playedThisRound({ participants = [], order = [], currentActorId = null, round = 0, advanced = null } = {}) {
+  const active = activeIds(participants), validOrder = (Array.isArray(order) ? order : []).filter(id => active.has(id));
+  if (!(Number(round) > 0) || !currentActorId) return [];
+  const adv = readAdvancedTurn(advanced, round), cursorId = adv?.resumeActorId || currentActorId;
+  let cursor = validOrder.indexOf(cursorId);
+  if (cursor < 0) cursor = adv?.resumeIndex ?? 0;
+  const played = new Set(validOrder.slice(0, cursor));
+  for (const id of adv?.playedIds || []) if (active.has(id) && id !== currentActorId) played.add(id);
+  return validOrder.filter(id => played.has(id));
+}
+
+/** « Jouer son tour maintenant » est-il permis pour ce combattant ? `{ ok, reason }` (raison en français si refus). */
+export function playTurnNowCheck({ participants = [], order = [], currentActorId = null, round = 0, advanced = null, participantId } = {}) {
+  if (!(Number(round) > 0) || !currentActorId) return { ok: false, reason: 'le combat n’a pas commencé' };
+  if (!activeIds(participants).has(participantId)) return { ok: false, reason: 'n’est pas dans le combat actif' };
+  if (participantId === currentActorId) return { ok: false, reason: 'c’est déjà son tour' };
+  const adv = readAdvancedTurn(advanced, round);
+  if (adv?.resumeActorId === participantId) return { ok: false, reason: 'reprend son tour au prochain « Tour suivant »' };
+  if (playedThisRound({ participants, order, currentActorId, round, advanced }).includes(participantId)) return { ok: false, reason: 'a déjà joué ce round' };
+  return { ok: true };
+}
+
+/** Donne le tour tout de suite ; l'ordre ne change pas. Rend `{ ok, currentActorId, advancedTurn }` ou `{ ok:false, reason }`. */
+export function playTurnNow({ participants = [], order = [], currentActorId = null, round = 0, advanced = null, participantId } = {}) {
+  const check = playTurnNowCheck({ participants, order, currentActorId, round, advanced, participantId });
+  if (!check.ok) return check;
+  const active = activeIds(participants), validOrder = (Array.isArray(order) ? order : []).filter(id => active.has(id));
+  const adv = readAdvancedTurn(advanced, round);
+  // Enchaîné (un autre joue déjà par anticipation) : celui qui reprend reste le premier interrompu.
+  const resumeActorId = adv?.resumeActorId || currentActorId;
+  const resumeIndex = adv?.resumeActorId ? adv.resumeIndex : Math.max(0, validOrder.indexOf(currentActorId));
+  return { ok: true, currentActorId: participantId,
+    advancedTurn: { round: Number(round), playedIds: [...(adv?.playedIds || []), participantId], resumeActorId, resumeIndex } };
+}
+
 /** Select the next active actor; changing the order never applies effects itself. */
-export function nextTurn({ participants = [], order = [], currentActorId = null, round = 0 } = {}) {
+export function nextTurn({ participants = [], order = [], currentActorId = null, round = 0, advanced = null } = {}) {
   const active = activeIds(participants);
   const validOrder = (Array.isArray(order) ? order : []).filter(id => active.has(id));
   if (!validOrder.length) return { order: [], currentActorId: null, round };
   const currentIndex = validOrder.indexOf(currentActorId);
+  const adv = readAdvancedTurn(advanced, round);
+  if (adv && (currentIndex >= 0 || adv.resumeActorId)) {
+    // Tour avancé : on rend la main à celui qui devait jouer, puis on saute ceux qui ont déjà joué par anticipation.
+    const played = new Set(adv.playedIds), kept = { ...adv, resumeActorId: null, resumeIndex: null };
+    if (adv.resumeActorId && validOrder.includes(adv.resumeActorId) && !played.has(adv.resumeActorId))
+      return { order: validOrder, currentActorId: adv.resumeActorId, round, advancedTurn: kept };
+    const start = adv.resumeActorId ? Math.min(adv.resumeIndex ?? 0, validOrder.length) : currentIndex + 1;
+    const following = validOrder.slice(start).find(id => !played.has(id));
+    if (following) return { order: validOrder, currentActorId: following, round, advancedTurn: kept };
+    return { order: validOrder, currentActorId: validOrder[0], round: round + 1, advancedTurn: null };
+  }
   if (currentIndex < 0) return { order: validOrder, currentActorId: validOrder[0], round };
   const nextIndex = (currentIndex + 1) % validOrder.length;
   return {
     order: validOrder,
     currentActorId: validOrder[nextIndex],
-    round: nextIndex === 0 ? round + 1 : round
+    round: nextIndex === 0 ? round + 1 : round,
+    // Un champ d'un round passé est remis à zéro dès le premier Tour suivant.
+    ...(advanced && !adv ? { advancedTurn: null } : {})
   };
 }
 

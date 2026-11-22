@@ -9,6 +9,9 @@
  * `friseModel` et `actorOutOfTurn` sont des fonctions pures (testées sous Node) ; `renderFrise` pose le DOM.
  * Le module ne lit pas le store : il ne reçoit que le `context` de `playContext()`. `context.decisions` (liste de
  * `{ participantId }`, alimentée par la case « À décider » du lot E2) est facultative : absente = aucune marque.
+ * Lot E4c (CA24-CA25) : `context.playedIds` (ceux qui ont joué ce round, tours avancés compris, lus du store) remplace le
+ * calcul par le rang quand il est fourni ; `context.playNow(id)` → `{ ok, reason }` donne à celui qui agit hors de son tour
+ * la commande « Jouer son tour maintenant » (`handlers.playTurnNow(id)`), grisée avec sa raison si elle est refusée.
  */
 import { hasMomentum } from '../core/v5-momentum-state.js';
 
@@ -33,7 +36,7 @@ function mountText(participant, people) {
 
 /**
  * Portraits de la frise, dans l'ordre reçu (celui du round) :
- * `{ id, nom, rang, camp, tour, agit, joue, mort, pv, pvMax, elan, monture, decision }`.
+ * `{ id, nom, rang, camp, tour, agit, joue, mort, pv, pvMax, elan, monture, decision, maintenant }`.
  * `joue` : précède celui dont c'est le tour (jamais avant le début du combat) ; `decision` : nombre de décisions en attente.
  */
 export function friseModel(context) {
@@ -41,22 +44,25 @@ export function friseModel(context) {
   const turnId = context?.started ? context.combat?.currentActorId : null;
   const turnIndex = turnId ? people.findIndex(row => row.id === turnId) : -1;
   const decisions = Array.isArray(context?.decisions) ? context.decisions : [];
+  const played = turnIndex >= 0 && Array.isArray(context?.playedIds) ? new Set(context.playedIds) : null;
   return people.map((participant, index) => {
     const pv = asNumber(participant.hp);
+    const tour = turnIndex >= 0 && index === turnIndex, agit = Boolean(context.actor) && participant.id === context.actor.id;
     return {
       id: participant.id,
       nom: participant.name,
       rang: index + 1,
       camp: typeof context.camp === 'function' ? context.camp(participant) : 'neutre',
-      tour: turnIndex >= 0 && index === turnIndex,
-      agit: Boolean(context.actor) && participant.id === context.actor.id,
-      joue: turnIndex >= 0 && index < turnIndex,
+      tour,
+      agit,
+      joue: played ? played.has(participant.id) && !tour : turnIndex >= 0 && index < turnIndex,
       mort: isDead(participant),
       pv,
       pvMax: asNumber(participant.maxHp, pv),
       elan: hasMomentum(participant),
       monture: mountText(participant, people),
-      decision: decisions.filter(item => item?.participantId === participant.id).length
+      decision: decisions.filter(item => item?.participantId === participant.id).length,
+      maintenant: agit && !tour && turnIndex >= 0 && typeof context.playNow === 'function' ? context.playNow(participant.id) : null
     };
   });
 }
@@ -133,6 +139,19 @@ export function renderFrise(zone, context, handlers = {}) {
     // Le clic passe par l'écoute commune de workspace-view (mêmes parcours qu'avant : [data-workspace-select="id"]).
     portrait.dataset.workspaceSelect = row.id;
     item.append(portrait);
+    // Lot E4c : « Jouer son tour maintenant » sur celui qui agit hors de son tour ; grisé, la raison au survol et dans le nom.
+    if (row.maintenant) {
+      const now = el('button', 'frise-play-now', '▶');
+      now.type = 'button';
+      now.dataset.playTurnNow = row.id;
+      now.dataset.focusKey = `frise-play-now-${row.id}`;
+      const text = row.maintenant.ok ? `Jouer son tour maintenant : ${row.nom}` : `${row.nom} ne peut pas jouer son tour maintenant : ${row.maintenant.reason}`;
+      now.setAttribute('aria-label', text);
+      now.title = row.maintenant.ok ? `${text} (« Tour suivant » reviendra ensuite à celui qui devait jouer)` : text;
+      now.disabled = !row.maintenant.ok;
+      now.addEventListener('click', event => { event.stopPropagation(); handlers.playTurnNow?.(row.id); });
+      item.append(now);
+    }
     list.append(item);
   }
   zone.append(list);
