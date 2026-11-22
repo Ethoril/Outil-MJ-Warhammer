@@ -78,6 +78,13 @@ Constat du MJ : il n'a pas trouvé comment déclencher une charge pendant le com
 ### S8 · Les autres espaces (lots après le combat)
 - **CA23** Préparer, Campagne et Bibliothèque ne défilent pas à 1440 × 800 ; une liste longue (réserve, bestiaire, règles, suivis) défile dans sa case.
 
+### S9 · Liaison « tour de jeu » avec la carte (ajout du MJ, 22/11)
+Depuis la carte `3256bd9`, `mj.turn` désigne le seul PJ que la tablette laisse jouer (note `rpg-map-display/docs/A-FAIRE-OUTIL-MJ-TOUR-DE-JEU-2026-11-22.md`). Aucun changement de protocole.
+- **CA28** `mj.turn` part avec le pion du combattant actif à chaque changement de tour, « Jouer son tour maintenant », sa reprise et Annuler compris, et toujours dans l'instantané.
+- **CA29** `mj.turn { ref: null }` part à la fin d'un combat (Terminer le combat, retrait du dernier combattant actif, Recommencer).
+- **CA30** Un second `map.ran` dans le même Tour ne coûte pas une seconde Action ; une proposition de Course non tranchée ne survit pas au changement de Tour.
+- À décider par le MJ après la recette, sans rien coder d'ici là : `null` ambigu (champ `inCombat`) et annulation du mouvement non remontée (`map.turnReset`) ; chacun est un changement de protocole dans les deux dépôts.
+
 ## 4. Hors périmètre
 - Téléphone et tablette.
 - Toute modification des règles appliquées par le moteur.

@@ -63,6 +63,7 @@ Un seul ajout, facultatif : `participant.extensions.v5.suddenDeathDeclined: true
 | 21 | `tests/unit/ui/contrastes-theme.test.mjs` (ratio des couples texte/fond des deux thèmes ≥ 4,5) ; aucune `@font-face` ni police chargée (parcours : `document.fonts` vide). |
 | 22 | `tests/unit/ui/raccourcis-clavier.test.mjs` inchangé et vert. |
 | 25 bis | E7a : `tests/unit/combat/jouer-tour-maintenant.test.js` — effet de début de tour déclenché à l'avance, pas une seconde fois à la place normale, Annuler rétablit l'horloge. |
+| 28, 29, 30 | E10 : `tests/unit/chapeau/liaison-carte-tour-de-jeu.test.mjs` (store réel, faux canal) et `tests/unit/combat/liaison-carte-course.test.js` ; `liaison-carte-messages-golden` inchangé. |
 | 23 | Lots F : un parcours de mesure par espace (`tests/refonte-preparer-browser.mjs`, `tests/refonte-campagne-browser.mjs`, `tests/refonte-bibliotheque-browser.mjs`). |
 
 ## 7. Complexité justifiée
