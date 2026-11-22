@@ -462,6 +462,14 @@ export function renderResolutionPanel(options) {
     }
     menu.appendChild(menuStatus);
     actionChips.append(magicButton, menu);
+    // G1-c : charge déclarée par « Charger » (barre du bas) ; la puce la montre hors du tiroir « autres… » et la retire d'un clic.
+    if (draft.charging === true) {
+      const charge = chip('Charge', { pressed: true, key: 'charge' });
+      charge.dataset.chargeChip = '';
+      charge.title = 'Charge déclarée : donne l’Élan si la distance de charge est atteinte (p. 163). Cliquer pour la retirer.';
+      charge.addEventListener('click', () => handlers.select({ charging: false }));
+      actionChips.insertBefore(charge, testButton);
+    }
   }
   section.appendChild(actionBlock);
 
@@ -3383,7 +3391,9 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
     // Les menus qui s'ouvrent (type d'action, sort, prière, Corruption) prennent une ligne sous la ligne Action.
     const menus = [];
     for (const child of [...actionList.children]) {
-      if (child.matches('[data-action-key], p')) continue;
+      // G1-a : les actions préparées sont dans la barre du bas ; la case de résolution n'en répète aucune puce.
+      if (child.matches('[data-action-key]')) { child.remove(); continue; }
+      if (child.matches('p')) continue;
       if (child.matches('.workspace-action-type, .workspace-action-menu')) menus.push(child); else tools.appendChild(child);
     }
     const turnActions = actionStep.querySelector(':scope > .workspace-combat-actions');

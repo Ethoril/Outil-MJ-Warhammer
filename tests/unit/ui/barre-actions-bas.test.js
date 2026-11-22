@@ -43,3 +43,27 @@ test('barre « d’ici » : se désengager, fuir, charger et autres actions rest
   assert.ok(rows.every(row => !/^\d/.test(row.label)), 'aucun numéro devant un libellé');
   assert.ok(rows.every(row => !('shortcut' in row) && !('key' in row)), 'aucun raccourci clavier');
 });
+
+// Passe G, lot G1 (R11, R12) : « Charger » reste enfoncé tant que la charge est déclarée ; « Autres actions » ouvre le menu.
+const foe = { id: 'e', name: 'Erich', zone: 'active', camp: 'pj' };
+const modelOf = extra => actionBarModel({ actor, active: [actor, foe], actions, actionKeys: keys, targetId: 'e', previewDisengage: () => ({ mode: 'test', bestOpponentId: 'e' }), ...extra });
+
+test('G1-c : « Charger » déclare la charge, puis la retire au second clic (bouton enfoncé)', () => {
+  const idle = modelOf({}).find(row => row.id === 'charge-e');
+  assert.equal(idle.pressed, false, 'charge non déclarée : bouton relevé');
+  const calls = [];
+  idle.run({ select: patch => calls.push(patch) });
+  assert.equal(calls[0].charging, true);
+  const declared = modelOf({ charging: true }).find(row => row.id === 'charge-e');
+  assert.equal(declared.pressed, true, 'charge déclarée : bouton enfoncé');
+  const undo = [];
+  declared.run({ select: patch => undo.push(patch) });
+  assert.deepEqual(undo, [{ charging: false }], 'second clic : la charge est retirée, sans changer ni cible ni arme');
+});
+
+test('G1-b : « Autres actions » ouvre le menu magie, prière et Test', () => {
+  const other = modelOf({}).find(row => row.id === 'other');
+  const calls = [];
+  other.run({ openOther: () => calls.push('openOther'), focus: () => calls.push('focus') });
+  assert.deepEqual(calls, ['openOther']);
+});

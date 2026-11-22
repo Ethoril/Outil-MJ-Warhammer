@@ -188,7 +188,8 @@ try {
   const insideWindow = locator => locator.evaluate(el => { const r = el.getBoundingClientRect(); return r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1; });
   const resolution = () => page.locator('.workspace-resolution');
   const selectActor = id => page.locator(`[data-workspace-select="${id}"]`).first().click();
-  const chooseAction = name => resolution().locator('[data-action-key]').filter({ hasText: name }).first().click();
+  // Passe G1 (R1) : les puces d'action de la résolution sont supprimées ; l'action se choisit dans la barre du bas.
+  const chooseAction = name => page.locator('[data-zone="bas"] [data-bar-action^="prepared-"]').filter({ hasText: name }).first().click();
   const chooseTarget = name => resolution().getByRole('button', { name, exact: true }).first().click();
   const rollInput = (name, value) => page.locator(`[data-roll-input="${name}"]`).first().fill(String(value));
   const press = (name, key = 'Enter') => page.locator(`[data-roll-input="${name}"]`).first().press(key);
