@@ -55,7 +55,8 @@ try {
 
   // Taille (arme) : la Vermine de choc frappe Wren au Corps (54 inversé = 45), Wren rate sa défense.
   await page.locator(`[data-workspace-select="${vermin.id}"]`).first().click().catch(() => {});
-  await resolution().locator('[data-action-key]').filter({ hasText: 'Hallebarde' }).first().click();
+  // Passe G1 (R1) : l'action se choisit dans la barre du bas, plus dans la résolution.
+  await page.locator('[data-zone="bas"] [data-bar-action^="prepared-"]').filter({ hasText: 'Hallebarde' }).first().click();
   await resolution().getByRole('button', { name: 'Wren', exact: true }).first().click();
   await page.locator('[data-roll-input="attack"]').first().fill('54');
   await page.locator('[data-roll-input="defense"]').first().fill('95');
