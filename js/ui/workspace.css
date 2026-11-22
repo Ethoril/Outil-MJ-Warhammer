@@ -2559,3 +2559,41 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 dialog.v5-fortune-dialog[open], dialog.v5-fate-dialog[open] { position:fixed !important; margin:0 !important; transform:none !important; top:150px !important; bottom:auto !important; width:min(350px, calc(50vw - 16px)) !important; max-height:calc(100dvh - 250px) !important; z-index:30; box-sizing:border-box; }
 dialog.v5-fortune-dialog[open] { left:calc(50% - 358px) !important; right:auto !important; }
 dialog.v5-fate-dialog[open] { left:calc(50% + 8px) !important; right:auto !important; }
+
+/* ==========================================================================
+   REFONTE · LOT F1 : Préparer sans défilement de page (CA23)
+   En-tête en haut ; rencontres à gauche, réserve à droite ; chaque liste défile dans sa case.
+   La fenêtre « Préparer une rencontre » garde le formulaire d'ajout et les boutons en vue : seule la composition défile.
+   ========================================================================== */
+.workspace-prepare-area { min-width: 0; display: grid; gap: var(--workspace-gap); align-content: start; }
+.workspace-prepare-area > .workspace-rubric { margin: 0; }
+
+@media (min-width: 1000px) {
+  body:has(#panel-workspace.is-active #workspace-prepare:not([hidden])) .topbar { height: var(--topbar-height); }
+  body:has(#panel-workspace.is-active #workspace-prepare:not([hidden])) .topbar .topbar-main { height: 100%; padding-block: 0; }
+  body:has(#panel-workspace.is-active #workspace-prepare:not([hidden])) main.wrap { height: calc(100dvh - var(--topbar-height)); padding: 0; }
+  body:has(#panel-workspace.is-active #workspace-prepare:not([hidden])) #panel-workspace { height: 100%; margin: 0; }
+  body:has(#panel-workspace.is-active #workspace-prepare:not([hidden])) #workspace-root { height: 100%; }
+  body:has(#panel-workspace.is-active #workspace-prepare:not([hidden])) .workspace-view { height: 100%; margin: 0; padding-block: 8px; grid-template-rows: auto minmax(0, 1fr); }
+  #workspace-prepare:not([hidden]) {
+    height: 100%; min-height: 0; gap: 8px;
+    grid-template-columns: minmax(340px, 30%) minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas: "entete entete" "rencontres profils";
+  }
+  #workspace-prepare > [data-zone="prep-entete"] { grid-area: entete; }
+  #workspace-prepare > [data-zone="prep-rencontres"] { grid-area: rencontres; }
+  #workspace-prepare > [data-zone="prep-profils"] { grid-area: profils; }
+  #workspace-prepare > .workspace-prepare-area { overflow: auto; overscroll-behavior: contain; padding-right: 4px; }
+  #workspace-prepare .workspace-encounter-list { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  #workspace-prepare .workspace-profile-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 8px; }
+  #workspace-prepare .workspace-section-heading h2 { font-size: 22px; }
+
+  dialog.tool-sheet > .tool-sheet-body:has(> .prepare-view) { display: flex; flex-direction: column; overflow: hidden; padding-bottom: 12px; }
+  .tool-sheet-body > .prepare-view { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+  .tool-sheet-body > .prepare-view > * { flex: none; margin-block: 0; }
+  .tool-sheet-body > .prepare-view > label { display: flex; flex-direction: column; gap: 2px; }
+  .tool-sheet-body > .prepare-view > label > textarea { height: 3.4em; resize: none; }
+  .tool-sheet-body > .prepare-view > .encounter-composition { flex: 1 1 0; min-height: 80px; overflow: auto; overscroll-behavior: contain; margin: 0; padding-left: 18px; }
+  .tool-sheet-body > .prepare-view > .encounter-composition li { padding: 2px 0; }
+}

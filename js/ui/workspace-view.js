@@ -407,9 +407,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     });
   }
 
+  // Refonte F1 : trois cases à zone fixe (en-tête, rencontres, réserve) ; les deux listes défilent dans leur case.
   function renderPrepare() {
     refs.prepare.replaceChildren();
     const header = node('div', 'workspace-section-heading');
+    header.dataset.zone = 'prep-entete';
     const title = node('div');
     title.appendChild(node('h2', '', 'Préparer'));
     header.appendChild(title);
@@ -425,13 +427,19 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     header.appendChild(launch);
     refs.prepare.appendChild(header);
 
-    refs.prepare.appendChild(rubric('Rencontres'));
+    const encounterZone = node('section', 'workspace-prepare-area is-rencontres');
+    encounterZone.dataset.zone = 'prep-rencontres';
+    encounterZone.appendChild(rubric('Rencontres'));
     const encounters = encounterList({ compact: false });
-    if (encounters.note) refs.prepare.appendChild(encounters.note);
-    if (encounters.list) refs.prepare.appendChild(encounters.list);
-    if (encounters.empty) refs.prepare.appendChild(node('p', 'workspace-muted', 'Aucune rencontre préparée : « Nouvelle rencontre » pour en composer une à l’avance.'));
+    if (encounters.note) encounterZone.appendChild(encounters.note);
+    if (encounters.list) encounterZone.appendChild(encounters.list);
+    if (encounters.empty) encounterZone.appendChild(node('p', 'workspace-muted', 'Aucune rencontre préparée : « Nouvelle rencontre » pour en composer une à l’avance.'));
+    refs.prepare.appendChild(encounterZone);
 
-    refs.prepare.appendChild(rubric('Profils'));
+    const profileZone = node('section', 'workspace-prepare-area is-profils');
+    profileZone.dataset.zone = 'prep-profils';
+    profileZone.appendChild(rubric('Profils'));
+    refs.prepare.appendChild(profileZone);
     const profiles = readProfiles(Store);
     if (!profiles.length) {
       const empty = node('div', 'workspace-empty workspace-card');
@@ -439,7 +447,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       const library = button('Ouvrir la bibliothèque', 'workspace-secondary');
       library.dataset.workspaceSpace = 'library';
       empty.appendChild(library);
-      refs.prepare.appendChild(empty);
+      profileZone.appendChild(empty);
       return;
     }
     const list = node('div', 'workspace-profile-grid');
@@ -455,7 +463,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       card.dataset.detailsOwner=`profile:${profile.id}`;card.appendChild(renderFicheDetails(profile));
     list.appendChild(card);
     });
-    refs.prepare.appendChild(list);
+    profileZone.appendChild(list);
   }
 
   // Cartes des rencontres enregistrées. `compact` (Jouer, sans combat) : titre,
