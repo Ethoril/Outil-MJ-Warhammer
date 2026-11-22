@@ -1,6 +1,7 @@
 import { ResolutionError } from '../../core/resolution.js';
 import { removedArmourIds } from '../../core/armour-worn.js';
 import { locationProtection } from '../../core/equipment.js';
+import { creatureSizeOf } from '../../core/creature-size.js';
 import { userMessage } from '../messages.js';
 import { minusSigned } from '../resolution-panel/dom.js';
 import { shownTokenImageOf } from '../../core/token-image.js';
@@ -86,8 +87,13 @@ export function stateLabel(state) {
 export const toughnessBonus = participant => Math.floor((Number(participant?.caracs?.E) || 0) / 10);
 
 // PA non nuls : Tête, Corps, Bras, Jambes.
+// G5-e : une valeur conditionnelle (pièce Partielle, p. 306) est suivie d'un astérisque, la note en fin de résumé (infobulle).
 export function armorSummary(armor = {}, precise = null) {
-  if (precise) return Object.entries(precise).filter(([,ap])=>ap===null||Number(ap)>0).map(([key,ap])=>`${({head:"T",body:"C",rightArm:"BD",leftArm:"BG",rightLeg:"JD",leftLeg:"JG"})[key] || key}${ap??'?'}`).join(" ") || "—";
+  if (precise) {
+    const conditional = precise.conditional || {};
+    const text = Object.entries(precise).filter(([,ap])=>ap===null||Number(ap)>0).map(([key,ap])=>`${({head:"T",body:"C",rightArm:"BD",leftArm:"BG",rightLeg:"JD",leftLeg:"JG"})[key] || key}${ap??'?'}${ap!==null&&conditional[key]?'*':''}`).join(" ") || "—";
+    return Object.keys(conditional).length ? `${text} (* ${PARTIAL_ARMOUR_NOTE})` : text;
+  }
   const parts = [['T', 'head'], ['C', 'body'], ['B', 'arms'], ['J', 'legs']]
     .filter(([, key]) => Number(armor?.[key]) > 0)
     .map(([letter, key]) => `${letter}${Number(armor[key])}`);
@@ -96,10 +102,58 @@ export function armorSummary(armor = {}, precise = null) {
 
 // L’armure de fiche reste physique. Montrer la protection réellement utilisée
 // par le combat quand une prière apporte des PA ou qu’une pièce est ôtée, sans réécrire cette armure.
+// G5-e (p. 306) : sans jet de localisation, une pièce Partielle compte pour sa valeur nominale, marquée conditionnelle dans
+// `conditional` (propriété non énumérable : { localisation: note }) au lieu de rendre « ? ».
+export const PARTIAL_ARMOUR_NOTE = 'Partielle : ignorée sur une localisation paire';
+const ARMOUR_LOCATIONS = ['head','body','rightArm','leftArm','rightLeg','leftLeg'];
+const PARTIAL_PENDING = 'jet-localisation-requis:partielle';
 export function displayedArmorLocations(participant) {
   const prayerAp = (participant.extensions?.v5?.divineEffects || []).some(layer => Object.keys(layer.apModifiers || {}).length);
-  if (!prayerAp && !removedArmourIds(participant).length) return participant.armorLocations;
-  return Object.fromEntries(['head','body','rightArm','leftArm','rightLeg','leftLeg'].map(location => [location, locationProtection(participant,{location}).ap ?? null]));
+  const recompute = prayerAp || removedArmourIds(participant).length > 0;
+  const hasArmour = Array.isArray(participant.equipment) && participant.equipment.some(item => item?.kind === 'armour');
+  if (!recompute && (!hasArmour || !participant.armorLocations)) return participant.armorLocations;
+  const conditional = {}, values = {};
+  for (const location of ARMOUR_LOCATIONS) {
+    const plain = locationProtection(participant, { location });
+    const partial = (plain.manual || []).includes(PARTIAL_PENDING);
+    if (partial) conditional[location] = PARTIAL_ARMOUR_NOTE;
+    // Jet impair : la pièce Partielle est comptée (valeur nominale).
+    values[location] = !recompute ? null : (partial ? locationProtection(participant, { location, hitLocationRoll: 1 }).ap : plain.ap) ?? null;
+  }
+  if (!recompute && !Object.keys(conditional).length) return participant.armorLocations;
+  const shown = recompute ? values : { ...participant.armorLocations };
+  if (Object.keys(conditional).length) Object.defineProperty(shown, 'conditional', { value: conditional, enumerable: false });
+  return shown;
+}
+
+// G5-d (R13) : rang de Taille connu (Trait, champ `size`, espèce du PJ) envoyé au moteur quand le MJ n'a rien choisi ;
+// une Taille seulement supposée n'est pas envoyée (le moteur la suppose et le rappelle).
+export function knownSizeRank(participant) {
+  if (!participant) return undefined;
+  const size = creatureSizeOf(participant);
+  return size.assumed ? undefined : size.rank;
+}
+
+// G5-c : où mène le bouton d'ouverture d'une décision de la case « À décider ». Toujours un contrôle visible : le champ
+// (lien de la raison), sinon le panneau, sinon la raison ou la carte de décision mise en évidence (`fallback`).
+const DECISION_PANELS = Object.freeze({ corruption: '[data-secondary-panel="corruption"]', jugement: '[data-divine-panel]', brise: '.workspace-broken-escape, [data-broken-escape]', familier: '.actor-familiar', peur: '.workspace-action-bar' });
+const DECISION_CENTER = Object.freeze({ corruption: 'corruption', jugement: 'prayer' });
+const RESOLUTION_DECISIONS = new Set(['maladresse', 'deviation', 'incident-magie', 'questions-etats', 'equipement']);
+export function decisionRevealTarget(entry) {
+  const card = `[data-decision-id="${String(entry?.id ?? '').replace(/["\\]/g, '\\$&')}"]`;
+  if (entry?.kind === 'initiative') return { via: 'initiative', selector: '[data-initiative="board"]', fallback: card };
+  if (RESOLUTION_DECISIONS.has(entry?.kind)) return { via: 'resolution', selector: '.workspace-blocking-reason', fallback: '.workspace-resolution', text: entry.detail || entry.titre || '' };
+  if (DECISION_PANELS[entry?.kind]) return { via: 'panel', selector: DECISION_PANELS[entry.kind], center: DECISION_CENTER[entry.kind] || null, fallback: card };
+  return { via: 'card', selector: card, fallback: card };
+}
+/** Index de la raison « À saisir avant d'appliquer » qui correspond au détail de la décision ; -1 si aucune. */
+export function matchingReasonIndex(texts, detail) {
+  const wanted = String(detail || '').trim();
+  if (!wanted) return -1;
+  const exact = texts.findIndex(text => String(text || '').trim() === wanted);
+  if (exact >= 0) return exact;
+  const head = wanted.slice(0, 24);
+  return texts.findIndex(text => String(text || '').includes(head) || wanted.includes(String(text || '').trim() || '\u0000'));
 }
 
 export const hpText = participant => `${minusSigned(participant.hp)}/${participant.maxHp ?? participant.hp}`;

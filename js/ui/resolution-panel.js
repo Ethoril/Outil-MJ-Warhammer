@@ -1706,26 +1706,32 @@ export function renderResolutionPanel(options) {
     fields.append(wrap);
   }
   if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='taille')&&target){
-    const current=draft.v5Context||{},wrap=node('label','workspace-type','Taille : pièce d’armure ou bouclier frappé'),select=document.createElement('select');
-    select.setAttribute('aria-label',wrap.textContent);
-    select.append(new Option('À préciser',''));
-    for(const item of(target.equipment||[]).filter(row=>['armour','shield'].includes(row.kind)&&Number.isSafeInteger(row.ap)))select.append(new Option(`${item.name} · ${item.ap} PA`,item.id));
-    select.value=current.struckItemId||'';
-    select.addEventListener('change',()=>{
-      const struckItemId=select.value||undefined,hitShield=(target.equipment||[]).find(item=>item.id===struckItemId&&item.kind==='shield');
-      handlers.select({v5Context:{...current,struckItemId},...(hitShield?{protectionContext:{...(draft.protectionContext||{}),shieldId:hitShield.id,shieldAvailable:true,opposedWithShield:true,defenseProvided:true,ranged:draft.attackContext?.ranged===true}}:{})});
-    });
-    wrap.append(select);
-    fields.append(wrap);
-    // Sans pièce identifiable sur la fiche de la cible, le MJ nomme la pièce frappée (l'usure n'est pas suivie).
-    const manualWrap=node('label','workspace-type','Taille : pièce frappée, saisie manuelle (si aucune pièce n’est identifiable)'),manual=document.createElement('input');
-    manual.type='text';
-    manual.value=current.struckPieceManual||'';
-    manual.dataset.blockingField='hack-piece';
-    manual.setAttribute('aria-label',manualWrap.textContent);
-    manual.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),struckPieceManual:manual.value.trim()||undefined}}));
-    manualWrap.append(manual);
-    fields.append(manualWrap);
+    // G5-a/b : la pièce touchée par la qualité d'arme Taille (p. 304) se déduit au calcul ; la liste se limite aux pièces de la
+    // localisation (et au bouclier s'il a servi), la plus forte en PA précochée. « Taille (arme) » : pas la Taille de la créature.
+    const current=draft.v5Context||{},hack=draft.preview?.hack||null,choices=hack?.candidates||[];
+    if(choices.length>1){
+      const wrap=node('label','workspace-type','Taille (arme) : pièce touchée'),select=document.createElement('select');
+      select.setAttribute('aria-label',wrap.textContent);
+      select.dataset.hackPiece='';
+      for(const item of choices)select.append(new Option(`${item.name} · ${item.ap} PA${item.kind==='shield'?' (bouclier)':''}`,item.id));
+      select.value=hack.struckItemId||choices[0].id;
+      select.addEventListener('change',()=>handlers.select({v5Context:{...current,struckItemId:select.value||undefined}}));
+      wrap.append(select);
+      fields.append(wrap);
+    }
+    else fields.append(node('p','workspace-muted',hack?.struckItemName&&!hack.manual?`Taille (arme) : ${hack.struckItemName} perd 1 PA.`
+      :hack?.manual?'Taille (arme) : la protection touchée perd 1 PA.':draft.preview?'Taille (arme) : rien à abîmer à cette localisation.':'Taille (arme) : pièce touchée déduite au calcul.'));
+    if(hack?.manual){
+      // PA sans pièce identifiable sur la fiche de la cible : nommer la pièce frappée est facultatif (usure non suivie).
+      const manualWrap=node('label','workspace-type','Taille (arme) : pièce frappée (facultatif)'),manual=document.createElement('input');
+      manual.type='text';
+      manual.value=current.struckPieceManual||'';
+      manual.dataset.blockingField='hack-piece';
+      manual.setAttribute('aria-label',manualWrap.textContent);
+      manual.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),struckPieceManual:manual.value.trim()||undefined}}));
+      manualWrap.append(manual);
+      fields.append(manualWrap);
+    }
   }
   if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='entaille')&&target){
     const current=draft.v5Context||{},wrap=node('label','workspace-type','Entaille : dépenser 1 Élan pour +1 Hémorragique'),select=document.createElement('select');

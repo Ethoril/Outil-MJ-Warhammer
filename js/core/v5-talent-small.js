@@ -2,6 +2,16 @@
 import {hasV5Talent} from './v5-talents.js';
 import {situationPlan,activeSource} from './v5-talent-situations.js';
 import {getReferenceCatalogue} from './reference-catalog.js';
+import {creatureSizeOf} from './creature-size.js';
+
+// G5-d (R13) : rangs de Taille saisis par le MJ, sinon la catégorie connue (Trait, champ `size`, espèce du PJ), sinon Moyenne
+// supposée, signalée par un rappel non bloquant (Taille des créatures, p. 360). Aucune fiche n'est réécrite.
+export const ASSUMED_SIZE_REMINDER='Taille supposée Moyenne (non renseignée sur la fiche) : vérifier les catégories de Taille.';
+export function sizeRanksOf(n){
+  const one=(manual,p)=>{if(Number.isSafeInteger(manual))return{rank:manual,assumed:false};if(!p)return{rank:undefined,assumed:false};const s=creatureSizeOf(p);return{rank:s.rank,assumed:s.assumed};};
+  const a=one(n.v5?.actorSize,n.actor),b=one(n.v5?.targetSize,n.target);
+  return{sizes:[a.rank,b.rank],assumed:a.assumed||b.assumed};
+}
 
 export function smallSource(actor,target){
   const owner=[actor,target].find(p=>hasV5Talent(p,'talent-small'));
@@ -9,12 +19,13 @@ export function smallSource(actor,target){
 }
 export function smallNoTest(actor,target,id){return ['small-disengage','small-psychology'].includes(id)&&Boolean(smallSource(actor,target)?.proposals.length);}
 export function previewSmall(n){
-  const plan=smallSource(n.actor,n.target),unresolved=[];
-  const sizes=[n.v5.actorSize,n.v5.targetSize],known=sizes.every(Number.isSafeInteger);
+  const plan=smallSource(n.actor,n.target),unresolved=[],reminders=[];
+  const ranks=sizeRanksOf(n),sizes=ranks.sizes,known=sizes.every(Number.isSafeInteger);
   const attack=['attack','attaque'].includes(n.action.type),strength=n.defense&&n.action.attr==='F'&&n.defense.attr==='F';
   const selected=['small-psychology','small-disengage','stomp'].includes(n.v5.context?.talentAction);
   const eligible=attack||strength||selected,active=eligible&&Boolean(plan?.proposals.length),plans=eligible&&plan?[plan]:[];
   if(active&&(attack||strength||selected)&&!known)unresolved.push('Petit : catégories de Taille explicites requises, sans recalcul des fiches.');
+  if(active&&known&&ranks.assumed)reminders.push(ASSUMED_SIZE_REMINDER);
   const gap=active&&known?Math.abs(sizes[0]-sizes[1]):0,larger=gap?(sizes[0]>sizes[1]?'attacker':'defender'):null;
   const stomp=n.v5.context?.talentAction==='stomp';
   const quality=gap===1?'devastatrice':gap>=2?'percutante':null;
@@ -22,7 +33,7 @@ export function previewSmall(n){
     const weapon=larger==='attacker'?n.action:n.defense;
     if(weapon&&(larger==='attacker'||n.defense?.v5?.kind==='melee')&&quality&&!weapon.qualities.some(q=>q.id===quality))weapon.qualities.push({id:quality,talentOrigins:plan.proposals.flatMap(p=>p.origins)});
   }
-  return {active,plans,unresolved,gap,larger,quality,scoreBonus:active&&attack&&larger==='defender'?10:0,
+  return {active,plans,unresolved,reminders,gap,larger,quality,scoreBonus:active&&attack&&larger==='defender'?10:0,
     defensePenalty:active&&larger==='attacker'?2*gap:0,
     multiplier:active&&larger==='attacker'&&!stomp?Math.max(1,gap):1,
     defenderMultiplier:active&&larger==='defender'&&!stomp?Math.max(1,gap):1,
@@ -34,7 +45,7 @@ export function previewSmallActivation(n){
   const id=n.v5.context?.talentAction;
   if(!['small-disengage','small-psychology','stomp'].includes(id))return null;
   const plan=smallSource(n.actor,n.target);if(!plan?.proposals.length)return null;
-  const changes=[],unresolved=[],reminders=[],c=n.v5.context||{},sizes=[n.v5.actorSize,n.v5.targetSize];
+  const changes=[],unresolved=[],reminders=[],c=n.v5.context||{},sizes=n.target?sizeRanksOf(n).sizes:[n.v5.actorSize,n.v5.targetSize];
   const known=sizes.every(Number.isSafeInteger),gap=known?Math.abs(sizes[0]-sizes[1]):0;
   if(!n.target||!known||!gap)unresolved.push('Petit : deux créatures de catégories de Taille différentes requises.');
   const origin=plan.proposals[0].origins[0];

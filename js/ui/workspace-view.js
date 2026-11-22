@@ -67,7 +67,7 @@ import { effectiveSupplementalEncumbrance } from '../core/v5-supplemental-equipm
 import { renderTestQuestions, renderObstinateChoice } from './test-questions.js';
 import { createV5AftermathPanel } from './v5-aftermath-panel.js';
 import { mountCampaignWorkspace } from './campaign-workspace.js';
-import { WORKSPACE_SPACES, noop, node, button, readProfiles, readEncounters, readScenes, readParticipants, readCombat, turnKey, STATE_NAMES, stateLabel, toughnessBonus, armorSummary, displayedArmorLocations, hpText, hpBar, CRITICAL_ERROR_FIELDS, DEFENDER_CRITICAL_FIELDS, criticalRollError, dispelDistance, dispelVisible, validRoll, criticalRollsChanged, profileSearchText, createShell, profileSummary, magicCastingSpell } from './workspace/helpers.js';
+import { WORKSPACE_SPACES, noop, node, button, readProfiles, readEncounters, readScenes, readParticipants, readCombat, turnKey, STATE_NAMES, stateLabel, toughnessBonus, armorSummary, displayedArmorLocations, hpText, hpBar, CRITICAL_ERROR_FIELDS, DEFENDER_CRITICAL_FIELDS, criticalRollError, dispelDistance, dispelVisible, validRoll, criticalRollsChanged, profileSearchText, createShell, profileSummary, magicCastingSpell, decisionRevealTarget, matchingReasonIndex, knownSizeRank } from './workspace/helpers.js';
 export { WORKSPACE_SPACES, STATE_NAMES, magicCastingSpell } from './workspace/helpers.js';
 
 // G-CRI-5 : parties amputées (clés des séquelles) affichées en français.
@@ -1057,9 +1057,11 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     row.appendChild(node('span', 'workspace-sheet-pa-label', 'PA'));
     for (const [letter, key, label, zone] of PA_CELLS) {
       const raw = precise ? precise[key] : coarse[PA_COARSE[key]];
-      const shown = raw === null ? '?' : Number.isFinite(Number(raw)) ? String(Number(raw)) : '0';
-      const cell = node('span', `workspace-sheet-pa-cell num${zone === hitZone ? ' is-hit' : ''}`);
-      cell.title = `${label} : PA ${shown}${zone === hitZone ? ' (zone touchée)' : ''}`;
+      // G5-e : valeur nominale d'une pièce Partielle marquée « * », la règle en infobulle.
+      const note = raw !== null ? precise?.conditional?.[key] : null;
+      const shown = raw === null ? '?' : `${Number.isFinite(Number(raw)) ? String(Number(raw)) : '0'}${note ? '*' : ''}`;
+      const cell = node('span', `workspace-sheet-pa-cell num${zone === hitZone ? ' is-hit' : ''}${note ? ' is-conditional' : ''}`);
+      cell.title = `${label} : PA ${shown}${note ? ` (${note})` : ''}${zone === hitZone ? ' (zone touchée)' : ''}`;
       cell.dataset.paZone = zone;
       cell.append(node('small', '', letter), shown);
       row.appendChild(cell);
@@ -1622,7 +1624,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       ...(draft.reverseDice === true ? { reverseDice: true } : {}),
       ...(draft.fortuneRerollRoll != null && draft.fortuneRerollRoll !== '' ? { fortuneRerollRoll: Number(draft.fortuneRerollRoll) } : {}),
       extraAttack: draft.extraAttack === true, ...(draft.reactionId ? { reactionId: draft.reactionId } : {}), aimed: draft.aimed === true,
-      actorSize: draft.actorSize, targetSize: draft.targetSize,
+      // G5-d : la Taille affichée par défaut (catégorie connue) est celle envoyée ; une saisie du MJ l'emporte.
+      actorSize: draft.actorSize ?? knownSizeRank(context.actor), targetSize: draft.targetSize ?? knownSizeRank(context.target),
       advantageSources: declaredSources(draft.v5Advantages, 'Avantage déclaré'), disadvantageSources: declaredSources(draft.v5Disadvantages, 'Désavantage déclaré') };
   }
   function defenseV5Input(context, draft) {
@@ -3372,31 +3375,49 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     return entries;
   }
   // Après une décision : l'entrée réglée disparaît au rendu suivant ; « Plus tard » reste compté (CA9).
-  const SHOW_PANEL = { corruption: '[data-secondary-panel="corruption"]', jugement: '[data-divine-panel]', brise: '.workspace-broken-escape, [data-broken-escape]', familier: '.actor-familiar', peur: '.workspace-action-bar' };
+  // G5-c : un élément sans contrôle propre est mis en évidence, amené à l'écran et reçoit le focus.
+  function spotlight(element) {
+    if (!element) return false;
+    for (let parent = element.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
+    element.classList.add('is-spotlight');
+    setTimeout(() => element.classList.remove('is-spotlight'), 2500);
+    element.scrollIntoView({ block: 'center' });
+    const control = element.matches('input, select, button, textarea') ? element : element.querySelector('input, select, button, textarea');
+    if (control) control.focus();
+    else { if (!element.hasAttribute('tabindex')) element.tabIndex = -1; element.focus({ preventScroll: true }); }
+    return true;
+  }
   function revealDecision(entry) {
     const root = refs.play;
-    if (entry.kind === 'initiative') {
-      const board = root.querySelector('[data-initiative="board"]');
-      board?.querySelector('input, select, button')?.focus();
+    const target = decisionRevealTarget(entry);
+    if (target.via === 'initiative') {
+      const board = root.querySelector(target.selector);
+      const field = board?.querySelector('input, select, button');
+      if (field) field.focus(); else spotlight(board || root.querySelector(target.fallback));
       return;
     }
-    if (['maladresse', 'deviation', 'incident-magie', 'questions-etats', 'equipement'].includes(entry.kind)) {
-      const links = [...root.querySelectorAll('.workspace-blocking-link')];
-      const link = links.find(item => entry.detail && item.textContent.includes(entry.detail.slice(0, 24))) || links[0];
+    if (target.via === 'resolution') {
+      // La raison qui correspond à la décision : son lien mène au champ ; sans champ, la raison elle-même est montrée.
+      const reasons = [...root.querySelectorAll(target.selector)];
+      const reason = reasons[matchingReasonIndex(reasons.map(item => item.textContent), target.text)];
+      const link = reason?.querySelector('.workspace-blocking-link');
       if (link) { link.click(); return; }
-      root.querySelector('.workspace-resolution')?.scrollIntoView({ block: 'start' });
+      spotlight(reason || root.querySelector(target.fallback));
       return;
     }
     if (entry.participantId && entry.participantId !== playContext().actor?.id) selectActor(entry.participantId);
     // Refonte E4b : corruption et jugement dernier s'ouvrent dans la case centrale.
-    if (entry.kind === 'corruption' && openCenterPanel('corruption')) return;
-    if (entry.kind === 'jugement' && openCenterPanel('prayer')) return;
-    const panel = SHOW_PANEL[entry.kind] && root.querySelector(SHOW_PANEL[entry.kind]);
+    if (target.center && openCenterPanel(target.center)) return;
+    const panel = refs.play.querySelector(target.selector);
     if (panel) {
       if (panel.tagName === 'DETAILS') panel.open = true;
       panel.scrollIntoView({ block: 'nearest' });
-      panel.querySelector('summary, button, input, select')?.focus();
+      const control = panel.querySelector('summary, button, input, select');
+      if (control) { control.focus(); return; }
+      spotlight(panel);
+      return;
     }
+    spotlight(refs.play.querySelector(target.fallback));
   }
   const decisionErrors = new Map();
   async function chooseDecision(entry, key) {
