@@ -319,3 +319,5 @@ Demandes d'interface du MJ, valables pour tous les lots G : écrans de tir, de m
 - **Q3 (R4)** Choix par défaut, à infirmer : quitter une mêlée par un déplacement du MJ crée une décision « Se désengager / Fuir / Sans règle » (p. 163), sans attaque d'opportunité hors Fuite.
 - **Q4 (R9)** Comment la torche du PJ était-elle posée (panneau de la carte, autre) ? Quelle taille avait l'ennemi ? Le niveau était-il dans le noir ?
 - Choix par défaut, à infirmer : Taille (arme) sur plusieurs pièces superposées → celle de plus fort PA précochée (le livre ne tranche pas).
+
+**Réponses du MJ (22/11 soir).** Q2 : **option B**, clic sur la carte (G4 en deux dépôts, liaison version 3, lot jumeau carte, publication conjointe). Q3 : **validé** (décision Se désengager / Fuir / Sans règle). Taille (arme) sur pièces superposées : **validé** (plus fort PA précoché). Q4 : torche posée par le **panneau de la carte** (écran MJ). Q1 : en attente, le MJ a d abord demandé le texte exact de la règle (p. 165).
