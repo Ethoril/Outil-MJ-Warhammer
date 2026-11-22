@@ -430,8 +430,12 @@ function seedInitiativeActor(state, actor, staging) {
   }else if(reflex){
     state.combatReflexesById[actor.id]={dice:actor.kind==='PJ'?[null,null]:[Math.floor(Math.random()*10)+1,Math.floor(Math.random()*10)+1],choice:''};
   }else state.diceById[actor.id] = existingCombat?.initialized?existingCombat.die:actor.kind!=='PJ'?Math.floor(Math.random()*10)+1:undefined;
-  // G6 : d100 de Vigilance (p. 116), tiré une fois pour un PNJ comme ses dés d'initiative, saisi pour un PJ.
-  if(hasV5Talent(actor,'talent-combat-aware'))state.vigilanceRolls[actor.id]=actor.kind!=='PJ'?Math.floor(Math.random()*100)+1:undefined;
+}
+// G6 : d100 de Vigilance (p. 116) d'un PNJ surpris qui a le talent, tiré une fois (comme ses dés d'initiative) dès que son camp est surpris ; saisi pour un PJ.
+function rollNpcVigilance(state, active) {
+  if (!state.surprisedCamp) return;
+  for (const actor of active) if (actor.kind !== 'PJ' && actor.camp === state.surprisedCamp && hasV5Talent(actor, 'talent-combat-aware') && !Number.isInteger(state.vigilanceRolls[actor.id]))
+    state.vigilanceRolls[actor.id] = Math.floor(Math.random() * 100) + 1;
 }
 function newInitiativeState(staging) {
   return { diceById: {}, combatReflexesById: {}, characteristicById: {}, tieOrders: { ...(staging?.tieOrders||{}) }, opposedRolls: { ...(staging?.opposedRolls||{}) }, tieChoices: { ...(staging?.tieChoices||{}) }, surprisedCamp: '', mountedRideTests: {}, vigilanceRolls: {}, preview: null };
@@ -463,7 +467,7 @@ function captureInitiativeNeeds(state, tieArea, mountedArea) {
     const match = input.dataset.matchId, side = input.dataset.side, rolls = state.opposedRolls[match] || {};
     rolls[side] = input.value === '' ? null : input.type === 'number' ? Number(input.value) : input.value; state.opposedRolls[match] = rolls;
   }
-  for (const input of mountedArea.querySelectorAll('input[data-vigilance]')) state.vigilanceRolls[input.dataset.vigilance] = input.value === '' ? null : Number(input.value);
+  for (const input of mountedArea.querySelectorAll('input[data-vigilance]:not([readonly])')) state.vigilanceRolls[input.dataset.vigilance] = input.value === '' ? null : Number(input.value);
   for (const input of mountedArea.querySelectorAll('[data-mounted-rider]')) {
     const riderId = input.dataset.mountedRider, field = input.dataset.field;
     const answer = state.mountedRideTests[riderId] || {};
@@ -733,10 +737,11 @@ function renderInitiativeBoard(host) {
         const first = field('reflexFirst'), second = field('reflexSecond'), choice = field('reflexChoice'), current = state.combatReflexesById[actor.id];
         if (current) state.combatReflexesById[actor.id] = { dice: [first ? (first.value === '' ? null : Number(first.value)) : current.dice[0], second ? (second.value === '' ? null : Number(second.value)) : current.dice[1]], choice: choice ? choice.value : current.choice };
       } else if (field('die')) state.diceById[actor.id] = field('die').value === '' ? null : Number(field('die').value);
-      if (field('vigilance')) state.vigilanceRolls[actor.id] = field('vigilance').value === '' ? null : Number(field('vigilance').value);
+      if (field('vigilance') && !field('vigilance').readOnly) state.vigilanceRolls[actor.id] = field('vigilance').value === '' ? null : Number(field('vigilance').value);
     }
     state.surprisedCamp = surprised.value || '';
     captureInitiativeNeeds(state, tieArea, mountedArea);
+    rollNpcVigilance(state, active);
   }
   const request = () => { const { preview, ...entries } = state; return { staging: null, startCombat: true, ...entries }; };
   // Les sections d'égalités et de Chevauchée ne sont reconstruites que si ce qu'il y a à saisir a changé : un champ en cours de saisie n'est pas remplacé sous la main.
@@ -754,7 +759,9 @@ function renderInitiativeBoard(host) {
     for (const actor of active) {
       const vigil = grid.querySelector(`[data-vigilance-field="${CSS.escape(actor.id)}"]`); if (!vigil) continue;
       const shown = Boolean(state.surprisedCamp) && actor.camp === state.surprisedCamp;
-      vigil.hidden = !shown; vigil.querySelector('input').required = shown;
+      const vigilInput = vigil.querySelector('input');
+      vigil.hidden = !shown; vigilInput.required = shown;
+      if (vigilInput.readOnly) vigilInput.value = Number.isInteger(state.vigilanceRolls[actor.id]) ? String(state.vigilanceRolls[actor.id]) : '';
       const outcome = grid.querySelector(`[data-vigilance-result="${CSS.escape(actor.id)}"]`);
       outcome.hidden = !shown; outcome.textContent = shown ? vigilanceOutcome(preview, actor.id) : '';
     }
@@ -900,6 +907,7 @@ function openCombatInitiativeDialog({ staging = null, startCombat = false, title
         }
         state.surprisedCamp = form.elements.namedItem('surprisedCamp')?.value || '';
         captureInitiativeNeeds(state, tieArea, mountedArea);
+        rollNpcVigilance(state, active);
       }
       const request = () => ({ staging, startCombat, ...state });
       function recalculate() {
