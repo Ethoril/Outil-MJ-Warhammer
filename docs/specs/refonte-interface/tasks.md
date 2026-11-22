@@ -249,6 +249,7 @@ Demandes d'interface du MJ, valables pour tous les lots G : écrans de tir, de m
 - **G2-d** Cliquer une raison bloquante n'ouvre jamais le tiroir « autres… » : elle donne le contrôle en ligne (Oui / Non, ou le champ) dans la résolution. Seul le bouton « autres… » ouvre le tiroir.
 - **G2-e (f4-tirer)** Écran de tir avant les jets : cible, ligne Distance, puces déduites, jets, résultat ; rien du tiroir n'est affiché par défaut. Le parcours compte les contrôles visibles à l'étape « tir » avant et après (rapport).
 - **G2-f (g-distance)** La ligne Distance dit en clair ce qui est retenu et d'où (« Courte · 12 m · carte », « Au contact · plateau », « Choisi par le MJ ») ; « Au contact » est séparé visuellement des bandes de portée ; la puce retenue est marquée (`aria-pressed`). CA13 à CA15 restent verts (six cas de `distance-tir.test.js`).
+- **G2-g (MJ, 22/11)** Un tir sans droit à l esquive se résout **sans aucun jet de défense** : pas de champ de défense exigé, pas de raison bloquante, « Appliquer » actif après le seul jet de Capacité de Tir (réussi = touché, raté = manqué, p. 164). Même chose si le MJ répond « Non » à la question d esquive. Test unitaire et étape du parcours dédiés, rouges sur la base si l outil exige aujourd hui une défense.
 **Acceptation.** Tests unitaires ; `timeout 120 node tests/recette-g2-browser.mjs` (esquive permise, interdite, sans carte, raison cliquée sans tiroir) ; `refonte-ecran-browser.mjs` vert.
 
 ### G3 · Magie et miracles

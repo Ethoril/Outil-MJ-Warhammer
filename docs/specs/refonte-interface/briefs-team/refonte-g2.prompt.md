@@ -15,3 +15,5 @@ Rappels : test écrit avant le code et rouge d'abord (ce qui passe déjà reste 
 Si tu approches de la limite de contexte ou de tours : commit local « wip: … (Claude) » et une passation `docs/specs/refonte-interface/passation-g2.md` (fait, reste, commandes).
 
 Rapport final en français, moins de quinze lignes : pour chaque critère G2-x, « corrigé » (fichier) ou « déjà vrai » ; commandes d'acceptation et leurs lignes de résultat ; `git diff <base> --stat -- js/core/` ; nombre de contrôles visibles à l'étape « tir » avant / après ; tests adaptés (avec justification) ; écarts au brief ; ce qui n'est pas vérifié ; hash du dernier commit. (Modèle prévu : Opus.)
+
+Exigence ajoutée par le MJ (22/11) : vérifie et garantis que l outil accepte un tir **sans jet de défense** quand l esquive n est pas permise (ou que le MJ répond Non) : rien ne bloque, « Appliquer » est actif après le seul jet de tir (critère G2-g de `tasks.md`). Écris le test d abord et dis au rapport s il était rouge sur la base.
