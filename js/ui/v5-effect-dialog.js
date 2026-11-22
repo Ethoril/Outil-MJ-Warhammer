@@ -61,7 +61,8 @@ export function chooseV5RecoveryMethod({ participantName, condition, getFortune,
     publishDecision({ id: decisionId, kind: 'recuperation', titre: `${participantName} · récupérer ${condition.name}`, options: methods.map(([key, text]) => ({ key, label: text })),
       onChoose: key => { select.value = key; select.dispatchEvent(new Event('change')); select.focus(); } });
     cancel.addEventListener('click', () => dialog.close()); dialog.addEventListener('close', () => { withdrawDecision(decisionId); dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(selected); }, { once: true });
-    dialog.showModal(); select.focus();
+    // Refonte E2b (CA10) : fenêtre non modale, le reste de l’écran reste utilisable.
+    dialog.show(); select.focus();
   });
 }
 
@@ -208,6 +209,6 @@ export function openV5EffectInputDialog({ pending, submit, getCurrentRevision, g
     const decisionId=`effets-v5:${Date.now()}`;
     publishDecision({id:decisionId,kind:'effets-v5',titre:title,options:[{key:'open',label:'Saisir les résultats'}],onChoose:()=>fields.querySelector('input,select')?.focus()});
     dialog.addEventListener('close',()=>{withdrawDecision(decisionId);dialog.remove();opener?.isConnected&&opener.focus();resolve(outcome);},{once:true});
-    render();dialog.showModal();fields.querySelector('input,select')?.focus();
+    render();dialog.show();fields.querySelector('input,select')?.focus();
   });
 }

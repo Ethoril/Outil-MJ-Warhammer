@@ -1,6 +1,11 @@
 // Fenêtre « Garder ou archiver » (CAMP-10, CA8 à CA10) : à la fin du combat ou au retrait d'un participant, le MJ
 // choisit les participants à suivi ouvert qui deviennent des personnages suivis ; les autres suivis sont archivés.
 // Fenêtre de l'outil, jamais une boîte native du navigateur.
+// Refonte E2b (décisions 16 et 17, CA7, CA10) : la question figure aussi dans la case « À décider » tant que la fenêtre est
+// ouverte ; le retrait d'un participant s'ouvre sans bloquer le reste de l'écran (non modal), seule la confirmation de
+// « Terminer le combat » reste modale.
+import { publishDecision, withdrawDecision } from './combat-decisions.js';
+
 const el = (tag, text = null, className = '') => {
   const node = document.createElement(tag);
   if (text != null) node.textContent = text;
@@ -53,8 +58,13 @@ export function openEncounterEndDialog({ candidates = [], removal = false } = {}
       if (outcome.openCampaign) setTimeout(() => document.getElementById('tab-campaign')?.click(), 0);
     });
     cancel.addEventListener('click', () => dialog.close());
-    dialog.addEventListener('close', () => { dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(outcome); }, { once: true });
-    dialog.showModal();
+    const decisionId = removal ? `retrait:${candidates.map(row => row.participantId).join('+')}` : 'fin-combat';
+    publishDecision({ id: decisionId, kind: removal ? 'retrait' : 'fin-combat', participantId: removal ? candidates[0]?.participantId ?? null : null,
+      titre: removal ? 'Retrait : garder ou archiver le suivi ?' : 'Terminer le combat : garder ou archiver les suivis ?',
+      options: [{ key: 'confirm', label: removal ? 'Retirer du combat' : 'Terminer le combat' }, { key: 'cancel', label: 'Annuler' }],
+      onChoose: key => (key === 'confirm' ? form.requestSubmit() : dialog.close()) });
+    dialog.addEventListener('close', () => { withdrawDecision(decisionId); dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(outcome); }, { once: true });
+    if (removal) dialog.show(); else dialog.showModal();
     (boxes[0] || confirm).focus();
   });
 }
@@ -145,8 +155,12 @@ export async function confirmParticipantRemoval(Store, id) {
       dialog.close();
     });
     cancel.addEventListener('click', () => dialog.close());
-    dialog.addEventListener('close', () => { dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(result); }, { once: true });
-    dialog.showModal();
+    const decisionId = `retrait:${id}`;
+    publishDecision({ id: decisionId, kind: 'retrait', participantId: id, titre: `Retirer ${participant.name} de la rencontre ?${mount ? ` (monture : ${mount.name})` : ''}`,
+      options: [{ key: 'confirm', label: 'Retirer de la rencontre' }, { key: 'cancel', label: 'Annuler' }],
+      onChoose: key => (key === 'confirm' ? form.requestSubmit() : dialog.close()) });
+    dialog.addEventListener('close', () => { withdrawDecision(decisionId); dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(result); }, { once: true });
+    dialog.show();
     cancel.focus();
   });
   if (!outcome) return false;

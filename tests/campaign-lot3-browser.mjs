@@ -460,6 +460,15 @@ try {
   // Une fois archivé, l'incident ouvert n'est plus présent dans la liste des actions
   await expect(detail.getByRole('button', { name: 'Archiver ce suivi' })).toHaveCount(0);
 
+  // Refonte E2b (CA16, CA20) : l'arbitrage des séquelles d'un participant absent, que permettait le panneau « Suites de
+  // combat » de Jouer en 3.56.0 (mêmes contrôles, mêmes appels au Store), se fait dans le détail Campagne de l'absent.
+  const absentSequelae = detail.locator('.campaign-detail-sequelae-box');
+  await expect(absentSequelae.locator(':scope > h4')).toHaveText('Arbitrage des séquelles');
+  const detailGhostSequela = absentSequelae.locator('.workspace-aftermath-sequela', { hasText: 'Fracture spectrale' });
+  await expect(detailGhostSequela).toBeVisible();
+  await expect(detailGhostSequela).not.toContainText('consultation seule');
+  await expect(detailGhostSequela.locator('details, button')).not.toHaveCount(0);
+
   // 6b. Préservation des fonctionnalités dans l'onglet Jouer (non-régression Lot 2 / Phase F2) :
   // Le panneau suites de combat de Jouer conserve ses contrôles d'arbitrage pour les séquelles
   const playNavBtn = page.locator('[data-workspace-space="play"]');

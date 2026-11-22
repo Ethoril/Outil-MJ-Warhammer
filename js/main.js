@@ -51,7 +51,8 @@ import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-li
 import { offScenePjParticipants, mapMaxHpOf } from './core/map-link-state.js';
 import { participantTokenImageUrl, formImageOf } from './core/token-image.js';
 import { runProposalOf } from './core/map-link-run.js';
-import { mountMapLinkFeedback } from './ui/map-link-feedback.js';
+import { mountMapLinkFeedback, runDecision } from './ui/map-link-feedback.js';
+import { publishDecision, withdrawDecision } from './ui/combat-decisions.js';
 import { setMapDistanceProvider } from './ui/resolution-panel.js';
 // Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
 const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
@@ -2154,8 +2155,10 @@ if (typeof BroadcastChannel === 'function') {
         actionSpent: id => Store.listTurnActions(id).length > 0 });
       if (!proposal) return;
       if (!proposal.canSpend) { showToast(`🗺️ ${proposal.message}`, 'info'); return; }
-      showToast(`🗺️ ${proposal.message}`, 'warning', { label: 'Action utilisée', onClick: () => Promise.resolve(Store.spendV5RunAction(proposal.actorId))
-        .then(result => { if (result?.ok === false) showToast(result.message, 'error'); }) }, 15000);
+      // Refonte E2b (décision 21) : la question reste dans la case « À décider » jusqu'au clic, ici ou sur le toast.
+      publishDecision(runDecision(proposal, { spend: id => Store.spendV5RunAction(id), showToast }));
+      showToast(`🗺️ ${proposal.message}`, 'warning', { label: 'Action utilisée', onClick: () => { withdrawDecision(`course-carte:${proposal.actorId}`); return Promise.resolve(Store.spendV5RunAction(proposal.actorId))
+        .then(result => { if (result?.ok === false) showToast(result.message, 'error'); }); } }, 15000);
     }
   });
   // Retours de la carte (L5) : « À poser (N) », suggestions d'engagement, distance préremplie, pastille « posé ».

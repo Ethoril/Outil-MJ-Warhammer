@@ -47,7 +47,11 @@ export function initKeyboardShortcuts(Store, CombatEngine, goToSpace, { advanceT
       document.querySelectorAll('.color-palette').forEach(p => p.classList.add('hidden'));
       // Une saisie en cours hors de la fenêtre (jet, recherche…) ne la ferme pas.
       const dlg = document.querySelector('dialog[open]');
-      if (dlg && (dlg.contains(e.target) || !isInput)) dlg.close();
+      // Une fenêtre non modale (refonte E2b, CA10) garde son refus de fermeture (« cancel » annulé pendant un envoi).
+      if (dlg && (dlg.contains(e.target) || !isInput)) {
+        const cancel = new Event('cancel', { cancelable: true });
+        if (dlg.dispatchEvent(cancel)) dlg.close();
+      }
       return;
     }
 

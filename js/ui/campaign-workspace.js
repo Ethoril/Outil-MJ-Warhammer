@@ -325,8 +325,16 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
           }
         }
 
+        // Refonte E2b (CA16, CA20) : les séquelles d'un absent s'arbitrent ici, comme dans les suites de combat de la 3.56.0.
+        const absentSequelae = chosen.absent && typeof aftermath.renderAbsentSequelae === 'function' ? aftermath.renderAbsentSequelae(chosen.id, participants) : null;
+        if (absentSequelae) {
+          const sequelaeBox = node('section', 'campaign-detail-sequelae-box');
+          sequelaeBox.append(node('h4', '', 'Arbitrage des séquelles'), absentSequelae);
+          detail.append(sequelaeBox);
+        }
+
         detail.append(node('p', 'campaign-help', chosen.absent
-          ? 'Un suivi en consultation ne reçoit ni soin ni Test.'
+          ? (absentSequelae ? 'Un suivi en consultation ne reçoit ni soin ni Test de soin ; ses séquelles s’arbitrent ci-dessus.' : 'Un suivi en consultation ne reçoit ni soin ni Test.')
           : (chosen.off ? 'Les soins et décisions appliqués ici mettent à jour le registre et les PV du personnage suivi, hors rencontre.'
             : 'Les soins et décisions appliqués ici mettent à jour le registre et les PV de la partie.')));
       }
