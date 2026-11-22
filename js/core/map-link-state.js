@@ -5,6 +5,7 @@
 import { projectFollowedCharacter } from './aftermath-subjects.js';
 import { creatureSizeOf } from './creature-size.js';
 import { carriesSense } from './creature-senses.js';
+import { hasV5Talent } from './v5-talent-registry.js';
 import { participantCamp } from './encounters.js';
 import { carriesMovement, planMovement } from './creature-movement.js';
 import { normalizeTokenColor } from './models.js';
@@ -89,8 +90,8 @@ export const persistentMaxHpOf = profile => profile?.ficheSnapshot?.woundsMax ??
  */
 export const mapMaxHpOf = (participant, profile) => (Number(participant?.maxHp) > 0 ? null : persistentMaxHpOf(profile));
 
-/** Vision dans le noir en cases (§4) : 1 par défaut, 10 Vision nocturne, 20 Vision dans le noir. */
-export const visionDimOf = participant => (carriesSense(participant, 'darkVision') ? 20 : carriesSense(participant, 'nightVision') ? 10 : 1);
+/** Vision dans le noir en cases (§4) : 1 par défaut, 10 Vision nocturne (Trait p. 360 ou talent p. 123), 20 Vision dans le noir (Trait). */
+export const visionDimOf = participant => (carriesSense(participant, 'darkVision') ? 20 : carriesSense(participant, 'nightVision') || hasV5Talent(participant, 'talent-night-vision') ? 10 : 1);
 
 /** Santé affichée d'un PNJ (§4). */
 export function healthOf(current, max) {
