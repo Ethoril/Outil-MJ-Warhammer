@@ -47,6 +47,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
   let selected = null;
   let filter = 'all';
   let globalDetailsOpen = false;
+  let openFold = null; // pli ouvert du détail (un seul à la fois : le détail ne défile pas)
   let disposed = false;
 
   const aftermath = aftermathPanel || createV5AftermathPanel({ Store, refresh: () => render() });
@@ -67,15 +68,13 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
     const page = node('section', 'campaign-workspace');
     page.setAttribute('aria-label', 'Campagne');
 
+    // Refonte F2 : titre et temps de campagne tiennent sur une seule ligne (case « campagne-temps »).
+    const topBar = node('div', 'campaign-topbar');
+    topBar.dataset.zone = 'campagne-temps';
     const header = node('header', 'campaign-heading');
-    const titleBox = node('div');
-    titleBox.append(
-      label('ESPACE DE SÉANCE'),
-      node('h2', '', 'Campagne'),
-      node('p', 'campaign-intro', 'Temps de jeu, blessures et séquelles suivis dans la partie.')
-    );
-    header.append(titleBox);
-    page.append(header);
+    header.append(node('h2', '', 'Campagne'));
+    topBar.append(header);
+    page.append(topBar);
 
     try {
       const campaignSeconds = Store.getCampaignSeconds();
@@ -113,12 +112,14 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
       const timeAction = node('div', 'campaign-clock-action');
       const advance = btn('Avancer le temps…', 'campaign-primary', () => onAdvanceTime());
       advance.dataset.campaignFocus = 'advance';
-      timeAction.append(node('p', '', 'Le dialogue demande les saisies nécessaires avant d’avancer le temps.'), advance);
+      advance.title = 'Le dialogue demande les saisies nécessaires avant d’avancer le temps.';
+      timeAction.append(advance);
       clockBox.append(clockInfo, timeAction);
-      page.append(clockBox);
+      topBar.append(clockBox);
 
       // Tâches à traiter
       const tasks = node('section', 'campaign-tasks');
+      tasks.dataset.zone = 'campagne-taches';
       tasks.append(label('À TRAITER'), node('h3', '', 'Décisions et critiques à suivre'));
       const taskList = node('ul', 'campaign-task-list');
       const taskRows = [
@@ -166,10 +167,10 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
 
       // Colonne gauche : liste des personnages
       const group = node('section', 'campaign-group');
-      group.append(label('VUE D’ENSEMBLE'));
       const groupTitle = node('div', 'campaign-section-heading');
       groupTitle.append(node('h3', '', 'Personnages'), node('span', 'campaign-muted', countText(people.length, 'personnage ou suivi', 'personnages ou suivis')));
-      group.append(groupTitle, node('p', 'campaign-muted', 'Participants de la rencontre en cours, puis personnages suivis hors rencontre.'));
+      groupTitle.title = 'Participants de la rencontre en cours, puis personnages suivis hors rencontre.';
+      group.append(groupTitle);
 
       const filters = node('div', 'campaign-filters');
       filters.setAttribute('role', 'group');
@@ -186,6 +187,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
 
       const list = node('div', 'campaign-person-list');
       list.setAttribute('aria-label', 'Personnages et suivis');
+      list.dataset.zone = 'campagne-liste';
       if (!visible.length) {
         list.append(node('p', 'campaign-empty', filter === 'active' ? 'Aucun suivi actif.' : 'Aucun participant ni personnage suivi.'));
       }
@@ -244,6 +246,7 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
 
       // Colonne droite : détail et opérations du personnage sélectionné
       const detail = node('aside', 'campaign-detail');
+      detail.dataset.zone = 'campagne-detail';
       detail.setAttribute('aria-label', 'Détail du suivi');
       const chosen = visible.find(person => person.id === selected);
       if (!chosen) {
@@ -280,17 +283,20 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
           detail.append(node('p', 'campaign-notice', PLACE_NOTICE[chosen.place] || PLACE_NOTICE.aucun));
         }
 
+        // Refonte F2 : le détail est un accordéon (un pli ouvert à la fois, repliables) ; le pli ouvert défile dans sa case.
+        const folds = [];
+        const addFold = (key, className, title, ...content) => folds.push({ key, className, title, content });
+
+        const followups = node('div', 'campaign-fold-stack');
         if (pending.length) {
           const decisions = node('section', 'campaign-decisions');
           decisions.append(node('h4', '', 'Décisions en attente'));
-          const entries = node('ul', 'campaign-followups');
-          for (const item of pending) addLine(entries, item.label || 'Séquelle', pendingText[item.kind] || 'Décision à examiner');
-          decisions.append(entries);
-          detail.append(decisions);
+          const decisionList = node('ul', 'campaign-followups');
+          for (const item of pending) addLine(decisionList, item.label || 'Séquelle', pendingText[item.kind] || 'Décision à examiner');
+          decisions.append(decisionList);
+          followups.append(decisions);
         }
-
-        const followups = node('section', 'campaign-detail-followups');
-        followups.append(node('h4', '', 'Suivis actifs'));
+        const followupsBox = node('section', 'campaign-detail-followups');
         const entries = node('ul', 'campaign-followups');
         for (const proposal of ownProposals) addLine(entries, proposal.effectName || 'Blessure critique', 'Suivi à ouvrir');
         for (const incident of ownIncidents) {
@@ -304,79 +310,97 @@ export function mountCampaignWorkspace({ root, Store, onAdvanceTime = () => {}, 
           const end = Number.isInteger(sequela.endDay) ? ` · échéance jour ${sequela.endDay}` : '';
           addLine(entries, sequela.label || 'Séquelle', stateLabel + end);
         }
-        if (!entries.childElementCount) followups.append(node('p', 'campaign-muted', 'Aucun suivi actif pour ce personnage.'));
-        else followups.append(entries);
-        detail.append(followups);
+        if (!entries.childElementCount) followupsBox.append(node('p', 'campaign-muted', 'Aucun suivi actif pour ce personnage.'));
+        else followupsBox.append(entries);
+        followups.append(followupsBox);
+        const followupCount = pending.length + ownProposals.length + ownIncidents.length + ownDiseases.length + ownSequelae.length;
+        addFold('suivis', 'campaign-fold-followups', `Suivis (${followupCount})`, followups);
 
         // Actions interactives de convalescence pour ce personnage
+        const help = node('p', 'campaign-help', chosen.absent
+          ? 'Un suivi en consultation ne reçoit ni soin ni Test.'
+          : (chosen.off ? 'Les soins et décisions appliqués ici mettent à jour le registre et les PV du personnage suivi, hors rencontre.'
+            : 'Les soins et décisions appliqués ici mettent à jour le registre et les PV de la partie.'));
         if (!chosen.absent && typeof aftermath.renderParticipantConvalescence === 'function') {
-          const actionsBox = node('section', 'campaign-detail-actions-box');
-          actionsBox.append(node('h4', '', 'Soins et décisions disponibles'));
-          actionsBox.append(aftermath.renderParticipantConvalescence(chosen.id, participants));
-          detail.append(actionsBox);
+          addFold('soins', 'campaign-detail-actions-box', 'Soins et décisions disponibles', aftermath.renderParticipantConvalescence(chosen.id, participants), help);
         } else if (chosen.absent && typeof aftermath.renderParticipantConvalescence === 'function') {
           // Suivi sans sujet : seul l'archivage d'un ancien suivi est proposé
           const hasArchivable = incidents.some(row => row.participantId === chosen.id && row.status === 'open');
-          if (hasArchivable) {
-            const actionsBox = node('section', 'campaign-detail-actions-box');
-            actionsBox.append(node('h4', '', 'Archivage du suivi'));
-            actionsBox.append(aftermath.renderParticipantConvalescence(chosen.id, participants));
-            detail.append(actionsBox);
-          }
+          if (hasArchivable) addFold('soins', 'campaign-detail-actions-box', 'Archivage du suivi', aftermath.renderParticipantConvalescence(chosen.id, participants));
         }
 
         // Refonte E2b (CA16, CA20) : les séquelles d'un absent s'arbitrent ici, comme dans les suites de combat de la 3.56.0.
         const absentSequelae = chosen.absent && typeof aftermath.renderAbsentSequelae === 'function' ? aftermath.renderAbsentSequelae(chosen.id, participants) : null;
-        if (absentSequelae) {
-          const sequelaeBox = node('section', 'campaign-detail-sequelae-box');
-          sequelaeBox.append(node('h4', '', 'Arbitrage des séquelles'), absentSequelae);
-          detail.append(sequelaeBox);
-        }
+        if (absentSequelae) addFold('sequelae', 'campaign-detail-sequelae-box', 'Arbitrage des séquelles', absentSequelae);
 
         // Refonte E7b (CA16, CA20) : ses maladies, sous l'arbitrage des séquelles.
         const absentDiseases = chosen.absent && typeof aftermath.renderAbsentDiseases === 'function' ? aftermath.renderAbsentDiseases(chosen.id, participants) : null;
-        if (absentDiseases) {
-          const diseasesBox = node('section', 'campaign-detail-diseases-box');
-          diseasesBox.append(node('h4', '', 'Maladies de l’absent'), absentDiseases);
-          detail.append(diseasesBox);
+        if (absentDiseases) addFold('diseases', 'campaign-detail-diseases-box', 'Maladies de l’absent', absentDiseases);
+
+        if (chosen.absent) {
+          detail.append(node('p', 'campaign-help', absentSequelae || absentDiseases
+            ? 'Un suivi en consultation ne reçoit ni soin ni Test de soin ; ses séquelles et ses maladies se gèrent dans les plis ci-dessous.'
+            : 'Un suivi en consultation ne reçoit ni soin ni Test.'));
         }
 
-        detail.append(node('p', 'campaign-help', chosen.absent
-          ? (absentSequelae || absentDiseases ? 'Un suivi en consultation ne reçoit ni soin ni Test de soin ; ses séquelles et ses maladies se gèrent ci-dessus.' : 'Un suivi en consultation ne reçoit ni soin ni Test.')
-          : (chosen.off ? 'Les soins et décisions appliqués ici mettent à jour le registre et les PV du personnage suivi, hors rencontre.'
-            : 'Les soins et décisions appliqués ici mettent à jour le registre et les PV de la partie.')));
+        const current = folds.some(fold => fold.key === openFold) ? openFold : (folds.find(fold => fold.key === 'soins') || folds[0]).key;
+        const accordion = node('div', 'campaign-folds');
+        for (const fold of folds) {
+          const isOpen = fold.key === current;
+          const section = node('section', `campaign-fold ${fold.className}${isOpen ? ' is-open' : ''}`);
+          section.dataset.campaignFold = fold.key;
+          const toggle = btn('', 'campaign-fold-toggle', () => {
+            openFold = isOpen ? '' : fold.key;
+            render();
+            root.querySelector(`[data-campaign-fold-toggle="${fold.key}"]`)?.focus({ preventScroll: true });
+          });
+          toggle.dataset.campaignFoldToggle = fold.key;
+          toggle.setAttribute('aria-expanded', String(isOpen));
+          toggle.append(node('span', 'campaign-fold-title', fold.title), node('span', 'campaign-fold-chevron', isOpen ? '▾' : '▸'));
+          const content = node('div', 'campaign-fold-body');
+          content.hidden = !isOpen;
+          if (isOpen) content.dataset.zone = 'campagne-pli';
+          content.append(...fold.content);
+          section.append(toggle, content);
+          accordion.append(section);
+        }
+        detail.append(accordion);
       }
       layout.append(detail);
       page.append(layout);
 
+      // Contexte et rappels de règles (refonte F2 : rangés dans les opérations d'ensemble, repliées, pour ne pas prendre de place)
+      const note = node('section', 'campaign-context');
+      note.append(
+        label('TEMPS ET SUIVIS'),
+        node('p', '', 'Un temps de campagne partagé : l’avance du temps peut entraîner des échéances de convalescence. Les échéances liées à un Tour réel restent distinctes.')
+      );
+      if (absentIds.length) {
+        note.append(node('p', 'campaign-notice', `${countText(absentIds.length, 'suivi est', 'suivis sont')} en consultation seule (scène suspendue ou ancien suivi). Aucun rapprochement automatique avec un autre personnage n’est effectué.`));
+      }
+
       // Section d'ensemble des opérations de convalescence
       if (typeof aftermath.renderGlobalConvalescence === 'function') {
         const globalSection = node('section', 'campaign-global-section');
+        globalSection.dataset.zone = 'campagne-ops';
         const globalDetails = node('details');
         globalDetails.className = 'campaign-global-details';
         globalDetails.open = globalDetailsOpen;
         globalDetails.addEventListener('toggle', () => {
           globalDetailsOpen = globalDetails.open;
+          globalSection.classList.toggle('is-open', globalDetailsOpen);
         });
+        globalSection.classList.toggle('is-open', globalDetailsOpen);
         globalDetails.append(
           node('summary', '', 'Toutes les opérations de convalescence (groupe, calendrier, pertes)'),
-          aftermath.renderGlobalConvalescence(participants)
+          aftermath.renderGlobalConvalescence(participants),
+          note
         );
         globalSection.append(globalDetails);
-        page.append(globalSection);
+        layout.append(globalSection); // refonte F2 : dans la grille du corps (en bas, repliée ; en troisième colonne, dépliée)
+      } else {
+        page.append(note);
       }
-
-      // Contexte et rappels de règles
-      const note = node('section', 'campaign-context');
-      note.append(
-        label('TEMPS ET SUIVIS'),
-        node('h3', '', 'Un temps de campagne partagé'),
-        node('p', '', 'L’avance du temps de campagne peut entraîner des échéances de convalescence. Les échéances liées à un Tour réel restent distinctes.')
-      );
-      if (absentIds.length) {
-        note.append(node('p', 'campaign-notice', `${countText(absentIds.length, 'suivi est', 'suivis sont')} en consultation seule (scène suspendue ou ancien suivi). Aucun rapprochement automatique avec un autre personnage n’est effectué.`));
-      }
-      page.append(note);
     } catch (error) {
       const message = node('div', 'campaign-error');
       message.setAttribute('role', 'alert');
