@@ -14,7 +14,12 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 | E2b | Fin de « À décider » : décisions 6, 12, 16, 17, 20, 21 branchées ; fenêtres d'effets V5 non modales ; fiche de la cible sans défilement avec une décision en attente ; arbitrage des séquelles d'un absent ; panneau de prière et résultat avec critique sans défilement | **Opus** | E4b · [P] avec E4c | 3, 7, 10, 16, 20 |
 | E4c | Jouer son tour maintenant (commande annulable) et Charger sur la cible | **Opus** | E4b · [P] avec E2b | 24-27 |
 | E6 | Recette : parcours complet, relevé coché, suite complète, notes de version | Sonnet | tous | 1-3, 16-18 |
-| F1-F3 | Préparer, Campagne, Bibliothèque sans défilement de page | Sonnet | publication E | 23 |
+| E7a | Jouer son tour maintenant : effets de début de tour de l'avancé (une seule fois) | **Opus** | E4c · [P] avec E7b, F1, F3 | 24, 25 bis |
+| E7b | Maladies d'un absent dans Campagne ; Chance, Destin, Temps de campagne non modaux | Sonnet | E2b · [P] avec E7a, F1, F3 | 10, 16, 20 |
+| F1 | Préparer sans défilement de page | Sonnet | E4c · [P] avec E7a, E7b, F3 | 23 |
+| F2 | Campagne sans défilement de page | Sonnet | E7b · [P] avec F1, F3 | 23 |
+| F3 | Bibliothèque sans défilement de page | Sonnet | E4c · [P] avec E7a, E7b, F1 | 23 |
+| E8 | Recette finale : relevé recoché, mesures combat et trois espaces, suite complète, notes de version | Sonnet | tous | 1-3, 16-18, 23 |
 
 ## Règles communes (bloc collé en tête de chaque brief)
 
@@ -22,7 +27,7 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 - Le test d'un lot est écrit **avant** son code et échoue d'abord.
 - Tests ciblés, un fichier par commande ; jamais un dossier ; tout parcours navigateur sous `timeout 120`. Pas de suite complète avant E6.
 - Aucune attente de **règle** d'un test existant n'est modifiée. Un test de structure du DOM cassé par la refonte est adapté, avec une ligne de justification dans le rapport.
-- Garde données : `git diff <base> -- js/core/ firebase.database.rules.json js/core/map-link*.js` vide (sauf E2 : lecture et écriture de `extensions.v5.suddenDeathDeclined`).
+- Garde données : `git diff <base> -- js/core/ firebase.database.rules.json js/core/map-link*.js` vide (sauf E2 : `extensions.v5.suddenDeathDeclined` ; E4c et E7a : `extensions.v5.advancedTurn` et le passage du tour).
 - Interface en français, aucune boîte native, police système. Interdits : modifier la spec ou le plan, pousser, `git stash`, `git add -A` / `git add .`, changer une règle pour faire passer un test.
 - Commit local, fichiers nommés, message en français suffixé « (Claude) ». Rapport court : fichiers, sortie des commandes d'acceptation, hash, ce qui n'est pas vérifié.
 
@@ -85,3 +90,46 @@ Spec : [spec.md](spec.md) · Plan : [plan.md](plan.md). Chaque lot se lance dans
 - **Panneau de prière sans défilement** (mesuré 1 257 px pour 495 à l'étape « prière » du parcours) : compacter sans rien retirer. Fichiers en plus : `js/ui/v5-divine-panel.js`, `js/ui/v5-divine-form-model.js` (présentation seulement).
 - **Colonne Résultat avec critique sans défilement** (mesuré 391 px pour 225 à l'étape « dégâts avec critique ») : compacter. Fichiers en plus : `js/ui/resolution-panel/result.js`, `js/ui/resolution-panel/critical.js`.
 - Le parcours de mesure doit rapporter zéro défilement interne pour ces deux panneaux.
+
+## Ajouts du 22/11 après E2b et E4c (décisions du MJ par sélecteurs)
+
+Base : `claude/refonte-interface-f76af4` à 6f1383e9 (E0 à E4c fusionnés). Publication en une fois après E8 : E7a, E7b, F1, F2, F3 passent **avant** la publication.
+
+**Ordre de lancement.** Tout de suite, en parallèle : **E7a** (Opus), **E7b**, **F1**, **F3** (Sonnet). **F2** après la fusion de E7b (même fichier `campaign-workspace.js`). **E8** quand tout est fusionné. E6 (en cours sur 6f1383e9) livre son relevé, ses captures et sa fiche de table ; E8 les reprend.
+
+**Partage de fichiers entre lots parallèles.** `js/ui/workspace-view.js` : F1 ne touche qu'à `renderPrepare`, F3 qu'à `renderLibrary`, E7b qu'aux appels de Chance, Destin et Temps de campagne ; E7a n'y touche pas. `js/ui/workspace.css` : chaque lot ajoute sa section en fin de fichier, titrée « LOT F1 », « LOT F3 »… ; aucun ne modifie les sections des autres. `js/main.js` : E7b (ouverture des fenêtres Chance et Destin) et E7a (appel de la commande seulement, si besoin) ; ils ne touchent pas aux mêmes fonctions.
+
+## E7a · Jouer son tour maintenant : effets de début de tour (ajouté le 22/11)
+**Décision du MJ.** « Déclencher les effets de début de tour de l'avancé quand il joue en avance, et pas une seconde fois à sa place normale. » Aujourd'hui (E4c, 1c5108a2) `playTurnNow` (`js/core/store.js`) donne le tour sans phase de début de tour ; `previewV5Turn` (`js/core/v5-turn.js`) saute déjà le début de tour de celui qui reprend (`resumingTurn`), et `nextTurn` saute l'avancé à sa place normale.
+**Exception à la garde `js/core/`.** Autorisés : `js/core/store.js` (`playTurnNow`), `js/core/v5-turn.js`, `js/core/turn-order.js` si besoin, et l'horloge de jeu (`gameClock`, `turnIndex`, phases validées) **seulement** pour que le tour avancé soit une transition de tour comme une autre. Pas de nouveau champ de données hors `extensions.v5.advancedTurn` ; aucune migration ; aucune règle d'effet modifiée.
+**Approche attendue.** Réutiliser le chemin de « Tour suivant » (aperçu `previewV5Turn` puis application, avec ses demandes de jets éventuelles) avec un combattant imposé, plutôt que dupliquer les phases ; la commande reste une seule commande annulable. Si une phase de fin de tour de celui qu'on interrompt est en jeu, ne rien changer à ce qu'elle fait aujourd'hui et le dire au rapport.
+**Fichiers.** `js/core/store.js`, `js/core/v5-turn.js`, `js/core/turn-order.js` (si besoin), `js/main.js` (appel de la commande seulement, si l'aperçu impose des jets à saisir), `js/ui/combat-frise.js` et `js/ui/combat-banner.js` (même chose), `tests/unit/combat/jouer-tour-maintenant.test.js`, `tests/fixtures/store-golden.json` (régénéré, ajouts seulement).
+**Tests d'abord.** Avec un effet que le moteur déclenche déjà au début du tour (en prendre un dans les tests existants : `tests/unit/divin/temps-et-calendrier.test.js` pour les phases validées, `tests/unit/combat/talents-v5.test.js`, `tests/unit/combat/miracles-narratifs-tour.test.js`) : (1) l'effet se déclenche quand l'avancé joue maintenant ; (2) il ne se déclenche pas une seconde fois quand le round arrive à sa place normale ; (3) celui qui reprend ne rejoue pas son début de tour ; (4) Annuler rétablit tout, horloge comprise ; (5) les 13 cas d'E4c restent verts.
+**Acceptation.** Tests ciblés verts (`jouer-tour-maintenant`, `store-golden`, `temps-et-calendrier`, `liaison-carte-messages-golden`) ; `timeout 120 node tests/refonte-ecran-browser.mjs` vert.
+
+## E7b · Maladies d'un absent, fenêtres non modales (ajouté le 22/11)
+**Décisions du MJ.** (1) Les maladies d'un participant absent se gèrent dans Campagne, à côté de l'arbitrage de ses séquelles (comme en 3.56.0 depuis le panneau des suites). (3) Chance, Destin et Temps de campagne deviennent des fenêtres non bloquantes, comme les effets V5 dans E2b.
+**Fichiers.** `js/ui/v5-aftermath-panel.js` (exposer, à côté de `renderAbsentSequelae`, les maladies de l'absent via `renderDiseases(…, { allowAbsentActions: true })`), `js/ui/campaign-workspace.js` (les afficher dans le détail de l'absent, sous l'arbitrage des séquelles), `js/ui/v5-fortune-dialog.js`, `js/ui/v5-fate-dialog.js`, `js/ui/v5-campaign-time-dialog.js` (`show()` au lieu de `showModal()`, comme `js/ui/v5-effect-dialog.js` ; Échap et refus de fermeture pendant un envoi gardés, cf. `js/ui/keyboard.js`), `js/main.js` et `js/ui/workspace-view.js` (appels seulement), `js/ui/workspace.css` ou `js/ui/campaign-workspace.css` (section « LOT E7b » en fin de fichier), `tests/campaign-lot3-browser.mjs`, `tests/refonte-ecran-browser.mjs`.
+**Tests d'abord.** Campagne : un absent malade → enregistrer, soigner, clore sa maladie, mêmes appels au store qu'en 3.56.0. Parcours de combat : ouvrir Chance puis Destin → aucune `dialog` modale ouverte, page fixe, le reste de l'écran reste cliquable.
+**Acceptation.** `timeout 120 node tests/campaign-lot3-browser.mjs` et `timeout 120 node tests/refonte-ecran-browser.mjs` verts ; tests unitaires qui importent les fichiers touchés verts. Seule la confirmation de « Terminer le combat » reste modale (CA10).
+
+## F · Les trois autres espaces (CA23)
+**Commun.** À 1440 × 800, la page ne défile ni verticalement ni horizontalement ; une liste longue défile dans sa case ; aucune fonction retirée ni éloignée de plus de deux clics ; police et thèmes de E0 ; rien dans `js/core/`. Chaque lot écrit **d'abord** son parcours de mesure, sur le modèle de `tests/refonte-ecran-browser.mjs` (mesure de `scrollHeight`/`scrollWidth` de la page et des cases), avec assez de données pour remplir les listes (fixture R20 ou sauvegarde dédiée dans `tests/fixtures/`) ; il échoue sur 6f1383e9. Les cases autorisées à défiler sont nommées une par une dans le test ; tout autre débordement le fait échouer.
+
+## F1 · Préparer sans défilement
+**Fichiers.** `js/ui/workspace-view.js` (`renderPrepare` seulement), `js/ui/prepare-view.js`, `js/ui/reserve.js`, `js/ui/workspace.css` (section « LOT F1 »), `tests/refonte-preparer-browser.mjs` (nouveau).
+**À livrer.** Rencontres, réserve, banc et lancement dans une grille fixe ; réserve et liste des rencontres défilent dans leur case ; le formulaire d'ajout ne pousse rien hors de l'écran.
+**Acceptation.** `timeout 120 node tests/refonte-preparer-browser.mjs` vert ; parcours existants de Préparer verts (au minimum ceux du socle).
+
+## F2 · Campagne sans défilement
+**Après E7b** (même fichier). **Fichiers.** `js/ui/campaign-workspace.js`, `js/ui/campaign-workspace.css`, `js/ui/campaign-model.js` (présentation seulement), `tests/refonte-campagne-browser.mjs` (nouveau), `tests/campaign-lot3-browser.mjs` (sélecteurs seulement).
+**À livrer.** Liste des suivis à gauche (défile dans sa case), détail à droite sans défilement de page ; séquelles, maladies, convalescence et calendrier dans le détail, repliables.
+**Acceptation.** `timeout 120 node tests/refonte-campagne-browser.mjs` et `timeout 120 node tests/campaign-lot3-browser.mjs` verts.
+
+## F3 · Bibliothèque sans défilement
+**Fichiers.** `js/ui/workspace-view.js` (`renderLibrary` seulement), `js/ui/bestiary-library.js`, `js/ui/rules-view.js`, `js/ui/workspace.css` (section « LOT F3 »), `tests/refonte-bibliotheque-browser.mjs` (nouveau).
+**À livrer.** Profils, Règles et mots-clés, Favoris : liste à gauche qui défile dans sa case, fiche à droite ; le texte d'une règle longue défile dans sa case (lecture, comme l'onglet Règles du combat).
+**Acceptation.** `timeout 120 node tests/refonte-bibliotheque-browser.mjs` vert ; parcours existants du bestiaire et des règles verts.
+
+## E8 · Recette finale
+**À livrer.** Reprise du travail d'E6 sur la branche complète : `recette-fonctions.md` recoché (combat et trois espaces), parcours de mesure verts (`refonte-ecran`, `refonte-preparer`, `refonte-campagne`, `refonte-bibliotheque`), `npm run test:browser-socle` sans nouveau rouge, suite unitaire complète verte (deux commandes de `CLAUDE.md`), notes de version (README, `docs/SUIVI_EVOLUTION.md`), captures avant/après, fiche de table. Ni changement de version ni publication : ils attendent la recette du MJ à la table et son feu vert.

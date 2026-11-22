@@ -15,7 +15,7 @@ Après un vrai combat, le MJ constate que l'outil ralentit le jeu : la page de c
 - Une décision en attente **ne bloque pas** « Tour suivant ».
 - **Police système** (San Francisco sur le Mac, Segoe UI sous Windows).
 - **Pas de raccourci clavier d'action** : les touches 1 à 4 gardent les espaces.
-- Les autres espaces suivent la même règle, **dans des lots après le combat**.
+- Les autres espaces suivent la même règle, **dans des lots après le combat** ; ajout du 22/11 : ces lots passent **avant** la publication, tout est publié en une fois.
 - Écrans visés : Mac et PC, fenêtre de 1440 × 800 et plus ; pas de téléphone ni de tablette.
 - Taille de référence : **20 combattants actifs**.
 
@@ -37,13 +37,14 @@ Rencontre de référence (R20) : la rencontre d'essai de l'inventaire (4 PJ dont
 Demande du MJ : « une possibilité de "déplacer" un tour, en choisissant un personnage qui reprend le statut actif (puis le tour poursuit son cours normal) » ; « On reprend où on était ».
 - **CA24** Depuis le portrait de la frise ou le bandeau « agit hors de son tour », « Jouer son tour maintenant » donne le tour à ce combattant tout de suite ; à la fin de son tour, « Tour suivant » revient à celui qui devait jouer.
 - **CA25** Ce combattant est marqué « a joué » dans la frise et ne rejoue pas à sa place normale dans ce round ; au round suivant, l'ordre d'initiative reprend tel quel. L'action s'annule avec « Annuler ». Un combattant qui a déjà joué dans ce round ne peut pas jouer son tour maintenant : la commande est grisée, avec la raison.
+- **CA25 bis** (22/11) Les effets de début de tour de ce combattant se déclenchent quand il joue en avance, et pas une seconde fois à sa place normale ; celui qui reprend ne rejoue pas son début de tour.
 - CA5 reste : agir hors de son tour sans rien marquer (réaction, action gratuite) ne change ni le tour ni l'ordre.
 
 ### S3 · Les demandes apparaissent à la vue du MJ
 - **CA7** Chaque décision attendue du MJ (les 26 du relevé, §A) apparaît, dès qu'elle naît, dans la case fixe « À décider », toujours visible ; le nombre de décisions en attente s'affiche dans la barre du haut et une marque sur le portrait concerné.
 - **CA8** Mort subite d'un figurant à 0 PV : « Mort », « Inconscient », « Plus tard », « Pas un figurant », chacun en un clic, sans case à cocher préalable.
 - **CA9** Aucune décision ne bloque « Tour suivant » ; une décision non tranchée reste dans la case jusqu'à ce que le MJ la tranche.
-- **CA10** Pendant le combat, aucune fenêtre n'empêche d'agir ailleurs, sauf la confirmation de « Terminer le combat » ; aucune boîte native.
+- **CA10** Pendant le combat, aucune fenêtre n'empêche d'agir ailleurs, sauf la confirmation de « Terminer le combat » ; Chance, Destin et Temps de campagne compris (22/11) ; aucune boîte native.
 
 ### S4 · Démarrer un combat
 - **CA11** Lancer une rencontre fait entrer tous ses combattants d'un geste ; le banc reste disponible pour les renforts.
@@ -68,7 +69,7 @@ Constat du MJ : il n'a pas trouvé comment déclencher une charge pendant le com
 - **CA17** Pour les mêmes saisies, chaque résolution donne le même résultat qu'en 3.56.0 ; les tests unitaires existants passent sans modification de leurs attentes de règles.
 - **CA18** Sauvegardes, synchronisation, fiches des PJ et liaison carte inchangées : aucune migration, aucun message de liaison modifié.
 - **CA19** Ajouts de la 3.56.0 repris : retrait d'un participant (avec ou sans sa monture, annulable) et « sans monture pour la rencontre » dans le menu ⋯ de la fiche et du cartouche ; Élan visible sur la frise et sur les fiches.
-- **CA20** Séquelles, convalescence et calendrier quittent l'écran de combat : ils restent accessibles à la fin du combat et dans l'espace Campagne.
+- **CA20** Séquelles, convalescence et calendrier quittent l'écran de combat : ils restent accessibles à la fin du combat et dans l'espace Campagne. Les séquelles et les maladies d'un participant absent s'arbitrent dans Campagne, comme en 3.56.0 depuis le panneau des suites (22/11).
 
 ### S7 · Apparence
 - **CA21** Police système partout, titres compris ; aucune police décorative chargée ; thèmes clair et sombre conservés ; contrastes de texte au moins AA.

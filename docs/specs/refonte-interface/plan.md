@@ -36,7 +36,7 @@ On ne réécrit pas l'interface : on **reloge** les blocs existants dans une gri
 
 ## 4. Données
 
-Un seul ajout, facultatif : `participant.extensions.v5.suddenDeathDeclined: true` quand le MJ répond « Pas un figurant ». Absent = faux, lu au point de lecture (règle du projet), sans migration ni changement de `schemaVersion` ; les règles Firebase ne décrivent pas les participants (vérifié : aucune clé `participants` ni `extensions` dans `firebase.database.rules.json`), rien à déployer. Second ajout (lot E4c, CA24-CA25) : une commande annulable du store, « jouer son tour maintenant », qui donne le tour au combattant choisi et garde dans des champs facultatifs du combat (sous `combat.extensions.v5`) qui reprendra ensuite et qui a déjà joué par anticipation dans ce round ; absents = rien d'avancé, lus au point de lecture, sans migration ni `schemaVersion`. Le calcul de l'ordre d'initiative ne change pas. Rien d'autre : sauvegardes, synchronisation, fiches et messages de la carte inchangés (CA18).
+Un seul ajout, facultatif : `participant.extensions.v5.suddenDeathDeclined: true` quand le MJ répond « Pas un figurant ». Absent = faux, lu au point de lecture (règle du projet), sans migration ni changement de `schemaVersion` ; les règles Firebase ne décrivent pas les participants (vérifié : aucune clé `participants` ni `extensions` dans `firebase.database.rules.json`), rien à déployer. Second ajout (lot E4c, CA24-CA25) : une commande annulable du store, « jouer son tour maintenant », qui donne le tour au combattant choisi et garde dans un champ facultatif de l'état, `extensions.v5.advancedTurn` (le store ne sauvegarde pas `combat.extensions` ; champ effacé au démarrage d'un combat), qui reprendra ensuite et qui a déjà joué par anticipation dans ce round ; absents = rien d'avancé, lus au point de lecture, sans migration ni `schemaVersion`. Le calcul de l'ordre d'initiative ne change pas. Rien d'autre : sauvegardes, synchronisation, fiches et messages de la carte inchangés (CA18).
 
 ## 5. Tests existants
 
@@ -62,7 +62,8 @@ Un seul ajout, facultatif : `participant.extensions.v5.suddenDeathDeclined: true
 | 20 | Parcours : rien de « Séquelles » dans `[data-zone]` ; présent à la fin du combat et dans Campagne. |
 | 21 | `tests/unit/ui/contrastes-theme.test.mjs` (ratio des couples texte/fond des deux thèmes ≥ 4,5) ; aucune `@font-face` ni police chargée (parcours : `document.fonts` vide). |
 | 22 | `tests/unit/ui/raccourcis-clavier.test.mjs` inchangé et vert. |
-| 23 | Lots F : même parcours étendu aux trois espaces. |
+| 25 bis | E7a : `tests/unit/combat/jouer-tour-maintenant.test.js` — effet de début de tour déclenché à l'avance, pas une seconde fois à la place normale, Annuler rétablit l'horloge. |
+| 23 | Lots F : un parcours de mesure par espace (`tests/refonte-preparer-browser.mjs`, `tests/refonte-campagne-browser.mjs`, `tests/refonte-bibliotheque-browser.mjs`). |
 
 ## 7. Complexité justifiée
 
