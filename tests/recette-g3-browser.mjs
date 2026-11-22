@@ -121,13 +121,14 @@ try {
     const target = prayer.getByLabel(`Destinataire ${gor.name}`, { exact: true });
     if (await target.count() && !(await target.isChecked())) await target.check();
   }
-  await check('G3-b (R17) : une ligne par cible, faits en cases précochées à « oui », « Allié du prêtre »', async () => {
+  await check('G3-b (R17) : une ligne par cible, faits en cases précochées à « oui » sauf « Allié du prêtre » (déduit du camp)', async () => {
     for (const gor of gors) {
       const line = prayer.getByRole('group', { name: `Faits · ${gor.name}` });
       assert.equal(await line.count(), 1, `une ligne de faits pour ${gor.name}`);
       const boxes = line.locator('input[type="checkbox"]');
       assert.equal(await boxes.count(), 4, 'portée, ne vénère pas Myrmidia, regarde le prêtre, allié');
-      for (const box of await boxes.all()) assert.equal(await box.isChecked(), true, await box.getAttribute('aria-label'));
+      // Conditions précochées à oui ; « Allié du prêtre » se déduit du camp : un Gor ennemi n'est pas coché (correctif du 22/11).
+      for (const box of await boxes.all()) { const label = await box.getAttribute('aria-label') || ''; assert.equal(await box.isChecked(), !/Allié du prêtre/.test(label), label); }
       assert.equal(await line.locator('select').count(), 0, 'plus de question « À préciser » par fait');
     }
     assert.equal(await prayer.getByText('Allié du prêtre', { exact: true }).count() >= 1, true);

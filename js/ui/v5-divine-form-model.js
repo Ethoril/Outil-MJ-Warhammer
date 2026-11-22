@@ -12,6 +12,8 @@
 import { calendarDurationUnits, targetRuleFactFields } from '../core/v5-divine-grammar.js';
 import { campaignDurationSeconds } from '../core/v5-game-time.js';
 import { spellObjectChoices } from '../core/equipment.js';
+import { isTargetUndead, isTargetDaemon, hasTargetNatureOrTrait } from '../core/v5-magic-target-nature.js';
+import { participantCamp } from '../core/participant-camp.js';
 import { effectHandler, hasImplicitCasterTarget } from '../core/v5-divine-effect-handlers.js';
 
 const isRecord = value => Boolean(value && typeof value === 'object' && !Array.isArray(value));
@@ -41,14 +43,28 @@ export function confirmRangeByDefault(form, targetId) {
  * Passe G, G3-b (R17, décision du MJ du 22/11) : chaque fait de cible demandé est précoché à « oui », faits de scène compris ;
  * le MJ décoche ce qui est faux. Une réponse déjà donnée (« true » ou « false ») n'est jamais touchée ; une réponse
  * « À préciser » (chaîne vide) laissée par l'ancien formulaire devient « oui ». `factFields` = { [cibleId]: [champ de fait] }.
+ * Exception (22/11) : Allié, Mort-vivant, Serviteur de la Ruine et À 0 Blessure décrivent la cible et se déduisent de sa fiche.
  */
-export function confirmFactsByDefault(form, factFields = {}) {
+// Faits qui décrivent la cible : déduits de sa fiche, jamais précochés à « oui » (un ennemi n est ni un allié ni un mort-vivant par défaut).
+const sideOf = participant => { const camp = participantCamp(participant); return camp === 'pj' || camp === 'allie' ? 'groupe' : camp; };
+const DEDUCED_FACTS = Object.freeze({
+  ally: (target, actor) => Boolean(actor) && sideOf(target) === sideOf(actor),
+  undead: target => isTargetUndead(target),
+  // Serviteur des Puissances de la Ruine, orque ou gobelin (fait du livre) : seul le démon, l orque et le gobelin se lisent sur la fiche.
+  ruinServant: target => isTargetDaemon(target) || ['orque', 'orc', 'gobelin', 'goblin'].some(key => hasTargetNatureOrTrait(target, key)),
+  zeroWounds: target => Number(target?.hp) === 0
+});
+export function confirmFactsByDefault(form, factFields = {}, { actor = null, targets = [] } = {}) {
   form.facts ??= {};
+  const byId = new Map((targets || []).map(target => [target?.id, target]));
   for (const [targetId, fields] of Object.entries(factFields || {})) {
     form.facts[targetId] ??= {};
+    const target = byId.get(targetId);
     for (const fact of fields || []) {
       const current = form.facts[targetId][fact.field];
-      if (current !== 'true' && current !== 'false') form.facts[targetId][fact.field] = 'true';
+      if (current === 'true' || current === 'false') continue;
+      const deduce = DEDUCED_FACTS[fact.field];
+      form.facts[targetId][fact.field] = deduce && target ? String(Boolean(deduce(target, actor))) : 'true';
     }
   }
 }

@@ -603,7 +603,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   const effectTargets=isSelfTargeted(contract)?[actor]:participants.filter(row=>row.zone==='active'&&state.targetIds.includes(row.id));
   const model=buildDivineForm(contract,{actor,targets:effectTargets,participants,form:state.form,choices:state.choices}),descr=model.descr;
   // Passe G, G3-b (R17, décision du MJ du 22/11) : tous les faits de cible précochés à « oui », faits de scène compris ; le MJ décoche.
-  confirmFactsByDefault(state.form,model.factFields);
+  confirmFactsByDefault(state.form,model.factFields,{actor,targets:effectTargets});
   model.warnings=formWarnings(descr,actor,effectTargets,state.form);
   const needs=state.preview&&!state.preview.ready?classifyNeeds(state.preview.needsInput||[],{targets:effectTargets,fields:model.effectFields}):[];
   const blocking=new Set(needs.map(row=>row.anchor).filter(Boolean));
