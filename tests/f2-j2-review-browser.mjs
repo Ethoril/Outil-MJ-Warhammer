@@ -29,14 +29,14 @@ try{
  const origin=`http://127.0.0.1:${server.address().port}${base}`;await page.goto(origin,{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block',{timeout:20000});await page.locator('#tab-combat').click();
  const load=async state=>page.evaluate(async s=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(s);},state),read=async()=>page.evaluate(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');return JSON.parse(Store.getFullJSON());});
  await load(fixture());
- const combat=page.locator('#workspace-root'),panel=combat.locator('[aria-label="Suivi des séquelles et convalescence"]'),status=panel.locator('.workspace-aftermath-status'),sequelae=panel.locator('.workspace-aftermath-sequelae');
+ // Refonte E4b (CA20) : les suites de combat ont quitté Jouer ; le suivi se fait dans Campagne (opérations générales de
+ // convalescence, statut et critique de la personne suivie).
+ const combat=page.locator('#workspace-root'),campaign=page.locator('#workspace-campaign'),panel=campaign.locator('[aria-label="Opérations générales de convalescence"]'),status=campaign.locator('.workspace-aftermath-status'),sequelae=panel.locator('.workspace-aftermath-sequelae');
  const participant=async id=>(await read()).combat.participants.find(row=>row.id===id);
  const waitStatus=async pattern=>page.waitForFunction(source=>new RegExp(source).test(document.querySelector('.workspace-aftermath-status')?.textContent||''),pattern.source);
 
  // 1. Un critique appliqué par l'interface : cible choisie dans le groupe « Adversaires », gravité 5 + 70 d'excédent = 75, Cassure nette (fracture mineure du bras gauche).
- // U3 : « Suites de combat » est fermé pendant le combat ; le MJ l'ouvre, U2 le garde ouvert ensuite.
- const aftermath=combat.locator('details.workspace-aftermath');assert.equal(await aftermath.evaluate(el=>el.open),false,'Suites de combat fermé pendant le combat');await aftermath.locator(':scope > summary').click();
- await panel.waitFor();
+ assert.equal(await combat.locator('details.workspace-aftermath').count(),0,'plus de « Suites de combat » dans Jouer');
  await combat.locator('[data-workspace-select="hero"]').click();
  await combat.getByRole('group',{name:'Adversaires'}).getByRole('button',{name:'Garde'}).click();
  await openU1Settings(combat);await combat.getByRole('combobox',{name:'Nature du Test'}).selectOption('melee');
@@ -47,6 +47,10 @@ try{
  assert.equal(occurrence.length,1);assert.equal(occurrence[0].effectName,'Cassure nette');assert.deepEqual(occurrence[0].sequela.injuries.map(row=>[row.name,row.severity,row.part]),[['Broken Bone','minor','arm']],'fracture mineure issue d’un critique appliqué par l’interface');
 
  // 2. Le suivi lié, puis les séquelles : côté et 1d10 saisis par le MJ, jamais devinés.
+ await page.locator('#tab-campaign').click();await page.locator('#tab-campaign[aria-selected="true"]').waitFor();
+ await campaign.locator('[data-campaign-person="foe"]').click();
+ const globalOps=campaign.locator('details.campaign-global-details');if(!await globalOps.evaluate(el=>el.open))await globalOps.locator(':scope > summary').click();
+ await panel.waitFor();
  await panel.locator('summary',{hasText:'Critiques à suivre (2)'}).click();
  for(const [name,effectName] of [['Garde','Cassure nette'],['Manchot','Main mutilée']]){
   const row=panel.locator('.workspace-aftermath-proposal').filter({hasText:name});await row.getByLabel('Déjà bandée ou traitée').check();await row.getByRole('button',{name:`Ouvrir le suivi de ${effectName}`}).click();
@@ -85,7 +89,7 @@ try{
  assert.equal((await read()).extensions.v5.aftermathRegister.sequelae.find(row=>row.kind==='broken-bone').status,'healed');
 
  // 5. Le critique est déclaré guéri : le refus de J1 est levé, l’historique et la perte du Manchot restent.
- const incident=panel.locator('.workspace-aftermath-incident').filter({has:page.locator('h4',{hasText:'Garde'})});
+ const incident=campaign.locator('.campaign-detail .workspace-aftermath-incident').filter({has:page.locator('h4',{hasText:'Garde'})});
  await incident.locator('summary',{hasText:'Déclarer le critique guéri'}).click();
  await incident.getByLabel('Les malus temporaires sont terminés').check();await incident.getByLabel(/Les États du critique sont retirés/).check();await incident.getByRole('button',{name:'Clore'}).click();
  await page.waitForFunction(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');return Store.getAftermathState().incidents.some(row=>row.status==='closed');});
@@ -94,6 +98,7 @@ try{
  assert.equal(register.sequelae.find(row=>row.kind==='loss').status,'permanent');
 
  // 6. Une main perdue confirmée : l’arme à deux mains est refusée dans la résolution, l’épée à une main passe, la circonstance demandée au MJ est proposée.
+ await page.locator('#tab-combat').click();
  await combat.locator('[data-workspace-select="manchot"]').click();
  await combat.locator('[data-action-key="great"]').click();
  await combat.getByRole('group',{name:'Adversaires'}).getByRole('button',{name:'Héros'}).click();

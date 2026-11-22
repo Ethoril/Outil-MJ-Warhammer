@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** B08 : champs réels, récupération source, garde manuel, IndexedDB et historique. */
 import assert from 'node:assert/strict';
@@ -11,7 +12,8 @@ const server=createStaticServer({ root });
 let browser,page;const receipt={passed:false,checks:[],screenshots:[]};
 const snap=()=>page.evaluate(async()=>{const{Store}=await import('/js/main.js');await Store.whenIdle();const s=JSON.parse(Store.getFullJSON());delete s.exportedAt;return s;});
 const ready=()=>page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block');
-const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
+// Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+const openPanel=async()=>{await openCenterPanel(page,'prayer');const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 try{
  await new Promise(done=>server.listen(0,'127.0.0.1',done));browser=await launchBrowser();
  const context=await browser.newContext({serviceWorkers:'block',viewport:{width:1440,height:900}});await blockExternalNetwork(context, server);page=await context.newPage();page.setDefaultTimeout(8000);const errors=[];page.on('pageerror',error=>errors.push(error.message));

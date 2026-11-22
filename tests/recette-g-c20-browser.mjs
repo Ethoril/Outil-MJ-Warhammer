@@ -1,3 +1,4 @@
+import { openCenterPanel, closeCenterPanel } from './helpers/u1-drawer.mjs';
 /** T5 acceptance: panneau de prières piloté par le contrat, application réelle, gestes réels, IndexedDB native. */
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
@@ -35,7 +36,8 @@ const loadState=async()=>{
  await page.getByRole('tab',{name:'Jouer',exact:true}).click();
  const actorButton=page.locator('[data-workspace-select="priest"]');if(await actorButton.count())await actorButton.click();
 };
-const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
+// Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+const openPanel=async()=>{await openCenterPanel(page,'prayer');const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 const choose=async(panel,contractId)=>{await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption(contractId);assert.equal(await panel.evaluate(el=>el.open),true,'le panneau reste ouvert');return panel;};
 const baseFields=async(panel,roll=45)=>{
  await panel.getByRole('combobox',{name:'Le personnage peut prononcer la prière',exact:true}).selectOption('true');
@@ -75,13 +77,17 @@ try{
  await waitFor(async()=>(await person('ally')).extensions?.v5?.divineEffects?.some(e=>e.attackDeterrent),'Protection');
  await page.getByRole('button',{name:'Annuler',exact:true}).click();
  await waitFor(async()=>!(await person('ally')).extensions?.v5?.divineEffects?.some(e=>e.attackDeterrent),'Undo');
- const bulk=page.getByRole('button',{name:'Lancer tous les dés des PNJ',exact:true});
+ // Refonte E4b : la prière occupe la case centrale à la place de la résolution ; le MJ la ferme pour le lancer groupé,
+ // puis la rouvre. L'état du bouton se lit par sa clé, qu'il soit en vue ou non.
+ const bulk=page.locator('[data-focus-key="roll-all-npc"]');
+ await closeCenterPanel(page);
  assert.equal(await bulk.isEnabled(),true);await bulk.click();
+ await openPanel();
  assert.equal(await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).inputValue(),'25');
  await panel.getByRole('spinbutton',{name:'Jet de Prière (d100)',exact:true}).fill('');
  assert.equal(await bulk.isEnabled(),true,'effacer le jet de prière rend le lancer groupé disponible');
  await page.evaluate(async()=>{const {Store}=await import('/js/main.js');await Store.updateParticipant('priest',{kind:'PJ'});});
- await waitFor(async()=>await page.getByRole('button',{name:'Lancer tous les dés des PNJ',exact:true}).isDisabled(),'jet de PJ non proposé');
+ await waitFor(async()=>await bulk.isDisabled(),'jet de PJ non proposé');
  const voice=panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true});
  await voice.getByRole('button',{name:'Non',exact:true}).click();assert.equal(await voice.getByRole('button',{name:'Non',exact:true}).getAttribute('aria-pressed'),'true');
  await voice.getByRole('button',{name:'Oui',exact:true}).click();

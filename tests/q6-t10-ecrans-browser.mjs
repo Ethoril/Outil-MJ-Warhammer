@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { launchBrowser } from './helpers/browser.mjs';
 import { createStaticServer } from './helpers/static-server.mjs';
 import { chooseConfirmation } from './helpers/confirmation.mjs';
-import { openU1TurnActions, openU1Settings, openU1Types } from './helpers/u1-drawer.mjs';
+import { openU1TurnActions, openU1Settings, openU1Types, openCenterPanel } from './helpers/u1-drawer.mjs';
 
 // Q6 T10 (docs/specs/tests-secondaires-agregateur/) : chaque question du calcul commun d'un Test a son champ de réponse à l'écran.
 // Un parcours par écran : amener l'acteur dans le cas qui pose la question, répondre via le champ, vérifier que le Test se résout.
@@ -158,6 +158,7 @@ try {
     await load(seed([fighter('hero', 'Héros', 'pj', withSkills({ states: [PRONE], extensions: { v5: { corruptionPoints: 0 } } }))]));
     await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.startTalentSession(); });
     await combat.locator('[data-workspace-select="hero"]').click();
+    await openCenterPanel(combat, 'corruption'); // Refonte E4b : la corruption s'ouvre dans la case centrale
     const details = combat.locator('details[data-secondary-panel="corruption"]');
     await details.waitFor();
     if (!(await details.evaluate(el => el.open))) await details.locator(':scope > summary').click();

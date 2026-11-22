@@ -41,6 +41,8 @@ try{
  // Retour5A : vrai affichage et journal de Chaîne, Vent de couleur étranger, noms des invocations lisibles.
  await choose('Epées Sanguines');
  await page.evaluate(async()=>{await window.__TEST__.Store.applySpellExecution('Epées Sanguines',{actorId:'mage',targetIds:['mage'],sl:40,attributeActive:false,overcastSpecific:{swords:2}});});
+ // Refonte E4b : le panneau « autres… » prend la place des mêlées (et du banc) tant qu'il est ouvert ; on le ferme.
+ await closeU1Drawer(page);
  const names=await page.locator('.workspace-bench-label').evaluateAll(es=>es.filter(e=>e.textContent.includes('Sanguine')).map(e=>({text:e.textContent,width:e.getBoundingClientRect().width,height:e.getBoundingClientRect().height,line:parseFloat(getComputedStyle(e).lineHeight)||parseFloat(getComputedStyle(e).fontSize)*1.25})));assert.equal(names.length,3);assert.ok(names.every(n=>n.width>=90&&n.height<=3*n.line),JSON.stringify(names));
  await mkdir('tmp/lot5b',{recursive:true});await page.screenshot({path:'tmp/lot5b/desktop.png',fullPage:true});
  await page.setViewportSize({width:390,height:844});await choose('Goût de la Mort');assert.equal(await page.getByLabel(/^Sort : second Calme/).count(),1);assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.screenshot({path:'tmp/lot5b/mobile.png',fullPage:true});await page.evaluate(()=>document.documentElement.dataset.theme='dark');await page.screenshot({path:'tmp/lot5b/mobile-dark.png',fullPage:true});

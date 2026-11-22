@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** Principal acceptance: real application, gestures and native IndexedDB. */
 import assert from 'node:assert/strict';
@@ -14,7 +15,8 @@ const check=description=>receipt.checks.push(description);let browser,page;
 const state=()=>page.evaluate(async()=>{const{Store}=await import('/js/main.js');await Store.whenIdle();return JSON.parse(Store.getFullJSON());});
 const caps=async()=>((await state()).combat.participants.find(p=>p.id==='priest').extensions?.v5?.divineEffects||[]).filter(e=>e.type==='prayer-sl-cap');
 const ready=()=>page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block');
-const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
+// Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+const openPanel=async()=>{await openCenterPanel(page,'prayer');const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 const prepare=async(contractId,roll)=>{
  const panel=await openPanel();await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption(contractId);
  assert.equal(await panel.evaluate(el=>el.open),true,'Le panneau ouvert reste ouvert après choix de prière');

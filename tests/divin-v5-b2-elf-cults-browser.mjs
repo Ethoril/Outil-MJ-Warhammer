@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** B02 : vrai panneau, IndexedDB native, attribution humaine puis Prière elfique. */
 import assert from 'node:assert/strict';
@@ -13,7 +14,8 @@ const receipt={passed:false,checks:[],screenshots:[]},MATH='divine:miracle:mathl
 let browser,page;
 const snapshot=()=>page.evaluate(async()=>{const {Store}=await import('/js/main.js');await Store.whenIdle();return JSON.parse(Store.getFullJSON());});
 const ready=()=>page.waitForFunction(()=>document.querySelector('#app-content')?.style.display==='block');
-const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
+// Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+const openPanel=async()=>{await openCenterPanel(page,'prayer');const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 try{
  await new Promise(done=>server.listen(0,'127.0.0.1',done));
  browser=await launchBrowser();

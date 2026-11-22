@@ -33,7 +33,12 @@ try {
     window.__view = view;
   });
   const toggle = page.locator('[data-circumstances-toggle]'), drawer = page.locator('.workspace-resolution-drawer');
-  const openDrawer = async () => { if (await drawer.isHidden()) await toggle.click(); };
+  // Refonte E4b : les réglages détaillés sont repliés sous les cases pertinentes du panneau « autres… ».
+  const openDrawer = async () => {
+    if (await drawer.isHidden()) await toggle.click();
+    const more = drawer.locator('.workspace-circumstances-more');
+    if (await more.count() && !await more.evaluate(el => el.open)) await more.locator(':scope > summary').click();
+  };
   const dump = async label => { if (process.env.DUMP) console.log('---', label, (await page.locator('.workspace-resolution').innerText()).split(String.fromCharCode(10)).filter(Boolean).join(' | ')); };
   const field = key => page.locator(`.workspace-resolution [data-blocking-field="${key}"]`).first();
   await check('C47 : le second tir est préparé après le premier tir du tir double', async () => {

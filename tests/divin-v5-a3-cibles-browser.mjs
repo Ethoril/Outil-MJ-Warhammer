@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import assert from 'node:assert/strict';
 import {sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -18,7 +19,7 @@ try{
   await Store.loadFromJSON({schemaVersion:3,reserve:[],combat:{round:1,currentActorId:'priest',order:['priest'],participants:[priest]},diceLines:[],log:[],extensions:{v5:{turnIndex:1}}});
  });
  await page.getByRole('tab',{name:'Jouer',exact:true}).click();
- const panel=page.locator('[data-divine-panel]');await panel.locator('summary').first().click();
+ await openCenterPanel(page,'prayer');/* Refonte E4b : la prière s'ouvre dans la case centrale. */const panel=page.locator('[data-divine-panel]');if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();
  const prayer=panel.getByRole('combobox',{name:'Prière divine',exact:true});
  for(const id of ['divine:miracle:il-de-l-aigle','divine:miracle:ulric:howl-of-the-wolf','divine:miracle:taal:king-of-the-wild']){
   await prayer.selectOption(id);

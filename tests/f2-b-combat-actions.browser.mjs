@@ -80,7 +80,7 @@ try {
   await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
   assert.match((await combat.locator('.workspace-resolution, .workspace-resolution-drawer').allInnerTexts()).join(' '), /Bandes dérivées de la portée imprimée \(100 m\) : Bout portant ≤ 4 m \(\+2 DR\) · Courte ≤ 50 m \(\+1 DR\) · Moyenne ≤ 100 m \(0 DR\) · Longue ≤ 200 m \(−1 DR\) · Extrême ≤ 300 m \(−2 DR\)/);
-  await combat.getByRole('combobox', { name: 'Bande de portée choisie par le MJ' }).selectOption('point-blank');
+  await combat.locator('[data-distance] [data-distance-choice="point-blank"]').click(); // Refonte E4b : ligne Distance
   await combat.getByRole('combobox', { name: 'Météo' }).selectOption('rain-wind');
   await combat.getByRole('combobox', { name: 'Lumière' }).selectOption('fog');
   await combat.getByRole('checkbox', { name: 'La cible est à couvert ou À Terre (−1 DR, une seule fois)' }).check();
@@ -115,7 +115,7 @@ try {
   await actorCard.click();
   await openResolutionSettings();
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
-  await combat.getByRole('combobox', { name: 'Bande de portée choisie par le MJ' }).selectOption('point-blank');
+  await combat.locator('[data-distance] [data-distance-choice="point-blank"]').click(); // Refonte E4b : ligne Distance
   const tableLethal = combat.getByRole('checkbox', { name: 'Activer l’option létale de la table pour cette résolution' });
   const intentLethal = combat.getByRole('checkbox', { name: 'Déclarer une intention létale contre Garde' });
   assert.equal(await tableLethal.isChecked(), false, 'l’option létale est inactive par défaut');
@@ -198,10 +198,12 @@ try {
   await combat.getByRole('combobox', { name: 'Nature du Test' }).selectOption('ranged');
   await chooseConfirmation(combat.getByRole('group', { name: 'La cible est engagée au corps à corps (Désavantage au tir)' }), 'true');
   await combat.getByRole('checkbox', { name: 'Engagé avec la cible : Allié' }).check();
-  await combat.getByRole('spinbutton', { name: 'Jet d100 pour désigner le combattant touché' }).fill('80');
-  await combat.getByRole('spinbutton', { name: 'Jet d100 pour désigner le combattant touché' }).press('Tab');
   await combat.getByRole('textbox', { name: 'Attaque (CT 70)' }).fill('28');
   await combat.getByRole('button', { name: 'Calculer' }).click();
+  // Refonte E4b (CA15) : le d100 du combattant touché se saisit dans le pied, quand le moteur le demande ; Entrée = Calculer.
+  const engagedRoll = combat.locator('.workspace-resolution-footer [data-focus-key="engaged-target-roll"]');
+  await engagedRoll.fill('80');
+  await engagedRoll.press('Enter');
   assert.match(await combat.locator('.workspace-result-live').innerText(), /Tir dévié vers Allié \(d100 80\), jet 28 retenu/);
   await combat.locator('.workspace-resolution-footer').getByRole('button', { name: /Appliquer .* à Allié/ }).click();
   await page.waitForFunction(async () => {

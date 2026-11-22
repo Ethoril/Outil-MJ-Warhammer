@@ -28,14 +28,19 @@ try {
     if (!view.openResolution({ ...action, participantId: 'npc', targetId: 'pj' })) throw new Error('résolution indisponible');
     window.__u1 = { view, store };
   });
-  const group=page.getByRole('group',{name:'Tir à bout portant',exact:true});
-  assert.equal(await group.getAttribute('data-focus-key'),'actor-pointBlank');
+  // Refonte E4b (CA13) : la case « Tir à bout portant » a disparu (ligne Distance). Les boutons Oui / Non à trois états se
+  // vérifient sur une autre confirmation du MJ au tir, dans les réglages détaillés du panneau « autres… ».
+  assert.equal(await page.getByRole('group',{name:'Tir à bout portant',exact:true}).count(),0,'plus de case « Tir à bout portant »');
+  await page.locator('[data-circumstances-toggle]').click();
+  await page.locator('.workspace-circumstances-more > summary').click();
+  const group=page.getByRole('group',{name:/^Tir opposé par Esquive confirmé par le MJ/});
+  assert.equal(await group.getAttribute('data-focus-key'),'actor-rangedOppositionAllowed');
   const oui=group.getByRole('button',{name:'Oui',exact:true}),non=group.getByRole('button',{name:'Non',exact:true});
   assert.equal(await oui.getAttribute('aria-pressed'),'false');assert.equal(await non.getAttribute('aria-pressed'),'false');
-  await oui.click();assert.equal(await page.evaluate(()=>window.__u1.view.getViewState().resolution.v5Context.pointBlank),true);
-  await non.click();assert.equal(await page.evaluate(()=>window.__u1.view.getViewState().resolution.v5Context.pointBlank),false);
+  await oui.click();assert.equal(await page.evaluate(()=>window.__u1.view.getViewState().resolution.v5Context.rangedOppositionAllowed),true);
+  await non.click();assert.equal(await page.evaluate(()=>window.__u1.view.getViewState().resolution.v5Context.rangedOppositionAllowed),false);
   assert.equal(await non.getAttribute('aria-pressed'),'true');
-  await non.click();assert.equal(await page.evaluate(()=>window.__u1.view.getViewState().resolution.v5Context.pointBlank),undefined);
+  await non.click();assert.equal(await page.evaluate(()=>window.__u1.view.getViewState().resolution.v5Context.rangedOppositionAllowed),undefined);
   assert.equal(await non.getAttribute('aria-pressed'),'false');
   assert.deepEqual(errors, []);
 } finally { await browser.close(); await new Promise(resolveClose => server.close(resolveClose)); }

@@ -29,15 +29,29 @@ export function openEncounterEndDialog({ candidates = [], removal = false } = {}
       list.append(label);
       return box;
     });
+    // Refonte E4b (CA20) : séquelles, convalescence et calendrier ont quitté l'écran de combat ; la fin du combat y mène.
+    let campaignBox = null;
+    if (!removal) {
+      const campaign = el('label', null, 'encounter-end-campaign');
+      campaignBox = el('input'); campaignBox.type = 'checkbox'; campaignBox.name = 'open-campaign';
+      campaign.append(campaignBox, document.createTextNode(' Ouvrir ensuite l’espace Campagne : séquelles, convalescence et calendrier'));
+    }
     const controls = el('div', null, 'row');
     const confirm = el('button', removal ? 'Retirer du combat' : 'Terminer le combat'); confirm.type = 'submit';
     const cancel = el('button', 'Annuler', 'ghost'); cancel.type = 'button';
     controls.append(confirm, cancel);
     form.append(list, controls);
+    if (campaignBox) controls.before(campaignBox.parentElement);
     dialog.append(form);
     document.body.append(dialog);
     let outcome = null;
-    form.addEventListener('submit', event => { event.preventDefault(); outcome = { keepIds: boxes.filter(box => box.checked).map(box => box.value) }; dialog.close(); });
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      outcome = { keepIds: boxes.filter(box => box.checked).map(box => box.value), openCampaign: campaignBox?.checked === true };
+      dialog.close();
+      // L'espace Campagne s'ouvre une fois le combat terminé (le tour d'après), par son onglet habituel.
+      if (outcome.openCampaign) setTimeout(() => document.getElementById('tab-campaign')?.click(), 0);
+    });
     cancel.addEventListener('click', () => dialog.close());
     dialog.addEventListener('close', () => { dialog.remove(); if (opener?.isConnected) opener.focus(); resolve(outcome); }, { once: true });
     dialog.showModal();

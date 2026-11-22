@@ -23,7 +23,9 @@ import { creatureSizeOf } from '../core/creature-size.js';
 import { carriesSense } from '../core/creature-senses.js';
 import { carriesMovement } from '../core/creature-movement.js';
 import { engagedCandidates, planOutnumbering } from '../core/outnumbering.js';
-import { deriveEngagementContext, engagedWith } from '../core/engagements.js';
+import { deriveEngagementContext, deriveSceneContext, engagedWith } from '../core/engagements.js';
+import { renderDistanceRow, renderContextRow, renderPertinentCircumstances, deviationRollField } from './resolution-panel/compact.js';
+import { deducedCircumstances } from './resolution-panel/circonstances.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
 import { isBlackpowderIncidentEligible } from '../core/v5-combat-fumbles.js';
@@ -78,7 +80,7 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
     return finish();
   }
   add(preview.choiceRequired, 'Choisissez le résultat à appliquer');
-  for (const text of preview.unresolved || []) reasons.push({ text: readableTalentWarning(text), focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /^Malice de Ranald : choisissez/.test(text) ? 'ranald-characteristic' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/une Charge est requise\.$/.test(text) ? { action: 'charge' } : {}), ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
+  for (const text of preview.unresolved || []) reasons.push({ text: readableTalentWarning(text), focus: /^Maladresse du défenseur/.test(text) ? 'defender-fumble-roll' : /^Maladresse de combat : saisissez/.test(text) ? 'fumble-roll' : /Calme.*attaquant/i.test(text) ? 'protection-calm' : /Tir engagé.*Test de défense/i.test(text) ? 'engaged-defense' : /^Tir engagé : saisir le dé/.test(text) ? 'engaged-roll' : /^Recharge : saisir les munitions/.test(text) ? 'reload-ammo' : /^Taille : saisir la pièce/.test(text) ? 'hack-piece' : /^Dispersion : bande/.test(text) ? 'spread-band' : /^Dispersion : (?:cibles|inclure)/.test(text) ? 'spread-targets' : /^Explosion : (?:cibles|inclure)/.test(text) ? 'explosion-targets' : /^Confirmer la règle autorisant cette défense contre un tir/.test(text) ? 'ranged-opposition' : /^Appendice : saisissez les PA/.test(text) ? 'appendage-ap' : /^Malice de Ranald : choisissez/.test(text) ? 'ranald-characteristic' : /jet de défense/i.test(text) ? 'defense-roll' : undefined, ...(/une Charge est requise\.$/.test(text) ? { action: 'charge' } : {}), ...(/^Bénédiction de Protection :/.test(text) ? { ignorable: 'divine-protection' } : {}) });
   const criticals = [preview.critical?.details, preview.critical?.second, preview.defenderCritical?.details];
   // Le jet sur la table des critiques n'apparaît qu'une fois la localisation connue : une seule ligne à la fois.
   add(criticals.some(row => row?.pending && !row?.needsLocation), 'Complétez le jet de critique', 'critical-pending');
@@ -98,8 +100,13 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
  * Ligne de « À saisir avant d'appliquer » : un lien vers le champ, et sur place ce qui se règle d'un geste
  * (d100 du critique saisi ou lancé ici, Charge déclarée), pour ne pas chercher le champ dans le panneau.
  */
-function blockingReasonItem(reason, field, { section, handlers }) {
+function blockingReasonItem(reason, field, { section, handlers, draft }) {
   const item = node('li', 'workspace-blocking-reason');
+  // Refonte E4b (CA15) : le d100 du combattant touché se saisit ici, et seulement quand le moteur le demande.
+  if (!field && reason.focus === 'engaged-roll' && draft) {
+    item.append(node('span', '', reason.text), deviationRollField({ draft, handlers }));
+    return item;
+  }
   if (field) {
     const link = button(reason.text, 'workspace-ghost workspace-blocking-link');
     link.addEventListener('click', () => {
@@ -324,6 +331,11 @@ export function renderResolutionPanel(options) {
   settings.appendChild(node('summary', '', 'Autres réglages'));
   drawer.appendChild(settings);
   section.appendChild(drawer);
+  // Refonte E4b : faits de la résolution compacte, établis avec la nature du Test (plus bas) ; une case du panneau « autres… »
+  // ou une puce déduite remplace la case de la 3.56.0 qui portait le même champ (covered).
+  let compactKind = '', compactAttack = false, compactPlateau = {}, compactFacts = null, compactRangeBands = null;
+  let pertinent = { box: null, ids: new Set() }, deducedIds = new Set();
+  const covered = id => pertinent.ids.has(id) || deducedIds.has(id);
   // U6 : le bloc Circonstances est déplacé par la vue hors de la section ; les recherches de champs couvrent les deux.
   const within = { one: selector => section.querySelector?.(selector) || drawer.querySelector?.(selector) || null, all: selector => [...new Set([...(section.querySelectorAll?.(selector) || []), ...(drawer.querySelectorAll?.(selector) || [])])] };
   const addCircumstance = (key, element, required = false) => {
@@ -998,6 +1010,19 @@ export function renderResolutionPanel(options) {
   kind.dataset.focusKey='v5-kind';
   kind.dataset.defaultValue = inferV5Kind({ ...action, type }, equipmentAttackContext(kindEquipment, {}));
   kind.addEventListener('change', () => handlers.select({ v5Kind: kind.value }));
+  // Refonte E4b : faits de la résolution compacte — ligne Distance, puces déduites (CA15b), panneau « autres… » (CA15a).
+  // Une case du panneau ou une puce déduite remplace la case de la 3.56.0 qui portait le même champ (covered).
+  compactKind = String(kind.value);
+  compactAttack = type === 'attack' && Boolean(target) && target.id !== actor.id;
+  compactPlateau = compactAttack ? deriveEngagementContext({ combat: { participants }, participants, actorId: actor.id, targetId: target.id, kind: compactKind }) : {};
+  const compactScene = compactAttack ? deriveSceneContext({ scene: options.scene || {}, actor, target, kind: compactKind }) : {};
+  const compactWeapon = actor?.equipment?.find(item => item?.id === action.extensions?.fiche?.equipmentId) || action.extensions?.equipment;
+  compactFacts = { type, kind: compactKind, draft, target, plateau: compactPlateau, scene: compactScene, turnFacts: options.turnFacts || {},
+    accurateShot: hasV5Talent(actor, V5_TALENT_IDS.accurateShot),
+    knownThrowing: type === 'attack' && compactKind === 'ranged' && weaponSkillGroupInfo(compactWeapon?.category || draft.v5Context?.weaponGroup || action.category, compactWeapon)?.specialty === 'Lancer' };
+  pertinent = renderPertinentCircumstances({ facts: compactFacts, handlers });
+  drawer.appendChild(pertinent.box);
+  deducedIds = new Set(deducedCircumstances(compactFacts).map(row => row.id));
   kindLabel.appendChild(kind);
   addCircumstance('v5-kind', kindLabel);
   numberField('v5SlModifier', 'Modificateur V5 (DR)', draft.v5SlModifier ?? action.extensions?.v5?.slModifier ?? (action.mod ? null : 0), null, action.extensions?.v5?.slModifier ?? (action.mod ? null : 0));
@@ -1129,7 +1154,7 @@ export function renderResolutionPanel(options) {
     check.checked=draft.charging === true;
     check.addEventListener('change',()=>handlers.select({charging:check.checked}));
     charge.append(check,'Charge donnant Élan (distance et conditions vérifiées)');
-    v5.appendChild(charge);
+    if (!covered('charge')) v5.appendChild(charge);
     const mountId = actor?.extensions?.v5?.mountId;
     const mount = participants.find(row => row.id === mountId && row.zone === 'active');
     if (actor?.extensions?.v5?.mounted === true && mount) {
@@ -1144,7 +1169,9 @@ export function renderResolutionPanel(options) {
       v5.appendChild(useMount);
     }
   }
+  const TOGGLE_IDS = { fortuneReroll: 'chance-relance', fortuneForAdvantage: 'chance-avantage', extraAttack: 'attaque-supplementaire', aimed: 'vise' };
   const talentToggle = (key, text, checked, disabled = false) => {
+    if (TOGGLE_IDS[key] && covered(TOGGLE_IDS[key])) return;
     const label = node('label', 'workspace-type');
     const check = document.createElement('input');
     check.type = 'checkbox';
@@ -1859,7 +1886,6 @@ export function renderResolutionPanel(options) {
   }
   if (kind.value === 'ranged' && target) {
     contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé par Esquive confirmé par le MJ (tireur à moins de Bonus d’Initiative mètres de la cible, ou bouclier de 2 PA ou plus)').dataset.blockingField = 'ranged-opposition';
-    contextField(fields, 'actor', 'pointBlank', 'Tir à bout portant');
   }
   if (type === 'attack' && target) contextField(fields, 'actor', 'targetHelpless', 'Cible sans défense : situation vérifiée par le MJ');
   // Surnombre (L06 p. 167, BR-16) : le moteur ne suit pas l'engagement, le MJ coche les engagés avec la cible de chaque côté.
@@ -1941,23 +1967,8 @@ export function renderResolutionPanel(options) {
       const rangedWeapons = (actor?.equipment || []).filter(item => item?.kind === 'weapon' && String(item.range || '').trim());
       const rangedWeapon = actor?.equipment?.find(item => item?.id === action.extensions?.fiche?.equipmentId) || action.extensions?.equipment || (rangedWeapons.length === 1 ? rangedWeapons[0] : null);
       const rangeBands = computeV5WeaponRangeBands(draft.v5Context?.weaponRangeYards ?? rangedWeapon?.range ?? action.range ?? action.rangeYards, actor);
-      choiceField(fields, 'shotRange', 'Bande de portée choisie par le MJ', [['point-blank','Bout portant'],['short','Courte'],['medium','Moyenne'],['long','Longue'],['extreme','Extrême']]);
-      if (mapDistanceProvider && actor && target) {
-        const mapNote = node('p', 'workspace-muted map-distance-note', 'Distance sur la carte : mesure en cours…');
-        fields.appendChild(mapNote);
-        const pairKey = `${actor.id}>${target.id}@${draft?.round ?? ''}`;
-        Promise.resolve(mapDistanceProvider(actor, target, 'ranged')).then(answer => {
-          if (!mapNote.isConnected) return;
-          if (!answer?.ok) { mapNote.textContent = answer?.message || 'Distance à saisir.'; return; }
-          const band = v5RangeBandForMeters(answer.meters, rangeBands);
-          mapNote.textContent = `Distance sur la carte : ${answer.meters} m${rangeBands ? ` → ${band ? SHOT_RANGE_LABELS[band] : 'au-delà de l’Extrême'}` : ''}.`;
-          const current = draft.v5Context || {};
-          if (band && !current.shotRange && !mapRangePrefilled.has(pairKey)) {
-            mapRangePrefilled.add(pairKey);
-            handlers.select({ v5Context: { ...current, shotRange: band } });
-          }
-        }, () => { if (mapNote.isConnected) mapNote.textContent = 'Distance à saisir.'; });
-      }
+      // Refonte E4b (CA13) : la bande de portée et la distance de la carte vivent dans la ligne « Distance » de la résolution.
+      compactRangeBands = rangeBands;
       if (rangeBands) fieldGroups.combat.content.appendChild(node('p', 'workspace-muted', `Bandes dérivées de la portée imprimée (${rangeBands.printedYards} m) : ${rangeBands.pointBlankYards === null ? 'Pas de bout portant (portée courte de 4 m ou moins)' : `Bout portant ≤ ${rangeBands.pointBlankYards} m (+2 DR)`} · Courte ≤ ${rangeBands.shortYards} m (+1 DR) · Moyenne ≤ ${rangeBands.mediumYards} m (0 DR) · Longue ≤ ${rangeBands.longYards} m (−1 DR) · Extrême ≤ ${rangeBands.extremeYards} m (−2 DR).`));
       if ([...(rangedWeapon?.keywords || []), ...(action?.qualities || [])].some(row => (typeof row === 'string' ? row : row?.id) === 'a-repetition')) {
         contextField(fields, 'actor', 'repeaterDoubleShot', 'À répétition : tir double (deux tirs sur la même cible à −1 DR, une seule Action)');
@@ -1979,19 +1990,19 @@ export function renderResolutionPanel(options) {
       choiceField(fields, 'weather', 'Météo', [['normal','Aucune pénalité'],['fog','Brouillard (−1 DR)'],['rain-wind','Pluie ou vent (−2 DR)'],['extreme','Météo extrême (−3 DR)']]);
       choiceField(fields, 'lighting', 'Lumière', [['normal','Aucune pénalité'],['fog','Faible lumière (−1 DR)'],['dim','Pénombre (−1 DR)'],['dark','Noir total (−3 DR)']]);
       fields.appendChild(node('p', 'workspace-muted', 'Météo et lumière partagent une seule ligne du tableau : seule la pénalité la plus sévère s’applique. La portée est un choix du MJ; l’application ne suit pas la distance.'));
-      const covered = node('label', 'workspace-type', 'La cible est à couvert ou À Terre (−1 DR, une seule fois)');
+      const coverLabel = node('label', 'workspace-type', 'La cible est à couvert ou À Terre (−1 DR, une seule fois)');
       const cover = document.createElement('input');
       cover.type = 'checkbox';
       cover.checked = Number(draft.v5Context?.penalties?.cover || draft.v5Context?.penalties?.targetProne) < 0;
-      cover.setAttribute('aria-label', covered.textContent);
+      cover.setAttribute('aria-label', coverLabel.textContent);
       cover.addEventListener('change', () => {
         const current = draft.v5Context || {}, penalties = { ...(current.penalties || {}) };
         delete penalties.targetProne;
         if (cover.checked) penalties.cover = -1; else delete penalties.cover;
         handlers.select({ v5Context: { ...current, penalties } });
       });
-      covered.prepend(cover);
-      fields.appendChild(covered);
+      coverLabel.prepend(cover);
+      if (!covered('couvert')) fields.appendChild(coverLabel);
       const moved = node('label', 'workspace-type', 'Tireur déplacé avant ce tir (−1 DR)');
       const movedBox = document.createElement('input');
       movedBox.type = 'checkbox';
@@ -1999,7 +2010,7 @@ export function renderResolutionPanel(options) {
       movedBox.setAttribute('aria-label', moved.textContent);
       movedBox.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), movedBeforeRangedAttack: movedBox.checked } }));
       moved.prepend(movedBox);
-      fields.appendChild(moved);
+      if (!covered('deplace')) fields.appendChild(moved);
       if (hasV5Talent(actor, 'talent-sharpshooter')) {
         const extraordinary = node('label', 'workspace-type', 'Tir extraordinaire selon Tireur d’élite');
         const enabled = document.createElement('input');
@@ -2039,7 +2050,7 @@ export function renderResolutionPanel(options) {
       throwingBox.setAttribute('aria-label',throwing.textContent);
       throwingBox.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),throwingWeapon:throwingBox.checked}}));
       throwing.prepend(throwingBox);
-      fields.appendChild(throwing);
+      if (!covered('arme-de-jet')) fields.appendChild(throwing);
       if(knownThrowing){
         throwingBox.checked=true;
         throwingBox.disabled=true;
@@ -2083,24 +2094,11 @@ export function renderResolutionPanel(options) {
           rangedPlateau.targetEngaged && !rangedPlateau.engagedWithShooter ? `cible engagée avec ${names(rangedPlateau.engagedTargetIds.slice(1))} (Désavantage, déviation possible)` : '',
           rangedPlateau.shooterEngagedElsewhere && !rangedPlateau.engagedWithShooter ? 'tireur engagé en mêlée (Pistolet seulement)' : ''].filter(Boolean).join(' ; ');
         engagementBanner(fields, summary, { plateau: rangedPlateau, values: { targetEngaged: false, engagedWithShooter: false, engagedTargetIds: [], shooterEngagedElsewhere: false } });
-        if (rangedPlateau.targetEngaged && !rangedPlateau.engagedWithShooter) {
-          const rollLabel = node('label', 'workspace-type', 'Jet d100 pour désigner le combattant touché');
-          const roll = document.createElement('input');
-          roll.type = 'number';
-          roll.min = '1';
-          roll.max = '100';
-          roll.value = draft.v5Context?.engagedTargetRoll ?? '';
-          roll.dataset.npcRollKey = 'contextValue';
-          roll.dataset.npcRollField = 'engagedTargetRoll';
-          roll.setAttribute('aria-label', rollLabel.textContent);
-          roll.addEventListener('change', () => handlers.select({ v5Context: { ...(draft.v5Context || {}), engagedTargetRoll: roll.value === '' ? null : Number(roll.value) } }));
-          rollLabel.appendChild(roll);
-          fields.appendChild(rollLabel);
-        }
+        // Refonte E4b (CA15) : le d100 du combattant touché se demande dans le pied, seulement si le Désavantage fait rater un tir qui aurait touché.
       } else {
       if (draft.v5Context?.engagementForced) plateauReturn(fields);
       contextField(fields, 'actor', 'targetEngaged', 'La cible est engagée au corps à corps (Désavantage au tir)');
-      contextField(fields, 'actor', 'engagedWithShooter', 'La cible est engagée avec le tireur (le tir se résout comme une mêlée : Corps à corps opposé, pas de Désavantage de tir dans la mêlée)');
+      // Refonte E4b (CA13) : « La cible est engagée avec le tireur » = choix « Au contact » de la ligne Distance.
       if (draft.v5Context?.targetEngaged === true && draft.v5Context?.engagedWithShooter !== true && target) {
         const current = draft.v5Context || {}, engagedIds = new Set(current.engagedTargetIds || [target.id]);
         engagedIds.add(target.id);
@@ -2120,17 +2118,6 @@ export function renderResolutionPanel(options) {
           label.prepend(check);
           fields.appendChild(label);
         }
-        const rollLabel = node('label','workspace-type','Jet d100 pour désigner le combattant touché');
-        const roll = document.createElement('input');
-        roll.type='number';
-        roll.min='1';
-        roll.max='100';
-        roll.value=current.engagedTargetRoll??'';
-        roll.dataset.npcRollKey='contextValue';roll.dataset.npcRollField='engagedTargetRoll';
-        roll.setAttribute('aria-label',rollLabel.textContent);
-        roll.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),engagedTargetRoll:roll.value===''?null:Number(roll.value)}}));
-        rollLabel.appendChild(roll);
-        fields.appendChild(rollLabel);
       }
       }
     } else if (kind.value === 'melee') {
@@ -2156,7 +2143,7 @@ export function renderResolutionPanel(options) {
         handlers.select({ v5Context: { ...current, penalties } });
       });
       offHand.prepend(offHandBox);
-      fields.appendChild(offHand);
+      if (!covered('main-secondaire')) fields.appendChild(offHand);
       const equipmentId=action.extensions?.fiche?.equipmentId,allWeapons=(actor?.equipment||[]).filter(item=>item?.kind==='weapon');
       const currentWeapon=allWeapons.find(item=>item.id===equipmentId)||action.extensions?.equipment||(allWeapons.length===1?allWeapons[0]:null);
       const oneHanded=weaponHandsForParticipant(currentWeapon,actor,{action,context:draft.v5Context})===1;
@@ -3212,7 +3199,7 @@ export function renderResolutionPanel(options) {
       for (const reason of reasons) {
         const field = reason.focus && within.one(`[data-blocking-field="${reason.focus}"]`);
         if (field && ['INPUT', 'SELECT', 'TEXTAREA'].includes(field.tagName)) { field.setAttribute('aria-required', 'true'); previouslyRequired.add(field); }
-        list.appendChild(blockingReasonItem(reason, field, { section, handlers }));
+        list.appendChild(blockingReasonItem(reason, field, { section, handlers, draft }));
       }
     };
     rolls.addEventListener('input', refreshPending);
@@ -3286,7 +3273,7 @@ export function renderResolutionPanel(options) {
           const caption = field.closest?.('label') || (field.id && (within.one(`label[for="${field.id}"]`) || live.querySelector?.(`label[for="${field.id}"]`)));
           if (caption && !caption.textContent.trim().endsWith('*')) caption.append(' *');
         }
-        list.appendChild(blockingReasonItem(reason, field, { section, handlers }));
+        list.appendChild(blockingReasonItem(reason, field, { section, handlers, draft }));
       }
       block.appendChild(list);
       live.appendChild(block);
@@ -3338,23 +3325,47 @@ export function renderResolutionPanel(options) {
   }
   section.appendChild(live);
   refreshRollAll();
-  arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups });
+  let distance = null;
+  if (type === 'attack' && compactKind === 'ranged' && compactAttack) {
+    const names = ids => ids.map(id => participants.find(row => row.id === id)?.name || id).join(', ');
+    distance = renderDistanceRow({ draft, plateau: compactPlateau, rangeBands: compactRangeBands, handlers, names });
+    if (mapDistanceProvider) {
+      const pairKey = `${actor.id}>${target.id}@${draft?.round ?? ''}`;
+      Promise.resolve(mapDistanceProvider(actor, target, 'ranged')).then(answer => {
+        if (!distance.explain.isConnected) return;
+        if (!answer?.ok) { distance.explain.textContent = `${distance.line.explanation} ${answer?.message || 'Carte : distance à saisir.'}`; return; }
+        const band = v5RangeBandForMeters(answer.meters, compactRangeBands);
+        distance.explain.textContent = `Carte : ${answer.meters} m${compactRangeBands ? ` → ${band ? SHOT_RANGE_LABELS[band] : 'au-delà de l’Extrême'}` : ''}. ${distance.line.explanation}`;
+        const current = draft.v5Context || {};
+        if (band && !current.shotRange && current.engagedWithShooter !== true && compactPlateau.engagedWithShooter !== true && !mapRangePrefilled.has(pairKey)) {
+          mapRangePrefilled.add(pairKey);
+          handlers.select({ v5Context: { ...current, shotRange: band } });
+        }
+      }, () => { if (distance.explain.isConnected) distance.explain.textContent = `${distance.line.explanation} Carte : distance à saisir.`; });
+    }
+  }
+  arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups,
+    compact: { distanceRow: distance?.row || null, facts: compactFacts, pertinentBox: pertinent.box, handlers } });
   return section;
 }
 
 // Organise les contrôles déjà construits sans modifier leurs gestionnaires ni leurs valeurs.
+// Refonte E4b : résolution compacte — Action, Cible (une ligne), Distance (tir), Contexte (puces déduites + « autres… »), jets,
+// résultat, pied. Le panneau « autres… » (ancien tiroir Circonstances) s'ouvre par-dessus l'écran : en tête les cases pertinentes
+// de l'action (au plus 12), puis « À régler maintenant », puis les réglages détaillés et arbitrages, repliés.
 const otherSettingsState = new WeakMap();
+const moreSettingsState = new WeakMap();
 
-function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups }) {
+function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups, compact = {} }) {
   if (!section.insertBefore) return;
-  const step = title => {
-    const block = node('section', 'workspace-resolution-step');
-    block.appendChild(node('h4', '', title));
+  const step = (title, key) => {
+    const block = node('section', `workspace-resolution-step is-${key}`);
+    block.appendChild(node('h4', 'workspace-visually-hidden', title));
     return block;
   };
-  const actionStep = step('1 · Action et cible');
-  const rollsStep = step('2 · Jets');
-  const resultStep = step('3 · Résultat');
+  const actionStep = step('1 · Action et cible', 'action');
+  const rollsStep = step('2 · Jets', 'jets');
+  const resultStep = step('3 · Résultat', 'resultat');
   const footer = node('footer', 'workspace-resolution-footer');
   const children = [...section.children];
   for (const child of children) {
@@ -3363,30 +3374,64 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
     else if (child === rolls || child === commands || child.id === 'workspace-roll-hint') rollsStep.appendChild(child);
     else if (child === live) resultStep.appendChild(child);
   }
+  actionBlock?.classList?.add('is-action');
+  // Ligne Action : les actions préparées en bande d'une ligne (elles sont aussi dans la barre du bas) ; Test…, Sort, prière,
+  // Corruption… et Actions du Tour… dans un groupe fixe au bout de la ligne.
+  const actionList = actionBlock?.querySelector(':scope > .workspace-chip-list');
+  if (actionList) {
+    const tools = node('div', 'workspace-action-tools');
+    // Les menus qui s'ouvrent (type d'action, sort, prière, Corruption) prennent une ligne sous la ligne Action.
+    const menus = [];
+    for (const child of [...actionList.children]) {
+      if (child.matches('[data-action-key], p')) continue;
+      if (child.matches('.workspace-action-type, .workspace-action-menu')) menus.push(child); else tools.appendChild(child);
+    }
+    const turnActions = actionStep.querySelector(':scope > .workspace-combat-actions');
+    if (turnActions) tools.appendChild(turnActions);
+    if (tools.childNodes.length) actionBlock.appendChild(tools);
+    for (const menu of menus) actionBlock.appendChild(menu);
+  }
+  targetBlock?.classList?.add('is-target');
+  // Sous les jets (E4b) : dés des PNJ, Calculer, Comparer sur une ligne ; le pied garde Appliquer, Effacer et ce qui manque.
+  const rollAll = rolls.querySelector(':scope > [data-focus-key="roll-all-npc"]');
+  if (rollAll && commands?.parentElement === rollsStep) commands.prepend(rollAll);
+  commands?.classList?.add('workspace-resolution-calc');
   const applyCommands = live.querySelector(':scope > .workspace-resolution-commands');
   if (applyCommands) footer.appendChild(applyCommands);
   const reasons = live.querySelector(':scope > .workspace-field-error:not([role])');
   if (reasons) footer.appendChild(reasons);
   for (const { group, content } of Object.values(fieldGroups)) group.hidden = !content.childNodes.length;
   settings.hidden = settings.childNodes.length <= 1;
+  // Panneau « autres… » : cases pertinentes, puis « À régler maintenant », puis le reste replié.
+  const heading = drawer.querySelector(':scope > .workspace-circumstances-heading');
+  heading?.querySelector('h4')?.replaceChildren(compact.pertinentBox ? 'Circonstances de cette action' : 'Circonstances');
+  const more = node('details', 'workspace-circumstances-more');
+  more.appendChild(node('summary', '', 'Réglages détaillés et arbitrages'));
+  // Sort, Focalisation, Dissipation : le choix du sort et ses réglages ne sont pas des circonstances ; le bloc Magie reste
+  // en tête du panneau, hors des réglages repliés, et le panneau s'ouvre de lui-même (magie dans la résolution).
+  const magicType = ['channelling', 'cast', 'dispel'].includes(type);
+  const magicGroup = magicType && !fieldGroups.magic?.group.hidden ? fieldGroups.magic.group : null;
+  for (const [key, { group }] of Object.entries(fieldGroups)) if (key !== 'required' && group !== magicGroup) more.appendChild(group);
+  more.appendChild(settings);
+  more.hidden = ![...more.children].some(child => child.tagName !== 'SUMMARY' && !child.hidden);
+  more.open = moreSettingsState.get(draft) === true;
+  more.addEventListener('toggle', () => { moreSettingsState.set(draft, more.open); });
+  drawer.replaceChildren(...[heading, magicGroup, compact.pertinentBox, fieldGroups.required?.group, more].filter(Boolean));
   const backdrop = node('div', 'workspace-circumstances-backdrop');
-  const toggle = button('Circonstances', 'workspace-secondary', { 'data-circumstances-toggle': '', 'data-focus-key': 'circumstances-toggle', 'aria-controls': drawer.id });
-  const summary = node('p', 'workspace-muted workspace-circumstances-summary');
+  const toggle = button('+ autres…', 'workspace-chip workspace-circumstances-toggle', { 'data-circumstances-toggle': '', 'data-focus-key': 'circumstances-toggle', 'aria-controls': drawer.id });
   const refreshSummary = () => {
     const controls = circumstanceControls(drawer);
     const active = controls.filter(control => control.type === 'checkbox' || control.type === 'radio'
       ? control.checked !== control.defaultChecked : String(control.value ?? '') !== String(control.defaultValue));
     const count = countActiveCircumstances(controls);
-    toggle.textContent = `Circonstances · ${count} active${count === 1 ? '' : 's'}`;
-    const labels = active.map(control => control.label);
-    const missing = reasons ? [...reasons.querySelectorAll('li')].map(item => item.textContent.trim()) : [];
-    summary.textContent = [...labels, ...missing].join(' · ') || 'Aucune circonstance active.';
+    toggle.textContent = count ? `+ autres… (${count})` : '+ autres…';
+    toggle.title = active.map(control => control.label).join(' · ') || 'Autres circonstances de cette action';
   };
   rolls.addEventListener('input', refreshSummary);
   drawer.addEventListener('input', refreshSummary);
   drawer.addEventListener('change', refreshSummary);
   refreshSummary();
-  // Seul un geste du MJ mémorise l'état : le défaut reste réévalué à chaque changement de type.
+  // Seul un geste du MJ mémorise l'état ; fermé par défaut : les circonstances utiles sont déjà en puces.
   const setOpen = (open, remember = true) => {
     if (remember) draft.circumstancesOpen = open;
     drawer.hidden = !open;
@@ -3400,11 +3445,28 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
   section.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !drawer.hidden) { setOpen(false); toggle.focus(); }
   });
-  // Ouvert par défaut quel que soit le type, car la zone « Test V5 » qu'il remplace était toujours visible ;
-  // sauf sur petit écran, où il recouvrirait tout le panneau.
-  setOpen(draft.circumstancesOpen ?? !globalThis.matchMedia?.('(max-width: 900px)').matches, false);
-  const circumstancesLine = node('div', 'workspace-inline-actions workspace-circumstances-line');
-  circumstancesLine.append(toggle, summary);
-  rollsStep.appendChild(circumstancesLine);
+  setOpen(draft.circumstancesOpen ?? Boolean(magicGroup), false);
+  // Ligne Contexte : seulement s'il y a des puces déduites ; sinon « + autres… » finit la ligne Cible (une ligne de gagnée).
+  const deducedRow = compact.facts ? renderContextRow({ facts: compact.facts, handlers: compact.handlers, toggle }) : null;
+  const hasDeduced = Boolean(deducedRow?.querySelector('[data-deduced]'));
+  const anchor = targetBlock?.parentElement === actionStep ? targetBlock : actionBlock;
+  if (compact.distanceRow) anchor.after(compact.distanceRow);
+  if (hasDeduced) (compact.distanceRow || anchor).after(deducedRow);
+  else if (anchor === targetBlock) { targetBlock.classList.add('has-toggle'); targetBlock.appendChild(toggle); }
+  else { const row = node('div', 'workspace-resolution-row workspace-context-row'); row.append(node('span', 'workspace-res-label', 'Contexte'), toggle); (compact.distanceRow || anchor).after(row); }
+  // Deux colonnes (saisies, résultat) seulement quand il y a un résultat à lire ; avant, « Calculer » rejoint le pied.
+  const hasResult = [...live.children].some(child => !child.classList.contains('workspace-result-waiting'));
+  section.classList.toggle('has-result', hasResult);
+  if (!hasResult && commands?.parentElement === rollsStep) footer.prepend(commands);
   section.append(actionStep, rollsStep, resultStep, footer, backdrop, drawer);
+  // Bandes d'une ligne (actions, cibles) : la puce choisie reste en vue.
+  globalThis.requestAnimationFrame?.(() => {
+    if (!section.isConnected) return;
+    for (const strip of section.querySelectorAll(':scope .workspace-resolution-row:is(.is-action, .is-target) > .workspace-chip-list')) {
+      const chosen = strip.querySelector('[aria-pressed="true"]');
+      if (!chosen || strip.scrollWidth <= strip.clientWidth) continue;
+      const left = chosen.getBoundingClientRect().left - strip.getBoundingClientRect().left + strip.scrollLeft;
+      if (left < strip.scrollLeft || left + chosen.offsetWidth > strip.scrollLeft + strip.clientWidth) strip.scrollLeft = Math.max(0, left - 24);
+    }
+  });
 }

@@ -1,3 +1,4 @@
+import { openCenterPanel } from './helpers/u1-drawer.mjs';
 import {chooseConfirmation} from './helpers/confirmation.mjs';
 /** P4c B4 : invocations divines (Hurlement du loup, Roi de la Nature, Œil de l'aigle), application réelle, gestes réels, IndexedDB native. */
 import assert from 'node:assert/strict';
@@ -46,7 +47,8 @@ const loadState=async()=>{
  await page.getByRole('tab',{name:'Jouer',exact:true}).click();
  const actorButton=page.locator('[data-workspace-select="priest"]');if(await actorButton.count())await actorButton.click();
 };
-const openPanel=async()=>{const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
+// Refonte E4b : la prière s'ouvre dans la case centrale (menu « Sort, prière, Corruption… »).
+const openPanel=async()=>{await openCenterPanel(page,'prayer');const panel=page.locator('[data-divine-panel]');await panel.waitFor();if(!await panel.evaluate(el=>el.open))await panel.locator('summary').first().click();return panel;};
 const choose=async(panel,contractId)=>{await panel.getByRole('combobox',{name:'Prière divine',exact:true}).selectOption(contractId);return panel;};
 const baseFields=async(panel,roll=45)=>{
  await chooseConfirmation(panel.getByRole('group',{name:'Le personnage peut prononcer la prière',exact:true}),'true');

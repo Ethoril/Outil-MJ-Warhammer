@@ -61,7 +61,8 @@ try {
   await calculate();
   assert.match(await details(), /1 Désavantage/u, 'tir dans une mêlée : Désavantage affiché');
   await prepareShot('pshot');
-  await chooseBoolean(play.getByLabel(/La cible est engagée avec le tireur/u),'true');
+  // Refonte E4b (CA13) : « La cible est engagée avec le tireur » = choix « Au contact » de la ligne Distance.
+  await play.locator('[data-distance] [data-distance-choice="contact"]').click();
   await play.getByLabel(/Défense de Garde : caractéristique ou jet/u).selectOption('CC');
   await play.locator('[data-roll-input="defense"]').fill('45');
   await calculate();
