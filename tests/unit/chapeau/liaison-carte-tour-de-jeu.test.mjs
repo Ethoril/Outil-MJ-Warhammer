@@ -219,11 +219,13 @@ describe('CA31 — map.turnReset : Action rendue, déplacement remis à zéro', 
   test('ref d’un non-actif, inconnu ou hors combat : rien', async () => {
     const t = await table();
     assert.equal((await t.store.spendV5RunAction('a')).ok, true);
-    const before = t.store.getFullJSON();
+    // getFullJSON horodate l'export (exportedAt) : on compare l'état sans cette date.
+    const sansDate = json => { const etat = JSON.parse(json); delete etat.exportedAt; return etat; };
+    const before = sansDate(t.store.getFullJSON());
     assert.equal((await t.store.resetV5TurnFromMap('b')).reason, 'not-turn');
     assert.equal(await t.flow.onTurnReset('p:b'), null, 'non-actif : l’outil ne touche à rien');
     assert.equal(await t.flow.onTurnReset('p:inconnu'), null);
-    assert.equal(t.store.getFullJSON(), before);
+    assert.deepEqual(sansDate(t.store.getFullJSON()), before);
     await t.store.endEncounter();
     assert.equal((await t.store.resetV5TurnFromMap('a')).reason, 'not-turn');
     assert.equal(await t.flow.onTurnReset('p:a'), null);
