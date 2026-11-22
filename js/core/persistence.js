@@ -86,7 +86,7 @@ export function createPersistence({
   function open() {
     if (closed) return Promise.reject(new Error('Persistence fermée'));
     if (dbPromise) return dbPromise;
-    dbPromise = new Promise((resolve, reject) => {
+    const current = dbPromise = new Promise((resolve, reject) => {
       const request = indexedDB.open(dbName, PERSISTENCE_DB_VERSION);
       request.onupgradeneeded = () => {
         const db = request.result;
@@ -103,9 +103,12 @@ export function createPersistence({
       request.onsuccess = () => {
         const db = request.result;
         db.onversionchange = () => {
-          dbPromise = undefined;
+          if (dbPromise === current) dbPromise = undefined;
           db.close();
         };
+        // Le navigateur peut fermer la connexion de lui-même (recette du 22/11) :
+        // la suivante sera rouverte au lieu de réutiliser une connexion morte.
+        db.onclose = () => { if (dbPromise === current) dbPromise = undefined; };
         resolve(db);
       };
       request.onerror = () => {
@@ -120,23 +123,33 @@ export function createPersistence({
     return dbPromise;
   }
 
-  async function readState() {
+  // Transaction sur une connexion vivante : une connexion fermée sans événement
+  // (« The database connection is closing ») est oubliée et rouverte une fois.
+  async function transaction(names, mode) {
     const db = await open();
-    const tx = db.transaction(['contexts'], 'readonly');
+    try {
+      return db.transaction(names, mode);
+    } catch (error) {
+      if (error?.name !== 'InvalidStateError' || closed) throw error;
+      if (dbPromise) { const stale = await dbPromise.catch(() => null); if (stale === db) dbPromise = undefined; }
+      return (await open()).transaction(names, mode);
+    }
+  }
+
+  async function readState() {
+    const tx = await transaction(['contexts'], 'readonly');
     const record = await requestResult(tx.objectStore('contexts').get(contextId));
     return record ? clone(record.state) : null;
   }
 
   async function readSession() {
-    const db = await open();
-    const tx = db.transaction(['contexts'], 'readonly');
+    const tx = await transaction(['contexts'], 'readonly');
     const record = await requestResult(tx.objectStore('contexts').get(contextId));
     return record?.session ? clone(record.session) : null;
   }
 
   async function listOutbox() {
-    const db = await open();
-    const tx = db.transaction(['outbox'], 'readonly');
+    const tx = await transaction(['outbox'], 'readonly');
     const records = await requestResult(tx.objectStore('outbox').getAll());
     return records
       .filter(record => record.contextId === contextId)
@@ -145,8 +158,7 @@ export function createPersistence({
   }
 
   async function listRestorePoints() {
-    const db = await open();
-    const tx = db.transaction(['restores'], 'readonly');
+    const tx = await transaction(['restores'], 'readonly');
     const records = await requestResult(tx.objectStore('restores').getAll());
     return records
       .filter(record => record.contextId === contextId)
@@ -181,9 +193,7 @@ export function createPersistence({
       state: clone(restore.state === undefined ? state : restore.state)
     } : null;
 
-    const db = await open();
-    const names = ['contexts', 'outbox', 'restores'];
-    const tx = db.transaction(names, 'readwrite');
+    const tx = await transaction(['contexts', 'outbox', 'restores'], 'readwrite');
     return transactionResult(tx, transaction => {
       if (state !== undefined) {
         const contextRecord = {
@@ -227,8 +237,7 @@ export function createPersistence({
 
   async function acknowledge(operationId) {
     if (typeof operationId !== 'string' || !operationId.trim()) throw new TypeError('operationId invalide');
-    const db = await open();
-    const tx = db.transaction(['outbox'], 'readwrite');
+    const tx = await transaction(['outbox'], 'readwrite');
     return transactionResult(tx, transaction => {
       transaction.objectStore('outbox').delete(contextId + ':' + operationId);
       return true;
@@ -240,8 +249,7 @@ export function createPersistence({
   // by the snapshot passed to an older flush call.
   async function acknowledgeSession(operationId, session) {
     if (typeof operationId !== 'string' || !operationId.trim()) throw new TypeError('operationId invalide');
-    const db = await open();
-    const tx = db.transaction(['contexts', 'outbox'], 'readwrite');
+    const tx = await transaction(['contexts', 'outbox'], 'readwrite');
     return transactionResult(tx, transaction => {
       const contexts = transaction.objectStore('contexts');
       const outbox = transaction.objectStore('outbox');
@@ -258,8 +266,7 @@ export function createPersistence({
   }
 
   async function clearOutbox() {
-    const db = await open();
-    const tx = db.transaction(['outbox'], 'readwrite');
+    const tx = await transaction(['outbox'], 'readwrite');
     return transactionResult(tx, transaction => {
       const store = transaction.objectStore('outbox');
       const request = store.getAll();
@@ -272,8 +279,7 @@ export function createPersistence({
 
   async function deleteRestorePoint(id) {
     if (typeof id !== 'string' || !id.trim()) throw new TypeError('restore id invalide');
-    const db = await open();
-    const tx = db.transaction(['restores'], 'readwrite');
+    const tx = await transaction(['restores'], 'readwrite');
     return transactionResult(tx, transaction => {
       const store = transaction.objectStore('restores');
       const request = store.get(id);
@@ -285,8 +291,7 @@ export function createPersistence({
   }
 
   async function clearContext() {
-    const db = await open();
-    const tx = db.transaction(['contexts', 'outbox', 'restores'], 'readwrite');
+    const tx = await transaction(['contexts', 'outbox', 'restores'], 'readwrite');
     return transactionResult(tx, transaction => {
       transaction.objectStore('contexts').delete(contextId);
       for (const name of ['outbox', 'restores']) {
