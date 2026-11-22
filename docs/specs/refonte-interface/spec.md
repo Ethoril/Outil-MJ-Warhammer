@@ -83,11 +83,13 @@ Depuis la carte `3256bd9`, `mj.turn` désigne le seul PJ que la tablette laisse 
 - **CA28** `mj.turn` part avec le pion du combattant actif à chaque changement de tour, « Jouer son tour maintenant », sa reprise et Annuler compris, et toujours dans l'instantané.
 - **CA29** `mj.turn { ref: null }` part à la fin d'un combat (Terminer le combat, retrait du dernier combattant actif, Recommencer).
 - **CA30** Un second `map.ran` dans le même Tour ne coûte pas une seconde Action ; une proposition de Course non tranchée ne survit pas au changement de Tour.
-- À décider par le MJ après la recette, sans rien coder d'ici là : `null` ambigu (champ `inCombat`) et annulation du mouvement non remontée (`map.turnReset`) ; chacun est un changement de protocole dans les deux dépôts.
+- **Décisions du MJ (22/11)** : `null` ambigu (ennemi hors de la carte pendant son tour) laissé tel quel ; annulation du mouvement sur la tablette **automatisée** (CA31, CA32).
+- **CA31** La carte émet `map.turnReset { ref }` à chaque annulation du mouvement du tour ; l'outil rend alors l'Action du Tour si une Course signalée par la carte l'avait dépensée, et remet à zéro le déplacement du Tour ; sans effet si `ref` n'est pas le combattant actif ou hors combat ; idempotent (un second message ne rend rien de plus).
+- **CA32** Changement de protocole : contrat amendé (§10 et §2.3), copies identiques dans les deux dépôts, version de la liaison 2 des deux côtés (`LIAISON_CARTE.version`). L'outil et la carte se publient ensemble ; à versions différentes, l'indicateur « version différente » s'affiche et rien n'est échangé, comme aujourd'hui.
 
 ## 4. Hors périmètre
 - Téléphone et tablette.
 - Toute modification des règles appliquées par le moteur.
-- La carte (Map Display) : aucun changement dans son dépôt.
+- La carte (Map Display) : aucun changement dans son dépôt, sauf le lot jumeau C1 (`map.turnReset`, version 2, décision du MJ du 22/11).
 - Multi-jeux : la frise et la case « À décider » restent dans le module Warhammer ; elles ne remontent pas dans le chapeau avant qu'un second jeu en ait besoin (spec multi-jeux §1).
 - Le tour propre d'une monture et le tour d'un combattant à 0 PV restent tels que le moteur les calcule (constat B6) : la frise les montre.
