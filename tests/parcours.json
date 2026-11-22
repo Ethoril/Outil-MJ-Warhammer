@@ -182,6 +182,7 @@
     "refonte-campagne-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "refonte-ecran-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "recette-g1-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
+    "recette-g7-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "refonte-preparer-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "soins-hors-rencontre-browser.mjs": {"famille":"general"},
     "sw-update-fresh-cache-browser.mjs": {"famille":"general","socle":true},

@@ -22,7 +22,7 @@ import { prepareMagicOptions } from '../core/v5-magic-talents.js';
 import { recoveryMethodsFor, openV5EffectInputDialog } from './v5-effect-dialog.js';
 import { hasMomentum, inferV5Kind } from '../core/v5-combat-rules.js';
 import { renderFrise, actorOutOfTurn } from './combat-frise.js';
-import { collectDecisions, renderDecisions, rememberDecisionCount, publishedDecisions, onPublishedDecisions } from './combat-decisions.js';
+import { collectDecisions, renderDecisions, rememberDecisionCount, publishedDecisions, onPublishedDecisions, publishDecision, withdrawDecision, leftMelee, leaveMeleeEntry, leaveMeleeId, leaveMeleeRemaining } from './combat-decisions.js';
 import { withoutOutnumberContext as withoutOutnumberKeys, outnumberSide } from '../core/outnumbering.js';
 // Surnombre, tir engagé et forçage du MJ ne valent que pour la cible où ils ont été saisis (spec engagements CA18).
 const TARGET_ENGAGEMENT_KEYS = ['targetEngaged', 'engagedWithShooter', 'engagedTargetIds', 'engagedTargetRoll', 'engagedDefensesById', 'shooterEngagedElsewhere', 'engagementForced'];
@@ -605,19 +605,65 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     select.addEventListener('change', () => { if (select.value) apply(true, select.value); });
     return select;
   }
+  // Lot G7 (R4, p. 163) : un combattant qui quitte une mêlée par un déplacement du MJ pose une décision « À décider »
+  // (Se désengager / Fuir / Sans règle) ; le déplacement est déjà fait, il n'est pas refait. « Sans règle » ne change rien.
+  const leaving = new Map();
+  const opponentsOf = id => {
+    const people = Store.listParticipants(), me = people.find(row => row.id === id);
+    return me ? Store.listEngagedWith(id).filter(other => { const person = people.find(row => row.id === other); return person && outnumberSide(person) !== outnumberSide(me); }) : [];
+  };
+  const announceLeave = (moverId, foeIds) => {
+    const people = Store.listParticipants(), mover = people.find(row => row.id === moverId);
+    if (!mover || !foeIds.length) return;
+    const all = [...new Set([...(leaving.get(moverId) || []), ...foeIds])];
+    leaving.set(moverId, all);
+    publishDecision(leaveMeleeEntry({ mover, foes: all.map(id => people.find(row => row.id === id)).filter(Boolean), onChoose: key => resolveLeave(moverId, key) }));
+  };
+  async function resolveLeave(moverId, key) {
+    const foeIds = leaving.get(moverId) || [];
+    const done = () => { leaving.delete(moverId); withdrawDecision(leaveMeleeId(moverId)); };
+    if (key === 'none') { done(); render(); return; }
+    const mover = Store.listParticipants().find(row => row.id === moverId);
+    if (key === 'flee' && mover && isBrokenActor(mover)) { import('./toast.js').then(({ showToast }) => showToast('Brisé : utilisez la fuite de Brisé du panneau.', 'info')); return; }
+    try {
+      // Le déplacement est déjà fait : on rétablit les engagements quittés pour que la règle (formulaire ou Fuite) les lise.
+      const active = new Set(Store.listParticipants().filter(row => row.zone === 'active').map(row => row.id));
+      for (const foe of foeIds) if (active.has(foe) && !Store.listEngagedWith(moverId).includes(foe)) await Store.engageParticipants(moverId, foe);
+      if (key === 'flee') await Store.applyFlee(moverId);
+      else { state.disengage = { actorId: moverId }; selectActor(moverId); }
+      done();
+    } catch (error) { plateauToast(key === 'flee' ? 'Fuite impossible' : 'Désengagement impossible', error); }
+    render();
+  }
+  // Retire les décisions de départ devenues sans objet (réengagé avec les mêmes adversaires, retiré du combat).
+  function pruneLeaveDecisions() {
+    if (!leaving.size) return;
+    const people = Store.listParticipants();
+    for (const [moverId, foeIds] of [...leaving]) {
+      const remaining = leaveMeleeRemaining({ moverId, foeIds }, people, Store.listEngagedWith(moverId));
+      if (!remaining) { leaving.delete(moverId); withdrawDecision(leaveMeleeId(moverId)); }
+      else if (remaining.length !== foeIds.length) leaving.set(moverId, remaining);
+    }
+  }
   const moveCommand = (participant, value) => {
     const run = value === 'free' ? () => Store.disengageParticipant(participant.id)
       : value.startsWith('engage:') ? () => Store.engageParticipants(participant.id, value.slice(7))
         : /^(surround|high|cover):(on|off)$/.test(value) ? () => Store.setParticipantPosition(participant.id, { [{ surround: 'surrounded', high: 'higherGround', cover: 'cover' }[value.split(':')[0]]]: value.endsWith(':on') }) : null;
     if (!run) return;
-    Promise.resolve().then(run).catch(error => plateauToast('Déplacement impossible', error)).finally(() => render());
+    const before = opponentsOf(participant.id);
+    Promise.resolve().then(run).then(() => announceLeave(participant.id, leftMelee(before, opponentsOf(participant.id))))
+      .catch(error => plateauToast('Déplacement impossible', error)).finally(() => render());
   };
   const dropOnZone = (zone, participantId, context) => {
     const mover = context.active.find(row => row.id === participantId);
     if (!mover) return;
     if (zone.kind === 'free') return moveCommand(mover, 'free');
     const foes = zone.members.filter(person => person.id !== mover.id && outnumberSide(person) !== outnumberSide(mover));
-    foes.reduce((chain, foe) => chain.then(() => Store.engageParticipants(mover.id, foe.id)), Promise.resolve())
+    // Glisser vers une autre mêlée : le combattant quitte celle qu'il tenait (adversaires absents de la zone d'arrivée).
+    const before = opponentsOf(mover.id), leaves = before.filter(id => !foes.some(foe => foe.id === id));
+    (leaves.length ? Promise.resolve().then(() => Store.disengageParticipant(mover.id, { otherIds: leaves })) : Promise.resolve())
+      .then(() => foes.reduce((chain, foe) => chain.then(() => Store.engageParticipants(mover.id, foe.id)), Promise.resolve()))
+      .then(() => announceLeave(mover.id, leftMelee(before, opponentsOf(mover.id))))
       .catch(error => plateauToast('Engagement impossible', error)).finally(() => render());
   };
   // Refonte (lot E4a) : les mêlées sont des cartouches compacts (camp, rang, PV, monture, engagements, états), groupés par
@@ -3373,6 +3419,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   }
   function playDecisions(context) {
     let entries = [];
+    try { pruneLeaveDecisions(); } catch { /* un départ non vérifiable reste en attente */ }
     try { entries = collectDecisions(decisionsContext(context), Store); } catch { entries = []; }
     // Filet : un bloc « À traiter » rendu par main.js sans entrée reconnue reste visible dans la case.
     if (decisionForms.has('overview') && !entries.some(entry => entry.formKey === 'overview')) entries.push({ id: 'a-traiter', kind: 'rappel', participantId: null, titre: 'À traiter', formKey: 'overview', options: [{ key: 'open', label: 'Voir' }] });
