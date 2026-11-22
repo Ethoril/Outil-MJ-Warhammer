@@ -179,6 +179,7 @@
     "recette-g-c19-browser.mjs": {"famille":"ticket","chantier":"recette-g"},
     "recette-g-c20-browser.mjs": {"famille":"ticket","chantier":"recette-g"},
     "refonte-bibliotheque-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
+    "refonte-campagne-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "refonte-ecran-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "refonte-preparer-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "soins-hors-rencontre-browser.mjs": {"famille":"general"},
