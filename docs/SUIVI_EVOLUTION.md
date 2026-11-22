@@ -10,6 +10,27 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## Refonte de l’interface — non publiée, en attente de la recette du MJ à la table (22/11/2026)
+
+Pas de numéro de version : ni `tools/bump-version.mjs` ni publication avant le feu vert du MJ. Spec, plan et tâches : `docs/specs/refonte-interface/`. Les règles du moteur, les sauvegardes, la synchronisation, les fiches des PJ et la liaison avec la carte ne changent pas (aucune migration ; seuls deux champs facultatifs s’ajoutent : `suddenDeathDeclined` et `advancedTurn`).
+
+**L’espace Jouer tient sur l’écran.** À 1440 × 800 la page ne défile plus : frise d’initiative en haut, celui qui agit à gauche, les mêlées puis la résolution au centre, « À décider » puis la cible à droite, la barre d’actions et les onglets Règles · Profils · Journal en bas. La police est celle du système (plus de police gothique), thèmes clair et sombre conservés.
+
+**Ce que le MJ fait autrement.**
+- **Frise** : un clic sur un portrait fait agir ce combattant (réaction, action gratuite) sans changer le tour ni la cible ; le haut de l’écran dit « agit hors de son tour ».
+- **Jouer son tour maintenant** : donne le tour tout de suite à un combattant ; ses effets de début de tour se déclenchent à ce moment et pas une seconde fois à sa place normale ; « Tour suivant » reprend ensuite où on en était ; « Annuler » rétablit tout.
+- **Mêlées en cartouches** : un clic sur un cartouche choisit la cible.
+- **Charger** : proposé sur la cible choisie pour tout ennemi non engagé, sans limite à quatre ; si l’acteur est engagé ailleurs, la mention « interdit : déjà engagé (p. 163) » reste, avec forçage.
+- **À décider** : toutes les décisions attendues du MJ arrivent dans une case toujours visible, avec un compteur en haut et une marque sur la frise ; la mort subite se tranche en un clic (Mort, Inconscient, Plus tard, Pas un figurant) ; aucune décision ne bloque « Tour suivant ».
+- **Démarrage** : lancer une rencontre fait entrer tous ses combattants d’un geste ; l’initiative se saisit au centre de l’écran (dés des PJ, Combat instinctif, égalités, camp surpris, monté ou sans monture) et la liste suit les renforts et les retraits.
+- **Tir** : une seule ligne « Distance » (Au contact, Bout portant, Courte, Moyenne, Longue, Extrême), préremplie par le plateau et la carte ; l’onglet Circonstances disparaît au profit de puces déduites et d’un panneau « autres… » qui ne propose que ce qui s’applique à l’action.
+- **Fiches** compactes (PV, caractéristiques, Élan, Chance, Destin, États, monture) ; le reste est dans le menu ⋯ de la fiche (fiche complète, sorts et prières, retrait avec ou sans monture, sans monture, renommer, camp, modifier).
+- **Fenêtres non bloquantes** pendant le combat : Chance, Destin, Temps de campagne, effets V5. Seule la confirmation de « Terminer le combat » reste modale.
+- **Magie, prières, corruption** se lancent depuis la résolution ; **séquelles, maladies et convalescence** ont quitté l’écran de combat : elles se règlent dans Campagne, y compris pour un participant absent.
+- **Préparer, Campagne, Bibliothèque** ne défilent plus : les longues listes (réserve, rencontres, suivis, profils, règles) défilent dans leur case.
+
+**Recette.** Relevé des fonctions : `docs/specs/refonte-interface/recette-fonctions.md` ; captures avant/après : `docs/specs/refonte-interface/captures/` ; fiche pour la recette à la table : `docs/specs/refonte-interface/fiche-de-table.md`. Parcours de mesure verts : `refonte-ecran`, `refonte-preparer`, `refonte-campagne`, `refonte-bibliotheque`.
+
 ## 3.56.0 — Retours d’un gros combat (publiée le 21/11/2026)
 
 Lots corrigés après un vrai combat, avant la refonte de l’interface.
