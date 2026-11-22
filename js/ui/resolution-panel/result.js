@@ -386,7 +386,8 @@ export function renderResult(preview, target, draft, handlers, participants=[], 
     }
     calculations.append(details);
   }
-  result.appendChild(calculations);
+  // Refonte E2b : « Détail des calculs et règles » se replie au bout de la ligne des pastilles (colonne Résultat sans défilement).
+  pills.appendChild(calculations);
   return result;
 }
 

@@ -8,6 +8,7 @@ export function rollField({ field, label, value, error, handlers, disabled, crit
   const id = `workspace-roll-${field}`;
   const caption = node('label', 'workspace-roll-label', label);
   caption.htmlFor = id;
+  caption.title = label; // intitulé complet au survol quand la colonne Résultat l'abrège (refonte E2b)
   const row = node('div', 'workspace-roll-row');
   const input = document.createElement('input');
   input.id = id;
@@ -101,12 +102,15 @@ export function renderCritical(preview, draft, handlers, defending = false) {
   const appendPart = (part, kind, label) => {
     if (!part) return;
     block.appendChild(rubric(label));
-    if (kind === 'first') block.appendChild(rollField({ field: defending ? 'defender-critical-location' : 'critical-location',
+    let locationField = null;
+    if (kind === 'first') block.appendChild(locationField = rollField({ field: defending ? 'defender-critical-location' : 'critical-location',
       label: 'Localisation du critique (nouveau d100)', value: defending ? draft.defenderCriticalLocationRoll : draft.criticalLocationRoll,
       error: errors[defending ? 'defenderLocation' : 'location'] || '', handlers, disabled: draft.busy,
       critical: defending ? 'defenderLocation' : 'location' }));
     if (!part.location) return;
-    block.appendChild(node('p', 'workspace-result-line', part.locationRoll == null ? `Localisation choisie : ${part.location.name}` : `${part.locationRoll} → ${part.location.name}`));
+    // Refonte E2b : la localisation lue s'affiche au bout de la ligne de son dé (colonne Résultat sans défilement).
+    const locationLine = node('p', 'workspace-result-line workspace-critical-location', part.locationRoll == null ? `Localisation choisie : ${part.location.name}` : `${part.locationRoll} → ${part.location.name}`);
+    if (locationField && part.locationRoll != null) locationField.appendChild(locationLine); else block.appendChild(locationLine);
     block.appendChild(rollField({ field: defending ? 'defender-critical-effect' : kind === 'first' ? 'critical-effect' : 'critical-second',
       label: part.bonus ? `Gravité (d100 + ${part.bonus})` : 'Gravité (d100)',
       value: defending ? kind==='first'?draft.defenderCriticalEffectRoll:draft.defenderCriticalSecondRoll : kind === 'first' ? draft.criticalEffectRoll : draft.criticalSecondRoll,

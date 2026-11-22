@@ -56,7 +56,7 @@ import { renderFicheDetails, setFicheTab } from './fiche-details.js';
 import { renderSilhouette, locationZone } from './silhouette.js';
 import { buildParticipantReminders } from '../core/reminders.js';
 import { deriveEngagementContext, deriveSceneContext, engagedWith } from '../core/engagements.js';
-import { plateauZones, actionBarModel, preparedActionRows, renderActionBar, renderDisengageForm } from './workspace/plateau.js';
+import { plateauZones, actionBarModel, preparedActionRows, renderActionBar, renderDisengageForm, disengageDecision } from './workspace/plateau.js';
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { rollMisfortuneDie } from './resolution-panel/dom.js';
@@ -91,6 +91,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   const secondaryDirty = new Set();
   // Refonte E4b : panneaux qui peuvent s'ouvrir dans la case centrale pour l'acteur affiché (prière, corruption).
   const centerPanelsAvailable = new Set();
+  // Refonte E2b : questions que le rendu en cours pose au MJ (désengagement, Courroux), ajoutées à la case « À décider ».
+  let renderRequests = [];
   const state = {
     // Panneau ouvert dans la case centrale à la place de la résolution : null ou { panel: 'prayer' | 'corruption', actorId }.
     centerPanel: null,
@@ -806,11 +808,17 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     const input = { ...state.disengage };
     delete input.actorId;
     const plan = Store.previewDisengage(actor.id, input);
+    const onChange = patch => { state.disengage = { ...state.disengage, ...patch }; render(); };
+    const onClose = () => { state.disengage = null; render(); };
     renderDisengageForm(column, { actor, plan, state: input, active: context.active, getObstinateStatus: id => Store.getObstinateStatus?.(id),
-      onChange: patch => { state.disengage = { ...state.disengage, ...patch }; render(); },
+      onChange,
       onApply: () => Promise.resolve().then(() => Store.applyDisengage(actor.id, input)).then(() => { state.disengage = null; })
         .catch(error => plateauToast('Désengagement impossible', error)).finally(() => render()),
-      onClose: () => { state.disengage = null; render(); } });
+      onClose });
+    // Refonte E2b (décision 6) : encerclé ou question d'État sans réponse → case « À décider ».
+    const decision = disengageDecision({ actor, plan, state: input }, { onForce: () => onChange({ force: true }), onClose,
+      onAnswer: () => play.center.querySelector('.workspace-disengage select')?.focus() });
+    if (decision) renderRequests.push(decision);
   }
 
   // Bloc des rappels portés par un participant (Fait / Ignorer) ; null sans rappel. Partagé par le banc et la fiche du personnage actif.
@@ -1103,7 +1111,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     if (callbacks.removeParticipant) {
       menu.appendChild(item('Retirer du combat…', entry => {
         entry.disabled = true;
+        // Refonte E2b : la confirmation n'est plus modale ; le menu (et son voile) se ferme avant qu'elle s'ouvre.
         sheetMenu = null;
+        render();
         Promise.resolve(callbacks.removeParticipant(participant.id, { confirm: true })).then(() => render(), () => render());
       }, { className: 'is-danger workspace-sheet-remove', title: 'Retirer de la rencontre (confirmation, avec ou sans sa monture, annulable)' }));
     }
@@ -2982,6 +2992,9 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
     // Les suites de combat (séquelles, convalescence, calendrier) ont quitté l'écran de combat : fin du combat et
     // espace Campagne (CA20).
     const prayers=divinePanel.render(context.actor,context.participants);
+    // Refonte E2b (décision 12) : Courroux déclenché par la prière en cours → case « À décider », jusqu'à l'application.
+    const wrath=divinePanel.decision(context.actor);
+    if(wrath)renderRequests.push({...wrath,onChoose:()=>{openCenterPanel('prayer');play.center.querySelector('[data-focus-key="divine-wrathRoll"]')?.focus();}});
     const corruption=corruptionPanel.render(context.actor);
     centerPanelsAvailable.clear();
     if(prayers){prayers.dataset.secondaryPanel='prayer';centerPanelsAvailable.add('prayer');}
@@ -3341,7 +3354,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
   function decisionsContext(context) {
     let initiativePending = false;
     try { initiativePending = play.grid.classList.contains('is-initiative'); } catch { initiativePending = false; }
-    return { ...context, resolution: state.resolution, initiativePending, requests: publishedDecisions(), dismissed: state.decisionsDismissed };
+    return { ...context, resolution: state.resolution, initiativePending, requests: [...renderRequests, ...publishedDecisions()], dismissed: state.decisionsDismissed };
   }
   function playDecisions(context) {
     let entries = [];
@@ -3434,6 +3447,7 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
 
   function renderPlay() {
     const context = playContext();
+    renderRequests = [];
     renderTrack(context);
     renderCenter(context);
     placeInZones();

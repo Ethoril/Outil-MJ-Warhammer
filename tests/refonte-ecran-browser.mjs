@@ -96,6 +96,11 @@ try {
           return { name: el.getAttribute('aria-label') || el.querySelector('h2,h3,strong')?.textContent?.trim() || 'fenêtre', inside: r.top >= 0 && r.left >= 0 && r.bottom <= innerHeight + 1 && r.right <= innerWidth + 1, ...inner(el) };
         }),
         fonts: document.fonts ? [...document.fonts].map(face => face.family) : [],
+        // Lot E2b (CA10) : aucune fenêtre modale pendant le combat (seule la confirmation de « Terminer le combat » l'est).
+        modal: [...document.querySelectorAll('dialog[open]')].filter(el => el.matches(':modal')).map(el => el.getAttribute('aria-label') || el.querySelector('h2,h3')?.textContent?.trim() || 'fenêtre'),
+        // Lot E2b : rien ne défile dans la zone de droite (case « À décider » et fiche de la cible), même avec une décision.
+        droiteInner: (zone => zone ? [...zone.querySelectorAll('*')].filter(item => item.getClientRects().length && /(auto|scroll)/.test(getComputedStyle(item).overflowY) && item.scrollHeight > item.clientHeight + 1)
+          .map(item => ({ name: `droite : ${item.matches('[data-decisions], [data-decisions] *') ? 'À décider' : item.closest('.workspace-sheet, [data-sheet]') ? 'fiche de la cible' : item.className.split(' ')[0] || item.tagName.toLowerCase()}`, scrollHeight: item.scrollHeight, clientHeight: item.clientHeight })) : [])(document.querySelector('[data-zone="droite"]')),
         // REFONTE_DUMP=1 : hauteur des blocs de la zone centre (trois niveaux), pour savoir ce qui la remplit.
         dump: (() => {
           if (!dumpCentre) return null;
@@ -105,11 +110,13 @@ try {
               const h = Math.round(child.getBoundingClientRect().height);
               if (!h) continue;
               out.push(`${'  '.repeat(depth)}${h} ${child.tagName.toLowerCase()}.${[...child.classList].join('.')}${child.dataset.part ? `[${child.dataset.part}]` : ''} ${(child.querySelector('h4,h5,summary,strong')?.textContent || '').trim().slice(0, 40)}`);
-              if ((depth < 3 || child.closest(".is-resultat")) && h > 30 && depth < 9) walk(child, depth + 1);
+              if ((depth < 3 || child.closest('.is-resultat, [data-zone="droite"], [data-center-panel]')) && h > 30 && depth < 9) walk(child, depth + 1);
             }
           };
-          const centre = document.querySelector('[data-zone="centre"]');
-          if (centre) walk(centre, 0);
+          for (const name of ['centre', 'droite']) {
+            const zone = document.querySelector(`[data-zone="${name}"]`);
+            if (zone) { out.push(`[${name}]`); walk(zone, 0); }
+          }
           return out;
         })(),
         melees: (el => el ? box(el) : { absent: true })(document.querySelector('[data-zone="centre"] [data-part="melees"]')),
@@ -154,14 +161,15 @@ try {
     for (const z of m.zones) if (z.name === 'bas' && z.shown && (z.scrollHeight > z.clientHeight + 1 || z.scrollWidth > z.clientWidth + 1)) failures.push(`${step} : la zone bas déborde (${z.scrollHeight}/${z.clientHeight})`);
     // Lot E4b : zone centre, résolution et panneaux centraux sans débordement sur R20, à chaque étape.
     for (const z of m.zones) if (z.name === 'centre' && z.shown && (z.scrollHeight > z.clientHeight + 1 || z.scrollWidth > z.clientWidth + 1)) failures.push(`${step} : la zone centre déborde (${z.scrollHeight}/${z.clientHeight})`);
-    // La colonne Résultat (critique long) et le panneau de prière (toutes les sections du culte) peuvent défiler en dernier
-    // recours : rapportés, pas en échec ; tout le reste de la case centrale doit tenir.
-    for (const part of m.centreParts || []) if (!['résultat', 'panneau prayer'].includes(part.name) && part.scrollHeight > part.clientHeight + 1) failures.push(`${step} : ${part.name} déborde (${part.scrollHeight}/${part.clientHeight})`);
+    // Lot E2b : plus d'exception — la colonne Résultat (critique compris) et le panneau de prière tiennent aussi.
+    for (const part of m.centreParts || []) if (part.scrollHeight > part.clientHeight + 1) failures.push(`${step} : ${part.name} déborde (${part.scrollHeight}/${part.clientHeight})`);
+    for (const part of m.droiteInner) failures.push(`${step} : ${part.name} défile (${part.scrollHeight}/${part.clientHeight})`);
+    if (m.modal.length) failures.push(`${step} : fenêtre modale ouverte pendant le combat (${m.modal.join(', ')})`);
     if (m.drawer && !m.drawer.inside) failures.push(`${step} : le panneau « autres… » sort de la fenêtre`);
     if (m.melees && !m.melees.absent && m.melees.scrollHeight > m.melees.clientHeight + 1) failures.push(`${step} : les mêlées débordent (${m.melees.scrollHeight}/${m.melees.clientHeight})`);
     if (m.melees && m.melees.absent && m.zones.find(z => z.name === 'centre')?.shown && report.length >= 3) failures.push(`${step} : partie mêlées absente du centre`);
     if (m.actionBar && m.actionBar.height > 0 && m.actionBar.overflow) failures.push(`${step} : la barre d'actions déborde (${JSON.stringify(m.actionBar)})`);
-    report.push({ step, pageScrolls, page: m.page, absent, overflowing, windows: m.windows, windowsOverflow, centreParts: m.centreParts || [] });
+    report.push({ step, pageScrolls, page: m.page, absent, overflowing, windows: m.windows, windowsOverflow, centreParts: [...(m.centreParts || []), ...m.droiteInner] });
     if (pageScrolls) failures.push(`${step} : la page défile (${m.page.scrollWidth} × ${m.page.scrollHeight} pour ${m.page.width} × ${m.page.height})`);
     if (absent.length) failures.push(`${step} : zones absentes (${absent.join(', ')})`);
     if (STRICT_ZONES) for (const z of [...overflowing, ...windowsOverflow]) failures.push(`${step} : ${z.name} déborde (${z.scrollHeight}/${z.clientHeight})`);
@@ -544,6 +552,8 @@ try {
   await menuItem(/Retirer du combat/).click();
   const confirm = page.locator('dialog[open]').last();
   await confirm.waitFor({ state: 'visible' });
+  // Lot E2b (décision 16) : la confirmation, non modale, figure aussi dans la case « À décider ».
+  await page.locator(`[data-zone="droite"] [data-decisions] [data-decision-kind="retrait"][data-participant-id="${ID.UNGOR}"]`).waitFor();
   await measure('retrait d’un participant (confirmation)');
   await confirm.getByRole('button', { name: /^Retirer/ }).first().click();
   await page.waitForFunction(async id => !(await import('/js/main.js')).Store.listParticipants().some(row => row.id === id && row.zone === 'active'), ID.UNGOR);
@@ -557,6 +567,7 @@ try {
   for (let n = 0; n < 40 && (await roundNow()) < 2; n += 1) {
     await next.click();
     const sheetOpen = page.locator('dialog.tool-sheet[open]');
+    if (await page.locator('dialog:modal').count()) failures.push(`tour suivant : fenêtre modale ouverte (${await page.locator('dialog:modal').first().innerText().then(text => text.slice(0, 60)).catch(() => '?')})`);
     if (await sheetOpen.count()) await sheetOpen.getByRole('button', { name: /Fermer|Annuler/ }).first().click();
   }
   assert.equal(await roundNow(), 2, 'le parcours atteint le round 2');

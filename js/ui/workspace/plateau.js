@@ -259,3 +259,24 @@ export function renderDisengageForm(container, { actor, plan, state, active, onC
   container.appendChild(form);
   return form;
 }
+
+/**
+ * Refonte E2b (décision 6 du relevé §A) : ce que le formulaire de Désengagement attend du MJ, pour la case « À décider ».
+ * Encerclé (p. 163) : « Passer outre » ou « Renoncer » ; question d'État sans réponse : « Répondre » (mène au champ).
+ * Rend `null` quand rien n'attend. `handlers` : `onForce`, `onClose`, `onAnswer`, appelés par le clic dans la case.
+ */
+export function disengageDecision({ actor, plan, state = {} } = {}, handlers = {}) {
+  if (!actor?.id || !plan) return null;
+  const base = { id: `fuite:${actor.id}`, kind: 'fuite', participantId: actor.id };
+  if (plan.mode === 'surrounded') {
+    if (state.force === true) return null;
+    return { ...base, titre: `${actor.name} est encerclé : passer outre ?`, detail: plan.reason || '',
+      options: [{ key: 'override', label: 'Passer outre' }, { key: 'close', label: 'Renoncer' }],
+      onChoose: key => (key === 'override' ? handlers.onForce?.() : handlers.onClose?.()) };
+  }
+  const contextOf = side => (side === 'opponent' ? state.opponentContext : state.context) || {};
+  const open = (plan.needsInput || []).find(row => row?.field && contextOf(row.side)[row.field] === undefined);
+  if (!open) return null;
+  return { ...base, titre: `${actor.name} se désengage : ${QUESTION_LABELS[open.field] || open.label || testQuestionLabel(open.field) || open.field}`,
+    options: [{ key: 'answer', label: 'Répondre' }], onChoose: () => handlers.onAnswer?.(open) };
+}

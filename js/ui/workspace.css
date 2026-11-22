@@ -2471,3 +2471,73 @@ dialog.tool-sheet.campaign-time-dialog { position:fixed; inset:auto; top:50%; le
 
 /* Fin du combat : renvoi vers l'espace Campagne (séquelles, convalescence, calendrier). */
 .encounter-end-campaign { display: flex; align-items: center; gap: 6px; margin: 8px 0; }
+
+/* ==========================================================================
+   REFONTE · LOT E2b : zone de droite sans défilement (case « À décider » + fiche de la cible), CA2, CA7
+   La fiche de la cible garde tout ce qu'elle montrait, en plus serré : caractéristiques sur un rang, monture sur une
+   ligne, États et rappels côte à côte ; les options d'une décision tiennent sur une ligne.
+   ========================================================================== */
+.workspace-area[data-zone="droite"] .workspace-sheet-target { gap: 4px; grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target > * { grid-column: 1 / -1; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target > .workspace-sheet-states { grid-column: 1; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target > .workspace-sheet-more { grid-column: 2; justify-content: flex-end; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target .workspace-caracs { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 2px; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target .workspace-carac { padding: 2px 0; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target .workspace-carac dt { font-size: 9.5px; letter-spacing: 0; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target .workspace-carac dd { font-size: 13px; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target .workspace-sheet-mount { flex-wrap: nowrap; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target .workspace-sheet-mount > .workspace-mount-toggle { flex: 1 1 auto; min-width: 0; min-height: 24px; }
+.workspace-area[data-zone="droite"] .workspace-decision-options { gap: 3px; }
+.workspace-area[data-zone="droite"] .workspace-decision-options > button,
+.workspace-area[data-zone="droite"] .workspace-decision > button,
+.workspace-area[data-zone="droite"] .workspace-decision.has-form button { min-height: 26px; padding: 1px 7px; font-size: 12.5px; }
+.workspace-area[data-zone="droite"] .workspace-sheet-target .workspace-sheet-mount > span { flex: none; white-space: nowrap; }
+
+/* Lot E2b : colonne Résultat sans défilement (CA2), même avec un critique. Rien n'est retiré :
+   - avec un critique, le pied (Appliquer, Effacer, ce qui manque) passe sous la colonne de gauche et le résultat prend toute
+     la hauteur de la résolution ;
+   - pastilles plus petites, dés du critique sur une ligne (intitulé abrégé à l'écran, complet au survol et pour les lecteurs
+     d'écran), effet en face du dé, case d'effet et rappel côte à côte, titre du bloc pour les lecteurs d'écran seulement
+     (« Critique du jet » / « Critique de la défense » restent affichés). */
+@media (min-width: 1000px) {
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result:has(.workspace-critical) { grid-template-areas: "action resultat" "jets resultat" "pied resultat"; }
+  .workspace-area[data-zone="centre"] .workspace-resolution.has-result:has(.workspace-critical) > .workspace-resolution-footer { flex-wrap: wrap; padding: 3px 0 0; border-top: 0; }
+  .workspace-area[data-zone="centre"] .workspace-result { row-gap: 2px; padding: 3px 6px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-outcome { padding: 0 4px; font-size: 10px; line-height: 16px; letter-spacing: 0; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical { grid-template-columns: auto minmax(0, 1fr); column-gap: 8px; row-gap: 1px; align-items: center; padding: 2px 6px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical > * { grid-column: 1 / -1; min-width: 0; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical > .workspace-rubric:first-child:has(+ .workspace-rubric) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical .workspace-roll > .workspace-roll-label { display: block; flex: 0 1 auto; min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 11.5px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical > .workspace-critical-item:has(+ .workspace-muted) { grid-column: 1; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical > .workspace-critical-item + .workspace-muted { grid-column: 2; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical-item { min-height: 20px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-roll > .workspace-critical-location { flex: none; margin: 0; white-space: nowrap; }
+  .workspace-area[data-zone="centre"] .workspace-result-pills > .workspace-v5-calculations { margin-left: auto; }
+  .workspace-area[data-zone="centre"] .workspace-result-pills > .workspace-v5-calculations > summary { line-height: 17px; }
+  .workspace-area[data-zone="centre"] :is(.workspace-result p, .workspace-result-line) { font-size: 12px; line-height: 1.22; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-roll { min-height: 0; }
+  .workspace-area[data-zone="centre"] .workspace-resolution .workspace-result .workspace-roll-input { height: 24px; min-height: 24px; font-size: 13px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-roll button { min-height: 24px; height: 24px; padding: 0 7px; font-size: 12px; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical > .workspace-rubric { line-height: 12px; }
+  .workspace-area[data-zone="centre"] .workspace-result-pills > .workspace-v5-calculations[open] { flex: 1 1 100%; margin-left: 0; }
+  .workspace-area[data-zone="centre"] .workspace-result .workspace-critical-item input { width: 15px; height: 15px; }
+}
+
+/* Lot E2b : panneau de prière sans défilement (CA2, CA3) — trois colonnes fixes (prière · jet · destinataires) au lieu du flux
+   en colonnes ; libellés et champs sur une ligne quand ils tiennent ; destinataires serrés. */
+.workspace-center-panel .workspace-divine-content.has-columns { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, 1fr); column-gap: 12px; align-items: start; }
+.workspace-center-panel .workspace-divine-col { display: grid; gap: 4px; min-width: 0; align-content: start; }
+.workspace-center-panel .workspace-divine-col > * { margin: 0; }
+.workspace-center-panel .workspace-divine-col :is(label.workspace-type, p) { font-size: 12px; line-height: 1.25; }
+.workspace-center-panel .workspace-divine-col > label.workspace-type { gap: 1px; }
+.workspace-center-panel .workspace-divine-col details > summary { font-size: 12.5px; line-height: 1.25; }
+.workspace-center-panel .workspace-divine-col > .workspace-resolution-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 4px; grid-template-columns: none; min-width: 0; }
+.workspace-center-panel .workspace-divine-col > .workspace-resolution-row > * { flex: 1 1 100%; min-width: 0; max-width: 100%; }
+.workspace-center-panel .workspace-divine-col > .workspace-resolution-row:has(> button) > button { flex: 1 1 auto; }
+.workspace-center-panel .workspace-divine-col :is(select, input:not([type="checkbox"]):not([type="radio"])) { width: 100%; }
+.workspace-center-panel .workspace-divine-col.is-targets fieldset { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; padding: 2px 6px 4px; }
+.workspace-center-panel .workspace-divine-col.is-targets fieldset > * { grid-column: 1; }
+.workspace-center-panel .workspace-divine-col.is-targets fieldset > legend { font-size: 12px; }
+.workspace-center-panel .workspace-divine-col.is-targets fieldset > p { font-size: 11.5px; }
+.workspace-center-panel .workspace-divine-col.is-targets fieldset > label.workspace-type { gap: 4px; font-size: 11.5px; line-height: 1.2; }
+.workspace-center-panel .workspace-divine-col.is-targets input[type="checkbox"] { width: 13px; height: 13px; margin: 0; }

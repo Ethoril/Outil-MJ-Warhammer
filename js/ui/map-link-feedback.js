@@ -5,6 +5,7 @@
  */
 import { renderMapLinkPending } from './map-link-indicator.js';
 import { engagementSuggestionsOf, distanceMetersOf } from '../core/map-link-feedback.js';
+import { publishDecision, withdrawDecision } from './combat-decisions.js';
 
 export const SUGGESTION_TOAST_MS = 15000;
 
@@ -24,14 +25,24 @@ export function mountMapLinkFeedback({ mapLink, store, showToast, pendingNode = 
     }
   };
 
+  // Refonte E2b (décision 20, CA7, CA9) : chaque suggestion figure aussi dans la case « À décider » jusqu'au clic du MJ
+  // (« Engager » ou « Ignorer », dans la case ou sur le toast), ou jusqu'à ce que la paire ne soit plus au contact.
+  const decisionId = key => `engagement-carte:${key}`;
+  const published = new Set();
+  const withdraw = key => { published.delete(key); withdrawDecision(decisionId(key)); };
   const onAdjacency = pairs => {
     const suggestions = engagementSuggestionsOf(pairs, store.listParticipants());
     for (const suggestion of suggestions) {
       if (lastKeys.has(suggestion.key)) continue;
-      showToast(`🗺️ ${suggestion.aName} et ${suggestion.bName} sont au contact : les engager ?`, 'info',
-        { label: 'Engager', onClick: () => accept(suggestion) }, SUGGESTION_TOAST_MS);
+      const titre = `${suggestion.aName} et ${suggestion.bName} sont au contact : les engager ?`;
+      showToast(`🗺️ ${titre}`, 'info', { label: 'Engager', onClick: () => { withdraw(suggestion.key); return accept(suggestion); } }, SUGGESTION_TOAST_MS);
+      published.add(suggestion.key);
+      publishDecision({ id: decisionId(suggestion.key), kind: 'engagement-carte', participantId: suggestion.aId, titre,
+        options: [{ key: 'engage', label: 'Engager' }, { key: 'ignore', label: 'Ignorer' }],
+        onChoose: key => { withdraw(suggestion.key); return key === 'engage' ? accept(suggestion) : null; } });
     }
     lastKeys = new Set(suggestions.map(suggestion => suggestion.key));
+    for (const key of [...published]) if (!lastKeys.has(key)) withdraw(key);
   };
 
   const offPlacement = mapLink.on('placement', view => renderMapLinkPending(pendingNode, view));
@@ -48,5 +59,21 @@ export function mountMapLinkFeedback({ mapLink, store, showToast, pendingNode = 
     return meters === null ? { ok: false, reason: 'unknown-use', message: `Usage de distance inconnu : ${use}.` } : { ...answer, meters };
   });
 
-  return { distanceBetween, accept, destroy: () => { offPlacement(); offAdjacency(); } };
+  return { distanceBetween, accept, destroy: () => { offPlacement(); offAdjacency(); [...published].forEach(withdraw); } };
+}
+
+/**
+ * Refonte E2b (décision 21) : course signalée par la carte (`runProposalOf`), question de la case « À décider ».
+ * Rien n'est décompté sans le clic du MJ : « Action utilisée » appelle `spend(actorId)` (Store.spendV5RunAction).
+ * Rend `null` quand il n'y a rien à décompter (course hors du Tour, Action déjà dépensée).
+ */
+export function runDecision(proposal, { spend, showToast = () => {} } = {}) {
+  if (!proposal?.canSpend || !proposal.actorId) return null;
+  return { id: `course-carte:${proposal.actorId}`, kind: 'course-carte', participantId: proposal.actorId, titre: proposal.message,
+    options: [{ key: 'used', label: 'Action utilisée' }, { key: 'ignore', label: 'Pas d’Action' }],
+    onChoose: key => {
+      withdrawDecision(`course-carte:${proposal.actorId}`);
+      if (key !== 'used') return null;
+      return Promise.resolve(spend?.(proposal.actorId)).then(result => { if (result?.ok === false) showToast(result.message, 'error'); return result; });
+    } };
 }

@@ -124,6 +124,32 @@ export function renderDivineCounterControls(container,{layer,Store={},onDone=()=
 }
 // Un personnage sans culte, talent divin ni suivi divin n'affiche pas la section (bouton discret pour l'ouvrir).
 const hasDivineLife=actor=>Boolean(actor?.cult)||actorDivineCults(actor).length>0||Object.entries(actor?.extensions?.v5||{}).some(([key,value])=>/^divine/.test(key)&&(Array.isArray(value)?value.length>0:value&&typeof value==='object'?Object.values(value).some(item=>item):Boolean(value)));
+/**
+ * Refonte E2b (panneau de prière sans défilement) : trois colonnes fixes au lieu d'un flux en colonnes. Présentation seule,
+ * aucun bloc retiré : la prière (choix, source, Péchés, accès, extensions), le jet (Obstiné, voix, d100, Calculer, Appliquer,
+ * aperçu), les destinataires et les saisies d'effets.
+ */
+export function arrangeDivineColumns(content,{form,extension}={}){
+ const kids=[...content.children],formAt=kids.indexOf(form),extensionAt=kids.indexOf(extension);
+ if(formAt<0)return content;
+ const column=kind=>{const col=document.createElement('div');col.className='workspace-divine-col is-'+kind;col.dataset.divineColumn=kind;return col;};
+ const prayer=column('prayer'),roll=column('roll'),targets=column('targets');
+ kids.forEach((child,index)=>(index<formAt||child===extension?prayer:index>formAt&&(extensionAt<0||index<extensionAt)?targets:roll).append(child));
+ content.append(prayer,roll,targets);
+ content.classList.add('has-columns');
+ return content;
+}
+
+/**
+ * Refonte E2b (décision 12 du relevé §A) : Courroux déclenché par la prière en cours. Le moteur n'enregistre aucun
+ * « Courroux en attente » : le Courroux se résout dans le formulaire de la prière, avant son application. Tant que l'aperçu
+ * le déclenche, la case « À décider » le montre. Rend `null` sinon.
+ */
+export function wrathDecisionOf(actor,preview){
+ if(!actor?.id||preview?.wrath?.triggered!==true)return null;
+ const sin=Number(preview.wrath.sinAtTest);
+ return {id:'courroux:'+actor.id,kind:'courroux',participantId:actor.id,titre:actor.name+' · Courroux divin déclenché'+(sin>0?' (+'+(10*sin)+' au résultat)':'')+' : jet à saisir',options:[{key:'open',label:'Saisir le Courroux'}]};
+}
 export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
  const forcedActors=new Set();
  let state={actorId:null,open:false,cult:'',targetIds:[],form:emptyDivineForm(),lastReceipt:null,choices:{range:0,targets:0,duration:0,effect:0}};
@@ -425,6 +451,8 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
   content.append(box);
  }
  return {
+ /** Décision 12 de la case « À décider » pour l'acteur affiché, d'après l'aperçu de sa prière en cours. */
+ decision(actor){return actor&&state.actorId===actor.id?wrathDecisionOf(actor,state.preview):null;},
  needsNpcRoll(actor){return state.open && state.actorId===actor?.id && actor?.kind!=='PJ' && !String(state.roll||'').trim();},
  show(){state.open=true;},
  rollNpc(actor){if(this.needsNpcRoll(actor)){state.roll=String(d100());state.preview=null;state.error='';}},
@@ -475,7 +503,8 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
     button(box,'Exécuter l’événement de Péché',()=>run(async()=>{const result=await Store.applyDivineSinEvent({actorId:actor.id,eventId:state.sinEventId,cult:contract.deity,fact:state.sinEventFact,confirmed:state.sinEventConfirmed==='true',...(state.sinEventAmount?{amount:Number(state.sinEventAmount)}:{}),baseRevision:Store.getLocalRevision()});if(result?.ok===false)throw Error(result.error||'Événement non enregistré.');state.sinEventFact='';state.sinEventConfirmed='';state.sinEventAmount='';state.sinEventId='';state.sinEdit=actor.extensions?.v5?.divine?.sin??'';state.preview=null;}),!state.sinEventId,'sin-event');
     if(chosen?.wrathHint)box.append(node('p','workspace-muted','Le MJ peut aussi jouer la table de Colère : « Courroux décidé par le MJ » (absolution, Péché positif requis).'));
     for(const record of (actor.extensions?.v5?.divineSinEvents||[]).slice(-5))box.append(node('p','workspace-muted','Journal : '+record.cult+' · '+record.sinBefore+' → '+record.sinAfter+' · '+record.fact+' · '+record.source.book+' p.'+record.source.printedPage));
-    content.append(box);
+    // Refonte E2b : les événements de Péché se rangent dans le volet « Péchés » (panneau de prière sans défilement).
+    sin.append(box);
    }
    const reminders=node('details','workspace-v5-context-details');reminders.append(node('summary','','Commandements, présages et usages (rappels)'));
    for(const row of Store.getDivineSinReminders?.()||[])reminders.append(node('p','workspace-muted',row.label+' — '+row.text+' ('+row.source.book+' p.'+row.source.printedPage+')'));
@@ -726,6 +755,7 @@ export function createDivinePanel({Store,refresh,onRollChange=()=>{}}){
    content.append(outcome);
   }
   if(state.error){const message=node('p','workspace-field-error',state.error);message.setAttribute('role','alert');content.append(message);}
+  arrangeDivineColumns(content,{form,extension});
   renderConfirmationButtons(panel);
   for(const link of panel.querySelectorAll('[data-need-anchor]')) if(!anchorTarget(panel,link.dataset.needAnchor)) link.replaceWith(document.createTextNode(link.textContent));
   return panel;

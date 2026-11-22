@@ -13,7 +13,7 @@ class El {
   append(...items) { for (const item of items) if (item != null) (item.isOption ? this.options : this.children).push(item); }
   appendChild(item) { this.append(item); return item; }
   replaceChildren(...items) { this.children = []; this.options = []; this.append(...items); }
-  after() {} remove() {} focus() {} showModal() {}
+  after() {} remove() {} focus() {} showModal() {} show() {}
   close() { for (const fn of this.listeners.close || []) fn(); }
   setAttribute(key, value) { this.attrs[key] = String(value); }
   getAttribute(key) { return this.attrs[key]; }
