@@ -19,7 +19,7 @@ function setup(initial = []) {
   const channel = fakeChannel();
   const link = createMapLink({ channel, getParticipants: () => scene, now: () => 1000,
     setTimer: (fn, ms) => { timers.set(++timerSeq, { fn, ms }); return timerSeq; }, clearTimer: id => timers.delete(id) });
-  const map = (type, payload = {}) => channel.onmessage({ data: { v: 2, type, from: 'map', payload } });
+  const map = (type, payload = {}) => channel.onmessage({ data: { v: 3, type, from: 'map', payload } });
   const fire = () => { for (const [id, timer] of [...timers]) { timers.delete(id); timer.fn(); } };
   return { link, channel, map, fire, timers, set: next => { scene = next; } };
 }
