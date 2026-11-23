@@ -34,7 +34,7 @@ try{
   const load=async state=>page.evaluate(async value=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;await Store.loadFromJSON(value);},state);
   const read=async()=>page.evaluate(async()=>{const{Store}=await import('/Outil-MJ-Warhammer/js/main.js');await Store.ready;return JSON.parse(Store.getFullJSON());});
   const play=page.locator('#workspace-root');
-  const chooseAction=async id=>{const button=play.locator(`[data-action-key="${id}"]`);await button.waitFor();await button.click();await openU1Settings(play);};
+  const chooseAction=async id=>{/* G1 : l'action préparée se choisit dans la barre du bas */const button=page.locator(`[data-zone="bas"] [data-bar-action="prepared-${id}"]`);await button.waitFor();await button.click();await openU1Settings(play);};
   const selectAttack=async id=>{await chooseAction(id);await openU1Types(play);await play.getByLabel('Type d’action').selectOption('attack');if(id==='d-inflict-action')await play.getByLabel('Nature du Test').selectOption('melee');};
   const openProtection=async()=>{const summary=play.getByText('Protection et bouclier pour cette attaque');if(!(await summary.evaluate(el=>el.closest('details')?.open)))await summary.click();};
   const settleChoices=async()=>{const groups=play.locator('.workspace-v5-choice-group');for(let i=0;i<await groups.count();i++){const radio=groups.nth(i).locator('input[type="radio"]').first();if(await radio.isEnabled())await radio.check();}};
@@ -53,7 +53,8 @@ try{
   // de la seule pièce nommée, avec le vrai calcul et l’application Store.
   await selectAttack('d-cut');await play.getByText('Protection et bouclier pour cette attaque').click();
   await chooseBoolean(play.getByLabel('Coup ciblé (−2 DR, hors modificateur saisi)'),'true');await play.getByLabel('Localisation du coup ciblé').selectOption('body');
-  await play.getByLabel('Taille : pièce d’armure ou bouclier frappé').selectOption('d-mail');
+  /* G5 : la pièce touchée est déduite ; la liste « Taille (arme) : pièce touchée » n'existe que s'il y a plusieurs pièces. */
+  const hackPiece=play.locator('select[data-hack-piece]');if(await hackPiece.count())await hackPiece.selectOption('d-mail');
   await enterRoll(31);let preview=await play.locator('.workspace-result-live').innerText();assert.match(preview,/Touché · Corps/u);await apply();
   let state=await read(),foe=state.combat.participants.find(row=>row.id===target.id);assert.equal(foe.extensions.v5.armorDamageByItem?.['d-mail'],1,'Taille diminue de 1 PA la pièce d’inventaire touchée');
 

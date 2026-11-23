@@ -265,7 +265,8 @@ try {
 
   // Attaque immédiate de la seconde arme à une main après réacquisition d’Élan
   await page.evaluate(async () => { const { Store } = await import('/Outil-MJ-Warhammer/js/main.js'); await Store.updateParticipant('a', { extensions: { v5: { hasMomentum: true } } }); });
-  await combat.locator('.workspace-resolution').getByRole('button', { name: /Coup de dague/ }).click();
+  // G1 : l'action préparée se choisit dans la barre du bas.
+  await page.locator('[data-zone="bas"] [data-bar-action^="prepared-"]').filter({ hasText: /Coup de dague/ }).first().click();
   await combat.getByRole('combobox', { name: 'Attaque précédente pour l’attaque immédiate de l’autre arme' }).selectOption({ index: 1 });
   await combat.getByRole('textbox', { name: 'Attaque (CC 65)' }).fill('20');
   await combat.getByRole('textbox', { name: /Jet de défense/ }).fill('80');
