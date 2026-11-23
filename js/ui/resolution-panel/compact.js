@@ -9,7 +9,12 @@ import { node, button } from './dom.js';
 import { distanceChoices, distanceToContext } from '../combat-distance.js';
 import { deducedCircumstances, pertinentCircumstances } from './circonstances.js';
 
-export function renderDistanceRow({ draft, plateau = {}, rangeBands = null, handlers, names, mapState = null }) {
+/**
+ * Ligne « Distance » (CA13, G2-f) : « Au contact » à part, puis les bandes ; dessous, en une ligne, ce qui est retenu et d'où
+ * (« Courte · 12 m · carte ») et le droit d'esquiver (G2-a) : puce déduite forçable d'un clic, ou question Oui / Non.
+ * `dodge` = rangedDodgeRight(…) ; `onDodge(valeur)` écrit la réponse du MJ (true, false, null = rendre la déduction).
+ */
+export function renderDistanceRow({ draft, plateau = {}, rangeBands = null, handlers, names, mapState = null, dodge = null, onDodge = null }) {
   const row = node('div', 'workspace-resolution-row workspace-distance-row');
   row.dataset.distance = '';
   row.appendChild(node('span', 'workspace-res-label', 'Distance'));
@@ -17,17 +22,56 @@ export function renderDistanceRow({ draft, plateau = {}, rangeBands = null, hand
   const chips = node('div', 'workspace-chip-list workspace-distance-chips');
   chips.setAttribute('role', 'group');
   chips.setAttribute('aria-label', 'Distance');
+  const bands = node('span', 'workspace-distance-bands');
   for (const option of line.options) {
     const item = button(option.label, 'workspace-chip', { 'data-distance-choice': option.key, 'aria-pressed': String(line.selected === option.key) });
     if (option.limit) item.appendChild(node('span', 'workspace-chip-note', ` ${option.limit}`));
     item.title = option.reason || option.title;
     item.disabled = option.disabled || draft.busy === true;
     item.addEventListener('click', () => handlers.select({ v5Context: distanceToContext(option.key, { context: draft.v5Context || {}, plateau }) }));
-    chips.appendChild(item);
+    if (option.key === 'contact') { item.classList.add('workspace-distance-contact'); chips.appendChild(item); } else bands.appendChild(item);
   }
-  const explain = node('p', 'workspace-distance-explain', line.explanation);
+  chips.appendChild(bands);
+  const explain = node('p', 'workspace-distance-explain');
+  explain.title = line.explanation;
+  const summary = node('span', 'workspace-distance-summary', line.summary);
+  summary.dataset.distanceSummary = '';
+  explain.appendChild(summary);
+  const mapNote = node('span', 'workspace-distance-map');
+  explain.appendChild(mapNote);
+  if (dodge && dodge.status !== 'contact') explain.appendChild(renderDodge({ dodge, onDodge, busy: draft.busy === true }));
   row.append(chips, explain);
-  return { row, explain, line };
+  return { row, explain, line, mapNote };
+}
+
+/** G2-a : droit d'esquiver le tir, en ligne. Jamais de texte long dans un bouton : la question est un texte, Oui / Non des boutons. */
+function renderDodge({ dodge, onDodge, busy }) {
+  const box = node('span', `workspace-dodge is-${dodge.status}`);
+  box.dataset.dodge = dodge.status;
+  box.title = dodge.title;
+  if (dodge.deduced === 'ask') {
+    box.setAttribute('role', 'group');
+    box.setAttribute('aria-label', dodge.label);
+    box.dataset.blockingField = 'ranged-opposition';
+    box.tabIndex = -1;
+    box.appendChild(node('span', 'workspace-dodge-question', dodge.label));
+    for (const [key, value, text] of [['oui', true, 'Oui'], ['non', false, 'Non']]) {
+      const choice = button(text, 'workspace-chip workspace-dodge-answer', { 'data-dodge-answer': key, 'aria-pressed': String(dodge.answer === value) });
+      choice.title = dodge.answer === value ? 'Recliquer pour retirer la réponse' : value ? 'Le tireur est à portée d’esquive : la cible peut opposer son Esquive' : 'Hors de portée d’esquive : tir non opposé (p. 164)';
+      choice.disabled = busy;
+      choice.addEventListener('click', () => onDodge?.(dodge.answer === value ? null : value));
+      box.appendChild(choice);
+    }
+    return box;
+  }
+  const allowed = dodge.status === 'allowed';
+  const chip = button(dodge.label, `workspace-chip workspace-dodge-chip ${allowed ? 'is-allowed' : 'is-forbidden'}${dodge.forced ? ' is-forced' : ''}`, { 'data-dodge-chip': '', 'aria-pressed': String(allowed) });
+  chip.dataset.blockingField = 'ranged-opposition';
+  chip.title = `${dodge.title} ${dodge.forced ? 'Un clic rend la déduction.' : 'Un clic force l’inverse (choix du MJ).'}`;
+  chip.disabled = busy;
+  chip.addEventListener('click', () => onDodge?.(dodge.forced ? null : !allowed));
+  box.appendChild(chip);
+  return box;
 }
 
 export function renderContextRow({ facts, handlers, toggle }) {
