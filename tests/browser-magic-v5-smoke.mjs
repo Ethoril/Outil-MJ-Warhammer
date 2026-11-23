@@ -203,6 +203,8 @@ try {
   // Le lanceur a une liste : elle seule est proposée ; « Tous les sorts » rouvre le catalogue pour les sorts hors liste plus bas.
   const listedOnly = await page.$$eval('[data-focus-key="magic-spell"] option', options => options.length);
   assert.equal(listedOnly, 4, 'Seuls les 4 sorts du lanceur sont proposés tant que « Tous les sorts » n’est pas coché');
+  // G3 : les réglages du sort sont dans un repli « Options » fermé ; ce parcours les manipule tous, on le garde ouvert.
+  await page.evaluate(() => { const open = () => document.querySelectorAll('details[data-magic-options]:not([open])').forEach(d => { d.open = true; }); new MutationObserver(open).observe(document, { childList: true, subtree: true }); open(); });
   await page.check('[data-focus-key="magic-all-spells"]');
   await page.waitForFunction(() => document.querySelectorAll('[data-focus-key="magic-spell"] option').length > 4);
   await page.selectOption('[data-focus-key="magic-spell"]', 'spell-audit-f44d90e9c50d6dafb769');
