@@ -459,9 +459,16 @@ async function main() {
     assert.deepEqual(await trackTexts(), trackBeforeResolution, 'calculer ne doit rien appliquer');
     await galleryResolution.getByRole('button', { name: /^Appliquer \d+ dégâts à Participant de démonstration 03/ }).click();
     await expect(page.locator('#toast-container')).toContainText(/dégâts appliqués à Participant de démonstration 03/);
-    await expect.poll(async () => (await trackTexts()).filter((text, index) => text !== trackBeforeResolution[index]).length).toBe(1);
+    // Depuis 3.56.0, l'attaquant qui l'emporte gagne l'Élan : sa ligne change aussi, et seulement par ce badge.
+    await expect.poll(async () => (await trackTexts()).filter((text, index) => text !== trackBeforeResolution[index]).length).toBe(2);
     const changedRows = (await trackTexts()).filter((text, index) => text !== trackBeforeResolution[index]);
-    assert.match(changedRows[0], /Participant de démonstration 03/);
+    const targetRow = changedRows.find(text => /Participant de démonstration 03/.test(text));
+    assert.ok(targetRow, 'la ligne de la cible change');
+    assert.doesNotMatch(targetRow, /PV 12\/12/, 'les dégâts sont appliqués à la cible');
+    const attackerRow = changedRows.find(text => text !== targetRow);
+    assert.match(attackerRow, /l’Élan/, 'l’autre ligne qui change est l’attaquant qui gagne l’Élan');
+    const attackerBefore = trackBeforeResolution.find(text => text.split('|')[0] === attackerRow.split('|')[0]);
+    assert.equal(attackerBefore.replace(/ — /, ''), attackerRow.replace(/ — É A l’Élan /, '').replace(/ — /, ''), 'l’attaquant ne change que par l’Élan');
 
     // E16 « Et si… » : comparer toutes les cibles avec les mêmes jets, sans rien
     // appliquer, puis choisir une ligne pour retrouver l'aperçu de « Calculer ».
