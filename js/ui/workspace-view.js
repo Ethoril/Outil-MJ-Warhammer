@@ -60,6 +60,7 @@ import { plateauZones, actionBarModel, preparedActionRows, renderActionBar, rend
 import { renderResolutionPanel, actionKey, minusSigned, defenseOptions, defaultDefenseValue } from './resolution-panel.js';
 import { initSidePanel } from './side-panel.js';
 import { rollMisfortuneDie } from './resolution-panel/dom.js';
+import { castTargetIds } from './resolution-panel/magic.js';
 import { getSpellContract, getAllSpellContracts, divineCastingModifiers } from '../core/v5-spell-contracts.js';
 import { magicGrantedActions, beastFormActions } from '../core/v5-magic-combat.js';
 import { transformationOvercastCost } from '../core/v5-magic-arbitrations.js';
@@ -2357,9 +2358,8 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
             } else {
               defaultTargets = context.target ? [context.target.id] : [context.actor.id];
             }
-            const targetIds = Array.isArray(draft.magicTargetIds) && draft.magicTargetIds.length > 0
-              ? draft.magicTargetIds
-              : defaultTargets;
+            // G4 (R16) : en point d'impact, seuls les cochés partent (aucun = sort sans cible) ; sinon le défaut d'avant.
+            const targetIds = castTargetIds(draft, defaultTargets);
             const hogTier = draft.magicHogTier || (Array.isArray(draft.magicChosenStats) && draft.magicChosenStats.length > 1 ? 'overcast6' : 'base');
             const overcastChoices = {};
             if (draft.magicOvercastDamage != null && draft.magicOvercastDamage !== 0) overcastChoices.damage = draft.magicOvercastDamage;
