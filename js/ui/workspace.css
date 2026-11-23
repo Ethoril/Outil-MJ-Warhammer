@@ -2704,3 +2704,24 @@ dialog.v5-fate-dialog[open] { left:calc(50% + 8px) !important; right:auto !impor
 .workspace-defense-reason { font-style: italic; }
 /* Contrôle amené du panneau « autres… » dans la ligne d'une raison (G2-d). */
 .workspace-blocking-reason > .is-inline-from-drawer { display: inline-flex; margin-left: 6px; }
+   LOT G4 · Sort de zone : point d'impact (case), rayon, carte, combattants dans la zone (R16)
+   ========================================================================== */
+.workspace-v5-magic .workspace-magic-zone { display: grid; gap: 3px; flex: 1 1 100%; min-width: 0; }
+.workspace-v5-magic .workspace-magic-zone-line { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 10px; }
+.workspace-v5-magic .workspace-magic-zone-modes { display: flex; flex-wrap: nowrap; gap: 4px; }
+.workspace-v5-magic .workspace-magic-zone-modes > .workspace-chip { min-height: 26px; padding: 1px 10px; font-size: 13px; }
+.workspace-v5-magic .workspace-magic-zone-line > .workspace-magic-zone-radius { display: inline-flex; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 4px; flex: 0 0 auto; width: auto; margin: 0; }
+.workspace-v5-magic .workspace-magic-zone-radius > input { width: 4.5em; min-height: 26px; padding: 1px 4px; }
+.workspace-v5-magic .workspace-magic-zone-line > button { min-height: 26px; padding: 1px 10px; }
+.workspace-v5-magic .workspace-magic-zone-waiting { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-weight: 600; }
+.workspace-v5-magic .workspace-magic-zone-placed, .workspace-v5-magic .workspace-magic-zone-none { font-weight: 400; }
+.workspace-v5-magic .workspace-magic-zone-legend { font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.workspace-v5-magic .workspace-magic-zone-targets { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 6px; min-width: 0; }
+.workspace-v5-magic .workspace-magic-zone-none { font-size: 12.5px; }
+.workspace-v5-magic .workspace-magic-zone-targets > .workspace-magic-zone-target { min-height: 24px; max-width: 160px; padding: 1px 9px; overflow: hidden; font-size: 12.5px; white-space: nowrap; text-overflow: ellipsis; }
+.workspace-v5-magic .workspace-magic-zone-targets > .workspace-magic-zone-add { flex: 0 1 150px; width: auto; min-width: 0; min-height: 24px; padding: 1px 4px; font-size: 12.5px; }
+/* En point d'impact (le panneau Magie est bas) : « Sort à lancer » à gauche de sa liste, résumé du contrat sur une ligne
+   (texte complet en infobulle). */
+.workspace-v5-magic:has(.workspace-magic-zone[data-magic-zone="impact"]) > .workspace-type:has(> select[data-focus-key="magic-spell"]) { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 8px; white-space: nowrap; }
+.workspace-v5-magic:has(.workspace-magic-zone[data-magic-zone="impact"]) > .workspace-type > select[data-focus-key="magic-spell"] { flex: 1 1 auto; min-width: 0; }
+.workspace-v5-magic:has(.workspace-magic-zone[data-magic-zone="impact"]) > .workspace-magic-contract-summary { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }

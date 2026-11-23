@@ -17,6 +17,10 @@
  * Annulation du mouvement du tour sur la carte (`map.turnReset { ref }`, contrat §10, version 2 du 22/11/2026) : transmise
  * telle quelle à `onTurnReset(ref)`, comme `map.ran` à `onRan(ref)` ; le jeu décide de ce qu'elle rend.
  *
+ * Point d'impact d'un sort de zone (`mj.impactQuery`, `mj.impactCancel`, `map.impact`, contrat §10.1, version 3 du
+ * 23/11/2026) : `queryImpact` envoie la demande et rend `{ queryId, answer }` ; une seule demande à la fois, sans délai
+ * d'expiration (c'est un geste du MJ) ; elle est abandonnée à la déconnexion.
+ *
  * Le cycle de vie se lit sur les instantanés : un `ref` qui apparaît part en `token.add`, un `ref` qui change en `token.state`,
  * un `ref` non PJ qui disparaît en `token.remove`. Mort et banc gardent le participant, donc le pion.
  */
@@ -36,6 +40,8 @@ export const MOUNT_REQUEST_TIMEOUT_MS = 3000;
 export const MOUNT_NOT_ADJACENT_MESSAGE = 'Rapprochez le cavalier de sa monture sur la carte';
 /** Délai de réponse à `mj.distanceQuery` : passé ce délai, la distance n'est pas préremplie. */
 export const DISTANCE_QUERY_TIMEOUT_MS = 3000;
+/** `label` de `mj.impactQuery` (contrat §10.1) : 40 caractères au plus. */
+export const IMPACT_LABEL_MAX = 40;
 
 /**
  * Les 16 marqueurs connus de la carte (contrat §5, `STATUS_MARKER_IDS` de Map Display), liste fermée : la carte rejette
@@ -149,6 +155,9 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, ge
   const pendingMounts = new Map();
   const pendingDistances = new Map();
   let distanceSeq = 0;
+  /** Demande de point d'impact en cours (§10.1) : `{ queryId, candidates, resolve }` ou `null`. */
+  let impact = null;
+  let impactSeq = 0;
   let engagements = '[]';
   let turn = null;
   let placement = '';
@@ -162,7 +171,14 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, ge
     placement = text;
     emit('placement', view);
   };
-  const setStatus = next => { if (next !== status) { status = next; onStatus(next); emitPlacement(); } };
+  const setStatus = next => {
+    if (next === status) return;
+    status = next;
+    // Déconnexion ou version différente (§10.1) : la demande de point d'impact en cours est perdue, sans message.
+    if (next !== 'connected') settleImpact(impact?.queryId, { ok: false, reason: 'disconnected' });
+    onStatus(next);
+    emitPlacement();
+  };
   const send = (type, payload = {}) => channel.postMessage({ v: MAP_LINK_VERSION, type, seq: ++seq, at: now(), from: 'outil-mj', payload });
   /** États envoyés, sans marqueur inconnu de la carte (CA9). */
   const read = (participants = getParticipants() || []) => Object.fromEntries(Object.entries(projection.tokenStates(participants) || {})
@@ -245,6 +261,7 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, ge
     if (message.type === 'map.adjacency' && Array.isArray(payload.pairs)) emit('adjacency', payload.pairs);
     if (message.type === 'map.distance') settleDistance(payload.queryId, Number.isFinite(payload.cells) && payload.cells >= 0
       ? { ok: true, cells: payload.cells } : { ok: false, reason: 'unmeasurable', message: 'La carte n’a pas pu mesurer la distance.' });
+    if (message.type === 'map.impact') answerImpact(payload);
     if (message.type === 'map.ran' && payload.ref) onRan(payload.ref);
     if (message.type === 'map.turnReset' && payload.ref) onTurnReset(payload.ref);
     if (message.type === 'mount.accepted') settleMount(payload.riderRef, { ok: true });
@@ -300,6 +317,52 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, ge
     });
   }
 
+  /** Règle la demande de point d'impact `queryId` si c'est celle en cours ; sinon rien (réponse périmée ou déjà reçue). */
+  function settleImpact(queryId, answer) {
+    if (!impact || queryId === undefined || queryId === null || impact.queryId !== queryId) return false;
+    const { resolve } = impact;
+    impact = null;
+    resolve({ ...answer, queryId });
+    return true;
+  }
+
+  /**
+   * `map.impact` (§10.1) : `cancelled` → retour au choix manuel ; sinon `refs` telles que reçues, et `ids` des seuls
+   * `candidates` de la demande (participants que le jeu accepte comme cibles) dont la `ref` y figure, sans doublon.
+   */
+  function answerImpact(payload) {
+    if (!impact || payload.queryId !== impact.queryId) return;
+    if (payload.cancelled === true) { settleImpact(payload.queryId, { ok: false, reason: 'cancelled' }); return; }
+    const refs = Array.isArray(payload.refs) ? payload.refs : [];
+    const wanted = new Set(refs);
+    const ids = [...new Set(impact.candidates.filter(participant => participant?.id && wanted.has(refOf(participant))).map(participant => participant.id))];
+    settleImpact(payload.queryId, { ok: true, levelId: payload.levelId ?? null, cell: payload.cell ?? null, refs, ids });
+  }
+
+  /**
+   * Point d'impact d'un sort de zone (§10.1) : `mj.impactQuery { queryId, label, radiusCells, casterRef }`. Une demande en
+   * cours est d'abord retirée (`mj.impactCancel`, réponse `superseded`). Carte non connectée : aucune demande,
+   * `{ queryId: null }` et réponse `disconnected`. `answer` rend `{ ok: true, queryId, levelId, cell, refs, ids }` ou
+   * `{ ok: false, queryId, reason }` (`cancelled`, `superseded`, `withdrawn`, `disconnected`).
+   */
+  function queryImpact({ label = '', radiusCells = 0, caster = null, candidates = [] } = {}) {
+    if (status !== 'connected') return { queryId: null, answer: Promise.resolve({ ok: false, queryId: null, reason: 'disconnected' }) };
+    if (impact) { const previous = impact.queryId; send('mj.impactCancel', { queryId: previous }); settleImpact(previous, { ok: false, reason: 'superseded' }); }
+    const queryId = `iq-${++impactSeq}`;
+    const radius = Number(radiusCells);
+    const answer = new Promise(resolve => { impact = { queryId, candidates: Array.isArray(candidates) ? candidates : [], resolve }; });
+    send('mj.impactQuery', { queryId, label: String(label ?? '').slice(0, IMPACT_LABEL_MAX), radiusCells: Number.isFinite(radius) && radius > 0 ? radius : 0,
+      casterRef: caster ? refOf(caster) : null });
+    return { queryId, answer };
+  }
+
+  /** L'outil n'attend plus (§10.1) : `mj.impactCancel` si `queryId` est la demande en cours ; rend vrai si elle l'était. */
+  function cancelImpact(queryId) {
+    if (!impact || impact.queryId !== queryId) return false;
+    send('mj.impactCancel', { queryId });
+    return settleImpact(queryId, { ok: false, reason: 'withdrawn' });
+  }
+
   /** Abonnement aux retours de la carte : 'placement' ou 'adjacency' ; rend la fonction de désabonnement. */
   function on(event, fn) {
     if (!listeners[event]) throw new Error(`Événement de liaison inconnu : ${event}`);
@@ -322,6 +385,7 @@ export function createMapLinkProtocol({ channel, projection, getParticipants, ge
   channel.onmessage = event => onMessage(event?.data ?? event);
   [states, forms] = readScene();
   send('mj.hello');
-  return { refresh, snapshot, tick, onMessage, requestMount, queryDistance, on, placement: placementView,
+  return { refresh, snapshot, tick, onMessage, requestMount, queryDistance, queryImpact, cancelImpact, impactPending: () => impact?.queryId ?? null,
+    on, placement: placementView,
     isPlaced: participant => isRefPlaced(refOf(participant), states, placed), status: () => status, close: () => channel.close?.() };
 }
