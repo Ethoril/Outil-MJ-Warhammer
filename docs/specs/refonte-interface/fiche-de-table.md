@@ -49,6 +49,40 @@ Outil connecté à la carte : les deux servis par le même serveur local (même 
 
 Laissé tel quel par ta décision du 22/11 : pendant le tour d'un **ennemi qui n'est pas posé sur la carte**, l'outil envoie « personne » (`null`) et les PJ peuvent bouger.
 
+## Passe G · corrections de ta recette du 22/11 (à refaire à la table)
+
+Un geste par retour. Liaison en **version 3** (point d'impact) : outil et carte doivent être de la même version, sinon « versions de liaison différentes » (recharge les deux onglets). Rien n'est publié sans ton feu vert.
+
+| Retour | Geste à refaire | Attendu |
+|---|---|---|
+| **R1** ligne « Action » en double | Choisis un combattant, regarde la case de résolution. | Plus de puces d'action dans la résolution : l'action se choisit dans la barre du bas. « Test… », « Sort, prière, Corruption… » et « Actions du Tour… » restent. |
+| **R2** « Taille : pièce ou bouclier touché requis » | Un PNJ à la hallebarde (Taille (arme), p. 304) touche un PJ en armure ; calcule. | « Appliquer » est actif, la pièce de plus fort PA est précochée (liste limitée aux pièces de la localisation) ; l'armure perd 1 PA. Le libellé dit « Taille (arme) ». |
+| **R3** Vigilance hors surprise | Saisis l'initiative en déclarant un camp surpris, avec un PJ qui a le talent Vigilance. | Colonne « Vigilance » pour les seuls surpris qui ont le talent (Perception Challenging, p. 116) ; réussi = pas Surpris. « Surprise : aucune / camp … surpris » visible en tête. Hors surprise, aucune Vigilance proposée. |
+| **R4** pas d'attaque gratuite quand un engagé part | « Déplacer… » un engagé vers Libre. | Une décision « X quitte la mêlée de Y » : Se désengager, Fuir (attaque gratuite de chaque adversaire, Brisé, p. 163) ou Sans règle. Ne bloque pas « Tour suivant ». |
+| **R5** « Tour suivant » refusé | « Tour suivant » avec un rappel « Fin du tour de … » en attente. | Le tour passe (test de non-régression ; la cause était la connexion IndexedDB, réglée en 0aa34eb8). |
+| **R6** « Enregistrement local » en échec | Une série d'actions de combat, un rechargement. | Plus d'échec d'enregistrement (réglé en 0aa34eb8). |
+| **R7** « corrigez les données » en boucle | Appliquer l'initiative quand l'enregistrement échoue. | Le message dit « Enregistrement local impossible, réessayez » ; une vraie erreur de données garde son message. |
+| **R8** PJ hors tour déplaçables (carte) | Donne le tour à un PJ, essaie d'en déplacer un autre sur la tablette. | Non reproduit le 22/11 (sans doute la panne d'enregistrement). À revérifier ; si ça revient, lot C2 (en réserve). |
+| **R9** ennemi non détecté dans la torche d'un PJ | Torche posée par le panneau de la carte ; un ennemi finit son mouvement dans la lumière. | Lot C3 (carte) : un ennemi est vu sur **toute la portée** d'une lumière, et un grand pion **dès qu'une case de son emprise** l'est. |
+| **R10** vision dans le noir « à 1 » | PJ avec le talent Vision nocturne, lié à la carte. | `visionDim` 10 (Vision dans le noir : 20, rien : 1), p. 123 et 360. |
+| **R11** « Autres actions » sans effet | Barre du bas → « Autres actions », au tour d'un PNJ qui ne sait faire que de la magie. | Le menu sort, prière et Test s'ouvre, le focus est sur sa première entrée. |
+| **R12** « Charger » sans effet | Choisis une cible non engagée, « Charger ». | Une puce « Charge » active apparaît dans la résolution, le bouton est enfoncé ; un second clic (puce ou bouton) retire la charge. |
+| **R13** « Petit : catégories de Taille explicites requises » | Attaque d'un Petit (ou contre un Petit) sans rien choisir. | Les Tailles connues (Trait, champ, espèce) sont lues ; plus de blocage. Une Taille seulement supposée donne un rappel non bloquant. |
+| **R14** esquive contre un tir | Tir sur une cible à moins / à plus de BI m, avec et sans carte, avec et sans bouclier de 2 PA. | Puce « Esquive permise : 3 m ≤ BI 4 » ou « Esquive interdite : 9 m > BI 4 » (p. 165), forçable d'un clic. Sans droit : Test non opposé, « Appliquer » actif après le seul jet de tir (p. 164). Sans carte ni bouclier : une ligne « Esquive permise si le tireur est à N m ou moins » avec Oui / Non. La ligne Distance dit « Courte · 12 m · carte ». |
+| **R15** magie trop grande | Un PNJ lanceur lance un sort. | Sort, cibles, d100, dés réclamés, « Appliquer » ; tout le reste sous un seul repli « Options ». |
+| **R16** case vide comme cible de zone | Sort de zone : « Point d'impact », puis « Choisir sur la carte » (carte connectée). | Une seule demande part ; un clic sur une case précoche les combattants actifs dans le rayon, tu décoches. Sans carte : rayon en mètres, liste à cocher, rien de précoché. Annuler, fermer ou changer de sort annule la demande. **Le point d'impact se choisit sur l'écran MJ de la carte** (lot C4). |
+| **R17** miracles : quatre questions par cible | Miracle « Soleil flamboyant » sur trois cibles. | Une ligne par cible, faits en cases précochées à « oui ». « Allié du prêtre » se déduit du camp ; Allié, Mort-vivant, Serviteur de la Ruine et 0 Blessure sont déduits de la fiche. |
+| **f4-tirer / g-distance / f5-armure** | Tir ; coiffe de maille seule. | Écran de tir réduit (voir ci-dessous) ; ligne Distance lisible ; coiffe de maille « 2* » avec infobulle « Partielle : ignorée sur une localisation paire » (p. 306). |
+
+### Limites connues de la passe G (à juger, rien de caché)
+
+- **Écran de tir sans carte** : G2 ne l'a pas allégé (24 contrôles visibles au lieu de 22 avant) ; avec la carte, 19 à 23 selon la distance.
+- **Vigilance sans effet en combat** (G6) : le bouton Vigilance de « combat-aware » reste proposé à un Surpris mais le moteur refuse toute action d'un Surpris. Une case texte « Identifiant de la Surprise » subsiste dans `js/ui/v5-talent-situations.js` (celle de la saisie d'initiative, elle, est générée).
+- **Désengagement abandonné** (G7) : si tu fermes le formulaire de désengagement sans l'appliquer, le combattant **reste engagé**.
+- **Carte, C3** : un ennemi est vu sur toute la portée d'une lumière, et un grand pion dès qu'une case de son emprise l'est.
+- **Carte, C4** : le point d'impact se choisit sur l'écran MJ (pas sur la tablette, qui n'en voit que le gabarit).
+- **Copies de la liaison** : le test « copies réelles » de `donnees-communes` reste rouge jusqu'à la publication conjointe (copies de la carte et des fiches en version 3) : attendu.
+
 ## Si quelque chose manque
 
 Note le geste voulu et l'écran : le relevé de départ est [fonctions-jouer.md](fonctions-jouer.md). Publication seulement après ton feu vert et la suite unitaire verte.
