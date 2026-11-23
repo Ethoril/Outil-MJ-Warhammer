@@ -62,7 +62,8 @@ test('C17 : les raisons déclarent une cible ou explicitement l’absence de cha
     [{ v5MagicKind: 'cast', ready: false, miscast: {}, spellPreview: { valid: false } }, {}, true],
     [{ choiceRequired: true, attack: true, unresolved: ['Test de Calme de l’attaquant', 'Tir engagé : Test de défense', 'Jet de défense', 'Autre'], critical: { details: { pending: true, needsAlternative: true, needsLocation: true } }, protection: { ap: null }, mechanicalWarnings: ['Avertissement'] }, { criticalErrors: { jet: 'invalide' } }, true]
   ];
-  const allowed = new Set(['attack-roll', 'magic-miscast', 'protection-calm', 'engaged-defense', 'defense-roll', 'critical-pending', 'critical-alternative', 'target', 'critical-location', 'protection']);
+  // 'magic-options' : repli « Options » du sort, cible de lien ajoutée par la passe G (G3-a).
+  const allowed = new Set(['attack-roll', 'magic-miscast', 'magic-options', 'protection-calm', 'engaged-defense', 'defense-roll', 'critical-pending', 'critical-alternative', 'target', 'critical-location', 'protection']);
   const reasons = cases.flatMap(args => applicationBlockingReasons(...args));
   for (const reason of reasons) {
     assert.ok(reason.focus ? allowed.has(reason.focus) && !reason.withoutField : reason.withoutField === true, reason.text);
