@@ -166,7 +166,7 @@ function feedback(people) {
   const store = { listParticipants: () => people, listEngagedWith: () => [], engageParticipants: (a, b) => { engaged.push([a, b]); return { ok: true }; } };
   const node = { hidden: true, textContent: '', removeAttribute() {} };
   const ui = mountMapLinkFeedback({ mapLink: link, store, pendingNode: node, showToast: (message, type, action) => toasts.push({ message, action }) });
-  const map = (type, payload = {}) => channel.onmessage({ data: { v: 2, type, from: 'map', payload } });
+  const map = (type, payload = {}) => channel.onmessage({ data: { v: 3, type, from: 'map', payload } });
   return { ui, toasts, engaged, map };
 }
 
