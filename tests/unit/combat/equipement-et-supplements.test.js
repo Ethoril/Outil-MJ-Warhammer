@@ -988,7 +988,9 @@ test('T2 bis characterization — bouclier attaché: PA limités à tête, corps
 });
 
 test('T2 bis integration — attached shield side selection reaches hit protection and missing side blocks only an arm hit', () => {
-  const actor = participant('a', [referenceSnapshot.equipment.items.find(item => item.kind === 'weapon')]);
+  // G5-a : une arme à Taille (la première arme du référentiel est une hallebarde) abîme le bouclier de défense de 1 PA (p. 304) ;
+  // la fixture prend une arme sans Taille pour ne vérifier ici que le côté du bras non directeur.
+  const actor = participant('a', [referenceSnapshot.equipment.items.find(item => item.kind === 'weapon' && !(item.keywords || []).some(row => row.id === 'taille'))]);
   const target = participant('b', [shield]);
   const make = nonDominantArmSide => previewResolution({ actor, target, roll: 20,
     action: { type: 'attack', attr: 'CC', base: 50, damage: 4, qualities: [], extensions: { fiche: { equipmentId: actor.equipment[0].id } } },
