@@ -9,6 +9,273 @@ import { renderSpellOptions, clearVortexTestTalents, vortexSelectedTalents } fro
 import { ARCANE_ARMOR_LOCATIONS } from '../../core/v5-magic-arcane-unforgiving.js';
 import { DURATION_UNIT_LABELS, parseSpellDuration } from '../../core/v5-magic-effects.js';
 import { d100 } from '../../core/dice.js';
+import { spellFormulaValue } from '../../core/v5-magic-effects.js';
+import { getOvercastBenefit } from '../../core/v5-magic-casting.js';
+import { IMPACT_LABEL_MAX } from '../../core/map-link-protocol.js';
+export { IMPACT_LABEL_MAX };
+
+// Passe G, G4 (R16, option B du MJ) : point d'impact d'un sort de zone, choisi d'un clic sur la carte (contrat de liaison
+// §10.1, version 3) ou, sans carte, par la liste des combattants actifs à cocher. Le moteur des sorts ne change pas : les
+// cochés partent par le chemin existant (`magicTargetIds`).
+let mapImpactProvider = null;
+/** Branché par `main.js` (bloc de la liaison) : `{ connected(), pending(), query({ label, radiusCells, caster, candidates }), cancel(queryId) }`. */
+export function setMapImpactProvider(provider) { mapImpactProvider = provider && typeof provider.query === 'function' ? provider : null; }
+
+/** Sort de zone : même lecture que le moteur (`hasAoeEffect`, v5-spell-contracts.js). */
+export function spellHasZone(contract) {
+  if (!contract) return false;
+  return /zde|zone|aoe/i.test(String(contract.target || '')) || Boolean(contract.effects?.aoe);
+}
+
+const foldText = text => String(text || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+/** Grandeurs nommées dans la cible « ZdE … mètres » d'un contrat ; un Bonus est la dizaine de la Caractéristique. */
+const ZONE_MEASURES = [
+  [/moitie de la force mentale/, actor => spellFormulaValue('FM', actor) / 2],
+  [/bonus de force mentale/, actor => spellFormulaValue('BFM', actor)],
+  [/force mentale/, actor => spellFormulaValue('FM', actor)],
+  [/bonus de sociabilite/, actor => spellFormulaValue('BSoc', actor)],
+  [/bonus d.intelligence/, actor => spellFormulaValue('BIntelligence', actor)],
+  [/bonus d.initiative/, actor => spellFormulaValue('BInitiative', actor)],
+  [/initiative/, actor => spellFormulaValue('I', actor)],
+  [/bonus de ct/, actor => Math.floor(spellFormulaValue('CT', actor) / 10)]
+];
+
+/**
+ * Rayon de la zone en mètres (yards = mètres) : la cible du contrat (« ZdE Bonus de Force Mentale mètres »,
+ * « ZdE 2 × Bonus de Force Mentale mètres »…) lue pour le lanceur, multipliée par le palier de surpuissance « Zone » du
+ * moteur (`getOvercastBenefit`). Zone non chiffrée en mètres (Spécial, miles, plusieurs zones, aura « Vous ») : `meters: null`,
+ * le MJ saisit le rayon.
+ */
+export function zoneRadius(contract, actor, overcastAoe = 0) {
+  const multiplier = getOvercastBenefit('aoe', overcastAoe)?.multiplier || 1;
+  const text = foldText(contract?.target);
+  const at = text.indexOf('zde');
+  const clause = at < 0 || /\d\s*[×x]\s*zde/.test(text) ? null : text.slice(at + 3);
+  let base = null;
+  if (clause !== null && /metres?/.test(clause)) {
+    const measure = ZONE_MEASURES.find(([pattern]) => pattern.test(clause));
+    const factor = Number(/(\d+)\s*[×x]/.exec(clause)?.[1] || 1);
+    const value = measure ? factor * measure[1](actor || {}) : NaN;
+    base = Number.isFinite(value) && value >= 0 ? value : null;
+  }
+  return { meters: base === null ? null : base * multiplier, base, multiplier };
+}
+
+const isActive = participant => participant?.zone === 'active';
+const pointImpactMode = (draft, contract) => draft?.magicImpactMode === true && spellHasZone(contract);
+
+/**
+ * Modèle des cibles d'un sort de zone. `available` : le sort a une zone (G4-a). `mode` : 'combatant' (cible d'aujourd'hui)
+ * ou 'impact'. `radius` : rayon en mètres, saisi par le MJ (`magicImpactRadius`) ou lu au contrat. `candidates` : les
+ * combattants actifs, cochés s'ils sont dans `magicTargetIds` (rien de précoché sans réponse de la carte). `canQueryMap` :
+ * carte connectée, en point d'impact. `waiting` : la liaison attend encore la demande notée dans le brouillon.
+ */
+export function zoneTargetModel({ contract, actor, participants = [], draft = {}, mapConnected = false, pendingQueryId = null }) {
+  if (!spellHasZone(contract)) return { available: false, mode: 'combatant', radius: null, candidates: [], canQueryMap: false, waiting: false, impact: null };
+  const mode = pointImpactMode(draft, contract) ? 'impact' : 'combatant';
+  const computed = zoneRadius(contract, actor, draft.magicOvercastAoe);
+  const manual = Number(draft.magicImpactRadius);
+  const radius = draft.magicImpactRadius != null && draft.magicImpactRadius !== '' && Number.isFinite(manual) && manual >= 0
+    ? { ...computed, meters: manual, manual: true } : { ...computed, manual: false };
+  const checked = new Set(Array.isArray(draft.magicTargetIds) ? draft.magicTargetIds : []);
+  const candidates = participants.filter(isActive).map(row => ({ id: row.id, name: row.name, checked: checked.has(row.id) }));
+  const canQueryMap = mode === 'impact' && mapConnected === true;
+  const waiting = canQueryMap && draft.magicImpact?.status === 'waiting' && pendingQueryId != null && draft.magicImpact.queryId === pendingQueryId;
+  return { available: true, mode, radius, candidates, canQueryMap, waiting, impact: mode === 'impact' && draft.magicImpact?.status === 'placed' ? draft.magicImpact : null };
+}
+
+/** Cibles qui partent au moteur : en point d'impact, les seuls cochés (aucun = sort sans cible) ; sinon le défaut d'aujourd'hui. */
+export function castTargetIds(draft = {}, defaults = []) {
+  if (draft.magicImpactMode === true) return Array.isArray(draft.magicTargetIds) ? [...draft.magicTargetIds] : [];
+  return Array.isArray(draft.magicTargetIds) && draft.magicTargetIds.length ? draft.magicTargetIds : defaults;
+}
+
+/**
+ * Réponse de la liaison à la demande notée dans le brouillon : cochés = `ids` (participants actifs des `refs`), point
+ * d'impact noté ; abandon (`cancelled`, déconnexion, demande remplacée ou retirée) : retour au choix manuel, cochés gardés.
+ * Réponse à une autre demande : `null`.
+ */
+export function impactAnswerPatch(draft = {}, answer = {}) {
+  if (!draft.magicImpact || answer?.queryId == null || draft.magicImpact.queryId !== answer.queryId) return null;
+  if (!answer.ok) return { magicImpact: null };
+  const ids = Array.isArray(answer.ids) ? [...answer.ids] : [];
+  return { magicTargetIds: ids, magicImpact: { status: 'placed', queryId: answer.queryId, levelId: answer.levelId ?? null, cell: answer.cell ?? null, count: ids.length } };
+}
+
+/**
+ * Demande en attente sur la carte : dernier rendu de son bandeau. Si le bandeau quitte l'écran (panneau fermé, autre
+ * action ou autre lanceur, résolution effacée), `mj.impactCancel` part (contrat §10.1, G4-d).
+ */
+let impactWatch = null;
+let impactObserver = null;
+function stopImpactWatch() {
+  impactObserver?.disconnect();
+  impactObserver = null;
+  impactWatch = null;
+}
+function impactBannerGone() {
+  const element = impactWatch?.element;
+  return !element || !element.isConnected || (typeof element.checkVisibility === 'function' && !element.checkVisibility());
+}
+function checkImpactWatch() {
+  if (!impactWatch) return;
+  if (mapImpactProvider?.pending?.() !== impactWatch.queryId) { stopImpactWatch(); return; }
+  if (!impactBannerGone()) return;
+  const { queryId } = impactWatch;
+  stopImpactWatch();
+  mapImpactProvider.cancel(queryId);
+}
+function watchImpactBanner(queryId, element, draft, handlers) {
+  if (impactWatch?.queryId !== queryId) stopImpactWatch();
+  impactWatch = { queryId, element, draft, handlers };
+  if (impactObserver || typeof MutationObserver !== 'function' || typeof document === 'undefined') return;
+  impactObserver = new MutationObserver(() => { if (impactBannerGone()) setTimeout(checkImpactWatch, 0); });
+  impactObserver.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'open', 'class', 'style'] });
+}
+/** Retire la demande en cours de ce brouillon (Annuler, autre sort, retour à « Combattant »). */
+function withdrawImpact(draft) {
+  const queryId = draft?.magicImpact?.queryId;
+  if (queryId != null && mapImpactProvider?.pending?.() === queryId) mapImpactProvider.cancel(queryId);
+  if (impactWatch?.queryId === queryId) stopImpactWatch();
+}
+
+/** Cible d'un sort de zone (G4) : « Combattant » ou « Point d'impact (case) », rayon, carte, liste des actifs à cocher. */
+function renderZoneTargets({ contract, actor, participants, draft, handlers }) {
+  const connected = mapImpactProvider?.connected?.() === true;
+  const model = zoneTargetModel({ contract, actor, participants, draft, mapConnected: connected, pendingQueryId: mapImpactProvider?.pending?.() ?? null });
+  if (!model.available) return null;
+  const box = node('div', 'workspace-magic-zone');
+  box.dataset.magicZone = model.mode;
+  // Une seule ligne de tête (le panneau Magie est bas) : mode, rayon, carte ou attente ; l'état passe dans la légende.
+  const head = node('div', 'workspace-magic-zone-line');
+  box.appendChild(head);
+  const modes = node('div', 'workspace-magic-zone-modes');
+  modes.setAttribute('role', 'group');
+  modes.setAttribute('aria-label', 'Cible du sort de zone');
+  for (const [mode, text, title] of [['combatant', 'Combattant', 'Le sort vise le combattant choisi comme cible'],
+    ['impact', 'Point d’impact (case)', 'Le sort vise une case, même vide : cochez les combattants pris dans la zone']]) {
+    const choice = node('button', 'workspace-chip', text);
+    choice.type = 'button';
+    choice.title = title;
+    choice.dataset.impactMode = mode;
+    choice.setAttribute('aria-pressed', String(model.mode === mode));
+    choice.addEventListener('click', () => {
+      if (model.mode === mode) return;
+      withdrawImpact(draft);
+      handlers.select({ magicImpactMode: mode === 'impact', magicTargetIds: [], magicImpact: null });
+    });
+    modes.appendChild(choice);
+  }
+  head.appendChild(modes);
+  if (model.mode !== 'impact') return box;
+
+  const radiusLine = head;
+  const radiusLabel = node('label', 'workspace-type workspace-magic-zone-radius', 'Rayon');
+  const radiusInput = document.createElement('input');
+  radiusInput.type = 'number';
+  radiusInput.min = '0';
+  radiusInput.step = 'any';
+  radiusInput.value = model.radius.meters ?? '';
+  radiusInput.placeholder = 'à saisir';
+  radiusInput.setAttribute('aria-label', 'Rayon de la zone (m)');
+  radiusInput.dataset.focusKey = 'magic-impact-radius';
+  // La saisie ne redessine pas le panneau (focus gardé) : le bouton de la carte relit le champ.
+  const typedRadius = () => { const value = radiusInput.value === '' ? null : Number(radiusInput.value); return Number.isFinite(value) && value >= 0 ? value : null; };
+  let ask = null;
+  radiusInput.addEventListener('input', () => {
+    handlers.input('magicImpactRadius', radiusInput.value === '' ? null : Number(radiusInput.value));
+    if (ask) ask.disabled = typedRadius() === null || Boolean(draft.busy);
+  });
+  radiusLabel.append(radiusInput, ' m');
+  // Source du rayon en infobulle (le résumé du contrat, sous le bloc, redit la cible « ZdE … »).
+  radiusLabel.title = model.radius.manual ? 'Rayon saisi par le MJ'
+    : model.radius.meters === null ? `Zone non chiffrée en mètres (contrat : ${contract.target}) : saisir le rayon`
+      : `Contrat : ${contract.target}${model.radius.multiplier > 1 ? ` · surpuissance Zone ×${model.radius.multiplier}` : ''}`;
+  radiusLine.appendChild(radiusLabel);
+
+  if (model.waiting) {
+    const banner = node('span', 'workspace-magic-zone-waiting', 'Clique une case sur la carte…');
+    banner.setAttribute('role', 'status');
+    banner.dataset.impactWaiting = draft.magicImpact.queryId;
+    const cancel = node('button', 'workspace-ghost', 'Annuler');
+    cancel.type = 'button';
+    cancel.dataset.impactCancel = '';
+    cancel.title = 'Ne plus attendre le clic sur la carte';
+    cancel.addEventListener('click', () => { withdrawImpact(draft); handlers.select({ magicImpact: null }); });
+    banner.appendChild(cancel);
+    radiusLine.appendChild(banner);
+    watchImpactBanner(draft.magicImpact.queryId, banner, draft, handlers);
+  } else if (model.canQueryMap) {
+    ask = node('button', 'workspace-secondary', 'Choisir sur la carte');
+    ask.type = 'button';
+    ask.dataset.impactQuery = '';
+    ask.disabled = model.radius.meters === null || Boolean(draft.busy);
+    ask.title = 'Cliquer une case sur l’écran MJ de la carte (rayon en cases = mètres) ; sans rayon, le saisir d’abord';
+    ask.addEventListener('click', () => {
+      const meters = typedRadius();
+      if (meters === null) return;
+      const query = mapImpactProvider.query({ label: (contract.name || 'Sort').slice(0, IMPACT_LABEL_MAX), radiusCells: meters, caster: actor,
+        candidates: participants.filter(isActive) });
+      if (query?.queryId == null) { handlers.select({ magicImpact: null }); return; }
+      handlers.select({ magicImpact: { status: 'waiting', queryId: query.queryId } });
+      Promise.resolve(query.answer).then(answer => {
+        // Bandeau encore à l'écran : la réponse est appliquée et le panneau redessiné. Sinon (panneau fermé entre-temps),
+        // le brouillon est seulement remis au choix manuel, sans redessiner une autre action.
+        const watch = impactWatch?.queryId === query.queryId ? impactWatch : null;
+        if (watch) stopImpactWatch();
+        const patch = impactAnswerPatch(watch?.draft || draft, answer);
+        if (!patch) return;
+        if (watch) watch.handlers.select({ ...patch, keepChoice: true });
+        else Object.assign(draft, { magicImpact: null });
+      });
+    });
+    radiusLine.appendChild(ask);
+  }
+
+  // Combattants dans la zone, sur une ligne (le panneau Magie n'a pas la hauteur d'une liste de 20 cases) : les cochés en
+  // puces (un clic retire), les autres actifs dans « + ajouter… ».
+  const list = node('div', 'workspace-magic-zone-targets');
+  list.setAttribute('role', 'group');
+  list.setAttribute('aria-label', 'Combattants dans la zone');
+  list.dataset.impactTargets = '';
+  const legend = node('span', 'workspace-magic-zone-legend', 'Dans la zone :');
+  if (model.impact) {
+    const placed = node('span', 'workspace-muted workspace-magic-zone-placed', ' (carte)');
+    placed.title = `Point d’impact choisi sur la carte : ${model.impact.count} combattant${model.impact.count > 1 ? 's' : ''} dans la zone, tous décochables`;
+    placed.dataset.impactPlaced = String(model.impact.count);
+    legend.appendChild(placed);
+  }
+  list.appendChild(legend);
+  const current = () => (Array.isArray(draft.magicTargetIds) ? draft.magicTargetIds : []);
+  const chosen = model.candidates.filter(row => row.checked), others = model.candidates.filter(row => !row.checked);
+  if (!chosen.length) {
+    const none = node('span', 'workspace-muted workspace-magic-zone-none', 'personne : sort sans cible');
+    none.dataset.impactNone = '';
+    list.appendChild(none);
+  }
+  for (const row of chosen) {
+    const chip = node('button', 'workspace-chip workspace-magic-zone-target', row.name);
+    chip.type = 'button';
+    chip.title = `${row.name} : cliquer pour le retirer de la zone`;
+    chip.setAttribute('aria-pressed', 'true');
+    chip.setAttribute('aria-label', `Retirer de la zone : ${row.name}`);
+    chip.dataset.impactTarget = row.id;
+    chip.dataset.focusKey = `magic-impact-target-${row.id}`;
+    chip.addEventListener('click', () => handlers.select({ magicTargetIds: current().filter(id => id !== row.id) }));
+    list.appendChild(chip);
+  }
+  if (others.length) {
+    const add = document.createElement('select');
+    add.className = 'workspace-magic-zone-add';
+    add.setAttribute('aria-label', 'Ajouter dans la zone');
+    add.dataset.focusKey = 'magic-impact-add';
+    add.append(new Option('+ ajouter…', ''), ...others.map(row => new Option(row.name, row.id)));
+    add.addEventListener('change', () => { if (add.value) handlers.select({ magicTargetIds: [...new Set([...current(), add.value])] }); });
+    list.appendChild(add);
+  }
+  box.appendChild(list);
+  return box;
+}
 // Dé manquant de l'incident (cœur) → champ du panneau qui le porte.
 export const MISCAST_DIE_FIELDS = Object.freeze({ duration: 'magicSecondaryDurationRoll', strength: 'magicSecondaryDurationRoll', damage: 'magicSecondaryDamageRoll', distance: 'magicSecondaryDistanceRoll' });
 // Recette G-U1-2 : le dé secondaire réclamé par l'incident est lancé avec les dés des PNJ et désigné par « À saisir ».
@@ -68,6 +335,8 @@ export function defaultMagicSpellId(draft, actor) {
 
 /** Cibles du sort : celles cochées, sinon la cible par défaut du contrat (un brouillon vide vaut « par défaut »). */
 export function magicTargetIdsOf(draft, contract, actor, target, participants) {
+  // G4 : en point d'impact, les seuls cochés, même aucun.
+  if (pointImpactMode(draft, contract)) return castTargetIds(draft);
   if (Array.isArray(draft.magicTargetIds) && draft.magicTargetIds.length) return draft.magicTargetIds;
   const isSelfSpell = /^vous$/i.test((contract?.target || '').trim()) || /^vous$/i.test((contract?.range || '').trim());
   const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);
@@ -219,9 +488,12 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       spellSelect.appendChild(grpAll);
     }
     spellSelect.value = defaultSpellId;
-    spellSelect.addEventListener('change', () => handlers.select({ magicSpellId: spellSelect.value }));
+    // G4-d : changer de sort retire la demande de point d'impact en cours (`mj.impactCancel`) et revient à « Combattant ».
+    spellSelect.addEventListener('change', () => { withdrawImpact(draft); handlers.select({ magicSpellId: spellSelect.value, magicImpactMode: false, magicImpact: null }); });
     spellLabel.appendChild(spellSelect);
     v5.appendChild(spellLabel);
+    const zoneTargets = renderZoneTargets({ contract: getSpellContract(defaultSpellId), actor, participants, draft, handlers });
+    if (zoneTargets) v5.appendChild(zoneTargets);
     // G3-a (R15) : le sort affiché est celui que le calcul lance. Sans choix du MJ, le calcul prenait son propre défaut
     // (premier contrat du catalogue) alors que la liste en montrait un autre : le défaut affiché est retenu dans le brouillon.
     if (!draft.magicSpellId && defaultSpellId) draft.magicSpellId = defaultSpellId;
@@ -242,6 +514,7 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
       const summary = node('p', 'workspace-muted workspace-magic-contract-summary',
         `${contract.name} (${contract.canonicalName || contract.domain}) · NI ${contract.cn} · Portée : ${contract.range} · Cible : ${contract.target} · Durée : ${contract.duration}`);
       summary.dataset.magicContractSummary = contract.id;
+      summary.title = summary.textContent;
       v5.appendChild(summary);
     }
 
@@ -394,7 +667,8 @@ export function renderV5MagicContext({ actor, participants = [], target, type, d
     }
     optionsBox.appendChild(flatGroup('Surpuissance & Paramètres du sort', overcastBox));
 
-    if (participants.length >= 1) {
+    // G4 : en point d'impact, la liste « Dans la zone » (en vue) remplace les cibles multiples.
+    if (participants.length >= 1 && !pointImpactMode(draft, contract)) {
       const multiBox = flatGroup(`Cibles multiples (Contrat : ${contract?.target || '1'})`);
       const isSelfSpell = /^vous$/i.test((contract?.target || '').trim()) || /^vous$/i.test((contract?.range || '').trim());
       const isAllyOnlySpell = ['hand-of-glory', 'shield-of-saphery', 'twist-of-fate', 'hunters-moons', 'timewarp', 'ox-stands'].includes(contract?.effects?.special);

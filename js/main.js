@@ -2247,6 +2247,14 @@ if (typeof BroadcastChannel === 'function') {
   Bus.on('combat:update', mapLink.refresh);
   // Remonte (contrat §8.2) : la carte vérifie l'adjacence avant la bascule ; refus → message du cartouche ou du formulaire.
   Store.setMountGate(mapLink.requestMount);
+  // Point d'impact d'un sort de zone (contrat §10.1, version 3 ; passe G, G4) : demande, attente et annulation exposées au
+  // panneau du sort ; la connexion se relit à chaque rendu (`placement` redessine l'écran quand elle change).
+  import('./ui/resolution-panel/magic.js').then(({ setMapImpactProvider }) => setMapImpactProvider({
+    connected: () => mapLink.status() === 'connected',
+    pending: () => mapLink.impactPending(),
+    query: request => mapLink.queryImpact(request),
+    cancel: queryId => mapLink.cancelImpact(queryId)
+  }));
   setInterval(mapLink.tick, MAP_LINK_PING_MS);
 }
 
