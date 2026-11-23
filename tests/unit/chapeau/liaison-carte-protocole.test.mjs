@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const PROTOCOL = join(ROOT, 'js/core/map-link-protocol.js');
-const { createMapLinkProtocol, MARQUEURS_CARTE } = await import('../../../js/core/map-link-protocol.js');
+const { createMapLinkProtocol, MARQUEURS_CARTE, MAP_LINK_VERSION } = await import('../../../js/core/map-link-protocol.js');
 
 /** Fermeture des imports relatifs (statiques, réexports et `import()` dynamiques) d'un module, chemins relatifs à la racine. */
 function importClosure(entry) {
@@ -38,7 +38,7 @@ test('CA9 — les 16 marqueurs du contrat §5, liste figée', () => {
   assert.ok(Object.isFrozen(MARQUEURS_CARTE));
 });
 
-const map = (type, payload = {}) => ({ v: 2, type, seq: 0, at: 0, from: 'map', payload });
+const map = (type, payload = {}) => ({ v: MAP_LINK_VERSION, type, seq: 0, at: 0, from: 'map', payload });
 
 /** Branche une projection d'essai sur le protocole avec un faux canal ; `set` change la scène et relit. */
 function linked(projection, initial = []) {

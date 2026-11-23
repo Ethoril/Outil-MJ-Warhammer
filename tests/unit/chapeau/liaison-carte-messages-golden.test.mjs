@@ -7,6 +7,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { createMapLink } from '../../../js/core/map-link.js';
+import { MAP_LINK_VERSION } from '../../../js/core/map-link-protocol.js';
 import { offScenePjParticipants, mapMaxHpOf } from '../../../js/core/map-link-state.js';
 import { BEAST_PROFILES, applyBeastForm, revertBeastForm } from '../../../js/core/v5-magic-arbitrations.js';
 
@@ -39,7 +40,7 @@ const sauteur = {
 const persistantRenaut = { id: 'c1', profileId: 'prof-r', name: 'Renaut', hp: 12, maxHp: 12, states: [] };
 const persistantElsa = { id: 'c2', profileId: 'prof-e', name: 'Elsa', hp: 8, maxHp: 11, states: [{ name: 'Exténué', level: 2 }] };
 
-const map = (type, payload = {}) => ({ v: 2, type, seq: 0, at: 0, from: 'map', payload });
+const map = (type, payload = {}) => ({ v: MAP_LINK_VERSION, type, seq: 0, at: 0, from: 'map', payload });
 const withV5 = (participant, patch) => ({ ...participant, extensions: { ...participant.extensions, v5: { ...participant.extensions.v5, ...patch } } });
 
 /** Joue le scénario Warhammer et rend tout ce que la liaison a produit (messages sans `at`, statuts, vues, réponses). */
@@ -133,6 +134,20 @@ async function playScenario() {
   link.tick();
   answers.push(['status', link.status()]);
   answers.push(['timers', timers.map(timer => timer.ms)]);
+  // Point d'impact d'un sort de zone (contrat §10.1, version 3, lot G4) : ajouté en fin de scénario, après reconnexion.
+  from('map.hello');
+  const candidates = [destrier, { ...sauteur, states: [] }];
+  const impact = link.queryImpact({ label: 'Boule de feu', radiusCells: 4, caster: sauteur, candidates });
+  from('map.impact', { queryId: impact.queryId, levelId: 'L1', cell: { x: 3, y: 5 }, refs: ['p:g', 'pj:c2', 'p:inconnu'] });
+  answers.push(['queryImpact', await impact.answer]);
+  const replaced = link.queryImpact({ label: 'Tempête', radiusCells: 8, caster: null, candidates });
+  const latest = link.queryImpact({ label: 'Tempête', radiusCells: 8, caster: sauteur, candidates });
+  answers.push(['queryImpact', await replaced.answer]);
+  answers.push(['cancelImpact', link.cancelImpact(latest.queryId)]);
+  answers.push(['queryImpact', await latest.answer]);
+  const escaped = link.queryImpact({ label: 'Boule de feu', radiusCells: 4, caster: sauteur, candidates });
+  from('map.impact', { queryId: escaped.queryId, cancelled: true });
+  answers.push(['queryImpact', await escaped.answer]);
   return { messages, statuses, placements, adjacency, ran, answers };
 }
 
@@ -149,7 +164,7 @@ test('CA7 — le scénario d’or couvre bien chaque message attendu', async () 
   const { messages } = await playScenario();
   const types = new Set(messages.map(message => message.type));
   for (const type of ['mj.hello', 'mj.snapshot', 'mj.roster', 'mj.engagements', 'token.add', 'token.state', 'token.remove', 'fx.wound', 'fx.death',
-    'mount.request', 'mount.split', 'mj.distanceQuery', 'mj.ping']) assert.ok(types.has(type), `message ${type} présent`);
+    'mount.request', 'mount.split', 'mj.distanceQuery', 'mj.ping', 'mj.impactQuery', 'mj.impactCancel']) assert.ok(types.has(type), `message ${type} présent`);
   assert.ok(messages.some(message => message.type === 'token.state' && message.payload.mounted === true), 'pion monté');
   assert.ok(messages.some(message => message.type === 'token.state' && message.payload.formImageUrl), 'forme bestiale');
   assert.ok(messages.some(message => message.type === 'token.add' && message.payload.bondCells > 0), 'porteur de Bond');

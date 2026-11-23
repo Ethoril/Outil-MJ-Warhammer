@@ -258,17 +258,18 @@ describe('CA31 — map.turnReset : Action rendue, déplacement remis à zéro', 
   });
 });
 
-describe('CA32 — version 2 de la liaison', () => {
-  test('LIAISON_CARTE.version vaut 2, mj.hello part en version 2', () => {
-    assert.equal(LIAISON_CARTE.version, 2);
-    assert.equal(MAP_LINK_VERSION, 2);
+// Version 3 depuis le lot G4 (point d'impact, contrat §10.1, 23/11/2026) : map.turnReset y reste inchangé.
+describe('CA32 — version de la liaison (2, puis 3 depuis G4)', () => {
+  test('LIAISON_CARTE.version vaut 3, mj.hello part en version 3', () => {
+    assert.equal(LIAISON_CARTE.version, 3);
+    assert.equal(MAP_LINK_VERSION, 3);
     const sent = [];
     createMapLinkProtocol({ channel: { postMessage: message => sent.push(message), onmessage: null },
       projection: { tokenStates: () => ({}), refOf: participant => `p:${participant.id}` }, getParticipants: () => [] });
-    assert.deepEqual([sent[0].type, sent[0].v], ['mj.hello', 2]);
+    assert.deepEqual([sent[0].type, sent[0].v], ['mj.hello', 3]);
   });
 
-  test('map.hello en version 2 : connecté ; en version 1 : version différente, rien d’échangé', () => {
+  test('map.hello en version courante : connecté ; en version 1 : version différente, rien d’échangé', () => {
     const sent = [], statuses = [], resets = [];
     const link = createMapLinkProtocol({ channel: { postMessage: message => sent.push(message), onmessage: null },
       projection: { tokenStates: () => ({}), refOf: participant => `p:${participant.id}` }, getParticipants: () => [], onStatus: status => statuses.push(status),
@@ -278,7 +279,7 @@ describe('CA32 — version 2 de la liaison', () => {
     assert.equal(link.status(), 'version-mismatch');
     assert.equal(sent.filter(message => message.type === 'mj.snapshot').length, 0, 'pas d’instantané');
     assert.deepEqual(resets, [], 'map.turnReset d’une version 1 ignoré');
-    link.onMessage(map('map.hello', {}, 2));
+    link.onMessage(map('map.hello'));
     assert.equal(link.status(), 'connected');
     assert.equal(sent.filter(message => message.type === 'mj.snapshot').length, 1);
     assert.deepEqual(statuses, ['version-mismatch', 'connected']);
