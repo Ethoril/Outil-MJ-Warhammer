@@ -46,7 +46,7 @@ try{
   }
  }
  await choose('Flaming Hearts','',true);
- await page.locator('summary',{hasText:'Cibles multiples'}).click();
+ await page.locator('summary',{hasText:'Cibles multiples'}).click({timeout:1500}).catch(()=>{})/* G3 : groupe à plat dans « Options », plus de repli à ouvrir */;
  await page.getByLabel('Cible du sort : Cible',{exact:true}).check();
  await page.getByLabel('Tenter Frénésie — Cible',{exact:true}).check();
  assert.equal(await page.getByLabel('Frénésie : d100 — Cible',{exact:true}).count(),1);

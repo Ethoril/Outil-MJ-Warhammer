@@ -34,14 +34,16 @@ try {
   for (const [name, quality, kind, expected] of [
     ['Recharge : chargeur', { id: 'recharge', parameter: '2' }, 'ranged', 'reload-ammo'],
     ['À répétition : chargeur', { id: 'a-repetition', parameter: '3' }, 'ranged', 'reload-ammo'],
-    ['Taille : pièce frappée', { id: 'taille' }, 'melee', 'hack-piece'],
+    /* G5-a : la pièce touchée par la Taille (arme) se déduit ; elle ne bloque plus « Appliquer » (champ absent des champs bloquants). */
+    ['Taille (arme) : plus de champ bloquant', { id: 'taille' }, 'melee', '!hack-piece'],
     ['Dispersion : bande', { id: 'dispersion', rating: 3 }, 'ranged', 'spread-band'],
     ['Dispersion : cibles', { id: 'dispersion', rating: 3 }, 'ranged', 'spread-targets'],
     ['Explosion : cibles', { id: 'explosion', parameter: '2' }, 'ranged', 'explosion-targets']
   ]) {
     try {
       const found = await fields(quality, kind);
-      assert.ok(found.includes(expected), `${name} : champ ${expected} absent (${found.join(', ')})`);
+      if (expected.startsWith('!')) assert.ok(!found.includes(expected.slice(1)), `${name} : champ ${expected.slice(1)} encore bloquant (${found.join(', ')})`);
+      else assert.ok(found.includes(expected), `${name} : champ ${expected} absent (${found.join(', ')})`);
       console.log('ok  -', name);
     } catch (error) { failures++; console.log('FAIL -', name, '\n   ', error.message); }
   }

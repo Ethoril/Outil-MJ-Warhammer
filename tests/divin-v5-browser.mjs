@@ -37,8 +37,9 @@ try {
   const shieldId=await page.locator('[aria-label="Prière divine"] option').evaluateAll(options=>options.find(option=>option.textContent.includes('Bouclier de Myrmidia'))?.value);
   assert.ok(shieldId,'option Bouclier de Myrmidia visible');await page.locator('[aria-label="Prière divine"]').selectOption(shieldId);
   await page.locator('[aria-label="Destinataire Allié"]').check();
-  await chooseBoolean(page.locator('[aria-label="Allié · Portée \/ zone confirmée"]'),'true');
-  await chooseBoolean(page.locator('[aria-label="Allié · Allié admissible"]'),'true');
+  /* G3 : les faits de cible sont des cases précochées à « oui » ; « Allié admissible » s'appelle « Allié du prêtre ». */
+  await page.locator('[aria-label="Allié · Portée \/ zone confirmée"]').setChecked(true);
+  await page.locator('[aria-label="Allié · Allié du prêtre"]').setChecked(true);
   await chooseBoolean(page.locator('[aria-label="Le personnage peut prononcer la prière"]'),'true');
   await page.locator('[aria-label="Jet de Prière (d100)"]').fill('23');
   await page.locator('[aria-label="Fin de l’effet (choix du MJ)"]').selectOption('endOfRound');

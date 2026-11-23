@@ -312,7 +312,8 @@ async function main() {
     await expect(page.locator('.workspace-track-role')).toHaveCount(1);
     await rerender();
     await expect(targetSheet).toContainText('Combattant 5');
-    await expect(page.locator('.workspace-resolution')).toContainText('Épée longue · 45');
+    // Depuis G1, l'action préparée est dans la barre du bas, plus dans la résolution.
+    await expect(page.locator('.workspace-action-bar [data-bar-action^="prepared-"]').filter({ hasText: /Épée longue.*45/ })).toHaveCount(1);
     await expect(page.locator('.workspace-resolution').getByRole('group', { name: 'Alliés' })).toContainText('Combattant 5');
 
     // Integrated resolution: no keystroke is lost across Bus re-renders.

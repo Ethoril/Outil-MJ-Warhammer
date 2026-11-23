@@ -1,4 +1,6 @@
 export const workspaceHarness=`<!doctype html><html lang="fr"><head><meta charset="utf-8"><link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body><div id="workspace-mount"></div><script type="module">
+/* G3 : les réglages du sort sont dans un repli « Options » fermé ; ces parcours les manipulent tous, on le garde ouvert. */
+new MutationObserver(()=>document.querySelectorAll('details[data-magic-options]:not([open])').forEach(d=>{d.open=true;})).observe(document,{childList:true,subtree:true});
 import {createStore} from '/js/core/store.js';
 import {initWorkspaceView} from '/js/ui/workspace-view.js';
 import {getSpellContract,getAllSpellContracts} from '/js/core/v5-spell-contracts.js';

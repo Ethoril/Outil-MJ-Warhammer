@@ -9,7 +9,7 @@ const rider = (patch = {}) => ({ id: 'r', kind: 'PJ', persistentCharacterId: 'c1
   extensions: { v5: { ownMountId: 'h', ...patch } } });
 const horse = (patch = {}) => ({ id: 'h', kind: 'Créature', name: 'Destrier', hp: 20, maxHp: 22, size: 'Grande', movement: 10,
   states: [{ name: 'Sonné', level: 2 }], extensions: { v5: { mountOf: 'r' } }, ...patch });
-const map = (type, payload = {}) => ({ v: 2, type, from: 'map', payload });
+const map = (type, payload = {}) => ({ v: 3, type, from: 'map', payload });
 
 function setup(initial) {
   let scene = initial;

@@ -21,6 +21,8 @@ const HARNESS_HTML = `<!doctype html><html lang="fr"><head><meta charset="utf-8"
 <link rel="stylesheet" href="/MJ.css"><link rel="stylesheet" href="/js/ui/workspace.css"></head><body>
 <div id="combat-banner"></div><div id="workspace-mount"></div>
 <script type="module">
+/* G3 : les réglages du sort sont dans un repli « Options » fermé ; ce parcours les manipule tous, on le garde ouvert. */
+new MutationObserver(() => document.querySelectorAll('details[data-magic-options]:not([open])').forEach(d => { d.open = true; })).observe(document, { childList: true, subtree: true });
 import { createStore } from '/js/core/store.js';
 import { initWorkspaceView } from '/js/ui/workspace-view.js';
 import { getSpellContract } from '/js/core/v5-spell-contracts.js';
@@ -102,7 +104,7 @@ async function pickSpell(page, name) {
 }
 /** Ne cible que les participants donnés (cases « Cible du sort »). */
 async function targetOnly(page, ...names) {
-  await page.locator('summary', { hasText: 'Cibles multiples' }).click(); await page.waitForTimeout(150);
+  await page.locator('summary', { hasText: 'Cibles multiples' }).click({timeout:1500}).catch(()=>{})/* G3 : groupe à plat dans « Options », plus de repli à ouvrir */; await page.waitForTimeout(150);
   for (const name of ['Aldous Flammecoeur', 'Greta Alliée', 'Guerrier du Chaos', 'Maraudeur']) {
     const box = page.getByLabel('Cible du sort : ' + name, { exact: true });
     if ((await box.isChecked()) !== names.includes(name)) { await box.setChecked(names.includes(name)); await page.waitForTimeout(200); }
@@ -192,13 +194,13 @@ try {
   // P6 : les réponses d'une attaque ne passent pas à la suivante.
   {
     const { page, context } = await open('attack', { w: 'Dôme' });
-    await page.click('[data-action-key="bow-enemy-1"]'); await page.waitForTimeout(300);
+    await page.click('.workspace-action-bar [data-bar-action="prepared-bow-enemy-1"]'); await page.waitForTimeout(300);
     const origin = () => page.getByLabel('Aldous Flammecoeur : origine extérieure à la zone ?', { exact: true });
     await chooseBoolean(origin(),'true'); await page.waitForTimeout(250);
     await page.fill('input[aria-label="Protection magique : résultat du d10"]', '3'); await page.waitForTimeout(150);
     await calc(page, 25);
     await page.locator('button[data-focus-key="apply"]', { hasText: /^Appliquer/ }).click(); await page.waitForTimeout(500);
-    await page.click('[data-action-key="bow-enemy-1"]'); await page.waitForTimeout(300);
+    await page.click('.workspace-action-bar [data-bar-action="prepared-bow-enemy-1"]'); await page.waitForTimeout(300);
     assert.equal(await confirmationValue(origin()), '', 'la nature de l’attaque précédente est oubliée');
     assert.equal(await page.inputValue('input[aria-label="Protection magique : résultat du d10"]'), '', 'le d10 précédent est oublié');
     await context.close();
@@ -206,7 +208,7 @@ try {
   // Contact contre un Dôme : aucune question d'origine.
   {
     const { page, context } = await open('attack', { w: 'Dôme' });
-    await page.click('[data-action-key="axe-enemy-1"]'); await page.waitForTimeout(300);
+    await page.click('.workspace-action-bar [data-bar-action="prepared-axe-enemy-1"]'); await page.waitForTimeout(300);
     assert.equal(await page.getByLabel('Aldous Flammecoeur : origine extérieure à la zone ?', { exact: true }).count(), 0);
     await context.close();
   }
@@ -264,9 +266,9 @@ try {
     await pickSpell(page, 'Forme bestiale');
     assert.equal(await page.locator('[data-focus-key="magic-beast-key"]').count(), 1, 'sélecteur d’animal pour Forme bestiale');
     assert.equal(await page.locator('[data-focus-key="magic-kadon-monster"]').count(), 0, 'pas de sélecteur de monstre');
-    const optionsBlock = page.locator('summary', { hasText: 'Options du sort : Forme bestiale' }).locator('..');
+    const optionsBlock = page.locator('.workspace-magic-options-group').filter({ has: page.locator('.workspace-magic-options-title', { hasText: 'Options du sort : Forme bestiale' }) })/* G3 : groupe à plat dans « Options » */;
     assert.equal(await optionsBlock.locator('[data-focus-key="magic-beast-key"]').count(), 1, 'dans le bloc des options du sort');
-    const overcastBlock = page.locator('summary', { hasText: 'Surpuissance & Paramètres du sort' }).locator('..');
+    const overcastBlock = page.locator('.workspace-magic-options-group').filter({ has: page.locator('.workspace-magic-options-title', { hasText: 'Surpuissance & Paramètres du sort' }) });
     assert.equal(await overcastBlock.locator('[data-focus-key="magic-beast-key"]').count(), 0, 'plus dans la surpuissance');
     assert.equal(await overcastBlock.getByLabel('Palier Main de Gloire').count(), 0, 'aucun champ d’un autre sort');
     assert.equal(await page.getByLabel('Jet 3d10 commun (Main de Gloire)').count(), 0);
@@ -289,9 +291,9 @@ try {
     assert.equal(mage.form, profile.name);
     assert.deepEqual(mage.equipment, []);
     assert.ok(Object.values(mage.armor).every(ap => ap === (profile.armor?.ap ?? 0)), key + ' : seule l’armure standard de l’animal');
-    const proposed = await page.locator('[data-action-key^="beast-form:"]').count();
+    const proposed = await page.locator('.workspace-action-bar [data-bar-action^="prepared-beast-form:"]').count();
     assert.equal(proposed, profile.attacks.length, key + ' : attaques de l’animal proposées');
-    assert.equal(await page.locator('[data-action-key="staff-1"]').count(), 0, key + ' : l’arme du lanceur n’est plus proposée');
+    assert.equal(await page.locator('.workspace-action-bar [data-bar-action="prepared-staff-1"]').count(), 0, key + ' : l’arme du lanceur n’est plus proposée');
     assert.deepEqual(errors, []);
     await context.close();
   }
@@ -323,7 +325,7 @@ try {
     const { page, context } = await open('cast');
     await pickSpell(page, 'Carreau');
     for (const key of ['magic-beast-key', 'magic-kadon-monster']) assert.equal(await page.locator(`[data-focus-key="${key}"]`).count(), 0, key + ' absent pour un autre sort');
-    assert.equal(await page.locator('summary', { hasText: 'Options du sort' }).count(), 0, 'aucune option propre à Carreau');
+    assert.equal(await page.locator('.workspace-magic-options-title', { hasText: 'Options du sort' }).count(), 0, 'aucune option propre à Carreau');
     await pickSpell(page, 'Main de Gloire');
     assert.equal(await page.getByLabel('Palier Main de Gloire').count(), 1);
     assert.equal(await page.locator('[data-focus-key="magic-beast-key"]').count(), 0);
@@ -349,7 +351,7 @@ try {
     assert.ok(mage.traits.includes('Vision nocturne') && mage.traits.includes('Régénération'));
     assert.deepEqual(mage.skills, ['Corps à corps (Bagarre)', 'Corps à corps (Base)', 'Résistance'], 'Compétences du monstre');
     assert.deepEqual(mage.talents, [], 'Talents remplacés');
-    assert.equal(await page.locator('[data-action-key^="beast-form:"]').count(), KADON_PROFILES.troll.attacks.length);
+    assert.equal(await page.locator('.workspace-action-bar [data-bar-action^="prepared-beast-form:"]').count(), KADON_PROFILES.troll.attacks.length);
     assert.deepEqual(errors, []);
     await context.close();
   }
@@ -367,7 +369,7 @@ try {
     const reminder = page.locator('[data-daemonbane-reminder]');
     assert.equal(await reminder.isVisible(), true, 'rappel visible tant que les Bmax sont divisées');
     assert.match(await reminder.innerText(), /Guerrier du Chaos 10\/20/);
-    await page.click('[data-action="restore-daemonbane"]'); await page.waitForTimeout(500);
+    /* G3 : Options ouvert dans la page d'essai recouvre le bandeau ; clic sans test de visibilité */ await page.locator('[data-action="restore-daemonbane"]').dispatchEvent('click'); await page.waitForTimeout(500);
     assert.equal(await maxHp(), 20, 'Bmax restaurées par l’action MJ');
     assert.equal(await reminder.isVisible(), false, 'rappel retiré une fois restaurées');
     assert.deepEqual(errors, []);

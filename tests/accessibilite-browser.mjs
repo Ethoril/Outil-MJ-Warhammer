@@ -35,6 +35,10 @@ async function seed(page) {
     await Store.launchEncounter('rencontre-accessibilite');
     const state = JSON.parse(Store.getFullJSON());
     const gobId = state.combat.participants.find(row => row.name === 'Gobelin').id;
+    // Combat au round 1 : la barre d'actions (seule à proposer les actions préparées depuis G1) n'existe qu'une fois l'initiative appliquée.
+    state.combat.round = 1;
+    state.combat.order = state.combat.participants.map(row => row.id);
+    state.combat.currentActorId = state.combat.participants.find(row => row.name === 'Hilda Brenner').id;
     state.extensions.v5.aftermathRegister = { schemaVersion: 1, revision: 1, calendar: { schemaVersion: 1, originDay: 0, currentDay: 0 }, receipts: [], diseases: [], sequelae: [],
       incidents: [{ id: 'i-gob', participantId: gobId, source: { kind: 'wounds-lost', cause: 'combat' }, subjectKind: 'person', injuryDay: 0, status: 'open',
         bandaged: false, requiresSurgery: false, surgeryCompleted: true, infection: false, dailyChecks: [], treatments: [] }] };
@@ -179,7 +183,7 @@ try {
     // Jouer : rencontre en cours, panneau de résolution d'une attaque ouvert sur le Gobelin.
     await screen('Jouer', '#tab-combat', async () => {
       await page.locator('[data-workspace-select]', { hasText: 'Hilda' }).click();
-      await page.locator('[data-action-key="epee"]').click();
+      await page.locator('.workspace-action-bar [data-bar-action^="prepared-"]').filter({ hasText: 'Épée à une main' }).first().click();
       await page.locator('#workspace-root').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Gobelin', exact: true }).click();
       await expect(page.locator('#workspace-root [data-roll-input="attack"]')).toBeVisible();
     });

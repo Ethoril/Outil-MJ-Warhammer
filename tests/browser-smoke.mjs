@@ -236,7 +236,8 @@ async function main() {
     // Integrated resolution: the prepared physical action is preselected and
     // resolved in place, without a modal.
     const resolution = page.locator('.workspace-resolution');
-    const action = resolution.getByRole('button', { name: /Épée de recette.*48/ }).first();
+    // Depuis G1, l'action préparée se lit (aria-pressed) dans la barre du bas, plus dans la résolution.
+    const action = page.locator('.workspace-action-bar [data-bar-action^="prepared-"]').filter({ hasText: /Épée de recette.*48/ }).first();
     await expect(action).toHaveAttribute('aria-pressed', 'true');
     await openU1Types(resolution);await expect(resolution.getByRole('combobox', { name: 'Type d’action' })).toHaveValue('attack');
     // The V5 melee opposition requires the defender's chosen Test and roll.

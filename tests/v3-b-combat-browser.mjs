@@ -45,7 +45,8 @@ try {
   const calculate = async () => { await play.getByRole('button', { name: 'Calculer', exact: true }).click(); await play.locator('.workspace-result-live').waitFor(); await page.waitForTimeout(400); await settleChoices(); await page.waitForTimeout(200); };
   const prepareShot = async (id = 'shot') => {
     await play.locator('[data-workspace-select="a"]').click();
-    await play.locator(`[data-action-key="${id}"]`).click();
+    // Depuis G1, l'action préparée se choisit dans la barre du bas.
+    await page.locator(`[data-zone="bas"] [data-bar-action="prepared-${id}"]`).click();
     await openU1Types(play);await play.getByLabel('Type d’action').selectOption('attack');
     await openU1Settings(play);
     await play.getByLabel('Nature du Test').selectOption('ranged');

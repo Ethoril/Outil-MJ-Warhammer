@@ -140,6 +140,12 @@ async function main() {
     await Store.savePersistentCharacter({ id: 'visual-pc', name: 'Caelel', hp: 12, maxHp: 18, states: ['Sonné|3'] });
     await Store.saveEncounter({ id: 'visual-encounter', title: 'Recette PJ : armes, talents et protection', entries: [{ id: 'visual-entry', profileId: 'visual-pj', quantity: 1, zone: 'active', persistentCharacterId: 'visual-pc' }] });
     await Store.launchEncounter('visual-encounter');
+    // Round 1 posé : depuis G1, l'action choisie se lit dans la barre du bas, qui n'existe qu'une fois l'initiative appliquée.
+    const state = JSON.parse(Store.getFullJSON());
+    state.combat.round = 1;
+    state.combat.order = state.combat.participants.map(row => row.id);
+    state.combat.currentActorId = state.combat.order[0];
+    await Store.loadFromJSON(state);
   }, { fixture, equipment: [weapon('one', { name: 'Épée longue personnalisée de la forêt de Loren', keywords: [{ id: 'empaleuse', parameter: '' }] }), weapon('shield', { name: 'Bouclier gravé de Caelel', kind: 'shield', ap: 2, damage: 'BF+2', keywords: [{ id: 'protectrice', parameter: '2' }] }), weapon('leather', { name: 'Veste de cuir', kind: 'armour', damage: '', reach: '', ap: 1, locations: ['body', 'rightArm'], layer: 'leather', keywords: [] }), weapon('plate', { name: 'Plastron et bras gauche rigides', kind: 'armour', damage: '', reach: '', ap: 3, locations: ['body', 'leftArm'], layer: 'rigid', keywords: [] })] });
   await visual.locator('#tab-library').click();
   const card = visual.locator('.workspace-space-library .workspace-profile-card').filter({ hasText: 'Caelel' });
@@ -174,7 +180,7 @@ async function main() {
     button.click();
     return before;
   });
-  await expect(visual.locator('.workspace-resolution [data-action-key][aria-pressed="true"]')).toContainText(legacyBefore.note);
+  await expect(visual.locator('[data-zone="bas"] [data-bar-action^="prepared-"][aria-pressed="true"]')).toContainText(legacyBefore.note);
   await expect(visual.locator('.workspace-resolution [data-roll-input="attack"]')).toHaveValue('');
   assert.deepEqual(await visual.evaluate(async () => { const { Store } = await import('/js/main.js'); return { revision: Store.getLocalRevision(), health: Store.listParticipants().map(row => [row.id, row.hp]) }; }), { revision: legacyBefore.revision, health: legacyBefore.health }, 'historical attack navigation must not roll or mutate combat');
   console.log('PASS — historical attack button selects the canonical action without rolling or damage');
@@ -191,11 +197,13 @@ async function main() {
   }, { bow: weapon('bow-test', { name: 'Arc de recette', category: 'Arc', range: '50', keywords: [] }), arrows: weapon('arrows', { kind: 'ammunition', name: 'Flèches recette', category: 'Arc', damage: '', reach: '', range: '', keywords: [{ id: 'empaleuse', parameter: '' }] }) });
   const resolution = visual.locator('.workspace-resolution, .workspace-resolution-drawer');
   await openU1Settings(resolution);
-  await resolution.getByRole('button', { name: /Arc de recette/ }).first().click();
+  // Depuis G1, les actions préparées se choisissent dans la barre du bas, plus dans la résolution.
+  const barAction = name => visual.locator('[data-zone="bas"] [data-bar-action^="prepared-"]').filter({ hasText: name }).first();
+  await barAction(/Arc de recette/).click();
   const ammo = resolution.getByRole('combobox', { name: 'Munition', exact: true });
   await expect(ammo).toBeVisible().catch(async error => { console.error('AMMO DEBUG — '+JSON.stringify(await visual.evaluate(async () => { const { Store } = await import('/js/main.js'); return { participants:Store.listParticipants().map(row=>({name:row.name,equipment:row.equipment?.map(item=>({id:item.id,kind:item.kind,category:item.category,range:item.range})),actions:row.actions?.map(action=>({note:action.note,fiche:action.extensions?.fiche}))})), resolution:document.querySelector('.workspace-resolution')?.textContent }; }))); throw error; }); await expect(ammo.locator('option[value="arrows"]')).toHaveCount(1);
   await ammo.selectOption('arrows');
-  await resolution.getByRole('button', { name: /Inoffensive recette/ }).first().click();
+  await barAction(/Inoffensive recette/).click();
   await expect(resolution.getByRole('combobox', { name: 'Munition', exact: true })).toHaveCount(0, 'no ammunition on melee attack');
   // The synthetic unbound action must now identify its skill and non-improvised weapon explicitly.
   await resolution.getByRole('combobox', { name: 'Compétence de ce Test pour les talents', exact: true }).selectOption('skill-43_6f_72_70_73_20_e0_20_63_6f_72_70_73-42_61_73_65');
