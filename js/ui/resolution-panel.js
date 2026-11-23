@@ -25,6 +25,7 @@ import { carriesMovement } from '../core/creature-movement.js';
 import { engagedCandidates, planOutnumbering } from '../core/outnumbering.js';
 import { deriveEngagementContext, deriveSceneContext, engagedWith } from '../core/engagements.js';
 import { renderDistanceRow, renderContextRow, renderPertinentCircumstances, deviationRollField } from './resolution-panel/compact.js';
+import { rangedDodgeRight, rangedDodgeSync, rangedDodgeAnswer, mapDistanceContext, mapMetersFor, mapBandFor } from './combat-distance.js';
 import { deducedCircumstances } from './resolution-panel/circonstances.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
@@ -52,10 +53,30 @@ import { collectTestQuestions, renderTestQuestions, renderObstinateChoice, getAt
 export const isCriticalFateRoll = value => Number.isInteger(Number(value)) && Number(value) >= 1 && Number(value) <= 100 && isDouble(Number(value));
 export const hitMorphologySelection = (override, profileMorphology) => override !== undefined ? override : profileMorphology || '';
 
+/** G2-c : coupe un texte à `max` caractères au plus, sur une limite de mot, avec « … ». */
+export function clipText(text, max) {
+  const value = String(text ?? '').replace(/\s+/g, ' ').trim();
+  if (value.length <= max) return value;
+  const cut = value.slice(0, max - 1);
+  const space = cut.lastIndexOf(' ');
+  return `${(space > max / 2 ? cut.slice(0, space) : cut).replace(/[\s,;:.(–—-]+$/u, '')}…`;
+}
+// Libellés courts des raisons dont le texte du moteur est long (texte complet en infobulle).
+const SHORT_REASONS = [
+  [/^Confirmer la règle autorisant cette défense contre un tir/, 'Esquive contre ce tir : à confirmer (p. 165)'],
+  [/^Bénédiction de Protection : saisir le Test de Calme/, 'Protection : Test de Calme de l’attaquant'],
+  [/^Tir engagé : saisir le dé/, 'd100 du combattant touché']
+];
+/** G2-c : libellé court (≤ 60 caractères) d'une raison bloquante. */
+export function shortReasonLabel(text) {
+  const known = SHORT_REASONS.find(([pattern]) => pattern.test(String(text)));
+  return clipText(known ? known[1] : text, 60);
+}
+
 export function applicationBlockingReasons(preview, draft, canApply, preflight = {}) {
   const reasons = [];
   const add = (condition, text, focus) => { if (condition) reasons.push({ text, focus }); };
-  const finish = () => reasons.map(reason => reason.focus || reason.action ? reason : { ...reason, withoutField: true });
+  const finish = () => reasons.map(reason => ({ ...(reason.focus || reason.action ? reason : { ...reason, withoutField: true }), label: shortReasonLabel(reason.text) }));
   if (draft.busy) reasons.push({ text: 'Calcul en cours', silent: true });
   add(!canApply, 'Application indisponible dans cet écran');
   if (!preview) {
@@ -101,19 +122,47 @@ export function applicationBlockingReasons(preview, draft, canApply, preflight =
  * Ligne de « À saisir avant d'appliquer » : un lien vers le champ, et sur place ce qui se règle d'un geste
  * (d100 du critique saisi ou lancé ici, Charge déclarée), pour ne pas chercher le champ dans le panneau.
  */
+/** G2-c : bouton d'une raison, libellé de 40 caractères au plus ; libellé court en nom accessible, texte complet en infobulle. */
+function reasonButton(reason, className) {
+  const label = reason.label || shortReasonLabel(reason.text);
+  const visible = clipText(label, 40);
+  const link = button(visible, className);
+  if (visible !== label) link.setAttribute('aria-label', label);
+  link.title = reason.text;
+  return link;
+}
+
+/**
+ * G2-d : une raison cliquée ne rouvre jamais le panneau « autres… ». Un champ rangé dans le panneau fermé est amené dans la
+ * ligne de la raison (le même élément, avec ses gestionnaires), le temps de la saisie ; le rendu suivant le remet en place.
+ */
+function inlineControlOf(field) {
+  const holder = field.closest('label, [role="group"]') || field;
+  if (holder.closest('.workspace-resolution-drawer') === null) return field;
+  const controls = holder.querySelectorAll ? holder.querySelectorAll('input, select, textarea, button').length : 0;
+  return holder !== field && controls > 3 ? field : holder;
+}
+
 function blockingReasonItem(reason, field, { section, handlers, draft }) {
   const item = node('li', 'workspace-blocking-reason');
+  item.title = reason.text;
+  // Texte complet lu par les lecteurs d'écran et par « Arbitrer » (G5-c) qui retrouve la raison par son texte.
+  if ((reason.label || reason.text) !== reason.text) item.appendChild(node('span', 'workspace-visually-hidden', `${reason.text} `));
   // Refonte E4b (CA15) : le d100 du combattant touché se saisit ici, et seulement quand le moteur le demande.
   if (!field && reason.focus === 'engaged-roll' && draft) {
-    item.append(node('span', '', reason.text), deviationRollField({ draft, handlers }));
+    item.append(node('span', '', reason.label || reason.text), deviationRollField({ draft, handlers }));
     return item;
   }
   if (field) {
-    const link = button(reason.text, 'workspace-ghost workspace-blocking-link');
+    const link = reasonButton(reason, 'workspace-ghost workspace-blocking-link');
     link.addEventListener('click', () => {
-      if (field.closest('.workspace-resolution-drawer')?.hidden) section.querySelector('[data-circumstances-toggle]')?.click();
+      if (field.closest('.workspace-resolution-drawer')?.hidden) {
+        const control = inlineControlOf(field);
+        if (control.parentElement !== item) { control.classList.add('is-inline-from-drawer'); item.appendChild(control); }
+      }
       for (let parent = field.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
-      field.scrollIntoView({ block: 'center' }); field.focus();
+      field.scrollIntoView({ block: 'center' });
+      (field.matches?.('[role="group"]') ? field.querySelector('button') || field : field).focus();
     });
     item.appendChild(link);
     if (field.tagName === 'INPUT' && field.dataset.criticalDraftKey) {
@@ -143,7 +192,7 @@ function blockingReasonItem(reason, field, { section, handlers, draft }) {
         item.appendChild(launch);
       }
     }
-  } else item.appendChild(node('span', '', reason.text));
+  } else item.appendChild(node('span', '', reason.label || reason.text));
   if (reason.action === 'charge') {
     const charge = button('Déclarer la Charge', 'workspace-secondary', { 'data-focus-key': 'declare-charge' });
     charge.addEventListener('click', () => { handlers.select({ charging: true }); handlers.calculate(); });
@@ -276,6 +325,13 @@ export function defenseOptions(target, actions = [], { includeEndurance = false 
     return[{value,label:name+' · '+(target?.caracs?.[attr]??'—'),statLabel:name,attr,group:'skills',base:finiteBase(target?.caracs?.[attr]),type:'skill',extensions:{fiche:{skillId:skill.id},v5:{scoreIsCurrent:true}},v5:{kind:'test'}}];
   }):[];
   return [...caracs, ...skills, ...perceptionOption, ...jets, { value: 'Autre', label: 'Autre (valeur libre)', statLabel: 'Autre', group: 'autre', base: null }];
+}
+
+/** G2-a : option d'Esquive de la cible (compétence importée, jet enregistré « Esquive », sinon Ag), ou null. */
+export function dodgeOptionValue(options = []) {
+  return options.find(option => option.extensions?.fiche?.skillId === DODGE_SKILL_ID)?.value
+    || options.find(option => option.group === 'jets' && /esquive|dodge/i.test(option.statLabel || ''))?.value
+    || options.find(option => option.value === 'Ag')?.value || null;
 }
 
 /** Défense proposée d'office : le premier jet de type défense, sinon la CC. Contre un défenseur Bestial (`dodgeOnly`), l'Esquive si la cible l'a. */
@@ -1900,7 +1956,14 @@ export function renderResolutionPanel(options) {
     fields.append(wrap);
   }
   if (kind.value === 'ranged' && target) {
-    contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé par Esquive confirmé par le MJ (tireur à moins de Bonus d’Initiative mètres de la cible, ou bouclier de 2 PA ou plus)').dataset.blockingField = 'ranged-opposition';
+    // G2-a/d : la question se pose en ligne (ligne Distance) ; cette case des réglages détaillés reste, sans être la cible des raisons.
+    const dodgeSelect = contextField(fields, 'actor', 'rangedOppositionAllowed', 'Tir opposé par Esquive confirmé par le MJ (tireur à moins de Bonus d’Initiative mètres de la cible, ou bouclier de 2 PA ou plus)');
+    // Une réponse donnée ici est un choix du MJ pour cette paire, comme le Oui / Non de la ligne (jamais réécrit par la déduction).
+    dodgeSelect.parentElement?.addEventListener('change', event => {
+      if (event.target !== dodgeSelect) return;
+      event.stopPropagation();
+      handlers.select({ v5Context: rangedDodgeAnswer(draft.v5Context || {}, { actorId: actor.id, targetId: target.id }, dodgeSelect.value === '' ? null : dodgeSelect.value === 'true') });
+    }, true);
   }
   if (type === 'attack' && target) contextField(fields, 'actor', 'targetHelpless', 'Cible sans défense : situation vérifiée par le MJ');
   // Surnombre (L06 p. 167, BR-16) : le moteur ne suit pas l'engagement, le MJ coche les engagés avec la cible de chaque côté.
@@ -3083,10 +3146,18 @@ export function renderResolutionPanel(options) {
     disabled: draft.busy
   }));
   const kindVal = draft.v5Kind || inferV5Kind({ ...action, type }, equipmentAttackContext(action.extensions?.equipment));
+  // G2-a (R14, p. 165) : droit d'esquiver ce tir, déduit de la carte, du bouclier ou du plateau, sinon demandé au MJ.
+  const dodgePair = target ? { actorId: actor.id, targetId: target.id } : null;
+  const dodgeRight = type === 'attack' && compactKind === 'ranged' && compactAttack ? rangedDodgeRight({ actor, target, context: draft.v5Context || {}, plateau: compactPlateau }) : null;
+  const noDefense = dodgeRight?.defense === 'none';
   if (['attack', 'opposition'].includes(type) && target) {
-    const defenseBlock = node('div', 'workspace-defense');
+    const defenseBlock = node('div', `workspace-defense${noDefense ? ' is-no-defense' : ''}`);
     const legend = node('p', 'workspace-roll-label');
-    legend.append('Défense de ', node('span', 'combatant-name', target.name), kindVal === 'melee' ? ' (requise en mêlée)' : ' (selon les circonstances)');
+    // G2-g : sans droit à l'esquive, aucun jet de défense ; le tir est un Test non opposé (p. 164).
+    if (noDefense) {
+      legend.append('Défense de ', node('span', 'combatant-name', target.name), ' : aucune · ', node('span', 'workspace-defense-reason', dodgeRight.label));
+      legend.title = `Tir non opposé : réussi = touché, raté = manqué (p. 164). ${dodgeRight.title}`;
+    } else legend.append('Défense de ', node('span', 'combatant-name', target.name), kindVal === 'melee' ? ' (requise en mêlée)' : ' (selon les circonstances)');
     defenseBlock.appendChild(legend);
     const row = node('div', 'workspace-roll-row');
     const stat = document.createElement('select');
@@ -3116,15 +3187,18 @@ export function renderResolutionPanel(options) {
     base.disabled = draft.busy;
     base.addEventListener('input', () => handlers.input('defenseBase', base.value));
     row.append(stat, base);
+    // Sans droit : caractéristique et valeur masquées, dé grisé (et ignoré par « Lancer tous les dés des PNJ »).
+    if (noDefense) { stat.disabled = true; base.disabled = true; row.hidden = true; }
     defenseBlock.appendChild(row);
     defenseBlock.appendChild(rollField({
       field: 'defense',
       label: `Jet de défense (${defense.option.value === 'Autre' ? 'valeur' : defense.option.statLabel} ${draft.defenseBase || '—'})`,
-      value: draft.defenseRoll,
+      value: noDefense ? '' : draft.defenseRoll,
       error: draft.error?.field === 'defense' ? draft.error.message : '',
       handlers,
-      disabled: draft.busy
+      disabled: draft.busy || noDefense
     }));
+    if (noDefense) { const roll = defenseBlock.querySelector?.('[data-roll-input="defense"]')?.closest('.workspace-roll'); if (roll) roll.hidden = true; }
     rolls.appendChild(defenseBlock);
   }
   for (const [field, participant] of [['attack', actor], ['defense', target]]) {
@@ -3170,6 +3244,43 @@ export function renderResolutionPanel(options) {
   }
   section.appendChild(commands);
 
+  let distance = null;
+  if (type === 'attack' && compactKind === 'ranged' && compactAttack) {
+    const names = ids => ids.map(id => participants.find(row => row.id === id)?.name || id).join(', ');
+    // G2-b : les mètres de la carte sont gardés dans le brouillon ; la ligne et le droit d'esquiver se lisent sans attendre.
+    const knownMeters = mapMetersFor(draft.v5Context || {}, actor.id, target.id);
+    const knownBand = knownMeters === null ? null : v5RangeBandForMeters(knownMeters, compactRangeBands);
+    distance = renderDistanceRow({ draft, plateau: compactPlateau, rangeBands: compactRangeBands, handlers, names,
+      mapState: knownMeters === null ? null : { meters: knownMeters, band: knownBand }, dodge: dodgeRight,
+      onDodge: value => handlers.select({ v5Context: rangedDodgeAnswer(draft.v5Context || {}, dodgePair, value) }) });
+    // Dans la section dès maintenant : les raisons du pied y trouvent la question d'esquive (G2-d) ; replacée sous la Cible ensuite.
+    section.appendChild(distance.row);
+    if (mapDistanceProvider) {
+      const pairKey = `${actor.id}>${target.id}@${draft?.round ?? ''}`;
+      Promise.resolve(mapDistanceProvider(actor, target, 'ranged')).then(answer => {
+        if (!distance.explain.isConnected) return;
+        if (!answer?.ok) {
+          // Carte débranchée ou pion absent : la mesure gardée ne vaut plus (sans carte, la question revient).
+          if (knownMeters !== null) handlers.select({ v5Context: { ...(draft.v5Context || {}), mapDistance: { ...draft.v5Context.mapDistance, offline: true } } });
+          else distance.mapNote.textContent = ` · ${answer?.message || 'Carte : distance à saisir.'}`;
+          return;
+        }
+        const band = v5RangeBandForMeters(answer.meters, compactRangeBands);
+        const current = draft.v5Context || {};
+        // La bande écrite par la carte suit la nouvelle mesure ; une bande choisie par le MJ reste.
+        const previous = mapBandFor(current, actor.id, target.id);
+        let shotRange = current.shotRange;
+        if (band && previous && shotRange === previous) shotRange = band;
+        if (band && !shotRange && current.engagedWithShooter !== true && compactPlateau.engagedWithShooter !== true && !mapRangePrefilled.has(pairKey)) {
+          mapRangePrefilled.add(pairKey);
+          shotRange = band;
+        }
+        const fromMap = Boolean(band) && shotRange === band;
+        const next = mapDistanceContext({ ...current, ...(shotRange ? { shotRange } : {}) }, { meters: answer.meters, actorId: actor.id, targetId: target.id, band: fromMap ? band : null });
+        if (next || shotRange !== current.shotRange) handlers.select({ v5Context: next || { ...current, shotRange } });
+      }, () => { if (distance.explain.isConnected && knownMeters === null) distance.mapNote.textContent = ' · Carte : distance à saisir.'; });
+    }
+  }
   const live = node('div', 'workspace-result-live');
   live.setAttribute('aria-live', 'polite');
   if (draft.error?.field === 'apply' || draft.error?.field === 'general') {
@@ -3248,7 +3359,7 @@ export function renderResolutionPanel(options) {
       const block = node('div', 'workspace-field-error');
       block.appendChild(node('p', '', 'À saisir avant d’appliquer :'));
       const list = node('ul');
-      for (const reason of reasons) list.appendChild(node('li', '', reason.text));
+      for (const reason of reasons) { const item = node('li', '', reason.label || reason.text); item.title = reason.text; list.appendChild(item); }
       block.appendChild(list); live.appendChild(block);
     }
   } else if (preview) {
@@ -3296,7 +3407,7 @@ export function renderResolutionPanel(options) {
       for (const reason of listed) {
         const field = reason.focus && drawer.querySelector?.(`[data-blocking-field="${reason.focus}"]`);
         if (!field || field.closest('.workspace-circumstances-group.is-required')) continue;
-        const jump = button(reason.text, 'workspace-ghost');
+        const jump = reasonButton(reason, 'workspace-ghost');
         jump.addEventListener('click', () => {
           for (let parent = field.parentElement; parent; parent = parent.parentElement) if (parent.tagName === 'DETAILS') parent.open = true;
           field.scrollIntoView({ block: 'center' });
@@ -3340,24 +3451,18 @@ export function renderResolutionPanel(options) {
   }
   section.appendChild(live);
   refreshRollAll();
-  let distance = null;
-  if (type === 'attack' && compactKind === 'ranged' && compactAttack) {
-    const names = ids => ids.map(id => participants.find(row => row.id === id)?.name || id).join(', ');
-    distance = renderDistanceRow({ draft, plateau: compactPlateau, rangeBands: compactRangeBands, handlers, names });
-    if (mapDistanceProvider) {
-      const pairKey = `${actor.id}>${target.id}@${draft?.round ?? ''}`;
-      Promise.resolve(mapDistanceProvider(actor, target, 'ranged')).then(answer => {
-        if (!distance.explain.isConnected) return;
-        if (!answer?.ok) { distance.explain.textContent = `${distance.line.explanation} ${answer?.message || 'Carte : distance à saisir.'}`; return; }
-        const band = v5RangeBandForMeters(answer.meters, compactRangeBands);
-        distance.explain.textContent = `Carte : ${answer.meters} m${compactRangeBands ? ` → ${band ? SHOT_RANGE_LABELS[band] : 'au-delà de l’Extrême'}` : ''}. ${distance.line.explanation}`;
-        const current = draft.v5Context || {};
-        if (band && !current.shotRange && current.engagedWithShooter !== true && compactPlateau.engagedWithShooter !== true && !mapRangePrefilled.has(pairKey)) {
-          mapRangePrefilled.add(pairKey);
-          handlers.select({ v5Context: { ...current, shotRange: band } });
-        }
-      }, () => { if (distance.explain.isConnected) distance.explain.textContent = `${distance.line.explanation} Carte : distance à saisir.`; });
-    }
+  // G2-a, G2-g : le droit déduit passe au moteur (`rangedOppositionAllowed`) ; sans droit, aucun jet de défense ; avec droit,
+  // l'Esquive est proposée (p. 165) si le MJ n'a pas choisi de défense. Une seule écriture, après le rendu.
+  if (dodgeRight && !draft.busy) {
+    const nextContext = rangedDodgeSync(dodgeRight, draft.v5Context || {}, dodgePair);
+    const clearDefense = dodgeRight.defense === 'none' && String(draft.defenseRoll ?? '').trim() !== '';
+    const dodgeValue = dodgeRight.defense === 'dodge' && (draft.defenseStat === null || draft.defenseStat === undefined) ? dodgeOptionValue(defense?.options) : null;
+    const setDodge = Boolean(dodgeValue) && defense?.value !== dodgeValue;
+    if (nextContext || clearDefense || setDodge) queueMicrotask(() => {
+      if (section.isConnected === false) return;
+      if (clearDefense) handlers.input('defenseRoll', '');
+      handlers.select({ ...(nextContext ? { v5Context: nextContext } : {}), ...(setDodge ? { defenseStat: dodgeValue } : {}) });
+    });
   }
   arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups,
     compact: { distanceRow: distance?.row || null, facts: compactFacts, pertinentBox: pertinent.box, handlers } });
