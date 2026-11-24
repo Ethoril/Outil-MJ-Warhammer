@@ -28,9 +28,68 @@ const MARKER_BY_STATE = {
 };
 const stateKey = state => fold(state?.name || state?.key).replace(/[-_]+/g, ' ');
 
-/** `ref` stable : `pj:<id persistant>` pour un PJ (liaison durable), sinon `p:<participantId>`. */
-export const mapRefOf = participant => (participant?.kind === 'PJ' && participant?.persistentCharacterId
-  ? `pj:${participant.persistentCharacterId}` : `p:${participant?.id}`);
+/**
+ * `ref` stable : `pj:<id persistant>` pour un PJ avec personnage persistant (liaison durable) ; sinon, si
+ * `extensions.mapRef` est une chaîne non vide commençant par `p:`, ce `ref` repris (participant recréé par un
+ * « Recommencer » qui garde le pion de celui qu'il remplace, contrat §7, décision du MJ du 24/11/2026) ; à défaut `p:<participantId>`.
+ */
+export const mapRefOf = participant => {
+  if (participant?.kind === 'PJ' && participant?.persistentCharacterId) return `pj:${participant.persistentCharacterId}`;
+  const carried = participant?.extensions?.mapRef;
+  return typeof carried === 'string' && carried.length > 0 && carried.startsWith('p:') ? carried : `p:${participant?.id}`;
+};
+
+/**
+ * « Recommencer » une rencontre recrée les participants avec des `id` neufs ; pour que la carte garde chaque pion
+ * à sa case, le participant recréé reprend le `ref` de celui qu'il remplace (contrat §7, décision du MJ du 24/11/2026).
+ * Appariement : même ligne de rencontre (`source.encounterEntryId` non vide) et même rang dans cette ligne (ordre des
+ * tableaux). Un participant apparié reçoit `extensions.mapRef = mapRefOf(précédent)` — un `ref` déjà repris est ainsi
+ * transmis de recommencement en recommencement. Les PJ avec personnage persistant et les participants sans
+ * prédécesseur sont laissés tels quels. Retourne un nouveau tableau, sans jamais deux participants de même `ref`.
+ */
+export function carryMapRefs(previousParticipants = [], nextParticipants = []) {
+  const previous = Array.isArray(previousParticipants) ? previousParticipants : [];
+  const next = Array.isArray(nextParticipants) ? nextParticipants : [];
+  const entryIdOf = participant => {
+    const entryId = participant?.source?.encounterEntryId;
+    return typeof entryId === 'string' && entryId ? entryId : null;
+  };
+  const previousByEntry = new Map();
+  for (const participant of previous) {
+    const entryId = entryIdOf(participant);
+    if (!entryId) continue;
+    const group = previousByEntry.get(entryId) || [];
+    group.push(participant);
+    previousByEntry.set(entryId, group);
+  }
+  // Rang de chaque participant recréé parmi ceux de sa ligne de rencontre.
+  const rankByParticipant = new Map(), counters = new Map();
+  for (const participant of next) {
+    const entryId = entryIdOf(participant);
+    if (!entryId) continue;
+    const rank = counters.get(entryId) || 0;
+    counters.set(entryId, rank + 1);
+    rankByParticipant.set(participant, rank);
+  }
+  const used = new Set(next.map(participant => mapRefOf(participant)));
+  const carriedByIndex = new Map();
+  next.forEach((participant, index) => {
+    if (participant?.kind === 'PJ' && participant?.persistentCharacterId) return;
+    const entryId = entryIdOf(participant);
+    if (!entryId) return;
+    const previousOfEntry = previousByEntry.get(entryId);
+    const previousParticipant = previousOfEntry?.[rankByParticipant.get(participant)];
+    if (!previousParticipant) return;
+    const ref = mapRefOf(previousParticipant);
+    if (typeof ref !== 'string' || !ref.startsWith('p:') || used.has(ref)) return;
+    used.add(ref);
+    carriedByIndex.set(index, ref);
+  });
+  return next.map((participant, index) => {
+    const ref = carriedByIndex.get(index);
+    return ref ? { ...participant, extensions: { ...(participant.extensions || {}), mapRef: ref } } : participant;
+  });
+}
 
 /** Mouvement M du participant (champ `movement`, sinon caractéristique M). */
 const movementOf = participant => {
