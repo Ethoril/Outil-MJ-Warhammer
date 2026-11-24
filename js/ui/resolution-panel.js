@@ -32,6 +32,7 @@ import { rangedDodgeRight, rangedDodgeSync, rangedDodgeAnswer, mapAnswerContext,
 import { deducedCircumstances } from './resolution-panel/circonstances.js';
 import { carriesTailleArme, tailleArmeModel } from './resolution-panel/taille-arme.js';
 import { otherMenuEntries, OTHER_MENU_MAGIC } from './resolution-panel/menu-autres.js';
+import { targetRowModel } from './resolution-panel/target-row.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
 import { isBlackpowderIncidentEligible } from '../core/v5-combat-fumbles.js';
@@ -538,13 +539,22 @@ export function renderResolutionPanel(options) {
   const targetBlock = node('div', 'workspace-resolution-row');
   targetBlock.appendChild(rubric(draft.preview?.attack && !draft.preview.targetId ? 'Cible *' : 'Cible'));
   const targetChips = node('div', 'workspace-chip-list');
-  [['Adversaires', groups.adversaries], ['Alliés', groups.allies]].forEach(([label, list]) => {
+  // G11 : au-delà de huit cibles, seules les prioritaires restent en puces (cible choisie, puis engagés) ;
+  // les autres passent dans le menu « Autres cibles (…) » pour que la ligne ne défile jamais en largeur.
+  const targetRow = targetRowModel({
+    adversaries: groups.adversaries,
+    allies: groups.allies,
+    targetId: target?.id ?? null,
+    actorId: actor?.id ?? null,
+    engagedIds: actor ? engagedWith({ participants }, participants, actor.id) : []
+  });
+  [['Adversaires', targetRow.shown.filter(entry => entry.group === 'Adversaires')], ['Alliés', targetRow.shown.filter(entry => entry.group === 'Alliés')]].forEach(([label, list]) => {
     if (!list.length) return;
     const group = node('div', 'workspace-chip-group');
     group.setAttribute('role', 'group');
     group.setAttribute('aria-label', label);
     group.appendChild(node('span', 'workspace-chip-group-label', label));
-    list.forEach(participant => {
+    list.forEach(({ participant }) => {
       const item = chip(participant.name, { pressed: participant.id === target?.id, key: `target-${participant.id}` });
       if (!targetChips.querySelector?.('[data-blocking-field="target"]')) item.dataset.blockingField = 'target';
       item.classList.add('combatant-name');
@@ -553,6 +563,15 @@ export function renderResolutionPanel(options) {
     });
     targetChips.appendChild(group);
   });
+  if (targetRow.hidden.length) {
+    const moreSelect = document.createElement('select');
+    moreSelect.className = 'workspace-target-more';
+    moreSelect.setAttribute('aria-label', 'Autres cibles');
+    moreSelect.append(new Option(`Autres cibles (${targetRow.hidden.length})…`, ''));
+    for (const participant of targetRow.hidden) moreSelect.append(new Option(participant.name, participant.id));
+    moreSelect.addEventListener('change', () => { if (moreSelect.value) handlers.select({ targetId: moreSelect.value }); });
+    targetChips.appendChild(moreSelect);
+  }
     const selfChip = type === 'cast' ? chip(`Soi-même (${actor.name})`, { pressed: target?.id === actor.id, key: `target-${actor.id}` }) : null;
     if (selfChip) {
       selfChip.classList.add('combatant-name');

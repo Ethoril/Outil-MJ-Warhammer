@@ -194,7 +194,13 @@ try {
   const selectActor = id => page.locator(`[data-workspace-select="${id}"]`).first().click();
   // Passe G1 (R1) : les puces d'action de la résolution sont supprimées ; l'action se choisit dans la barre du bas.
   const chooseAction = name => page.locator('[data-zone="bas"] [data-bar-action^="prepared-"]').filter({ hasText: name }).first().click();
-  const chooseTarget = name => resolution().getByRole('button', { name, exact: true }).first().click();
+  // G11 (j-vingt) : au-delà de huit cibles, seules la cible choisie et les engagés restent en puces ; les autres se
+  // choisissent dans le menu « Autres cibles (N)… » de la même ligne.
+  const chooseTarget = async name => {
+    const chip = resolution().getByRole('button', { name, exact: true }).first();
+    if (await chip.count()) return chip.click();
+    return resolution().locator('select.workspace-target-more').first().selectOption({ label: name });
+  };
   const rollInput = (name, value) => page.locator(`[data-roll-input="${name}"]`).first().fill(String(value));
   const press = (name, key = 'Enter') => page.locator(`[data-roll-input="${name}"]`).first().press(key);
 
