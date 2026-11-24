@@ -136,12 +136,14 @@ export function knownSizeRank(participant) {
 
 // G5-c : où mène le bouton d'ouverture d'une décision de la case « À décider ». Toujours un contrôle visible : le champ
 // (lien de la raison), sinon le panneau, sinon la raison ou la carte de décision mise en évidence (`fallback`).
-const DECISION_PANELS = Object.freeze({ corruption: '[data-secondary-panel="corruption"]', jugement: '[data-divine-panel]', brise: '.workspace-broken-escape, [data-broken-escape]', familier: '.actor-familiar', peur: '.workspace-action-bar' });
+const DECISION_PANELS = Object.freeze({ corruption: '[data-secondary-panel="corruption"]', jugement: '[data-divine-panel]', brise: '.workspace-broken-escape, [data-broken-escape]', peur: '.workspace-action-bar' });
 const DECISION_CENTER = Object.freeze({ corruption: 'corruption', jugement: 'prayer' });
 const RESOLUTION_DECISIONS = new Set(['maladresse', 'deviation', 'incident-magie', 'questions-etats', 'equipement']);
 export function decisionRevealTarget(entry) {
   const card = `[data-decision-id="${String(entry?.id ?? '').replace(/["\\]/g, '\\$&')}"]`;
   if (entry?.kind === 'initiative') return { via: 'initiative', selector: '[data-initiative="board"]', fallback: card };
+  // La saisie du familier (Calme, d10) vit dans le bloc `.actor-familiar` de la « Fiche complète » : la décision y ouvre la fiche.
+  if (entry?.kind === 'familier') return { via: 'sheet', selector: '.actor-familiar', fallback: card };
   if (RESOLUTION_DECISIONS.has(entry?.kind)) return { via: 'resolution', selector: '.workspace-blocking-reason', fallback: '.workspace-resolution', text: entry.detail || entry.titre || '' };
   if (DECISION_PANELS[entry?.kind]) return { via: 'panel', selector: DECISION_PANELS[entry.kind], center: DECISION_CENTER[entry.kind] || null, fallback: card };
   return { via: 'card', selector: card, fallback: card };

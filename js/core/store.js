@@ -4104,6 +4104,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       const master = combat.participants.get(masterId), familiar = combat.participants.get(familiarId);
       const plan = planFamiliarDeath(master, familiar);
       if (!plan.applicable) return { ok: false, reason: 'no-animal-link', message: plan.reason };
+      // La mort ne se résout qu'une fois par lien : la marque `deathResolved` posée sur le lien bloque toute seconde saisie.
+      if (familiarLinksOf(master).find(row => row.id === plan.linkId)?.deathResolved) return { ok: false, reason: 'already-resolved', message: 'Mort du familier déjà résolue.' };
       let damage = 0;
       if (options.calmFailed === true) {
         const dealt = familiarDeathDamage(options.rolls);
@@ -4111,7 +4113,13 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         damage = dealt.damage;
       }
       const result = api.executeCommand('familiar-death', draft => ({ ...draft,
-        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === masterId && damage ? momentumAfterChange(item, { ...item, hp: Math.max(0, (Number(item.hp) || 0) - damage) }) : item)) },
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
+          if (item.id !== masterId) return item;
+          // Même commande : Annuler retire la marque en même temps que les Blessures.
+          const marked = withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).map(row => row.id === plan.linkId
+            ? { ...row, deathResolved: { familiarId, calmFailed: options.calmFailed === true, damage } } : row) }));
+          return damage ? momentumAfterChange(marked, { ...marked, hp: Math.max(0, (Number(marked.hp) || 0) - damage) }) : marked;
+        }) },
         log: [{ id: uid(), kind: 'effect', actorId: familiarId, targetId: masterId,
           text: `${familiar.name} · Mort du familier : ${master.name} ${options.calmFailed === true ? `rate le ${plan.calmTest.label}, ${damage} Blessure(s) directe(s)` : `réussit le ${plan.calmTest.label}`}`,
           detail: { kind: 'familiar-death', linkId: plan.linkId, calmModifier: plan.calmTest.modifier, calmFailed: options.calmFailed === true, damage, reminders: plan.reminders } }, ...(draft.log || [])].slice(0, 300) }));
