@@ -1,6 +1,6 @@
 import { keywordMechanicalStatus } from './keywords.js';
 import { ENGINES } from '../data/keyword-engines.js';
-import { normalizeQualities } from './quality-normalization.js';
+import { normalizeQualities, isQuality } from './quality-normalization.js';
 
 export const PLANCHER_TOUCHE = 1;
 export const FACTEUR_INOFFENSIVE = 2;
@@ -138,7 +138,7 @@ export function computeDamage({ weaponDamage = 0, strengthBonus = null, sl = 0, 
 
   // 1. Percutante / Impact : ajoute le dé d'unités du jet
   const unitsDie = Number(roll) > 0 ? (approvedQualities.includes('percutante')?Number(roll)%10:(Number(roll) % 10 || 10)) : 0;
-  const isInoffensive = activeEngines.some(ae => ae.quality.id === 'inoffensive');
+  const isInoffensive = activeEngines.some(ae => isQuality(ae.quality, 'inoffensive'));
   const isPercutante = !isInoffensive && activeEngines.some(ae => ae.engine.engine === 'add-units-die');
   const bonusPercutante = isPercutante ? unitsDie : 0;
 

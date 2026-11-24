@@ -10,7 +10,7 @@ import {
   foldKey
 } from './common.js';
 import { actionHasDamage } from '../damage.js';
-import { normalizeQualities } from '../quality-normalization.js';
+import { normalizeQualities, hasQuality } from '../quality-normalization.js';
 import { planNaturalAttack, inferNaturalAttackKey } from '../creature-combat.js';
 import { decorateBestiaryProfileAction, planBestiaryProfileAbility } from '../creature-abilities.js';
 import {
@@ -186,7 +186,7 @@ export function normalizeResolutionInput(input = {}) {
   if(wieldedPavise){
     action.damageFormula='BF +2';
     delete action.damage;
-    if(!qualities.some(row=>row.id==='defensive'))qualities.push({id:'defensive'});
+    if(!hasQuality(qualities,'defensive'))qualities.push({id:'defensive'});
   }
   action.qualities = qualities;
   const resolutionId = String(input.resolutionId || input.id || defaultResolutionId(actor, action, target, baseRevision, roll));

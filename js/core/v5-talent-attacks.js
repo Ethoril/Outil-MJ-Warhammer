@@ -1,4 +1,4 @@
-import{normalizeQualities}from'./quality-normalization.js';
+import { normalizeQualities, hasQuality } from './quality-normalization.js';
 const weaponSignature=a=>JSON.stringify({id:a.id,type:a.type,attr:a.attr,base:Number(a.base)||0,mod:Number(a.mod)||0,damage:a.damage,damageFormula:a.damageFormula,qualities:normalizeQualities(a.qualities),fiche:a.extensions?.fiche});
 import{situationPlan,activeSource}from'./v5-talent-situations.js';import{hasV5Talent}from'./v5-talents.js';
 export function previewAttackPrelude(n){
@@ -21,7 +21,7 @@ export function previewAttackPrelude(n){
   if(c.mainHand!==true)unresolved.push('Attaque rapide : arme de la main principale requise.');
  }
  if(id==='fast-shot'){
-  const plan=situationPlan(n.actor,id);plans.push(plan);const pistol=n.action.qualities.some(q=>q.id==='pistolet'),order=c.fastShotActorIds;
+  const plan=situationPlan(n.actor,id);plans.push(plan);const pistol=hasQuality(n.action.qualities,'pistolet'),order=c.fastShotActorIds;
   if(!plan.proposals.length||!pistol||n.v5.kind!=='ranged'||c.weaponLoaded!==true||c.actorEngaged!==false||c.beforeFirstTurn!==true||!Array.isArray(order)||!order.includes(n.actor.id)||new Set(order).size!==order.length)unresolved.push('Tir rapide : Pistol chargé, hors engagement, avant le premier Tour et tireurs déclarés requis.');
   if(Array.isArray(order)){
    const candidates=order.map(id=>n.v5State.participants.find(p=>p.id===id));

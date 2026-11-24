@@ -1,3 +1,4 @@
+import { hasQuality } from './quality-normalization.js';
 import{hasV5Talent,currentV5TalentHashes}from'./v5-talents.js';
 import{getReferenceCatalogue}from'./reference-catalog.js';
 import{situationPlan,activeSource}from'./v5-talent-situations.js';
@@ -50,7 +51,7 @@ export function previewForgeAura(n){
   if(!author||!plan.proposals.length||author.camp!==n.actor.camp||c.forgeEngagedIds?.includes(id)!==true||!Number.isFinite(distance)||distance<0||bonus==null)unresolved.push('Feu de forge : auteur engagé, allié, BFM et distance explicites requis.');
   else if(distance<=bonus)active=true;
  }
- const melee=n.v5.kind==='melee',already=n.action.qualities.some(q=>q.id==='perforante');
+ const melee=n.v5.kind==='melee',already=hasQuality(n.action.qualities,'perforante');
  if(active&&melee&&!already)n.action.qualities.push({id:'perforante'});
  return{plans,unresolved,extraMetalAP:active&&melee&&already};
 }
@@ -60,7 +61,7 @@ export function applyForgeProtection(n,guard){
  return{...guard,ap:guard.ap==null?null:Math.max(0,guard.ap-Math.min(1,amount)),forgeIgnoredAP:Math.min(1,amount)};
 }
 export function lodgedHarpoon(n,critical,hit){
- if(!critical||!hit||n.v5.kind!=='ranged'||!n.action.qualities.some(q=>q.id==='empaleuse'))return{plans:[],changes:[]};
+ if(!critical||!hit||n.v5.kind!=='ranged'||!hasQuality(n.action.qualities,'empaleuse'))return{plans:[],changes:[]};
  const weapon=n.actor?.equipment?.find(e=>e.id===n.action.extensions?.fiche?.equipmentId),group=weapon?.category||n.v5.context?.weaponGroup;
  if(group!=='Arbalète')return{plans:[],changes:[]};
  const plan=situationPlan(n.actor,'remove-bolt'),origin=plan.proposals[0]?.origins[0];return{plans:[plan],changes:origin?[{participantId:n.target.id,add:[{id:n.resolutionId+':lodged-bolt',key:'lodged-bolt',name:'Carreau fiché : Mouvement −1',kind:'talent-pending',level:1,source:origin,authorId:n.actor.id,targetId:n.target.id}]}]:[]};

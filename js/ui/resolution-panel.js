@@ -12,6 +12,9 @@ import { computeV5WeaponReachGuide, computeV5WeaponRangeBands, v5RangeBandForMet
 // Liaison carte (L5) : `(de, vers, usage) => Promise<{ ok, meters?, cells?, message? }>`, branché par main.js.
 let mapDistanceProvider = null;
 export function setMapDistanceProvider(fn) { mapDistanceProvider = typeof fn === 'function' ? fn : null; }
+// G10 (R14) : redemande la distance à la carte pour la résolution de tir affichée (appelé à chaque `map.adjacency`).
+let mapDistanceRefresh = null;
+export function refreshMapDistance() { if (mapDistanceRefresh) mapDistanceRefresh(); }
 // Paire tireur→cible déjà préremplie dans ce round : si le MJ efface la bande, on ne la remet pas.
 const mapRangePrefilled = new Set();
 const SHOT_RANGE_LABELS = { 'point-blank': 'Bout portant', short: 'Courte', medium: 'Moyenne', long: 'Longue', extreme: 'Extrême' };
@@ -25,8 +28,10 @@ import { carriesMovement } from '../core/creature-movement.js';
 import { engagedCandidates, planOutnumbering } from '../core/outnumbering.js';
 import { deriveEngagementContext, deriveSceneContext, engagedWith } from '../core/engagements.js';
 import { renderDistanceRow, renderContextRow, renderPertinentCircumstances, deviationRollField } from './resolution-panel/compact.js';
-import { rangedDodgeRight, rangedDodgeSync, rangedDodgeAnswer, mapDistanceContext, mapMetersFor, mapBandFor } from './combat-distance.js';
+import { rangedDodgeRight, rangedDodgeSync, rangedDodgeAnswer, mapAnswerContext, mapMetersFor } from './combat-distance.js';
 import { deducedCircumstances } from './resolution-panel/circonstances.js';
+import { carriesTailleArme, tailleArmeModel } from './resolution-panel/taille-arme.js';
+import { otherMenuEntries, OTHER_MENU_MAGIC } from './resolution-panel/menu-autres.js';
 import { hasV5Talent, V5_TALENT_IDS } from '../core/v5-talents.js';
 import { ammunitionCompatibility, equipmentAttackContext, weaponSkillGroupInfo, conjuredWeaponMetadata, weaponHandsForParticipant } from '../core/equipment.js';
 import { isBlackpowderIncidentEligible } from '../core/v5-combat-fumbles.js';
@@ -44,7 +49,7 @@ import { getReferenceCatalogue } from '../core/reference-catalog.js';
 import { V5_TEST_TALENT_IDS, applicableV5TalentTestFields } from '../core/v5-talent-tests.js';
 import { MASTER_AND_COMMANDER_TALENT } from '../core/v5-effects.js';
 import { actionHasDamage } from '../core/damage.js';
-import { qualityLabel } from '../core/quality-normalization.js';
+import { qualityLabel, hasQuality } from '../core/quality-normalization.js';
 import { resolveCastingSkill } from '../core/v5-magic-casting.js';
 import { isDouble } from '../core/dice.js';
 import { validRoll } from './workspace/helpers.js';
@@ -383,6 +388,7 @@ export function renderResolutionPanel(options) {
     fieldGroups[key] = { group, content };
   }
   const settings = node('details', 'workspace-resolution-settings');
+  let hackRow = null; // G10 (R2) : ligne « Taille (arme) », construite avec les circonstances, placée sous la Cible
   settings.open = otherSettingsState.get(draft) ?? type === 'attack';
   settings.addEventListener('toggle', () => { otherSettingsState.set(draft, settings.open); });
   settings.appendChild(node('summary', '', 'Autres réglages'));
@@ -503,18 +509,16 @@ export function renderResolutionPanel(options) {
     const magicButton = button('Sort, prière, Corruption…', 'workspace-chip', { 'data-magic-menu': '', 'aria-controls': 'workspace-magic-menu', 'aria-expanded': 'false' });
     const menu = node('div', 'workspace-action-menu'); menu.id = 'workspace-magic-menu'; menu.hidden = true;
     magicButton.addEventListener('click', () => { menu.hidden = !menu.hidden; magicButton.setAttribute('aria-expanded', String(!menu.hidden)); });
-    for (const [magicType, label] of [['channelling','Focalisation V5'],['cast','Incantation V5'],['dispel','Dissipation persistante V5']]) {
-      const found = actions.findIndex(action => action.type === magicType);
-      const attrs = found < 0 ? {} : { 'data-action-key': actionKey(actions[found], found) };
-      const item = button(label, 'workspace-secondary', attrs);
-      item.disabled = !actions.length;
-      item.addEventListener('click', () => handlers.select(found < 0 ? { type: magicType } : { actionKey: actionKey(actions[found], found) }));
-      menu.appendChild(item);
-    }
+    // G10 (R11) : « Autres actions » annonce « magie, prière ou Test » ; les entrées viennent de otherMenuEntries (menu-autres.js),
+    // « Test… » ayant le même effet que le bouton de la ligne Action.
     const menuStatus = node('p', 'workspace-muted'); menuStatus.setAttribute('role', 'status');
-    for (const [key, label] of [['prayer','Prière'],['corruption','Corruption']]) {
-      const item = button(label, 'workspace-secondary');
-      item.addEventListener('click', () => { const detail = { panel: key, opened: false }; section.dispatchEvent(new CustomEvent('workspace-open-secondary', { bubbles: true, detail })); menuStatus.textContent = detail.opened ? '' : `${label} indisponible pour ce participant.`; });
+    for (const entry of otherMenuEntries({ actions })) {
+      const found = OTHER_MENU_MAGIC.some(([id]) => id === entry.id) ? actions.findIndex(action => action.type === entry.id) : -1;
+      const item = button(entry.label, 'workspace-secondary', found < 0 ? {} : { 'data-action-key': actionKey(actions[found], found) });
+      item.disabled = entry.disabled;
+      if (entry.id === 'test') { item.dataset.testMenuEntry = ''; item.addEventListener('click', () => { if (typeLabel.hidden) testButton.click(); else select.focus(); }); }
+      else if (OTHER_MENU_MAGIC.some(([id]) => id === entry.id)) item.addEventListener('click', () => handlers.select(found < 0 ? { type: entry.id } : { actionKey: actionKey(actions[found], found) }));
+      else item.addEventListener('click', () => { const detail = { panel: entry.id, opened: false }; section.dispatchEvent(new CustomEvent('workspace-open-secondary', { bubbles: true, detail })); menuStatus.textContent = detail.opened ? '' : `${entry.label} indisponible pour ce participant.`; });
       menu.appendChild(item);
     }
     menu.appendChild(menuStatus);
@@ -1770,35 +1774,37 @@ export function renderResolutionPanel(options) {
     wrap.append(input);
     fields.append(wrap);
   }
-  if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='taille')&&target){
-    // G5-a/b : la pièce touchée par la qualité d'arme Taille (p. 304) se déduit au calcul ; la liste se limite aux pièces de la
-    // localisation (et au bouclier s'il a servi), la plus forte en PA précochée. « Taille (arme) » : pas la Taille de la créature.
-    const current=draft.v5Context||{},hack=draft.preview?.hack||null,choices=hack?.candidates||[];
-    if(choices.length>1){
-      const wrap=node('label','workspace-type','Taille (arme) : pièce touchée'),select=document.createElement('select');
-      select.setAttribute('aria-label',wrap.textContent);
+  // G10 (R2, p. 304) : la ligne « Taille (arme) » vit dans la résolution (sous la Cible), pas dans le tiroir « autres… ». La qualité se
+  // reconnaît par `hasQuality` (alias « Hack » compris), comme le calcul ; la pièce touchée se déduit au calcul (G5-a), la liste
+  // ne paraît que s'il y a plusieurs pièces, la plus forte précochée. « Taille (arme) » : pas la Taille de la créature.
+  if(carriesTailleArme({action,type,target})){
+    const current=draft.v5Context||{},model=tailleArmeModel({hack:draft.preview?.hack||null,hasPreview:Boolean(draft.preview)});
+    hackRow=node('div','workspace-resolution-row workspace-hack-row');
+    hackRow.dataset.hackRow='';
+    if(model.mode==='list'){
+      const wrap=node('label','workspace-type',model.label),select=document.createElement('select');
+      select.setAttribute('aria-label',model.label);
       select.dataset.hackPiece='';
-      for(const item of choices)select.append(new Option(`${item.name} · ${item.ap} PA${item.kind==='shield'?' (bouclier)':''}`,item.id));
-      select.value=hack.struckItemId||choices[0].id;
+      for(const item of model.choices)select.append(new Option(item.text,item.id));
+      select.value=model.selectedId;
       select.addEventListener('change',()=>handlers.select({v5Context:{...current,struckItemId:select.value||undefined}}));
       wrap.append(select);
-      fields.append(wrap);
+      hackRow.append(wrap);
     }
-    else fields.append(node('p','workspace-muted',hack?.struckItemName&&!hack.manual?`Taille (arme) : ${hack.struckItemName} perd 1 PA.`
-      :hack?.manual?'Taille (arme) : la protection touchée perd 1 PA.':draft.preview?'Taille (arme) : rien à abîmer à cette localisation.':'Taille (arme) : pièce touchée déduite au calcul.'));
-    if(hack?.manual){
+    else hackRow.append(node('p','workspace-muted',model.text));
+    if(model.manual){
       // PA sans pièce identifiable sur la fiche de la cible : nommer la pièce frappée est facultatif (usure non suivie).
-      const manualWrap=node('label','workspace-type','Taille (arme) : pièce frappée (facultatif)'),manual=document.createElement('input');
+      const manualWrap=node('label','workspace-type',model.manualLabel),manual=document.createElement('input');
       manual.type='text';
       manual.value=current.struckPieceManual||'';
       manual.dataset.blockingField='hack-piece';
-      manual.setAttribute('aria-label',manualWrap.textContent);
+      manual.setAttribute('aria-label',model.manualLabel);
       manual.addEventListener('change',()=>handlers.select({v5Context:{...(draft.v5Context||{}),struckPieceManual:manual.value.trim()||undefined}}));
       manualWrap.append(manual);
-      fields.append(manualWrap);
+      hackRow.append(manualWrap);
     }
   }
-  if(type==='attack'&&(action?.qualities||[]).some(row=>(typeof row==='string'?row:row?.id)==='entaille')&&target){
+  if(type==='attack'&&hasQuality(action?.qualities,'entaille')&&target){
     const current=draft.v5Context||{},wrap=node('label','workspace-type','Entaille : dépenser 1 Élan pour +1 Hémorragique'),select=document.createElement('select');
     select.setAttribute('aria-label',wrap.textContent);
     select.append(new Option('Aucun Élan dépensé','0'),new Option('Dépenser 1 Élan','1'));
@@ -3245,6 +3251,7 @@ export function renderResolutionPanel(options) {
   section.appendChild(commands);
 
   let distance = null;
+  mapDistanceRefresh = null;
   if (type === 'attack' && compactKind === 'ranged' && compactAttack) {
     const names = ids => ids.map(id => participants.find(row => row.id === id)?.name || id).join(', ');
     // G2-b : les mètres de la carte sont gardés dans le brouillon ; la ligne et le droit d'esquiver se lisent sans attendre.
@@ -3257,7 +3264,7 @@ export function renderResolutionPanel(options) {
     section.appendChild(distance.row);
     if (mapDistanceProvider) {
       const pairKey = `${actor.id}>${target.id}@${draft?.round ?? ''}`;
-      Promise.resolve(mapDistanceProvider(actor, target, 'ranged')).then(answer => {
+      const requestDistance = () => Promise.resolve(mapDistanceProvider(actor, target, 'ranged')).then(answer => {
         if (!distance.explain.isConnected) return;
         if (!answer?.ok) {
           // Carte débranchée ou pion absent : la mesure gardée ne vaut plus (sans carte, la question revient).
@@ -3266,19 +3273,14 @@ export function renderResolutionPanel(options) {
           return;
         }
         const band = v5RangeBandForMeters(answer.meters, compactRangeBands);
-        const current = draft.v5Context || {};
-        // La bande écrite par la carte suit la nouvelle mesure ; une bande choisie par le MJ reste.
-        const previous = mapBandFor(current, actor.id, target.id);
-        let shotRange = current.shotRange;
-        if (band && previous && shotRange === previous) shotRange = band;
-        if (band && !shotRange && current.engagedWithShooter !== true && compactPlateau.engagedWithShooter !== true && !mapRangePrefilled.has(pairKey)) {
-          mapRangePrefilled.add(pairKey);
-          shotRange = band;
-        }
-        const fromMap = Boolean(band) && shotRange === band;
-        const next = mapDistanceContext({ ...current, ...(shotRange ? { shotRange } : {}) }, { meters: answer.meters, actorId: actor.id, targetId: target.id, band: fromMap ? band : null });
-        if (next || shotRange !== current.shotRange) handlers.select({ v5Context: next || { ...current, shotRange } });
+        // La bande écrite par la carte suit la nouvelle mesure ; une bande choisie par le MJ reste (mapAnswerContext).
+        const { context, filled } = mapAnswerContext(draft.v5Context || {}, { meters: answer.meters, band, actorId: actor.id, targetId: target.id,
+          engaged: compactPlateau.engagedWithShooter === true, firstFill: !mapRangePrefilled.has(pairKey) });
+        if (filled) mapRangePrefilled.add(pairKey);
+        if (context) handlers.select({ v5Context: context });
       }, () => { if (distance.explain.isConnected && knownMeters === null) distance.mapNote.textContent = ' · Carte : distance à saisir.'; });
+      mapDistanceRefresh = requestDistance;
+      requestDistance();
     }
   }
   const live = node('div', 'workspace-result-live');
@@ -3465,7 +3467,7 @@ export function renderResolutionPanel(options) {
     });
   }
   arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, commands, live, draft, type, drawer, settings, closeDrawer, fieldGroups,
-    compact: { distanceRow: distance?.row || null, facts: compactFacts, pertinentBox: pertinent.box, handlers } });
+    compact: { distanceRow: distance?.row || null, hackRow, facts: compactFacts, pertinentBox: pertinent.box, handlers } });
   return section;
 }
 
@@ -3572,6 +3574,7 @@ function arrangeResolutionSteps(section, { actionBlock, targetBlock, rolls, comm
   const deducedRow = compact.facts ? renderContextRow({ facts: compact.facts, handlers: compact.handlers, toggle }) : null;
   const hasDeduced = Boolean(deducedRow?.querySelector('[data-deduced]'));
   const anchor = targetBlock?.parentElement === actionStep ? targetBlock : actionBlock;
+  if (compact.hackRow) anchor.after(compact.hackRow);
   if (compact.distanceRow) anchor.after(compact.distanceRow);
   if (hasDeduced) (compact.distanceRow || anchor).after(deducedRow);
   else if (anchor === targetBlock) { targetBlock.classList.add('has-toggle'); targetBlock.appendChild(toggle); }

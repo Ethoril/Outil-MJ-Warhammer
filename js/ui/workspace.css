@@ -2725,3 +2725,8 @@ dialog.v5-fate-dialog[open] { left:calc(50% + 8px) !important; right:auto !impor
 .workspace-v5-magic:has(.workspace-magic-zone[data-magic-zone="impact"]) > .workspace-type:has(> select[data-focus-key="magic-spell"]) { display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; gap: 8px; white-space: nowrap; }
 .workspace-v5-magic:has(.workspace-magic-zone[data-magic-zone="impact"]) > .workspace-type > select[data-focus-key="magic-spell"] { flex: 1 1 auto; min-width: 0; }
 .workspace-v5-magic:has(.workspace-magic-zone[data-magic-zone="impact"]) > .workspace-magic-contract-summary { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+
+/* LOT G10 (R2) : ligne « Taille (arme) » de la résolution, sous la Cible, hors du tiroir « autres… ». */
+.workspace-area[data-zone="centre"] .workspace-resolution-row.workspace-hack-row { grid-template-columns: minmax(0, 1fr); font-size: 12px; }
+.workspace-hack-row > p { margin: 0; }
+.workspace-hack-row > .workspace-type { flex-direction: row; align-items: center; gap: 6px; }
