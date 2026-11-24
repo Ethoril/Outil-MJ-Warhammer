@@ -1,23 +1,57 @@
-/* Page de L'Appel de Cthulhu 7e (outil MJ). Styles propres au jeu : rien de Warhammer n'est chargé. */
+/* Page de L'Appel de Cthulhu 7e (outil MJ). Jetons neutres du chapeau (chapeau-theme.css) et identité vert-de-gris propre au jeu : rien de Warhammer n'est chargé. */
 :root {
-  --fond: #f4f1ea; --carte: #fffdf8; --texte: #222; --doux: #5f584d; --bord: #d8d0c0; --accent: #2f5d50; --accent-texte: #fff;
-  --pj: #2f5d50; --ennemi: #8a2c2c; --alerte: #8a2c2c; --chance: #7a5f12; --san: #4b3f8a;
-  --entete: #2b2a27; --entete-texte: #f4f1ea; --bouton: #fff; --ligne-courante: #e7efe9; --avis: #f6efd9;
+  --fond: var(--bg);
+  --carte: var(--panel);
+  --texte: var(--text);
+  --doux: var(--muted);
+  --bord: var(--border);
+  --entete: var(--topbar-bg);
+  --entete-texte: var(--text);
+  --bouton: var(--panel-2);
+  --alerte: var(--danger);
+  --ennemi: var(--camp-ennemi);
 }
-@media (prefers-color-scheme: dark) {
-  :root {
-    --fond: #1d1c1a; --carte: #262522; --texte: #ece8de; --doux: #b3ab9c; --bord: #46433c; --accent: #5aa38c; --accent-texte: #10201b;
-    --pj: #7fc4ac; --ennemi: #e08a8a; --alerte: #e08a8a; --chance: #e0c26a; --san: #b3a6ee;
-    --entete: #121110; --entete-texte: #ece8de; --bouton: #33312d; --ligne-courante: #2d3a35; --avis: #3b3420;
+
+:root,
+:root[data-theme="dark"] {
+  --accent: #5aa38c;
+  --accent-texte: #10201b;
+  --pj: #7fc4ac;
+  --ligne-courante: #1d2924;
+  --avis: #352c1d;
+  --chance: #e0c26a;
+  --san: #b3a6ee;
+}
+
+:root[data-theme="light"] {
+  --accent: #2f5d50;
+  --accent-texte: #ffffff;
+  --pj: #2f5d50;
+  --ligne-courante: #d4e2d9;
+  --avis: #e4d3ae;
+  --chance: #6b500c;
+  --san: #43357d;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --accent: #2f5d50;
+    --accent-texte: #ffffff;
+    --pj: #2f5d50;
+    --ligne-courante: #d4e2d9;
+    --avis: #e4d3ae;
+    --chance: #6b500c;
+    --san: #43357d;
   }
 }
+
 * { box-sizing: border-box; }
-body { margin: 0; font: 14px/1.4 system-ui, "Segoe UI", sans-serif; background: var(--fond); color: var(--texte); }
+body { margin: 0; font-family: var(--font-ui); font-size: 14px; line-height: 1.4; background: var(--fond); color: var(--texte); }
 [hidden] { display: none !important; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.entete { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 16px; background: var(--entete); color: var(--entete-texte); }
-.entete h1 { font-size: 17px; margin: 0 8px 0 0; }
+.entete { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 16px; background: var(--entete); color: var(--entete-texte); border-bottom: 1px solid var(--bord); }
+.entete h1 { font-size: 17px; margin: 0 8px 0 0; color: var(--heading-color); }
 .entete h1 small { font-weight: 400; opacity: .8; }
 .entete .statut, .entete .round { font-size: 12px; opacity: .9; }
 .entete .round { font-weight: 600; }
@@ -26,20 +60,20 @@ body { margin: 0; font: 14px/1.4 system-ui, "Segoe UI", sans-serif; background: 
 .onglets { display: inline-flex; gap: 2px; }
 .onglets button[aria-selected="true"] { background: var(--accent); color: var(--accent-texte); border-color: var(--accent); }
 .fichiers { position: relative; margin-left: auto; }
-.fichiers summary { cursor: pointer; padding: 4px 10px; border: 1px solid #9c9282; border-radius: 4px; list-style: none; }
+.fichiers summary { cursor: pointer; padding: 4px 10px; border: 1px solid var(--bord); background: var(--bouton); border-radius: 4px; list-style: none; }
 .fichiers .menu { position: absolute; right: 0; z-index: 5; display: grid; gap: 4px; min-width: 260px; padding: 8px; background: var(--carte); color: var(--texte); border: 1px solid var(--bord); border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
 .fichiers .menu ul { margin: 0; padding-left: 18px; font-size: 12px; }
-.fichiers .menu .danger { color: var(--alerte); }
+.fichiers .menu .danger { background: var(--carte); color: var(--alerte); }
 
 .message { margin: 8px 16px 0; padding: 8px 12px; border-radius: 4px; background: var(--avis); border: 1px solid var(--bord); }
-.message[data-type="erreur"] { background: var(--alerte); color: #fff; border-color: var(--alerte); }
+.message[data-type="erreur"] { background: color-mix(in srgb, var(--alerte) 14%, var(--bg)); color: var(--alerte); border-color: var(--alerte); }
 
 main { padding: 12px 16px; }
 .jeu { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(260px, .9fr); gap: 12px; }
 #panneau-preparer { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; align-items: start; }
 .carte { background: var(--carte); border: 1px solid var(--bord); border-radius: 6px; padding: 10px 12px; min-width: 0; overflow-x: auto; }
 h2 { font-size: 14px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: .04em; color: var(--doux); }
-h3 { font-size: 15px; margin: 0 0 8px; }
+h3 { font-size: 15px; margin: 0 0 8px; color: var(--heading-color); }
 table { width: 100%; border-collapse: collapse; }
 th, td { text-align: left; padding: 5px 4px; border-bottom: 1px solid var(--bord); vertical-align: top; }
 th { font-size: 12px; color: var(--doux); font-weight: 600; }
@@ -54,8 +88,8 @@ td.compo label { display: block; margin: 0 0 2px; }
 small { color: var(--doux); }
 
 .badge { font-size: 11px; padding: 0 5px; border-radius: 8px; background: rgba(127, 127, 127, .2); }
-.badge.grave { background: #f3d6d6; color: #8a2c2c; }
-.badge.folie { background: #e2def3; color: #4b3f8a; }
+.badge.grave { background: color-mix(in srgb, var(--alerte) 14%, var(--bg)); color: var(--alerte); }
+.badge.folie { background: color-mix(in srgb, var(--san) 14%, var(--bg)); color: var(--san); }
 
 fieldset { border: 1px solid var(--bord); border-radius: 4px; margin: 0 0 10px; padding: 6px 8px 8px; }
 legend { font-weight: 600; font-size: 13px; }
@@ -64,7 +98,7 @@ label.large { display: flex; flex-direction: column; align-items: stretch; }
 input[type=number] { width: 70px; }
 input[type=text], textarea, select { font: inherit; color: inherit; background: var(--bouton); border: 1px solid var(--bord); border-radius: 3px; padding: 2px 4px; max-width: 100%; }
 textarea { width: 100%; }
-button { font: inherit; padding: 4px 10px; border: 1px solid #9c9282; background: var(--bouton); color: inherit; border-radius: 4px; cursor: pointer; }
+button { font: inherit; padding: 4px 10px; border: 1px solid var(--bord); background: var(--bouton); color: inherit; border-radius: 4px; cursor: pointer; }
 button:disabled { opacity: .45; cursor: default; }
 button.principal { background: var(--accent); color: var(--accent-texte); border-color: var(--accent); }
 button:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #e3a008; outline-offset: 1px; }
