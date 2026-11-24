@@ -17,7 +17,7 @@
   --accent: #5aa38c;
   --accent-texte: #10201b;
   --pj: #7fc4ac;
-  --ligne-courante: #26352f;
+  --ligne-courante: #1d2924;
   --avis: #352c1d;
   --chance: #e0c26a;
   --san: #b3a6ee;
@@ -63,7 +63,7 @@ body { margin: 0; font-family: var(--font-ui); font-size: 14px; line-height: 1.4
 .fichiers summary { cursor: pointer; padding: 4px 10px; border: 1px solid var(--bord); background: var(--bouton); border-radius: 4px; list-style: none; }
 .fichiers .menu { position: absolute; right: 0; z-index: 5; display: grid; gap: 4px; min-width: 260px; padding: 8px; background: var(--carte); color: var(--texte); border: 1px solid var(--bord); border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
 .fichiers .menu ul { margin: 0; padding-left: 18px; font-size: 12px; }
-.fichiers .menu .danger { color: var(--alerte); }
+.fichiers .menu .danger { background: var(--carte); color: var(--alerte); }
 
 .message { margin: 8px 16px 0; padding: 8px 12px; border-radius: 4px; background: var(--avis); border: 1px solid var(--bord); }
 .message[data-type="erreur"] { background: color-mix(in srgb, var(--alerte) 14%, var(--bg)); color: var(--alerte); border-color: var(--alerte); }
