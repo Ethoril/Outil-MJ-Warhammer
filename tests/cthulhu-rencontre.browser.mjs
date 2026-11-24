@@ -13,7 +13,7 @@ const root = fileURLToPath(new URL('..', import.meta.url));
 const HALE = { nom: 'Margaret Hale', carac: { FOR: 55, CON: 60, TAI: 55, DEX: 80, APP: 60, INT: 70, POU: 65, EDU: 65 }, chance: 70,
   competences: 'Corps à corps 45\nArmes de poing 60\nEsquive 50', armeMelee: 'couteau-grand', armeTir: 'revolver-38' };
 const LINDQVIST = { nom: 'Pr Arthur Lindqvist', carac: { FOR: 30, CON: 40, TAI: 60, DEX: 40, APP: 70, INT: 75, POU: 50, EDU: 80 }, chance: 60,
-  competences: 'Corps à corps 45\nArmes de poing 20\nEsquive 25\nBibliothèque 70', armeMelee: 'gourdin-grand', armeTir: '' };
+  competences: 'Corps à corps 45\nArmes de poing 20\nEsquive 25\nBibliothèque 70', armeMelee: { label: 'Canne-épée' }, armeTir: '' };
 
 async function creerInvestigateur(page, p) {
   await page.getByRole('button', { name: 'Nouveau profil' }).click();
@@ -53,6 +53,13 @@ async function parcours(browser, origin, port) {
   await expect(reserve.locator('tr[data-profil="disciple-jacob-smith"]')).toContainText('Aventures effroyables p. 129');
   await expect(reserve).not.toContainText('Fantôme');
   await creerInvestigateur(page, HALE);
+  await page.getByRole('button', { name: 'Nouvelle arme' }).click();
+  const formArme = page.locator('#form-arme');
+  await expect(formArme).toBeVisible();
+  await formArme.locator('[name=nom]').fill('Canne-épée');
+  await formArme.locator('[name=competence]').fill('Épée');
+  await formArme.locator('[name=des]').fill('1D6');
+  await formArme.getByRole('button', { name: 'Créer l’arme' }).click();
   await creerInvestigateur(page, LINDQVIST);
   await expect(reserve.locator('tr[data-profil="margaret-hale"]')).toContainText('PV 11');
 
@@ -73,6 +80,7 @@ async function parcours(browser, origin, port) {
   await page.getByRole('button', { name: 'Commencer le round 1' }).click();
   await expect(page.locator('#round')).toHaveText('Round 1');
   await expect(page.locator('#action h3')).toContainText('Au tour de Margaret Hale');
+  await expect(page.locator('#action fieldset legend').first()).toContainText('Mêlée (Grand couteau (poignard, machette), Corps à corps 45 %)');
   await page.locator('#tir-cible').selectOption({ label: 'Disciple de Jacob Smith' });
   await page.locator('#tir-distance').fill('10');
   await des(page, '25 30', '6');
@@ -100,8 +108,12 @@ async function parcours(browser, origin, port) {
   await expect(ligneDisciple).toContainText('0/12');
   await expect(ligneDisciple).toContainText('mourant');
   assert.match(await journal(page), /MOURANT/);
-  await expect(ligneDisciple.getByRole('button', { name: 'Jet CON mourant' })).toBeVisible();
-  await expect(ligneDisciple.getByRole('button', { name: 'Premiers soins' })).toBeVisible();
+  const boutonMourant = ligneDisciple.getByRole('button', { name: 'Jet CON mourant' });
+  const boutonSoins = ligneDisciple.getByRole('button', { name: 'Premiers soins' });
+  await expect(boutonMourant).toBeVisible();
+  await expect(boutonSoins).toBeVisible();
+  assert.match(await boutonMourant.getAttribute('title'), /CON.*mourant.*Gardien p\. 107-108/i);
+  assert.match(await boutonSoins.getAttribute('title'), /stabilise.*1 PV.*\+1 PV/i);
 
   // Jet de CON mourant réussi (30 ≤ CON 60) : il survit, toujours mourant ; Premiers soins : stabilisé à 1 PV, inconscient.
   await des(page, '30', '');
@@ -113,16 +125,18 @@ async function parcours(browser, origin, port) {
   await expect(ligneDisciple).toContainText('1/12');
   await expect(ligneDisciple).toContainText('inconscient');
 
-  // Rechargement après les deux tirs : « Recharger » rend la capacité maximale (8/8) ; l’aide cite le Gardien p. 100.
+  // Rechargement après les deux tirs : « Recharger » ajoute deux balles (6/8 → 8/8) ; l’aide cite durée et page (Gardien p. 100).
   const ligneHale = page.locator('#participants tr', { hasText: 'Margaret Hale' });
   await expect(ligneHale).toContainText('6/8');
   const boutonRecharger = ligneHale.getByRole('button', { name: 'Recharger' });
   await expect(boutonRecharger).toBeVisible();
-  assert.match(await boutonRecharger.getAttribute('title'), /Gardien p\. 100/);
+  assert.match(await boutonRecharger.getAttribute('title'), /1 round.*deux balles.*Gardien p\. 100/i);
   await boutonRecharger.click();
   await expect(ligneHale).toContainText('8/8');
   assert.match(await journal(page), /recharge/);
   await page.locator('#fin-tour').click();
+  await expect(page.locator('#action h3')).toContainText('Au tour de Pr Arthur Lindqvist');
+  await expect(page.locator('#action fieldset legend').first()).toContainText('Mêlée (Canne-épée, Épée ? %)');
 
   // Égalité parfaite au test opposé : le MJ choisit. Tant qu'il n'a pas tranché, la rencontre ne continue pas.
   await page.locator('#oppose-a').selectOption({ label: 'Margaret Hale' });
@@ -179,7 +193,10 @@ async function parcours(browser, origin, port) {
   await des(page, '95', '0');
   await page.locator('#san-qui').selectOption({ label: 'Pr Arthur Lindqvist' });
   await page.locator('#jet-san').click();
-  assert.match(await journal(page), /Pr Arthur Lindqvist perd 0 SAN/);
+  const j3 = await journal(page);
+  assert.match(j3.slice(j2.length), /Pr Arthur Lindqvist perd 0 SAN/);
+  await expect(page.locator('#file-degats')).toHaveValue('');
+  await expect(page.locator('#participants tr', { hasText: 'Pr Arthur Lindqvist' }).locator('td').nth(3)).toHaveText('50');
 
   // Rechargement : la rencontre, le journal et l'historique reviennent ; seule la base de Cthulhu existe.
   await page.waitForFunction(() => document.querySelector('#statut-sauvegarde').textContent.startsWith('Sauvegardé'));

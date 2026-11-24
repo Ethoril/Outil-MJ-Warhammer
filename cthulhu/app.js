@@ -539,10 +539,10 @@ function lancerInterface() {
     const lignes = [...r.participants].sort((a, b) => (ordre.get(a.id)?.rang ?? 99) - (ordre.get(b.id)?.rang ?? 99)).map(p => {
       const o = ordre.get(p.id);
       const arme = r.armes[p.armeTir];
-      const boutonsEtat = (p.etat === 'mourant' ? ` <button type="button" data-action="jet-mourant" data-id="${esc(p.id)}">Jet CON mourant</button>` : '')
-        + (p.etat === 'mourant' || (p.etat !== 'mort' && p.pv < p.pvMax) ? ` <button type="button" data-action="premiers-soins" data-id="${esc(p.id)}">Premiers soins</button>` : '');
+      const boutonsEtat = (p.etat === 'mourant' ? ` <button type="button" data-action="jet-mourant" data-id="${esc(p.id)}" title="Jet de CON en fin de round tant qu’il est mourant (échec : mort, réussite : survit) — Gardien p. 107-108">Jet CON mourant</button>` : '')
+        + (p.etat === 'mourant' || (p.etat !== 'mort' && p.pv < p.pvMax) ? ` <button type="button" data-action="premiers-soins" data-id="${esc(p.id)}" title="Premiers soins réussis : stabilise un mourant (1 PV, inconscient), sinon +1 PV">Premiers soins</button>` : '');
       const boutonRecharger = arme && p.etat !== 'mort' && p.munitions < arme.capacite
-        ? ` <button type="button" data-action="recharger" data-id="${esc(p.id)}" title="Recharger : 1 round pour deux balles (pistolet ou fusil) ou un changement de chargeur / cylindre qui remet l’arme à pleine capacité — Gardien p. 100">Recharger</button>` : '';
+        ? ` <button type="button" data-action="recharger" data-id="${esc(p.id)}" title="Recharger : 1 round pour deux balles — Gardien p. 100">Recharger</button>` : '';
       return `<tr class="camp-${participantCamp({ camp: p.camp, kind: p.kind })} ${acteur?.id === p.id ? 'courant' : ''} etat-${p.etat}${p.cachee ? ' cachee' : ''}"${acteur?.id === p.id ? ' aria-current="true"' : ''}>
         <td>${o ? o.rang : '—'}</td>
         <td><strong>${esc(p.nom)}</strong>${p.cachee ? ' <em>(cachée)</em>' : ''}<br><small>DEX ${p.carac.DEX}${o ? ` → ${o.dex}` : ''} · Impact ${esc(p.impact)}</small></td>
