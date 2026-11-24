@@ -7,7 +7,7 @@ import { updateCriticalDeathCountdown } from '../v5-critical-aftermath.js';
 import { uid, cloneValue } from '../models.js';
 import { sequelaCharacteristicTotals, sequelaEffectRows, sequelaPhase } from '../v5-sequela-effects.js';
 import { consumeObstinate } from '../v5-obstinate.js';
-import { aftermathSubjects, aftermathOwnership, mutableAftermathSubject } from '../aftermath-subjects.js';
+import { aftermathSubjects, aftermathOwnership, mutableAftermathSubject, suspendedSubjectOf } from '../aftermath-subjects.js';
 
 /** Q6 T6 : le testeur (participant) et les réponses du MJ aux questions d'États de ce Test (CA8, CA12). */
 const aftermathTestOptions = (tester, input) => ({ tester: tester || null, conditionContext: input?.conditionContext || {} });
@@ -298,8 +298,11 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return runAftermathCommand('resolve-aftermath-fracture', (state, draft) => {
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
         const patient = sequela && subjectIn(draft, sequela.participantId);
-        const outcome = resolveFractureHealing(state, { ...aftermathTestOptions(patient, input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll ?? null });
-        return outcome.receipt?.waived === false ? countAftermathTest(draft, state, outcome, patient, input) : outcome;
+        // Patient absent d'une scène suspendue : sa Résistance est lue dans la scène (lecture seule), rien n'y est écrit.
+        const suspended = !patient && sequela ? suspendedSubjectOf(draft, sequela.participantId) : null;
+        const tester = patient || suspended;
+        const outcome = resolveFractureHealing(state, { ...aftermathTestOptions(tester, input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: tester ? aftermathEnduranceScore(tester) : null, roll: input.roll ?? null });
+        return outcome.receipt?.waived === false ? countAftermathTest(draft, state, outcome, patient || null, input) : outcome;
       });
     },
     treatAftermathTornMuscle(input = {}) {
@@ -323,8 +326,11 @@ export function createAftermathApi({ api, currentEnvelope, absentAftermathSubjec
       return runAftermathCommand('record-aftermath-post-encounter-test', (state, draft) => {
         const sequela = (state.sequelae || []).find(row => row.id === input.sequelaId);
         const patient = sequela && subjectIn(draft, sequela.participantId);
-        const outcome = recordPostEncounterTest(state, { ...aftermathTestOptions(patient, input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: patient ? aftermathEnduranceScore(patient) : null, roll: input.roll });
-        return countAftermathTest(draft, state, outcome, patient, input);
+        // Patient absent d'une scène suspendue : sa Résistance est lue dans la scène (lecture seule), rien n'y est écrit.
+        const suspended = !patient && sequela ? suspendedSubjectOf(draft, sequela.participantId) : null;
+        const tester = patient || suspended;
+        const outcome = recordPostEncounterTest(state, { ...aftermathTestOptions(tester, input), operationId: input.operationId, expectedRevision: input.expectedRevision ?? state.revision, sequelaId: input.sequelaId, enduranceScore: tester ? aftermathEnduranceScore(tester) : null, roll: input.roll });
+        return countAftermathTest(draft, state, outcome, patient || null, input);
       });
     },
     decideAftermathSurgeryDeadline(input = {}) {
