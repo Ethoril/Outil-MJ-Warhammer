@@ -1,5 +1,6 @@
 /** Pure fiche equipment contract, copied functions regenerated from the source project. */
 import { wornEquipment } from './armour-worn.js';
+import { isQuality } from './quality-normalization.js';
 import { HIT_LOCATIONS, armourProtection, equipmentFormula, armourLayer, validateEquipmentItem } from '../data/shared/fiche/equipment.js';
 import talentQualityRegistry from '../data/v5-quality-talent-contracts.json' with {type:'json'};
 import contracts from '../data/keyword-engine-contracts.json' with { type: 'json' };
@@ -437,7 +438,7 @@ export function applyWeaponSkillRules(actor, action, { weapon = null, context = 
   receipt.trained=true;receipt.skillId=usable.id;
   if(isBastard&&hands===1)unchanged.action.qualities=addQuality(addQuality(qualities,'epuisante'),'lente');
   if(categoryName==='cavalerie'&&!mounted&&isSabre&&skillSpec(usable)==='base'){
-   unchanged.action.qualities=qualities.map(word=>word.id==='entaille'?{...word,parameter:'2'}:word);
+   unchanged.action.qualities=qualities.map(word=>isQuality(word,'entaille')?{...word,parameter:'2'}:word);
    receipt.applied.push('sabre-basic-slash-2');
   }
   if(isMainGauche&&!['escrime','parade'].includes(skillSpec(usable))){

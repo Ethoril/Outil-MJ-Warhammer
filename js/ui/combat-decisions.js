@@ -165,7 +165,7 @@ export function collectDecisions(context = {}, store = {}) {
     if ((Array.isArray(v5.divineJudgments) ? v5.divineJudgments : []).some(row => row?.status === 'departed')) push({ id: `jugement:${pid}`, kind: 'jugement', participantId: pid, titre: `${name} · jugement dernier en cours`, options: OPEN('Ouvrir les prières') });
     // 22 · familier animal mort : Test de Calme du maître.
     for (const { link, familiar } of familiarLinksOf(participant).length ? linkedFamiliars(participant, context.participants || []) : []) {
-      if (link?.system === 'animal' && familiar && (Number(familiar.hp) <= 0 || isDead(familiar))) push({ id: `familier:${pid}:${link.id}`, kind: 'familier', participantId: pid, titre: `${name} · ${nameOf(familiar)} est mort : Test de Calme`, options: OPEN('Mort du familier') });
+      if (link?.system === 'animal' && familiar && !link.deathResolved && (Number(familiar.hp) <= 0 || isDead(familiar))) push({ id: `familier:${pid}:${link.id}`, kind: 'familier', participantId: pid, titre: `${name} · ${nameOf(familiar)} est mort : Test de Calme`, options: OPEN('Mort du familier') });
     }
     // 25 · Peur en cours, pas encore surmontée.
     const fears = statesOf(participant).filter(row => row?.key === 'fear-of-talent' && row.overcome !== true);

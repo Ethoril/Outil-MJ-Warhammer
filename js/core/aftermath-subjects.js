@@ -106,6 +106,13 @@ export function aftermathSubjectOf(envelope, row) {
   return followed ? { where: 'suivi', subject: followed.subject } : none;
 }
 
+/** Copie profonde en lecture seule du participant d'une scène suspendue : score d'un Test, jamais une cible d'écriture. */
+export function suspendedSubjectOf(envelope, participantId) {
+  if (participantId == null) return null;
+  const found = suspendedOf(envelope).find(row => row?.id === participantId);
+  return found ? cloneValue(found) : null;
+}
+
 /**
  * Sujet modifiable dans un brouillon. `target` se modifie en place ; `commit()` reporte un personnage suivi sur
  * son enregistrement persistant (PV, États, extensions V5 différentes de celles du profil). Sans effet en combat.

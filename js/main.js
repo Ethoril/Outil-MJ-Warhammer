@@ -51,7 +51,7 @@ import { createMapLink, MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from './core/map-li
 import { offScenePjParticipants, mapMaxHpOf } from './core/map-link-state.js';
 import { participantTokenImageUrl, formImageOf } from './core/token-image.js';
 import { mountMapLinkFeedback, createMapTurnFlow } from './ui/map-link-feedback.js';
-import { setMapDistanceProvider } from './ui/resolution-panel.js';
+import { setMapDistanceProvider, refreshMapDistance } from './ui/resolution-panel.js';
 // Libellés des saisies d'Initiative manquantes (recette G-INI-2 : plus d'identifiants internes).
 const INITIATIVE_INPUT_LABELS = Object.freeze({ characteristic: 'Initiative', die: 'd10', combatReflexesDice: 'deux d10 du Combat instinctif',
   combatReflexesChoice: 'choix du Combat instinctif', tieChoice: 'départage de l’égalité', tieOrder: 'ordre de l’égalité',
@@ -2240,6 +2240,8 @@ if (typeof BroadcastChannel === 'function') {
   // Retours de la carte (L5) : « À poser (N) », suggestions d'engagement, distance préremplie, pastille « posé ».
   const mapLinkFeedback = mountMapLinkFeedback({ mapLink, store: Store, showToast, pendingNode: qs('#map-link-pending') });
   setMapDistanceProvider(mapLinkFeedback.distanceBetween);
+  // G10 (R14) : la carte envoie `map.adjacency` à chaque fin de déplacement ; la résolution de tir ouverte redemande sa distance.
+  mapLink.on('adjacency', () => refreshMapDistance());
   mapLinkPlacement = participant => mapLink.isPlaced(participant);
   mapLink.on('placement', () => workspaceView?.render());
   Bus.on('reserve', mapLink.refresh);

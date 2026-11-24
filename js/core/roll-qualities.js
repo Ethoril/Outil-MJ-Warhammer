@@ -5,7 +5,7 @@ import { keywordMechanicalStatus } from './keywords.js';
 // c'est ce qui manquait aux trois moteurs concernés (Précise, Empaleuse, Dangereuse),
 // déclarés dans ENGINES mais consommés nulle part.
 import { ENGINES } from '../data/keyword-engines.js';
-import { normalizeQualities } from './quality-normalization.js';
+import { normalizeQualities, isQuality } from './quality-normalization.js';
 import { slModifierClause } from './effect-engine.js';
 
 /** Moteurs actifs pour une liste de qualités, dédoublonnés par slug. */
@@ -66,7 +66,7 @@ export function defenseQualityClauses(qualities = [], { kind = 'melee', shield =
   const overridden = new Set(engines.flatMap(e => e.overrides || []));
   const make = (id, quality, amount, stackGroup) => slModifierClause({ id, role: 'defender', bearer: { kind: 'quality', sourceId: `${ownerId}:quality:${quality}` }, amount, stack: 'max', stackGroup });
   const clauses = [];
-  if (engines.some(e => e.id === 'defensive' && !overridden.has(e.id))) clauses.push(make('defensive-protection', 'defensive', 1, 'defensive-protection'));
+  if (engines.some(e => isQuality(e, 'defensive') && !overridden.has(e.id))) clauses.push(make('defensive-protection', 'defensive', 1, 'defensive-protection'));
   if (shield) clauses.push(make('defensive-protection:shield', 'shield', 1, 'defensive-protection'));
   for (const e of engines) if (!overridden.has(e.id) && e.params.bonus < 0) clauses.push(make(`quality-${e.id}`, e.id, e.params.bonus, `quality-${e.id}`));
   return clauses;

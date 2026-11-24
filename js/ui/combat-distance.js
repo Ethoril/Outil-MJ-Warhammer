@@ -81,6 +81,22 @@ export function mapDistanceContext(context = {}, { meters, actorId, targetId, ba
   return { ...context, mapDistance: { meters, actorId, targetId, ...(band !== undefined ? { band } : {}) } };
 }
 
+/**
+ * G10 (R14) : contexte du brouillon après une réponse de la carte (rendu du panneau, ou redemande à chaque `map.adjacency`).
+ * La bande écrite par la carte suit la nouvelle mesure ; une bande choisie par le MJ reste telle quelle. Sans bande choisie, la
+ * première réponse la préremplit (`firstFill`, sauf engagement). Rend `{ context, filled }` : `context` est null quand rien ne change,
+ * `filled` vrai quand la bande vient d'être préremplie (l'appelant ne la préremplit plus pour cette paire).
+ */
+export function mapAnswerContext(current = {}, { meters, band = null, actorId, targetId, engaged = false, firstFill = true } = {}) {
+  const previous = mapBandFor(current, actorId, targetId);
+  let shotRange = current.shotRange, filled = false;
+  if (band && previous && shotRange === previous) shotRange = band;
+  if (band && !shotRange && current.engagedWithShooter !== true && !engaged && firstFill) { filled = true; shotRange = band; }
+  const fromMap = Boolean(band) && shotRange === band;
+  const next = mapDistanceContext({ ...current, ...(shotRange ? { shotRange } : {}) }, { meters, actorId, targetId, band: fromMap ? band : null });
+  return { context: next || (shotRange !== current.shotRange ? { ...current, shotRange } : null), filled };
+}
+
 /** Mètres de la carte pour cette paire, sinon null (mesure d'une autre cible, d'un autre tireur, ou carte débranchée ignorée). */
 export function mapMetersFor(context = {}, actorId, targetId) {
   const known = context.mapDistance;

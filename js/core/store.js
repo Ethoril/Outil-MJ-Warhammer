@@ -151,6 +151,7 @@ import { createStateCommand, createCompactStateCommand, applyStateChanges } from
 import { createHistory, recordCommand, canUndo as historyCanUndo, canRedo as historyCanRedo, undo as historyUndo, redo as historyRedo, historySnapshot, markExternalBoundary } from './history.js';
 import { ORDER_MODES, effectiveOrder, moveInOrder, insertReinforcement, insertParticipantsByInitiative, setOrderMode as computeOrderMode, nextTurn as computeNextTurn, removeFromCombat, prepareCombatInitiative, playTurnNowCheck as computePlayTurnNowCheck, playedThisRound as computePlayedThisRound } from './turn-order.js';
 import { createEncounter, normalizeEncounter, setEncounterEntry, removeEncounterEntry, duplicateEncounter, launchEncounter, addImprovisedParticipant, suspendScene, resumeScene } from './encounters.js';
+import { carryMapRefs } from './map-link-state.js';
 import { previewResolution as buildResolutionPreview, applyResolution as applyActionResolution, previewMountedSecondaryTest, withTriggeringStun } from './resolution.js';
 import { simulateAction, applySimulation as applyActionSimulation, discardSimulation } from './simulation.js';
 import { deriveReminders, pendingReminders, resolveReminder } from './reminders.js';
@@ -3167,6 +3168,11 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
           const rebuilt=launchEncounter(encounter,{profiles:draft.reserve||[],persistentCharacters:draft.persistentCharacters||[],activeScene:null,now:null,idFactory:()=>`f2a:${prefix}:${encounter.id}:${expected}:${index++}`});
           if(JSON.stringify(rebuilt.participants.map(row=>row.id))!==JSON.stringify((staging.scene?.participants||[]).map(row=>row.id))
             ||rebuilt.id!==staging.scene?.id&&staging.kind==='launch')throw Object.assign(new Error('La composition a changé depuis la préparation.'),{code:'COMBAT_INIT_STALE'});
+          if(staging.kind==='restart-scene'){
+            // G11 (contrat §7, décision du MJ du 24/11/2026) : les participants recréés reprennent le `ref` de carte des participants de la scène vivante.
+            rebuilt.participants=carryMapRefs(liveScene?.participants||[],rebuilt.participants||[]);
+            sourceParticipants=carryMapRefs(liveScene?.participants||[],sourceParticipants);
+          }
           sourceScene=staging.kind==='restart-scene'?{...rebuilt,id:staging.sceneId,startedAt:staging.startedAt}:{...rebuilt,status:'active'};
         }
         if(staging?.kind==='restart-free')sourceParticipants=(draft.combat?.participants||[]).map(item=>{
@@ -4104,6 +4110,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
       const master = combat.participants.get(masterId), familiar = combat.participants.get(familiarId);
       const plan = planFamiliarDeath(master, familiar);
       if (!plan.applicable) return { ok: false, reason: 'no-animal-link', message: plan.reason };
+      // La mort ne se résout qu'une fois par lien : la marque `deathResolved` posée sur le lien bloque toute seconde saisie.
+      if (familiarLinksOf(master).find(row => row.id === plan.linkId)?.deathResolved) return { ok: false, reason: 'already-resolved', message: 'Mort du familier déjà résolue.' };
       let damage = 0;
       if (options.calmFailed === true) {
         const dealt = familiarDeathDamage(options.rolls);
@@ -4111,7 +4119,13 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         damage = dealt.damage;
       }
       const result = api.executeCommand('familiar-death', draft => ({ ...draft,
-        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => (item.id === masterId && damage ? momentumAfterChange(item, { ...item, hp: Math.max(0, (Number(item.hp) || 0) - damage) }) : item)) },
+        combat: { ...draft.combat, participants: (draft.combat?.participants || []).map(item => {
+          if (item.id !== masterId) return item;
+          // Même commande : Annuler retire la marque en même temps que les Blessures.
+          const marked = withV5(item, v5 => ({ ...v5, familiarLinks: (v5.familiarLinks || []).map(row => row.id === plan.linkId
+            ? { ...row, deathResolved: { familiarId, calmFailed: options.calmFailed === true, damage } } : row) }));
+          return damage ? momentumAfterChange(marked, { ...marked, hp: Math.max(0, (Number(marked.hp) || 0) - damage) }) : marked;
+        }) },
         log: [{ id: uid(), kind: 'effect', actorId: familiarId, targetId: masterId,
           text: `${familiar.name} · Mort du familier : ${master.name} ${options.calmFailed === true ? `rate le ${plan.calmTest.label}, ${damage} Blessure(s) directe(s)` : `réussit le ${plan.calmTest.label}`}`,
           detail: { kind: 'familiar-death', linkId: plan.linkId, calmModifier: plan.calmTest.modifier, calmFailed: options.calmFailed === true, damage, reminders: plan.reminders } }, ...(draft.log || [])].slice(0, 300) }));
@@ -4356,6 +4370,8 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
         if (!encounter) throw missing();
         if (!(encounter.entries || []).length) throw empty();
         const launched = freshScene(launchEncounter(encounter, { profiles: draft.reserve || [], persistentCharacters: draft.persistentCharacters || [], activeScene: null }));
+        // G11 (contrat §7, décision du MJ du 24/11/2026) : les participants recréés reprennent le `ref` de carte de la scène vivante.
+        launched.participants=carryMapRefs(current.participants||[],launched.participants||[]);
         launched.participants=(launched.participants||[]).map(withoutPaviseDeployments);
         const resetV5=freshV5(draft);
         const nextScene = { ...launched, participants:(launched.participants||[]).map(withoutGrapples), id: current.id, startedAt: current.startedAt,

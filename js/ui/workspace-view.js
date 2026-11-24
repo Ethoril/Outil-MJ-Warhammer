@@ -3460,6 +3460,24 @@ export function initWorkspaceView({ Store, Combat = {}, Bus = null, mount, actio
       return;
     }
     if (entry.participantId && entry.participantId !== playContext().actor?.id) selectActor(entry.participantId);
+    // `via: 'sheet'` : la saisie vit dans la « Fiche complète » du participant (ex. bloc `.actor-familiar`) — on l'ouvre,
+    // puis on focalise le premier contrôle du bloc cible après le rendu ; sinon la carte de la décision est montrée.
+    if (target.via === 'sheet') {
+      const participant = readParticipants(Store).find(row => row.id === entry.participantId) || playContext().actor;
+      if (participant) {
+        openFullSheet(participant);
+        queueMicrotask(() => {
+          const scope = refs.play.querySelector('.workspace-fullsheet')?.querySelector(target.selector);
+          // La saisie commence par « Calme raté » (bloc du familier), sinon le premier contrôle du bloc.
+          const control = scope?.querySelector('.familiar-calm-failed') || scope?.querySelector('input, select, button');
+          if (control) { control.scrollIntoView?.({ block: 'nearest' }); control.focus(); return; }
+          spotlight(refs.play.querySelector(target.fallback));
+        });
+        return;
+      }
+      spotlight(refs.play.querySelector(target.fallback));
+      return;
+    }
     // Refonte E4b : corruption et jugement dernier s'ouvrent dans la case centrale.
     if (target.center && openCenterPanel(target.center)) return;
     const panel = refs.play.querySelector(target.selector);

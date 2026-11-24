@@ -4,7 +4,7 @@ import registry from '../data/v5-quality-talent-contracts.json' with { type: 'js
 import additionalRegistry from '../data/v5-additional-talent-contracts.json' with { type: 'json' };
 import { getReferenceCatalogue } from './reference-catalog.js';
 import { keywordMechanicalStatus } from './keywords.js';
-import { normalizeQualities } from './quality-normalization.js';
+import { normalizeQualities, hasQuality } from './quality-normalization.js';
 import { evaluateV5Talents, V5_TALENT_CONTRACTS } from './v5-talents.js';
 
 const IMPROVISED_WEAPON_ID = 'weapon-armes-corps-a-corps-base-arme-improvisee';
@@ -20,7 +20,7 @@ export function v5ActionQualityContext(normalized, qualities = normalized.action
   const published = weapon && catalogue.items?.some(row => row.id === sourceId);
   const improvised = normalized.action.contactImprovised===true?true:published ? sourceId === IMPROVISED_WEAPON_ID : declared.weaponImprovised;
   const kind = ['attack', 'attaque'].includes(normalized.action.type) ? normalized.v5.kind || (normalized.attackContext?.ranged === true || normalized.action.attr === 'CT' ? 'ranged' : 'melee') : 'test';
-  return { kind, actor:{hasMomentum:normalized.actor?.extensions?.v5?.hasMomentum===true},target:{hasMomentum:normalized.target?.extensions?.v5?.hasMomentum===true||normalized.combatPrelude?.targetIncomingMomentum===true}, weapon: { improvised, group:published?weapon.category:declared.weaponGroup, dagger:published?/^(weapon-armes-corps-a-corps-base-dague|weapon-armes-corps-a-corps-base-couteau)$/.test(sourceId):declared.weaponDagger,unarmed:published?sourceId==='weapon-armes-corps-a-corps-bagarre-mains-nues':declared.weaponUnarmed, pummel: qualities.some(row => row.id === 'assommante') },
+  return { kind, actor:{hasMomentum:normalized.actor?.extensions?.v5?.hasMomentum===true},target:{hasMomentum:normalized.target?.extensions?.v5?.hasMomentum===true||normalized.combatPrelude?.targetIncomingMomentum===true}, weapon: { improvised, group:published?weapon.category:declared.weaponGroup, dagger:published?/^(weapon-armes-corps-a-corps-base-dague|weapon-armes-corps-a-corps-base-couteau)$/.test(sourceId):declared.weaponDagger,unarmed:published?sourceId==='weapon-armes-corps-a-corps-bagarre-mains-nues':declared.weaponUnarmed, pummel: hasQuality(qualities, 'assommante') },
     dualWielding:declared.dualWielding===true,silentTakedown: declared.silentTakedown, calledShot: declared.calledShot };
 }
 /** Adds and suppresses Qualities on the cloned action only, before every Test plan. */
@@ -72,7 +72,7 @@ export function v5QualityMechanicalStatus(value, catalogue = getReferenceCatalog
 /** Pummel uses Wounds actually lost from the ordinary head hit, after protection. */
 export function previewV5WeaponConditions({ qualities = [], hit, location, target, damage, resolutionId, actor, replaced = false, catalogue } = {}) {
   const proposed = [], unresolved = [], warnings = [], talentPlans=[];
-  if (replaced || !qualities.some(row => row.id === 'assommante')) return { proposed, unresolved, warnings };
+  if (replaced || !hasQuality(qualities, 'assommante')) return { proposed, unresolved, warnings };
   const status = v5QualityMechanicalStatus('assommante', catalogue);
   if (status.status !== 'covered') warnings.push({ keywordId: 'assommante', reason: status.reason });
   if (status.status !== 'covered' || !hit || location?.key !== 'HEAD' || !damage || damage.finalDamage <= 0) return { proposed, unresolved, warnings };

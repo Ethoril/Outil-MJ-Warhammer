@@ -72,6 +72,10 @@ export function buildFamiliarBlock(createElement, participant, participants = []
     death.dataset.familiarId = familiar.id;
     death.textContent = 'Mort du familier';
     death.title = 'Test de Calme Difficile du maître ; si « Calme raté » est coché, les deux d10 saisis sont infligés en Blessures directes';
+    if (link.deathResolved) {
+      death.disabled = true;
+      death.title = 'Mort du familier déjà résolue' + (link.deathResolved.calmFailed ? ` : ${link.deathResolved.damage} Blessure(s) directe(s) enregistrée(s)` : ' : Calme réussi, aucune Blessure');
+    }
     block.appendChild(death);
     animalDeath = true;
   }
