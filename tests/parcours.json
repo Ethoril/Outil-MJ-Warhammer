@@ -181,6 +181,7 @@
     "recette-g3-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "recette-g4-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "recette-g5-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
+    "recette-g10-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "refonte-bibliotheque-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "refonte-campagne-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},
     "recette-g6-browser.mjs": {"famille":"ticket","chantier":"refonte-interface"},

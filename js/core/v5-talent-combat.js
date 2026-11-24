@@ -1,3 +1,4 @@
+import { hasQuality } from './quality-normalization.js';
 import{previewSmall}from'./v5-talent-small.js';
 /** Typed combat inputs: never erase an unclassified MJ difficulty. */
 import {previewWhirlwind} from './v5-talent-whirlwind.js';
@@ -89,7 +90,7 @@ export function previewV5CombatPrelude(normalized){
   const attack=['attack','attaque'].includes(normalized.action.type),charging=attack&&normalized.v5.charging===true;
   const sizes=[normalized.v5.actorSize,normalized.v5.targetSize],larger=sizes.every(Number.isSafeInteger)?sizes[0]>sizes[1]:undefined;
   const slayer=evaluateV5Talents(normalized.target,{event:'combat.beforeTests',role:'defender',context:{receivedCharge:charging,chargedByLargerEnemy:larger},includeTalents:['talent-slayer']});
-  const demolition=evaluateV5Talents(normalized.actor,{event:'combat.beforeTests',role:'attacker',context:{weapon:{hack:(normalized.action.qualities||[]).some(q=>q.id==='taille')}},includeTalents:['talent-demolisher']});
+  const demolition=evaluateV5Talents(normalized.actor,{event:'combat.beforeTests',role:'attacker',context:{weapon:{hack:hasQuality(normalized.action.qualities,'taille')}},includeTalents:['talent-demolisher']});
   const coverStep=demolition.proposals.filter(e=>e.op==='reduceCover').reduce((sum,e)=>sum+e.amount,0);
   if(attack&&coverStep&&normalized.v5.context?.penalties?.cover<0)normalized.v5.context.penalties.cover=Math.min(0,normalized.v5.context.penalties.cover+coverStep);
   const underminer=evaluateV5Talents(normalized.target,{event:'combat.beforeTests',role:'defender',context:{},includeTalents:['talent-underminer']});

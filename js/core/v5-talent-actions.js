@@ -1,3 +1,4 @@
+import { hasQuality } from './quality-normalization.js';
 import {suffusedFrenzy,sourceActive} from './v5-talent-source.js';
 export {sourceActive} from './v5-talent-source.js';
 import{smallNoTest,terrorAction}from'./v5-talent-small.js';
@@ -41,7 +42,7 @@ export function availableV5TalentActions(subject){
   return rows.filter(row=>Number.isSafeInteger(row.base)&&row.base>=0);
 }
 export function pendingCrewSkill(actor,action,context={}){
-  const crewed=(action.qualities||[]).some(q=>q.id==='equipage');
+  const crewed=hasQuality(action.qualities,'equipage');
   if(!crewed)return null;
   return (actor.states||[]).find(s=>s.key==='crew-next-shot'&&s.targetId===actor.id&&sourceActive(s)&&(!s.equipmentId||s.equipmentId===action.extensions?.fiche?.equipmentId))||null;
 }

@@ -1,3 +1,4 @@
+import { isQuality } from '../../core/quality-normalization.js';
 import { node, button, signed, rubric } from './dom.js';
 
 // Champs de jet du critique : clé du brouillon de workspace-view. Saisir ou cocher ne vide jamais l'aperçu.
@@ -128,7 +129,7 @@ export function renderCritical(preview, draft, handlers, defending = false) {
       const field=defending?kind==='first'?'defenderInjure':'defenderInjureSecond':kind==='first'?'injure':'injureSecond';
       const draftKey=CRITICAL_ROLL_KEYS[field];
       block.appendChild(rollField({field:'injure-'+(defending?'defender-':'')+kind,label:'Frappe blessante : deuxième gravité au choix',value:draft[draftKey]||'',error:'',handlers,disabled:draft.busy,critical:field}));
-      if((defending?preview.input.defense?.qualities:preview.input.action.qualities)?.some(q=>q.id==='inoffensive')){
+      if((defending?preview.input.defense?.qualities:preview.input.action.qualities)?.some(q=>isQuality(q,'inoffensive'))){
         const alt=field+'Alternative';
         block.appendChild(rollField({field:'injure-alt-'+(defending?'defender-':'')+kind,label:'Inoffensive : autre dé de la deuxième paire',value:draft[CRITICAL_ROLL_KEYS[alt]]||'',error:'',handlers,disabled:draft.busy,critical:alt}));
       }
