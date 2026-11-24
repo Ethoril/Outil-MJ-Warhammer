@@ -10,7 +10,7 @@ import { dirname, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { MARQUEURS_CARTE, MAP_LINK_VERSION } from '../../../js/core/map-link-protocol.js';
 import { creerReserve, ajouterArme, ajouterProfil } from '../../../cthulhu/profils.js';
-import { composerRencontre } from '../../../cthulhu/rencontre.js';
+import { composerRencontre, commencerRound, passerTour } from '../../../cthulhu/rencontre.js';
 import { ARMES_DEPART, CREATURES_DEPART } from '../../../cthulhu/donnees-depart.js';
 import {
   refCarteDe, participantsPourLaCarte, etatPionDe, cthulhuMapProjection, creerLiaisonCarte
@@ -142,11 +142,11 @@ test('CA25 — participants de la carte : ceux de la rencontre, plus les investi
 
 // --- Par le protocole commun --------------------------------------------------------------------------------------------
 
-function liaison(etatInitial) {
+function liaison(etatInitial, options = {}) {
   const envoyes = [];
   let etat = etatInitial;
   const canal = { postMessage: message => envoyes.push(message), close() {} };
-  const lien = creerLiaisonCarte({ channel: canal, getEtat: () => etat, now: () => 1000 });
+  const lien = creerLiaisonCarte({ channel: canal, getEtat: () => etat, now: () => 1000, ...options });
   const carte = (type, payload = {}) => ({ v: MAP_LINK_VERSION, type, seq: 1, at: 0, from: 'map', payload });
   return {
     lien, envoyes, carte,
@@ -216,10 +216,69 @@ test('CA9, CA27 — rien d’envoyé hors du contrat : enveloppes, marqueurs et 
     assert.equal(pion.speedCells, null);
     assert.equal(pion.runCells, null);
   }
+  assert.equal(MAP_LINK_VERSION, 3);
   for (const message of t.envoyes) {
     assert.equal(message.v, MAP_LINK_VERSION);
+    assert.equal(message.v, 3);
     assert.equal(message.from, 'outil-mj');
   }
+});
+
+test('v3 — mj.turn : null hors rencontre et au round 0, ref du participant actif à l’instantané et à chaque tour', () => {
+  assert.equal(MAP_LINK_VERSION, 3);
+  const res = reserve();
+  const r0 = composerRencontre(res, ['hale', 'goule']);
+
+  // Hors rencontre : instantané puis mj.turn { ref: null }.
+  const tHors = liaison({ reserve: res, rencontre: null });
+  tHors.lien.onMessage(tHors.carte('map.hello'));
+  assert.deepEqual(tHors.de('mj.turn').map(m => m.payload), [{ ref: null }]);
+
+  // Au round 0 (aucun acteur courant) : mj.turn { ref: null } dans l'instantané, inchangé sur refresh.
+  const t = liaison({ reserve: res, rencontre: r0 });
+  t.lien.onMessage(t.carte('map.hello'));
+  assert.deepEqual(t.de('mj.turn').map(m => m.payload), [{ ref: null }]);
+  t.poser({ reserve: res, rencontre: r0 });
+  assert.equal(t.de('mj.turn').length, 1, 'rien de renvoyé tant que le tour reste null');
+
+  // Round 1 : Margaret Hale (DEX 80) agit avant la goule (DEX 65), puis la goule au tour suivant.
+  const r1 = commencerRound(r0);
+  t.poser({ reserve: res, rencontre: r1 });
+  assert.deepEqual(t.de('mj.turn').at(-1).payload, { ref: 'pj:hale' });
+
+  // Un instantané pendant le tour de Margaret émet aussi mj.turn { ref: 'pj:hale' }.
+  const tSnapshot = liaison({ reserve: res, rencontre: r1 });
+  tSnapshot.lien.onMessage(tSnapshot.carte('map.hello'));
+  assert.deepEqual(tSnapshot.de('mj.turn').map(m => m.payload), [{ ref: 'pj:hale' }]);
+
+  const r2 = passerTour(r1);
+  t.poser({ reserve: res, rencontre: r2 });
+  assert.deepEqual(t.de('mj.turn').at(-1).payload, { ref: 'p:goule' });
+
+  // Fin de rencontre : retour à null.
+  t.poser({ reserve: res, rencontre: null });
+  assert.deepEqual(t.de('mj.turn').at(-1).payload, { ref: null });
+  for (const message of t.envoyes) assert.equal(message.v, 3);
+});
+
+test('v3 — tolérance : map.turnReset sans puis avec espion onTurnReset, et map.impact inattendu ignoré sans erreur', () => {
+  const res = reserve();
+  const r1 = commencerRound(composerRencontre(res, ['hale', 'goule']));
+
+  const t = liaison({ reserve: res, rencontre: r1 });
+  t.lien.onMessage(t.carte('map.hello'));
+  const avant = t.envoyes.length;
+  t.lien.onMessage({ v: 3, type: 'map.turnReset', seq: 2, at: 0, from: 'map', payload: { ref: 'pj:hale' } });
+  assert.equal(t.envoyes.length, avant, 'map.turnReset sans callback : aucune erreur ni message parasite');
+
+  t.lien.onMessage({ v: 3, type: 'map.impact', seq: 3, at: 0, from: 'map', payload: { queryId: 'iq-99', refs: ['pj:hale'] } });
+  assert.equal(t.envoyes.length, avant, 'map.impact inattendu : ignoré sans erreur ni message');
+
+  const resets = [];
+  const tEspion = liaison({ reserve: res, rencontre: r1 }, { onTurnReset: ref => resets.push(ref) });
+  tEspion.lien.onMessage(tEspion.carte('map.hello'));
+  tEspion.lien.onMessage({ v: 3, type: 'map.turnReset', seq: 2, at: 0, from: 'map', payload: { ref: 'pj:hale' } });
+  assert.deepEqual(resets, ['pj:hale']);
 });
 
 test('CA25 — une carte dont la version diffère est signalée, rien n’est envoyé de plus', () => {

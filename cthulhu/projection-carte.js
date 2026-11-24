@@ -13,11 +13,17 @@
  * Réf. (contrat §3) : `pj:<id du profil>` pour un investigateur, liaison durable, même hors rencontre ; `p:<id>` pour un PNJ ou
  * une créature, liaison par rencontre (`goule`, `goule-2`…). Une créature « cachée » part aussi : le MJ prépare sa carte, la
  * visibilité d'un pion se règle sur la carte (`hidden`), que l'outil n'écrit jamais.
+ *
+ * Posture v3 du protocole (`js/core/map-link-protocol.js`) :
+ * - `mj.turn` est servi via `getActiveId` (`acteurCourant(rencontre)?.id ?? null`) pour le halo du participant actif sur `gm.html`.
+ * - `map.turnReset` est toléré sans effet par défaut (Q6 = non : Cthulhu n'envoie ni portée ni Course, `onTurnReset` optionnel).
+ * - `mj.impactQuery` / `map.impact` ne sont jamais émis (pas de magie de zone) et un `map.impact` reçu est toléré sans erreur.
  */
 import { createMapLinkProtocol } from '../js/core/map-link-protocol.js';
 import { normalizeLibraryImage } from '../js/core/token-library-path.js';
 import { participantCamp } from '../js/core/participant-camp.js';
 import { valeursDerivees } from './profils.js';
+import { acteurCourant } from './rencontre.js';
 
 /** `ref` stable d'un participant : `pj:<id du profil>` pour un investigateur, sinon `p:<id du participant>`. */
 export const refCarteDe = participant => (participant?.kind === 'PJ' ? `pj:${participant.profilId ?? participant.id}` : `p:${participant?.id}`);
@@ -94,7 +100,9 @@ export function participantsPourLaCarte({ reserve, rencontre } = {}) {
  * Liaison de Cthulhu avec la carte : le protocole commun, la projection ci-dessus et la lecture de la séance. `getEtat()` rend
  * `{ reserve, rencontre }` ; le reste est celui de `createMapLinkProtocol` (`refresh`, `snapshot`, `tick`, `on('placement')`, `status`…).
  */
-export function creerLiaisonCarte({ channel, getEtat, imageUrlOf, now, onStatus, onRan, setTimer, clearTimer }) {
+export function creerLiaisonCarte({ channel, getEtat, imageUrlOf, now, onStatus, onRan, onTurnReset, setTimer, clearTimer }) {
   return createMapLinkProtocol({ channel, projection: cthulhuMapProjection({ imageUrlOf }), getParticipants: () => participantsPourLaCarte(getEtat() ?? {}),
-    ...(now ? { now } : {}), ...(onStatus ? { onStatus } : {}), ...(onRan ? { onRan } : {}), ...(setTimer ? { setTimer } : {}), ...(clearTimer ? { clearTimer } : {}) });
+    getActiveId: () => { const r = getEtat()?.rencontre; return r ? (acteurCourant(r)?.id ?? null) : null; },
+    ...(now ? { now } : {}), ...(onStatus ? { onStatus } : {}), ...(onRan ? { onRan } : {}), ...(onTurnReset ? { onTurnReset } : {}),
+    ...(setTimer ? { setTimer } : {}), ...(clearTimer ? { clearTimer } : {}) });
 }
