@@ -6,6 +6,19 @@ import { expect } from 'playwright/test';
 import { launchBrowser } from './helpers/browser.mjs';
 import { startStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 
+// G11 (recette j-vingt) : au-delà de huit cibles, seules la cible choisie et les engagés restent en puces ;
+// les autres se choisissent dans le menu « Autres cibles (N)… » de la ligne Cible.
+async function chooseResolutionTarget(page, name) {
+  const chip = page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: name });
+  const menu = page.locator('.workspace-resolution select.workspace-target-more').filter({ has: page.locator('option', { hasText: name }) });
+  await chip.or(menu).first().waitFor();
+  if (await chip.count()) return chip.first().click();
+  // Le libellé de l'option peut porter un suffixe : on choisit par la valeur de l'option qui contient le nom.
+  const value = await menu.first().locator('option', { hasText: name }).first().getAttribute('value');
+  return menu.first().selectOption(value);
+}
+
+
 const root = fileURLToPath(new URL('..', import.meta.url));
 
 // Les commandes de séance vivent dans le menu ⋯ de la barre du haut.
@@ -387,7 +400,7 @@ async function main() {
     await page.locator('#combat-banner').getByRole('button', { name: 'Tour suivant' }).click();
     await expect.poll(() => page.locator('#combat-banner').textContent()).not.toBe(roundBefore);
     await expect(eventsOverlay).toBeVisible();
-    await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: 'Participant de démonstration 04' }).click();
+    await chooseResolutionTarget(page, 'Participant de démonstration 04');
     await expect(page.locator('.workspace-sheet-target')).toContainText('Participant de démonstration 04');
     await expect(eventsOverlay).toBeVisible();
     // Une seule fenêtre à la fois ; Échap ferme et rend le focus au menu ⋯.
@@ -447,7 +460,7 @@ async function main() {
     };
     // Rangés par combattant : depuis le plateau des mêlées (3.39.0), une attaque appliquée déplace les jetons dans une zone de mêlée.
     const trackTexts = () => page.locator('.workspace-track .workspace-track-item').evaluateAll(items => items.map(item => `${item.dataset.workspaceTarget}|${item.textContent}`).sort());
-    await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: 'Participant de démonstration 03' }).click();
+    await chooseResolutionTarget(page, 'Participant de démonstration 03');
     await expect(page.locator('.workspace-sheet-target')).toContainText('Participant de démonstration 03');
     const galleryResolution = page.locator('.workspace-resolution');
     await fillDefense(galleryResolution);
@@ -515,7 +528,7 @@ async function main() {
     // fait passer la cible sous zéro ajoute un critique d'excédent (+10 par Blessure en trop),
     // avec son propre jet de gravité ; il remplace l'ancien Acharnement.
     const critTarget = 'Participant de démonstration 04';
-    await page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: critTarget }).click();
+    await chooseResolutionTarget(page, critTarget);
     const gallerySheet = page.locator('.workspace-sheet-target');
     const galleryHp = async () => Number((await gallerySheet.locator('.workspace-sheet-hp').textContent()).match(/PV\s*(−?\d+)/)[1].replace('−', '-'));
     // Scénario déterministe : 1er coup sans excédent (PV 13), 2e coup sous zéro (critique d'excédent).
