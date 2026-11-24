@@ -2734,10 +2734,19 @@ dialog.v5-fate-dialog[open] { left:calc(50% + 8px) !important; right:auto !impor
 /* ==========================================================================
    LOT G11 · ligne des cibles : jamais de défilement horizontal, même à vingt
    combattants (recette j-vingt). Les cibles surnuméraires passent dans le menu
-   « Autres cibles (…) » ; la liste de puces de la ligne Cible passe à la ligne.
+   « Autres cibles (…) » ; la ligne Cible tient sur UNE seule ligne à toutes
+   largeurs : quand la case est étroite (résultat en deux colonnes, écran
+   520 px), puces, groupes et menu rétrécissent avec ellipse dans leur cellule
+   minmax(0, 1fr) au lieu de passer à la ligne, pour ne jamais pousser le
+   contenu de la résolution sous le pied.
    La ligne Action garde son comportement d'origine (bande d'une ligne).
    ========================================================================== */
-.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target > .workspace-chip-list { flex-wrap: wrap; overflow-x: visible; overflow-y: visible; scrollbar-width: none; padding-bottom: 0; }
-.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target .workspace-chip-group { flex-wrap: wrap; flex: none; min-width: 0; max-width: 100%; gap: 3px; }
-.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target > .workspace-chip-list .workspace-chip { flex: none; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
-.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target > .workspace-chip-list > .workspace-target-more { flex: 0 1 auto; min-width: 0; max-width: 100%; min-height: 24px; padding: 1px 8px; border-radius: 999px; font-family: var(--font-ui); font-size: 12.5px; color: inherit; background: var(--panel-2, transparent); }
+/* Les règles G11 s'appliquent à toutes largeurs (menu « Autres cibles » et
+   longues puces existent aussi en écran étroit) : on clôt ici le bloc
+   @media (min-width: 1000px) ouvert plus haut dans ce fichier. */
+}
+.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target > .workspace-chip-list { flex-wrap: nowrap; overflow: hidden; scrollbar-width: none; padding-bottom: 0; min-width: 0; }
+.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target .workspace-chip-group { flex: 0 1 auto; flex-wrap: nowrap; min-width: 0; max-width: 100%; overflow: hidden; gap: 3px; }
+.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target .workspace-chip-group-label { flex: none; white-space: nowrap; }
+.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target > .workspace-chip-list .workspace-chip { flex: 0 1 auto; min-width: 0; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.workspace-area[data-zone="centre"] .workspace-resolution-row.is-target > .workspace-chip-list > .workspace-target-more { flex: 0 1 auto; width: auto; min-width: 0; max-width: 100%; min-height: 24px; padding: 1px 8px; border-radius: 999px; font-family: var(--font-ui); font-size: 12.5px; color: inherit; background: var(--panel-2, transparent); }

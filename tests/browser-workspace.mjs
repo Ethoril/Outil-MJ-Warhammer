@@ -7,6 +7,18 @@ import { launchBrowser } from './helpers/browser.mjs';
 import { startStaticServer, blockExternalNetwork } from './helpers/static-server.mjs';
 import { closeU1Drawer } from './helpers/u1-drawer.mjs';
 
+// G11 (recette j-vingt) : au-delà de huit cibles, seules la cible choisie et les engagés restent en puces ;
+// les autres se choisissent dans le menu « Autres cibles (N)… » de la ligne Cible.
+async function chooseResolutionTarget(page, name) {
+  const chip = page.locator('.workspace-resolution [data-focus-key^="target-"]').filter({ hasText: new RegExp('^' + name.replace(/[.*+?^${}()|[]\]/g, '\$&') + '$') });
+  const menu = page.locator('.workspace-resolution select.workspace-target-more').filter({ has: page.locator('option', { hasText: name }) });
+  await chip.or(menu).first().waitFor();
+  if (await chip.count()) return chip.first().click();
+  const value = await menu.first().locator('option', { hasText: name }).first().getAttribute('value');
+  return menu.first().selectOption(value);
+}
+
+
 const root = fileURLToPath(new URL('..', import.meta.url));
 
 async function main() {
@@ -305,7 +317,7 @@ async function main() {
     await expect(actorSheet).toContainText('Combattant 3');
 
     // La cible se choisit dans Résolution, et la piste l’étiquette « cible ».
-    await page.locator('.workspace-resolution').getByRole('group', { name: 'Alliés' }).getByRole('button', { name: 'Combattant 5', exact: true }).click();
+    await chooseResolutionTarget(page, 'Combattant 5');
     await expect(targetSheet).toContainText('Combattant 5');
     await expect(actorSheet).toContainText('Combattant 3');
     await expect(page.locator('[data-workspace-target="actor-5"] .workspace-track-role')).toHaveText('cible');
@@ -325,7 +337,7 @@ async function main() {
     await page.keyboard.type('3');
     await rerender();
     await expect(attack).toHaveValue('23');
-    await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    await chooseResolutionTarget(page, 'Combattant 2');
     await expect(targetSheet).toContainText('Combattant 2');
     await expect(page.locator('.workspace-defense-base')).toHaveValue('41');
     await page.locator('[data-roll-input="defense"]').fill('88');
@@ -369,7 +381,7 @@ async function main() {
     await expect(targetSheet).toContainText('Combattant 4');
     await expect(page.getByRole('button', { name: /^Appliquer \d+ dégâts à Combattant 4$/ })).toBeVisible();
     await page.getByRole('button', { name: 'Annuler le résultat calculé' }).click();
-    await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    await chooseResolutionTarget(page, 'Combattant 2');
     await expect(page.locator('.workspace-defense-base')).toHaveValue('41');
 
     // Défense : les jets enregistrés de la cible rejoignent le choix ; le jet défensif est proposé d’office.
@@ -379,7 +391,7 @@ async function main() {
         { participantId: 'actor-2', note: 'Esquive', base: 38, type: 'defense' }
       );
     });
-    await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    await chooseResolutionTarget(page, 'Combattant 2');
     const defenseSelect = page.getByRole('combobox', { name: 'Défense de Combattant 2 : caractéristique ou jet' });
     await expect(defenseSelect.locator('option:checked')).toHaveText('Esquive · 38');
     await expect(defenseSelect.locator('optgroup[label="Jets enregistrés"] option')).toHaveText(['Épée rouillée · 30', 'Esquive · 38']);
@@ -398,10 +410,10 @@ async function main() {
     const adversaries = page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' });
     await defenseSelect.selectOption({ label: 'Épée rouillée · 30' });
     await expect(page.locator('.workspace-defense-base')).toHaveValue('30');
-    await adversaries.getByRole('button', { name: 'Combattant 4', exact: true }).click();
+    await chooseResolutionTarget(page, 'Combattant 4');
     await expect(page.getByRole('combobox', { name: 'Défense de Combattant 4 : caractéristique ou jet' }).locator('option:checked')).toHaveText('CC · 43');
     await expect(page.locator('.workspace-defense-base')).toHaveValue('43');
-    await adversaries.getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    await chooseResolutionTarget(page, 'Combattant 2');
     await expect(defenseSelect.locator('option:checked')).toHaveText('Épée rouillée · 30');
     await expect(page.locator('.workspace-defense-base')).toHaveValue('30');
     // Le jet disparaît de la cible : le choix retombe sur la CC, valeur comprise.
@@ -429,7 +441,7 @@ async function main() {
     // Coup critique sur un double : localisation, gravité, cases à cocher, second critique.
     await page.locator('[data-roll-input="defense"]').fill('');
     await page.evaluate(() => { window.workspaceTestData.combat.participants.get('actor-4').hp = 3; });
-    await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 4', exact: true }).click();
+    await chooseResolutionTarget(page, 'Combattant 4');
     await attack.fill('22');
     await attack.press('Enter');
     const critical = page.locator('.workspace-critical').first();
@@ -503,7 +515,7 @@ async function main() {
     await page.locator('.workspace-comparison-item').first().getByRole('button').click();
     await expect(page.locator('[data-roll-input="critical-location"]')).toHaveValue('');
     await expect(page.locator('.workspace-resolution [data-focus-key="apply"]')).toHaveAttribute('title', /Lancez la localisation du critique/);
-    await page.locator('.workspace-resolution').getByRole('group', { name: 'Adversaires' }).getByRole('button', { name: 'Combattant 2', exact: true }).click();
+    await chooseResolutionTarget(page, 'Combattant 2');
     await attack.fill('0');
     await attack.press('Enter');
 
