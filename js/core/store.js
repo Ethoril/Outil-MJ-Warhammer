@@ -6008,6 +6008,14 @@ const corruptionTestPending = (participant, baseRevision, test) => ({ status: te
     },
     previewImport(jsonStr) {
       const raw = typeof jsonStr === 'string' ? JSON.parse(jsonStr) : jsonStr;
+      // Un fichier exporté par la page d’un autre jeu porte la marque de son jeu : le refus nomme ce jeu (le reste de la validation ne change pas).
+      if (raw && raw.format === 'outil-mj-sauvegarde' && typeof raw.jeu === 'string' && raw.jeu !== 'warhammer') {
+        const nom = raw.nomJeu || raw.jeu;
+        throw Object.assign(new MigrationError('Fichier d’un autre jeu', { reason: 'fichier-autre-jeu' }), {
+          userFacing: true,
+          message: `Ce fichier vient de ${nom} : ouvrez-le depuis la page de ce jeu.`
+        });
+      }
       const migrated = migrateSnapshot(raw, { appVersion, contextId });
       // Un registre de convalescence invalide serait refusé plus tard, au premier geste de suivi : l'import le refuse tout de suite.
       if (migrated.data.extensions?.v5?.aftermathRegister != null) {

@@ -4,6 +4,14 @@ const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './MJ.css',
+  './cthulhu/index.html',
+  './cthulhu/app.js',
+  './cthulhu/cthulhu.css',
+  './cthulhu/regles.js',
+  './cthulhu/profils.js',
+  './cthulhu/rencontre.js',
+  './cthulhu/donnees-depart.js',
+  './cthulhu/projection-carte.js',
   './favicon.svg',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
@@ -405,7 +413,13 @@ self.addEventListener('fetch', (event) => {
         }
         return networkResponse;
       }).catch((err) => {
-        if (event.request.mode === 'navigate') return caches.match('./index.html');
+        if (event.request.mode === 'navigate') {
+          // Une adresse de dossier (« …/cthulhu/ ») ou de page (« …/cthulhu ») se sert avec le index.html du dossier ; toute autre page, avec celui de Warhammer.
+          const indexDuDossier = url.pathname.endsWith('/')
+            ? caches.match(url.pathname + 'index.html')
+            : caches.match(url.pathname + '/index.html');
+          return indexDuDossier.then((page) => page || caches.match('./index.html'));
+        }
         throw err;
       });
     })

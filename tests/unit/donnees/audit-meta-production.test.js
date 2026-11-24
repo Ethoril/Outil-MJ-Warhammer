@@ -426,4 +426,22 @@ test('index.html — la coquille référencée est bien mise en cache', () => {
   const oubliées = locales.filter(f => !listés.includes(f) && f !== 'sw.js');
   assert.deepEqual(oubliées, [], `référencées par index.html mais hors cache : ${oubliées.join(', ')}`);
 });
+
+test('cthulhu/ — chaque fichier de la page (html, js, css) est mis en cache, et la page ne référence que des fichiers cachés (CA24, CA28)', () => {
+  // La page de Cthulhu est servie par le même service worker que Warhammer : sans ces entrées, elle ne s'ouvrirait pas hors ligne.
+  const dossier = join(racine, 'cthulhu');
+  const fichiers = readdirSync(dossier).filter(nom => /\.(html|js|css|json)$/.test(nom));
+  assert.ok(fichiers.includes('index.html') && fichiers.includes('app.js'));
+  const oubliés = fichiers.filter(nom => !listés.includes(`cthulhu/${nom}`));
+  assert.deepEqual(oubliés, [], `ces fichiers de cthulhu/ ne seraient pas disponibles hors ligne à froid : ${oubliés.join(', ')}`);
+  // L'adresse /cthulhu/ (dossier) n'est pas une entrée du précache (cache.addAll refuse un dossier sur certains serveurs) :
+  // hors ligne, le service worker la sert avec cthulhu/index.html — avec ou sans barre finale.
+  const sw2 = readFileSync(join(racine, 'sw.js'), 'utf8');
+  assert.match(sw2, /pathname\.endsWith\('\/'\)\s*\?\s*caches\.match\(url\.pathname \+ 'index\.html'\)/, 'repli hors ligne : « …/cthulhu/ » servie avec cthulhu/index.html');
+  assert.match(sw2, /caches\.match\(url\.pathname \+ '\/index\.html'\)/, 'repli hors ligne : « …/cthulhu » servie avec cthulhu/index.html');
+  const html = readFileSync(join(dossier, 'index.html'), 'utf8');
+  const locales = [...html.matchAll(/(?:href|src)=\"(?!https?:|data:|#)([^\"]+)\"/g)].map(m => m[1])
+    .map(f => new URL(f, 'http://racine/cthulhu/').pathname.slice(1)).filter(f => /\.(css|js|svg|webmanifest)$/.test(f));
+  assert.deepEqual(locales.filter(f => !listés.includes(f)), [], 'référencés par cthulhu/index.html mais hors cache');
+});
 });
