@@ -10,9 +10,9 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
-## Refonte de l’interface — non publiée, en attente de la recette du MJ à la table (22/11/2026)
+## 4.0.0 — Refonte de l’interface (publiée le 24/11/2026)
 
-Pas de numéro de version : ni `tools/bump-version.mjs` ni publication avant le feu vert du MJ. Spec, plan et tâches : `docs/specs/refonte-interface/`. Les règles du moteur, les sauvegardes, la synchronisation, les fiches des PJ et la liaison avec la carte ne changent pas (aucune migration ; seuls deux champs facultatifs s’ajoutent : `suddenDeathDeclined` et `advancedTurn`).
+Version majeure : l’écran de combat est refait, recetté par le MJ (première recette le 22/11, recette manuelle de la passe G les 23 et 24/11), et la liaison avec la carte passe en **version 3** : l’outil et RPG Map Display se publient ensemble, avec la copie des données communes dans les fiches. Spec, plan et tâches : `docs/specs/refonte-interface/`. Les règles du moteur, les sauvegardes, la synchronisation et les fiches des PJ ne changent pas (aucune migration ; champs facultatifs ajoutés : `suddenDeathDeclined`, `advancedTurn`, `deathResolved` sur le lien d’un familier, `extensions.mapRef` d’un participant recréé).
 
 **L’espace Jouer tient sur l’écran.** À 1440 × 800 la page ne défile plus : frise d’initiative en haut, celui qui agit à gauche, les mêlées puis la résolution au centre, « À décider » puis la cible à droite, la barre d’actions et les onglets Règles · Profils · Journal en bas. La police est celle du système (plus de police gothique), thèmes clair et sombre conservés.
 
@@ -28,6 +28,25 @@ Pas de numéro de version : ni `tools/bump-version.mjs` ni publication avant le 
 - **Fenêtres non bloquantes** pendant le combat : Chance, Destin, Temps de campagne, effets V5. Seule la confirmation de « Terminer le combat » reste modale.
 - **Magie, prières, corruption** se lancent depuis la résolution ; **séquelles, maladies et convalescence** ont quitté l’écran de combat : elles se règlent dans Campagne, y compris pour un participant absent.
 - **Préparer, Campagne, Bibliothèque** ne défilent plus : les longues listes (réserve, rencontres, suivis, profils, règles) défilent dans leur case.
+
+**Passe G (corrections de la première recette).**
+- Barre du bas : seul endroit où l’on choisit l’action préparée ; « Autres actions » ouvre le menu sort, prière et Test… ; « Charger » se voit (puce « Charge », bouton enfoncé).
+- Tir : droit d’esquive calculé (p. 165) et affiché en puce courte, forçable ; sans ce droit, le tir est un simple Test de Capacité de Tir (p. 164). Ligne Distance lisible (« Courte · 12 m · carte »), mise à jour quand un pion bouge sur la carte.
+- Qualité d’arme **Taille (arme)** (Hack, p. 304) : ligne visible sous la Cible, pièce touchée déduite (la plus forte précochée), elle perd 1 PA durablement ; « Appliquer » n’est plus bloqué. Qualités des profils du bestiaire reconnues sous leur nom anglais. **Petit** et la Taille des créatures lisent les Tailles connues ; coiffe de maille seule : « 2* » (p. 306).
+- Surprise : jets de **Vigilance** après l’initiative pour les seuls surpris qui ont le talent ; message d’erreur d’enregistrement correct.
+- Quitter une mêlée par un déplacement : décision « Se désengager / Fuir / Sans règle » (p. 163).
+- Vision nocturne des PJ envoyée à la carte (10 ; Vision dans le noir : 20).
+- Magie : panneau réduit au nécessaire, le reste dans « Options ». Miracles : faits de cible précochés, une ligne par cible, « Allié du prêtre ».
+- Sorts de zone : point d’impact choisi d’un clic sur une case de l’écran MJ de la carte (liaison version 3 : `mj.impactQuery`, `mj.impactCancel`, `map.impact`), ou liste à cocher sans carte.
+
+**Corrections de la recette manuelle (24/11).**
+- Mort d’un familier : se résout une seule fois (une seconde saisie est refusée, ↶ la rend possible), la décision quitte « À décider », son bouton ouvre la saisie dans la fiche complète.
+- Test final de fracture (et Test après la rencontre) d’un absent d’une scène suspendue : sa Résistance est lue dans la scène, sans rien y écrire ; les soins d’un absent restent refusés.
+- Combat à vingt : la ligne des cibles ne défile plus ; au-delà de huit cibles, la cible choisie et les engagés restent en puces, les autres sont dans « Autres cibles (N) ».
+- « Recommencer » une rencontre garde les pions des PNJ à leur case sur la carte : chaque participant recréé reprend la référence de carte de celui qu’il remplace.
+- Carte (publiée avec cette version) : elle se souvient de la case d’un pion retiré et l’y repose s’il revient (fin de combat annulée, contrat §7) ; un pion posé pendant son Tour démarre sur sa case de pose sur les deux vues, et l’annulation du mouvement les garde d’accord.
+
+**Style.** Retour au style de la maquette, thème sombre par défaut.
 
 **Recette.** Relevé des fonctions : `docs/specs/refonte-interface/recette-fonctions.md` ; captures avant/après : `docs/specs/refonte-interface/captures/` ; fiche pour la recette à la table : `docs/specs/refonte-interface/fiche-de-table.md`. Parcours de mesure verts : `refonte-ecran`, `refonte-preparer`, `refonte-campagne`, `refonte-bibliotheque`.
 
