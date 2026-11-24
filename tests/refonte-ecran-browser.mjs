@@ -101,6 +101,9 @@ try {
         // Lot E2b : rien ne défile dans la zone de droite (case « À décider » et fiche de la cible), même avec une décision.
         droiteInner: (zone => zone ? [...zone.querySelectorAll('*')].filter(item => item.getClientRects().length && /(auto|scroll)/.test(getComputedStyle(item).overflowY) && item.scrollHeight > item.clientHeight + 1)
           .map(item => ({ name: `droite : ${item.matches('[data-decisions], [data-decisions] *') ? 'À décider' : item.closest('.workspace-sheet, [data-sheet]') ? 'fiche de la cible' : item.className.split(' ')[0] || item.tagName.toLowerCase()}`, scrollHeight: item.scrollHeight, clientHeight: item.clientHeight })) : [])(document.querySelector('[data-zone="droite"]')),
+        // G11 (recette j-vingt) : la ligne des cibles de la résolution ne défile pas en largeur, même à 20 combattants.
+        targetRows: [...document.querySelectorAll('[data-zone="centre"] .workspace-resolution-row.is-target > .workspace-chip-list')].filter(el => el.getClientRects().length)
+          .map(el => ({ scrollWidth: el.scrollWidth, clientWidth: el.clientWidth })),
         // REFONTE_DUMP=1 : hauteur des blocs de la zone centre (trois niveaux), pour savoir ce qui la remplit.
         dump: (() => {
           if (!dumpCentre) return null;
@@ -163,6 +166,7 @@ try {
     for (const z of m.zones) if (z.name === 'centre' && z.shown && (z.scrollHeight > z.clientHeight + 1 || z.scrollWidth > z.clientWidth + 1)) failures.push(`${step} : la zone centre déborde (${z.scrollHeight}/${z.clientHeight})`);
     // Lot E2b : plus d'exception — la colonne Résultat (critique compris) et le panneau de prière tiennent aussi.
     for (const part of m.centreParts || []) if (part.scrollHeight > part.clientHeight + 1) failures.push(`${step} : ${part.name} déborde (${part.scrollHeight}/${part.clientHeight})`);
+    for (const row of m.targetRows || []) if (row.scrollWidth > row.clientWidth + 1) failures.push(`${step} : la ligne des cibles défile en largeur (${row.scrollWidth}/${row.clientWidth})`);
     for (const part of m.droiteInner) failures.push(`${step} : ${part.name} défile (${part.scrollHeight}/${part.clientHeight})`);
     if (m.modal.length) failures.push(`${step} : fenêtre modale ouverte pendant le combat (${m.modal.join(', ')})`);
     if (m.drawer && !m.drawer.inside) failures.push(`${step} : le panneau « autres… » sort de la fenêtre`);
