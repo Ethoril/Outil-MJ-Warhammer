@@ -311,9 +311,10 @@ export function impactEtCarrure(force, taille) {
 export const pvMax = (con, taille) => Math.floor(((Number(con) || 0) + (Number(taille) || 0)) / 10);
 
 /**
- * Empalement possible ? Arme empalante ; à très longue portée (seule une réussite Extrême touche), seulement sur un
- * succès critique, un jet de 01 (Manuel du Gardien p. 100). Sans empalement, une réussite Extrême ne donne que les
- * dégâts maximaux (arme et Impact), sans jet supplémentaire : lecture retenue, le livre ne détaille pas ce cas.
+ * Empalement possible ? Arme empalante ; à très longue portée (seule une réussite Extrême touche), uniquement sur un
+ * 01 critique (Manuel du Gardien p. 100). Dans `calculerDegats` (p. 404) : hors très longue portée, une réussite
+ * Extrême sur une arme non empalante inflige les dégâts maximaux (+ Impact maximal si applicable) ; à très longue
+ * portée, une réussite Extrême hors 01 n'inflige que les dégâts ordinaires.
  */
 export const empalementPossible = ({ arme, niveau, tresLonguePortee = false }) =>
   arme.empalante === true && (!tresLonguePortee || niveau === NIVEAU.CRITIQUE);

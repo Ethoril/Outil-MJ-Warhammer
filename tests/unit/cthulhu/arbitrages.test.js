@@ -139,7 +139,7 @@ test('Q8-7 · goule : armes à feu et projectiles à demi-dégâts (arrondi à l
   assert.equal(d.total, 3);
 });
 
-// --- 8. Folie passagère : déclenchée par un jet d'INT réussi -------------------------------------------------------
+// --- 8. Folie temporaire : déclenchée par un jet d'INT réussi ------------------------------------------------------
 
 test('Q8-8 · folie temporaire : au moins 5 points perdus ET jet d’INT réussi (un échec refoule le souvenir, Gardien p. 140-141)', () => {
   // p. 140-141 : perte d’au moins 5 SAN et jet d’INT réussi → folie temporaire (la phase passagère n’est que la première

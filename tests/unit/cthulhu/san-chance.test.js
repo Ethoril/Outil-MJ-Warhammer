@@ -1,4 +1,4 @@
-// Cthulhu 7e : perte de SAN, folies passagère et persistante, dépense de Chance, test redoublé.
+// Cthulhu 7e : perte de SAN, folies temporaire et persistante, dépense de Chance, test redoublé.
 import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
 import {
@@ -16,7 +16,7 @@ test('coût x/y : réussite → x, échec → y, maladresse → maximum de y', (
   assert.equal(perteSan({ cout: '0/1D3', niveau: NIVEAU.ORDINAIRE, lancer: fixe({ 0: 0 }) }), 0);
 });
 
-test('folie passagère : ≥ 5 points d’un coup ET réussite au jet d’INT', () => {
+test('folie temporaire : ≥ 5 points d’un coup ET réussite au jet d’INT', () => {
   assert.equal(foliePassagere({ perte: 5, niveauINT: NIVEAU.ORDINAIRE }), true);
   assert.equal(foliePassagere({ perte: 5, niveauINT: NIVEAU.ECHEC }), false);
   assert.equal(foliePassagere({ perte: 4, niveauINT: NIVEAU.EXTREME }), false);

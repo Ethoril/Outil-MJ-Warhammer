@@ -171,7 +171,7 @@ const JOURNAL_ATTENDU = [
   "Margaret Hale — SAN 65 % : 80 → Échec",
   "Margaret Hale perd 6 SAN (65 → 59 ; 6 perdus aujourd’hui sur un seuil de 13).",
   "Margaret Hale — INT (comprendre l’horreur) 70 % : 20 → Réussite majeure",
-  "Margaret Hale comprend ce que ses yeux ont vu : FOLIE TEMPORAIRE (crise de 1D10 rounds).",
+  "Margaret Hale comprend ce que ses yeux ont vu : FOLIE TEMPORAIRE de 1D10 heures (crise passagère de 1D10 rounds).",
   "Pr Arthur Lindqvist — SAN 50 % : 30 → Réussite ordinaire",
   "Pr Arthur Lindqvist perd 1 SAN (50 → 49 ; 1 perdus aujourd’hui sur un seuil de 10).",
   "Pr Arthur Lindqvist — Bibliothèque 70 % : 85 → Échec",
@@ -348,9 +348,9 @@ test('PNJ et créature à 0 PV : inconscients ou mourants, pas morts ; dégâts 
   assert.deepEqual([leger.pv, leger.etat, leger.blessureGrave], [6, 'actif', false]);
 });
 
-test('un mourant n’a plus de tour : il sombre dans l’inconscience (Gardien p. 107 et p. 108), seul son jet de CON se joue', () => {
-  // Le livre : à 0 PV le personnage « sombre dans l’inconscience » ; mourant, il « sombre immédiatement dans
-  // l’inconscience » et ne fait qu’un test de CON à la fin de chaque round. Il n'a donc pas d'action à jouer.
+test('un mourant n’a plus de tour : perte de connaissance (Gardien p. 107-108), seul son jet de CON se joue', () => {
+  // À 0 PV et à l'état mourant, le personnage perd connaissance et ne tente plus que son test de CON en fin de round
+  // (Gardien p. 107-108) ; il n'a donc pas d'action à jouer à son tour.
   const avecMourant = reserve => {
     const s = composerRencontre(reserve, ['hale', 'lindqvist']);
     return { ...s, participants: s.participants.map(p => (p.id === 'hale' ? { ...p, pv: 0, blessureGrave: true, etat: 'mourant' } : p)) };
@@ -383,7 +383,7 @@ test('bout portant en mètres (DEX ÷ 10) : DEX 80 donne un dé bonus à 8 m, pa
   assert.doesNotMatch(textes(b).at(-2), /bout portant/);
 });
 
-test('très longue portée : l’empalement exige un 01, une réussite extrême donne seulement le maximum', () => {
+test('très longue portée : dégâts ordinaires sur Extrême hors 01, empalement sur 01 seul (Gardien p. 404 et p. 100)', () => {
   const reserve = reserveDeDepart();
   let r = ajouterProfil(reserve, { nom: 'Cible', kind: 'PNJ', carac: { FOR: 50, CON: 150, TAI: 150, DEX: 50, INT: 50, POU: 50 }, competences: {} });
   // Disciple de Jacob Smith : Armes de poing 40 %, revolver .32 (1D8), portée 15 m ; à 40 m (entre ×2 et ×4) seule une réussite extrême (≤ 8) touche.
@@ -620,8 +620,11 @@ test('recharger : refus (note « erreur ») si participant inconnu, mort, sans a
   let r = recharger(s, { id: 'lindqvist' }); // lindqvist n'a pas d'arme à feu
   assert.equal(r.journal.at(-1).type, 'erreur');
   assert.match(r.journal.at(-1).texte, /pas d’arme à feu/);
-  const mort = { ...s, participants: s.participants.map(p => (p.id === 'lindqvist' ? { ...p, etat: 'mort' } : p)) };
-  assert.equal(recharger(mort, { id: 'lindqvist' }).journal.at(-1).type, 'erreur');
+  const mort = { ...s, participants: s.participants.map(p => (p.id === 'hale' ? { ...p, etat: 'mort', munitions: 4 } : p)) };
+  r = recharger(mort, { id: 'hale' });
+  assert.equal(r.journal.at(-1).type, 'erreur');
+  assert.match(r.journal.at(-1).texte, /mort/);
+  assert.equal(participant(r, 'hale').munitions, 4);
   const eg = testOppose(pairePourOppose(), { aId: 'lindqvist', aCompetence: 'FOR', bId: DISCIPLE, bCompetence: 'FOR' }, desScriptes({ d100: [40, 40] }));
   r = recharger(eg, { id: DISCIPLE });
   assert.equal(r.journal.at(-1).type, 'erreur');
@@ -638,4 +641,13 @@ test('redoubler conserve les dés bonus/malus du test d’origine', () => {
   assert.equal(s.dernierTest.reussi, true);
   assert.equal(s.dernierTest.redouble, true);
   assert.match(textes(s).at(-1), /Test redoublé — Pr Arthur Lindqvist — Bibliothèque 70 % \[1 dé\(s\) bonus : 40 \/ 10\]/);
+
+  let m = composerRencontre(reserveMaquette(), ['lindqvist']);
+  m = testLibre(m, { id: 'lindqvist', competence: 'Bibliothèque', malus: 1 }, desScriptes({ d100: [{ jet: 85, candidats: [45, 85], net: -1 }] }));
+  assert.equal(m.dernierTest.reussi, false);
+  assert.equal(m.dernierTest.net, -1);
+  m = redoublerDernierTest(m, desScriptes({ d100: [{ jet: 60, candidats: [20, 60], net: -1 }] })); // le d100 repart avec 1 dé malus
+  assert.equal(m.dernierTest.net, -1);
+  assert.equal(m.dernierTest.redouble, true);
+  assert.match(textes(m).at(-1), /Test redoublé — Pr Arthur Lindqvist — Bibliothèque 70 % \[1 dé\(s\) malus : 20 \/ 60\]/);
 });

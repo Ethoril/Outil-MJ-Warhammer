@@ -91,9 +91,9 @@ const noter = (state, texte, type = 'info') => ({ ...state, journal: [...state.j
 const armeDe = (state, id) => state.armes[id];
 
 /**
- * Seul un participant actif a un tour. Un mourant est inconscient (Manuel du Gardien p. 108 : il « sombre immédiatement
- * dans l'inconscience » et ne fait que son test de CON à la fin de chaque round) : comme un inconscient, il reste en jeu
- * dans l'ordre de DEX mais son tour est sauté.
+ * Seul un participant actif a un tour. À 0 PV ou mourant, le personnage perd connaissance et ne fait plus que son test
+ * de CON en fin de round (Manuel du Gardien p. 107-108) : comme un inconscient, il reste en jeu dans l'ordre de DEX
+ * mais son tour est sauté.
  */
 export const peutAgir = p => p && p.etat === 'actif' && !p.cachee;
 export const enJeu = p => p && p.etat !== 'mort' && !p.cachee;
@@ -399,7 +399,7 @@ export function jetSan(state, { id, cout, source = null }, des) {
   if (r.jetIntRequis) {
     const int = jetTest(des, { valeur: pj.carac.INT });
     s = noter(s, decrireTest(pj.nom, 'INT (comprendre l’horreur)', int));
-    if (foliePassagere({ perte, niveauINT: int.niveau })) { folie = 'temporaire'; s = noter(s, `${pj.nom} comprend ce que ses yeux ont vu : FOLIE TEMPORAIRE (crise de 1D10 rounds).`, 'alerte'); }
+    if (foliePassagere({ perte, niveauINT: int.niveau })) { folie = 'temporaire'; s = noter(s, `${pj.nom} comprend ce que ses yeux ont vu : FOLIE TEMPORAIRE de 1D10 heures (crise passagère de 1D10 rounds).`, 'alerte'); }
     else s = noter(s, `${pj.nom} refoule l’horreur (jet d’INT raté) : pas de folie temporaire.`);
   }
   if (r.persistante) { folie = 'persistante'; s = noter(s, `${pj.nom} a perdu 1/5 de sa SAN aujourd’hui : FOLIE PERSISTANTE.`, 'alerte'); }
