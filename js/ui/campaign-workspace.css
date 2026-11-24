@@ -149,12 +149,12 @@
   padding: 10px 18px;
   border: 1px solid var(--cw-red-border);
   background: var(--cw-red-bg);
-  color: #fff;
+  color: var(--on-accent, #fff);
   font-weight: 700;
   font-size: 13.5px;
 }
 .campaign-primary:hover {
-  background: #9c3a37;
+  background: var(--accent-hover, #9c3a37);
 }
 
 /* Tâches à traiter */
@@ -620,19 +620,19 @@
 
 /* Support Thème Sombre : choix forcé */
 :root[data-theme="dark"] .campaign-workspace {
-  --cw-ink: #ece4d8;
-  --cw-muted: #b5a494;
-  --cw-red: #e27d75;
-  --cw-red-bg: #9a3733;
-  --cw-red-border: #bb4e48;
-  --cw-line: #4a3e35;
-  --cw-paper: #1c1815;
-  --cw-wash: #27211d;
-  --cw-card: #251f1b;
-  --cw-darkbar: #231b18;
-  --cw-darkbar-text: #f8f1e1;
-  --cw-darkbar-border: #a84c39;
-  --cw-darkbar-muted: #bdaea0;
+  --cw-ink: #ece3d6;
+  --cw-muted: #a89a88;
+  --cw-red: #e39a55;
+  --cw-red-bg: #e39a55;
+  --cw-red-border: #8a5a32;
+  --cw-line: #3b3028;
+  --cw-paper: #17130f;
+  --cw-wash: #221c17;
+  --cw-card: #221c17;
+  --cw-darkbar: #120e0b;
+  --cw-darkbar-text: #ece3d6;
+  --cw-darkbar-border: #3b3028;
+  --cw-darkbar-muted: #a89a88;
 }
 
 :root[data-theme="dark"] .campaign-avatar {
@@ -681,19 +681,19 @@
 /* Support Thème Sombre : préférence système (sans surcharge claire) */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) .campaign-workspace {
-    --cw-ink: #ece4d8;
-    --cw-muted: #b5a494;
-    --cw-red: #e27d75;
-    --cw-red-bg: #9a3733;
-    --cw-red-border: #bb4e48;
-    --cw-line: #4a3e35;
-    --cw-paper: #1c1815;
-    --cw-wash: #27211d;
-    --cw-card: #251f1b;
-    --cw-darkbar: #231b18;
-    --cw-darkbar-text: #f8f1e1;
-    --cw-darkbar-border: #a84c39;
-    --cw-darkbar-muted: #bdaea0;
+    --cw-ink: #ece3d6;
+    --cw-muted: #a89a88;
+    --cw-red: #e39a55;
+    --cw-red-bg: #e39a55;
+    --cw-red-border: #8a5a32;
+    --cw-line: #3b3028;
+    --cw-paper: #17130f;
+    --cw-wash: #221c17;
+    --cw-card: #221c17;
+    --cw-darkbar: #120e0b;
+    --cw-darkbar-text: #ece3d6;
+    --cw-darkbar-border: #3b3028;
+    --cw-darkbar-muted: #a89a88;
   }
 
   :root:not([data-theme="light"]) .campaign-avatar {

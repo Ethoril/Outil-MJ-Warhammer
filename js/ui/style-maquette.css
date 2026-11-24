@@ -1,0 +1,99 @@
+/* ==========================================================================
+   Passe esthétique (24/11/2026) : retour au style de la maquette de la refonte (docs/specs/refonte-interface/maquette.html).
+   Chargée en dernier. Rien n'est déplacé ni retiré : barre du haut fine aux onglets en texte, frise à pastilles d'initiales,
+   panneaux sans liseré coloré, étiquettes discrètes, accent seulement sur ce qui agit. Les couleurs passent par les jetons
+   (MJ.css, #workspace-play) : le thème sombre (par défaut) reprend la palette de la maquette, le clair garde son parchemin.
+   ========================================================================== */
+
+/* Texte posé sur une pastille de camp : encre foncée sur les tons clairs du sombre, blanc sur les tons foncés du clair. */
+:root { --on-camp: #ffffff; }
+:root[data-theme="dark"] { --on-camp: #1b120a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --on-camp: #1b120a; } }
+
+/* --- Barre du haut (maquette : .top) : une ligne, onglets en texte, outils de séance discrets. --- */
+.topbar { border-bottom: 1px solid var(--border); }
+:root .topbar .wrap.topbar-main { padding-block: 6px; gap: 10px; }
+.topbar-title { font-size: 15px; letter-spacing: 0.02em; color: var(--accent-text); }
+:root .topbar .topbar-main .tabs { gap: 2px; }
+:root .topbar .topbar-main .tabs > .tab {
+  padding: 5px 10px; border-color: transparent; border-radius: 6px; background: transparent;
+  color: var(--muted); font-size: 14px; font-weight: 500;
+}
+:root .topbar .topbar-main .tabs > .tab:hover { color: var(--text); background: var(--panel); }
+:root .topbar .topbar-main .tabs > .tab.is-active { background: var(--panel-2); color: var(--text); font-weight: 600; }
+:root .topbar .topbar-main .tabs > .tab:focus-visible { outline: 2px solid var(--frise-or); outline-offset: 2px; }
+:root .topbar .topbar-tools { gap: 0; }
+:root .topbar .topbar-main .topbar-tool { padding: 3px 7px; font-size: 12.5px; color: var(--muted); }
+:root .topbar .topbar-main .topbar-tool:hover:not(:disabled) { color: var(--text); background: var(--panel); }
+:root .topbar .topbar-main .topbar-tool.danger { color: var(--danger); }
+:root .topbar .topbar-icon { min-width: 32px; padding: 3px 9px; font-size: 16px; }
+
+/* Bandeau du combat : « au tour de » en or, compteur de décisions en puce d'alerte, « hors de son tour » en puce neutre. */
+.combat-banner-status { color: var(--text); }
+.combat-banner-status .combatant-name { color: var(--frise-or); }
+:root .combat-banner-decisions { background: transparent; color: var(--frise-or); border: 1px solid var(--frise-or); }
+:root .combat-banner-offturn { border-color: var(--border); background: var(--panel-2); color: var(--text); font-weight: 600; }
+:root .topbar .combat-banner-primary { border-radius: 6px; }
+
+/* --- Frise d'initiative (maquette : .frise, .por) : pastille d'initiales au camp, nom, PV, barre ; le tour en or.
+   Mêmes hauteurs qu'avant (60 et 68 px) : la pastille ne prend rien aux zones du dessous. --- */
+.frise-portrait {
+  padding: 3px 4px 4px; justify-content: flex-start; align-items: stretch; gap: 0;
+  background: var(--j-panel); transition: transform 140ms ease-out, box-shadow 140ms ease-out;
+}
+.frise-portrait:hover { background: var(--j-wash); }
+.frise-portrait.is-turn { box-shadow: 0 0 0 2px color-mix(in srgb, var(--frise-or) 35%, transparent); }
+.frise-portrait.is-actor:not(.is-turn) { transform: translateY(-3px); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent); border-color: var(--accent); }
+.frise-initials {
+  flex: none; align-self: center; display: grid; place-items: center; width: 20px; height: 20px; margin: 1px 0;
+  border-radius: 50%; background: var(--camp-neutre); color: var(--on-camp); font-size: 9.5px; font-weight: 700; letter-spacing: 0; line-height: 1;
+}
+.frise-portrait.is-camp-pj .frise-initials { background: var(--camp-pj); }
+.frise-portrait.is-camp-allie .frise-initials { background: var(--camp-allie); }
+.frise-portrait.is-camp-ennemi .frise-initials { background: var(--camp-ennemi); }
+.frise-portrait.is-turn .frise-initials { width: 26px; height: 26px; font-size: 11px; }
+.frise-name { font-size: 11px; line-height: 1.15; }
+.frise-meta { line-height: 1.15; }
+.frise-bar { margin-top: auto; }
+.frise-decision { color: var(--on-accent); }
+.frise-play-now { color: var(--on-accent); }
+@media (prefers-reduced-motion: reduce) { .frise-portrait { transition: none; } .frise-portrait.is-actor:not(.is-turn) { transform: none; } }
+
+/* --- Panneaux et étiquettes (maquette : .panel, .lbl) : pas de liseré coloré, étiquettes en petites capitales atténuées. --- */
+#workspace-play .workspace-sheet-actor,
+#workspace-play .workspace-sheet-target { border-top: 1px solid var(--j-line); box-shadow: none; }
+#workspace-play .workspace-rubric { color: var(--j-soft); font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; }
+#workspace-play .workspace-plateau .workspace-zone-head strong {
+  color: var(--j-soft); font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+}
+
+/* Mêlées (maquette : .melee) : les groupes engagés cernés d'un trait fin, le reste en pointillés. */
+#workspace-play .workspace-plateau[data-part="melees"] { background: transparent; border-style: dashed; }
+#workspace-play .workspace-plateau[data-part="melees"] .workspace-zone.is-melee { border: 1px solid var(--j-red-border); }
+#workspace-play .workspace-plateau .workspace-track-entry { border-left-width: 3px; background: var(--j-wash); }
+
+/* --- Barre d'actions (maquette : .hotbar, .act) : l'action choisie se cerne d'accent sans s'inonder. --- */
+#workspace-play .workspace-action-bar { border-left-width: 1px; }
+#workspace-play .workspace-action-bar-item { border-radius: 8px; background: var(--j-wash); }
+#workspace-play .workspace-action-bar-item[aria-pressed="true"] { background: var(--j-red-soft); border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+#workspace-play .workspace-action-bar-item[aria-pressed="true"],
+#workspace-play .workspace-action-bar-item[aria-pressed="true"] strong { color: var(--j-ink); }
+#workspace-play .workspace-action-bar-item[aria-pressed="true"] span { color: var(--j-soft); }
+
+/* Bandeau à deux rangées (lot E9) : le statut en haut, tout le reste sur UNE rangée en dessous, « Tour suivant » au bord droit.
+   En flex, « Tour suivant » passait à une troisième rangée et la barre de 52 px rognait le statut. */
+:root .topbar .combat-banner-inner.is-stacked {
+  display: grid; grid-template-columns: minmax(0, max-content) max-content max-content minmax(0, 1fr) max-content;
+  grid-template-rows: auto auto; align-items: center; align-content: center; gap: 2px 8px;
+}
+:root .topbar .combat-banner-inner.is-stacked > .combat-banner-status { grid-column: 1 / -1; grid-row: 1; }
+:root .topbar .combat-banner-inner.is-stacked > .spacer { display: none; }
+:root .topbar .combat-banner-inner.is-stacked > .combat-banner-primary,
+:root .topbar .combat-banner-inner.is-stacked > .combat-banner-back { grid-row: 2; grid-column: 5; justify-self: end; }
+
+/* « À décider » (maquette : .dec) : cadre or quand une décision attend, sinon un simple trait. */
+#workspace-play .workspace-decisions:not(.is-empty) {
+  border: 1px solid var(--frise-or); border-left-width: 4px;
+  background: color-mix(in srgb, var(--frise-or) 7%, var(--j-panel));
+}
+#workspace-play .workspace-decisions-count { background: var(--frise-or); color: var(--j-paper); }

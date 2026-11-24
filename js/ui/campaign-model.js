@@ -41,10 +41,16 @@ export function personSubtitle({ incidents, diseases, sequelae, proposals }) {
 }
 
 export function getInitials(name) {
-  if (!name) return '?';
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  // Le titre après « — », la virgule ou la parenthèse ne compte pas (« Ungrakk — Seigneur-bête gor (Commandant) » → UN),
+  // ni les petits mots (« Cheval de selle » → CS) ; un numéro final reste (« Gor 12 » → G12). Pastilles de Campagne et de la frise.
+  const head = String(name ?? '').split(/\s+[—–-]\s+|,|\(/)[0].trim();
+  const all = head.split(/\s+/).filter(Boolean);
+  const words = all.length > 1 ? all.filter(word => !/^(de|du|des|la|le|les|l['’]|d['’]|et|of|the)$/i.test(word)) : all;
+  if (!words.length) return '?';
+  const last = words[words.length - 1];
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  if (/^\d+$/.test(last)) return (words[0][0] + last).slice(0, 3).toUpperCase();
+  return (words[0][0] + last[0]).toUpperCase();
 }
 
 /** Statut d'un personnage (texte et couleur de pastille) d'après ses suivis actifs. */

@@ -39,6 +39,14 @@ test('formatElapsed, getInitials, hpText', () => {
   assert.equal(getInitials('Agnès'), 'AG');
   assert.equal(getInitials('  Jean de la Tour '), 'JT');
   assert.equal(getInitials(''), '?');
+  // Pastilles de Campagne et de la frise (passe esthétique du 24/11/2026) : titre écarté, petits mots ignorés, numéro gardé.
+  assert.equal(getInitials('Ungrakk — Seigneur-bête gor (Commandant)'), 'UN');
+  assert.equal(getInitials('Skrakk (Élite)'), 'SK');
+  assert.equal(getInitials('Père Pedragar, prêtre de Taal'), 'PP');
+  assert.equal(getInitials('Cheval de selle'), 'CS');
+  assert.equal(getInitials('Gor 2'), 'G2');
+  assert.equal(getInitials('Ungor 12'), 'U12');
+  assert.equal(getInitials(null), '?');
   assert.equal(hpText({ person: { hp: 6, maxHp: 12 } }, 'x'), '6 / 12 PV');
   assert.equal(hpText({ person: { hp: 6 } }, 'x'), 'PV indisponibles');
   assert.equal(hpText({ person: null, absent: true }, 'Consultation'), 'Consultation');

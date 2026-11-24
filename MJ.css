@@ -45,89 +45,92 @@
   --hp-warn: #7d4b0c;
   --hp-crit: #a3201a;
   --accent-text: #8a0707; /* accent utilisable comme couleur de texte */
+  --on-accent: #ffffff; /* texte posé sur l'accent (sombre : encre foncée sur orange, comme la maquette) */
 }
 
 :root[data-theme="dark"] {
-  --bg: #1c1815;
+  --bg: #17130f;
   --bg-image: none;
-  --panel: #27211d;
-  --panel-2: #332b26;
-  --text: #e5dcd0;
-  --heading-color: #e6a875;
-  --muted: #b0a294;
-  --accent: #d33838;
-  --accent-hover: #ff4d4d;
-  --border: #6e3d36;
-  --ring: 2px solid rgba(211, 56, 56, 0.5);
-  --chip: #423832;
-  --chip-text: #e5dcd0;
-  --topbar-bg: rgba(28, 24, 21, 0.92);
+  --panel: #221c17;
+  --panel-2: #2b231d;
+  --text: #ece3d6;
+  --heading-color: #f0dcc0;
+  --muted: #a89a88;
+  --accent: #e39a55;
+  --accent-hover: #eeb176;
+  --border: #3b3028;
+  --ring: 2px solid rgba(227, 154, 85, 0.5);
+  --chip: #2b231d;
+  --chip-text: #ece3d6;
+  --topbar-bg: rgba(18, 14, 11, 0.96);
 
-  --active-zone-bg: rgba(211, 56, 56, 0.12);
+  --active-zone-bg: rgba(227, 154, 85, 0.10);
   --bench-zone-bg: rgba(255, 255, 255, 0.02);
 
-  --card-bg-default: #2d2621;
+  --card-bg-default: #221c17;
   --card-bg-red: #422020;
   --card-bg-green: #1d3622;
   --card-bg-blue: #1c303d;
   --card-bg-purple: #34203d;
   --card-bg-orange: #3d2a1c;
 
-  --success: #6fd188;
+  --success: #7cc68a;
   --danger: #ff8a80;
-  --info-fg: #d4a574;
+  --info-fg: #e0b07a;
 
-  --camp-pj: #7db3a2;
-  --camp-allie: #8fb4d6;
+  --camp-pj: #d9c9a8;
+  --camp-allie: #79aee0;
   --camp-ennemi: #e0735a;
   --camp-neutre: #9c9183;
-  --hp-ok: #7fbf8a;
-  --hp-warn: #dda84a;
+  --hp-ok: #7cc68a;
+  --hp-warn: #f2c14e;
   --hp-crit: #ff7b6b;
-  --accent-text: #ff6b5e;
+  --accent-text: #e39a55;
+  --on-accent: #1b120a;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #1c1815;
+    --bg: #17130f;
     --bg-image: none;
-    --panel: #27211d;
-    --panel-2: #332b26;
-    --text: #e5dcd0;
-    --heading-color: #e6a875;
-    --muted: #b0a294;
-    --accent: #d33838;
-    --accent-hover: #ff4d4d;
-    --border: #6e3d36;
-    --ring: 2px solid rgba(211, 56, 56, 0.5);
-    --chip: #423832;
-    --chip-text: #e5dcd0;
-    --topbar-bg: rgba(28, 24, 21, 0.92);
+    --panel: #221c17;
+    --panel-2: #2b231d;
+    --text: #ece3d6;
+    --heading-color: #f0dcc0;
+    --muted: #a89a88;
+    --accent: #e39a55;
+    --accent-hover: #eeb176;
+    --border: #3b3028;
+    --ring: 2px solid rgba(227, 154, 85, 0.5);
+    --chip: #2b231d;
+    --chip-text: #ece3d6;
+    --topbar-bg: rgba(18, 14, 11, 0.96);
 
-    --active-zone-bg: rgba(211, 56, 56, 0.12);
+    --active-zone-bg: rgba(227, 154, 85, 0.10);
     --bench-zone-bg: rgba(255, 255, 255, 0.02);
 
-    --card-bg-default: #2d2621;
+    --card-bg-default: #221c17;
     --card-bg-red: #422020;
     --card-bg-green: #1d3622;
     --card-bg-blue: #1c303d;
     --card-bg-purple: #34203d;
     --card-bg-orange: #3d2a1c;
 
-    --success: #6fd188;
+    --success: #7cc68a;
     --danger: #ff8a80;
-    --info-fg: #d4a574;
+    --info-fg: #e0b07a;
 
-    --camp-pj: #7db3a2;
-    --camp-allie: #8fb4d6;
+    --camp-pj: #d9c9a8;
+    --camp-allie: #79aee0;
     --camp-ennemi: #e0735a;
     --camp-neutre: #9c9183;
-    --hp-ok: #7fbf8a;
-    --hp-warn: #dda84a;
+    --hp-ok: #7cc68a;
+    --hp-warn: #f2c14e;
     --hp-crit: #ff7b6b;
-    --accent-text: #ff6b5e;
+    --accent-text: #e39a55;
   }
-}
+    --on-accent: #1b120a;
+  }
 
 * { box-sizing: border-box; }
 body { margin: 0; font-family: var(--font-text); font-size: 16px; font-variant-numeric: lining-nums; background: var(--bg); color: var(--text); background-image: var(--bg-image); }
@@ -194,7 +197,7 @@ h4 { font-family: var(--font-ui); font-weight: 700; color: var(--accent); margin
 .combat-banner-inner { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 auto; }
 .combat-banner-status { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-ui); font-size: 14px; white-space: nowrap; }
 .combat-banner-status .combatant-name { font-weight: 700; color: var(--accent-text); }
-.combat-banner-decisions { flex: none; padding: 2px 9px; border-radius: 999px; background: var(--accent); color: #fff; font-family: var(--font-ui); font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+.combat-banner-decisions { flex: none; padding: 2px 9px; border-radius: 999px; background: var(--accent); color: var(--on-accent); font-family: var(--font-ui); font-size: 12.5px; font-weight: 700; white-space: nowrap; }
 .combat-banner-decisions[hidden] { display: none; }
 .combat-banner-track { display: flex; flex: 1 1 0; gap: 6px; min-width: 0; margin: 0; padding: 0; list-style: none; overflow: hidden; }
 .combat-banner-track[hidden] { display: none; }
@@ -209,7 +212,7 @@ h4 { font-family: var(--font-ui); font-weight: 700; color: var(--accent); margin
 .combat-banner-reminder { position: absolute; top: 100%; left: 0; right: 0; display: flex; align-items: center; gap: 12px; padding: 4px 16px 6px; background: var(--panel); border-bottom: 1px solid var(--border); font-family: var(--font-ui); font-size: 13.5px; }
 .combat-banner-reminder[hidden] { display: none; }
 .combat-banner-restore { flex: none; white-space: nowrap; }
-.combat-banner-primary { flex: none; white-space: nowrap; background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; }
+.combat-banner-primary { flex: none; white-space: nowrap; background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 700; }
 .combat-banner-primary:hover:not(:disabled) { border-color: var(--accent-hover); box-shadow: 0 0 0 2px var(--accent-hover); }
 .combat-banner-primary:disabled { opacity: 0.6; cursor: not-allowed; }
 .topbar-main:has(> .combat-banner:not([hidden])) > .spacer { display: none; }
@@ -375,7 +378,7 @@ dialog .card { min-width: 480px; max-width: 600px; max-height: 80vh; overflow-y:
 .import-tile { display: inline-flex; align-items: center; justify-content: center; padding: 7px 12px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--bg); cursor: pointer; font-size: 0.88em; text-align: center; transition: background 0.15s, border-color 0.15s; }
 .import-tile input[type=checkbox] { display: none; }
 .import-tile:hover { border-color: var(--accent); background: var(--panel-2); }
-.import-tile.selected { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: bold; }
+.import-tile.selected { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: bold; }
 
 /* Lot 7 — Styles Lignes de dés & bouton Inoffensive */
 .mini-dice-line {

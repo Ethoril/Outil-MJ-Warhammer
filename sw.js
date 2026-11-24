@@ -312,6 +312,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/fiche-writeback-view.js',
   './js/ui/prepare-view.js',
   './js/ui/workspace.css',
+  './js/ui/style-maquette.css',
   './js/core/currency.js',
   './js/core/v5-aftermath.js',
   './js/core/v5-combat-fumbles.js',

@@ -14,6 +14,7 @@
  * la commande « Jouer son tour maintenant » (`handlers.playTurnNow(id)`), grisée avec sa raison si elle est refusée.
  */
 import { hasMomentum } from '../core/v5-momentum-state.js';
+import { getInitials } from './campaign-model.js';
 
 const v5Of = participant => participant?.extensions?.v5 || {};
 const asNumber = (value, fallback = 0) => (Number.isFinite(Number(value)) ? Number(value) : fallback);
@@ -122,6 +123,9 @@ export function renderFrise(zone, context, handlers = {}) {
     portrait.classList.toggle('has-decision', row.decision > 0);
     portrait.append(el('span', 'frise-rank num', String(row.rang)));
     if (row.elan) { const momentum = el('span', 'frise-momentum', 'É'); momentum.title = 'A l’Élan'; portrait.append(momentum); }
+    const initials = el('span', 'frise-initials', getInitials(row.nom));
+    initials.setAttribute('aria-hidden', 'true');
+    portrait.append(initials);
     portrait.append(el('span', 'frise-name combatant-name', row.nom));
     const meta = el('span', 'frise-meta num');
     meta.append(el('span', 'frise-hp', `${row.pv}/${row.pvMax}`));
