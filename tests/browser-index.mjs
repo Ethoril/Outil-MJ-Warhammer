@@ -584,6 +584,10 @@ async function main() {
     await expect(criticalLog).not.toContainText('[object Object]');
 
     await openAppMenu(page);
+    // Sombre par défaut : Clair, puis Système, puis retour au Sombre.
+    await expect(page.locator('#btn-theme-toggle')).toHaveText('Thème : Sombre');
+    await page.locator('#btn-theme-toggle').click();
+    await expect(page.locator('#btn-theme-toggle')).toHaveText('Thème : Clair');
     await page.locator('#btn-theme-toggle').click();
     await page.locator('#btn-theme-toggle').click();
     await expect.poll(() => page.evaluate(() => document.documentElement.dataset.theme)).toBe('dark');

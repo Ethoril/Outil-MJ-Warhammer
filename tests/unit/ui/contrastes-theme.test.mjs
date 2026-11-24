@@ -53,7 +53,7 @@ const APP_PAIRS = [
   ...['--text', '--muted', '--heading-color', '--accent-text', '--camp-pj', '--camp-allie', '--camp-ennemi', '--camp-neutre',
     '--hp-ok', '--hp-warn', '--hp-crit', '--success', '--danger', '--info-fg'].flatMap(fg => [[fg, '--bg'], [fg, '--panel']]),
   ['--text', '--panel-2'], ['--chip-text', '--chip'],
-  ['#ffffff', '--accent'] // bouton principal (Tour suivant, Commencer)
+  ['--on-accent', '--accent'] // bouton principal (Tour suivant, Commencer) : blanc sur rouge en clair, encre sur orange en sombre
 ];
 // Couples de l'espace Jouer (js/ui/workspace.css).
 const PLAY_PAIRS = [
