@@ -1,0 +1,108 @@
+/* Jetons neutres du chapeau multi-jeux (palette 4.0.0 : sombre par défaut, parchemin clair, police système) et indicateur de liaison carte. */
+:root,
+:root[data-theme="dark"] {
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, Roboto, sans-serif;
+
+  --bg: #17130f;
+  --panel: #221c17;
+  --panel-2: #2b231d;
+  --text: #ece3d6;
+  --heading-color: #f0dcc0;
+  --muted: #a89a88;
+  --border: #3b3028;
+  --topbar-bg: rgba(18, 14, 11, 0.96);
+
+  --success: #7cc68a;
+  --danger: #ff8a80;
+
+  --camp-pj: #d9c9a8;
+  --camp-ennemi: #e0735a;
+  --camp-neutre: #9c9183;
+}
+
+:root[data-theme="light"] {
+  --bg: #f5e5c7;
+  --panel: #e8d8b8;
+  --panel-2: #d1c0a0;
+  --text: #3e2e22;
+  --heading-color: #5a1d1d;
+  --muted: #5e4e42;
+  --border: #5a1d1d;
+  --topbar-bg: rgba(245, 229, 199, 0.88);
+
+  --success: #1f5c2a;
+  --danger: #a32a2a;
+
+  --camp-pj: #2a6354;
+  --camp-ennemi: #9b2317;
+  --camp-neutre: #615a4f;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f5e5c7;
+    --panel: #e8d8b8;
+    --panel-2: #d1c0a0;
+    --text: #3e2e22;
+    --heading-color: #5a1d1d;
+    --muted: #5e4e42;
+    --border: #5a1d1d;
+    --topbar-bg: rgba(245, 229, 199, 0.88);
+
+    --success: #1f5c2a;
+    --danger: #a32a2a;
+
+    --camp-pj: #2a6354;
+    --camp-ennemi: #9b2317;
+    --camp-neutre: #615a4f;
+  }
+}
+
+.map-link-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-ui);
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.map-link-indicator .status-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.map-link-indicator[data-state="connected"] {
+  color: var(--text);
+}
+
+.map-link-indicator[data-state="connected"] .status-dot {
+  background: var(--success);
+}
+
+.map-link-indicator[data-state="version-mismatch"] {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.map-link-indicator[data-state="version-mismatch"] .status-dot {
+  background: var(--danger);
+}
+
+.map-link-pending {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 1px 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.map-link-pending[hidden] {
+  display: none;
+}

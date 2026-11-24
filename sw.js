@@ -315,6 +315,7 @@ const ASSETS_TO_CACHE = [
   './js/ui/selecteur-jeu.js',
   './js/ui/silhouette.js',
   './js/ui/theme.js',
+  './js/ui/chapeau-theme.css',
   './js/ui/status-summary.js',
   './js/ui/toast.js',
   './js/ui/workspace-view.js',

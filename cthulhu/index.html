@@ -1,11 +1,13 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#17130f">
   <title>L’Appel de Cthulhu 7e — Outil MJ</title>
   <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../js/ui/chapeau-theme.css">
   <link rel="stylesheet" href="./cthulhu.css">
   <script>
     // Même service worker et même cache que Warhammer (portée : racine de l'outil), pour que la page marche hors ligne dès sa première visite.
@@ -32,6 +34,7 @@
     <button type="button" id="annuler" disabled>↶ Annuler</button>
     <button type="button" id="retablir" disabled>↷ Rétablir</button>
     <span id="statut-sauvegarde" class="statut" role="status" aria-live="polite"></span>
+    <button type="button" id="btn-theme-toggle">Thème : Sombre</button>
     <details class="fichiers">
       <summary>Fichiers</summary>
       <div class="menu">
