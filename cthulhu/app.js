@@ -18,6 +18,7 @@ import { participantCamp } from '../js/core/participant-camp.js';
 import { JEUX } from '../js/core/jeux.js';
 import { MAP_LINK_CHANNEL, MAP_LINK_PING_MS } from '../js/core/map-link-protocol.js';
 import { initSelecteurJeu } from '../js/ui/selecteur-jeu.js';
+import { initThemeManager } from '../js/ui/theme.js';
 import { renderMapLinkIndicator, renderMapLinkPending } from '../js/ui/map-link-indicator.js';
 import { creerLiaisonCarte } from './projection-carte.js';
 import { lancerD100, lancerExpression, analyserExpression, LIBELLE_NIVEAU, LIBELLE_DIFFICULTE, seuils } from './regles.js';
@@ -271,7 +272,9 @@ function lancerInterface() {
 
   // --- Dés : saisis par le MJ ou tirés au hasard ---------------------------------------------------------------------
 
-  const fileDe = id => ($(id)?.value ?? '').split(/[\s,;]+/).map(Number).filter(n => Number.isInteger(n) && n > 0);
+  // File des dés saisis : `#file-degats` accepte 0 (dégâts ou perte de SAN nulle), `#file-d100` exige 1 à 100.
+  const fileDe = id => ($(id)?.value ?? '').split(/[\s,;]+/).filter(t => t !== '').map(Number)
+    .filter(n => Number.isInteger(n) && (id === '#file-degats' ? n >= 0 : n >= 1 && n <= 100));
   function consommer(id) {
     const valeurs = fileDe(id);
     const v = valeurs.shift();
@@ -536,14 +539,18 @@ function lancerInterface() {
     const lignes = [...r.participants].sort((a, b) => (ordre.get(a.id)?.rang ?? 99) - (ordre.get(b.id)?.rang ?? 99)).map(p => {
       const o = ordre.get(p.id);
       const arme = r.armes[p.armeTir];
+      const boutonsEtat = (p.etat === 'mourant' ? ` <button type="button" data-action="jet-mourant" data-id="${esc(p.id)}">Jet CON mourant</button>` : '')
+        + (p.etat === 'mourant' || (p.etat !== 'mort' && p.pv < p.pvMax) ? ` <button type="button" data-action="premiers-soins" data-id="${esc(p.id)}">Premiers soins</button>` : '');
+      const boutonRecharger = arme && p.etat !== 'mort' && p.munitions < arme.capacite
+        ? ` <button type="button" data-action="recharger" data-id="${esc(p.id)}" title="Recharger : 1 round pour deux balles (pistolet ou fusil) ou un changement de chargeur / cylindre qui remet l’arme à pleine capacité — Gardien p. 100">Recharger</button>` : '';
       return `<tr class="camp-${participantCamp({ camp: p.camp, kind: p.kind })} ${acteur?.id === p.id ? 'courant' : ''} etat-${p.etat}${p.cachee ? ' cachee' : ''}"${acteur?.id === p.id ? ' aria-current="true"' : ''}>
         <td>${o ? o.rang : '—'}</td>
         <td><strong>${esc(p.nom)}</strong>${p.cachee ? ' <em>(cachée)</em>' : ''}<br><small>DEX ${p.carac.DEX}${o ? ` → ${o.dex}` : ''} · Impact ${esc(p.impact)}</small></td>
         <td>${p.pv}/${p.pvMax}${p.blessureGrave ? ' <span class="badge grave">grave</span>' : ''}</td>
         <td>${p.kind === 'PJ' ? `${p.san}${p.folie ? ` <span class="badge folie">${esc(p.folie)}</span>` : ''}` : '—'}</td>
         <td>${p.kind === 'PJ' ? p.chance : '—'}</td>
-        <td>${ETAT[p.etat]}</td>
-        <td>${arme && p.etat === 'mort' ? `${p.munitions}/${arme.capacite}` : arme ? `${p.munitions}/${arme.capacite} <button type="button" data-arme="${esc(p.id)}">${p.armeFeuPrete ? 'Rengainer' : 'Dégainer'}</button>` : '—'}</td>
+        <td>${ETAT[p.etat]}${boutonsEtat}</td>
+        <td>${arme && p.etat === 'mort' ? `${p.munitions}/${arme.capacite}` : arme ? `${p.munitions}/${arme.capacite} <button type="button" data-arme="${esc(p.id)}">${p.armeFeuPrete ? 'Rengainer' : 'Dégainer'}</button>${boutonRecharger}` : '—'}</td>
       </tr>`;
     }).join('');
     return `<table id="participants"><thead><tr><th>#</th><th>Personnage</th><th>PV</th><th>SAN</th><th>Chance</th><th>État</th><th>Arme à feu</th></tr></thead><tbody>${lignes}</tbody></table>
@@ -585,7 +592,7 @@ function lancerInterface() {
     if (!adversaires.length) return `<h3>Plus aucune cible</h3><p>Personne d’autre n’est en jeu.</p><p><button type="button" id="fin-tour">Fin du tour</button></p>`;
     const melee = r.armes[acteur.armeMelee], tir = r.armes[acteur.armeTir];
     return `<h3>Au tour de ${esc(acteur.nom)}</h3>
-      ${melee ? `<fieldset><legend>Mêlée (${esc(melee.nom)}, Corps à corps ${acteur.competences['Corps à corps']} %)</legend>
+      ${melee ? `<fieldset><legend>Mêlée (${esc(melee.nom)}, ${esc(melee.competence)} ${acteur.competences[melee.competence] ?? '?'} %)</legend>
         <label>Cible <select id="melee-cible">${cibles}</select></label>
         <label>Défense <select id="melee-mode"><option value="esquiver">Esquiver</option><option value="rendre">Rendre les coups</option><option value="aucune">Aucune (surprise)</option></select></label>
         <label>Dés bonus <input id="melee-bonus" type="number" min="0" max="2" value="0"></label>
@@ -675,10 +682,16 @@ function lancerInterface() {
         <hr><div class="outils">${rendreOutils(r)}</div></section>
       <section class="carte" aria-labelledby="t-journal"><h2 id="t-journal">Journal</h2>
         <ol id="journal">${r.journal.map(l => `<li class="j-${esc(l.type)}">${l.round ? `<span class="r">R${l.round}</span> ` : ''}${esc(l.texte)}</li>`).join('')}</ol></section>`;
-    rendreChamps(panneau, gardees);
+    // Les sélecteurs de personnage d’abord : `majCompetences` peuple leurs listes de compétences, puis les autres
+    // champs (dont #libre-competence, #oppose-a-comp, #oppose-b-comp) sont restaurés dans ces nouvelles options.
+    const selecteursQui = ['libre-qui', 'oppose-a', 'oppose-b'];
+    const quiGardes = new Map(selecteursQui.map(id => [id, gardees.get(id)]).filter(([, v]) => v !== undefined));
+    for (const id of selecteursQui) gardees.delete(id);
+    rendreChamps(panneau, quiGardes);
     majCompetences('#libre-qui', '#libre-competence');
     majCompetences('#oppose-a', '#oppose-a-comp');
     majCompetences('#oppose-b', '#oppose-b-comp');
+    rendreChamps(panneau, gardees);
     const journal = $('#journal');
     journal.scrollTop = journal.scrollHeight;
     if (attente) for (const b of panneau.querySelectorAll('button')) if (!b.closest('.egalite')) b.disabled = true;
@@ -711,18 +724,7 @@ function lancerInterface() {
   // (projection-carte.js). L'indicateur « Carte connectée » et le compte « À poser (N) » sont créés ici, à côté de l'état de la sauvegarde.
 
   function indicateurCarte() {
-    if (!document.getElementById('style-liaison-carte')) {
-      const style = document.createElement('style');
-      style.id = 'style-liaison-carte';
-      style.textContent = `.map-link-indicator { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; white-space: nowrap; opacity: .85; }
-.map-link-indicator .status-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #9c9282; }
-.map-link-indicator[data-state="connected"] { opacity: 1; }
-.map-link-indicator[data-state="connected"] .status-dot { background: #5aa38c; }
-.map-link-indicator[data-state="version-mismatch"] { color: #f2a7a7; font-weight: 600; opacity: 1; }
-.map-link-indicator[data-state="version-mismatch"] .status-dot { background: #e08a8a; }
-.map-link-pending { font-size: 12px; padding: 1px 8px; border: 1px solid #9c9282; border-radius: 10px; }`;
-      document.head.appendChild(style);
-    }
+    // Les styles de l’indicateur et du compte « À poser » sont dans js/ui/chapeau-theme.css (chargé par la page).
     const indicateur = document.createElement('span');
     indicateur.id = 'map-link-indicator';
     indicateur.className = 'map-link-indicator';
@@ -795,6 +797,9 @@ function lancerInterface() {
       case 'abandonner-rencontre': return confirmer(b, 'Confirmer : rien n’est reporté', () => { ui.onglet = 'preparer'; agir('abandon-rencontre', etat => ({ ...etat, rencontre: null }), { avecDes: false }); });
       case 'commencer': return jouer('round', s => R.commencerRound(s));
       case 'fin-tour': return jouer('tour', s => R.passerTour(s));
+      case 'jet-mourant': return jouer('mourant', (s, des) => R.jetMourant(s, { id }, des));
+      case 'premiers-soins': return jouer('soins', s => R.premiersSoins(s, { id }));
+      case 'recharger': return jouer('recharger', s => R.recharger(s, { id }));
       case 'attaquer': { const acteur = R.acteurCourant(rencontre());
         return jouer('melee', (s, des) => R.attaquerMelee(s, { attaquantId: acteur.id, cibleId: $('#melee-cible').value, mode: $('#melee-mode').value,
           bonus: nombre('#melee-bonus'), malus: nombre('#melee-malus') }, des)); }
@@ -883,6 +888,7 @@ function lancerInterface() {
       surSauvegarde: erreur => { $('#statut-sauvegarde').textContent = erreur ? `Sauvegarde impossible : ${erreur.message}` : `Sauvegardé à ${new Date().toLocaleTimeString('fr-FR')}`; }
     });
     initSelecteurJeu();
+    initThemeManager();
     let issue;
     try { issue = await seance.demarrer(); } catch (erreur) {
       issue = 'sans';

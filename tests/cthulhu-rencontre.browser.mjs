@@ -89,6 +89,39 @@ async function parcours(browser, origin, port) {
   await expect(page.locator('#action')).toContainText('Résoudre');
   await page.locator('#retablir').click();
   assert.match(await journal(page), /BLESSURE GRAVE/);
+
+  // Deuxième tir sur le disciple : 0 PV avec blessure grave → Mourant (boutons « Jet CON mourant » et « Premiers soins »).
+  const ligneDisciple = page.locator('#participants tr', { hasText: 'Disciple de Jacob Smith' });
+  await page.locator('#tir-cible').selectOption({ label: 'Disciple de Jacob Smith' });
+  await page.locator('#tir-distance').fill('10');
+  await des(page, '25', '6');
+  await page.locator('#tirer').click();
+  await page.locator('#resoudre').click();
+  await expect(ligneDisciple).toContainText('0/12');
+  await expect(ligneDisciple).toContainText('mourant');
+  assert.match(await journal(page), /MOURANT/);
+  await expect(ligneDisciple.getByRole('button', { name: 'Jet CON mourant' })).toBeVisible();
+  await expect(ligneDisciple.getByRole('button', { name: 'Premiers soins' })).toBeVisible();
+
+  // Jet de CON mourant réussi (30 ≤ CON 60) : il survit, toujours mourant ; Premiers soins : stabilisé à 1 PV, inconscient.
+  await des(page, '30', '');
+  await ligneDisciple.getByRole('button', { name: 'Jet CON mourant' }).click();
+  assert.match(await journal(page), /s’accroche à la vie/);
+  await expect(ligneDisciple).toContainText('mourant');
+  await ligneDisciple.getByRole('button', { name: 'Premiers soins' }).click();
+  assert.match(await journal(page), /stabilisé \(1 PV, inconscient\)/);
+  await expect(ligneDisciple).toContainText('1/12');
+  await expect(ligneDisciple).toContainText('inconscient');
+
+  // Rechargement après les deux tirs : « Recharger » rend la capacité maximale (8/8) ; l’aide cite le Gardien p. 100.
+  const ligneHale = page.locator('#participants tr', { hasText: 'Margaret Hale' });
+  await expect(ligneHale).toContainText('6/8');
+  const boutonRecharger = ligneHale.getByRole('button', { name: 'Recharger' });
+  await expect(boutonRecharger).toBeVisible();
+  assert.match(await boutonRecharger.getAttribute('title'), /Gardien p\. 100/);
+  await boutonRecharger.click();
+  await expect(ligneHale).toContainText('8/8');
+  assert.match(await journal(page), /recharge/);
   await page.locator('#fin-tour').click();
 
   // Égalité parfaite au test opposé : le MJ choisit. Tant qu'il n'a pas tranché, la rencontre ne continue pas.
@@ -121,15 +154,32 @@ async function parcours(browser, origin, port) {
   await page.locator('#retablir').click();
   await expect(page.locator('#action .egalite')).toHaveCount(0);
 
+  // Conservation des compétences choisies après un re-rendu (les sélecteurs de personnage sont restaurés d’abord).
+  await page.locator('#oppose-a').selectOption({ label: 'Disciple de Jacob Smith' });
+  await page.locator('#oppose-a-comp').selectOption('Occultisme');
+  await page.locator('#oppose-b').selectOption({ label: 'Goule' });
+  await page.locator('#oppose-b-comp').selectOption('Grimper');
+  await ligneHale.getByRole('button', { name: 'Rengainer' }).click(); // re-rendu sans lancer de dés
+  assert.equal(await page.locator('#oppose-a').inputValue(), 'disciple-jacob-smith');
+  assert.equal(await page.locator('#oppose-a-comp').inputValue(), 'Occultisme');
+  assert.equal(await page.locator('#oppose-b').inputValue(), 'goule');
+  assert.equal(await page.locator('#oppose-b-comp').inputValue(), 'Grimper');
+
   // La goule surgit : jets de SAN des investigateurs conscients (Margaret : SAN 80 raté, perte 6, INT 20 réussi → folie).
   await des(page, '80 20 30', '6');
   await page.locator('#reveler').click();
   const j2 = await journal(page);
   assert.match(j2, /Apparition : Goule/);
   assert.match(j2, /Margaret Hale perd 6 SAN \(65 → 59/);
-  assert.match(j2, /FOLIE PASSAGÈRE/);
+  assert.match(j2, /FOLIE TEMPORAIRE/);
   assert.match(j2, /Pr Arthur Lindqvist perd 0 SAN/);
-  await expect(page.locator('#participants tr', { hasText: 'Margaret Hale' })).toContainText('passagère');
+  await expect(page.locator('#participants tr', { hasText: 'Margaret Hale' })).toContainText('temporaire');
+
+  // La file de dégâts / SAN accepte 0 : jet de SAN raté (95), perte 1D6 saisie à 0.
+  await des(page, '95', '0');
+  await page.locator('#san-qui').selectOption({ label: 'Pr Arthur Lindqvist' });
+  await page.locator('#jet-san').click();
+  assert.match(await journal(page), /Pr Arthur Lindqvist perd 0 SAN/);
 
   // Rechargement : la rencontre, le journal et l'historique reviennent ; seule la base de Cthulhu existe.
   await page.waitForFunction(() => document.querySelector('#statut-sauvegarde').textContent.startsWith('Sauvegardé'));
@@ -137,7 +187,7 @@ async function parcours(browser, origin, port) {
   await attendrePret(page);
   await expect(page.locator('#panneau-jouer')).toBeVisible();
   await expect(page.locator('#round')).toHaveText('Round 1');
-  assert.match(await journal(page), /FOLIE PASSAGÈRE/);
+  assert.match(await journal(page), /FOLIE TEMPORAIRE/);
   await expect(page.locator('#annuler')).toBeEnabled();
   const stockage = await page.evaluate(async () => ({
     bases: (await indexedDB.databases()).map(d => d.name).sort(),
@@ -145,6 +195,17 @@ async function parcours(browser, origin, port) {
   }));
   assert.deepEqual(stockage.bases, ['outil-mj-cthulhu-v1']);
   assert.ok(stockage.cles.every(cle => cle.startsWith('cthulhu.')), `clés : ${stockage.cles}`);
+
+  // Thème partagé : le bouton est présent, bascule sans erreur, et n’ajoute que la clé « wfrp.theme » au clic.
+  const boutonTheme = page.locator('#btn-theme-toggle');
+  await expect(boutonTheme).toBeVisible();
+  await expect(boutonTheme).toHaveText('Thème : Sombre');
+  await boutonTheme.click();
+  await expect(boutonTheme).toHaveText('Thème : Clair');
+  assert.deepEqual(await page.evaluate(() => Object.keys(localStorage).filter(cle => !cle.startsWith('cthulhu.'))), ['wfrp.theme']);
+  assert.equal(await page.evaluate(() => localStorage.getItem('wfrp.theme')), 'light');
+  await boutonTheme.click();
+  await expect(boutonTheme).toHaveText('Thème : Système');
 
   // Export, fin de rencontre (le report se voit dans la réserve), import (la rencontre revient), refus d'un fichier de Warhammer.
   await page.locator('summary', { hasText: 'Fichiers' }).click();
@@ -157,7 +218,7 @@ async function parcours(browser, origin, port) {
   await expect(page.locator('#panneau-jouer')).toContainText('Aucune rencontre en cours');
   await page.locator('#onglet-preparer').click();
   await expect(reserve.locator('tr[data-profil="margaret-hale"]')).toContainText('SAN 59');
-  await expect(reserve.locator('tr[data-profil="margaret-hale"]')).toContainText('folie passagère');
+  await expect(reserve.locator('tr[data-profil="margaret-hale"]')).toContainText('folie temporaire');
   await page.locator('summary', { hasText: 'Fichiers' }).click();
   await page.locator('#fichier-import').setInputFiles({ name: 'cthulhu.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(fichier)) });
   await expect(page.locator('#message')).toContainText('Sauvegarde chargée');
