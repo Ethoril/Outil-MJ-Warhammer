@@ -181,15 +181,18 @@ export function attaquerMelee(state, { attaquantId, cibleId, mode = 'esquiver', 
   const a = participant(state, attaquantId), c = participant(state, cibleId);
   const arme = armeDe(state, a.armeMelee);
   if (!arme) return noter(state, `${a.nom} n’a pas d’arme de mêlée.`, 'erreur');
-  const surnombre = desBonusSurnombre({ defensesFaites: c.defensesRound, defensesParRound: c.attaquesParRound ?? 1 });
-  const attaque = { ...jetTest(des, { valeur: a.competences['Corps à corps'], bonus: bonus + surnombre, malus }), competence: 'Corps à corps' };
-  let defense = null;
+  const compAttaque = arme.competence || 'Corps à corps';
+  if (!Number.isFinite(a.competences[compAttaque])) return noter(state, `${a.nom} n’a pas de valeur pour « ${compAttaque} ».`, 'erreur');
   const competenceDefense = mode === 'esquiver' ? 'Esquive' : 'Corps à corps';
+  if (mode !== 'aucune' && !Number.isFinite(c.competences[competenceDefense])) return noter(state, `${c.nom} n’a pas de valeur pour « ${competenceDefense} ».`, 'erreur');
+  const surnombre = desBonusSurnombre({ defensesFaites: c.defensesRound, defensesParRound: c.attaquesParRound ?? 1 });
+  const attaque = { ...jetTest(des, { valeur: a.competences[compAttaque], bonus: bonus + surnombre, malus }), competence: compAttaque };
+  let defense = null;
   if (mode !== 'aucune') defense = { ...jetTest(des, { valeur: c.competences[competenceDefense] }), competence: competenceDefense };
   let s = compterAttaque(state, attaquantId);
   s = maj(s, cibleId, { defensesRound: c.defensesRound + (mode === 'aucune' ? 0 : 1) });
   s = noter(s, `${a.nom} attaque ${c.nom} (${arme.nom})${surnombre ? ' — surnombre : +1 dé bonus' : ''}.`, 'action');
-  s = noter(s, decrireTest(a.nom, 'Corps à corps', attaque));
+  s = noter(s, decrireTest(a.nom, compAttaque, attaque));
   if (defense) s = noter(s, decrireTest(c.nom, `${mode === 'rendre' ? 'Rendre les coups' : 'Esquiver'} (${competenceDefense})`, defense));
   return { ...s, enAttente: { type: 'melee', attaquantId, cibleId, mode, attaque, defense, chance: [] } };
 }
@@ -207,6 +210,7 @@ export function tirer(state, { tireurId, cibleId, distance, couvert = false, dan
   if (t.munitions <= 0) return noter(state, `${t.nom} n’a plus de munitions.`, 'erreur');
   const prep = preparerTir({ distance, porteeBase: arme.portee, dexTireur: t.carac.DEX, dansMelee, couvert });
   if (prep.horsPortee) return noter(state, `${c.nom} est hors de portée (${distance} m, portée ${arme.portee} m ×4).`, 'erreur');
+  if (!Number.isFinite(t.competences[arme.competence])) return noter(state, `${t.nom} n’a pas de valeur pour « ${arme.competence} ».`, 'erreur');
   const attaque = { ...jetTest(des, { valeur: t.competences[arme.competence], difficulte: prep.difficulte, bonus: bonus + prep.bonus, malus: malus + prep.malus }),
     competence: arme.competence };
   const details = [`${distance} m`, `difficulté ${LIBELLE_DIFFICULTE[prep.difficulte]}`, prep.boutPortant && 'bout portant',
@@ -216,6 +220,30 @@ export function tirer(state, { tireurId, cibleId, distance, couvert = false, dan
   s = noter(s, `${t.nom} tire sur ${c.nom} (${arme.nom} ; ${details}).`, 'action');
   s = noter(s, decrireTest(t.nom, arme.competence, attaque));
   return { ...s, enAttente: { type: 'tir', attaquantId: tireurId, cibleId, attaque, defense: null, chance: [], tresLonguePortee: prep.tresLonguePortee } };
+}
+
+// ---------------------------------------------------------------------------
+// Recharger
+// ---------------------------------------------------------------------------
+
+/**
+ * Recharge une arme à feu (Manuel du Gardien p. 100) : au plus deux munitions par appel (1 round pour deux balles),
+ * sans dépasser la capacité de l'arme ; le MJ appelle l'action une fois par round. `chargeur: true` : changement de
+ * chargeur (1 round, p. 100), qui remet l'arme à pleine capacité.
+ */
+export function recharger(state, { id, chargeur = false } = {}) {
+  const refus = refuserSiEgalite(state);
+  if (refus) return refus;
+  const p = participant(state, id);
+  if (!p) return noter(state, `Participant introuvable : ${id}.`, 'erreur');
+  if (p.etat === 'mort') return noter(state, `${p.nom} est mort.`, 'erreur');
+  const arme = armeDe(state, p.armeTir);
+  if (!arme) return noter(state, `${p.nom} n’a pas d’arme à feu.`, 'erreur');
+  if (p.munitions >= arme.capacite) return noter(state, `${p.nom} a déjà le chargeur plein (${p.munitions}/${arme.capacite}).`, 'erreur');
+  const nouveau = chargeur ? arme.capacite : Math.min(arme.capacite, p.munitions + 2);
+  const s = maj(state, id, { munitions: nouveau });
+  const maniere = chargeur ? 'changement de chargeur' : 'deux balles';
+  return noter(s, `${p.nom} recharge ${arme.nom} (${nouveau}/${arme.capacite}) — ${maniere}, 1 round (Gardien p. 100).`, 'action');
 }
 
 // ---------------------------------------------------------------------------
@@ -312,7 +340,11 @@ export function annulerEnAttente(state) {
 // ---------------------------------------------------------------------------
 
 export function jetMourant(state, { id }, des) {
+  const refus = refuserSiEgalite(state);
+  if (refus) return refus;
   const p = participant(state, id);
+  if (!p) return noter(state, `Participant introuvable : ${id}.`, 'erreur');
+  if (p.etat !== 'mourant') return noter(state, `${p.nom} n’est pas mourant.`, 'erreur');
   const con = jetTest(des, { valeur: p.carac.CON });
   let s = noter(state, decrireTest(p.nom, 'CON (mourant)', con));
   const suite = suiteJetConMourant(p, con.niveau);
@@ -322,7 +354,11 @@ export function jetMourant(state, { id }, des) {
 
 /** Premiers soins réussis : un mourant est stabilisé (inconscient), sinon +1 PV. */
 export function premiersSoins(state, { id }) {
+  const refus = refuserSiEgalite(state);
+  if (refus) return refus;
   const p = participant(state, id);
+  if (!p) return noter(state, `Participant introuvable : ${id}.`, 'erreur');
+  if (p.etat === 'mort') return noter(state, `${p.nom} est mort : plus rien à soigner.`, 'erreur');
   if (p.etat === 'mourant') return noter(maj(state, id, { etat: 'inconscient', pv: 1 }), `${p.nom} est stabilisé (1 PV, inconscient).`, 'info');
   return noter(maj(state, id, { pv: Math.min(p.pvMax, p.pv + 1) }), `${p.nom} récupère 1 PV.`, 'info');
 }
@@ -337,6 +373,8 @@ export function premiersSoins(state, { id }) {
  * renseigné, la créature apparaît sans jet.
  */
 export function revelerCreature(state, { id }, des) {
+  const refus = refuserSiEgalite(state);
+  if (refus) return refus;
   const monstre = participant(state, id);
   let s = maj(state, id, { cachee: false });
   if (!monstre.coutSan) return noter(s, `Apparition : ${monstre.nom} !`, 'alerte');
@@ -349,18 +387,20 @@ export function revelerCreature(state, { id }, des) {
 }
 
 export function jetSan(state, { id, cout, source = null }, des) {
+  const refus = refuserSiEgalite(state);
+  if (refus) return refus;
   const pj = participant(state, id);
   const test = jetTest(des, { valeur: pj.san });
   let s = noter(state, decrireTest(pj.nom, 'SAN', test));
   const perte = perteSan({ cout, niveau: test.niveau, lancer: des.lancer });
   const r = appliquerPerteSan({ san: pj.san, journee: pj.journeeSan }, perte);
   let folie = pj.folie;
-  s = noter(s, `${pj.nom} perd ${perte} SAN (${pj.san} → ${r.san} ; ${r.journee.perteJour} perdus aujourd’hui sur un seuil de ${Math.max(1, Math.floor(r.journee.sanDebut / 5))}).`, perte ? 'san' : 'info');
+  s = noter(s, `${pj.nom} perd ${perte} SAN (${pj.san} → ${r.san} ; ${r.journee.perteJour} perdus aujourd’hui sur un seuil de ${Math.max(1, Math.floor(pj.san / 5))}).`, perte ? 'san' : 'info');
   if (r.jetIntRequis) {
     const int = jetTest(des, { valeur: pj.carac.INT });
     s = noter(s, decrireTest(pj.nom, 'INT (comprendre l’horreur)', int));
-    if (foliePassagere({ perte, niveauINT: int.niveau })) { folie = 'passagère'; s = noter(s, `${pj.nom} comprend ce que ses yeux ont vu : FOLIE PASSAGÈRE (crise de 1D10 rounds).`, 'alerte'); }
-    else s = noter(s, `${pj.nom} refoule l’horreur (jet d’INT raté) : pas de folie passagère.`);
+    if (foliePassagere({ perte, niveauINT: int.niveau })) { folie = 'temporaire'; s = noter(s, `${pj.nom} comprend ce que ses yeux ont vu : FOLIE TEMPORAIRE (crise de 1D10 rounds).`, 'alerte'); }
+    else s = noter(s, `${pj.nom} refoule l’horreur (jet d’INT raté) : pas de folie temporaire.`);
   }
   if (r.persistante) { folie = 'persistante'; s = noter(s, `${pj.nom} a perdu 1/5 de sa SAN aujourd’hui : FOLIE PERSISTANTE.`, 'alerte'); }
   if (r.permanente) { folie = 'permanente'; s = noter(s, `${pj.nom} sombre dans la folie permanente.`, 'alerte'); }
@@ -372,6 +412,8 @@ export function jetSan(state, { id, cout, source = null }, des) {
 // ---------------------------------------------------------------------------
 
 export function testLibre(state, { id, competence, difficulte = 'ordinaire', bonus = 0, malus = 0 }, des, { redouble = false } = {}) {
+  const refus = refuserSiEgalite(state);
+  if (refus) return refus;
   const p = participant(state, id);
   const valeur = valeurDe(p, competence);
   if (!Number.isFinite(valeur)) return noter(state, `${p.nom} n’a pas de valeur pour « ${competence} ».`, 'erreur');
@@ -381,14 +423,19 @@ export function testLibre(state, { id, competence, difficulte = 'ordinaire', bon
 }
 
 export function redoublerDernierTest(state, des) {
+  const refus = refuserSiEgalite(state);
+  if (refus) return refus;
   const d = state.dernierTest;
   if (!d) return state;
   const ok = peutRedoubler({ niveau: d.niveau, typeTest: d.typeTest, dejaRedouble: d.redouble, chanceDepensee: d.chanceDepensee });
   if (!ok.autorise) return noter(state, `Redoublement refusé : ${ok.raison}`, 'erreur');
-  return testLibre(state, { id: d.id, competence: d.competence, difficulte: d.difficulte }, des, { redouble: true });
+  return testLibre(state, { id: d.id, competence: d.competence, difficulte: d.difficulte,
+    bonus: Math.max(0, d.net ?? 0), malus: Math.max(0, -(d.net ?? 0)) }, des, { redouble: true });
 }
 
 export function chanceSurDernierTest(state) {
+  const refus = refuserSiEgalite(state);
+  if (refus) return refus;
   const d = state.dernierTest;
   if (!d) return state;
   const p = participant(state, d.id);

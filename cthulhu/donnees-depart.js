@@ -41,7 +41,7 @@ export const ARMES_DEPART = Object.freeze({
   'pattes-maigre-bete': { id: 'pattes-maigre-bete', nom: 'Pattes de maigre bête de la nuit', competence: 'Corps à corps', des: '1D4', empalante: false, aImpact: true, type: 'melee' }, // p. 302
   'tentacules-polype': { id: 'tentacules-polype', nom: 'Tentacules de polype volant', competence: 'Corps à corps', des: '1D10', empalante: false, aImpact: false, type: 'melee' }, // p. 305, sans Impact
   'mains-profond': { id: 'mains-profond', nom: 'Mains griffues de Profond', competence: 'Corps à corps', des: '1D6', empalante: false, aImpact: true, type: 'melee' }, // p. 306
-  harpon: { id: 'harpon', nom: 'Harpon de Profond', competence: 'Corps à corps', des: '1D8', empalante: false, aImpact: true, type: 'melee' }, // p. 306 : « par exemple, harpon 1D8 + impact »
+  harpon: { id: 'harpon', nom: 'Harpon de Profond', competence: 'Corps à corps', des: '1D8', empalante: false, aImpact: true, type: 'melee' }, // p. 306 : le livre prend le harpon en exemple, à 1D8 + Impact
   'crocs-loup-garou': { id: 'crocs-loup-garou', nom: 'Crocs et griffes de loup-garou', competence: 'Corps à corps', des: '1D8', empalante: false, aImpact: true, type: 'melee' }, // p. 338
   'coups-momie': { id: 'coups-momie', nom: 'Coups de momie', competence: 'Corps à corps', des: '1D6', empalante: false, aImpact: true, type: 'melee' } // p. 339
 });
@@ -85,7 +85,7 @@ export const CREATURES_DEPART = Object.freeze([
     carac: { FOR: 210, CON: 130, TAI: 320, DEX: 50, APP: 0, INT: 100, POU: 65, EDU: 0 },
     competences: { 'Corps à corps': 40, 'Arme à foudre': 30, Esquive: 25, Biologie: 80, Chimie: 70, Électricité: 60, Psychologie: 30 },
     mvt: 7, attaquesParRound: 2, armeMelee: 'pinces-yith', armeTir: 'arme-foudre', armure: 8, coutSan: '0/1D6',
-    notes: 'Voyage temporel : échange d’esprit avec un hôte à travers les âges (p. 294), non modélisé. 10 % de chances de connaître 1D3 sorts. '
+    notes: 'Voyage temporel : échange d’esprit avec un hôte à travers les âges (p. 295), non modélisé. 10 % de chances de connaître 1D3 sorts. '
       + 'L’arme à foudre porte à 100 m ; plusieurs charges par tir et risque de fusion (p. 295) ne sont pas modélisés.'
   },
   {
@@ -114,7 +114,7 @@ export const CREATURES_DEPART = Object.freeze([
   {
     id: 'peuple-serpent', nom: 'Peuple serpent (non dégénéré)', kind: 'CREATURE', camp: 'ennemi',
     source: { livre: GARDIEN, pages: [303, 304] },
-    // p. 304 (« Hommes serpents, non dégénérés ») : FOR 50, CON 50, TAI 50, DEX 65, INT 80, POU 65 ; PV 10, Impact 0,
+    // p. 304 (bloc des hommes-serpents non dégénérés) : FOR 50, CON 50, TAI 50, DEX 65, INT 80, POU 65 ; PV 10, Impact 0,
     // Carrure 0, PM 13 ; Mouvement 8 ; 1 attaque par round ; Combat rapproché 50 % (1D3 + Impact), Morsure 35 %,
     // Esquive 32 % ; Protection 1 (écailles) ; Biologie 40, Chimie 40, Intimidation 60, Trouver Objet Caché 35 ;
     // perte de SAN 0/1D6.

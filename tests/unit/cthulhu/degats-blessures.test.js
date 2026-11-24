@@ -102,3 +102,22 @@ test('mort immédiate : un coup supérieur aux PV max (égal : mourant, Gardien 
   assert.equal(egal.mortImmediate, false);
   assert.equal(appliquerBlessure({ pv: 11, pvMax: 11, blessureGrave: false, etat: 'actif' }, 10).mortImmediate, false);
 });
+
+test('blessure grave qui fait tomber à 0 PV : mourant, sans jet de CON de plus (Gardien p. 107-108)', () => {
+  // À 0 PV le personnage sombre déjà dans l'inconscience : pas de test de CON de blessure grave supplémentaire.
+  const r = appliquerBlessure({ pv: 8, pvMax: 15, blessureGrave: false, etat: 'actif' }, 8);
+  assert.deepEqual([r.pv, r.etat, r.grave, r.jetCON], [0, 'mourant', true, false]);
+});
+
+test('déjà inconscient, blessure grave : pas de jet de CON (Gardien p. 107-108)', () => {
+  const r = appliquerBlessure({ pv: 10, pvMax: 15, blessureGrave: false, etat: 'inconscient' }, 8);
+  assert.deepEqual([r.pv, r.etat, r.grave, r.jetCON], [2, 'inconscient', true, false]);
+});
+
+test('très longue portée : extrême non critique (pas 01) → dégâts ordinaires ; critique (01) → empalement (Gardien p. 404 et p. 100)', () => {
+  // p. 404 : à très longue portée, les dégâts extrêmes n’existent que sur un critique (01) ; p. 100 : idem pour l’empalement.
+  const d = calculerDegats({ arme: revolver, niveau: NIVEAU.EXTREME, tresLonguePortee: true, lancer: lanceur({ '1D10': 4 }) });
+  assert.deepEqual([d.extreme, d.empale, d.total], [false, false, 4]);
+  const c = calculerDegats({ arme: revolver, niveau: NIVEAU.CRITIQUE, tresLonguePortee: true, lancer: lanceur({ '1D10': 7 }) });
+  assert.deepEqual([c.extreme, c.empale, c.total], [true, true, 17]);
+});

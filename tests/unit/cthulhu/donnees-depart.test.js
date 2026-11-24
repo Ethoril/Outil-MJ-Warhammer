@@ -170,3 +170,14 @@ test('armes de départ : valeurs du tableau des armes (Gardien p. 405-406), lign
     assert.deepEqual([a.des, a.portee, a.capacite, a.empalante, a.aImpact, a.type, a.competence], [des, portee, capacite, true, false, 'feu', 'Armes de poing'], id);
   }
 });
+
+test('Grande Race de Yith : le pouvoir du voyage temporel est cité p. 295 (et non p. 294)', () => {
+  const note = CREATURES_DEPART.find(p => p.id === 'grande-race-de-yith').notes;
+  assert.match(note, /Voyage temporel[^)]*\(p\. 295\)/);
+  assert.doesNotMatch(note, /Voyage temporel[^)]*\(p\. 294\)/);
+});
+
+test('aucune phrase du livre recopiée entre guillemets dans donnees-depart.js : paraphrase courte + page seulement', () => {
+  const code = readFileSync(new URL('../../../cthulhu/donnees-depart.js', import.meta.url), 'utf8');
+  assert.doesNotMatch(code, /«[^»\n]{30,}»/);
+});

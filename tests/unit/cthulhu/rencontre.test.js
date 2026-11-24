@@ -5,7 +5,7 @@ import { strict as assert } from 'node:assert';
 import {
   composerRencontre, reporterSurReserve, commencerRound, passerTour, basculerArmePrete, tirer, attaquerMelee, resoudreEnAttente,
   depenserChanceEnAttente, revelerCreature, jetSan, jetMourant, premiersSoins, testLibre, redoublerDernierTest, chanceSurDernierTest,
-  testOppose, trancherEgalite, decisionEgalite, participant, acteurCourant, peutAgir
+  testOppose, trancherEgalite, decisionEgalite, participant, acteurCourant, peutAgir, recharger
 } from '../../../cthulhu/rencontre.js';
 import { creerReserve, ajouterArme, ajouterProfil, trouverProfil, modifierProfil } from '../../../cthulhu/profils.js';
 import { reserveDeDepart, ARMES_DEPART, CREATURES_DEPART } from '../../../cthulhu/donnees-depart.js';
@@ -135,18 +135,21 @@ function scenarioMaquette(des, reserve = reserveMaquette()) {
 const desScenario = () => desScriptes({
   d100: [25, 30, { jet: 10, candidats: [10, 60], net: 1 }, 80, 20, 30, 85, 40, 60,
     30, 35, 50, 22, 12,
-    40, 10, 15, 70, 70, { jet: 8, candidats: [8, 38], net: 1 }, 60,
+    40, 10, 15, 70, { jet: 8, candidats: [8, 38], net: 1 }, 60,
     40],
   lancer: [['1D8', 6], ['1D10', 4], ['1D6', 6], ['1D10', 8], ['1D6', 4], ['1D6', 5], ['+1D4', 3], ['1D6', 5]]
 });
 
 /*
  * Journal attendu des quatre rounds de la maquette rejoués avec les règles arbitrées de C1. Il est identique à celui de
- * la maquette (68 lignes) sauf trois lignes, toutes dues à une décision du Manuel du Gardien :
+ * la maquette (68 lignes) sauf quelques lignes, dues à des décisions du Manuel du Gardien :
  *  - « Disciple de Jacob Smith … est tué sur le coup » : le texte dit désormais « dégâts supérieurs aux PV max » (la mort immédiate
  *    exige des dégâts au-dessus du maximum de PV, et non plus égaux ; ici 14 contre 11, l'issue est la même) ;
  *  - « Goule s'effondre, mort » devient « Goule tombe inconscient (0 PV) » : un PNJ ou une créature à 0 PV est
  *    inconscient ou mourant, jamais mort ;
+ *  - le jet de CON de blessure grave de Margaret Hale (5 → 0 PV) disparaît : à 0 PV le mourant sombre déjà dans
+ *    l'inconscience, pas de jet de CON supplémentaire (Gardien p. 107-108) ;
+ *  - « FOLIE PASSAGÈRE » devient « FOLIE TEMPORAIRE » (Gardien p. 140-141) ;
  *  - l'ordre du round 4 compte la goule (65), toujours en jeu puisqu'elle n'est pas morte.
  */
 const JOURNAL_ATTENDU = [
@@ -168,7 +171,7 @@ const JOURNAL_ATTENDU = [
   "Margaret Hale — SAN 65 % : 80 → Échec",
   "Margaret Hale perd 6 SAN (65 → 59 ; 6 perdus aujourd’hui sur un seuil de 13).",
   "Margaret Hale — INT (comprendre l’horreur) 70 % : 20 → Réussite majeure",
-  "Margaret Hale comprend ce que ses yeux ont vu : FOLIE PASSAGÈRE (crise de 1D10 rounds).",
+  "Margaret Hale comprend ce que ses yeux ont vu : FOLIE TEMPORAIRE (crise de 1D10 rounds).",
   "Pr Arthur Lindqvist — SAN 50 % : 30 → Réussite ordinaire",
   "Pr Arthur Lindqvist perd 1 SAN (50 → 49 ; 1 perdus aujourd’hui sur un seuil de 10).",
   "Pr Arthur Lindqvist — Bibliothèque 70 % : 85 → Échec",
@@ -203,7 +206,6 @@ const JOURNAL_ATTENDU = [
   "Goule touche Margaret Hale.",
   "Dégâts (Griffes et crocs, 5 + Impact 3) = 8.",
   "Margaret Hale : 5 → 0 PV — BLESSURE GRAVE.",
-  "Margaret Hale — CON (blessure grave) 60 % : 70 → Échec",
   "Margaret Hale est MOURANT : jet de CON à chaque round jusqu’aux premiers soins.",
   "Pr Arthur Lindqvist attaque Goule (Batte de baseball) — surnombre : +1 dé bonus.",
   "Pr Arthur Lindqvist — Corps à corps 30 % [1 dé(s) bonus : 8 / 38] : 08 → Réussite majeure",
@@ -230,7 +232,7 @@ test('scénario de la maquette (quatre rounds), profils saisis : journal attendu
   assert.deepEqual(etat(DISCIPLE), ['mort', 0]);
   assert.deepEqual(etat('goule'), ['inconscient', 0]);
   const hale = participant(s, 'hale');
-  assert.deepEqual([hale.san, hale.folie, hale.chance], [59, 'passagère', 70]);
+  assert.deepEqual([hale.san, hale.folie, hale.chance], [59, 'temporaire', 70]);
   assert.deepEqual([participant(s, 'lindqvist').san, participant(s, 'lindqvist').chance], [49, 20]);
   assert.equal(hale.munitions, 6); // revolver .38 du tableau : 8 coups, deux tirs
   assert.deepEqual(JSON.parse(JSON.stringify(s)), s, 'état sérialisable');
@@ -243,7 +245,7 @@ test('un investigateur garde PV, SAN, Chance, folie et blessure grave d’une re
   const fin = scenarioMaquette(desScenario(), reserve);
   const apres = reporterSurReserve(reserve, fin);
   assert.deepEqual(trouverProfil(apres, 'hale').suivi, {
-    pv: 1, blessureGrave: true, etat: 'inconscient', san: 59, journeeSan: { sanDebut: 65, perteJour: 6, persistanteDeclenchee: false }, folie: 'passagère', chance: 70
+    pv: 1, blessureGrave: true, etat: 'inconscient', san: 59, journeeSan: { sanDebut: 65, perteJour: 6, persistanteDeclenchee: false }, folie: 'temporaire', chance: 70
   });
   assert.equal(trouverProfil(apres, 'lindqvist').suivi.chance, 20);
   assert.equal(trouverProfil(apres, 'goule').suivi, null);
@@ -252,7 +254,7 @@ test('un investigateur garde PV, SAN, Chance, folie et blessure grave d’une re
 
   const suite = composerRencontre(apres, ['hale', 'lindqvist', 'goule']);
   const h = participant(suite, 'hale'), l = participant(suite, 'lindqvist'), g = participant(suite, 'goule');
-  assert.deepEqual([h.pv, h.pvMax, h.etat, h.blessureGrave, h.san, h.folie, h.chance], [1, 11, 'inconscient', true, 59, 'passagère', 70]);
+  assert.deepEqual([h.pv, h.pvMax, h.etat, h.blessureGrave, h.san, h.folie, h.chance], [1, 11, 'inconscient', true, 59, 'temporaire', 70]);
   assert.deepEqual([h.journeeSan.perteJour, l.san, l.chance, l.pv], [6, 49, 20, 10]);
   assert.deepEqual([g.pv, g.etat], [13, 'actif']);
 });
@@ -334,8 +336,8 @@ test('PNJ et créature à 0 PV : inconscients ou mourants, pas morts ; dégâts 
     s = tirer(s, { tireurId: 'hale', cibleId: DISCIPLE, distance: 12 }, des);
     return resoudreEnAttente(s, des);
   };
-  // 10 dégâts sur 10 PV : 0 PV, blessure grave → mourant (le jet de CON, raté à 90, ne change rien) ; jamais mort.
-  const egal = participant(tireSurDisciple(10, [50, 90]), DISCIPLE);
+  // 10 dégâts sur 10 PV : 0 PV, blessure grave → mourant, sans jet de CON de plus (Gardien p. 107-108) ; jamais mort.
+  const egal = participant(tireSurDisciple(10, [50]), DISCIPLE);
   assert.deepEqual([egal.pv, egal.etat, egal.blessureGrave], [0, 'mourant', true]);
   // 11 dégâts sur 10 PV max : mort sur le coup.
   const trop = tireSurDisciple(11, [50]);
@@ -385,11 +387,13 @@ test('très longue portée : l’empalement exige un 01, une réussite extrême 
   const reserve = reserveDeDepart();
   let r = ajouterProfil(reserve, { nom: 'Cible', kind: 'PNJ', carac: { FOR: 50, CON: 150, TAI: 150, DEX: 50, INT: 50, POU: 50 }, competences: {} });
   // Disciple de Jacob Smith : Armes de poing 40 %, revolver .32 (1D8), portée 15 m ; à 40 m (entre ×2 et ×4) seule une réussite extrême (≤ 8) touche.
-  const extreme = desScriptes({ d100: [5] }); // aucun lancer attendu : maximum de 1D8, sans jet d'empalement
+  // Réussite extrême (5 ≤ 8) qui n'est pas un 01 : dégâts ordinaires, le 1D8 est jeté (Gardien p. 404 ; empalement sur 01, p. 100).
+  const extreme = desScriptes({ d100: [5], lancer: [['1D8', 4]] });
   let s = tirer(composerRencontre(r, [DISCIPLE, 'cible']), { tireurId: DISCIPLE, cibleId: 'cible', distance: 40 }, extreme);
   s = resoudreEnAttente(s, extreme);
-  assert.ok(textes(s).some(x => /maximum : 8\) = 8/.test(x)));
-  assert.equal(participant(s, 'cible').pv, participant(s, 'cible').pvMax - 8);
+  assert.ok(textes(s).some(x => /Dégâts \(Revolver cal\. 32, 4\) = 4/.test(x)));
+  assert.equal(participant(s, 'cible').pv, participant(s, 'cible').pvMax - 4);
+  assert.deepEqual(extreme.restants(), { d100: 0, lancer: 0 });
   const critique = desScriptes({ d100: [1, 10], lancer: [['1D8', 7]] }); // 01 : empalement, puis jet de CON (blessure grave)
   let t = tirer(composerRencontre(r, [DISCIPLE, 'cible']), { tireurId: DISCIPLE, cibleId: 'cible', distance: 40 }, critique);
   t = resoudreEnAttente(t, critique);
@@ -408,6 +412,8 @@ test('folie persistante : le cumul de la journée se mesure sur la SAN d’avant
   const p = participant(s, 'lindqvist');
   assert.deepEqual([p.san, p.folie, p.journeeSan.perteJour, p.journeeSan.persistanteDeclenchee], [42, 'persistante', 8, true]);
   assert.match(s.journal.at(-1).texte, /FOLIE PERSISTANTE/);
+  // Le seuil affiché est 1/5 de la SAN juste avant la perte (44 → 8), pas 1/5 de la SAN de début de journée (50 → 10).
+  assert.ok(textes(s).some(t => /perd 2 SAN \(44 → 42 ; 8 perdus aujourd’hui sur un seuil de 8\)\./.test(t)), textes(s).at(-2));
 });
 
 // --- Données de départ : la goule du Manuel du Gardien ---------------------------------------------------------------------
@@ -500,3 +506,136 @@ test('personne ne peut agir : le round commence puis s’arrête avec une note, 
   assert.equal(s.round, 3);
   assert.equal(acteurCourant(s)?.id, 'lindqvist');
 }, { timeout: 5000 });
+
+// --- M2 : compétences d'arme requises, gardes d'état, recharger, redoublement avec dés nets ----------------------
+
+const CARAC_HUMAIN = { FOR: 50, CON: 60, TAI: 60, DEX: 60, APP: 50, INT: 70, POU: 60, EDU: 60 };
+
+function reserveCompetences() {
+  let r = creerReserve();
+  r = ajouterArme(r, { id: 'machette', nom: 'Machette', competence: 'Machette', des: '1D8', empalante: true, aImpact: true, type: 'melee' });
+  r = ajouterArme(r, ARMES_DEPART['revolver-32']);
+  r = ajouterProfil(r, { nom: 'Alice', kind: 'PJ', carac: CARAC_HUMAIN, chance: 50,
+    competences: { Machette: 50, Esquive: 40, 'Armes de poing': 60 }, armeMelee: 'machette', armeTir: 'revolver-32' });
+  r = ajouterProfil(r, { nom: 'Bruno', kind: 'PNJ', carac: CARAC_HUMAIN, competences: { Esquive: 30 }, armeMelee: 'machette' }); // pas de Machette
+  r = ajouterProfil(r, { nom: 'Cécile', kind: 'PNJ', carac: CARAC_HUMAIN, competences: { Machette: 40, 'Armes de poing': 30 }, armeMelee: 'machette' }); // pas d'Esquive
+  r = ajouterProfil(r, { nom: 'David', kind: 'PNJ', carac: CARAC_HUMAIN, competences: { Machette: 40 }, armeMelee: null, armeTir: 'revolver-32' }); // pas d'Armes de poing
+  return r;
+}
+
+test('mêlée : la compétence de l’arme (champ arme.competence) est jetée et nommée dans le journal', () => {
+  let s = composerRencontre(reserveCompetences(), ['alice', 'cecile']);
+  s = attaquerMelee(s, { attaquantId: 'alice', cibleId: 'cecile', mode: 'aucune' }, desScriptes({ d100: [30] }));
+  assert.match(textes(s).at(-1), /Alice — Machette 50 % : 30 →/);
+  assert.equal(participant(s, 'alice').attaquesRound, 1);
+});
+
+test('mêlée : compétence d’attaque ou de défense absente → erreur, sans consommer d’attaque ni de défense', () => {
+  let s = composerRencontre(reserveCompetences(), ['bruno', 'cecile']);
+  s = attaquerMelee(s, { attaquantId: 'bruno', cibleId: 'cecile', mode: 'esquiver' }, desScriptes());
+  assert.equal(s.journal.at(-1).type, 'erreur');
+  assert.equal(s.journal.at(-1).texte, 'Bruno n’a pas de valeur pour « Machette ».');
+  assert.equal(s.enAttente, null);
+  assert.equal(participant(s, 'bruno').attaquesRound, 0, 'aucune attaque consommée');
+  assert.equal(participant(s, 'cecile').defensesRound, 0, 'aucune défense consommée');
+  // Côté défense : Cécile n'a pas Esquive.
+  let s2 = composerRencontre(reserveCompetences(), ['alice', 'cecile']);
+  s2 = attaquerMelee(s2, { attaquantId: 'alice', cibleId: 'cecile', mode: 'esquiver' }, desScriptes());
+  assert.equal(s2.journal.at(-1).type, 'erreur');
+  assert.equal(s2.journal.at(-1).texte, 'Cécile n’a pas de valeur pour « Esquive ».');
+  assert.equal(participant(s2, 'alice').attaquesRound, 0, 'aucune attaque consommée');
+  assert.equal(participant(s2, 'cecile').defensesRound, 0, 'aucune défense consommée');
+});
+
+test('tir : compétence de l’arme requise ; sans elle, erreur sans consommer de munition ni d’attaque', () => {
+  let s = composerRencontre(reserveCompetences(), ['david', 'alice']);
+  s = tirer(s, { tireurId: 'david', cibleId: 'alice', distance: 10 }, desScriptes());
+  assert.equal(s.journal.at(-1).type, 'erreur');
+  assert.equal(s.journal.at(-1).texte, 'David n’a pas de valeur pour « Armes de poing ».');
+  assert.equal(s.enAttente, null);
+  assert.equal(participant(s, 'david').munitions, 6, 'munitions intactes');
+  assert.equal(participant(s, 'david').attaquesRound, 0, 'aucune attaque consommée');
+});
+
+test('gardes d’état : jetMourant exige un participant mourant, premiersSoins refuse un mort ou un inconnu', () => {
+  let s = composerRencontre(reserveMaquette(), ['hale', 'lindqvist']);
+  let r = jetMourant(s, { id: 'hale' }, desScriptes());
+  assert.equal(r.journal.at(-1).type, 'erreur');
+  assert.match(r.journal.at(-1).texte, /pas mourant/);
+  assert.equal(participant(r, 'hale').etat, 'actif');
+  assert.equal(jetMourant(s, { id: 'inconnu' }, desScriptes()).journal.at(-1).type, 'erreur');
+  assert.equal(premiersSoins(s, { id: 'inconnu' }).journal.at(-1).type, 'erreur');
+  const mort = { ...s, participants: s.participants.map(p => (p.id === 'hale' ? { ...p, etat: 'mort' } : p)) };
+  r = premiersSoins(mort, { id: 'hale' });
+  assert.equal(r.journal.at(-1).type, 'erreur');
+  assert.match(r.journal.at(-1).texte, /mort/);
+  assert.equal(participant(r, 'hale').etat, 'mort');
+});
+
+test('une égalité en attente bloque aussi jetMourant, premiersSoins, revelerCreature, jetSan, testLibre, redoublerDernierTest et chanceSurDernierTest', () => {
+  const des = desScriptes({ d100: [40, 40] });
+  const s = testOppose(pairePourOppose(), { aId: 'lindqvist', aCompetence: 'FOR', bId: DISCIPLE, bCompetence: 'FOR' }, des);
+  assert.equal(s.enAttente.type, 'egalite');
+  const actions = [
+    ['jetMourant', () => jetMourant(s, { id: 'lindqvist' }, desScriptes())],
+    ['premiersSoins', () => premiersSoins(s, { id: 'lindqvist' })],
+    ['revelerCreature', () => revelerCreature(s, { id: DISCIPLE }, desScriptes())],
+    ['jetSan', () => jetSan(s, { id: 'lindqvist', cout: '1/1D6' }, desScriptes())],
+    ['testLibre', () => testLibre(s, { id: 'lindqvist', competence: 'Bibliothèque' }, desScriptes())],
+    ['redoublerDernierTest', () => redoublerDernierTest(s, desScriptes())],
+    ['chanceSurDernierTest', () => chanceSurDernierTest(s)]
+  ];
+  for (const [nom, action] of actions) {
+    const r = action();
+    assert.equal(r.enAttente?.type, 'egalite', `${nom} laisse l’égalité en attente`);
+    assert.equal(r.journal.at(-1).type, 'erreur', `${nom} note une erreur`);
+    assert.match(r.journal.at(-1).texte, /égalité/i, nom);
+  }
+});
+
+test('recharger : au plus deux munitions par appel, sans dépasser la capacité ; changement de chargeur à pleine capacité (Gardien p. 100)', () => {
+  // p. 100 : charger deux balles prend 1 round ; changer un chargeur prend 1 round.
+  let s = composerRencontre(reserveMaquette(), ['hale', DISCIPLE]);
+  s = { ...s, participants: s.participants.map(p => (p.id === 'hale' ? { ...p, munitions: 5 } : p)) };
+  s = recharger(s, { id: 'hale' });
+  assert.equal(participant(s, 'hale').munitions, 7);
+  assert.match(s.journal.at(-1).texte, /Margaret Hale recharge Revolver cal\. 38 \(7\/8\) — deux balles, 1 round \(Gardien p\. 100\)\./);
+  s = recharger(s, { id: 'hale' });
+  assert.equal(participant(s, 'hale').munitions, 8, 'sans dépasser la capacité (8)');
+  assert.equal(recharger(s, { id: 'hale' }).journal.at(-1).type, 'erreur', 'chargeur plein : refus');
+  // 2 munitions manquantes, une seule restante : on complète sans dépasser.
+  s = { ...s, participants: s.participants.map(p => (p.id === 'hale' ? { ...p, munitions: 7 } : p)) };
+  s = recharger(s, { id: 'hale' });
+  assert.equal(participant(s, 'hale').munitions, 8);
+  // Changement de chargeur : pleine capacité en un appel, 1 round (p. 100).
+  s = { ...s, participants: s.participants.map(p => (p.id === 'hale' ? { ...p, munitions: 2 } : p)) };
+  s = recharger(s, { id: 'hale', chargeur: true });
+  assert.equal(participant(s, 'hale').munitions, 8);
+  assert.match(s.journal.at(-1).texte, /changement de chargeur, 1 round \(Gardien p\. 100\)\./);
+});
+
+test('recharger : refus (note « erreur ») si participant inconnu, mort, sans arme à feu, ou pendant une égalité en attente', () => {
+  let s = composerRencontre(reserveMaquette(), ['hale', 'lindqvist']);
+  assert.equal(recharger(s, { id: 'inconnu' }).journal.at(-1).type, 'erreur');
+  let r = recharger(s, { id: 'lindqvist' }); // lindqvist n'a pas d'arme à feu
+  assert.equal(r.journal.at(-1).type, 'erreur');
+  assert.match(r.journal.at(-1).texte, /pas d’arme à feu/);
+  const mort = { ...s, participants: s.participants.map(p => (p.id === 'lindqvist' ? { ...p, etat: 'mort' } : p)) };
+  assert.equal(recharger(mort, { id: 'lindqvist' }).journal.at(-1).type, 'erreur');
+  const eg = testOppose(pairePourOppose(), { aId: 'lindqvist', aCompetence: 'FOR', bId: DISCIPLE, bCompetence: 'FOR' }, desScriptes({ d100: [40, 40] }));
+  r = recharger(eg, { id: DISCIPLE });
+  assert.equal(r.journal.at(-1).type, 'erreur');
+  assert.equal(r.enAttente.type, 'egalite', 'l’égalité reste en attente');
+  assert.equal(participant(r, DISCIPLE).munitions, 6, 'rien n’a changé');
+});
+
+test('redoubler conserve les dés bonus/malus du test d’origine', () => {
+  let s = composerRencontre(reserveMaquette(), ['lindqvist']);
+  s = testLibre(s, { id: 'lindqvist', competence: 'Bibliothèque', bonus: 1 }, desScriptes({ d100: [{ jet: 90, candidats: [90, 95], net: 1 }] }));
+  assert.equal(s.dernierTest.reussi, false);
+  assert.equal(s.dernierTest.net, 1);
+  s = redoublerDernierTest(s, desScriptes({ d100: [{ jet: 40, candidats: [40, 10], net: 1 }] })); // le d100 repart avec 1 dé bonus
+  assert.equal(s.dernierTest.reussi, true);
+  assert.equal(s.dernierTest.redouble, true);
+  assert.match(textes(s).at(-1), /Test redoublé — Pr Arthur Lindqvist — Bibliothèque 70 % \[1 dé\(s\) bonus : 40 \/ 10\]/);
+});

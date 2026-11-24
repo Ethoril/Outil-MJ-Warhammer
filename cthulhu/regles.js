@@ -132,8 +132,8 @@ export function testOppose(a, b) {
 }
 
 /**
- * Issues possibles d'une égalité parfaite au test opposé (Manuel du Gardien p. 80 : « un match nul, ou les deux camps
- * doivent relancer les dés »). Le livre laisse le choix au Gardien : l'outil le lui propose, il ne tranche pas.
+ * Issues possibles d'une égalité parfaite au test opposé (Manuel du Gardien p. 80 : match nul, ou les deux camps
+ * relancent les dés). Le livre laisse le choix au Gardien : l'outil le lui propose, il ne tranche pas.
  */
 export const ISSUES_EGALITE = Object.freeze([
   Object.freeze({ id: 'nul', libelle: 'Match nul', relance: false }),
@@ -323,14 +323,16 @@ export const empalementPossible = ({ arme, niveau, tresLonguePortee = false }) =
  * Réussite Extrême (ou Critique) : arme empalante → maximum de l'arme + un jet de l'arme en plus (+ Impact maximal si
  * `aImpact`) ; arme non empalante → maximum de l'arme + Impact maximal. Puis réduction propre à la cible
  * (`reduction` : 'moitie' pour une créature à demi-dégâts, appliquée avant l'armure, arrondi à l'inférieur), puis armure.
- * `tresLonguePortee` : le tir est à très longue portée (voir `empalementPossible`).
+ * `tresLonguePortee` : le tir est à très longue portée (voir `empalementPossible`) : une réussite Extrême qui n'y est
+ * pas un critique (01) n'est pas extrême, elle inflige les dégâts ordinaires (Manuel du Gardien p. 404 et p. 100).
  * `lancer(expression)` est injecté (tests) ; par défaut `lancerExpression` avec `rng`.
  */
 export function calculerDegats({ arme, impact = '0', niveau, armure = 0, reduction = null, tresLonguePortee = false,
   lancer = null, rng = Math.random }) {
   const jette = lancer || (e => lancerExpression(e, rng));
   const avecImpact = arme.aImpact === true && impact && impact !== '0';
-  const extreme = niveau >= NIVEAU.EXTREME;
+  // Gardien p. 404 : à très longue portée, seuls les dégâts d'un critique (01) sont extrêmes.
+  const extreme = niveau >= NIVEAU.EXTREME && !(tresLonguePortee && niveau === NIVEAU.EXTREME);
   let brut, detail;
   if (!extreme) {
     const armeJet = jette(arme.des);
@@ -362,7 +364,8 @@ export const estBlessureGrave = (degats, max) => degats > 0 && 2 * degats >= max
  * Applique un coup à `{ pv, pvMax, blessureGrave, etat }` (`etat` : 'actif' | 'inconscient' | 'mourant' | 'mort').
  * - Coup strictement supérieur aux PV max → mort immédiate ; égal aux PV max : blessure grave et 0 PV, donc mourant
  *   (Manuel du Gardien p. 107).
- * - Blessure grave → `jetCON` requis (échec : inconscient).
+ * - Blessure grave → `jetCON` requis (échec : inconscient), mais seulement tant que le personnage est encore actif :
+ *   à 0 PV il sombre déjà dans l'inconscience, et un déjà-inconscient ne repasse pas ce test (p. 107-108).
  * - 0 PV avec blessure grave (celle-ci ou une précédente) → mourant ; 0 PV sans → inconscient
  *   (Manuel du Gardien p. 107-108).
  * - PNJ et créatures suivent la même règle : à 0 PV, inconscients ou mourants, pas morts (le livre ne prévoit aucune
@@ -378,7 +381,7 @@ export function appliquerBlessure(cible, degats) {
   const blessureGrave = cible.blessureGrave || grave;
   let etat = cible.etat || 'actif';
   if (pv === 0) etat = blessureGrave ? 'mourant' : 'inconscient';
-  return { ...cible, pv, blessureGrave, etat, grave, mortImmediate: false, jetCON: grave && etat !== 'mort' };
+  return { ...cible, pv, blessureGrave, etat, grave, mortImmediate: false, jetCON: grave && etat === 'actif' };
 }
 
 /** Jet de CON après une blessure grave : échec → inconscient (un mourant reste mourant). */
@@ -420,8 +423,9 @@ export function perteSan({ cout, niveau, lancer = null, rng = Math.random }) {
 export const nouvelleJourneeSan = san => ({ sanDebut: san, perteJour: 0, persistanteDeclenchee: false });
 
 /**
- * Applique une perte de SAN. Folie passagère possible si ≥ 5 points d'un coup (il reste le jet d'INT : une réussite
- * rend fou, voir `foliePassagere`). Folie persistante (Manuel du Gardien p. 140) : le cumul des pertes de la journée,
+ * Applique une perte de SAN. Folie temporaire possible si ≥ 5 points d'un coup (il reste le jet d'INT : une réussite
+ * rend fou, voir `foliePassagere` ; la phase passagère n'est que la première phase commune aux folies temporaire et
+ * persistante, p. 140-141). Folie persistante (Manuel du Gardien p. 140) : le cumul des pertes de la journée,
  * perte en cours comprise, atteint 1/5 de la SAN « actuelle », celle d'avant cette perte (décision du MJ : le livre
  * ne dit pas à quel moment la mesurer). Le livre n'arrondit pas ce cinquième ; on prend l'arrondi à l'inférieur, au
  * moins 1 point. Une seule fois par journée. Folie permanente à 0.
@@ -442,8 +446,8 @@ export function appliquerPerteSan({ san, journee }, perte) {
 }
 
 /**
- * Folie passagère : ≥ 5 points perdus d'un coup ET réussite au jet d'INT (l'investigateur comprend ce qu'il a vu).
- * Le guide se contredit (« ratez un jet d'INT » puis « comprendre l'horreur rend fou ») ; on suit le livre de base.
+ * Folie temporaire (Manuel du Gardien p. 140-141) : ≥ 5 points perdus d'un coup ET réussite au jet d'INT
+ * (l'investigateur comprend ce qu'il a vu). Le guide se contredit sur le sens du jet d'INT ; on suit le livre de base.
  */
 export const foliePassagere = ({ perte, niveauINT }) => perte >= 5 && estReussite(niveauINT);
 
