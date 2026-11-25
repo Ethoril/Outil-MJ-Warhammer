@@ -236,6 +236,33 @@ test('sondeAction : inversion Avantage expose apercuInversion puis choisirInvers
   assert.equal(participant(apres, 'ganger').critiques[0].severite, 3);
 });
 
+test('sondeAction : apercuInversion nul tant qu’un dé manque (Avantage, d100 vide ou partiel)', () => {
+  // Avantage (Aider, p. 189/208) sur cible non surprise : deux d100 consommés (attaque + défense)
+  const s = rencontreBase();
+  const params = { id: 'helza', cibleId: 'executeur', armeId: 'epee', avantages: ['aide'] };
+
+  // Aucun d100 saisi : le jet factice 50 (inversible en 05) ne doit pas exposer apercuInversion
+  const pVide = sansMutation(s, st => sondeAction(st, { action: 'attaquerMelee', params }));
+  assert.equal(pVide.pretends, false);
+  assert.equal(pVide.champs.length, 2);
+  assert.ok(pVide.champs.every(c => c.valeurSaisie === undefined));
+  assert.equal(pVide.apercuInversion, null);
+
+  // 1/2 d100 saisi (72, inversible en 27 avec Avantage) : apercuInversion toujours nul tant que la défense manque
+  const pPartiel = sansMutation(s, st => sondeAction(st, { action: 'attaquerMelee', params }, { d100: [72] }));
+  assert.equal(pPartiel.pretends, false);
+  assert.equal(pPartiel.champs.length, 2);
+  assert.equal(pPartiel.champs.filter(c => c.valeurSaisie === undefined).length, 1);
+  assert.equal(pPartiel.apercuInversion, null);
+
+  // Les deux d100 saisis avec un jet inversible : apercuInversion bien exposé (garde-fou)
+  const pComplet = sansMutation(s, st => sondeAction(st, { action: 'attaquerMelee', params }, { d100: [72, 50] }));
+  assert.equal(pComplet.pretends, false);
+  assert.ok(pComplet.apercuInversion);
+  assert.equal(pComplet.apercuInversion.type, 'inversion');
+  assert.equal(pComplet.apercuInversion.inversions[0].cote, 'attaque');
+});
+
 test('sondeAction : testLibre, testOppose, premiersSoins et depenserDestin (relancer)', () => {
   const s = rencontreBase();
 

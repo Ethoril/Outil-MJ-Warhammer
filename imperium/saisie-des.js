@@ -10,7 +10,7 @@
  * - `fournisseurStrict({ d100, lancers })` : fournisseur de dés strict sans repli vers le hasard.
  * - `sondeAction(rencontre, requete, saisies)` / `planAction(...)` : sonde le moteur sur copie
  *   pour lister les champs de dés attendus, exposer `apercuInversion` si une inversion est en
- *   attente, et indiquer `pretends` (prêt à exécuter).
+ *   attente et qu'aucun dé ne manque, et indiquer `pretends` (prêt à exécuter).
  */
 import { analyserExpression, lancerExpression } from './regles.js';
 import {
@@ -138,6 +138,7 @@ function executerActionSurCopie(copie, requete, des) {
 /**
  * Sonde le moteur sur une copie de `rencontre` pour déterminer exactement les dés demandés par `requete`,
  * en injectant d'abord les valeurs déjà saisies (`d100`, `lancers`). Ne mute jamais `rencontre`.
+ * `apercuInversion` n'est exposé que lorsque aucun dé ne manque et que le moteur attend une inversion.
  * Retourne `{ champs: [{ cle, type, des, libelle, valeurSaisie? }], apercuInversion, pretends, erreur? }`.
  */
 export function sondeAction(rencontre, requete, { d100 = [], lancers = [] } = {}) {
@@ -197,7 +198,9 @@ export function sondeAction(rencontre, requete, { d100 = [], lancers = [] } = {}
     return { champs, apercuInversion: null, pretends: false, erreur: errJournal.texte };
   }
 
-  const apercuInversion = apres.enAttente?.type === 'inversion' ? apres.enAttente : null;
+  // L'aperçu d'inversion n'est exposé que si aucun dé ne manque : avec un d100 manquant, le jet
+  // factice (50, inversible en 05) ne doit pas présenter de choix d'inversion encore incomplet.
+  const apercuInversion = manquants === 0 && apres.enAttente?.type === 'inversion' ? apres.enAttente : null;
   return {
     champs,
     apercuInversion,
