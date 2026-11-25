@@ -444,4 +444,22 @@ test('cthulhu/ — chaque fichier de la page (html, js, css) est mis en cache, e
     .map(f => new URL(f, 'http://racine/cthulhu/').pathname.slice(1)).filter(f => /\.(css|js|svg|webmanifest)$/.test(f));
   assert.deepEqual(locales.filter(f => !listés.includes(f)), [], 'référencés par cthulhu/index.html mais hors cache');
 });
+
+test('imperium/ — chaque fichier de la page (html, js, css) est mis en cache, et la page ne référence que des fichiers cachés', () => {
+  // La page d'Imperium Maledictum est servie par le même service worker que Warhammer : sans ces entrées, elle ne s'ouvrirait pas hors ligne.
+  const dossier = join(racine, 'imperium');
+  const fichiers = readdirSync(dossier).filter(nom => /\.(html|js|css|json)$/.test(nom));
+  assert.ok(fichiers.includes('index.html') && fichiers.includes('app.js'));
+  const oubliés = fichiers.filter(nom => !listés.includes(`imperium/${nom}`));
+  assert.deepEqual(oubliés, [], `ces fichiers de imperium/ ne seraient pas disponibles hors ligne à froid : ${oubliés.join(', ')}`);
+  // L'adresse /imperium/ (dossier) n'est pas une entrée du précache (cache.addAll refuse un dossier sur certains serveurs) :
+  // hors ligne, le service worker la sert avec imperium/index.html — avec ou sans barre finale.
+  const sw2 = readFileSync(join(racine, 'sw.js'), 'utf8');
+  assert.match(sw2, /pathname\.endsWith\('\/'\)\s*\?\s*caches\.match\(url\.pathname \+ 'index\.html'\)/, 'repli hors ligne : « …/imperium/ » servie avec imperium/index.html');
+  assert.match(sw2, /caches\.match\(url\.pathname \+ '\/index\.html'\)/, 'repli hors ligne : « …/imperium » servie avec imperium/index.html');
+  const html = readFileSync(join(dossier, 'index.html'), 'utf8');
+  const locales = [...html.matchAll(/(?:href|src)=\"(?!https?:|data:|#)([^\"]+)\"/g)].map(m => m[1])
+    .map(f => new URL(f, 'http://racine/imperium/').pathname.slice(1)).filter(f => /\.(css|js|svg|webmanifest)$/.test(f));
+  assert.deepEqual(locales.filter(f => !listés.includes(f)), [], 'référencés par imperium/index.html mais hors cache');
+});
 });
