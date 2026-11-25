@@ -23,6 +23,9 @@ import {
 import { CARACS, PORTEES, VITESSES, TAILLES, ROLES_PNJ, ETATS } from './regles.js';
 import { composerRencontre, reporterSurReserve } from './rencontre.js';
 
+/** Libellés français des localisations d'armure (p. 211, 316). */
+const LIBELLE_LOCALISATION = Object.freeze({ tete: 'Tête', bras: 'Bras', brasG: 'Bras G', brasD: 'Bras D', corps: 'Corps', jambe: 'Jambes', jambeG: 'Jambe G', jambeD: 'Jambe D' });
+
 const LIBELLE_KIND = { PJ: 'Personnages-joueurs', PNJ: 'PNJ / Bestiaire' };
 const LIBELLE_CAMP = { pj: 'PJ', ennemi: 'ennemi', neutre: 'neutre' };
 const LIBELLE_ROLE = { troupe: 'Troupe', elite: 'Élite', chef: 'Chef' };
@@ -111,7 +114,7 @@ function lancerInterface() {
       : `<label>× <input type="number" min="0" max="9" value="${c.n}" data-compo="${esc(p.id)}" aria-label="Nombre de ${esc(p.nom)} dans la rencontre"></label>${zoneSel}`;
     const role = p.role ? LIBELLE_ROLE[p.role] : '';
     const profil = `<strong>${esc(p.nom)}</strong>${p.source ? `<br><small>${esc(p.source)}</small>` : ''}<br><small>${[role, LIBELLE_TAILLE[p.taille] ?? p.taille, LIBELLE_VITESSE[p.vitesse] ?? p.vitesse].filter(Boolean).join(' · ')}</small>${p.kind === 'PJ' ? `<br>${etatDuSuivi(p, d)}` : ''}`;
-    const armure = typeof d.armure === 'number' ? String(d.armure) : Object.entries(d.armure ?? {}).map(([k, v]) => `${k} ${v}`).join(', ');
+    const armure = typeof d.armure === 'number' ? String(d.armure) : Object.entries(d.armure ?? {}).map(([k, v]) => `${LIBELLE_LOCALISATION[k] ?? k} ${v}`).join(', ');
     const armes = (p.armes ?? []).map(id => seance.etat.reserve.armes[id]?.nom ?? id).join(', ');
     const valeurs = `<small>Blessures ${d.blessuresMax} · Critiques ${d.critiquesMax} · Init ${d.initiative} · Armure ${esc(armure)}${p.resolution !== null && p.resolution !== undefined ? ` · Résolution ${p.resolution}` : ''}${armes ? ` · ${esc(armes)}` : ''}</small>`;
     return `<tr class="camp-${participantCamp({ camp: p.camp, kind: p.kind })}" data-profil="${esc(p.id)}">
@@ -129,7 +132,7 @@ function lancerInterface() {
     const options = (liste, choisi, libelles) => liste.map(v => `<option value="${esc(v)}"${choisi === v ? ' selected' : ''}>${libelles[v] ?? v}</option>`).join('');
     const armureGlobale = typeof p?.armure === 'number' ? p.armure : '';
     const loc = typeof p?.armure === 'object' && p.armure !== null ? p.armure : {};
-    const locChamp = cle => `<label>${cle} <input type="number" min="0" name="armure-${cle}" value="${loc[cle] ?? ''}"></label>`;
+    const locChamp = cle => `<label>${LIBELLE_LOCALISATION[cle] ?? cle} <input type="number" min="0" name="armure-${cle}" value="${loc[cle] ?? ''}"></label>`;
     const armesCases = Object.values(reserve.armes).map(a => `<label><input type="checkbox" name="armes" value="${esc(a.id)}"${p?.armes?.includes(a.id) ? ' checked' : ''}> ${esc(a.nom)}</label>`).join('');
     return `<form id="form-profil" class="formulaire" aria-label="${p ? `Modifier ${esc(p.nom)}` : 'Nouveau profil'}">
       <h3>${p ? `Modifier ${esc(p.nom)}` : 'Nouveau profil'}</h3>
@@ -173,7 +176,9 @@ function lancerInterface() {
       const v = String(f.get(`armure-${cle}`) ?? '').trim();
       if (v !== '') loc[cle] = v;
     }
-    return Object.keys(loc).length ? loc : f.get('armure');
+    if (Object.keys(loc).length) return loc;
+    const globale = String(f.get('armure') ?? '').trim();
+    return globale === '' ? 0 : Number(globale); // nombre, sinon profils.js efface l'armure globale
   }
 
   function lireFormulaireProfil(form) {
