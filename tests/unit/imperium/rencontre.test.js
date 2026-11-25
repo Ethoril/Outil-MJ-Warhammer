@@ -72,11 +72,11 @@ const ZONES2 = [{ id: 'zone-1', nom: 'Zone 1', traits: [] }, { id: 'zone-2', nom
 test('scénario multi-rounds complet : surprise, initiative, mêlée + inversion, tir Rafale + Couvert + Esquive, Supériorité + Désespéré, blessures max + Endurance, mort subite Troupe, Maladresse + Reliable, Destin, états de tour, report', () => {
   const reserve = reserveAvecHelza();
   const des = desScriptes({
-    // ..., 44 = attaque matraque, 80 = Endurance (Douleur) répété après la matraque (p. 214-215), 20 = tir round 4
+    // ..., 44 = attaque matraque, 80 = Endurance (Douleur) repete apres la matraque (p. 214-215), 20 = tir round 4
     d100: [72, 96, 35, 33, 85, 24, 61, 15, 90, 88, 99, 44, 80, 20],
-    // 1d10 : sévérité ganger(3), loc helza(2), sévérité helza(4), sévérité exec(7), sévérité revolver(8),
-    // table maladresse revolver(5), Reliable revolver(6), loc matraque(6), sévérité matraque(6) ; 1d5 : Enflammé(4)
-    lancer: [['1d10', 3], ['1d10', 2], ['1d10', 4], ['1d10', 7], ['1d10', 8], ['1d10', 5], ['1d10', 6], ['1d10', 6], ['1d10', 6], ['1d5', 4]]
+    // 1d10 : severite ganger(3), loc helza(2), severite helza(4), severite exec(7),
+    // table maladresse revolver(5), Reliable revolver(6), loc matraque(6), severite matraque(6) ; 1d5 : Enflamme(4)
+    lancer: [['1d10', 3], ['1d10', 2], ['1d10', 4], ['1d10', 7], ['1d10', 5], ['1d10', 6], ['1d10', 6], ['1d10', 6], ['1d5', 4]]
   });
   let s = composerRencontre(reserve, ['helza', 'ganger', 'ganger', 'executeur'], {
     zones: ZONES2, superioriteInitiale: 1, surprise: 'pj' // p. 199
@@ -127,14 +127,14 @@ test('scénario multi-rounds complet : surprise, initiative, mêlée + inversion
   assert.ok(!participant(s, 'ganger-2').etats.some(e => e.id === 'surpris'));
   assert.deepEqual(s.ordre, ['helza', 'ganger-2', 'executeur']); // init 8, 7 (p. 340), 6 (p. 327, initiativeFixe)
 
-  // --- Round 1 : test libre, puis Destin dépensé (relancer + +1 SL, p. 220) ---
+  // --- Round 1 : test libre, puis Destin dépensé (relancer + +1 DR, p. 220) ---
   s = pur(s, st => testLibre(st, { id: 'helza', competence: 'Discrétion', caracFallback: 'Ag' }, des)); // 96 -> échec (p. 188)
   assert.equal(s.dernierTest.ap.reussi, false);
   s = pur(s, st => depenserDestin(st, 'helza', 'relancer', {}, des)); // 35 -> DR +1
   assert.equal(s.dernierTest.ap.reussi, true);
   assert.equal(s.dernierTest.ap.dr, 1);
   assert.equal(participant(s, 'helza').destin, 2);
-  s = pur(s, st => depenserDestin(st, 'helza', 'plus1DR')); // p. 220 : +1 SL après le jet
+  s = pur(s, st => depenserDestin(st, 'helza', 'plus1DR')); // p. 220 : +1 DR après le jet
   assert.equal(s.dernierTest.ap.dr, 2);
   assert.equal(participant(s, 'helza').destin, 1);
 
@@ -144,8 +144,8 @@ test('scénario multi-rounds complet : surprise, initiative, mêlée + inversion
   assert.equal(acteurCourant(s).id, 'ganger-2');
   s = pur(s, st => attaquerMelee(st, { id: 'ganger-2', cibleId: 'helza', armeId: 'couteau' }, des)); // 33 att, 85 def
   const h1 = participant(s, 'helza');
-  assert.equal(h1.blessures, 6); // p. 211 : 0+BF3 + diff SL 5 - armure 2 = 6 (couteau 0+BF p. 128, F 30 -> BF 3)
-  assert.equal(h1.critiques.length, 1); // p. 213 : double + SL positif = critique (localisation 1d10 = 2 -> bras-g, p. 211)
+  assert.equal(h1.blessures, 6); // p. 211 : 0+BF3 + diff DR 5 - armure 2 = 6 (couteau 0+BF p. 128, F 30 -> BF 3)
+  assert.equal(h1.critiques.length, 1); // p. 213 : double + DR positif = critique (localisation 1d10 = 2 -> bras-g, p. 211)
   assert.equal(h1.critiques[0].localisation, 'bras-g');
   assert.equal(h1.critiques[0].severite, 4);
   assert.equal(s.superiorite, 2); // p. 197 : première critique d'un PJ -> -1
@@ -157,7 +157,7 @@ test('scénario multi-rounds complet : surprise, initiative, mêlée + inversion
   s = pur(s, st => seMettreACouvert(st, { id: 'executeur', couvert: 'moyen' })); // +4 contre le tir, p. 204
   assert.equal(participant(s, 'executeur').couvertActif, 'moyen');
 
-  // --- Round 2 : tir Rafale (Burst +1 SL, -1 mun, p. 124) + Supériorité (DR +2, p. 196) + Esquive (p. 212) + Couvert (p. 204) ---
+  // --- Round 2 : tir Rafale (Burst +1 DR, -1 mun, p. 124) + Supériorité (DR +2, p. 196) + Esquive (p. 212) + Couvert (p. 204) ---
   s = pur(s, st => passerTour(st, des));
   assert.equal(s.round, 2);
   s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'executeur', armeId: 'pistolet-laser', mode: 'rafale', utiliserSuperiorite: true }, des)); // 24 att, 61 esquive
@@ -170,12 +170,13 @@ test('scénario multi-rounds complet : surprise, initiative, mêlée + inversion
   s = pur(s, st => passerTour(st, des));
   assert.equal(participant(s, 'helza').blessures, 7); // 6 + 1, p. 356
 
-  // ganger-2 fuit : hors de combat, -1 Supériorité (p. 208, 197)
+  // ganger-2 fuit : hors de combat ; un ennemi qui fuit est vaincu (p. 197), donc +1 Supériorité
+  // (Troupe, Résolution 1 atteinte ce round) au lieu d'un -1 réservé aux membres du groupe PJ (p. 197, 208)
   s = pur(s, st => fuir(st, { id: 'ganger-2' }));
   assert.equal(participant(s, 'ganger-2').etat, 'fui');
-  assert.equal(s.superiorite, 1);
+  assert.equal(s.superiorite, 3);
 
-  // executeur, Tir rapide (Rapid Fire 3 : -3 mun, +3 dégâts, p. 125) ; blessures max atteintes (p. 214)
+  // executeur, Tir rapide (Rapid Fire 3 : -3 mun, Avantage + +3 dégâts, p. 125) ; blessures max atteintes (p. 214)
   s = pur(s, st => passerTour(st, des));
   s = pur(s, st => attaquerDistance(st, { id: 'executeur', cibleId: 'helza', armeId: 'fusil-automatique', mode: 'rapide-degats' }, des)); // 15 att, 90 esquive, 88 endurance
   const h2 = participant(s, 'helza');
@@ -186,24 +187,26 @@ test('scénario multi-rounds complet : surprise, initiative, mêlée + inversion
   assert.ok(h2.etats.some(e => e.id === 'a-terre')); // p. 357
   assert.equal(participant(s, 'executeur').munitionsParArme['fusil-automatique'], 2); // 5-3, p. 125
 
-  // --- Round 3 : executeur contre helza inconsciente (pas d'opposition, critique auto, p. 199, 214, 357) ---
+  // --- Round 3 : executeur contre helza inconsciente (pas d'opposition, p. 199, 357) ---
   s = pur(s, st => passerTour(st, des));
   assert.equal(s.round, 3);
   assert.equal(acteurCourant(s).id, 'executeur'); // helza inconsciente : son tour est sauté
   // revolver : 99 = maladresse auto (p. 188, 213) ; table 1d10=5 puis Reliable 1d10=6 >= 4 -> résultat ignoré (p. 125)
+  // p. 357 : à distance, aucune critique automatique contre une cible Inconsciente (mêlée seulement) ;
+  // p. 214-215 : seule une attaque réussie contre un ennemi surpris est un critique auto -> ici, aucune critique
   s = pur(s, st => attaquerDistance(st, { id: 'executeur', cibleId: 'helza', armeId: 'revolver-automatique' }, des)); // 99
   assert.equal(s.enAttente, null); // p. 189 : 99 inversé vaut 99, aucune inversion n'est proposée
-  assert.equal(participant(s, 'helza').critiques.length, 3); // critique auto (corps, sévérité 8, p. 360)
+  assert.equal(participant(s, 'helza').critiques.length, 2); // aucune critique sur un tir raté (p. 213-215, 357)
   assert.ok(s.journal.some(j => j.texte.includes('Reliable'))); // p. 125
   assert.equal(participant(s, 'executeur').munitionsParArme['revolver-automatique'], 5); // 6-1, p. 123 (pas Burst/RF)
   // matraque : 44 = double + succès -> critique (p. 213), DR +1 ; dégâts 2+BF4+1-2 = 5, excédent 5 -> sévérité 1d10+5 = 11 (p. 215) ; Inflict (Sonné) p. 124, 128
+  // p. 357 : en mêlée, une cible Inconsciente subit un critique automatique sur l'attaque qui touche
   // p. 214-215 : helza est déjà à son maximum de blessures et reçoit encore des dégâts -> nouveau test
-  // d'Endurance (Douleur) exigé (« Repeat this Test each time you receive further Wounds », p. 214 ; « exactly as
-  // if they had », p. 215) : 80 -> échec, elle reste inconsciente
+  // d'Endurance (Douleur) exigé (le test se répète à chaque coup qui blesse, p. 214-215) : 80 -> échec, elle reste inconsciente
   s = pur(s, st => attaquerMelee(st, { id: 'executeur', cibleId: 'helza', armeId: 'electro-matraque' }, des)); // 44 puis 80 (Endurance)
   const h3 = participant(s, 'helza');
   assert.equal(h3.blessures, 16); // plafonné au max, p. 214
-  assert.equal(h3.critiques.length, 4);
+  assert.equal(h3.critiques.length, 3);
   assert.equal(h3.critiques.at(-1).severite, 11); // 6 + 5 d'excédent
   assert.ok(h3.etats.some(e => e.id === 'sonne')); // Inflict (Sonné), p. 124
 
@@ -224,7 +227,7 @@ test('scénario multi-rounds complet : surprise, initiative, mêlée + inversion
   s = pur(s, st => choisirInversion(st, 'keep', des));
   const h4 = participant(s, 'helza');
   assert.equal(h4.blessures, 16); // aucun dégât, p. 220
-  assert.equal(h4.critiques.length, 4); // aucun effet non plus
+  assert.equal(h4.critiques.length, 3); // aucun effet non plus
   assert.equal(h4.eviterDegatsActif, false); // consommé
   assert.equal(participant(s, 'executeur').munitionsParArme['fusil-automatique'], 2); // p. 123 : arme Rapid Fire, tir normal = 0 mun
 
@@ -246,7 +249,7 @@ test('scénario multi-rounds complet : surprise, initiative, mêlée + inversion
   const reserve2 = pur(reserve, r => reporterSurReserve(r, s));
   const helzaR = trouverProfil(reserve2, 'helza');
   assert.equal(helzaR.suivi.blessures, 15);
-  assert.equal(helzaR.suivi.critiques.length, 4);
+  assert.equal(helzaR.suivi.critiques.length, 3);
   assert.equal(helzaR.suivi.destin, 0);
   assert.equal(helzaR.suivi.destinBrule, 1);
   assert.deepEqual(helzaR.suivi.etats, h5.etats);
@@ -407,7 +410,7 @@ test('munitions (p. 123-125) : Burst/Rapid Fire gratuits en tir normal, rafale -
   s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'ganger', armeId: 'pistolet-laser', mode: 'normal' }, des));
   assert.equal(participant(s, 'helza').munitionsParArme['pistolet-laser'], 4); // p. 123
   assert.equal(participant(s, 'ganger').blessures, 3);
-  // rafale (Burst) : +1 SL, -1 mun (p. 124) ; 40 -> DR +1, esquive 60 échec, dégâts 5+1-2 = 4
+  // rafale (Burst) : +1 DR, -1 mun (p. 124) ; 40 -> DR +1, esquive 60 échec, dégâts 5+1-2 = 4
   s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'ganger', armeId: 'pistolet-laser', mode: 'rafale' }, des));
   assert.equal(participant(s, 'helza').munitionsParArme['pistolet-laser'], 3); // p. 124
   assert.equal(participant(s, 'ganger').blessures, 7);
@@ -472,7 +475,7 @@ test('premiers soins (p. 219) : soigne DR + BInt ; traite une critique', () => {
   const des = desScriptes({ d100: [30, 20] });
   let s = composerRencontre(reserve, ['helza', 'ganger'], { zones: ZONES2 });
   s = commencerRound(s);
-  // Médecine 40, test Challenging (+0) en combat (p. 219) ; 30 -> DR +1 ; soins = 1 + BInt 4 = 5 (Int 40, p. 50)
+  // Médecine 40, test Intermédiaire (+0) en combat (p. 219) ; 30 -> DR +1 ; soins = 1 + BInt 4 = 5 (Int 40, p. 50)
   s = pur(s, st => premiersSoins(st, { id: 'helza', cibleId: 'helza' }, des));
   assert.equal(participant(s, 'helza').blessures, 0);
   // traiterCritique : 20 -> DR +2 ; la critique est marquée traitée (p. 219)
@@ -547,4 +550,359 @@ test('un appel par dé : RangeError explicite si un dé manque ; état sérialis
   assert.equal(s.superiorite, 0);
   assert.equal(s2.superiorite, 1);
   assert.equal(ajusterSuperiorite(s2, -9).superiorite, 0);
+});
+
+// ---------------------------------------------------------------------------
+// Correctifs VERIF-I3 : un test ciblé par écart bloquant (page du livre citée)
+// ---------------------------------------------------------------------------
+
+test('F1 - un critique automatique exige une attaque qui touche (p. 188, 213-215, 357)', () => {
+  // (a) tir réussi contre un ennemi Surpris : critique auto (p. 214-215)
+  {
+    const des = desScriptes({ d100: [5], lancer: [['1d10', 3]] });
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'executeur'], { surprise: 'pj' }); // executeur surpris, p. 199
+    s = commencerRound(s); // round 0 : seule la PJ agit
+    s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'executeur', armeId: 'pistolet-laser' }, des));
+    // 05 = succès auto DR +4 (seuil CT 40, p. 187-188) ; dégâts 5+4-armure 5 = 4 ; critique auto vs Surpris (p. 214)
+    const e = participant(s, 'executeur');
+    assert.equal(e.blessures, 4);
+    assert.equal(e.critiques.length, 1);
+    assert.equal(e.critiques[0].localisation, 'jambe-d'); // unités du jet 05, p. 211
+    assert.equal(e.critiques[0].severite, 3);
+    assert.equal(e.etat, 'actif'); // Élite : 1re critique encaissée (p. 317)
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (b) tir raté (maladresse 99) contre un ennemi Surpris : aucun critique (p. 188, 213-215)
+  {
+    const des = desScriptes({ d100: [99], lancer: [['1d10', 2], ['1d10', 1]] });
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'executeur'], { surprise: 'pj' });
+    s = commencerRound(s);
+    s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'executeur', armeId: 'pistolet-laser' }, des));
+    const e = participant(s, 'executeur');
+    assert.equal(e.blessures, 0);
+    assert.equal(e.critiques.length, 0); // une attaque ratée ne fait jamais de critique auto (p. 213-215)
+    assert.ok(s.journal.some(j => j.type === 'maladresse')); // 99 = maladresse auto (p. 188) ; Reliable 1 < 4 (p. 125)
+    assert.equal(participant(s, 'helza').desavantageTour, true); // table de maladresse 2, p. 355
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (c) tir réussi contre une cible Neutralisée : dégâts mais PAS de critique auto (p. 357, mêlée seulement)
+  {
+    const des = desScriptes({ d100: [5], lancer: [] });
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'executeur']);
+    s = commencerRound(s); // ordre [helza (8), executeur (6)]
+    s = pur(s, st => appliquerEtat(st, { id: 'executeur', etat: 'neutralise' })); // p. 357
+    s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'executeur', armeId: 'pistolet-laser' }, des));
+    const e = participant(s, 'executeur');
+    assert.equal(e.blessures, 4); // 5 + DR4 - armure 5, p. 212
+    assert.equal(e.critiques.length, 0); // p. 357 : à distance, pas de critique auto contre une cible Incapable
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (d) mêlée contre une cible Neutralisée : critique auto (p. 357)
+  {
+    const des = desScriptes({ d100: [5], lancer: [['1d10', 4]] });
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'executeur']);
+    s = commencerRound(s);
+    s = pur(s, st => appliquerEtat(st, { id: 'executeur', etat: 'neutralise' }));
+    s = pur(s, st => attaquerMelee(st, { id: 'helza', cibleId: 'executeur', armeId: 'epee' }, des));
+    const e = participant(s, 'executeur');
+    // 05 = succès auto DR +4 (seuil Mêlée 42) ; dégâts 2+BF3+4-armure 5 = 4 ; critique auto en mêlée (p. 357)
+    assert.equal(e.blessures, 4);
+    assert.equal(e.critiques.length, 1);
+    assert.equal(e.critiques[0].localisation, 'jambe-d');
+    assert.equal(e.critiques[0].severite, 4);
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+});
+
+test('F2 - esquive en mêlée = test opposé Mêlée vs Réflexes (Esquive), dégâts = arme + BF + diff. DR (p. 211) ; riposte critique seulement en opposition (p. 213)', () => {
+  const des = desScriptes({ d100: [30, 70, 80, 30, 50, 22], lancer: [['1d10', 3], ['1d10', 5]] });
+  let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger'], { superioriteInitiale: 1 });
+  s = commencerRound(s); // ordre [helza (8), ganger (7)]
+  // (a) helza attaque, ganger esquive : test opposé ; 30 -> DR +1 vs 70 -> DR -3, helza gagne avec diff +4 (p. 190, 211)
+  s = pur(s, st => attaquerMelee(st, { id: 'helza', cibleId: 'ganger', armeId: 'epee', modeDefense: 'esquive' }, des));
+  assert.ok(s.journal.some(j => j.texte.includes('Test opposé (Réflexes (Esquive)'))); // p. 211
+  assert.equal(participant(s, 'ganger').blessures, 7); // 2+BF3 + diff DR 4 - armure 2 = 7, p. 211
+  assert.equal(participant(s, 'ganger').critiques.length, 0);
+  // (b) l'esquive peut aussi gagner le test opposé : 80 -> DR -4 vs 30 -> DR +1, ganger gagne, helza rate
+  s = pur(s, st => attaquerMelee(st, { id: 'helza', cibleId: 'ganger', armeId: 'epee', modeDefense: 'esquive' }, des));
+  assert.equal(participant(s, 'ganger').blessures, 7); // aucun dégât supplémentaire
+  // (c) riposte par coup critique seulement en défendant par la compétence Mêlée (opposition, p. 213) :
+  // helza 50 -> échec DR -1 ; ganger 22 -> double + succès = critique en défense -> riposte sur helza
+  s = pur(s, st => attaquerMelee(st, { id: 'helza', cibleId: 'ganger', armeId: 'epee' }, des)); // modeDefense 'opposition' par défaut
+  assert.equal(participant(s, 'ganger').blessures, 7); // helza a perdu le test opposé : pas de dégâts
+  const h = participant(s, 'helza');
+  assert.ok(s.journal.some(j => j.texte.includes('riposte par un coup critique'))); // p. 213
+  assert.equal(h.blessures, 1); // riposte au couteau : 0+BF3 +0 - armure 2 = 1, p. 211
+  assert.equal(h.critiques.length, 1);
+  assert.equal(s.superiorite, 0); // -1 : première blessure critique d'un PJ (p. 197)
+  assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+});
+
+test('F3 - Rapid Fire X (p. 125) : rapide-degats = Avantage + +X dégâts ; rapide-spread = Spread sans Avantage ; -X munitions dans les deux cas', () => {
+  const mk = () => {
+    const r = modifierProfil(reserveAvecHelza(), 'helza', { armes: ['fusil-automatique'] }); // Rapid Fire 3, chargeur 5, p. 133
+    let s = composerRencontre(r, ['helza', 'ganger'], { zones: ZONES2 });
+    return commencerRound(s); // ordre [helza (8), ganger (7)]
+  };
+  // (a) rapide-degats : 62 -> l'Avantage du mode permet d'inverser en 26 (DR +2) ; dégâts 6+3+2-2 = 9 ; -3 munitions
+  {
+    const des = desScriptes({ d100: [62] });
+    let s = mk();
+    s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'ganger', armeId: 'fusil-automatique', mode: 'rapide-degats', modeDefense: 'aucune' }, des));
+    assert.equal(s.enAttente?.type, 'inversion'); // Avantage du mode rapide-degats (p. 125, 189)
+    s = pur(s, st => choisirInversion(st, 'reverse', des));
+    assert.equal(participant(s, 'ganger').blessures, 9); // 6 + bonus X 3 + DR 2 - armure 2, p. 125, 212
+    assert.equal(participant(s, 'helza').munitionsParArme['fusil-automatique'], 2); // 5-3, p. 125
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (b) rapide-spread : aucun Avantage (62 reste 62, échec) ; -3 munitions quand même ; note Spread journalisée
+  {
+    const des = desScriptes({ d100: [62] });
+    let s = mk();
+    s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'ganger', armeId: 'fusil-automatique', mode: 'rapide-spread', modeDefense: 'aucune' }, des));
+    assert.equal(s.enAttente, null); // pas d'Avantage en mode Spread (p. 125)
+    assert.equal(participant(s, 'ganger').blessures, 0); // 62 -> DR -2, échec
+    assert.equal(participant(s, 'helza').munitionsParArme['fusil-automatique'], 2); // -3 munitions, p. 125
+    assert.ok(s.journal.some(j => j.texte.includes('Spread'))); // p. 125
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (c) rapide-spread : un tir réussi ne gagne pas les +X dégâts (6 + DR 1 - 2 = 5)
+  {
+    const des = desScriptes({ d100: [35] });
+    let s = mk();
+    s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'ganger', armeId: 'fusil-automatique', mode: 'rapide-spread', modeDefense: 'aucune' }, des));
+    assert.equal(participant(s, 'ganger').blessures, 5); // pas de bonus de dégâts en Spread, p. 125
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+});
+
+test('F4 - Mourant dès qu’un participant en jeu dépasse ses critiques max (p. 215) ; Endurance ne l’écrase pas ; le traitement stabilise (p. 215, 219)', () => {
+  const crit = { id: 'laceration', nom: 'Lacération', localisation: 'corps', severite: 3, traitementRequis: true, traitee: false, mortImmediate: false, blessure: null, page: 360 };
+  // (a) actif -> inconscient -> mourant -> mort en fin de round
+  {
+    const suivi = { blessures: 16, critiques: [crit, { ...crit }, { ...crit }], destin: 3, destinBrule: 0, etats: [] }; // 3 non traitées <= max 4
+    const des = desScriptes({ d100: [50, 45, 80, 45, 80], lancer: [['1d10', 8], ['1d10', 7]] });
+    let s = composerRencontre(reserveAvecHelza(suivi), ['helza', 'executeur']); // ordre [helza (8), executeur (6)]
+    s = commencerRound(s);
+    s = pur(s, st => testLibre(st, { id: 'helza', competence: 'Discrétion', caracFallback: 'Ag' }, des)); // 50, sans importance
+    s = pur(s, st => passerTour(st, des)); // tour de l'exécuteur
+    // coup 1 : matraque 2+BF4+DR1-armure 2 = 5 dégâts, excédent 5 -> 4e critique (<= max) ; Endurance 80 échoue -> Inconscient
+    s = pur(s, st => attaquerMelee(st, { id: 'executeur', cibleId: 'helza', armeId: 'electro-matraque', modeDefense: 'aucune' }, des));
+    let h = participant(s, 'helza');
+    assert.equal(h.critiques.length, 4);
+    assert.equal(h.etat, 'inconscient'); // p. 214, 357 : test d'Endurance (Douleur) échoué
+    // fin du round courant : pas Mourant -> elle survit ; round suivant, helza Inconsciente (tour sauté), l'exécuteur agit
+    s = pur(s, st => passerTour(st, des));
+    assert.equal(s.round, 2);
+    assert.equal(acteurCourant(s).id, 'executeur');
+    // coup 2 : cible Inconsciente -> pas d'opposition + critique auto en mêlée (p. 357) -> 5e critique > max 4 -> Mourant
+    s = pur(s, st => attaquerMelee(st, { id: 'executeur', cibleId: 'helza', armeId: 'electro-matraque' }, des));
+    h = participant(s, 'helza');
+    assert.equal(h.critiques.length, 5);
+    // p. 215 : Mourant dès que le participant est en jeu et non traitées > max, même s'il était Inconscient
+    assert.equal(h.etat, 'mourant');
+    // le test d'Endurance (Douleur) répété (80) échoue mais n'écrase pas Mourant en Inconscient (p. 214-215)
+    assert.equal(h.etat, 'mourant');
+    s = pur(s, st => passerTour(st, des)); // fin du round 1 : le Mourant meurt, p. 215
+    assert.equal(participant(s, 'helza').etat, 'mort');
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (b) un Mourant est stabilisé quand les critiques non traitées repassent <= max (p. 215, 219)
+  {
+    const suivi = { blessures: 16, critiques: [crit, { ...crit }, { ...crit }, { ...crit }, { ...crit }], destin: 3, destinBrule: 0, etats: [] }; // 5 > max 4
+    let r = reserveAvecHelza(suivi);
+    r = modifierProfil(r, 'helza', { carac: { Per: 20, Ag: 20 } }); // init 4 : l'exécuteur (6) agit avant elle
+    r = ajouterProfil(r, {
+      id: 'medicae', nom: 'Medicae', kind: 'PJ', camp: 'pj', taille: 'moyenne', vitesse: 'normale',
+      carac: { CC: 30, CT: 30, F: 30, E: 30, Ag: 30, Int: 40, Per: 20, FM: 30, Soc: 30 },
+      competences: { Médecine: 60 }, armure: 0, armes: ['couteau'], resolution: 3, destinMax: 3
+    }); // init 5
+    // sévérité 2+5 = 7 (jambe-d) -> Fracture nette : aucun état à effet de tour, pas de dé supplémentaire
+    const des = desScriptes({ d100: [45, 80, 30, 30], lancer: [['1d10', 2]] });
+    let s = composerRencontre(r, ['helza', 'medicae', 'executeur']); // ordre [executeur (6), medicae (5), helza (4)]
+    s = commencerRound(s);
+    assert.equal(acteurCourant(s).id, 'executeur');
+    // l'exécuteur inflige une 6e critique -> Mourant (non traitées 6 > 4) ; Endurance échoue, elle reste Mourante
+    s = pur(s, st => attaquerMelee(st, { id: 'executeur', cibleId: 'helza', armeId: 'electro-matraque', modeDefense: 'aucune' }, des));
+    assert.equal(participant(s, 'helza').etat, 'mourant');
+    assert.equal(participant(s, 'helza').critiques.length, 6);
+    s = pur(s, st => passerTour(st, des)); // tour de medicae
+    assert.equal(acteurCourant(s).id, 'medicae');
+    // 1er traitement (30 -> DR +3) : 5 non traitées, toujours > 4 -> toujours Mourante (p. 219)
+    s = pur(s, st => traiterCritique(st, { id: 'medicae', cibleId: 'helza' }, des));
+    assert.equal(participant(s, 'helza').critiques.filter(c => c.traitee).length, 1);
+    assert.equal(participant(s, 'helza').etat, 'mourant');
+    // 2e traitement : 4 non traitées <= max 4 -> stabilisée, de nouveau active (p. 215, 219)
+    s = pur(s, st => traiterCritique(st, { id: 'medicae', cibleId: 'helza' }, des));
+    assert.equal(participant(s, 'helza').critiques.filter(c => c.traitee).length, 2);
+    assert.equal(participant(s, 'helza').etat, 'actif');
+    assert.ok(s.journal.some(j => j.texte.includes('stabilisé')));
+    // fin du round : plus de Mourant -> helza survit au changement de round (p. 215)
+    s = pur(s, st => passerTour(st, des)); // tour d'helza
+    s = pur(s, st => passerTour(st, des)); // fin du round -> round suivant
+    assert.equal(s.round, 2);
+    assert.equal(participant(s, 'helza').etat, 'actif');
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+});
+
+test('F5 - fuite (p. 208) : -1 Supériorité seulement pour un membre du groupe PJ ; un ennemi qui fuit est vaincu (p. 197)', () => {
+  // (a) PJ qui fuit : -1 Supériorité (p. 197, 208)
+  {
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger'], { superioriteInitiale: 2 });
+    s = commencerRound(s); // ordre [helza (8), ganger (7)]
+    s = pur(s, st => fuir(st, { id: 'helza' }));
+    assert.equal(participant(s, 'helza').etat, 'fui');
+    assert.equal(s.superiorite, 1); // p. 197 : un membre du groupe mis hors combat -> -1
+  }
+  // (b) Troupe ennemie qui fuit : compte comme vaincue, +1 Supériorité si >= Résolution (p. 197, 208)
+  {
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger'], { superioriteInitiale: 0 });
+    s = commencerRound(s);
+    s = pur(s, st => engager(st, 'helza', 'ganger'));
+    s = pur(s, st => passerTour(st)); // tour du ganger
+    assert.equal(acteurCourant(s).id, 'ganger');
+    s = pur(s, st => fuir(st, { id: 'ganger' }));
+    assert.equal(participant(s, 'ganger').etat, 'fui');
+    assert.deepEqual(s.engages, []); // retiré des engagements, p. 208
+    assert.equal(s.superiorite, 1); // 1 Troupe vaincue >= Résolution 1 -> +1, p. 197
+  }
+  // (c) Élite ennemie qui fuit : +1 Supériorité (p. 197)
+  {
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'executeur'], { superioriteInitiale: 0 });
+    s = commencerRound(s);
+    s = pur(s, st => passerTour(st)); // tour de l'exécuteur (init 6 < 8)
+    s = pur(s, st => fuir(st, { id: 'executeur' }));
+    assert.equal(participant(s, 'executeur').etat, 'fui');
+    assert.equal(s.superiorite, 1); // Élite vaincue -> +1, p. 197
+  }
+});
+
+test('F6 - déplacements inter-zones (p. 199-200), bonus à un seul test (p. 208, 220), visée (p. 207), Destin non débité si effet invalide (p. 220)', () => {
+  // (a) deplacerZone ne rompt que les engagements inter-zones (p. 199-200)
+  {
+    const zones3 = [...ZONES2, { id: 'zone-3', nom: 'Zone 3', traits: [] }];
+    let s = composerRencontre(reserveAvecHelza(), [
+      { id: 'helza', zoneId: 'zone-1' }, { id: 'ganger', zoneId: 'zone-1' },
+      { id: 'executeur', zoneId: 'zone-2' }, { id: 'ganger', zoneId: 'zone-2' } // 2e ganger -> id « ganger-2 »
+    ], { zones: zones3 });
+    s = pur(s, st => engager(st, 'helza', 'ganger'));
+    s = pur(s, st => engager(st, 'executeur', 'ganger-2'));
+    s = pur(s, st => deplacerZone(st, 'ganger', 'zone-3'));
+    // helza-ganger devient inter-zones -> rompu ; executeur-ganger-2 (même zone) est conservé
+    assert.deepEqual(s.engages, [['executeur', 'ganger-2']]);
+  }
+  // (b) l'Avantage « au prochain test » est consommé par un seul test (p. 208, 220)
+  {
+    const des = desScriptes({ d100: [45, 45] });
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger']);
+    s = commencerRound(s);
+    s = pur(s, st => aider(st, { id: 'helza', cibleId: 'helza' })); // p. 208
+    assert.equal(participant(s, 'helza').avantageProchainTest, true);
+    s = pur(s, st => testLibre(st, { id: 'helza', competence: 'Discrétion', caracFallback: 'Ag' }, des)); // 45
+    assert.equal(participant(s, 'helza').avantageProchainTest, false); // consommé après un seul test
+    s = pur(s, st => testLibre(st, { id: 'helza', competence: 'Discrétion', caracFallback: 'Ag' }, des)); // 45, sans avantage
+    assert.equal(participant(s, 'helza').avantageProchainTest, false);
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (c) « Pour l'Empereur » ne vaut que pour un seul test (p. 220)
+  {
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger']);
+    s = commencerRound(s);
+    s = pur(s, st => brulerDestin(st, 'helza', 'pourEmpereur', { jet: 15 }));
+    const desVide = desScriptes({ d100: [] });
+    s = pur(s, st => testLibre(st, { id: 'helza', competence: 'Discrétion', caracFallback: 'Ag' }, desVide)); // jet choisi 15, aucun d100 consommé
+    assert.equal(s.dernierTest.ap.jet, 15);
+    assert.equal(participant(s, 'helza').destinPourEmpereur, null); // consommé, p. 220
+    // le test suivant retombe sur le fournisseur de dés -> RangeError s'il est vide
+    assert.throws(() => testLibre(s, { id: 'helza', competence: 'Discrétion', caracFallback: 'Ag' }, desScriptes({ d100: [] })), RangeError);
+  }
+  // (d) Viser (p. 207) : localisation ciblée sans pénalité au prochain tir
+  {
+    const des = desScriptes({ d100: [35] });
+    let s = composerRencontre(reserveAvecHelza(), [{ id: 'helza', zoneId: 'zone-1' }, { id: 'ganger', zoneId: 'zone-2' }], { zones: ZONES2 });
+    s = commencerRound(s);
+    // distance Moyenne = portée du pistolet-laser (p. 202, 132) ; sans Viser, cibleLocalisation = Désavantage (p. 210)
+    s = pur(s, st => viser(st, { id: 'helza' })); // p. 207
+    s = pur(s, st => attaquerDistance(st, { id: 'helza', cibleId: 'ganger', armeId: 'pistolet-laser', cibleLocalisation: 'tete', modeDefense: 'aucune' }, des));
+    assert.equal(s.enAttente, null); // pas d'inversion imposée : pas de Désavantage (p. 207)
+    assert.ok(s.journal.some(j => j.texte.includes(' 35 :'))); // jet 35 gardé (inversé, 53 raterait)
+    assert.equal(participant(s, 'ganger').blessures, 4); // 5 + DR1 - armure 2, p. 212 ; localisation tête visée
+    assert.equal(participant(s, 'helza').viseeActive, false); // perdue après le tir, p. 207
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (e) depenserDestin ne débite le point que si l'effet est valide (p. 220)
+  {
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger']);
+    s = commencerRound(s);
+    let r = depenserDestin(s, 'helza', 'relancer', {}, desScriptes({})); // aucun test échoué à relancer
+    assert.equal(r.journal.at(-1).type, 'erreur');
+    assert.equal(participant(r, 'helza').destin, 3); // pas de point perdu, p. 220
+    r = depenserDestin(s, 'helza', 'plus1DR'); // aucun dernier test
+    assert.equal(r.journal.at(-1).type, 'erreur');
+    assert.equal(participant(r, 'helza').destin, 3);
+  }
+});
+
+test('points mineurs - Réaction jusqu’au prochain tour de l’acteur (p. 199), ré-infliction majeure (p. 356), Charge (p. 207), Heavy en mêlée (p. 124)', () => {
+  // (a) la Réaction utilisée après le tour du PJ persiste jusqu’au début de SON prochain tour (p. 199)
+  {
+    const des = desScriptes({ d100: [50, 60, 30] });
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger', 'executeur']); // ordre [helza (8), ganger (7), executeur (6)]
+    s = commencerRound(s);
+    s = pur(s, st => testLibre(st, { id: 'helza', competence: 'Discrétion', caracFallback: 'Ag' }, des)); // 50
+    s = pur(s, st => passerTour(st, des)); // tour du ganger
+    s = pur(s, st => prendreInitiative(st, { id: 'ganger' })); // p. 209 : ganger en haut au prochain round
+    // ganger tire : helza esquive, sa Réaction est consommée (p. 212)
+    s = pur(s, st => attaquerDistance(st, { id: 'ganger', cibleId: 'helza', armeId: 'fusil-automatique' }, des)); // 60 att, 30 esquive
+    assert.equal(participant(s, 'helza').reactionUtilisee, true);
+    s = pur(s, st => passerTour(st, des)); // tour de l'exécuteur
+    s = pur(s, st => passerTour(st, des)); // fin du round -> round suivant, ordre [ganger, helza, executeur]
+    assert.equal(s.round, 2);
+    assert.equal(acteurCourant(s).id, 'ganger');
+    // le drapeau d'helza n'est pas remis à zéro au changement de round : seulement à son début de tour (p. 199)
+    assert.equal(participant(s, 'helza').reactionUtilisee, true);
+    s = pur(s, st => passerTour(st, des)); // début du tour d'helza
+    assert.equal(acteurCourant(s).id, 'helza');
+    assert.equal(participant(s, 'helza').reactionUtilisee, false);
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (b) subir à nouveau une Condition à paliers la fait passer à Majeur (p. 356)
+  {
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger']);
+    s = commencerRound(s);
+    s = pur(s, st => appliquerEtat(st, { id: 'ganger', etat: 'sonne', niveau: 'mineur' }));
+    s = pur(s, st => appliquerEtat(st, { id: 'ganger', etat: 'sonne', niveau: 'mineur' }));
+    assert.deepEqual(participant(s, 'ganger').etats.filter(e => e.id === 'sonne'), [{ id: 'sonne', niveau: 'majeur' }]); // p. 356
+  }
+  // (c) Charge (p. 207) : malus de défense jusqu’au prochain tour, aussi aux tests de Réflexes (Esquive)
+  {
+    const des = desScriptes({ d100: [35, 30, 45] });
+    let s = composerRencontre(reserveAvecHelza(), ['helza', 'ganger']);
+    s = commencerRound(s); // ordre [helza (8), ganger (7)]
+    // helza charge : Avantage à l'attaque et malus de défense jusqu'à son prochain tour (p. 207)
+    s = pur(s, st => attaquerMelee(st, { id: 'helza', cibleId: 'ganger', armeId: 'epee', modeDefense: 'aucune', charge: true }, des)); // 35
+    assert.equal(participant(s, 'helza').chargeMalusDefense, true); // p. 207
+    assert.equal(participant(s, 'ganger').blessures, 5); // 2+BF3 + DR2 - armure 2, p. 211
+    s = pur(s, st => passerTour(st, des)); // tour du ganger : le malus d'helza persiste (reset à SON début de tour)
+    assert.equal(participant(s, 'helza').chargeMalusDefense, true);
+    // ganger attaque en esquivant : le malus de Charge s'applique au test de Réflexes (Esquive), p. 207
+    s = pur(s, st => attaquerMelee(st, { id: 'ganger', cibleId: 'helza', armeId: 'couteau', modeDefense: 'esquive' }, des)); // 30 att, 45 esquive
+    assert.ok(s.journal.some(j => j.texte.includes('Test opposé (Réflexes (Esquive)')));
+    // helza 45 -> Désavantage imposé (charge) -> 54 -> échec ; ganger 30 -> DR +1 gagne le test opposé, diff +1
+    assert.equal(participant(s, 'helza').blessures, 2); // couteau 0+BF3 +1 - armure 2 = 2, p. 211
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
+  // (d) Heavy en mêlée (p. 124) : arme Heavy (4) avec BF 3 < 4 -> Désavantage imposé au test d'attaque
+  {
+    let r = modifierProfil(reserveAvecHelza(), 'helza', { armes: ['arme-lourde'] }); // Heavy (4), p. 128
+    const des = desScriptes({ d100: [38, 90] });
+    let s = composerRencontre(r, ['helza', 'ganger']);
+    s = commencerRound(s);
+    s = pur(s, st => attaquerMelee(st, { id: 'helza', cibleId: 'ganger', armeId: 'arme-lourde' }, des)); // 38 att, 90 def
+    assert.ok(s.journal.some(j => j.texte.includes(' 83 :'))); // 38 -> 83, inversion imposée par Heavy (p. 124, 189)
+    // 83 -> DR -4 (échec) mais helza gagne le test opposé (90 -> DR -5), diff +1 -> touche, p. 190, 213
+    assert.equal(participant(s, 'ganger').blessures, 6); // 4+BF3 +1 - armure 2 = 6, p. 211
+    assert.deepEqual(des.restants(), { d100: 0, lancer: 0 });
+  }
 });

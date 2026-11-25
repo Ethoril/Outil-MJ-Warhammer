@@ -124,6 +124,26 @@ function resolutionEffective(state, p) {
   return p.resolution ?? null; // p. 323 : null -> jamais Désespéré
 }
 
+/** Gains de Supériorité quand un ennemi est vaincu/mis hors combat (p. 197 : un ennemi mort, incapacité, qui se rend ou fuit est vaincu). */
+function gainsDefaiteEnnemi(s, p) {
+  let r = s;
+  if (p.role === 'chef' || p.role === 'elite') {
+    r = ajusterSuperioriteInterne(r, +1, `${p.nom} (${p.role === 'chef' ? 'Chef' : 'Élite'}) vaincu : +1 Supériorité (p. 197).`);
+  } else if (p.role === 'troupe') {
+    const res = resolutionEffective(r, p) ?? 0;
+    const n = r.troupesVaincuesCeRound + 1;
+    // p. 197 : vaincre un nombre de Troupes >= leur Résolution en un même tour -> +1
+    // (choix : « tour » lu comme le round courant, voir troupesVaincuesCeRound)
+    if (res > 0 && n >= res) {
+      r = ajusterSuperioriteInterne(r, +1, `${n} Troupe(s) vaincue(s) (>= Résolution ${res}) ce round : +1 Supériorité (p. 197).`);
+      r = { ...r, troupesVaincuesCeRound: 0 };
+    } else {
+      r = { ...r, troupesVaincuesCeRound: n };
+    }
+  }
+  return r;
+}
+
 /** Changement d'état avec gains/pertes automatiques de Supériorité (p. 197). */
 function appliquerChangementEtat(s, id, etat) {
   const p = participant(s, id);
@@ -137,20 +157,7 @@ function appliquerChangementEtat(s, id, etat) {
   let r = maj(s, id, { etat });
   if (etat === 'vaincu' || etat === 'mort') {
     if (p.camp !== 'pj') {
-      if (p.role === 'chef' || p.role === 'elite') {
-        r = ajusterSuperioriteInterne(r, +1, `${p.nom} (${p.role === 'chef' ? 'Chef' : 'Élite'}) vaincu : +1 Supériorité (p. 197).`);
-      } else if (p.role === 'troupe') {
-        const res = resolutionEffective(r, p) ?? 0;
-        const n = r.troupesVaincuesCeRound + 1;
-        // p. 197 : vaincre un nombre de Troupes >= leur Résolution en un même tour -> +1
-        // (choix : « tour » lu comme le round courant, voir troupesVaincuesCeRound)
-        if (res > 0 && n >= res) {
-          r = ajusterSuperioriteInterne(r, +1, `${n} Troupe(s) vaincue(s) (>= Résolution ${res}) ce round : +1 Supériorité (p. 197).`);
-          r = { ...r, troupesVaincuesCeRound: 0 };
-        } else {
-          r = { ...r, troupesVaincuesCeRound: n };
-        }
-      }
+      r = gainsDefaiteEnnemi(r, p); // p. 197 : un ennemi vaincu/mort rapporte de la Supériorité
     } else {
       r = ajusterSuperioriteInterne(r, -1, `${p.nom} (PJ) vaincu : -1 Supériorité (p. 197).`);
     }
@@ -174,8 +181,7 @@ function appliquerEtatInterne(s, id, etatId, niveau = 'mineur') {
     const existant = p.etats.find(e => e.id === etatId);
     if (existant) {
       // p. 356 : subir à nouveau la Condition fait passer à l'effet Majeur
-      const nouveau = (existant.niveau === 'majeur' || niv === 'majeur') ? 'majeur' : 'mineur';
-      etats = p.etats.map(e => (e.id === etatId ? { id: etatId, niveau: nouveau } : e));
+      etats = p.etats.map(e => (e.id === etatId ? { id: etatId, niveau: 'majeur' } : e));
     } else {
       etats = [...p.etats, { id: etatId, niveau: niv }];
     }
@@ -251,8 +257,9 @@ function enregistrerCritique(s, id, localisation, severite) {
     // p. 317 : une Élite est vaincue par sa deuxième blessure critique
     r = appliquerChangementEtat(r, id, 'vaincu');
     r = noter(r, `${q.nom} (Élite) est vaincu par sa deuxième blessure critique (p. 317).`, 'alerte');
-  } else if (q.etat === 'actif' && critiquesNonTraitees(q) > q.critiquesMax) {
+  } else if (enJeu(q) && critiquesNonTraitees(q) > q.critiquesMax) {
     // p. 215 : Mourant si les critiques non traitées dépassent le bonus d'E (critiquesMax = bonus E pour PJ/Chef, p. 88)
+    // (peu importe que le participant soit déjà Inconscient : Mourant s'applique à tout participant en jeu)
     r = maj(r, id, { etat: 'mourant' });
     r = noter(r, `${q.nom} est Mourant (critiques non traitées ${critiquesNonTraitees(q)} > ${q.critiquesMax}, p. 215).`, 'alerte');
   }
@@ -299,15 +306,16 @@ function appliquerDegatsCible(s, cibleId, { degats, coupCritique, retenirCoups =
       r = noter(r, `${participant(r, cibleId).nom} subit la condition ${inflict.valeur} (Inflict, p. 124).`, 'etat');
     }
   }
-  // p. 214 : blessures au maximum -> test d'Endurance (Douleur) Challenging (+0) ou inconscient
+  // p. 214 : blessures au maximum -> test d'Endurance (Douleur) Intermédiaire (+0) ou inconscient ;
+  // le test se répète à chaque nouveau coup qui blesse, même si ce coup rend Mourant (p. 214-215)
   const c2 = participant(r, cibleId);
   // p. 214 : le test d'Endurance (Douleur) est dû dès que les blessures atteignent le maximum
-  // (« Repeat this Test each time you receive further Wounds »), même si le même coup rend Mourant
+  // (le test se répète à chaque coup suivant), même si le même coup rend Mourant
   if (res.jetEnduranceRequis && enJeu(c2)) r = testEnduranceDouleur(r, cibleId, des);
   return { state: r, res };
 }
 
-/** Test d'Endurance (Douleur) à blessures max (p. 214) : E Challenging (+0) = Intermédiaire (p. 188). */
+/** Test d'Endurance (Douleur) à blessures max (p. 214) : E Intermédiaire (+0) (p. 188). */
 function testEnduranceDouleur(s, id, des) {
   const p = participant(s, id);
   const seuil = seuilDe(p, 'Endurance (Douleur)', 'E'); // p. 214, 316
@@ -315,9 +323,13 @@ function testEnduranceDouleur(s, id, des) {
   const ap = prevoirTest({ seuil, jet, difficulte: 'intermediaire', kind: 'test' });
   let r = noter(s, `${p.nom} — Endurance (Douleur) ${seuil} : ${String(ap.jet).padStart(2, '0')} -> ${ap.reussi ? 'succès' : 'échec'} (DR ${ap.dr >= 0 ? '+' : ''}${ap.dr}, p. 214).`, 'test');
   if (!ap.reussi) {
-    r = maj(r, id, { etat: 'inconscient' });
-    r = appliquerEtatInterne(r, id, 'a-terre'); // p. 357 : Inconscient -> À terre + Incapacitated
-    r = noter(r, `${p.nom} perd connaissance (p. 214, 357).`, 'alerte');
+    const q = participant(r, id);
+    // p. 215 : un Mourant qui échoue reste Mourant (mort en fin de round), pas Inconscient
+    if (enJeu(q) && q.etat !== 'mourant') {
+      r = maj(r, id, { etat: 'inconscient' });
+      r = appliquerEtatInterne(r, id, 'a-terre'); // p. 357 : Inconscient -> À terre + incapacité
+      r = noter(r, `${p.nom} perd connaissance (p. 214, 357).`, 'alerte');
+    }
   }
   return r;
 }
@@ -340,7 +352,8 @@ function appliquerDegatsIgnorantArmure(s, id, degats, des, { arreterApresCritiqu
     if (arreterApresCritique) r = retirerEtatInterne(r, id, arreterApresCritique);
   }
   const q = participant(r, id);
-  if (enJeu(q) && q.etat === 'actif' && critiquesNonTraitees(q) > q.critiquesMax) {
+  if (enJeu(q) && critiquesNonTraitees(q) > q.critiquesMax) {
+    // p. 215 : Mourant si les critiques non traitées dépassent le maximum, quel que soit l'état en jeu
     r = maj(r, id, { etat: 'mourant' });
     r = noter(r, `${q.nom} est Mourant (critiques non traitées > ${q.critiquesMax}, p. 215).`, 'alerte');
   }
@@ -366,7 +379,7 @@ function appliquerMaladresse(s, id, arme, des) {
   const p = participant(s, id);
   const jet = lancerDes(des, '1d10', { id, motif: 'maladresse' }); // p. 355 : table 1d10
   let r = s;
-  // p. 125 : Reliable — sur un Fumble, 1d10, sur 4+ la maladresse est ignorée
+  // p. 125 : Reliable — sur une maladresse, 1d10, sur 4+ la maladresse est ignorée
   if (aTrait(arme, 'reliable')) {
     const jetR = lancerDes(des, '1d10', { id, motif: 'reliable' });
     if (jetR >= 4) return noter(r, `Maladresse de ${p.nom} (1d10=${jet}) annulée par Reliable (1d10=${jetR} >= 4, p. 125).`, 'resultat');
@@ -418,13 +431,13 @@ function appliquerMaladresse(s, id, arme, des) {
     case 'sonneOuHemorragique': // p. 355 : au choix du MJ ; défaut Sonné (choix noté)
       r = appliquerEtatInterne(r, id, 'sonne');
       break;
-    case 'toucheAllie': { // p. 355 : touche un allié à portée avec +0 SL, localisation aléatoire ; soi-même sinon
+    case 'toucheAllie': { // p. 355 : touche un allié à portée avec +0 DR, localisation aléatoire ; soi-même sinon
       const allies = s.participants.filter(q => q.id !== id && q.camp === p.camp && enJeu(q) && q.zoneId === p.zoneId);
       const cible = allies[0] ?? p; // allié déterministe (premier de la liste), soi-même s'il n'y en a pas
       const loc = localisationDuJet(lancerDes(des, '1d10', { id, motif: 'touche-allie' }));
       const degatsBase = (arme?.degatsBase ?? 0) + (arme?.ajouteBF ? bonusCarac(p.carac.F) : 0);
       const deg = resoudreDegats({ degatsBase, dr: 0, armureEffective: armureDe(cible, loc) });
-      r = noter(r, `${p.nom} touche ${cible.nom} avec +0 SL (maladresse 10, p. 355).`, 'alerte');
+      r = noter(r, `${p.nom} touche ${cible.nom} avec +0 DR (maladresse 10, p. 355).`, 'alerte');
       r = appliquerDegatsCible(r, cible.id, { degats: deg, coupCritique: false, retenirCoups: true, localisation: loc, arme: null, des }).state;
       break;
     }
@@ -539,7 +552,7 @@ function cleReflexes(p) {
 function trierOrdre(state, ids) {
   return [...ids].sort((a, b) => {
     const pa = participant(state, a), pb = participant(state, b);
-    if (pa.saisirInitProchainRound !== pb.saisirInitProchainRound) return pa.saisirInitProchainRound ? -1 : 1; // p. 209 : Seize the Initiative en haut
+    if (pa.saisirInitProchainRound !== pb.saisirInitProchainRound) return pa.saisirInitProchainRound ? -1 : 1; // p. 209 : saisir l'initiative place en haut
     if (pa.maladresseInitBas !== pb.maladresseInitBas) return pa.maladresseInitBas ? 1 : -1; // p. 355 : maladresse 1 en bas
     if (pb.initiative !== pa.initiative) return pb.initiative - pa.initiative; // p. 198 : Initiative décroissante
     return cleReflexes(pb) - cleReflexes(pa); // p. 198 : Réflexes décroissant
@@ -561,7 +574,7 @@ function reordonnerEgalite(s, a, b, gagnant) {
   if (ia === -1 || ib === -1) return s;
   const autre = gagnant === a ? b : a;
   ordre.splice(Math.max(ia, ib), 1);
-  ordre.splice(ia, 1);
+  ordre.splice(Math.min(ia, ib), 1);
   ordre.splice(Math.min(ia, ib), 0, gagnant, autre);
   return { ...s, ordre };
 }
@@ -592,8 +605,12 @@ function commencerRoundInterne(state, ordreEgalites, des) {
     roundSurprise: surpriseEnCours,
     troupesVaincuesCeRound: 0,
     enAttente: null,
+    // p. 209 (saisir l'initiative) et p. 355 (maladresse 1) sont consommés par ce tri ;
+    // les drapeaux de tour (Réaction p. 199, Charge p. 207, Esquive p. 208, Destin p. 220, maladresse 2
+    // p. 355) durent « jusqu'au début de votre prochain tour » de chaque acteur : ils ne sont remis à
+    // zéro que dans debutTour, au début du tour de chaque acteur, et jamais pour tous au changement de round.
     participants: state.participants.map(p => (enJeu(p)
-      ? { ...p, reactionUtilisee: false, superioriteUtiliseeCeTour: false, chargeMalusDefense: false, esquiveActive: false, ignoreCritiquesTour: false, desavantageTour: false, saisirInitProchainRound: false, maladresseInitBas: false, destinPourEmpereur: null }
+      ? { ...p, saisirInitProchainRound: false, maladresseInitBas: false }
       : p))
   };
   next = noter(next, `Round ${round}${surpriseEnCours ? ' (surprise, p. 199)' : ''} — ordre : ${ordre.map(id => `${participant(next, id).nom} (Init ${participant(next, id).initiative})`).join(', ')}.`, 'round');
@@ -718,7 +735,9 @@ export function deplacerZone(state, id, zoneId) {
   if (!p) return noter(state, `Participant introuvable : ${id}.`, 'erreur');
   if (!state.zones.some(z => z.id === zoneId)) return noter(state, `Zone inconnue : ${zoneId}.`, 'erreur');
   let s = maj(state, id, { zoneId, couvertActif: null, viseeActive: false });
-  s = { ...s, engages: s.engages.filter(([a, b]) => participant(s, a)?.zoneId === zoneId && participant(s, b)?.zoneId === zoneId) };
+  // p. 199-200 : un engagement exige d'être dans la même zone ; on ne garde que les engagements
+  // dont les deux participants partagent encore une zone (les engagements inter-zones sont rompus)
+  s = { ...s, engages: s.engages.filter(([a, b]) => participant(s, a)?.zoneId === participant(s, b)?.zoneId) };
   return noter(s, `${p.nom} se déplace vers ${state.zones.find(z => z.id === zoneId).nom} (p. 199-200).`, 'action');
 }
 
@@ -753,8 +772,22 @@ export function desengager(state, idA, idB) {
 /** Avantages d'un acteur (aide p. 189/208, Destin p. 220). */
 function collecterAvantages(p, base = []) {
   const avantages = [...base];
-  if (p.avantageProchainTest) avantages.push('aide'); // p. 189, 208 : Help -> Avantage
+  if (p.avantageProchainTest) avantages.push('aide'); // p. 189, 208 : aider -> Avantage
   return avantages;
+}
+
+/**
+ * Consomme les bonus « au prochain test » d'un participant après son test : l'Avantage d'aide ne vaut
+ * que pour le prochain test (p. 208, 220) et « Pour l'Empereur » ne remplace le résultat que d'un seul
+ * test (p. 220).
+ */
+function consommerBonusTest(s, id) {
+  const p = participant(s, id);
+  if (!p) return s;
+  const changement = {};
+  if (p.avantageProchainTest) changement.avantageProchainTest = false;
+  if (p.destinPourEmpereur !== null && p.destinPourEmpereur !== undefined) changement.destinPourEmpereur = null;
+  return Object.keys(changement).length ? maj(s, id, changement) : s;
 }
 
 /** Désavantages d'un acteur (maladresse 2, p. 355). */
@@ -802,7 +835,7 @@ function porteeArmeEffective(p, arme) {
  * Coût en munitions et effets d'un mode de tir (p. 123-125).
  * - normal : 1 mun, sauf arme Burst/Rapid Fire (p. 123 : ne consomme que si l'on utilise ces traits) ;
  * - rafale (Burst) : +1 DR, +1 mun (p. 124) ; Rapid Fire vaut toujours Burst (p. 124-125) ;
- * - rapide-spread / rapide-degats (Rapid Fire X) : X mun, Avantage ou +X dégâts (p. 125) ;
+ * - rapide-spread / rapide-degats (Rapid Fire X) : X mun, au choix Spread ou Avantage + X dégâts (p. 125) ;
  * - surcharger (Supercharge X) : +X dégâts, munitions doublées (p. 125).
  */
 function coutMode(arme, mode) {
@@ -810,34 +843,35 @@ function coutMode(arme, mode) {
   const base = aBurst ? 0 : 1; // p. 123
   switch (mode) {
     case 'normal':
-      return { cout: base, bonusDR: 0, bonusDegats: 0, avantages: [] };
+      return { cout: base, bonusDR: 0, bonusDegats: 0, avantages: [], spread: false };
     case 'rafale': {
       if (!aBurst) return null; // Burst requis (p. 124)
-      return { cout: base + 1, bonusDR: 1, bonusDegats: 0, avantages: [] }; // +1 SL, -1 mun, p. 124
+      return { cout: base + 1, bonusDR: 1, bonusDegats: 0, avantages: [], spread: false }; // +1 DR, -1 mun, p. 124
     }
     case 'rapide-spread':
     case 'rapide-degats': {
       const rf = traitDe(arme, 'rapid-fire');
       if (!rf) return null; // Rapid Fire requis (p. 125)
       const x = Number(rf.valeur) || 0;
-      // p. 125 : -X munitions (magazine >= X exigé, vérifié par le test munitions) ; au choix Spread ou +X dégâts
+      // p. 125 : -X munitions (chargeur >= X exigé, vérifié par le test munitions) ; au choix :
+      // Spread (sans Avantage) OU Avantage à l'attaque ET +X dégâts
       return mode === 'rapide-degats'
-        ? { cout: x, bonusDR: 0, bonusDegats: x, avantages: [] }
-        : { cout: x, bonusDR: 0, bonusDegats: 0, avantages: ['rapid-fire'] };
+        ? { cout: x, bonusDR: 0, bonusDegats: x, avantages: ['rapid-fire'], spread: false } // Avantage + +X dégâts, p. 125
+        : { cout: x, bonusDR: 0, bonusDegats: 0, avantages: [], spread: true }; // Spread, p. 125
     }
     case 'surcharger': {
       const sc = traitDe(arme, 'supercharge');
       if (!sc) return null; // Supercharge requis (p. 125)
-      // p. 125 : « doubling the ammunition expended » ; une attaque surchargée est un tir réel (min 1 mun), doublé.
+      // p. 125 : les munitions dépensées sont doublées ; une attaque surchargée est un tir réel (min 1 mun), doublé.
       // (choix : 2 munitions même pour une arme Burst/Rapid Fire dont le tir normal est gratuit, p. 123)
-      return { cout: 2 * Math.max(1, base), bonusDR: 0, bonusDegats: Number(sc.valeur) || 0, avantages: [] };
+      return { cout: 2 * Math.max(1, base), bonusDR: 0, bonusDegats: Number(sc.valeur) || 0, avantages: [], spread: false };
     }
     default:
       return null;
   }
 }
 
-/** Entrées d'un aperçu pour re-jouer prevoirTest (relancer de dés / +1 SL, p. 220). */
+/** Entrées d'un aperçu pour re-jouer prevoirTest (relancer de dés / +1 DR, p. 220). */
 function inputsDe(ap) {
   return {
     seuil: ap.seuil, jet: ap.jet, difficulte: ap.difficulte, kind: ap.kind, bonusDR: ap.bonusDR,
@@ -875,7 +909,7 @@ function enAttenteInversion(s, action, params, apercus, inversions) {
  * Attaque de mêlée (p. 211) : test de Mêlée opposé (ou Réflexes (Esquive), ou aucune opposition),
  * engagement automatique (p. 212), Charge (Avantage + malus de défense, p. 207), surnombre 2:1
  * (Avantage, p. 214), cible incapable (surprise/inconscient/neutralisé : pas d'opposition, critique
- * auto, p. 199, 214, 357), critique/maladresse (p. 213), dégâts = arme + BF + différence de SL - armure.
+ * auto, p. 199, 214, 357), critique/maladresse (p. 213), dégâts = arme + BF + différence de DR - armure.
  * params : { id, cibleId, armeId, modeDefense = 'opposition'|'esquive'|'aucune', cibleLocalisation,
  *           utiliserSuperiorite, charge, retenirCoups, avantages, desavantages }.
  */
@@ -894,7 +928,9 @@ export function attaquerMelee(state, params, des) {
   if (cible.etats.some(e => e.id === 'surpris')) avantages.push('surprise'); // p. 199 : le camp surprenant a Avantage aux tests de Mêlée
   if (estCibleIncapable(cible) || modeDefense === 'aucune') avantages.push('non-oppose'); // p. 211 : pas d'opposition -> Avantage
   if (engagesAvec(state, cible.id, p.camp) >= 2) avantages.push('surnombre'); // p. 214 : 2 contre 1 -> Avantage
-  if (params.cibleLocalisation) desavantages.push('cible-localisation'); // p. 210 : viser une localisation -> Désavantage
+  if (params.cibleLocalisation) desavantages.push('cible-localisation'); // p. 210
+  const heavy = traitDe(arme, 'heavy');
+  if (heavy && bonusCarac(p.carac.F) < (Number(heavy.valeur) || 0)) desavantages.push('heavy'); // p. 124 : arme de mêlée Heavy -> Désavantage si BF < valeur du trait
   const sup = bonusSuperiorite(state, p, params); // p. 196
   const seuilA = seuilDe(p, arme.specialisation ?? 'Mêlée', 'CC');
   const jetA = jetActeur(state, p, des, { id: p.id, competence: arme.specialisation ?? 'Mêlée', motif: 'attaque-melee', cible: cible.id, arme: arme.id });
@@ -913,14 +949,18 @@ export function attaquerMelee(state, params, des) {
       const seuilD = seuilDe(cible, defArme?.specialisation ?? 'Mêlée', 'CC');
       const jetD = jetActeur(state, cible, des, { id: cible.id, competence: defArme?.specialisation ?? 'Mêlée', motif: 'defense-melee', attaquant: p.id });
       apD = prevoirTest({ seuil: seuilD, jet: jetD, difficulte: 'intermediaire', avantages: defAv, desavantages: defDes, bonusDR: 0, kind: 'melee' }); // p. 211, 213 : critique en défense = riposte
-    } else { // 'esquive' : p. 211, la cible peut utiliser Réflexes (Esquive)
+    } else { // 'esquive' : p. 211, la cible peut utiliser Réflexes (Esquive) pour éviter l'attaque
       if (cible.esquiveActive) defAv.push('esquive'); // p. 208
+      if (cible.chargeMalusDefense) defDes.push('charge'); // p. 207 : a chargé -> Désavantage aussi aux tests de Réflexes
       const seuilD = seuilDe(cible, 'Réflexes (Esquive)', 'Ag');
       const jetD = jetActeur(state, cible, des, { id: cible.id, competence: 'Réflexes (Esquive)', motif: 'esquive-melee', attaquant: p.id });
       apD = prevoirTest({ seuil: seuilD, jet: jetD, difficulte: 'intermediaire', avantages: defAv, desavantages: defDes, bonusDR: 0, kind: 'test' });
     }
   }
   let s = noter(state, `Attaque de mêlée : ${p.nom} (${arme.nom}) contre ${cible.nom}${params.charge ? ' (Charge, p. 207)' : ''}.`, 'action');
+  // p. 189, 208, 220 : l'Avantage « au prochain test » et « Pour l'Empereur » ne valent que pour un seul test
+  s = consommerBonusTest(s, p.id);
+  if (apD) s = consommerBonusTest(s, cible.id);
   const inversions = [];
   if (apA.choixRequis) inversions.push({ cote: 'attaque', apercu: apA });
   if (apD && apD.choixRequis) inversions.push({ cote: 'defense', apercu: apD });
@@ -931,24 +971,23 @@ export function attaquerMelee(state, params, des) {
 function finaliserAttaqueMelee(s, params, apA, apD, des, gagnantForce = null) {
   const p = participant(s, params.id), cible = participant(s, params.cibleId), arme = armeDe(s, params.armeId);
   const modeDefense = estCibleIncapable(cible) ? 'aucune' : (params.modeDefense ?? 'opposition');
-  const critiqueAuto = estCibleIncapable(cible); // p. 199 (surpris), 214 (attaque cachée), 357 (inconscient)
+  // p. 357 : en mêlée, une cible Incapable (Inconscient/Neutralisé) subit un critique automatique ;
+  // p. 199, 214 : idem contre une cible Surprise (ennemi ignorant l'attaque). Mais seule une attaque
+  // qui touche fait un critique automatique (p. 214-215) : une attaque ratée ne fait jamais de critique.
+  const critiqueAuto = estCibleIncapable(cible); // p. 199 (surpris), 214 (attaque cachée), 357 (inconscient/neutralisé)
   let r = s;
   let touche = false, drNet = 0;
-  if (modeDefense === 'opposition' && apD) {
+  if ((modeDefense === 'opposition' || modeDefense === 'esquive') && apD) {
+    // p. 211 : test opposé de Mêlée, la défense pouvant être faite en Mêlée ou en Réflexes (Esquive)
     const res = gagnantForce ? { gagnant: gagnantForce, drNet: 0, egaliteParfaite: false } : resoudreTestOppose(apA, apD); // p. 190, 211
     if (res.egaliteParfaite && !gagnantForce) {
       // p. 190 : égalité parfaite -> le MJ tranche via trancherEgalite
       const e = { ...r, enAttente: { type: 'egalite', action: 'attaquerMelee', params: clone(params), apercus: { attaque: apA, defense: apD }, inputs: { attaque: inputsDe(apA), defense: inputsDe(apD) } } };
       return noter(e, `Égalité parfaite du test opposé entre ${p.nom} et ${cible.nom} : trancherEgalite requis (p. 190).`, 'alerte');
     }
-    touche = res.gagnant === 'init'; // p. 211 : le vainqueur du test opposé touche (même avec un SL négatif, p. 213)
-    drNet = res.drNet; // p. 211 : dégâts = arme + différence de SL
-    r = noter(r, `Test opposé : ${p.nom} DR ${apA.dr >= 0 ? '+' : ''}${apA.dr} vs ${cible.nom} DR ${apD.dr >= 0 ? '+' : ''}${apD.dr} -> ${res.gagnant === 'init' ? p.nom : cible.nom} gagne, diff. ${drNet >= 0 ? '+' : ''}${drNet} (p. 190, 211).`, 'test');
-  } else if (modeDefense === 'esquive' && apD) {
-    // p. 211 : la cible peut tenter d'éviter avec Réflexes (Esquive) ; (choix : esquive réussie = attaque évitée)
-    touche = apA.reussi && !apD.reussi;
-    drNet = apA.dr;
-    r = noter(r, `${cible.nom} — Réflexes (Esquive) ${apD.jet} : ${apD.reussi ? 'esquive réussie' : 'échec'} (p. 211).`, 'test');
+    touche = res.gagnant === 'init'; // p. 211 : le vainqueur du test opposé touche (même avec un DR négatif, p. 190, 213)
+    drNet = res.drNet; // p. 211 : dégâts = arme + différence de DR
+    r = noter(r, `Test opposé (${modeDefense === 'esquive' ? 'Réflexes (Esquive)' : 'Mêlée'}) : ${p.nom} DR ${apA.dr >= 0 ? '+' : ''}${apA.dr} vs ${cible.nom} DR ${apD.dr >= 0 ? '+' : ''}${apD.dr} -> ${res.gagnant === 'init' ? p.nom : cible.nom} gagne, diff. ${drNet >= 0 ? '+' : ''}${drNet} (p. 190, 211).`, 'test');
   } else {
     touche = apA.reussi; // p. 211 : cible qui n'oppose pas
     drNet = apA.dr;
@@ -963,7 +1002,9 @@ function finaliserAttaqueMelee(s, params, apA, apD, des, gagnantForce = null) {
   // p. 204 : le couvert ne protège que contre les attaques à distance ; p. 210 : localisation ciblée ignore le couvert
   const { armureEffective } = calculerArmureEffective({ armureBase: armureDe(cible, loc), couvert: 0, traitsArme: arme.traits, ignoreCouvert: true });
   const degats = touche ? resoudreDegats({ degatsBase, dr: drNet, armureEffective }) : 0; // p. 211
-  const coupCritique = critiqueAuto || apA.critique; // p. 213 (double + SL positif), 214, 357
+  // p. 213 : double + DR positif = critique, même en perdant le test opposé ; p. 214-215, 357 :
+  // le critique automatique (cible incapable/surprise) exige une attaque qui touche
+  const coupCritique = (touche && critiqueAuto) || apA.critique; // p. 213, 214-215, 357
   r = noter(r, `${p.nom} — attaque de mêlée (${arme.specialisation ?? 'Mêlée'}) ${apA.jet} : ${apA.reussi ? 'succès' : 'échec'} DR ${apA.dr >= 0 ? '+' : ''}${apA.dr}${touche ? `, touche (${loc})` : ', rate'} (p. 211).`, 'test');
   if (touche || coupCritique) {
     // p. 213 : un critique touche même en perdant le test opposé
@@ -989,7 +1030,7 @@ function finaliserAttaqueMelee(s, params, apA, apD, des, gagnantForce = null) {
 // ---------------------------------------------------------------------------
 
 /**
- * Attaque à distance (p. 212) : test de Tir Challenging (+0) ; dégâts = arme + SL du test - armure ;
+ * Attaque à distance (p. 212) : test de Tir Intermédiaire (+0) ; dégâts = arme + DR du test - armure ;
  * esquive (Réflexes (Esquive)) retranche le DR (consomme la Réaction, ou esquiveActive p. 208) ;
  * portée (Viser +1 cran p. 207, hors portée = Désavantage p. 212, immédiate sans Close = Désavantage p. 212) ;
  * modes de tir et munitions (p. 123-125) ; couvert (p. 204, ignoré si localisation ciblée p. 210 ou Flamer p. 124).
@@ -1018,22 +1059,27 @@ export function attaquerDistance(state, params, des) {
   if (PORTEES.indexOf(distance) > PORTEES.indexOf(porteeEff)) desavantages.push('hors-portee'); // p. 212 : au-delà de la portée -> Désavantage
   if (distance === 'immediate' && !aTrait(arme, 'close')) desavantages.push('immediate-sans-close'); // p. 212
   const heavy = traitDe(arme, 'heavy');
-  if (heavy && bonusCarac(p.carac.F) < (Number(heavy.valeur) || 0)) desavantages.push('heavy'); // p. 124 : Heavy -> Désavantage aux tests de Tir si BF < rating
-  if (params.cibleLocalisation) desavantages.push('cible-localisation'); // p. 210
+  if (heavy && bonusCarac(p.carac.F) < (Number(heavy.valeur) || 0)) desavantages.push('heavy'); // p. 124 : Heavy -> Désavantage aux tests de Tir si BF < valeur du trait
+  if (params.cibleLocalisation && !p.viseeActive) desavantages.push('cible-localisation'); // p. 210 ; p. 207 : un tir visé (Viser) cible une localisation sans pénalité
   const sup = bonusSuperiorite(state, p, params); // p. 196
   const seuilA = seuilDe(p, arme.specialisation ?? 'Tir', 'CT');
   const jetA = jetActeur(state, p, des, { id: p.id, competence: arme.specialisation ?? 'Tir', motif: 'attaque-tir', cible: cible.id, arme: arme.id, mode });
-  const apA = prevoirTest({ seuil: seuilA, jet: jetA, difficulte: 'intermediaire', avantages, desavantages, bonusDR: sup.bonusDR + cout.bonusDR, kind: 'tir' }); // p. 212 : Challenging (+0)
+  const apA = prevoirTest({ seuil: seuilA, jet: jetA, difficulte: 'intermediaire', avantages, desavantages, bonusDR: sup.bonusDR + cout.bonusDR, kind: 'tir' }); // p. 212 : Intermédiaire (+0)
   let apD = null;
   if (modeDefense === 'esquive' && (!cible.reactionUtilisee || cible.esquiveActive)) {
     // p. 212 : la cible peut tenter d'esquiver (Réaction, ou esquiveActive p. 208 sans Réaction)
     const defAv = collecterAvantages(cible, []);
     if (cible.esquiveActive) defAv.push('esquive'); // p. 208 : Avantage au prochain test d'esquive
+    const defDes = collecterDesavantages(cible, []);
+    if (cible.chargeMalusDefense) defDes.push('charge'); // p. 207 : a chargé -> Désavantage aussi aux tests de Réflexes
     const seuilD = seuilDe(cible, 'Réflexes (Esquive)', 'Ag');
     const jetD = jetActeur(state, cible, des, { id: cible.id, competence: 'Réflexes (Esquive)', motif: 'esquive-tir', attaquant: p.id });
-    apD = prevoirTest({ seuil: seuilD, jet: jetD, difficulte: 'intermediaire', avantages: defAv, desavantages: collecterDesavantages(cible, []), bonusDR: 0, kind: 'test' });
+    apD = prevoirTest({ seuil: seuilD, jet: jetD, difficulte: 'intermediaire', avantages: defAv, desavantages: defDes, bonusDR: 0, kind: 'test' });
   }
   let s = noter(state, `Attaque à distance : ${p.nom} (${arme.nom}${mode !== 'normal' ? `, ${mode}` : ''}) contre ${cible.nom} (${distance}).`, 'action');
+  // p. 189, 208, 220 : l'Avantage « au prochain test » et « Pour l'Empereur » ne valent que pour un seul test
+  s = consommerBonusTest(s, p.id);
+  if (apD) s = consommerBonusTest(s, cible.id);
   const inversions = [];
   if (apA.choixRequis) inversions.push({ cote: 'attaque', apercu: apA });
   if (apD && apD.choixRequis) inversions.push({ cote: 'defense', apercu: apD });
@@ -1046,7 +1092,9 @@ function finaliserAttaqueDistance(s, params, apA, apD, des) {
   const mode = params.mode ?? 'normal';
   const cout = coutMode(arme, mode);
   const modeDefense = estCibleIncapable(cible) ? 'aucune' : (params.modeDefense ?? 'esquive');
-  const critiqueAuto = estCibleIncapable(cible); // p. 199, 214
+  // p. 214 : une attaque réussie contre un ennemi ignorant l'attaque (Surpris) est toujours un critique ;
+  // p. 357 : à distance, PAS de critique automatique contre une cible Inconsciente/Neutralisée (mêlée seulement)
+  const critiqueAuto = cible.etats.some(e => e.id === 'surpris'); // p. 199, 214
   let r = s;
   let touche = apA.reussi, drFinal = apA.dr;
   if (modeDefense === 'esquive' && apD) {
@@ -1067,9 +1115,12 @@ function finaliserAttaqueDistance(s, params, apA, apD, des) {
   const couvert = c.couvertActif ? (COUVERT[c.couvertActif] ?? 0) : 0; // p. 204 : léger +2, moyen +4, lourd +6
   const ignoreCouvert = Boolean(params.cibleLocalisation) || aTrait(arme, 'flamer'); // p. 210, 124 : Flamer ignore le couvert
   const { armureEffective } = calculerArmureEffective({ armureBase: armureDe(c, loc), couvert, traitsArme: arme.traits, ignoreCouvert });
-  const degats = touche ? resoudreDegats({ degatsBase: (arme.degatsBase ?? 0) + cout.bonusDegats, dr: drFinal, armureEffective }) : 0; // p. 212 : arme + SL du test - armure
-  const coupCritique = critiqueAuto || apA.critique; // p. 213, 214
+  const degats = touche ? resoudreDegats({ degatsBase: (arme.degatsBase ?? 0) + cout.bonusDegats, dr: drFinal, armureEffective }) : 0; // p. 212 : arme + DR du test - armure
+  // p. 213 : double + DR positif = critique, même en ratant ; p. 214-215 : le critique automatique
+  // (attaque contre un ennemi surpris) exige une attaque qui touche
+  const coupCritique = (touche && critiqueAuto) || apA.critique; // p. 213, 214-215
   r = noter(r, `${p.nom} — tir (${arme.nom}, ${mode}) ${apA.jet} : ${apA.reussi ? 'succès' : 'échec'} DR ${apA.dr >= 0 ? '+' : ''}${apA.dr}${touche ? `, touche (${loc})` : ', rate'} (p. 212).`, 'test');
+  if (cout.spread) r = noter(r, `Tir rapide en mode Spread : les créatures en portée Immédiate de la cible subissent la moitié des dégâts (p. 125).`, 'info');
   if (touche || coupCritique) {
     r = appliquerDegatsCible(r, cible.id, { degats, coupCritique, retenirCoups: params.retenirCoups ?? false, localisation: loc, viaDouble: apA.critique, arme, des }).state;
   }
@@ -1133,6 +1184,7 @@ export function trancherEgalite(state, decision, des = null) {
       const actor = participant(state, actorId);
       const jet = jetActeur(state, actor, des, { id: actorId, motif: 'egalite-relancer', cote });
       // p. 189 : l'inversion facultative éventuelle reste sur l'option par défaut ('keep')
+      s = consommerBonusTest(s, actorId); // p. 220 : « Pour l'Empereur » ne vaut que pour un test
       return prevoirTest({ ...inp, jet });
     };
     if (e.action === 'testOppose') {
@@ -1247,7 +1299,11 @@ export function aider(state, { id, cibleId }) {
   return noter(s, `${v.p.nom} aide ${cible.nom} (Avantage au prochain test, p. 208, 189).`, 'action');
 }
 
-/** Fuir (p. 208) : hors de combat, retiré des engagements, -1 Supériorité (p. 197, 208). */
+/**
+ * Fuir (p. 208) : hors de combat, retiré des engagements. La Supériorité est la ressource du groupe
+ * des PJ (p. 196) : -1 seulement si c'est un PJ qui fuit (p. 197 : un membre du groupe mis hors
+ * combat, p. 208). Un ennemi qui fuit est vaincu (p. 197) -> gains de Supériorité d'un ennemi vaincu.
+ */
 export function fuir(state, { id }) {
   const refus = refuserSiEnAttente(state);
   if (refus) return refus;
@@ -1255,8 +1311,13 @@ export function fuir(state, { id }) {
   if (v.erreur) return noter(state, v.erreur, 'erreur');
   let r = maj(state, id, { etat: 'fui' });
   r = { ...r, engages: r.engages.filter(([a, b]) => a !== id && b !== id) };
-  r = ajusterSuperioriteInterne(r, -1, `fuite de ${v.p.nom} (p. 208, 197)`);
-  return noter(r, `${v.p.nom} fuit le combat (p. 208).`, 'alerte');
+  const p = participant(r, id);
+  if (p.camp === 'pj') {
+    r = ajusterSuperioriteInterne(r, -1, `fuite de ${p.nom}, membre du groupe (p. 197, 208)`);
+  } else {
+    r = gainsDefaiteEnnemi(r, p); // p. 197 : un ennemi qui fuit compte comme vaincu
+  }
+  return noter(r, `${p.nom} fuit le combat (p. 208).`, 'alerte');
 }
 
 // ---------------------------------------------------------------------------
@@ -1264,7 +1325,7 @@ export function fuir(state, { id }) {
 // ---------------------------------------------------------------------------
 
 /**
- * Premiers soins en combat (p. 219) : test de Médecine Challenging (+0) ; soigne DR + bonus d'Int
+ * Premiers soins en combat (p. 219) : test de Médecine Intermédiaire (+0) ; soigne DR + bonus d'Int
  * blessures (mode 'soin') ou traite une blessure critique non traitée (mode 'critique').
  * `traiterCritique` est un raccourci pour le mode 'critique'.
  */
@@ -1282,8 +1343,9 @@ export function premiersSoins(state, params, des) {
   const competence = params.competence ?? 'Médecine';
   const seuil = seuilDe(p, competence, 'Int');
   const jet = jetActeur(state, p, des, { id: p.id, competence, motif: 'premiers-soins', cible: cible.id });
-  const ap = prevoirTest({ seuil, jet, difficulte: 'intermediaire', avantages: collecterAvantages(p, params.avantages ?? []), desavantages: collecterDesavantages(p, params.desavantages ?? []), bonusDR: 0, kind: 'test' }); // p. 219 : Challenging (+0) en combat
+  const ap = prevoirTest({ seuil, jet, difficulte: 'intermediaire', avantages: collecterAvantages(p, params.avantages ?? []), desavantages: collecterDesavantages(p, params.desavantages ?? []), bonusDR: 0, kind: 'test' }); // p. 219 : Intermédiaire (+0) en combat
   let s = noter(state, `${p.nom} prodigue des premiers soins à ${cible.nom} (${competence}, p. 219).`, 'action');
+  s = consommerBonusTest(s, p.id); // p. 189, 208, 220 : un seul test
   if (ap.choixRequis) return enAttenteInversion(s, 'premiersSoins', params, { test: ap }, [{ cote: 'test', apercu: ap }]);
   return finaliserPremiersSoins(s, params, ap, des);
 }
@@ -1303,8 +1365,14 @@ function finaliserPremiersSoins(s, params, ap, des) {
     const c = participant(r, cible.id).critiques.find(x => x.traitementRequis && !x.traitee);
     r = maj(r, cible.id, { critiques: participant(r, cible.id).critiques.map(x => (x === c ? { ...x, traitee: true } : x)) });
     r = noter(r, `Blessure critique « ${c.nom} » de ${cible.nom} traitée (p. 219).`, 'soin');
+    // p. 215 : un Mourant dont les critiques non traitées repassent sous le bonus d'E est stabilisé
+    const cA = participant(r, cible.id);
+    if (cA.etat === 'mourant' && critiquesNonTraitees(cA) <= cA.critiquesMax) {
+      r = maj(r, cible.id, { etat: 'actif' });
+      r = noter(r, `${cible.nom} est stabilisé (critiques non traitées <= ${cA.critiquesMax}, p. 215, 219).`, 'soin');
+    }
   } else {
-    const soins = Math.max(0, ap.dr) + bonusCarac(p.carac.Int); // p. 219 : SL + bonus d'Int
+    const soins = Math.max(0, ap.dr) + bonusCarac(p.carac.Int); // p. 219 : DR + bonus d'Int
     const avant = participant(r, cible.id).blessures;
     r = maj(r, cible.id, { blessures: Math.max(0, avant - soins) });
     const cApres = participant(r, cible.id);
@@ -1324,7 +1392,7 @@ function finaliserPremiersSoins(s, params, ap, des) {
 /**
  * Test libre (p. 186-189). params : { id, competence, caracFallback, difficulte = 'intermediaire',
  * avantages, desavantages, bonusDR, utiliserSuperiorite, kind = 'test' }.
- * Le résultat est mémorisé dans `dernierTest` (relancer / +1 SL du Destin, p. 220).
+ * Le résultat est mémorisé dans `dernierTest` (relancer / +1 DR du Destin, p. 220).
  */
 export function testLibre(state, params, des) {
   const refus = refuserSiEnAttente(state);
@@ -1342,6 +1410,7 @@ export function testLibre(state, params, des) {
     bonusDR: (params.bonusDR ?? 0) + sup.bonusDR, kind: params.kind ?? 'test'
   });
   let s = noter(state, `${p.nom} — test de ${competence} (${params.difficulte ?? 'intermediaire'}).`, 'action');
+  s = consommerBonusTest(s, p.id); // p. 189, 208, 220 : un seul test
   if (ap.choixRequis) return enAttenteInversion(s, 'testLibre', params, { test: ap }, [{ cote: 'test', apercu: ap }]);
   return finaliserTestLibre(s, params, ap, des);
 }
@@ -1374,6 +1443,8 @@ export function testOppose(state, params, des) {
   const apA = mk(a, params.competenceA, params.caracFallbackA, params.bonusDRA ?? 0);
   const apB = mk(b, params.competenceB, params.caracFallbackB, params.bonusDRB ?? 0);
   let s = noter(state, `Test opposé : ${a.nom} (${params.competenceA}) vs ${b.nom} (${params.competenceB}) (p. 190).`, 'action');
+  s = consommerBonusTest(s, a.id); // p. 189, 208, 220 : un seul test par participant
+  s = consommerBonusTest(s, b.id);
   const inversions = [];
   if (apA.choixRequis) inversions.push({ cote: 'a', apercu: apA });
   if (apB.choixRequis) inversions.push({ cote: 'b', apercu: apB });
@@ -1401,9 +1472,10 @@ function finaliserTestOppose(s, params, apA, apB, des) {
 
 /**
  * Dépense un point de Destin (p. 220) : effet parmi 'relancer' (relance le dernier test échoué de `id`,
- * exige `des`), 'avantage' (Avantage au prochain test de la cible), 'plus1DR' (+1 SL au dernier test
+ * exige `des`), 'avantage' (Avantage au prochain test de la cible), 'plus1DR' (+1 DR au dernier test
  * de `id`), 'agirPremier' (agit en premier dans le round), 'ignorerCritiques' (ignore les effets des
  * critiques jusqu'au prochain tour), 'retirerEtat' (retire une condition ; À terre -> +1 blessure).
+ * Le point n'est débité que si l'effet est valide : une erreur ne coûte pas de point de Destin (p. 220).
  */
 export function depenserDestin(state, id, effet, params = {}, des = null) {
   const refus = refuserSiEnAttente(state);
@@ -1412,32 +1484,35 @@ export function depenserDestin(state, id, effet, params = {}, des = null) {
   if (!p || !enJeu(p)) return noter(state, `Participant introuvable ou hors de combat : ${id}.`, 'erreur');
   if (!['relancer', 'avantage', 'plus1DR', 'agirPremier', 'ignorerCritiques', 'retirerEtat'].includes(effet)) throw new RangeError(`Effet de Destin inconnu : ${effet} (p. 220).`);
   if ((p.destin ?? 0) <= 0) return noter(state, `${p.nom} n'a plus de point de Destin à dépenser (p. 220).`, 'erreur');
-  let r = maj(state, id, { destin: p.destin - 1 }); // p. 220 : -1 point de Destin
+  const debiter = s => maj(s, id, { destin: (participant(s, id).destin ?? 0) - 1 }); // p. 220 : -1 point de Destin
   switch (effet) {
     case 'relancer': {
-      const dt = r.dernierTest;
-      if (!dt || dt.id !== id || dt.ap.reussi) return noter(r, 'Aucun test échoué de ce personnage à relancer (p. 220).', 'erreur');
+      const dt = state.dernierTest;
+      if (!dt || dt.id !== id || dt.ap.reussi) return noter(state, 'Aucun test échoué de ce personnage à relancer (p. 220).', 'erreur');
       if (!des) throw new RangeError('« relancer » exige le fournisseur de dés (p. 220).');
+      let r = debiter(state);
       const jet = jetActeur(r, participant(r, id), des, { id, motif: 'destin-relancer' });
       // p. 189 : l'inversion facultative du nouveau jet reste sur l'option par défaut ('keep')
       const ap2 = prevoirTest({ ...dt.inputs, jet });
+      r = consommerBonusTest(r, id); // p. 220 : « Pour l'Empereur » ne vaut que pour un test
       r = noter(r, `${p.nom} relance son test de ${dt.competence} : ${jet} -> ${ap2.reussi ? 'succès' : 'échec'} (DR ${ap2.dr >= 0 ? '+' : ''}${ap2.dr}, p. 220).`, 'destin');
       return { ...r, dernierTest: { ...dt, inputs: { ...dt.inputs, jet: ap2.jet }, ap: ap2 } };
     }
     case 'avantage': {
       const cid = params.cibleId ?? id;
-      const c = participant(r, cid);
-      if (!c || !enJeu(c)) return noter(r, `Cible introuvable ou hors de combat : ${cid}.`, 'erreur');
-      return noter(maj(r, cid, { avantageProchainTest: true }), `${c.nom} gagne Avantage à son prochain test (Destin, p. 220, 189).`, 'destin');
+      const c = participant(state, cid);
+      if (!c || !enJeu(c)) return noter(state, `Cible introuvable ou hors de combat : ${cid}.`, 'erreur');
+      return noter(maj(debiter(state), cid, { avantageProchainTest: true }), `${c.nom} gagne Avantage à son prochain test (Destin, p. 220, 189).`, 'destin');
     }
     case 'plus1DR': {
-      const dt = r.dernierTest;
-      if (!dt || dt.id !== id) return noter(r, 'Aucun test de ce personnage à bonifier (p. 220).', 'erreur');
-      const ap2 = prevoirTest({ ...dt.inputs, bonusDR: dt.inputs.bonusDR + 1 }); // p. 220 : +1 SL après le jet
-      r = noter(r, `${p.nom} gagne +1 SL sur son test de ${dt.competence} (DR ${ap2.dr >= 0 ? '+' : ''}${ap2.dr}, p. 220).`, 'destin');
+      const dt = state.dernierTest;
+      if (!dt || dt.id !== id) return noter(state, 'Aucun test de ce personnage à bonifier (p. 220).', 'erreur');
+      const ap2 = prevoirTest({ ...dt.inputs, bonusDR: dt.inputs.bonusDR + 1 }); // p. 220 : +1 DR après le jet
+      let r = noter(debiter(state), `${p.nom} gagne +1 DR sur son test de ${dt.competence} (DR ${ap2.dr >= 0 ? '+' : ''}${ap2.dr}, p. 220).`, 'destin');
       return { ...r, dernierTest: { ...dt, ap: ap2 } };
     }
     case 'agirPremier': {
+      let r = debiter(state);
       const ordre = [...r.ordre];
       const i = ordre.indexOf(id);
       if (i > 0) { ordre.splice(i, 1); ordre.unshift(id); r = { ...r, ordre }; } // p. 220 : agit en premier, ignorant l'Initiative
@@ -1445,15 +1520,16 @@ export function depenserDestin(state, id, effet, params = {}, des = null) {
     }
     case 'ignorerCritiques': {
       const cid = params.cibleId ?? id;
-      const c = participant(r, cid);
-      if (!c || !enJeu(c)) return noter(r, `Cible introuvable ou hors de combat : ${cid}.`, 'erreur');
-      return noter(maj(r, cid, { ignoreCritiquesTour: true }), `${c.nom} ignore les effets des blessures critiques jusqu'à son prochain tour (Destin, p. 220).`, 'destin');
+      const c = participant(state, cid);
+      if (!c || !enJeu(c)) return noter(state, `Cible introuvable ou hors de combat : ${cid}.`, 'erreur');
+      return noter(maj(debiter(state), cid, { ignoreCritiquesTour: true }), `${c.nom} ignore les effets des blessures critiques jusqu'à son prochain tour (Destin, p. 220).`, 'destin');
     }
     case 'retirerEtat': {
       const etat = params.etat;
       const cid = params.cibleId ?? id;
-      const c = participant(r, cid);
-      if (!c || !c.etats.some(x => x.id === etat)) return noter(r, `${c?.nom ?? cid} n'a pas la condition « ${etat} ».`, 'erreur');
+      const c = participant(state, cid);
+      if (!c || !c.etats.some(x => x.id === etat)) return noter(state, `${c?.nom ?? cid} n'a pas la condition « ${etat} ».`, 'erreur');
+      let r = debiter(state);
       r = retirerEtatInterne(r, cid, etat);
       if (etat === 'a-terre') r = maj(r, cid, { blessures: Math.max(0, (participant(r, cid).blessures ?? 0) - 1) }); // p. 220 : retirer À terre -> regagne 1 blessure
       return noter(r, `Condition « ${etat} » retirée de ${c.nom} (Destin, p. 220).`, 'destin');
