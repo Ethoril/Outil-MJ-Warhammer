@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer (v4.0.0)
+# Outil MJ — Warhammer (v4.1.0)
 
 Application web progressive (PWA) qui assiste le Maître de Jeu de **Warhammer Fantasy 4e**, avec le combat et la magie **V5**. Un seul utilisateur (le MJ, francophone) ; HTML5 et modules ES natifs, sans bundler ; hors ligne grâce au service worker. En ligne : <https://ethoril.github.io/Outil-MJ-Warhammer/> (GitHub Pages, branche `main`).
 
@@ -14,6 +14,8 @@ Onglets de la barre du haut (raccourcis `1` à `4`).
 | **Jouer** (2) | Combat V5 : initiative, tour courant, résolution des Tests (moteur d’effets unifié, détail des modificateurs), dégâts, critiques, États, magie, prières et miracles, engagements et plateau des mêlées, montures, journal, annulation/rétablissement. Barre du haut : Temps de campagne, Événements, Rappels, « Terminer le combat », « Envoyer aux fiches ». |
 | **Campagne** (3) | Temps de campagne, synthèse des suivis des personnages (blessures, critiques, maladies, séquelles, convalescence), soins des participants de la rencontre et des personnages suivis hors rencontre. |
 | **Bibliothèque** (4) | Règles consultables, bestiaire, références (armes, armures, mots-clés, talents, sorts, prières). |
+
+**Depuis la 4.1.0 (L’Appel de Cthulhu 7e).** Deuxième jeu de l’outil, page `cthulhu/`, ouverte par le menu « Jeu » (visible maintenant que deux jeux sont publiés). Préparer (profils, armes, réserve) et Jouer (rencontre ordonnée par DEX, mêlée et tests opposés, tir, dégâts, empalement, blessures graves, mourants, Premiers soins, SAN et folie, Chance, test hors combat et test redoublé), avec annulation, journal et sauvegarde séparée de Warhammer. Chaque jet a sa case : on la remplit ou on clique « Lancer », comme dans Warhammer. Les pions se projettent sur la carte (liaison version 3). Détail : [docs/SUIVI_EVOLUTION.md](docs/SUIVI_EVOLUTION.md).
 
 **Depuis la 4.0.0 (refonte de l’interface).** L’espace Jouer tient sur un écran de 1440 × 800 sans défilement de page : frise d’initiative (un clic = qui agit), mêlées en cartouches (un clic = cible), case « À décider » (toutes les décisions du MJ, mort subite en un clic, rien ne bloque « Tour suivant »), barre d’actions en bas, « Jouer son tour maintenant », « Charger » sur la cible, ligne « Distance » pour le tir, fenêtres non bloquantes, style de la maquette (thème sombre par défaut). Séquelles et maladies se règlent dans Campagne. Préparer, Campagne et Bibliothèque ne défilent plus non plus. Liaison avec la carte en version 3 (point d’impact des sorts de zone). Détail : [docs/SUIVI_EVOLUTION.md](docs/SUIVI_EVOLUTION.md) ; spec et recette : [docs/specs/refonte-interface/](docs/specs/refonte-interface/).
 

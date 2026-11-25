@@ -10,6 +10,19 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 4.1.0 — L’Appel de Cthulhu 7e (publiée le 25/11/2026)
+
+Module Cthulhu du chantier multi-jeux (`docs/specs/multi-jeux/`), repris des lots C1-C4 et mené en lots M1-M8 (Neon architecte et vérificateur, Mistral Large exécutant, Claude passerelle). Recette du MJ le 25/11, jets compris. Warhammer ne change pas : aucune donnée renommée ni migrée.
+
+- **Page `cthulhu/`** ouverte par le menu « Jeu », qui apparaît maintenant que deux jeux sont publiés (`js/core/jeux.js`).
+- **Préparer** : profils d’investigateurs et d’adversaires, armes, réserve de profils, données de départ.
+- **Jouer** : rencontre ordonnée par DEX, mêlée avec riposte ou esquive, tests opposés, tir (portées, recharge, dégainer), dégâts, empalement, blessures graves et jet de CON, mourants et Premiers soins, jets de SAN, folie temporaire (jet d’INT), Chance, test hors combat, test redoublé ; annulation et rétablissement, journal. Règles tranchées d’après le Manuel du Gardien.
+- **Jets** : chaque dé a sa case vide ; le MJ la remplit ou clique « Lancer » à côté, comme dans Warhammer (`cthulhu/saisie-des.js`, retour de recette). Une case vide est refusée, jamais tirée en silence.
+- **Sauvegarde séparée** : base `outil-mj-cthulhu-v1`, clés `cthulhu.*` ; un fichier de sauvegarde Cthulhu est refusé à l’import de Warhammer (`js/core/store.js`).
+- **Carte** : les pions de la rencontre se projettent sur RPG Map Display par la liaison version 3 (`cthulhu/projection-carte.js`) ; aucun changement côté carte.
+- **Hors ligne** : le service worker met en cache la page Cthulhu.
+- Tests : `tests/unit/cthulhu/*`, parcours navigateur `tests/cthulhu-rencontre.browser.mjs`.
+
 ## 4.0.0 — Refonte de l’interface (publiée le 24/11/2026)
 
 Version majeure : l’écran de combat est refait, recetté par le MJ (première recette le 22/11, recette manuelle de la passe G les 23 et 24/11), et la liaison avec la carte passe en **version 3** : l’outil et RPG Map Display se publient ensemble, avec la copie des données communes dans les fiches. Spec, plan et tâches : `docs/specs/refonte-interface/`. Les règles du moteur, les sauvegardes, la synchronisation et les fiches des PJ ne changent pas (aucune migration ; champs facultatifs ajoutés : `suddenDeathDeclined`, `advancedTurn`, `deathResolved` sur le lien d’un familier, `extensions.mapRef` d’un participant recréé).

@@ -1,6 +1,6 @@
 {
   "name": "outil-mj-warhammer",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "type": "module",
   "scripts": {
     "test": "node --test \"tests/unit/**/*.test.js\" \"tests/unit/**/*.test.mjs\"",
