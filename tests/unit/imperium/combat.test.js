@@ -13,7 +13,7 @@ test('constantes de combat : portées p. 201-202, vitesses p. 202, tailles p. 20
   assert.deepEqual([...PORTEES], ['immediate', 'courte', 'moyenne', 'longue', 'extreme']);
   assert.deepEqual([...VITESSES], ['lente', 'normale', 'rapide']);
   assert.deepEqual([...TAILLES], ['minuscule', 'petite', 'moyenne', 'grande', 'enorme', 'monstrueuse']);
-  assert.deepEqual({ ...COUVERT }, { aucun: 0, leger: 2, moyen: 4, lourd: 6 }); // Light/Medium/Heavy +2/+4/+6, p. 204 et 210
+  assert.deepEqual({ ...COUVERT }, { aucun: 0, leger: 2, moyen: 4, lourd: 6 }); // couvert léger/moyen/lourd +2/+4/+6, p. 204 et 210
   assert.deepEqual([...ROLES_PNJ], ['troupe', 'elite', 'chef']);
   assert.deepEqual([...LOCALISATIONS], ['tete', 'bras-g', 'bras-d', 'jambe-g', 'jambe-d', 'corps']);
 });
@@ -37,60 +37,60 @@ test('exemple p. 211 : sœur Helza (Melee 42, jet 17 → +3) bat le Cult Leader 
   assert.equal(leader.dr, -1);
   const r = resoudreTestOppose(helza, leader);
   assert.equal(r.gagnant, 'init');
-  assert.equal(r.drNet, 4); // « Helza wins the Opposed Test with +4 SL », p. 211
+  assert.equal(r.drNet, 4); // Helza remporte le test opposé de +4, p. 211
 });
 
 test('exemple p. 211 : dégâts = arme 3 + bonus F 3 (F 37) + DR 4 = 10, armure 2 du torse → 8 blessures', () => {
   assert.equal(bonusCarac(37), 3); // Force 37, p. 211
   assert.equal(localisationDuJet(17), 'corps');
-  assert.equal(resoudreDegats({ degatsBase: 3 + 3, dr: 4, armureEffective: 2 }), 8); // « final Damage ... is 8 (10 − 2) », p. 211
+  assert.equal(resoudreDegats({ degatsBase: 3 + 3, dr: 4, armureEffective: 2 }), 8); // dégâts finaux 8 (10 − 2), p. 211
 });
 
 test('exemple p. 212 : Leo (Ranged 40, jet 23 → +2) ; Autopistol 5 + 2 = 7 dégâts, bras droit (unités 3) armure 2 → 5', () => {
   const leo = prevoirTest({ seuil: 40, jet: 23, kind: 'tir' });
-  assert.equal(leo.dr, 2); // « rolls a 23, giving him +2 SL », p. 212
-  assert.equal(localisationDuJet(23), 'bras-d'); // « hit the right arm », p. 212
-  assert.equal(resoudreDegats({ degatsBase: 5, dr: 2, armureEffective: 0 }), 7); // « the attack deals 7 Damage (5 + 2) », p. 212
-  assert.equal(resoudreDegats({ degatsBase: 5, dr: 2, armureEffective: 2 }), 5); // « final Damage ... is 5 (7 − 2) », p. 212
+  assert.equal(leo.dr, 2); // jet de 23 = +2, p. 212
+  assert.equal(localisationDuJet(23), 'bras-d'); // touche le bras droit, p. 212
+  assert.equal(resoudreDegats({ degatsBase: 5, dr: 2, armureEffective: 0 }), 7); // l'attaque inflige 7 dégâts (5 + 2), p. 212
+  assert.equal(resoudreDegats({ degatsBase: 5, dr: 2, armureEffective: 2 }), 5); // dégâts finaux 5 (7 − 2), p. 212
 });
 
 test('esquive à distance, p. 212 : le DR de l\'attaque est réduit du DR de l\'esquive ; à +0 ou moins, ça manque', () => {
   const attaque = prevoirTest({ seuil: 40, jet: 23, kind: 'tir' }); // DR +2, exemple Leo p. 212
   const esquiveFaible = prevoirTest({ seuil: 50, jet: 40 }); // DR +1, réussite
   const r1 = resoudreEsquiveDistance({ drAttaque: attaque.dr, testDefense: esquiveFaible });
-  assert.deepEqual(r1, { touche: true, esquivé: false, drAttaque: 2, drDefense: 1, drFinal: 1 });
+  assert.deepEqual(r1, { touche: true, esquive: false, drAttaque: 2, drDefense: 1, drFinal: 1 });
   const esquiveForte = prevoirTest({ seuil: 50, jet: 20 }); // DR +3, réussite
   const r2 = resoudreEsquiveDistance({ drAttaque: attaque.dr, testDefense: esquiveForte });
-  assert.equal(r2.touche, false); // « reduce the SL ... to +0 or less, the attack misses you entirely », p. 212
+  assert.equal(r2.touche, false); // DR de l'attaque réduit à +0 ou moins : l'attaque manque entièrement, p. 212
   assert.equal(r2.drFinal, 0);
   const esquiveRatee = prevoirTest({ seuil: 30, jet: 80 }); // échec
   const r3 = resoudreEsquiveDistance({ drAttaque: attaque.dr, testDefense: esquiveRatee });
   assert.equal(r3.touche, true);
-  assert.equal(r3.drFinal, 2); // « A failed Dodge never means a Ranged Attack deals more damage », p. 212
+  assert.equal(r3.drFinal, 2); // une esquive ratée n'augmente jamais les dégâts d'une attaque à distance, p. 212
 });
 
 test('double en défense : Helza fait 33 en défendant → critique avec +1 DR même si elle perd le test opposé (p. 213)', () => {
   const helza = prevoirTest({ seuil: 40, jet: 33, kind: 'melee' });
-  assert.equal(helza.dr, 1); // « rolls a 33 -- a Critical, with +1 SL! », p. 213
+  assert.equal(helza.dr, 1); // jet de 33 = double = critique, +1, p. 213
   assert.equal(helza.critique, true);
   assert.equal(helza.maladresse, false);
   const ganger = prevoirTest({ seuil: 45, jet: 23, kind: 'melee' }); // réussit avec +2 SL, p. 213
   assert.equal(ganger.dr, 2);
   const r = resoudreTestOppose(ganger, helza);
-  assert.equal(r.gagnant, 'init'); // « The Ganger wins the Opposed Test », p. 213
-  assert.equal(helza.critique, true); // « but Helza has scored a Critical, so she deals a Critical Hit », p. 213
+  assert.equal(r.gagnant, 'init'); // le Ganger remporte le test opposé, p. 213
+  assert.equal(helza.critique, true); // mais Helza a réussi un double : elle porte un coup critique, p. 213
 });
 
 test('maladresse gagnante : Casseum fait 66 (double, -3 DR) contre 91 (-6 DR) → il gagne de +3 mais consulte la table de maladresse (p. 213)', () => {
   const casseum = prevoirTest({ seuil: 35, jet: 66, kind: 'melee' });
   const heretic = prevoirTest({ seuil: 35, jet: 91, kind: 'melee' });
-  assert.equal(casseum.dr, -3); // « a Fumble with -3 SL », p. 213
+  assert.equal(casseum.dr, -3); // maladresse à -3, p. 213
   assert.equal(casseum.maladresse, true);
   assert.equal(casseum.critique, false);
-  assert.equal(heretic.dr, -6); // « a failure with -6 SL », p. 213
+  assert.equal(heretic.dr, -6); // échec à -6, p. 213
   const r = resoudreTestOppose(casseum, heretic);
   assert.equal(r.gagnant, 'init');
-  assert.equal(r.drNet, 3); // « Casseum wins the Test with +3 SL », p. 213
+  assert.equal(r.drNet, 3); // Casseum remporte le test de +3, p. 213
 });
 
 test('double à DR positif en attaque → critique (p. 213) ; 99-00 → maladresse même avec un succès', () => {

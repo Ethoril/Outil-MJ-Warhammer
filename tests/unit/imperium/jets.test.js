@@ -15,15 +15,15 @@ test('CARACS : les neuf caractéristiques, p. 50', () => {
 test('DIFFICULTES : table des difficultés p. 188, libellés français (vocabulaire Warhammer)', () => {
   assert.deepEqual(Object.keys(DIFFICULTES),
     ['tres-facile', 'facile', 'accessible', 'intermediaire', 'difficile', 'ardu', 'tres-ardu']);
-  assert.equal(DIFFICULTES['tres-facile'].modif, +60); // Very Easy, p. 188
-  assert.equal(DIFFICULTES['facile'].modif, +40); // Easy, p. 188
-  assert.equal(DIFFICULTES['accessible'].modif, +20); // Routine +20 = « Accessible », p. 188
+  assert.equal(DIFFICULTES['tres-facile'].modif, +60); // Très facile, p. 188
+  assert.equal(DIFFICULTES['facile'].modif, +40); // Facile, p. 188
+  assert.equal(DIFFICULTES['accessible'].modif, +20); // Accessible +20, p. 188
   assert.equal(DIFFICULTES['accessible'].libelle, 'Accessible');
-  assert.equal(DIFFICULTES['intermediaire'].modif, 0); // Challenging +0 = « Intermédiaire », p. 188
+  assert.equal(DIFFICULTES['intermediaire'].modif, 0); // Intermédiaire +0, p. 188
   assert.equal(DIFFICULTES['intermediaire'].libelle, 'Intermédiaire');
-  assert.equal(DIFFICULTES['difficile'].modif, -10); // Difficult, p. 188
-  assert.equal(DIFFICULTES['ardu'].modif, -20); // Hard, p. 188
-  assert.equal(DIFFICULTES['tres-ardu'].modif, -30); // Very Hard, p. 188
+  assert.equal(DIFFICULTES['difficile'].modif, -10); // Difficile, p. 188
+  assert.equal(DIFFICULTES['ardu'].modif, -20); // Ardu, p. 188
+  assert.equal(DIFFICULTES['tres-ardu'].modif, -30); // Très ardu, p. 188
   assert.ok(Object.values(DIFFICULTES).every(d => d.page === 188));
 });
 
@@ -222,19 +222,33 @@ test('test opposé p. 190 : Melee 54 jet 35 (+2) contre parade Melee 60 jet 29 (
   assert.equal(adv.dr, 4);
   const r = resoudreTestOppose(init, adv);
   assert.equal(r.gagnant, 'adv');
-  assert.equal(r.drNet, -2); // 2 - 4, « final result of -2 SL (2-4) » p. 190
+  assert.equal(r.drNet, -2); // 2 - 4 = -2, résultat final du test opposé, p. 190
 });
 
 test('test opposé p. 190 : DR égaux → la compétence effective la plus haute gagne ; égalité parfaite sinon', () => {
   const init = prevoirTest({ seuil: 60, jet: 30 }); // +3, seuil 60
   const adv = prevoirTest({ seuil: 40, jet: 10 }); // +3, seuil 40
   const r = resoudreTestOppose(init, adv);
-  assert.equal(r.gagnant, 'init'); // « the character with the higher Skill wins », p. 190
+  assert.equal(r.gagnant, 'init'); // à DR égal, la compétence la plus haute gagne, p. 190
   assert.equal(r.drNet, 0);
   const a = prevoirTest({ seuil: 50, jet: 25 });
   const b = prevoirTest({ seuil: 50, jet: 25 });
   const tie = resoudreTestOppose(a, b);
-  assert.deepEqual(tie, { gagnant: null, egaliteParfaite: true, drNet: 0 }); // « the GM decides », p. 190
+  assert.deepEqual(tie, { gagnant: null, egaliteParfaite: true, drNet: 0 }); // égalité parfaite : le MJ tranche, p. 190
+});
+
+test('test opposé p. 187, 190, 213 : +0 bat -0 quand les deux DR sont nuls (le camp réussi gagne, drNet 0)', () => {
+  const init = prevoirTest({ seuil: 54, jet: 54 }); // DR 0, réussite marginale +0 (jet <= seuil)
+  const adv = prevoirTest({ seuil: 54, jet: 58 }); // DR 0, échec marginal -0 (mêmes dizaines, jet au-delà du seuil)
+  assert.equal(init.dr, 0);
+  assert.equal(init.reussi, true);
+  assert.equal(init.palier.id, '+0');
+  assert.equal(adv.dr, 0);
+  assert.equal(adv.reussi, false);
+  assert.equal(adv.palier.id, '-0');
+  // +0 est un DR positif, strictement supérieur au DR négatif -0 (p. 187, 190, 213)
+  assert.deepEqual(resoudreTestOppose(init, adv), { gagnant: 'init', drNet: 0, egaliteParfaite: false });
+  assert.deepEqual(resoudreTestOppose(adv, init), { gagnant: 'adv', drNet: 0, egaliteParfaite: false });
 });
 
 test('analyserExpression : constantes et NdX±M', () => {

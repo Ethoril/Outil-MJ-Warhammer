@@ -10,16 +10,16 @@ import {
 
 test('exemple p. 215 : Kalli (12 blessures sur 16 max) inflige 6 dégâts au Gang Leader → excédent 2, sévérité 1d10+2 = 9 → pied broyé (jambe)', () => {
   const r = appliquerDegats({ blessures: 12, blessuresMax: 16, degats: 6, role: 'chef', critiquesNonTraitees: 0, critiquesMax: 3 });
-  assert.equal(r.blessures, 16); // « The first 4 Damage inflict 4 Wounds, meaning the Gang Leader reaches their Maximum Wounds », p. 215
-  assert.equal(r.excedent, 2); // « The remaining 2 Damage causes a Critical Wound », p. 215
-  assert.equal(r.jetEnduranceRequis, true); // à 16/16 : test de FM (Résistance à la douleur) ou inconscient, p. 214
+  assert.equal(r.blessures, 16); // les 4 premiers dégâts infligent 4 blessures : le chef atteint son maximum, p. 215
+  assert.equal(r.excedent, 2); // les 2 dégâts restants provoquent une blessure critique, p. 215
+  assert.equal(r.jetEnduranceRequis, true); // à 16/16 : test d'Endurance (Douleur) (E) ou inconscient, p. 214
   assert.equal(r.blesseCritiquementSeuil, true);
   assert.equal(r.critiqueDeclenche, true);
-  assert.equal(r.severiteBonus, 2); // « roll 1d10 + the excess Damage », p. 215
-  const severite = lancerExpression('1d10', () => 0.65) + r.severiteBonus; // « The GM gets a 7 on the die, for a total of 9 », p. 215
+  assert.equal(r.severiteBonus, 2); // sévérité = 1d10 + excédent de dégâts, p. 215
+  const severite = lancerExpression('1d10', () => 0.65) + r.severiteBonus; // le MJ fait 7 au dé, soit 9 au total, p. 215
   assert.equal(severite, 9);
-  const crit = consulterCritique('jambe-d', severite); // « struck ... in the right leg ... 9th row on the Leg Critical Wound Table », p. 215
-  assert.equal(crit.id, 'pied-broye'); // Mangled Foot, p. 361
+  const crit = consulterCritique('jambe-d', severite); // touché à la jambe droite, 9e ligne de la table de la jambe, p. 215
+  assert.equal(crit.id, 'pied-broye'); // pied broyé, p. 361
   assert.equal(crit.page, 361);
   assert.equal(crit.traitementRequis, true);
   assert.equal(crit.mortImmediate, false);
@@ -27,7 +27,7 @@ test('exemple p. 215 : Kalli (12 blessures sur 16 max) inflige 6 dégâts au Gan
 
 test('coup retenu (p. 215) : aucun critique même avec un coup critique ou un excédent', () => {
   const r1 = appliquerDegats({ blessures: 5, blessuresMax: 10, degats: 3, coupCritique: true, retenirCoups: true });
-  assert.equal(r1.critiqueDeclenche, false); // « does not generate a Critical Wound, even if a Critical Hit is rolled », p. 215
+  assert.equal(r1.critiqueDeclenche, false); // aucun critique, même sur un coup critique, p. 215
   const r2 = appliquerDegats({ blessures: 9, blessuresMax: 10, degats: 3, retenirCoups: true });
   assert.equal(r2.excedent, 2);
   assert.equal(r2.critiqueDeclenche, false);
@@ -39,11 +39,11 @@ test('rôles de PNJ (p. 317) : Troupe hors combat dès la première blessure cri
   assert.equal(critiquesMax({ E: 35 }, 'chef'), 3); // bonus d'E, p. 88
   const troupe = appliquerDegats({ blessures: 5, blessuresMax: 10, degats: 2, coupCritique: true, role: 'troupe', critiquesMax: 0 });
   assert.equal(troupe.critiqueDeclenche, true);
-  assert.equal(troupe.mortSubiteRole, true); // « Any time they would suffer a Critical Wound, they are immediately defeated », p. 317
+  assert.equal(troupe.mortSubiteRole, true); // toute blessure critique met une troupe hors combat, p. 317
   const elite1 = appliquerDegats({ blessures: 5, blessuresMax: 10, degats: 2, coupCritique: true, role: 'elite', critiquesNonTraitees: 0, critiquesMax: 1 });
   assert.equal(elite1.mortSubiteRole, false); // première blessure critique : survivable
   const elite2 = appliquerDegats({ blessures: 5, blessuresMax: 10, degats: 2, coupCritique: true, role: 'elite', critiquesNonTraitees: 1, critiquesMax: 1 });
-  assert.equal(elite2.mortSubiteRole, true); // « if they suffer a second Critical Wound, they are immediately defeated », p. 317
+  assert.equal(elite2.mortSubiteRole, true); // une deuxième blessure critique met une élite hors combat, p. 317
   const chef = appliquerDegats({ blessures: 5, blessuresMax: 10, degats: 2, coupCritique: true, role: 'chef', critiquesMax: 3 });
   assert.equal(chef.mortSubiteRole, false);
 });
@@ -51,7 +51,7 @@ test('rôles de PNJ (p. 317) : Troupe hors combat dès la première blessure cri
 test('mourant : blessures critiques non traitées > bonus d\'E → mort en fin de round (p. 88, 214-215 ; Leo, bonus d\'E 3 et 3 critiques, p. 215)', () => {
   const r = appliquerDegats({ blessures: 16, blessuresMax: 16, degats: 5, coupCritique: true, role: 'pj', critiquesNonTraitees: 3, critiquesMax: 3 });
   assert.equal(r.critiquesNonTraiteesApres, 4);
-  assert.equal(r.mourant, true); // « four untreated Critical Wounds, which exceeds his Toughness Bonus », p. 215
+  assert.equal(r.mourant, true); // 4 blessures critiques non traitées, plus que son bonus d'E, p. 215
   const ok = appliquerDegats({ blessures: 5, blessuresMax: 16, degats: 2, role: 'pj', critiquesNonTraitees: 1, critiquesMax: 3 });
   assert.equal(ok.mourant, false);
 });
@@ -69,6 +69,21 @@ test('table de maladresse p. 355 : les 10 entrées, dans l\'ordre', () => {
   }
   assert.equal(consulterMaladresse(3).id, 'lacher-arme');
   assert.equal(consulterMaladresse(10).id, 'touche-allie');
+  assert.match(consulterMaladresse(6).resume, /Ardu \(-20\) de Tech/, 'maladresse 6 : test Ardu (-20), p. 355');
+});
+
+test('tests de résistance à la douleur : caractéristique E (Endurance (Douleur)), jamais FM (p. 95, 214, 358-361)', () => {
+  let compteDouleur = 0;
+  for (const table of Object.values(TABLES_CRITIQUES)) {
+    for (const e of table) {
+      assert.ok(!e.resume.includes('FM'), `${e.id} : ne doit pas citer la FM`);
+      if (e.resume.includes('Douleur')) {
+        compteDouleur++;
+        assert.ok(e.resume.includes('E (Endurance (Douleur))'), `${e.id} : test de douleur sur E`);
+      }
+    }
+  }
+  assert.equal(compteDouleur, 15); // les 15 entrées du rapport citent la douleur
 });
 
 test('tables de critiques : alias de localisation et borne au maximum de la table', () => {
@@ -132,7 +147,7 @@ test('états (Annexe IV p. 356-357, désespéré p. 197, surpris p. 199) : ids, 
     ['enflamme', 'hemorragique', 'aveugle', 'assourdi', 'extenue', 'effraye', 'neutralise', 'surcharge',
       'empoisonne', 'a-terre', 'entrave', 'sonne', 'inconscient', 'desespere', 'surpris']);
   const niveaux = Object.fromEntries(ETATS.map(e => [e.id, e.niveaux]));
-  // Deux paliers (mineur/majeur) pour ceux décrits en Minor/Major, p. 356-357.
+  // Deux paliers (mineur/majeur) pour les états concernés, p. 356-357.
   for (const id of ['enflamme', 'hemorragique', 'extenue', 'effraye', 'empoisonne', 'entrave', 'sonne']) assert.equal(niveaux[id], true, id);
   for (const id of ['aveugle', 'assourdi', 'neutralise', 'surcharge', 'a-terre', 'inconscient', 'desespere', 'surpris']) assert.equal(niveaux[id], false, id);
   const pages = Object.fromEntries(ETATS.map(e => [e.id, e.page]));

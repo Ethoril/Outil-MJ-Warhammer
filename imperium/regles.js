@@ -21,7 +21,7 @@ export const CARACS = Object.freeze(['CC', 'CT', 'F', 'E', 'Ag', 'Int', 'Per', '
 
 /**
  * Difficultés d'un test (p. 188). Libellés français selon le vocabulaire Warhammer :
- * Routine (+20) = « Accessible », Challenging (+0) = « Intermédiaire ».
+ * « Accessible » (+20), « Intermédiaire » (+0).
  */
 export const DIFFICULTES = Object.freeze({
   'tres-facile': Object.freeze({ id: 'tres-facile', libelle: 'Très facile', modif: +60, page: 188 }),
@@ -230,8 +230,13 @@ export function selectionnerOptionTest(apercu, optionId) {
 /**
  * Test opposé (p. 190) : DR le plus haut l'emporte, `drNet` = différence ; à DR égal, la compétence
  * effective la plus haute l'emporte (`drNet` 0) ; sinon égalité parfaite laissée au MJ.
+ * p. 187, 190, 213 : +0 (réussite marginale) est un DR positif, -0 (échec marginal) un DR négatif ;
+ * si les deux camps ont un DR de 0 et qu'un seul a réussi, ce camp gagne avec `drNet` 0.
  */
 export function resoudreTestOppose(init, adv) {
+  if (init.dr === 0 && adv.dr === 0 && init.reussi !== adv.reussi) {
+    return { gagnant: init.reussi ? 'init' : 'adv', drNet: 0, egaliteParfaite: false };
+  }
   if (init.dr !== adv.dr) {
     return { gagnant: init.dr > adv.dr ? 'init' : 'adv', drNet: init.dr - adv.dr, egaliteParfaite: false };
   }
@@ -291,8 +296,8 @@ export function resoudreDegats({ degatsBase, dr = 0, armureEffective = 0 } = {})
 /**
  * Applique des dégâts à une cible (p. 214-216, 317).
  * - Blessures plafonnées au maximum (p. 214) ; l'excédent sert de bonus de sévérité (1d10 + excédent, p. 215).
- * - Atteindre le maximum de blessures avec un coup qui fait des dégâts → test de FM (Résistance à la
- *   douleur) Intermédiaire ou inconscient (p. 214), et tout coup suivant qui blesse est critique.
+ * - Atteindre le maximum de blessures avec un coup qui fait des dégâts → test d'Endurance (Douleur)
+ *   (caractéristique E) Intermédiaire ou inconscient (p. 214), et tout coup suivant qui blesse est critique.
  * - Blessure critique si coup critique (double, p. 213) ou excédent > 0, sauf coup retenu (p. 215).
  * - Troupe : toute blessure critique la met hors combat (p. 317) ; Élite : idem dès sa deuxième
  *   blessure critique non traitée (p. 317) ; PJ/Chef : mort en fin de round si les blessures
@@ -314,7 +319,7 @@ export function appliquerDegats({ blessures, blessuresMax, critiquesNonTraitees 
     blessures: nouvellesBlessures,
     degats: deg,
     excedent,
-    jetEnduranceRequis: seuilAtteint, // p. 214 : test de FM (Résistance à la douleur) Intermédiaire ou inconscient
+    jetEnduranceRequis: seuilAtteint, // p. 214 : test d'Endurance (Douleur) (E) Intermédiaire ou inconscient
     blesseCritiquementSeuil: seuilAtteint,
     critiqueDeclenche,
     severiteBonus: excedent, // p. 215 : la sévérité se lance à 1d10 + excédent
@@ -326,7 +331,7 @@ export function appliquerDegats({ blessures, blessuresMax, critiquesNonTraitees 
 }
 
 /**
- * Esquive d'une attaque à distance (p. 212) : si le test de esquive réussit, le DR de l'attaque est
+ * Esquive d'une attaque à distance (p. 212) : si le test d'esquive réussit, le DR de l'attaque est
  * réduit du DR de l'esquive ; à +0 ou moins, l'attaque manque entièrement.
  */
 export function resoudreEsquiveDistance({ drAttaque, testDefense } = {}) {
@@ -334,10 +339,10 @@ export function resoudreEsquiveDistance({ drAttaque, testDefense } = {}) {
   if (testDefense && testDefense.reussi) {
     const drDefense = Math.max(0, Number(testDefense.dr) || 0);
     const drFinal = attaque - drDefense;
-    if (drFinal <= 0) return { touche: false, esquivé: true, drAttaque: attaque, drDefense, drFinal: 0 };
-    return { touche: true, esquivé: false, drAttaque: attaque, drDefense, drFinal };
+    if (drFinal <= 0) return { touche: false, esquive: true, drAttaque: attaque, drDefense, drFinal: 0 };
+    return { touche: true, esquive: false, drAttaque: attaque, drDefense, drFinal };
   }
-  return { touche: true, esquivé: false, drAttaque: attaque, drDefense: 0, drFinal: attaque };
+  return { touche: true, esquive: false, drAttaque: attaque, drDefense: 0, drFinal: attaque };
 }
 
 /** Désespéré : au début du tour, Supériorité du groupe > Résolution du PNJ (p. 197). */
