@@ -426,3 +426,20 @@ test('la projection elle-même ne charge que imperium/ et les modules communs du
     'imperium/tables-critiques.js', 'js/core/map-link-protocol.js', 'js/core/participant-camp.js', 'js/core/token-library-path.js',
     'js/data/donnees-communes.js'].sort());
 });
+
+test('la fermeture d’imports de imperium/app.js reste dans imperium/ et les modules communs du chapeau', () => {
+  const communs = modulesCommuns();
+  assert.ok(communs.includes('js/core/participant-camp.js') && communs.includes('js/ui/selecteur-jeu.js') && communs.includes('js/ui/theme.js'));
+  const fermee = fermeture('imperium/app.js');
+  const dehors = fermee.filter(chemin => !chemin.startsWith('imperium/') && !communs.includes(chemin));
+  assert.deepEqual(dehors, [], `hors de imperium/ et du chapeau : ${dehors.join(', ')}`);
+  assert.ok(fermee.includes('imperium/seance.js') && fermee.includes('imperium/profils.js') && fermee.includes('imperium/rencontre.js'),
+    'app.js s’appuie sur le moteur imperium/ (seance.js, profils.js, rencontre.js)');
+});
+
+test('imperium/projection-carte.js et imperium/app.js sont précachés dans sw.js', () => {
+  const sw = readFileSync(join(ROOT, 'sw.js'), 'utf8');
+  const listés = [...sw.matchAll(/'\.\/([^']*)'/g)].map(m => m[1]).filter(Boolean);
+  assert.ok(listés.includes('imperium/projection-carte.js'), 'imperium/projection-carte.js dans ASSETS_TO_CACHE');
+  assert.ok(listés.includes('imperium/app.js'), 'imperium/app.js dans ASSETS_TO_CACHE');
+});
