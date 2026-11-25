@@ -8,18 +8,21 @@
  * - `fournisseurStrict({ d100, lancers })` : fournisseur de dés pour `seance.agir` ; `d100()` rend `{ jet, candidats }`
  *   à partir de la file des d100 saisis, `lancer(expression)` rend la valeur saisie suivante pour une expression à
  *   dés (les expressions constantes passent sans consommer) ; file épuisée → `RangeError`.
- * - `planResolution(rencontre)` : prédit les dégâts d'une action en attente (tir ou mêlée) via `resoudreMelee` /
- *   `calculerDegats` / `empalementPossible`, sans muter l'état.
- * - `evaluerJetConBlessure(plan, valeursDegats)` : prédit le total de dégâts et si un jet de CON (blessure grave)
- *   sera demandé, via `calculerDegats` + `appliquerBlessure`.
- * - `planJetSan(pj, cout, { jetSan, perte })` : prédit la perte de SAN (champ à dés ou perte fixe) et si le jet
- *   d'INT (perte ≥ 5) sera demandé, via `analyserCoutSan` / `niveauDuJet` / `maxExpression`.
+ * - `planResolution(rencontre)` : prédit les dégâts d'une action en attente (tir ou mêlée) en sondant le moteur :
+ *   `calculerDegats` est appelé avec un `lancer` qui enregistre chaque expression demandée (on lit `d.empale` pour
+ *   nommer le champ de l'empalement), et quand aucun dé n'est demandé, la résolution est rejouée sur une copie par
+ *   `resoudreEnAttente` pour lire le total tel que le moteur le calcule (réduction de la cible et armure comprises).
+ * - `evaluerJetConBlessure(plan, valeursDegats)` : rejoue la résolution sur une copie avec les saisies rangées dans
+ *   l'ordre des champs prédits (`fournisseurStrict`) : le total se lit dans le journal rendu par le moteur et le
+ *   jet de CON est prévu exactement quand le moteur réclame un d100.
+ * - `planJetSan(pj, cout, { jetSan, perte })` : prédit la perte de SAN en sondant `perteSan` (le `lancer` enregistre
+ *   l'expression demandée), puis demande au moteur via `appliquerPerteSan(...).jetIntRequis` si le jet d'INT suivra.
  */
 import {
-  NIVEAU, estReussite, analyserExpression, lancerExpression, maxExpression, resoudreMelee, empalementPossible,
-  calculerDegats, appliquerBlessure, analyserCoutSan, niveauDuJet
+  analyserExpression, lancerExpression, resoudreMelee, calculerDegats, analyserCoutSan, niveauDuJet,
+  perteSan, appliquerPerteSan
 } from './regles.js';
-import { participant } from './rencontre.js';
+import { participant, resoudreEnAttente } from './rencontre.js';
 
 // ---------------------------------------------------------------------------
 // Validation d'une saisie
@@ -70,36 +73,69 @@ export function fournisseurStrict({ d100 = [], lancers = [] } = {}) {
 // Prédiction de la résolution (dégâts, blessure grave, jet de CON)
 // ---------------------------------------------------------------------------
 
-/** Réduction de dégâts propre à la cible, comme l applique `infligerDegats` du moteur. */
-const reductionDe = (arme, victime) => (arme.type === 'feu' ? victime.reductionFeu ?? null : null);
-
-/** Champs de dés de dégâts prédits pour un coup qui touche, d'après `calculerDegats` (mêmes branches). */
-function planDegats({ auteur, victime, arme, niveau, tresLonguePortee }) {
-  const extreme = niveau >= NIVEAU.EXTREME && !(tresLonguePortee && niveau === NIVEAU.EXTREME);
-  const impact = auteur.impact;
-  const impactADes = arme.aImpact === true && impact && impact !== '0' && analyserExpression(impact).some(t => t.faces);
-  const champsDegats = [];
-  let degatsFixes = null;
-  if (!extreme) {
-    champsDegats.push({ cle: 'arme', libelle: `Arme (${arme.des})`, expression: arme.des });
-    if (impactADes) champsDegats.push({ cle: 'impact', libelle: `Impact (${impact})`, expression: impact });
-  } else if (empalementPossible({ arme, niveau, tresLonguePortee })) {
-    // Extrême empalant : maximum de l'arme et de l'Impact, plus un jet de l'arme (le seul dé demandé).
-    champsDegats.push({ cle: 'empalement', libelle: `Empalement (${arme.des})`, expression: arme.des });
-  } else {
-    // Extrême non empalant : aucun dé (maximum de l'arme + Impact max), total calculé par le moteur.
-    const d = calculerDegats({ arme, impact, niveau, armure: victime.armure, reduction: reductionDe(arme, victime), tresLonguePortee });
-    degatsFixes = d.total;
+/** Total lu dans la dernière ligne « degats » du journal rendu par le moteur (« … = 12. »). */
+function totalDeDegats(journal) {
+  for (let i = journal.length - 1; i >= 0; i--) {
+    if (journal[i].type !== 'degats') continue;
+    const m = /= (\d+)\.$/.exec(journal[i].texte);
+    return m ? Number(m[1]) : null;
   }
-  return { touche: true, auteur, victime, arme, niveau, tresLonguePortee, champsDegats, degatsFixes };
+  return null;
+}
+
+/**
+ * Sonde du moteur : rejoue la résolution de l'action en attente sur une COPIE de `etat` en enregistrant chaque dé
+ * demandé (`{ type: 'lancer' | 'const' | 'd100', expression? }`). `lancer` est le fournisseur de dés du sondage :
+ * avec les saisies du MJ (`fournisseurStrict`), tout dé non prévu lève ; avec `e => lancerExpression(e)`, les dés
+ * reçoivent une valeur quelconque (prédiction seule). Rend `{ demandes, apres }` ; l'état transmis n'est pas muté.
+ */
+function sondeResolution(etat, lancer) {
+  const demandes = [];
+  const des = {
+    d100(net) { demandes.push({ type: 'd100' }); return { jet: 50, candidats: [50] }; },
+    lancer(expression) {
+      const e = String(expression);
+      demandes.push({ type: analyserExpression(e).some(t => t.faces) ? 'lancer' : 'const', expression: e });
+      return lancer(e);
+    }
+  };
+  const apres = resoudreEnAttente(JSON.parse(JSON.stringify(etat)), des);
+  return { demandes, apres };
+}
+
+const LIBELLE_ROLE = { arme: 'Arme', impact: 'Impact', empalement: 'Empalement' };
+
+/**
+ * Champs de dés de dégâts prédits pour un coup qui touche, en sondant le moteur : `calculerDegats` est appelé avec
+ * un `lancer` qui enregistre chaque expression demandée, et seules celles qui contiennent des dés deviennent des
+ * champs (une expression constante est rendue telle quelle par le moteur, sans saisie). On ne lit de cet appel que
+ * les demandes et `d.empale` (indépendants de l'armure et de la réduction de la cible) : `d.empale` nomme le champ
+ * de l'empalement, sinon les demandes sont « arme » puis « impact », dans l'ordre. Quand aucun dé n'est demandé,
+ * le total est lu en rejouant la résolution sur une copie (`resoudreEnAttente`) : le moteur y applique lui-même la
+ * réduction de la cible et l'armure.
+ */
+function planDegats(etat, { auteur, victime, arme, niveau, tresLonguePortee }) {
+  const demandes = [];
+  const d = calculerDegats({
+    arme, impact: auteur.impact, niveau, tresLonguePortee,
+    lancer: expression => { demandes.push(String(expression)); return lancerExpression(expression); }
+  });
+  const champsDegats = demandes
+    .map((expression, i) => ({ role: d.empale ? 'empalement' : (i === 0 ? 'arme' : 'impact'), expression }))
+    .filter(c => analyserExpression(c.expression).some(t => t.faces))
+    .map(c => ({ cle: c.role, libelle: `${LIBELLE_ROLE[c.role]} (${c.expression})`, expression: c.expression }));
+  let degatsFixes = null;
+  if (!champsDegats.length) degatsFixes = totalDeDegats(sondeResolution(etat, e => lancerExpression(e)).apres.journal);
+  return { touche: true, auteur, victime, arme, niveau, tresLonguePortee, champsDegats, degatsFixes, etat };
 }
 
 /**
  * Prédit la résolution de l'action en attente (`rencontre.enAttente`, type `'tir'` ou `'melee'`), sans muter l'état :
  * `{ touche: false }` si le tir manque ou si `resoudreMelee` ne touche personne ; sinon
- * `{ touche: true, auteur, victime, arme, niveau, tresLonguePortee, champsDegats: [{ cle, libelle, expression }], degatsFixes }`.
- * En coup normal `champsDegats` vaut `arme` puis `impact` si l'Impact de l'auteur porte des dés ; en Extrême
- * empalant, `empalement` ; en Extrême non empalant, `[]` avec `degatsFixes` calculé via `calculerDegats`.
+ * `{ touche: true, auteur, victime, arme, niveau, tresLonguePortee, champsDegats: [{ cle, libelle, expression }], degatsFixes, etat }`
+ * (`etat` : la rencontre sondée, conservée pour `evaluerJetConBlessure`). En coup normal `champsDegats` vaut `arme`
+ * puis `impact` si le moteur demande l'Impact ; en Extrême empalant, `empalement` ; en Extrême non empalant, `[]`
+ * avec `degatsFixes` lu sur la copie rejouée par le moteur.
  */
 export function planResolution(rencontre) {
   const e = rencontre.enAttente;
@@ -108,19 +144,21 @@ export function planResolution(rencontre) {
   const c = participant(rencontre, e.cibleId);
   if (e.type === 'tir') {
     if (!e.attaque.reussi) return { touche: false };
-    return planDegats({ auteur: a, victime: c, arme: rencontre.armes[a.armeTir], niveau: e.attaque.niveau, tresLonguePortee: e.tresLonguePortee === true });
+    return planDegats(rencontre, { auteur: a, victime: c, arme: rencontre.armes[a.armeTir], niveau: e.attaque.niveau, tresLonguePortee: e.tresLonguePortee === true });
   }
   const r = resoudreMelee({ attaque: e.attaque, defense: e.defense, mode: e.mode });
   if (!r.touche) return { touche: false };
   const auteur = r.touche === 'defenseur' ? a : c;
   const victime = r.touche === 'defenseur' ? c : a;
-  return planDegats({ auteur, victime, arme: rencontre.armes[auteur.armeMelee], niveau: r.niveauDegats, tresLonguePortee: false });
+  return planDegats(rencontre, { auteur, victime, arme: rencontre.armes[auteur.armeMelee], niveau: r.niveauDegats, tresLonguePortee: false });
 }
 
 /**
- * Prédit le total de dégâts d'un plan qui touche et si un jet de CON (blessure grave) sera demandé :
- * `calculerDegats` (avec les valeurs saisies, dans l'ordre des champs prédits) puis `appliquerBlessure`.
- * `valeursDegats` : `{ [cle]: entier ≥ 0 }` saisi par le MJ. Rend `{ pret, total, jetCON, victime }` ;
+ * Prédit le total de dégâts d'un plan qui touche et si un jet de CON (blessure grave) sera demandé : la résolution
+ * est rejouée sur une copie de l'état du plan avec les saisies (`fournisseurStrict`, consommées dans l'ordre des
+ * champs prédits — tout dé non prévu lève). Le total se lit dans le journal rendu par le moteur (réduction de la
+ * cible et armure appliquées par lui) et le jet de CON est prévu exactement quand le moteur réclame un d100.
+ * `valeursDegats` : `{ [cle]: entier au moins nul }` saisi par le MJ. Rend `{ pret, total, jetCON, victime }` ;
  * `pret: false` tant qu'un champ de dégâts manque ou est invalide.
  */
 export function evaluerJetConBlessure(plan, valeursDegats = {}) {
@@ -128,19 +166,14 @@ export function evaluerJetConBlessure(plan, valeursDegats = {}) {
   if (plan.champsDegats.some(c => !Number.isInteger(valeursDegats[c.cle]) || valeursDegats[c.cle] < 0)) {
     return { pret: false, total: null, jetCON: false, victime: plan.victime };
   }
-  const parExpression = new Map(plan.champsDegats.map(c => [c.expression, c.cle]));
-  const lancer = expression => {
-    const cle = parExpression.get(expression);
-    if (cle !== undefined) return valeursDegats[cle];
-    if (analyserExpression(expression).some(t => t.faces)) throw new RangeError(`Jet manquant pour ${expression} (saisie requise).`);
-    return lancerExpression(expression); // constante (Impact fixe, ex. « -1 »)
+  const lancer = fournisseurStrict({ lancers: plan.champsDegats.map(c => valeursDegats[c.cle]) }).lancer;
+  const { demandes, apres } = sondeResolution(plan.etat, lancer);
+  return {
+    pret: true,
+    total: totalDeDegats(apres.journal),
+    jetCON: demandes.some(x => x.type === 'd100'),
+    victime: plan.victime
   };
-  const d = calculerDegats({
-    arme: plan.arme, impact: plan.auteur.impact, niveau: plan.niveau, armure: plan.victime.armure,
-    reduction: reductionDe(plan.arme, plan.victime), tresLonguePortee: plan.tresLonguePortee === true, lancer
-  });
-  const apres = appliquerBlessure(plan.victime, d.total);
-  return { pret: true, total: d.total, jetCON: apres.jetCON === true, victime: plan.victime };
 }
 
 // ---------------------------------------------------------------------------
@@ -149,11 +182,13 @@ export function evaluerJetConBlessure(plan, valeursDegats = {}) {
 
 /**
  * Prédit le déroulement d'un jet de SAN : `analyserCoutSan(cout)` est vérifié (lève si le coût est invalide) ;
- * si `jetSan` est un entier de 1 à 100, `niveau = niveauDuJet(jetSan, pj.san)` et :
- * - `champPerte` : `{ expression }` si la branche retenue contient des dés (hors maladresse, qui prend
- *   `maxExpression(echec)`), sinon `null` avec `perteFixe` ;
- * - `jetIntRequis` : `perteEffective >= 5`, où `perteEffective` vaut `perteFixe` si la perte est fixe, ou `perte`
- *   si elle a été saisie (entier ≥ 0).
+ * si `jetSan` est un entier de 1 à 100, `niveau = niveauDuJet(jetSan, pj.san)` et le moteur est sondé par
+ * `perteSan({ cout, niveau, lancer })` avec un `lancer` qui enregistre l'expression demandée (aucune en cas de
+ * maladresse : le moteur prend lui-même le maximum de la branche échec) :
+ * - `champPerte` : `{ expression }` si la branche demandée contient des dés, sinon `null` avec `perteFixe` ;
+ * - `jetIntRequis` : lu dans `appliquerPerteSan({ san, journee }, perteEffective).jetIntRequis` (seuil du moteur,
+ *   pas une constante recopiée ici), où `perteEffective` vaut `perteFixe` si la perte est fixe, ou `perte` si elle
+ *   a été saisie (entier au moins nul).
  * Sans `jetSan` valide, rend `{ jetValide: false, … }` (aucune prédiction de branche).
  */
 export function planJetSan(pj, cout, { jetSan = null, perte = null } = {}) {
@@ -161,21 +196,19 @@ export function planJetSan(pj, cout, { jetSan = null, perte = null } = {}) {
   const jetValide = Number.isInteger(jetSan) && jetSan >= 1 && jetSan <= 100;
   if (!jetValide) return { jetValide: false, niveau: null, champPerte: null, perteFixe: null, perteEffective: null, jetIntRequis: false, cout: { reussite, echec } };
   const niveau = niveauDuJet(jetSan, pj.san);
-  let champPerte = null;
-  let perteFixe = null;
-  let expression = null;
-  if (estReussite(niveau)) expression = reussite;
-  else if (niveau === NIVEAU.MALADRESSE) perteFixe = Math.max(0, maxExpression(echec));
-  else expression = echec;
-  if (expression !== null) {
-    if (analyserExpression(expression).some(t => t.faces)) champPerte = { expression };
-    else perteFixe = Math.max(0, lancerExpression(expression));
-  }
+  const demandes = [];
+  const perteSonde = perteSan({ cout, niveau, lancer: expression => { demandes.push(String(expression)); return lancerExpression(expression); } });
+  const demande = demandes[0] ?? null;
+  const champPerte = demande !== null && analyserExpression(demande).some(t => t.faces) ? { expression: demande } : null;
+  const perteFixe = champPerte ? null : perteSonde;
   const perteSaisie = Number.isInteger(perte) && perte >= 0 ? perte : null;
   const perteEffective = perteFixe !== null ? perteFixe : perteSaisie;
+  const jetIntRequis = perteEffective !== null
+    ? appliquerPerteSan({ san: pj.san, journee: pj.journeeSan }, perteEffective).jetIntRequis
+    : false;
   return {
     jetValide: true, niveau, champPerte, perteFixe, perteEffective,
-    jetIntRequis: perteEffective !== null && perteEffective >= 5,
+    jetIntRequis,
     cout: { reussite, echec }
   };
 }

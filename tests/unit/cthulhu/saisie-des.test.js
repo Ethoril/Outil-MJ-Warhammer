@@ -148,7 +148,9 @@ test('planResolution : tir avec Impact à dés prédit « arme » puis « impact
   assert.deepEqual(esp.appels, [['lancer', '2D6', 3], ['lancer', '+2D6', 2]]);
   assert.equal(participant(apres, 'hale').pv, 11 - 5);
   // Sans blessure grave (5 < 11/2), aucun d100 de CON n’est demandé : evaluerJetConBlessure le prédisait.
-  assert.equal(evaluerJetConBlessure(plan, { arme: 3, impact: 2 }).jetCON, false);
+  const evImp = evaluerJetConBlessure(plan, { arme: 3, impact: 2 });
+  assert.equal(evImp.total, 5, 'chaque saisie est consommée dans l’ordre de son champ (arme 3 + impact 2)');
+  assert.equal(evImp.jetCON, false);
 });
 
 test('planResolution : mêlée rendue (riposte) → l’auteur est le défenseur, dégâts ordinaires de son arme', () => {
@@ -233,6 +235,25 @@ test('planResolution : tir à très longue portée, réussite extrême non criti
   const esp = espion(fournisseurStrict({}));
   resoudreEnAttente(s2, esp.des);
   assert.deepEqual(esp.appels, []);
+});
+
+test('planResolution : cible à moitié des dégâts d’armes à feu (goule) — la réduction est appliquée par le moteur sondé, pas recopiée ici', () => {
+  let r = reserveTest();
+  r = ajouterArme(r, ARMES_DEPART['griffes-goule']);
+  r = ajouterProfil(r, CREATURES_DEPART.find(p => p.id === 'goule'));
+  let s = commencerRound(composerRencontre(r, ['hale', 'goule']));
+  s = tirer(s, { tireurId: 'hale', cibleId: 'goule', distance: 10 }, fournisseurStrict({ d100: [25] })); // 25 ≤ 60 : touche
+  const plan = planResolution(s);
+  assert.deepEqual(plan.champsDegats.map(c => [c.cle, c.expression]), [['arme', '1D10']], 'revolver sans Impact (aImpact faux)');
+  const ev = evaluerJetConBlessure(plan, { arme: 10 });
+  assert.equal(ev.total, 5, 'le moteur applique ÷ 2 (armes à feu) sur la copie sondée : 10 → 5');
+  assert.equal(ev.jetCON, false, '2 × 5 = 10 < 13 PV max : pas de blessure grave');
+  // Rejeu dans le moteur avec la même saisie : un seul lancer consommé, même total réduit.
+  const esp = espion(fournisseurStrict({ lancers: [10] }));
+  const apres = resoudreEnAttente(s, esp.des);
+  assert.deepEqual(esp.appels, [['lancer', '1D10', 10]], 'le moteur consomme exactement le dé prédit');
+  assert.match(apres.journal.filter(l => l.type === 'degats').at(-1).texte, /÷ 2 \(armes à feu\).*= 5\.$/);
+  assert.equal(participant(apres, 'goule').pv, 13 - 5);
 });
 
 // --- evaluerJetConBlessure -------------------------------------------------------------------------------------------
@@ -325,6 +346,21 @@ test('planJetSan : maladresse → perte fixe = max de la branche échec, aucun l
   const esp2 = espion(fournisseurStrict({ d100: [80], lancers: [4] }));
   jetSan(s, { id: 'hale', cout: '1/1D6' }, esp2.des);
   assert.deepEqual(esp2.appels, [['d100', 80], ['lancer', '1D6', 4]], 'pas de d100 INT : comme prévu');
+});
+
+test('planJetSan : réussite sur une branche à dés (1D6/1D8) → champ perte « 1D6 », rejoué à l’identique', () => {
+  let s = composerRencontre(reserveTest(), ['hale', DISCIPLE]);
+  const hale = participant(s, 'hale');
+  const plan = planJetSan(hale, '1D6/1D8', { jetSan: 10 }); // 10 ≤ 13 (extrême) : réussite, branche « 1D6 »
+  assert.equal(plan.niveau, 4);
+  assert.deepEqual(plan.champPerte, { expression: '1D6' }, 'la sonde a vu le moteur demander la branche réussite');
+  assert.equal(plan.perteFixe, null);
+  assert.equal(planJetSan(hale, '1D6/1D8', { jetSan: 10, perte: 4 }).jetIntRequis, false, 'perte 4 : seuil du moteur non atteint');
+  assert.equal(planJetSan(hale, '1D6/1D8', { jetSan: 10, perte: 6 }).jetIntRequis, true, 'perte 6 : jet d’INT prévu par appliquerPerteSan');
+  const esp = espion(fournisseurStrict({ d100: [10], lancers: [4] }));
+  const apres = jetSan(s, { id: 'hale', cout: '1D6/1D8' }, esp.des);
+  assert.deepEqual(esp.appels, [['d100', 10], ['lancer', '1D6', 4]], 'd100 SAN puis le lancer de perte prédit, rien d’autre');
+  assert.equal(participant(apres, 'hale').san, 65 - 4);
 });
 
 test('planJetSan : si le moteur demande un dé non prédit, le fournisseur strict lève (aucun tirage au hasard)', () => {

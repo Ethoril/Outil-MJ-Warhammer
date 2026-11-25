@@ -300,12 +300,46 @@ async function parcours(browser, origin, port) {
   assert.match(j6.slice(j5.length), /Margaret Hale perd 6 SAN \(59 → 53/);
   assert.match(j6.slice(j5.length), /refoule l’horreur/);
 
+  // Test hors combat en mode saisi : #libre-d100 vide est refusé (rien au journal), puis un échec saisi est joué.
+  await page.locator('#libre-qui').selectOption({ label: 'Pr Arthur Lindqvist' });
+  await page.locator('#libre-competence').selectOption('Bibliothèque');
+  const jT = await journal(page);
+  await page.locator('#libre-lancer').click();
+  await expect(page.locator('#message')).toContainText(/d100 test/);
+  await expect(page.locator('#libre-d100')).toHaveAttribute('aria-invalid', 'true');
+  assert.equal(await journal(page), jT, 'case vide : aucun test joué, aucune ligne au journal');
+  await page.locator('#libre-d100').fill('90'); // 90 > 70 : échec
+  await page.locator('#libre-lancer').click();
+  await expect(page.locator('#libre-resultat .test')).toContainText('Échec');
+  assert.match(await journal(page), /Pr Arthur Lindqvist — Bibliothèque 70 % : 90 → Échec/);
+
+  // Redoubler en mode saisi : #redoubler-d100 vide refusé, puis le redoublement est joué et journalisé.
+  await expect(page.locator('#redoubler')).toBeEnabled();
+  const jR = await journal(page);
+  await page.locator('#redoubler').click();
+  await expect(page.locator('#message')).toContainText(/d100 redoublement/);
+  await expect(page.locator('#redoubler-d100')).toHaveAttribute('aria-invalid', 'true');
+  assert.equal(await journal(page), jR, 'case vide : aucun redoublement joué');
+  await page.locator('#redoubler-d100').fill('50'); // 35 < 50 ≤ 70 : réussite ordinaire
+  await page.locator('#redoubler').click();
+  assert.match(await journal(page), /Test redoublé — Pr Arthur Lindqvist — Bibliothèque 70 % : 50 → Réussite ordinaire/);
+  await expect(page.locator('#libre-resultat .test')).toContainText('Réussite ordinaire');
+
   // Mode hasard : décocher masque toutes les cases de dés et permet de jouer un test sans saisie.
   await page.locator('#jets-saisis').uncheck();
   await expect(page.locator('#jets-saisis')).toBeVisible();
   await expect(page.locator('[data-champ-des]')).toHaveCount(0);
   await page.locator('#libre-lancer').click();
   await expect(page.locator('#libre-resultat .test')).toBeVisible(); // test joué, dés tirés au hasard
+  // Jet de SAN en mode hasard : aucun champ de saisie (#san-d100 absent), le moteur tire lui-même.
+  await expect(page.locator('#san-d100')).toHaveCount(0);
+  await page.locator('#san-qui').selectOption({ label: 'Pr Arthur Lindqvist' });
+  const jA = await journal(page);
+  await page.locator('#jet-san').click();
+  const jS = await journal(page);
+  assert.notEqual(jS, jA, 'le jet de SAN est bien joué en mode hasard');
+  assert.match(jS.slice(jA.length), /Pr Arthur Lindqvist — SAN \d+ % : \d+ → /);
+  assert.match(jS.slice(jA.length), /Pr Arthur Lindqvist perd \d+ SAN/);
   await page.locator('#jets-saisis').check();
   await expect(page.locator('#melee-attaque-d100')).toBeVisible();
 

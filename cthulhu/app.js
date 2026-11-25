@@ -1062,10 +1062,13 @@ function lancerInterface() {
       case 'jet-san': {
         const r = rencontre();
         const pj = R.participant(r, $('#san-qui').value);
-        if (!pj) return jouerSaisi('san', (s, des) => R.jetSan(s, { id: $('#san-qui').value, cout: $('#san-cout').value.trim() }, des), []);
-        const res = champsJetSan(pj, $('#san-cout').value.trim(), { san: '#san-d100', idSan: 'san-d100', perte: '#san-perte', idPerte: 'san-perte', int: '#san-int-d100', idInt: 'san-int-d100' });
-        if (!res.ok) return bloquerSaisie(res.el, res.message);
-        return jouerSaisi('san', (s, des) => R.jetSan(s, { id: $('#san-qui').value, cout: $('#san-cout').value.trim() }, des), res.champs);
+        const champs = [];
+        if (saisis() && pj) {
+          const res = champsJetSan(pj, $('#san-cout').value.trim(), { san: '#san-d100', idSan: 'san-d100', perte: '#san-perte', idPerte: 'san-perte', int: '#san-int-d100', idInt: 'san-int-d100' });
+          if (!res.ok) return bloquerSaisie(res.el, res.message);
+          champs.push(...res.champs);
+        }
+        return jouerSaisi('san', (s, des) => R.jetSan(s, { id: $('#san-qui').value, cout: $('#san-cout').value.trim() }, des), champs);
       }
       case 'libre-lancer': return jouerSaisi('test', (s, des) => R.testLibre(s, { id: $('#libre-qui').value, competence: $('#libre-competence').value, difficulte: $('#libre-difficulte').value }, des),
         [{ sel: '#libre-d100', id: 'libre-d100', type: 'd100', libelle: 'd100 test' }]);
