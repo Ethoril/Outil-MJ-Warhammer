@@ -124,11 +124,11 @@ test('traits d\'arme : Ineffective double toute l\'armure (p. 124), Penetrating(
   const inefficace = calculerArmureEffective({ armureBase: 2, couvert: COUVERT.leger, traitsArme: ['ineffective'] });
   assert.equal(inefficace.armureEffective, 8); // (2 + 2) × 2, p. 124
   assert.equal(inefficace.detail.ineffective, true);
-  const pen4 = calculerArmureEffective({ armureBase: 5, traitsArme: [{ id: 'penetrating', rating: 4 }] });
+  const pen4 = calculerArmureEffective({ armureBase: 5, traitsArme: [{ id: 'penetrating', valeur: 4 }] });
   assert.equal(pen4.armureEffective, 1); // 5 - 4, p. 125
   const pen9 = calculerArmureEffective({ armureBase: 5, traitsArme: ['penetrating(9)'] });
   assert.equal(pen9.armureEffective, 0); // minimum 0, p. 125
-  const cumul = calculerArmureEffective({ armureBase: 3, couvert: COUVERT.moyen, traitsArme: ['ineffective', { id: 'penetrating', rating: 2 }] });
+  const cumul = calculerArmureEffective({ armureBase: 3, couvert: COUVERT.moyen, traitsArme: ['ineffective', { id: 'penetrating', valeur: 2 }] });
   assert.equal(cumul.armureEffective, 12); // (3 + 4) × 2 - 2
 });
 

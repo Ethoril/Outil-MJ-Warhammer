@@ -266,10 +266,10 @@ export function localisationDuJet(jet) {
 function traitNormalise(t) {
   if (typeof t === 'string') {
     const m = t.match(/^penetrating\D*(\d+)\D*$/i);
-    if (m) return { id: 'penetrating', rating: Number(m[1]) };
-    return { id: t.toLowerCase(), rating: 0 };
+    if (m) return { id: 'penetrating', valeur: Number(m[1]) };
+    return { id: t.toLowerCase(), valeur: 0 };
   }
-  return { id: String(t?.id ?? '').toLowerCase(), rating: Number(t?.rating) || 0 };
+  return { id: String(t?.id ?? '').toLowerCase(), valeur: Number(t?.valeur) || 0 };
 }
 
 /**
@@ -283,7 +283,7 @@ export function calculerArmureEffective({ armureBase = 0, couvert = 0, traitsArm
   let total = (Number(armureBase) || 0) + couvertApplique;
   const ineffective = traits.some(t => t.id === 'ineffective');
   if (ineffective) total *= 2; // p. 124 : toute l'armure est doublée contre une arme Ineffective
-  const penetration = traits.filter(t => t.id === 'penetrating').reduce((s, t) => s + t.rating, 0);
+  const penetration = traits.filter(t => t.id === 'penetrating').reduce((s, t) => s + t.valeur, 0);
   const armureEffective = Math.max(0, total - penetration); // p. 125 : Penetrating ignore de l'armure
   return { armureEffective, detail: { armureBase: Number(armureBase) || 0, couvertApplique, ineffective, penetration } };
 }

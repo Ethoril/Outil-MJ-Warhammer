@@ -173,7 +173,7 @@ test('piège du Core Book : les valeurs fixes imprimées priment sur la formule 
 });
 
 test('armureDe : une valeur unique s’applique à toutes les localisations (p. 316), objet par localisation sinon (p. 211)', () => {
-  // Exécuteur p. 327 : Armour 5 partout, p. 316 (« apply this Armour value to all Hit Locations »).
+  // Exécuteur p. 327 : Armour 5 partout, p. 316 (une seule valeur d’armure s’applique à toutes les localisations).
   const enforcer = { armure: 5 };
   for (const loc of ['tete', 'bras-g', 'bras-d', 'corps', 'jambe-g', 'jambe-d']) assert.equal(armureDe(enforcer, loc), 5, loc);
   // Armure par localisation, avec repli « bras »/« jambe » : tête sans casque = 0 (p. 316).

@@ -17,7 +17,7 @@ const src = p => `${LIVRE} p. ${p}`;
 /**
  * Armes de départ. Mêlée : tableau p. 128 (dégâts « X+BF » = `degatsBase` X + bonus de F, `ajouteBF`).
  * Tir : tableaux p. 132 (laser, bolter) et p. 133 (projectiles solides, plasma), grenades p. 136.
- * Attaques naturelles : griffe-serviteur p. 323, griffes du Warp p. 222 et 344.
+ * Attaques naturelles : griffe-serviteur p. 323, griffes du Warp p. 222 et 344, poings du citoyen p. 340.
  * `traits` : `{ id, valeur? }`, ids anglais comme dans regles.js (ex. `rend` 2 = Rend (2)).
  */
 export const ARMES_DEPART = Object.freeze({
@@ -25,14 +25,15 @@ export const ARMES_DEPART = Object.freeze({
   'mains-nues': { id: 'mains-nues', nom: 'Mains nues', type: 'melee', specialisation: 'Mêlée (Mains nues)', degatsBase: 0, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'ineffective' }], source: src(128) }, // 0+BF, Ineffective, p. 128
   'couteau': { id: 'couteau', nom: 'Couteau', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 0, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'subtle' }, { id: 'thrown', valeur: 'courte' }], source: src(128) }, // 0+BF, Subtle, Lancer (courte), p. 128
   'epee': { id: 'epee', nom: 'Épée', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 2, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [], source: src(128) }, // 2+BF, p. 128
-  'hache': { id: 'hache', nom: 'Hache', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 2, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [], source: src(128) }, // 2+BF, p. 128
-  'arme-lourde': { id: 'arme-lourde', nom: 'Arme lourde', type: 'melee', specialisation: 'Mêlée (Deux mains)', degatsBase: 4, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'heavy', valeur: 4 }, { id: 'two-handed' }], source: src(128) }, // 4+BF, Heavy (4), Deux mains, p. 128 (9+BF pour F 50, chef de gang p. 342)
-  'epee-tronconneuse': { id: 'epee-tronconneuse', nom: 'Épée tronçonneuse', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 3, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'loud' }, { id: 'rend', valeur: 2 }], source: src(128) }, // 3+BF, Loud, Rend (2), p. 128 (7+BF pour F 40, chasseur de primes p. 342)
-  'electro-matraque': { id: 'electro-matraque', nom: 'Électro-matraque', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 2, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'loud' }, { id: 'inflict', valeur: 'sonne' }], source: src(128) }, // 2+BF, Loud, Inflict (Sonné), p. 128 (6+BF pour F 40, exécuteur p. 327)
+  'hache': { id: 'hache', nom: 'Hache', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 2, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'rend', valeur: 1 }], source: src(128) }, // 2+BF, Rend (1), p. 128
+  'arme-lourde': { id: 'arme-lourde', nom: 'Arme lourde', type: 'melee', specialisation: 'Mêlée (Deux mains)', degatsBase: 4, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'heavy', valeur: 4 }, { id: 'two-handed' }], source: src(128) }, // 4+BF, Heavy (4), Deux mains, p. 128 (9 pour F 50, chef de gang p. 342)
+  'epee-tronconneuse': { id: 'epee-tronconneuse', nom: 'Épée tronçonneuse', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 3, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'loud' }, { id: 'rend', valeur: 2 }], source: src(128) }, // 3+BF, Loud, Rend (2), p. 128 (7 pour F 40, chasseur de primes p. 342)
+  'electro-matraque': { id: 'electro-matraque', nom: 'Électro-matraque', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 2, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'loud' }, { id: 'inflict', valeur: 'sonne' }], source: src(128) }, // 2+BF, Loud, Inflict (Sonné), p. 128 (6 pour F 40, exécuteur p. 327)
   'epee-energetique': { id: 'epee-energetique', nom: 'Épée énergétique', type: 'melee', specialisation: 'Mêlée (Une main)', degatsBase: 4, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'penetrating', valeur: 4 }], source: src(128) }, // 4+BF, Penetrating (4), p. 128
   // Attaques naturelles (le bonus de F s'ajoute aussi, p. 316 : les dégâts de mêlée incluent le bonus de F)
   'griffe-serviteur': { id: 'griffe-serviteur', nom: 'Griffe-serviteur', type: 'melee', specialisation: 'Mêlée (Mains nues)', degatsBase: 2, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'penetrating', valeur: 2 }], source: src(323) }, // 2+BF (7 pour F 50), Penetrating (2), p. 323
   'griffes-du-warp': { id: 'griffes-du-warp', nom: 'Griffes du Warp', type: 'melee', specialisation: 'Mêlée (Mains nues)', degatsBase: 0, ajouteBF: true, portee: 'immediate', chargeur: null, traits: [{ id: 'rend', valeur: 1 }], source: `${src(222)}, ${src(344)}` }, // mains nues perdent Ineffective et gagnent Rend (1), p. 222 et 344
+  'poings-citoyen': { id: 'poings-citoyen', nom: 'Poings du citoyen', type: 'melee', specialisation: 'Mêlée (Mains nues)', degatsBase: 1, ajouteBF: false, portee: 'immediate', chargeur: null, traits: [{ id: 'ineffective' }], source: src(340) }, // 1 dégât fixe (sans bonus de F), Ineffective, p. 340
   // --- Tir (p. 132-133, grenades p. 136) ; dégâts fixes, sans bonus de F ---
   'pistolet-laser': { id: 'pistolet-laser', nom: 'Pistolet laser', type: 'tir', specialisation: 'Tir (Pistolet)', degatsBase: 5, ajouteBF: false, portee: 'moyenne', chargeur: 4, traits: [{ id: 'burst' }, { id: 'close' }, { id: 'loud' }, { id: 'reliable' }], source: src(132) }, // 5, Moyenne, Mag 4, Burst, Rapprochée, Loud, Reliable, p. 132
   'fusil-laser': { id: 'fusil-laser', nom: 'Fusil laser', type: 'tir', specialisation: 'Tir (Arme longue)', degatsBase: 6, ajouteBF: false, portee: 'longue', chargeur: 8, traits: [{ id: 'burst' }, { id: 'loud' }, { id: 'reliable' }, { id: 'two-handed' }], source: src(132) }, // 6, Longue, Mag 8, Burst, Loud, Reliable, Deux mains, p. 132
@@ -41,8 +42,8 @@ export const ARMES_DEPART = Object.freeze({
   'revolver-automatique': { id: 'revolver-automatique', nom: 'Revolver automatique', type: 'tir', specialisation: 'Tir (Pistolet)', degatsBase: 6, ajouteBF: false, portee: 'moyenne', chargeur: 6, traits: [{ id: 'close' }, { id: 'loud' }, { id: 'reliable' }], source: src(133) }, // 6, Moyenne, Mag 6, Rapprochée, Loud, Reliable, p. 133
   'pistolet-automatique-lourd': { id: 'pistolet-automatique-lourd', nom: 'Pistolet automatique lourd', type: 'tir', specialisation: 'Tir (Pistolet)', degatsBase: 6, ajouteBF: false, portee: 'moyenne', chargeur: 2, traits: [{ id: 'burst' }, { id: 'close' }, { id: 'loud' }], source: src(133) }, // 6, Moyenne, Mag 2, Burst, Rapprochée, Loud, p. 133
   'canon-a-main': { id: 'canon-a-main', nom: 'Canon à main', type: 'tir', specialisation: 'Tir (Pistolet)', degatsBase: 8, ajouteBF: false, portee: 'moyenne', chargeur: 4, traits: [{ id: 'close' }, { id: 'heavy', valeur: 4 }, { id: 'loud' }, { id: 'penetrating', valeur: 2 }], source: src(133) }, // 8, Moyenne, Mag 4, Rapprochée, Heavy (4), Loud, Penetrating (2), p. 133 (chef de gang p. 342)
-  'fusil-a-pompe': { id: 'fusil-a-pompe', nom: 'Fusil à pompe', type: 'tir', specialisation: 'Tir (Arme longue)', degatsBase: 6, ajouteBF: false, portee: 'moyenne', chargeur: 8, traits: [{ id: 'inflict', valeur: 'a-terre' }, { id: 'loud' }, { id: 'spread' }, { id: 'two-handed' }], source: src(133) }, // 6, Moyenne, Mag 8, Inflict (À terre), Loud, Spread, Deux mains, p. 133 (arbitre p. 327)
-  'pistolet-bolter': { id: 'pistolet-bolter', nom: 'Pistolet bolter', type: 'tir', specialisation: 'Tir (Ordinance)', degatsBase: 8, ajouteBF: false, portee: 'moyenne', chargeur: 2, traits: [{ id: 'burst' }, { id: 'close' }, { id: 'loud' }, { id: 'penetrating', valeur: 4 }, { id: 'spread' }], source: src(132) }, // 8, Moyenne, Mag 2, Burst, Rapprochée, Loud, Penetrating (4), Spread, p. 132
+  'fusil-a-pompe': { id: 'fusil-a-pompe', nom: 'Fusil à pompe', type: 'tir', specialisation: 'Tir (Arme longue)', degatsBase: 6, ajouteBF: false, portee: 'moyenne', chargeur: 8, traits: [{ id: 'inflict', valeur: 'a-terre' }, { id: 'loud' }, { id: 'spread' }, { id: 'two-handed' }], source: src(133) }, // 6, Moyenne, Mag 8, Inflict (À terre), Loud, Spread, Deux mains, p. 133 (l’arbitre p. 327 porte un fusil de combat Mag 12, arme distincte)
+  'pistolet-bolter': { id: 'pistolet-bolter', nom: 'Pistolet bolter', type: 'tir', specialisation: 'Tir (Pistolet)', degatsBase: 8, ajouteBF: false, portee: 'moyenne', chargeur: 2, traits: [{ id: 'burst' }, { id: 'close' }, { id: 'loud' }, { id: 'penetrating', valeur: 4 }, { id: 'spread' }], source: src(132) }, // 8, Moyenne, Mag 2, Burst, Rapprochée, Loud, Penetrating (4), Spread, p. 132 (spécialisation Pistolet, p. 99 et 132)
   'pistolet-plasma': { id: 'pistolet-plasma', nom: 'Pistolet plasma', type: 'tir', specialisation: 'Tir (Pistolet)', degatsBase: 10, ajouteBF: false, portee: 'moyenne', chargeur: 6, traits: [{ id: 'close' }, { id: 'loud' }, { id: 'penetrating', valeur: 6 }, { id: 'supercharge', valeur: 4 }, { id: 'unstable' }], source: src(133) }, // 10, Moyenne, Mag 6, Rapprochée, Loud, Penetrating (6), Supercharge (4), Unstable, p. 133
   toilleur: { id: 'toilleur', nom: 'Toilleur', type: 'tir', specialisation: 'Tir (Arme longue)', degatsBase: 0, ajouteBF: false, portee: 'moyenne', chargeur: 6, traits: [{ id: 'inflict', valeur: 'entrave' }, { id: 'two-handed' }], source: src(133) }, // 0, Moyenne, Mag 6, Inflict (Entravé), Deux mains, p. 133 (chasseur de primes p. 342)
   'grenade-fragmentation': { id: 'grenade-fragmentation', nom: 'Grenade à fragmentation', type: 'tir', specialisation: 'Tir (Lancer)', degatsBase: 6, ajouteBF: false, portee: 'moyenne', chargeur: null, traits: [{ id: 'blast' }, { id: 'loud' }, { id: 'thrown', valeur: 'moyenne' }, { id: 'unstable' }], source: src(136) } // 6, Blast, Loud, Lancer (moyenne), Unstable, p. 136
@@ -59,11 +60,11 @@ export const PNJ_DEPART = Object.freeze([
   {
     id: 'citoyen-imperial', nom: 'Citoyen impérial', kind: 'PNJ', role: 'troupe', camp: 'ennemi',
     taille: 'moyenne', vitesse: 'normale',
-    // p. 340 : CC 30 CT 30 F 30 E 30 Ag 30 Int 30 Per 30 FM 30 Soc 30 ; armure 0, blessures 12, critiques 0, initiative 6, vitesse normale, résolution 1
+    // p. 340 : CC 30 CT 30 F 30 E 30 Ag 30 Int 30 Per 30 FM 30 Soc 30 ; armure 0, blessures 12, critiques 0, initiative 6, vitesse normale, résolution 1 ; attaque mains nues 1 dégât fixe, Ineffective (arme « poings-citoyen »)
     carac: { CC: 30, CT: 30, F: 30, E: 30, Ag: 30, Int: 30, Per: 30, FM: 30, Soc: 30 },
     competences: { Athlétisme: 40, Dextérité: 40, Erudition: 35 }, // compétences imprimées, p. 340
-    armure: 0, armes: ['mains-nues'], resolution: 1,
-    traitsTexte: '', notes: 'Attaque mains nues : 1 dégât, Ineffective (p. 340).', source: src(340)
+    armure: 0, armes: ['poings-citoyen'], resolution: 1,
+    traitsTexte: '', notes: '', source: src(340)
   },
   {
     id: 'miserable', nom: 'Misérable', kind: 'PNJ', role: 'troupe', camp: 'ennemi',
@@ -123,7 +124,7 @@ export const PNJ_DEPART = Object.freeze([
     competences: { Athlétisme: 50, Vigilance: 50, Discipline: 50, Endurance: 50, Intuition: 50, Mêlée: 40, 'Mêlée (Une main)': 50, Présence: 50, 'Présence (Interrogatoire)': 60, 'Présence (Intimidation)': 60, Tir: 40, Rapport: 30 }, // p. 327
     armure: 5, armes: ['electro-matraque', 'fusil-automatique', 'revolver-automatique'], resolution: 2,
     initiativeFixe: 6, // initiative 6 imprimée p. 327 (au lieu de 7 = bonus Per 4 + bonus Ag 3, p. 88)
-    traitsTexte: 'Appel à la rescousse : tous les exécuteurs dans un rayon d’un kilomètre entendent l’appel (p. 327). Incarcération : peut menotter en action gratuite lors d’une lutte (p. 327).',
+    traitsTexte: 'Appel à la rescousse : tous les exécuteurs dans un rayon d’un mile l’entendent (p. 327). Incarcération : peut menotter en action gratuite lors d’une lutte (p. 327).',
     notes: 'Grenade suffocante non modélisée (p. 327).', source: src(327)
   },
   {
