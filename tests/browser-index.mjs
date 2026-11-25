@@ -80,6 +80,11 @@ async function main() {
     await openAppMenu(page);
     await expect(page.locator('#app-menu')).toHaveAttribute('role', 'dialog');
     await expect(page.locator('#app-menu [role="menuitem"]')).toHaveCount(0);
+    // Deux jeux publiés (multi-jeux M6) : le groupe « Jeu » ouvre le menu, le jeu courant en premier.
+    await expect(page.locator('#app-menu-jeux-liste [data-jeu="warhammer"]')).toBeFocused();
+    await page.keyboard.press('ArrowDown');
+    await expect(page.locator('#app-menu-jeux-liste [data-jeu="cthulhu"]')).toBeFocused();
+    await page.keyboard.press('ArrowDown');
     await expect(page.locator('#workspace-save')).toBeFocused();
     await page.keyboard.press('ArrowDown');
     await expect(page.locator('#workspace-load')).toBeFocused();

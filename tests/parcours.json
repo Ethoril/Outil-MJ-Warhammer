@@ -30,6 +30,7 @@
     "campaign-workspace-browser.mjs": {"famille":"general","socle":true},
     "cloud-schema4-emulator.mjs": {"famille":"hors-serie","note":"émulateurs Firebase requis (voir le script npm test:firebase-emulators et tests/run-lot2-v5-25-emulators.ps1)"},
     "cloud-sparse-v2-emulator.mjs": {"famille":"hors-serie","note":"émulateurs Firebase requis (voir le script npm test:firebase-emulators et tests/run-lot2-v5-25-emulators.ps1)"},
+    "cthulhu-rencontre.browser.mjs": {"famille":"general","socle":true},
     "divin-v5-a3-cibles-browser.mjs": {"famille":"ticket","chantier":"divin"},
     "divin-v5-a4-devotion-browser.mjs": {"famille":"ticket","chantier":"divin"},
     "divin-v5-a6-inversion-browser.mjs": {"famille":"ticket","chantier":"divin"},

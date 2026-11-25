@@ -36,11 +36,31 @@ test('CA5 — Warhammer reste à son adresse ; son entrée reprend sa base et so
   assert.equal(warhammer.publie, true);
 });
 
-test('CA13 — jeuxPublies() ne rend que les jeux publiés : sans Cthulhu tant qu’il ne l’est pas, donc pas de sélecteur', () => {
+test('CA13 — jeuxPublies() ne rend que les jeux publiés : Warhammer et Cthulhu, donc le sélecteur s’affiche', () => {
   const cthulhu = JEUX.find(jeu => jeu.id === 'cthulhu');
-  assert.equal(cthulhu.publie, false);
-  assert.deepEqual(jeuxPublies().map(jeu => jeu.id), ['warhammer']);
+  assert.equal(cthulhu.publie, true);
+  assert.deepEqual(jeuxPublies().map(jeu => jeu.id), ['warhammer', 'cthulhu']);
   assert.deepEqual(jeuxPublies(), JEUX.filter(jeu => jeu.publie));
+});
+
+// La règle « sélecteur absent tant qu'un seul jeu est publié » (initSelecteurJeu : `jeux.length < 2`) n'est pas
+// testable ici : le sélecteur lit jeuxPublies() directement, sans registre injectable. Elle est couverte par la
+// lecture du code ; les deux jeux étant publiés, ce test vérifie le cas inverse (sélecteur affiché).
+test('CA13 — avec deux jeux publiés, le sélecteur s’affiche et marque le jeu courant', async () => {
+  const { initSelecteurJeu } = await import('../../../js/ui/selecteur-jeu.js');
+  const fabrique = () => {
+    const el = { hidden: true, children: [], dataset: {}, replaceChildren(...e) { this.children = e; }, setAttribute() {}, addEventListener() {} };
+    return el;
+  };
+  const groupe = fabrique(), liste = fabrique();
+  const doc = {
+    getElementById: id => ({ 'app-menu-jeux': groupe, 'app-menu-jeux-liste': liste })[id],
+    createElement: () => fabrique()
+  };
+  const res = initSelecteurJeu({ doc, adresse: `${RACINE}index.html`, aller: () => {} });
+  assert.deepEqual(res, { visible: true });
+  assert.equal(groupe.hidden, false);
+  assert.deepEqual(liste.children.map(b => b.textContent), ['Warhammer ✓', 'L’Appel de Cthulhu']);
 });
 
 test('jeuDeLaPage — reconnaît le jeu d’après l’adresse de la page, null si l’adresse est inutilisable', () => {

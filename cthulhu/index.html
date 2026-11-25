@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#17130f">
+  <title>L’Appel de Cthulhu 7e — Outil MJ</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../js/ui/chapeau-theme.css">
+  <link rel="stylesheet" href="./cthulhu.css">
+  <script>
+    // Même service worker et même cache que Warhammer (portée : racine de l'outil), pour que la page marche hors ligne dès sa première visite.
+    // En développement local, pas de service worker : chaque rechargement sert le code modifié.
+    if ('serviceWorker' in navigator && !['localhost', '127.0.0.1'].includes(location.hostname)) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('../sw.js').catch(err => console.warn('SW registration failed:', err));
+      });
+    }
+  </script>
+</head>
+<body>
+  <header class="entete">
+    <h1>L’Appel de Cthulhu <small>7e édition</small></h1>
+    <div id="app-menu-jeux" class="menu-jeux" role="group" aria-labelledby="app-menu-h-jeux" hidden>
+      <span id="app-menu-h-jeux">Jeu</span>
+      <span id="app-menu-jeux-liste" class="liste-jeux"></span>
+    </div>
+    <nav class="onglets" role="tablist" aria-label="Écrans">
+      <button type="button" role="tab" id="onglet-preparer" data-onglet="preparer" aria-controls="panneau-preparer" aria-selected="true">Préparer</button>
+      <button type="button" role="tab" id="onglet-jouer" data-onglet="jouer" aria-controls="panneau-jouer" aria-selected="false">Jouer</button>
+    </nav>
+    <span id="round" class="round"></span>
+    <button type="button" id="annuler" disabled>↶ Annuler</button>
+    <button type="button" id="retablir" disabled>↷ Rétablir</button>
+    <span id="statut-sauvegarde" class="statut" role="status" aria-live="polite"></span>
+    <button type="button" id="btn-theme-toggle">Thème : Sombre</button>
+    <details class="fichiers">
+      <summary>Fichiers</summary>
+      <div class="menu">
+        <button type="button" data-action="exporter">Sauvegarder dans un fichier</button>
+        <button type="button" data-action="importer">Charger un fichier</button>
+        <input type="file" id="fichier-import" accept=".json,application/json" hidden>
+        <button type="button" data-action="versions">Versions précédentes</button>
+        <div id="versions" hidden></div>
+        <button type="button" class="danger" data-action="effacer">Tout effacer</button>
+      </div>
+    </details>
+  </header>
+  <p id="message" class="message" role="status" aria-live="polite" hidden></p>
+  <main id="cthulhu-app">
+    <div id="panneau-preparer" role="tabpanel" aria-labelledby="onglet-preparer"></div>
+    <div id="panneau-jouer" class="jeu" role="tabpanel" aria-labelledby="onglet-jouer" hidden></div>
+  </main>
+  <noscript><p>Cette page a besoin de JavaScript.</p></noscript>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
