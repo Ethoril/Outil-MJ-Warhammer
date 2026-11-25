@@ -21,7 +21,8 @@ import { initSelecteurJeu } from '../js/ui/selecteur-jeu.js';
 import { initThemeManager } from '../js/ui/theme.js';
 import { renderMapLinkIndicator, renderMapLinkPending } from '../js/ui/map-link-indicator.js';
 import { creerLiaisonCarte } from './projection-carte.js';
-import { lancerD100, lancerExpression, analyserExpression, LIBELLE_NIVEAU, LIBELLE_DIFFICULTE, seuils } from './regles.js';
+import { lancerD100, lancerExpression, LIBELLE_NIVEAU, LIBELLE_DIFFICULTE, seuils } from './regles.js';
+import { validerEntier, fournisseurStrict, planResolution, evaluerJetConBlessure, planJetSan } from './saisie-des.js';
 import {
   creerReserve, ajouterArme, modifierArme, supprimerArme, ajouterProfil, supprimerProfil, normaliserProfil, valeursDerivees,
   nouvelleJournee, idDepuisNom, trouverProfil, CARACS
@@ -270,53 +271,113 @@ function lancerInterface() {
     delaiMessage = setTimeout(() => { el.hidden = true; }, type === 'erreur' ? 9000 : 5000);
   }
 
-  // --- Dés : saisis par le MJ ou tirés au hasard ---------------------------------------------------------------------
+  // --- Dés : saisis par le MJ dans chaque action, ou tirés au hasard ---------------------------------------------------------------------
 
-  // File des dés saisis : `#file-degats` accepte 0 (dégâts ou perte de SAN nulle), `#file-d100` exige 1 à 100.
-  const fileDe = id => ($(id)?.value ?? '').split(/[\s,;]+/).filter(t => t !== '').map(Number)
-    .filter(n => Number.isInteger(n) && (id === '#file-degats' ? n >= 0 : n >= 1 && n <= 100));
-  function consommer(id) {
-    const valeurs = fileDe(id);
-    const v = valeurs.shift();
-    $(id).value = valeurs.join(' ');
-    return v;
-  }
-  function fournisseurDes() {
-    const saisis = $('#jets-saisis')?.checked === true;
+  /** Mode saisi : la case « Jets saisis par le MJ » en haut de la carte Action (préférence `cthulhu.jets-saisis`). */
+  const saisis = () => seance.preference('jets-saisis') === '1';
+
+  /** Mode hasard (case décochée) : le moteur tire lui-même, comme avant. */
+  function fournisseurHasard() {
     return {
-      d100(net) {
-        const v = saisis ? consommer('#file-d100') : undefined;
-        if (v !== undefined) return { jet: Math.min(100, v), candidats: [Math.min(100, v)] };
-        return lancerD100({ net });
-      },
-      lancer(expression) {
-        if (!analyserExpression(expression).some(t => t.faces)) return lancerExpression(expression);
-        const v = saisis ? consommer('#file-degats') : undefined;
-        return v !== undefined ? v : lancerExpression(expression);
-      }
+      d100(net) { return lancerD100({ net }); },
+      lancer(expression) { return lancerExpression(expression); }
     };
+  }
+
+  /** Plan de la résolution en attente affiché dans la fenêtre « Résoudre » (mis à jour à chaque rendu). */
+  let planRes = null;
+  /** Ids des champs de dés consommés par la dernière action réussie : vidés au rendu suivant. */
+  const champsAVider = new Set();
+
+  /**
+   * Lit et valide une liste de champs de saisie. `champs` : `[{ sel, id, type: 'd100' | 'lancer', libelle }]` ;
+   * `type` dit dans quelle file va la valeur (les d100 d'abord, dans l'ordre des champs, comme le moteur les
+   * demande). Toute case vide ou invalide bloque l'action : `{ ok: false, el, message }`, message en français.
+   */
+  function lireChamps(champs) {
+    const d100 = [], lancers = [];
+    for (const c of champs) {
+      const el = document.querySelector(c.sel);
+      if (!el) return { ok: false, el: null, message: `${c.libelle} : champ de saisie introuvable.` };
+      const r = validerEntier(el.value, c.type === 'd100'
+        ? { min: 1, max: 100, libelle: c.libelle }
+        : { min: 0, max: Infinity, libelle: c.libelle });
+      if (!r.ok) return { ok: false, el, message: r.message };
+      (c.type === 'd100' ? d100 : lancers).push(r.valeur);
+    }
+    return { ok: true, d100, lancers };
+  }
+
+  /** Refus de validation : message en français, `aria-invalid` et focus sur le premier champ en défaut, aucun tirage. */
+  function bloquerSaisie(el, texte) {
+    for (const e of document.querySelectorAll('[aria-invalid="true"]')) e.removeAttribute('aria-invalid');
+    if (el) { el.setAttribute('aria-invalid', 'true'); el.focus(); }
+    message(texte, 'erreur');
+  }
+
+  /**
+   * Champs d'un jet de SAN pour un investigateur : d100 SAN, puis la perte (si la branche prédite par
+   * `planJetSan` contient des dés), puis le d100 INT (si la perte vaut ≥ 5). Le coût invalide laisse le moteur
+   * seul juge (il refusera l'action avec son message).
+   */
+  function champsJetSan(pj, cout, sels) {
+    const base = [{ sel: sels.san, id: sels.idSan ?? null, type: 'd100', libelle: `d100 SAN (${pj.nom})` }];
+    const lu = lireChamps(base);
+    if (!lu.ok) return lu;
+    const jet = lu.d100[0];
+    const champs = [...base];
+    let plan;
+    try { plan = planJetSan(pj, cout, { jetSan: jet }); } catch { return { ok: true, champs }; }
+    if (plan.champPerte) {
+      const perte = { sel: sels.perte, id: sels.idPerte ?? null, type: 'lancer', libelle: `Perte (${plan.champPerte.expression}) — ${pj.nom}` };
+      const luPerte = lireChamps([perte]);
+      if (!luPerte.ok) return luPerte;
+      champs.push(perte);
+      try { plan = planJetSan(pj, cout, { jetSan: jet, perte: luPerte.lancers[0] }); } catch { /* le moteur tranchera */ }
+    }
+    if (plan.jetIntRequis) champs.push({ sel: sels.int, id: sels.idInt ?? null, type: 'd100', libelle: `d100 INT (${pj.nom})` });
+    return { ok: true, champs };
   }
 
   // --- Actions --------------------------------------------------------------------------------------------------------
 
   const rencontre = () => seance.etat.rencontre;
 
-  function agir(type, fn, { avecDes = true } = {}) {
-    const r = seance.agir(type, fn, avecDes ? fournisseurDes() : null);
+  function agir(type, fn, { avecDes = true, des = null, avantRendre = null } = {}) {
+    const r = seance.agir(type, fn, avecDes ? (des ?? fournisseurHasard()) : null);
     if (r.erreur) message(`Impossible : ${r.erreur.message}`, 'erreur');
+    if (avantRendre) avantRendre(r);
     rendre();
     return r;
   }
 
   /** Action sur la rencontre en cours ; une ligne d'erreur ajoutée au journal par le moteur s'affiche aussi en message. */
-  function jouer(type, fn) {
+  function jouer(type, fn, des = null, opts = {}) {
     const avant = rencontre().journal.length;
-    const r = agir(type, (etat, des) => {
-      const suivante = fn(etat.rencontre, des);
+    const r = agir(type, (etat, d) => {
+      const suivante = fn(etat.rencontre, d);
       return suivante === etat.rencontre ? etat : { ...etat, rencontre: suivante };
-    });
+    }, { ...opts, des });
     const derniere = rencontre().journal.at(-1);
     if (r.change && derniere?.type === 'erreur' && rencontre().journal.length > avant) message(derniere.texte, 'erreur');
+    return r;
+  }
+
+  /**
+   * Action du moteur avec les dés saisis. En mode saisi, `champs` est lu et validé avant tout appel à
+   * `seance.agir` (case vide ou invalide → refus, aucune action, aucun tirage) puis joué avec un
+   * `fournisseurStrict` : si le moteur demande un dé qui n'a pas été saisi, il lève et le message d'erreur
+   * français s'affiche, sans tirer au hasard. Les champs consommés sont vidés au rendu suivant si l'action réussit.
+   */
+  function jouerSaisi(type, fn, champs, opts = {}) {
+    if (!saisis()) return jouer(type, fn, null, opts);
+    const lu = lireChamps(champs);
+    if (!lu.ok) { bloquerSaisie(lu.el, lu.message); return { change: false, erreur: null }; }
+    const des = fournisseurStrict({ d100: lu.d100, lancers: lu.lancers });
+    return jouer(type, fn, des, {
+      ...opts,
+      avantRendre: r => { if (r.change) for (const c of champs) if (c.id) champsAVider.add(c.id); }
+    });
   }
 
   const confirmer = (bouton, texte, action) => {
@@ -533,6 +594,123 @@ function lancerInterface() {
     return boutons ? `<div class="chance">${esc(qui.nom)} (Chance ${qui.chance}) : ${boutons}</div>` : '';
   }
 
+  // --- Mises à jour en place des zones de saisie (sans re-rendre le panneau, pour garder le focus) -------------------
+
+  /** Champ d100 CON de la fenêtre « Résoudre » : affiché dès que les dégâts (saisis ou fixes) déclenchent une blessure grave. */
+  function resConHtml(plan, valeurs = {}) {
+    if (!plan || plan.touche !== true) return '';
+    const ev = evaluerJetConBlessure(plan, valeurs);
+    return ev.jetCON
+      ? `<label>d100 CON (blessure grave) <input type="number" min="1" max="100" id="res-con-d100" data-champ-des="d100" class="d100-inline" aria-label="d100 CON, blessure grave"></label>`
+      : '';
+  }
+
+  function majResCon() {
+    const zone = $('#res-con-zone');
+    if (!zone || !planRes || planRes.touche !== true) return;
+    const valeurs = {};
+    for (const c of planRes.champsDegats) {
+      const brut = $(`#res-degats-${c.cle}`)?.value;
+      if (brut !== undefined && String(brut).trim() !== '') valeurs[c.cle] = Number(brut);
+    }
+    const avant = $('#res-con-d100')?.value;
+    const html = resConHtml(planRes, valeurs);
+    if (zone.innerHTML !== html) zone.innerHTML = html;
+    if (avant !== undefined && $('#res-con-d100')) $('#res-con-d100').value = avant;
+  }
+
+  /** Sous-zone du jet de SAN libre : la perte (si la branche prédite contient des dés), puis le d100 INT (perte ≥ 5). */
+  function majSanSuite() {
+    const zone = $('#san-suite-zone');
+    if (!zone) return;
+    const r = rencontre();
+    const pj = R.participant(r, $('#san-qui')?.value);
+    const cout = ($('#san-cout')?.value ?? '').trim();
+    const perteAvant = $('#san-perte')?.value;
+    const intAvant = $('#san-int-d100')?.value;
+    let html = '';
+    if (pj && cout) {
+      const jet = validerEntier($('#san-d100')?.value, { min: 1, max: 100, libelle: 'd100 SAN' });
+      if (jet.ok) {
+        try {
+          let plan = planJetSan(pj, cout, { jetSan: jet.valeur });
+          if (plan.champPerte) {
+            html += `<label>Perte (${esc(plan.champPerte.expression)}) <input type="number" min="0" id="san-perte" data-champ-des="lancer" class="d100-inline" aria-label="Perte de SAN saisie"></label>`;
+            const pv = validerEntier(perteAvant ?? '', { min: 0, max: Infinity, libelle: 'Perte de SAN' });
+            if (pv.ok) plan = planJetSan(pj, cout, { jetSan: jet.valeur, perte: pv.valeur });
+          }
+          if (plan.jetIntRequis) html += `<label>d100 INT <input type="number" min="1" max="100" id="san-int-d100" data-champ-des="d100" class="d100-inline" aria-label="d100 INT contre la folie"></label>`;
+        } catch { html = ''; }
+      }
+    }
+    zone.innerHTML = html;
+    if (perteAvant !== undefined && $('#san-perte')) $('#san-perte').value = perteAvant;
+    if (intAvant !== undefined && $('#san-int-d100')) $('#san-int-d100').value = intAvant;
+  }
+
+  /** Lignes de « Elle surgit » : un d100 SAN par investigateur conscient qui n'a pas encore vu la créature choisie. */
+  function lignesReveler(r) {
+    const qui = $('#reveler-qui')?.value || r.participants.find(p => p.cachee)?.id;
+    const monstre = R.participant(r, qui);
+    if (!monstre) return '';
+    if (!monstre.coutSan) return '<p><small>Coût de SAN inconnu pour cette créature : aucun jet saisi.</small></p>';
+    const lignes = r.participants.filter(p => p.kind === 'PJ' && p.etat === 'actif' && !p.aVu[monstre.id]).map(p =>
+      `<p class="ligne-saisie"><label>${esc(p.nom)} — d100 SAN <input type="number" min="1" max="100" id="reveler-san-${esc(p.id)}" data-champ-des="d100" data-reveler-san="${esc(p.id)}" class="d100-inline"></label> <span id="reveler-suite-${esc(p.id)}"></span></p>`).join('');
+    return lignes || '<p><small>Chaque investigateur conscient l’a déjà vue : aucun jet.</small></p>';
+  }
+
+  function majRevelerZone() {
+    const zone = $('#reveler-des-zone');
+    if (zone) zone.innerHTML = lignesReveler(rencontre());
+  }
+
+  /** Sous-zone d'une ligne « Elle surgit » : la perte puis le d100 INT, selon le d100 SAN saisi sur la ligne. */
+  function majRevelerSuite(pid) {
+    const span = document.querySelector(`#reveler-suite-${CSS.escape(pid)}`);
+    if (!span) return;
+    const r = rencontre();
+    const monstre = R.participant(r, $('#reveler-qui')?.value || r.participants.find(p => p.cachee)?.id);
+    const pj = R.participant(r, pid);
+    const perteAvant = span.querySelector('[data-reveler-perte]')?.value;
+    const intAvant = span.querySelector('[data-reveler-int]')?.value;
+    let html = '';
+    if (monstre?.coutSan && pj) {
+      const jet = validerEntier(document.querySelector(`[data-reveler-san="${CSS.escape(pid)}"]`)?.value, { min: 1, max: 100, libelle: `d100 SAN (${pj.nom})` });
+      if (jet.ok) {
+        try {
+          let plan = planJetSan(pj, monstre.coutSan, { jetSan: jet.valeur });
+          if (plan.champPerte) {
+            html += `<label>Perte (${esc(plan.champPerte.expression)}) <input type="number" min="0" id="reveler-perte-${esc(pid)}" data-champ-des="lancer" data-reveler-perte="${esc(pid)}" class="d100-inline" aria-label="Perte de SAN saisie pour ${esc(pj.nom)}"></label>`;
+            const pv = validerEntier(perteAvant ?? '', { min: 0, max: Infinity, libelle: 'Perte de SAN' });
+            if (pv.ok) plan = planJetSan(pj, monstre.coutSan, { jetSan: jet.valeur, perte: pv.valeur });
+          }
+          if (plan.jetIntRequis) html += `<label>d100 INT <input type="number" min="1" max="100" id="reveler-int-${esc(pid)}" data-champ-des="d100" data-reveler-int="${esc(pid)}" class="d100-inline" aria-label="d100 INT pour ${esc(pj.nom)}"></label>`;
+        } catch { html = ''; }
+      }
+    }
+    span.innerHTML = html;
+    const perteEl = span.querySelector('[data-reveler-perte]');
+    if (perteAvant !== undefined && perteEl) perteEl.value = perteAvant;
+    const intEl = span.querySelector('[data-reveler-int]');
+    if (intAvant !== undefined && intEl) intEl.value = intAvant;
+  }
+
+  /** Libellé de la case d100 de défense selon le mode choisi (conteneur vidé si « aucune »). */
+  function defenseZoneHtml() {
+    const mode = $('#melee-mode')?.value ?? 'esquiver';
+    if (mode === 'aucune') return '';
+    const libelle = mode === 'esquiver' ? 'd100 Esquive' : 'd100 Rendre les coups';
+    return `<label>${libelle} <input type="number" min="1" max="100" id="melee-defense-d100" data-champ-des="d100" class="d100-inline"></label>`;
+  }
+
+  function majMeleeDefense() {
+    const zone = $('#melee-defense-zone');
+    if (!zone) return;
+    const avant = $('#melee-defense-d100')?.value;
+    zone.innerHTML = defenseZoneHtml();
+    if (avant !== undefined && avant !== '' && $('#melee-defense-d100')) $('#melee-defense-d100').value = avant;
+  }
+
   function rendreParticipants(r) {
     const acteur = R.acteurCourant(r);
     const ordre = new Map(r.ordre.map((o, i) => [o.id, { ...o, rang: i + 1 }]));
@@ -543,13 +721,15 @@ function lancerInterface() {
         + (p.etat === 'mourant' || (p.etat !== 'mort' && p.pv < p.pvMax) ? ` <button type="button" data-action="premiers-soins" data-id="${esc(p.id)}" title="Premiers soins réussis : stabilise un mourant (1 PV, inconscient), sinon +1 PV">Premiers soins</button>` : '');
       const boutonRecharger = arme && p.etat !== 'mort' && p.munitions < arme.capacite
         ? ` <button type="button" data-action="recharger" data-id="${esc(p.id)}" title="Recharger : 1 round pour deux balles — Gardien p. 100">Recharger</button>` : '';
+      const champMourant = saisis() && p.etat === 'mourant'
+        ? ` <input type="number" min="1" max="100" id="mourant-d100-${esc(p.id)}" data-mourant-d100="${esc(p.id)}" data-champ-des="d100" placeholder="d100" class="d100-inline" aria-label="d100 CON mourant pour ${esc(p.nom)}">` : '';
       return `<tr class="camp-${participantCamp({ camp: p.camp, kind: p.kind })} ${acteur?.id === p.id ? 'courant' : ''} etat-${p.etat}${p.cachee ? ' cachee' : ''}"${acteur?.id === p.id ? ' aria-current="true"' : ''}>
         <td>${o ? o.rang : '—'}</td>
         <td><strong>${esc(p.nom)}</strong>${p.cachee ? ' <em>(cachée)</em>' : ''}<br><small>DEX ${p.carac.DEX}${o ? ` → ${o.dex}` : ''} · Impact ${esc(p.impact)}</small></td>
         <td>${p.pv}/${p.pvMax}${p.blessureGrave ? ' <span class="badge grave">grave</span>' : ''}</td>
         <td>${p.kind === 'PJ' ? `${p.san}${p.folie ? ` <span class="badge folie">${esc(p.folie)}</span>` : ''}` : '—'}</td>
         <td>${p.kind === 'PJ' ? p.chance : '—'}</td>
-        <td>${ETAT[p.etat]}${boutonsEtat}</td>
+        <td>${ETAT[p.etat]}${boutonsEtat}${champMourant}</td>
         <td>${arme && p.etat === 'mort' ? `${p.munitions}/${arme.capacite}` : arme ? `${p.munitions}/${arme.capacite} <button type="button" data-arme="${esc(p.id)}">${p.armeFeuPrete ? 'Rengainer' : 'Dégainer'}</button>${boutonRecharger}` : '—'}</td>
       </tr>`;
     }).join('');
@@ -564,12 +744,15 @@ function lancerInterface() {
       <p>${esc(nom(decision.a.id))} et ${esc(nom(decision.b.id))} font exactement le même résultat (même niveau, même valeur) : le livre laisse au Gardien le choix. La rencontre attend votre décision.</p>
       ${rendreTest(decision.a, `${nom(decision.a.id)} — ${decision.a.competence}`)}${rendreTest(decision.b, `${nom(decision.b.id)} — ${decision.b.competence}`)}
       <p>${decision.issues.map((issue, i) => `<button type="button" data-egalite="${esc(issue.id)}"${i === 0 ? ' class="principal"' : ''} title="${esc(issue.libelle)}">${esc(libelles[issue.id] ?? issue.libelle)}</button>`).join(' ')}</p>
-      <p><small>Relancer : les deux camps relancent les dés (saisissez-les ci-dessous si vous jouez avec vos dés).</small></p></div>`;
+      ${saisis() ? `<p class="saisie-des"><label>d100 ${esc(nom(decision.a.id))} <input type="number" min="1" max="100" id="egalite-a-d100" data-champ-des="d100" class="d100-inline"></label>
+        <label>d100 ${esc(nom(decision.b.id))} <input type="number" min="1" max="100" id="egalite-b-d100" data-champ-des="d100" class="d100-inline"></label></p>` : ''}
+      <p><small>Relancer : les deux camps relancent les dés (saisissez-les ici si vous jouez avec vos dés). Match nul n’en demande aucun.</small></p></div>`;
   }
 
   function rendreAction(r) {
     const acteur = R.acteurCourant(r);
     const decision = R.decisionEgalite(r);
+    planRes = null;
     if (decision) return rendreDecisionEgalite(r, decision);
     const personneNePeutAgir = !r.participants.some(R.peutAgir);
     if (!r.round) {
@@ -579,10 +762,18 @@ function lancerInterface() {
     const e = r.enAttente;
     if (e) {
       const a = R.participant(r, e.attaquantId), c = R.participant(r, e.cibleId);
+      planRes = saisis() ? planResolution(r) : null;
+      let blocDegats = '';
+      if (planRes) {
+        blocDegats = planRes.touche
+          ? `<div class="saisie-des">${planRes.champsDegats.map(ch => `<label>${esc(ch.libelle)} <input type="number" min="0" id="res-degats-${ch.cle}" data-champ-des="lancer" class="d100-inline" inputmode="numeric"></label>`).join('')}<span id="res-con-zone">${resConHtml(planRes)}</span></div>`
+          : '<p class="saisie-des"><small>Le coup ne touche pas : aucun dé de dégâts à saisir.</small></p>';
+      }
       return `<h3>${e.type === 'tir' ? 'Tir' : 'Mêlée'} : ${esc(a.nom)} → ${esc(c.nom)}</h3>
         ${rendreTest(e.attaque, e.attaque.competence)}
         ${rendreTest(e.defense, e.mode === 'rendre' ? 'Rendre les coups' : 'Esquive')}
         ${boutonsChance(r, 'attaque')}${boutonsChance(r, 'defense')}
+        ${blocDegats}
         <p><button type="button" id="resoudre" class="principal">Résoudre (dégâts)</button> <button type="button" id="abandonner">Abandonner</button></p>`;
     }
     if (!acteur || personneNePeutAgir) return '<h3>Plus personne ne peut agir</h3><p>Tous les participants sont inconscients, mourants ou morts. Terminez la rencontre ou annulez le dernier geste.</p>';
@@ -597,12 +788,14 @@ function lancerInterface() {
         <label>Défense <select id="melee-mode"><option value="esquiver">Esquiver</option><option value="rendre">Rendre les coups</option><option value="aucune">Aucune (surprise)</option></select></label>
         <label>Dés bonus <input id="melee-bonus" type="number" min="0" max="2" value="0"></label>
         <label>Dés malus <input id="melee-malus" type="number" min="0" max="2" value="0"></label>
+        ${saisis() ? `<label>d100 attaque <input type="number" min="1" max="100" id="melee-attaque-d100" data-champ-des="d100" class="d100-inline"></label> <span id="melee-defense-zone">${defenseZoneHtml()}</span>` : ''}
         <button type="button" id="attaquer">Attaquer</button></fieldset>` : '<p><small>Pas d’arme de mêlée.</small></p>'}
       ${tir ? `<fieldset><legend>Tir (${esc(tir.nom)}, ${acteur.competences[tir.competence] ?? '?'} %, portée ${tir.portee} m, ${acteur.munitions} coups)</legend>
         <label>Cible <select id="tir-cible">${cibles}</select></label>
         <label>Distance (m) <input id="tir-distance" type="number" min="0" step="0.5" value="8"></label>
         <label><input id="tir-couvert" type="checkbox"> cible à couvert</label>
         <label><input id="tir-melee" type="checkbox"> tir dans la mêlée</label>
+        ${saisis() ? '<label>d100 tir <input type="number" min="1" max="100" id="tir-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}
         <button type="button" id="tirer">Tirer</button></fieldset>` : ''}
       <p><button type="button" id="fin-tour" class="principal">Fin du tour</button></p>`;
   }
@@ -619,29 +812,32 @@ function lancerInterface() {
     return `<h2>Horreur</h2>
       <p><label>Créature <select id="reveler-qui">${cachees.length ? options(cachees) : '<option value="">aucune créature cachée</option>'}</select></label>
         <button type="button" id="reveler"${cachees.length ? '' : ' disabled'}>Elle surgit (jets de SAN)</button></p>
+      ${saisis() ? `<div id="reveler-des-zone" class="saisie-des">${lignesReveler(r)}</div>` : ''}
       <p><label>Investigateur <select id="san-qui">${jets.length ? options(jets) : '<option value="">aucun investigateur conscient</option>'}</select></label>
         <label>Perte (1/1D6) <input type="text" id="san-cout" size="7" value="1/1D6"></label>
+        ${saisis() ? '<label>d100 SAN <input type="number" min="1" max="100" id="san-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}
         <button type="button" id="jet-san"${jets.length ? '' : ' disabled'}>Jet de SAN</button></p>
+      ${saisis() ? '<div id="san-suite-zone" class="saisie-des"></div>' : ''}
       <h2>Test hors combat</h2>
       <p><label>Qui <select id="libre-qui">${options(tous, qui)}</select></label>
         <label>Compétence <select id="libre-competence">${optionsComp(qui)}</select></label>
         <label>Difficulté <select id="libre-difficulte"><option value="ordinaire">ordinaire</option><option value="majeure">majeure</option><option value="extreme">extrême</option></select></label>
+        ${saisis() ? '<label>d100 <input type="number" min="1" max="100" id="libre-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}
         <button type="button" id="libre-lancer">Lancer</button></p>
       <div id="libre-resultat">${d ? rendreTest(d, `${esc(R.participant(r, d.id).nom)} — ${esc(d.competence)}${d.redouble ? ' (redoublé)' : ''}`) : ''}</div>
       <p><button type="button" id="redoubler"${etats?.redoubler.autorise ? '' : ' disabled'} title="${esc(etats?.redoubler.raison ?? '')}">Redoubler le test</button>
+        ${saisis() && etats?.redoubler.autorise ? '<label>d100 <input type="number" min="1" max="100" id="redoubler-d100" data-champ-des="d100" class="d100-inline" aria-label="d100 du test redoublé"></label>' : ''}
         <button type="button" id="chance-libre"${etats?.chance.autorise ? '' : ' disabled'} title="${esc(etats?.chance.raison ?? '')}">${etats?.chance.autorise ? `Dépenser ${etats.chance.cout} Chance` : 'Dépenser la Chance'}</button></p>
       <h2>Test opposé</h2>
       <p><label>Camp A <select id="oppose-a">${options(tous, tous[0]?.id)}</select></label>
         <label>Compétence A <select id="oppose-a-comp">${optionsComp(tous[0]?.id)}</select></label>
-        <label>Dés A (+bonus, −malus) <input type="number" id="oppose-a-des" min="-2" max="2" value="0"></label></p>
+        <label>Dés A (+bonus, −malus) <input type="number" id="oppose-a-des" min="-2" max="2" value="0"></label>
+        ${saisis() ? '<label>d100 A <input type="number" min="1" max="100" id="oppose-a-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}</p>
       <p><label>Camp B <select id="oppose-b">${options(tous, (tous[1] ?? tous[0])?.id)}</select></label>
         <label>Compétence B <select id="oppose-b-comp">${optionsComp((tous[1] ?? tous[0])?.id)}</select></label>
-        <label>Dés B (+bonus, −malus) <input type="number" id="oppose-b-des" min="-2" max="2" value="0"></label></p>
-      <p><button type="button" id="oppose-lancer">Lancer le test opposé</button></p>
-      <h2>Dés</h2>
-      <p><label><input type="checkbox" id="jets-saisis"${seance.preference('jets-saisis') === '1' ? ' checked' : ''}> Jets saisis par le MJ (sinon tirés au hasard)</label></p>
-      <p><label>Prochains d100 <input type="text" id="file-d100" placeholder="ex. 12 87 45"></label></p>
-      <p><label>Prochains dés de dégâts / SAN <input type="text" id="file-degats" placeholder="ex. 7 3"></label></p>`;
+        <label>Dés B (+bonus, −malus) <input type="number" id="oppose-b-des" min="-2" max="2" value="0"></label>
+        ${saisis() ? '<label>d100 B <input type="number" min="1" max="100" id="oppose-b-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}</p>
+      <p><button type="button" id="oppose-lancer">Lancer le test opposé</button></p>`;
   }
 
   /** Les champs identifiés d'une zone gardent leur valeur d'un rendu à l'autre (cible, distance, dés saisis…). */
@@ -673,10 +869,15 @@ function lancerInterface() {
       return;
     }
     const gardees = garderChamps(panneau);
+    // Les champs de dés consommés par l’action qui vient de réussir ne sont pas recopiés : un jet joué ne reste pas prérempli.
+    for (const id of champsAVider) gardees.delete(id);
+    champsAVider.clear();
     const attente = R.decisionEgalite(r) !== null;
     panneau.innerHTML = `
       <section class="carte" aria-labelledby="t-ordre"><h2 id="t-ordre">Ordre du round (DEX)</h2><div id="zone-ordre">${rendreParticipants(r)}</div></section>
-      <section class="carte" aria-labelledby="t-action"><h2 id="t-action">Action</h2><div id="action">${rendreAction(r)}</div>
+      <section class="carte" aria-labelledby="t-action"><h2 id="t-action">Action</h2>
+        <p class="mode-des"><label><input type="checkbox" id="jets-saisis"${seance.preference('jets-saisis') === '1' ? ' checked' : ''}> Jets saisis par le MJ (sinon tirés au hasard)</label></p>
+        <div id="action">${rendreAction(r)}</div>
         <p class="barre fin"><button type="button" data-action="terminer-rencontre" title="Reporte PV, SAN, Chance et folies sur les investigateurs de la réserve">Terminer la rencontre</button>
         <button type="button" data-action="abandonner-rencontre" title="Sans rien reporter sur les investigateurs">Abandonner la rencontre</button></p>
         <hr><div class="outils">${rendreOutils(r)}</div></section>
@@ -692,6 +893,10 @@ function lancerInterface() {
     majCompetences('#oppose-a', '#oppose-a-comp');
     majCompetences('#oppose-b', '#oppose-b-comp');
     rendreChamps(panneau, gardees);
+    // Zones de saisie dynamiques remises en place après le rendu (valeurs conservées) : CON de la résolution, suite du jet de SAN, « Elle surgit ».
+    majResCon();
+    majSanSuite();
+    for (const p of r.participants) if (p.kind === 'PJ') majRevelerSuite(p.id);
     const journal = $('#journal');
     journal.scrollTop = journal.scrollHeight;
     if (attente) for (const b of panneau.querySelectorAll('button')) if (!b.closest('.egalite')) b.disabled = true;
@@ -779,9 +984,20 @@ function lancerInterface() {
     const b = ev.target.closest('button');
     if (!b || b.disabled) return;
     if (b.dataset.onglet) { ui.onglet = b.dataset.onglet; return rendre(); }
-    if (b.dataset.egalite) return jouer('egalite', (s, des) => R.trancherEgalite(s, { issue: b.dataset.egalite }, des));
-    if (b.dataset.arme) return jouer('arme', s => R.basculerArmePrete(s, b.dataset.arme));
-    if (b.dataset.chance) return jouer('chance', s => R.depenserChanceEnAttente(s, { role: b.dataset.chance, niveauVise: b.dataset.niveau }));
+    if (b.dataset.egalite) {
+      const decision = R.decisionEgalite(rencontre());
+      const nomA = decision ? R.participant(rencontre(), decision.a.id).nom : 'A';
+      const nomB = decision ? R.participant(rencontre(), decision.b.id).nom : 'B';
+      const champs = saisis() && b.dataset.egalite === 'relance'
+        ? [
+            { sel: '#egalite-a-d100', id: 'egalite-a-d100', type: 'd100', libelle: `d100 relance (${nomA})` },
+            { sel: '#egalite-b-d100', id: 'egalite-b-d100', type: 'd100', libelle: `d100 relance (${nomB})` }
+          ]
+        : [];
+      return jouerSaisi('egalite', (s, des) => R.trancherEgalite(s, { issue: b.dataset.egalite }, des), champs);
+    }
+    if (b.dataset.arme) return jouerSaisi('arme', s => R.basculerArmePrete(s, b.dataset.arme), []);
+    if (b.dataset.chance) return jouerSaisi('chance', s => R.depenserChanceEnAttente(s, { role: b.dataset.chance, niveauVise: b.dataset.niveau }), []);
     const id = b.dataset.id;
     switch (b.dataset.action ?? b.id) {
       case 'composer': return composer();
@@ -795,30 +1011,79 @@ function lancerInterface() {
       case 'nouvelle-journee': return agir('journee', etat => ({ ...etat, reserve: nouvelleJournee(etat.reserve) }), { avecDes: false });
       case 'terminer-rencontre': return agir('fin-rencontre', etat => ({ reserve: R.reporterSurReserve(etat.reserve, etat.rencontre), rencontre: null }), { avecDes: false });
       case 'abandonner-rencontre': return confirmer(b, 'Confirmer : rien n’est reporté', () => { ui.onglet = 'preparer'; agir('abandon-rencontre', etat => ({ ...etat, rencontre: null }), { avecDes: false }); });
-      case 'commencer': return jouer('round', s => R.commencerRound(s));
-      case 'fin-tour': return jouer('tour', s => R.passerTour(s));
-      case 'jet-mourant': return jouer('mourant', (s, des) => R.jetMourant(s, { id }, des));
-      case 'premiers-soins': return jouer('soins', s => R.premiersSoins(s, { id }));
-      case 'recharger': return jouer('recharger', s => R.recharger(s, { id }));
+      case 'commencer': return jouerSaisi('round', s => R.commencerRound(s), []);
+      case 'fin-tour': return jouerSaisi('tour', s => R.passerTour(s), []);
+      case 'jet-mourant': return jouerSaisi('mourant', (s, des) => R.jetMourant(s, { id }, des), [
+        { sel: `[data-mourant-d100="${id}"]`, id: `mourant-d100-${id}`, type: 'd100', libelle: `d100 CON mourant (${R.participant(rencontre(), id)?.nom ?? id})` }
+      ]);
+      case 'premiers-soins': return jouerSaisi('soins', s => R.premiersSoins(s, { id }), []);
+      case 'recharger': return jouerSaisi('recharger', s => R.recharger(s, { id }), []);
       case 'attaquer': { const acteur = R.acteurCourant(rencontre());
-        return jouer('melee', (s, des) => R.attaquerMelee(s, { attaquantId: acteur.id, cibleId: $('#melee-cible').value, mode: $('#melee-mode').value,
-          bonus: nombre('#melee-bonus'), malus: nombre('#melee-malus') }, des)); }
+        const mode = $('#melee-mode').value;
+        const champs = [{ sel: '#melee-attaque-d100', id: 'melee-attaque-d100', type: 'd100', libelle: 'd100 attaque' }];
+        if (mode !== 'aucune') champs.push({ sel: '#melee-defense-d100', id: 'melee-defense-d100', type: 'd100', libelle: mode === 'esquiver' ? 'd100 Esquive' : 'd100 Rendre les coups' });
+        return jouerSaisi('melee', (s, des) => R.attaquerMelee(s, { attaquantId: acteur.id, cibleId: $('#melee-cible').value, mode,
+          bonus: nombre('#melee-bonus'), malus: nombre('#melee-malus') }, des), champs); }
       case 'tirer': { const acteur = R.acteurCourant(rencontre());
-        return jouer('tir', (s, des) => R.tirer(s, { tireurId: acteur.id, cibleId: $('#tir-cible').value, distance: nombre('#tir-distance'),
-          couvert: $('#tir-couvert').checked, dansMelee: $('#tir-melee').checked }, des)); }
-      case 'resoudre': return jouer('resolution', (s, des) => R.resoudreEnAttente(s, des));
-      case 'abandonner': return jouer('abandon', s => R.annulerEnAttente(s));
-      case 'reveler': return jouer('san', (s, des) => R.revelerCreature(s, { id: $('#reveler-qui').value }, des));
-      case 'jet-san': return jouer('san', (s, des) => R.jetSan(s, { id: $('#san-qui').value, cout: $('#san-cout').value.trim() }, des));
-      case 'libre-lancer': return jouer('test', (s, des) => R.testLibre(s, { id: $('#libre-qui').value, competence: $('#libre-competence').value, difficulte: $('#libre-difficulte').value }, des));
-      case 'redoubler': return jouer('redoublement', (s, des) => R.redoublerDernierTest(s, des));
-      case 'chance-libre': return jouer('chance', s => R.chanceSurDernierTest(s));
+        return jouerSaisi('tir', (s, des) => R.tirer(s, { tireurId: acteur.id, cibleId: $('#tir-cible').value, distance: nombre('#tir-distance'),
+          couvert: $('#tir-couvert').checked, dansMelee: $('#tir-melee').checked }, des),
+          [{ sel: '#tir-d100', id: 'tir-d100', type: 'd100', libelle: 'd100 tir' }]); }
+      case 'resoudre': {
+        const plan = planRes ?? planResolution(rencontre());
+        const champs = plan.touche ? plan.champsDegats.map(c => ({ sel: `#res-degats-${c.cle}`, id: `res-degats-${c.cle}`, type: 'lancer', libelle: c.libelle })) : [];
+        if (saisis() && plan.touche) {
+          const lu = lireChamps(champs);
+          if (!lu.ok) return bloquerSaisie(lu.el, lu.message);
+          const valeurs = {};
+          plan.champsDegats.forEach((c, i) => { valeurs[c.cle] = lu.lancers[i]; });
+          if (evaluerJetConBlessure(plan, valeurs).jetCON) champs.push({ sel: '#res-con-d100', id: 'res-con-d100', type: 'd100', libelle: 'd100 CON (blessure grave)' });
+        }
+        return jouerSaisi('resolution', (s, des) => R.resoudreEnAttente(s, des), champs);
+      }
+      case 'abandonner': return jouerSaisi('abandon', s => R.annulerEnAttente(s), []);
+      case 'reveler': {
+        const r = rencontre();
+        const quiMonstre = $('#reveler-qui').value || r.participants.find(p => p.cachee)?.id;
+        const monstre = R.participant(r, quiMonstre);
+        const champs = [];
+        if (saisis() && monstre?.coutSan) {
+          for (const p of r.participants.filter(p => p.kind === 'PJ' && p.etat === 'actif' && !p.aVu[monstre.id])) {
+            const res = champsJetSan(p, monstre.coutSan, {
+              san: `[data-reveler-san="${p.id}"]`, idSan: `reveler-san-${p.id}`,
+              perte: `[data-reveler-perte="${p.id}"]`, idPerte: `reveler-perte-${p.id}`,
+              int: `[data-reveler-int="${p.id}"]`, idInt: `reveler-int-${p.id}`
+            });
+            if (!res.ok) return bloquerSaisie(res.el, res.message);
+            champs.push(...res.champs);
+          }
+        }
+        return jouerSaisi('san', (s, des) => R.revelerCreature(s, { id: quiMonstre }, des), champs);
+      }
+      case 'jet-san': {
+        const r = rencontre();
+        const pj = R.participant(r, $('#san-qui').value);
+        if (!pj) return jouerSaisi('san', (s, des) => R.jetSan(s, { id: $('#san-qui').value, cout: $('#san-cout').value.trim() }, des), []);
+        const res = champsJetSan(pj, $('#san-cout').value.trim(), { san: '#san-d100', idSan: 'san-d100', perte: '#san-perte', idPerte: 'san-perte', int: '#san-int-d100', idInt: 'san-int-d100' });
+        if (!res.ok) return bloquerSaisie(res.el, res.message);
+        return jouerSaisi('san', (s, des) => R.jetSan(s, { id: $('#san-qui').value, cout: $('#san-cout').value.trim() }, des), res.champs);
+      }
+      case 'libre-lancer': return jouerSaisi('test', (s, des) => R.testLibre(s, { id: $('#libre-qui').value, competence: $('#libre-competence').value, difficulte: $('#libre-difficulte').value }, des),
+        [{ sel: '#libre-d100', id: 'libre-d100', type: 'd100', libelle: 'd100 test' }]);
+      case 'redoubler': return jouerSaisi('redoublement', (s, des) => R.redoublerDernierTest(s, des),
+        [{ sel: '#redoubler-d100', id: 'redoubler-d100', type: 'd100', libelle: 'd100 redoublement' }]);
+      case 'chance-libre': return jouerSaisi('chance', s => R.chanceSurDernierTest(s), []);
       case 'oppose-lancer': {
         const des = id => nombre(id);
         const bornes = v => ({ bonus: Math.max(0, v), malus: Math.max(0, -v) });
         const a = bornes(des('#oppose-a-des')), bb = bornes(des('#oppose-b-des'));
-        return jouer('oppose', (s, d) => R.testOppose(s, { aId: $('#oppose-a').value, aCompetence: $('#oppose-a-comp').value, bId: $('#oppose-b').value,
-          bCompetence: $('#oppose-b-comp').value, bonusA: a.bonus, malusA: a.malus, bonusB: bb.bonus, malusB: bb.malus }, d));
+        const r = rencontre();
+        const nomA = R.participant(r, $('#oppose-a').value)?.nom ?? 'A';
+        const nomB = R.participant(r, $('#oppose-b').value)?.nom ?? 'B';
+        return jouerSaisi('oppose', (s, d) => R.testOppose(s, { aId: $('#oppose-a').value, aCompetence: $('#oppose-a-comp').value, bId: $('#oppose-b').value,
+          bCompetence: $('#oppose-b-comp').value, bonusA: a.bonus, malusA: a.malus, bonusB: bb.bonus, malusB: bb.malus }, d), [
+            { sel: '#oppose-a-d100', id: 'oppose-a-d100', type: 'd100', libelle: `d100 A (${nomA})` },
+            { sel: '#oppose-b-d100', id: 'oppose-b-d100', type: 'd100', libelle: `d100 B (${nomB})` }
+          ]);
       }
       case 'annuler': if (seance.annuler()) rendre(); return;
       case 'retablir': if (seance.retablir()) rendre(); return;
@@ -841,12 +1106,21 @@ function lancerInterface() {
     } else if (el.dataset?.cachee) {
       const courant = ui.compo[el.dataset.cachee] ?? { n: 0 };
       ui.compo[el.dataset.cachee] = { ...courant, cachee: el.checked };
-    } else if (el.id === 'jets-saisis') seance.definirPreference('jets-saisis', el.checked ? '1' : '0');
+    } else if (el.id === 'jets-saisis') { seance.definirPreference('jets-saisis', el.checked ? '1' : '0'); rendre(); }
+    else if (el.id === 'melee-mode') majMeleeDefense();
+    else if (el.id === 'reveler-qui') majRevelerZone();
+    else if (el.id === 'san-qui' || el.id === 'san-cout') majSanSuite();
     else if (['libre-qui', 'oppose-a', 'oppose-b'].includes(el.id)) {
       majCompetences('#libre-qui', '#libre-competence'); majCompetences('#oppose-a', '#oppose-a-comp'); majCompetences('#oppose-b', '#oppose-b-comp');
     } else if (el.id === 'fichier-import') importerFichier(el);
   });
-  document.addEventListener('input', ev => { if (ev.target.closest?.('#form-profil')) majDerives(); });
+  document.addEventListener('input', ev => {
+    const el = ev.target;
+    if (el.closest?.('#form-profil')) return majDerives();
+    if (el.id === 'res-degats-arme' || el.id === 'res-degats-impact' || el.id === 'res-degats-empalement') return majResCon();
+    if (el.id === 'san-d100' || el.id === 'san-perte') return majSanSuite();
+    if (el.dataset?.revelerSan || el.dataset?.revelerPerte) return majRevelerSuite(el.dataset.revelerSan ?? el.dataset.revelerPerte);
+  });
   document.addEventListener('submit', ev => {
     ev.preventDefault();
     if (ev.target.id === 'form-profil') enregistrerProfil(ev.target);

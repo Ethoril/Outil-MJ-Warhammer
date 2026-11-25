@@ -12,6 +12,7 @@ const ASSETS_TO_CACHE = [
   './cthulhu/rencontre.js',
   './cthulhu/donnees-depart.js',
   './cthulhu/projection-carte.js',
+  './cthulhu/saisie-des.js',
   './favicon.svg',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',

@@ -110,6 +110,12 @@ button:focus-visible, summary:focus-visible, input:focus-visible, select:focus-v
 .derives { margin: 0 0 8px; color: var(--doux); }
 
 .test { margin: 4px 0; }
+.mode-des { margin: 0 0 8px; }
+.mode-des label { margin: 0; }
+.saisie-des { margin: 6px 0; padding: 6px 8px; background: rgba(127, 127, 127, .08); border-radius: 4px; }
+.saisie-des p { margin: 4px 0; }
+input.d100-inline { width: 64px; }
+input[aria-invalid="true"] { border-color: var(--alerte); outline: 2px solid var(--alerte); }
 .niveau { font-weight: 600; }
 .n0, .n1 { color: var(--alerte); }
 .n4, .n5 { color: var(--accent); }
