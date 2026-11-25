@@ -9,7 +9,8 @@
  */
 export const JEUX = Object.freeze([
   Object.freeze({ id: 'warhammer', nom: 'Warhammer', page: './index.html', base: 'wfrp-persistence-v2', prefixe: 'wfrp.', publie: true }),
-  Object.freeze({ id: 'cthulhu', nom: 'L’Appel de Cthulhu', page: './cthulhu/', base: 'outil-mj-cthulhu-v1', prefixe: 'cthulhu.', publie: true })
+  Object.freeze({ id: 'cthulhu', nom: 'L’Appel de Cthulhu', page: './cthulhu/', base: 'outil-mj-cthulhu-v1', prefixe: 'cthulhu.', publie: true }),
+  Object.freeze({ id: 'imperium', nom: 'Imperium Maledictum', page: './imperium/', base: 'outil-mj-imperium-v1', prefixe: 'imperium.', publie: false })
 ]);
 
 /** Les jeux qui apparaissent dans le sélecteur. */
