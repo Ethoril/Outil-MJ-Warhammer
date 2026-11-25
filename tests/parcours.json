@@ -110,6 +110,7 @@
     "fiches-pj-reserve-browser.mjs": {"famille":"hors-serie","note":"module importé par browser-smoke, pas un parcours autonome"},
     "firebase-rules-emulator.mjs": {"famille":"hors-serie","note":"émulateurs Firebase requis (voir le script npm test:firebase-emulators et tests/run-lot2-v5-25-emulators.ps1)"},
     "firebase-rules-v3-emulator.mjs": {"famille":"hors-serie","note":"émulateurs Firebase requis (voir le script npm test:firebase-emulators et tests/run-lot2-v5-25-emulators.ps1)"},
+    "imperium-rencontre.browser.mjs": {"famille":"general","socle":true},
     "jouer-lot4a-browser.mjs": {"famille":"general","socle":true},
     "jouer-lot4b-browser.mjs": {"famille":"general"},
     "liaison-images.browser.mjs": {"famille":"general"},
