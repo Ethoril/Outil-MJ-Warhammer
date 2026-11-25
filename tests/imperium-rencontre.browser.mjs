@@ -107,6 +107,8 @@ async function parcours(browser, origin, port) {
   await expect(page.locator('#panneau-preparer')).toBeHidden();
   await expect(page.locator('#participants')).toContainText('Ganger');
   await expect(page.locator('#participants')).toContainText('Abri');
+  // Enflammé est le 1er état de la liste et a des niveaux (p. 356) : le sélecteur de niveau est visible au 1er rendu.
+  await expect(page.locator('#etat-niveau-executeur')).toBeVisible();
 
   // Round 1 : Ganger (Init 7, Ag 40) avant Acolyte (Init 7, Ag 30) ; Supériorité 2 > Résolution 1 -> Désespéré (p. 197).
   await page.getByRole('button', { name: 'Commencer le round 1' }).click();
@@ -144,6 +146,16 @@ async function parcours(browser, origin, port) {
   const inversion = page.locator('#action .inversion');
   await expect(inversion).toBeVisible();
   await expect(inversion).toContainText('Inverser en 27');
+  // Le cadre dit que le jet peut être inversé (Avantage, p. 189), pas « jet double ».
+  const texteInversion = await inversion.innerText();
+  assert.ok(!texteInversion.includes('Jet double'), `libellé du cadre d’inversion : ${texteInversion}`);
+  assert.match(texteInversion, /inversé/);
+  // Chaque zone d’inversion (Garder / Inverser) a son propre id : les champs de dés ont des ids uniques.
+  const idsZonesInv = await inversion.locator('[data-zone-des="inversion"]').evaluateAll(els => els.map(e => e.id));
+  assert.ok(idsZonesInv.length >= 2 && idsZonesInv.every(Boolean), `zones d’inversion avec un id : ${idsZonesInv.join(', ')}`);
+  assert.equal(new Set(idsZonesInv).size, idsZonesInv.length, `ids de zones d’inversion uniques : ${idsZonesInv.join(', ')}`);
+  const idsChampsInv = await inversion.locator('input[data-champ-des]').evaluateAll(els => els.map(e => e.id));
+  assert.equal(new Set(idsChampsInv).size, idsChampsInv.length, `ids de champs de dés uniques dans l’inversion : ${idsChampsInv.join(', ')}`);
   const autres = await page.locator('#panneau-jouer button:not(.inversion button)').all();
   assert.ok(autres.length >= 5, 'les autres boutons du jeu sont là…');
   for (const bouton of autres) await expect(bouton).toBeDisabled(); // … et désactivés tant que le MJ n’a pas choisi
@@ -192,6 +204,10 @@ async function parcours(browser, origin, port) {
   await page.locator('#etat-niveau-executeur').selectOption('mineur');
   await page.locator('[data-action="ajouter-etat"][data-id="executeur"]').click();
   await expect(ligneExec.locator('.badge.etat', { hasText: 'Enflammé' })).toHaveCount(1);
+  // … et le sélecteur de niveau reste visible après un re-rendu complet (changement d’onglet).
+  await page.locator('#onglet-preparer').click();
+  await page.locator('#onglet-jouer').click();
+  await expect(page.locator('#etat-niveau-executeur')).toBeVisible();
   const j1 = await journal(page);
   await page.locator('#fin-tour').click();
   const caseEnflamme = page.locator('#des-tour input[data-des="1d5"]');
@@ -222,6 +238,13 @@ async function parcours(browser, origin, port) {
   await expect(casesMelee.nth(1)).toHaveValue('96');
   const cases1d10 = page.locator('#des-melee input[data-des="1d10"]');
   await expect(cases1d10).toHaveCount(2); // localisation puis sévérité de la critique (p. 213, 358-361)
+  // Re-rendu complet avec les d100 déjà saisis : valeurs conservées (routées par type, pas par la clé)
+  // et les champs aval (1d10 de la critique) sont toujours proposés.
+  await page.locator('#onglet-preparer').click();
+  await page.locator('#onglet-jouer').click();
+  await expect(casesMelee.nth(0)).toHaveValue('11');
+  await expect(casesMelee.nth(1)).toHaveValue('96');
+  await expect(cases1d10).toHaveCount(2);
   const j2 = await journal(page);
   await page.locator('#attaquer').click();
   await expect(page.locator('#message')).toContainText(/aucune valeur saisie/);
@@ -230,14 +253,17 @@ async function parcours(browser, origin, port) {
   await amorcerJet(page, 0.25); // 1d10 -> 3 (bras droit)
   await boutonLancer(cases1d10.nth(0)).click();
   await expect(cases1d10.nth(0)).toHaveValue('3');
-  await amorcerJet(page, 0.95); // 1d10 -> 10
+  await amorcerJet(page, 0.05); // 1d10 -> 1 : sévérité 11 avec l'excédent (pas de mort immédiate de table)
   await boutonLancer(cases1d10.nth(1)).click();
-  await expect(cases1d10.nth(1)).toHaveValue('10');
+  await expect(cases1d10.nth(1)).toHaveValue('1');
   await page.locator('#attaquer').click();
-  await expect(ligneGanger).toHaveClass(/etat-mort/); // Troupe : mort subite à la 1re critique (p. 216, 317, 359)
+  await expect(ligneGanger).toHaveClass(/etat-mort/); // Troupe : vaincue par sa 1re critique, mort subite (p. 216, 317, 359)
   await expect(ligneGanger).toContainText('13/13');
+  await expect(ligneGanger.locator('.badge.critique')).toContainText('Bras droit'); // libellé français de la localisation
+  await expect(ligneGanger).toContainText('1 à traiter'); // nombre de critiques non traitées
   await expect(page.locator('#superiorite-entete')).toHaveText('Supériorité : 3'); // +1 (p. 197)
-  assert.match(await journal(page), /meurt sur le coup/);
+  assert.match(await journal(page), /est vaincu par sa blessure critique/);
+  assert.ok(!(await journal(page)).includes('meurt sur le coup'), 'pas de mort immédiate de table ici');
 
   // Premiers soins (Médecine) sur l'Exécuteur : refus sur case vide, puis 30 -> DR +2, 3 blessures récupérées (p. 219).
   await page.locator('#soins-cible').selectOption({ label: 'Exécuteur' });
@@ -256,7 +282,12 @@ async function parcours(browser, origin, port) {
   assert.match(await journal(page), /récupère 3 blessure/);
 
   // Test libre (Vigilance) : refus sur case vide, puis 90 -> échec journalisé.
+  // Changement de participant : la liste des compétences de « Test libre » suit (#libre-competence).
+  await page.locator('#libre-qui').selectOption({ label: 'Exécuteur' });
+  await expect(page.locator('#libre-competence')).toContainText('Athlétisme'); // compétence de l’Exécuteur (p. 327)
+  await expect(page.locator('#libre-competence')).not.toContainText('Médecine'); // pas dans celles de l’Exécuteur
   await page.locator('#libre-qui').selectOption({ label: 'Acolyte' });
+  await expect(page.locator('#libre-competence')).toContainText('Médecine'); // compétence de l’Acolyte (p. 334)
   await page.locator('#libre-competence').selectOption('Vigilance');
   const caseLibre = page.locator('#des-libre input[data-champ-des]');
   const j4 = await journal(page);
@@ -325,12 +356,17 @@ async function parcours(browser, origin, port) {
   await page.locator('#retablir').click();
   await expect(page.locator('#action .egalite')).toHaveCount(0);
 
-  // Filtre du journal par round.
+  // Filtre du journal par round : « Avant le combat » = round 0, « tous » = aucun filtre.
   await page.locator('#filtre-round').selectOption('2');
   const rangs = await page.locator('#journal li .r').allTextContents();
   assert.ok(rangs.length > 0 && rangs.every(r => r === 'R2'), `filtre round 2 : ${rangs.join(',')}`);
   await page.locator('#filtre-round').selectOption('0');
+  const rangs0 = await page.locator('#journal li .r').allTextContents();
+  assert.ok(rangs0.length > 0 && rangs0.every(r => r === 'R0'), `filtre « Avant le combat » (round 0) : ${rangs0.join(',')}`);
+  assert.match(await journal(page), /Rencontre composée/);
+  await page.locator('#filtre-round').selectOption('tous');
   assert.match(await journal(page), /R1 /);
+  assert.match(await journal(page), /R3 /);
 
   // Passage de tour : l'Exécuteur devient Désespéré (Supériorité 4 > Résolution 2) au début de son tour (p. 197).
   await page.locator('#fin-tour').click();

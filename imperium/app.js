@@ -69,7 +69,7 @@ const ecrireTraits = traits => (traits ?? []).map(t => (t.valeur !== undefined ?
 
 function lancerInterface() {
   const $ = sel => document.querySelector(sel);
-  const ui = { onglet: 'preparer', edition: null, compo: {}, zones: null, surprise: '', superiorite: 0, filtreRound: 0, versions: false };
+  const ui = { onglet: 'preparer', edition: null, compo: {}, zones: null, surprise: '', superiorite: 0, filtreRound: 'tous', versions: false };
   let seance = null;
   let carte = null;
   let delaiMessage = null;
@@ -568,21 +568,19 @@ function lancerInterface() {
       if (!Number.isFinite(v)) return;
       if (el.dataset.champDes === 'd100') d100.push(v); else lancers.push(v);
     });
-    (presetsZone ? Array.from(presetsZone.entries()) : []).forEach(([cle, brut]) => {
-      if (brut === '' || zone.querySelector('input[data-cle="' + cle + '"]')) return;
-      const v = parseInt(brut, 10);
+    (presetsZone ? Array.from(presetsZone.entries()) : []).forEach(([cle, preset]) => {
+      if (!preset || preset.brut === '' || zone.querySelector('input[data-cle="' + cle + '"]')) return;
+      const v = parseInt(preset.brut, 10);
       if (!Number.isFinite(v)) return;
-      const m = /^([^:]+(?:#[0-9]+)?):/.exec(cle);
-      if (!m) return;
-      if (/^d100/.test(m[1])) d100.push(v); else lancers.push(v);
+      if (preset.type === 'd100') d100.push(v); else lancers.push(v);
     });
     const plan = sondeAction(rencontre(), requete, { d100, lancers });
     if (plan && plan.champs && presetsZone) {
       plan.champs.forEach(champ => {
         if (champ.valeurSaisie != null) return;
-        const brut = presetsZone.get(champ.cle);
-        if (brut !== undefined && brut !== '') {
-          const v = parseInt(brut, 10);
+        const preset = presetsZone.get(champ.cle);
+        if (preset && preset.brut !== undefined && preset.brut !== '') {
+          const v = parseInt(preset.brut, 10);
           if (Number.isFinite(v)) champ.valeurSaisie = v;
         }
       });
@@ -618,7 +616,7 @@ function lancerInterface() {
       if (plan.erreur) html += '<p class="avis" role="alert">' + esc(plan.erreur) + '</p>';
       plan.champs.forEach(champ => {
         const preset = presets ? presets.get(cleZ) : null;
-        const brut = preset && preset.get(champ.cle) !== undefined ? preset.get(champ.cle) : valeurs[champ.cle];
+        const brut = preset && preset.get(champ.cle) !== undefined ? preset.get(champ.cle).brut : valeurs[champ.cle];
         const valeur = champ.valeurSaisie != null ? String(champ.valeurSaisie) : (brut ?? '');
         html += champHtml(zone, champ, valeur);
       });
@@ -729,8 +727,8 @@ function lancerInterface() {
         '</select></td>';
       html += '<td>' + p.blessures + '/' + p.blessuresMax + '</td>';
       const nonTraitees = (p.critiques || []).filter(c => c.traitementRequis && !c.traitee).length;
-      html += '<td>' + (p.critiques || []).map(c => '<span class="badge critique" title="' + esc(c.nom + (c.page ? ' (p. ' + c.page + ')' : '')) + '">' + esc(c.localisation) + '</span>').join('') +
-        ' <small>' + (p.critiques || []).length + '/' + p.critiquesMax + '</small>' +
+      html += '<td>' + (p.critiques || []).map(c => '<span class="badge critique" title="' + esc(c.nom + (c.page ? ' (p. ' + c.page + ')' : '')) + '">' + esc(LIBELLE_TOUCHE[c.localisation] || c.localisation) + '</span>').join('') +
+        ' <small>' + (p.critiques || []).length + '/' + p.critiquesMax + (nonTraitees > 0 ? ' — ' + nonTraitees + ' à traiter' : '') + '</small>' +
         (nonTraitees > 0 ? ' <button type="button" data-action="traiter-critique" data-id="' + esc(p.id) + '">Traiter</button>' : '') + '</td>';
       let etats = (p.etats || []).map(e => {
         const def = ETATS.find(x => x.id === e.id);
@@ -740,23 +738,28 @@ function lancerInterface() {
         return '<button type="button" class="badge etat' + desespere + '" data-action="retirer-etat" data-id="' + esc(p.id) + '" data-etat="' + esc(e.id) + '" title="Retirer ' + esc(lib) + '">' + esc(lib + niv) + ' ✕</button>';
       }).join('');
       const optsEtats = ETATS.map(e => '<option value="' + esc(e.id) + '">' + esc(e.libelle) + '</option>').join('');
+      // Au rendu, l'état sélectionné est le premier de la liste : `hidden` du sélecteur de niveau en découle.
+      const defAjout = ETATS[0];
       etats += '<select id="etat-add-' + esc(p.id) + '" data-etat-add="' + esc(p.id) + '" aria-label="Ajouter un état à ' + esc(p.nom) + '">' + optsEtats + '</select>' +
-        '<select id="etat-niveau-' + esc(p.id) + '" class="cachee" hidden><option value="mineur">mineur</option><option value="majeur">majeur</option></select>' +
+        '<select id="etat-niveau-' + esc(p.id) + '" class="cachee"' + (defAjout.niveaux ? '' : ' hidden') + '><option value="mineur">mineur</option><option value="majeur">majeur</option></select>' +
         '<button type="button" data-action="ajouter-etat" data-id="' + esc(p.id) + '">Ajouter</button>';
       html += '<td>' + etats + '</td>';
-      if (p.camp === 'pj') {
+      if (p.kind === 'PJ') {
+        // Au rendu, l'effet / la brûlure sélectionnés sont les premiers de leur liste.
+        const effetDestinDefaut = Object.keys(LIBELLE_EFFET_DESTIN)[0];
+        const effetBruleDefaut = Object.keys(LIBELLE_EFFET_BRULE)[0];
         html += '<td><span class="badge destin">Destin ' + p.destin + '/' + p.destinMax + '</span>' +
           (p.destinBrule > 0 ? ' <span class="badge destin">brûlé ' + p.destinBrule + '</span>' : '') +
           '<br><label>Effet <select id="destin-effet-' + esc(p.id) + '" data-destin-effet="' + esc(p.id) + '">' +
           Object.entries(LIBELLE_EFFET_DESTIN).map(([id, lib]) => '<option value="' + esc(id) + '">' + esc(lib) + '</option>').join('') +
           '</select></label>' +
-          '<select id="destin-etat-' + esc(p.id) + '" class="cachee" hidden>' + optsEtats + '</select>' +
+          '<select id="destin-etat-' + esc(p.id) + '" class="cachee"' + (effetDestinDefaut === 'retirerEtat' ? '' : ' hidden') + '>' + optsEtats + '</select>' +
           '<span class="saisie-des" id="des-destin-' + esc(p.id) + '" data-zone-des="destin" data-destin-pid="' + esc(p.id) + '"></span>' +
           ' <button type="button" data-action="depenser-destin" data-id="' + esc(p.id) + '">Dépenser</button>' +
           '<br><label>Brûler <select id="destin-brule-' + esc(p.id) + '" data-destin-brule="' + esc(p.id) + '">' +
           Object.entries(LIBELLE_EFFET_BRULE).map(([id, lib]) => '<option value="' + esc(id) + '">' + esc(lib) + '</option>').join('') +
           '</select></label>' +
-          '<input type="number" min="1" max="100" id="destin-jet-' + esc(p.id) + '" class="cachee" hidden aria-label="Jet de dé pour l’Empereur">' +
+          '<input type="number" min="1" max="100" id="destin-jet-' + esc(p.id) + '" class="cachee"' + (effetBruleDefaut === 'pourEmpereur' ? '' : ' hidden') + ' aria-label="Jet de dé pour l’Empereur">' +
           ' <button type="button" data-action="bruler-destin" data-id="' + esc(p.id) + '">Brûler</button></td>';
       } else {
         html += '<td>—</td>';
@@ -787,7 +790,7 @@ function lancerInterface() {
   function rendreInversion(r, e) {
     const libCote = { attaque: 'Côté attaquant', defense: 'Côté défenseur', a: 'Côté premier', b: 'Côté second', test: 'Côté test' };
     let html = '<div class="inversion" id="inversion" role="alert">';
-    html += '<p>Jet double : choisissez le résultat (p. 189).</p>';
+    html += '<p>Avantage (p. 189) : le jet peut être inversé — choisissez le résultat.</p>';
     e.inversions.forEach(inv => {
       html += '<fieldset><legend>' + esc(libCote[inv.cote] || inv.cote) + '</legend>';
       inv.apercu.options.forEach(opt => {
@@ -795,7 +798,7 @@ function lancerInterface() {
         const drSigne = (opt.dr >= 0 ? '+' : '') + opt.dr;
         html += '<div><button type="button" data-inversion="' + esc(oid) + '">' +
           esc(opt.id === 'keep' ? 'Garder' : 'Inverser en ' + opt.jet) + ' (jet ' + opt.jet + ', DR ' + drSigne + (opt.palier ? ', ' + esc(opt.palier.libelle) : '') + ')</button>' +
-          '<span class="saisie-des" data-zone-des="inversion" data-option-id="' + esc(oid) + '"></span></div>';
+          '<span class="saisie-des" id="des-inversion-' + esc(oid.replace(/:/g, '-')) + '" data-zone-des="inversion" data-option-id="' + esc(oid) + '"></span></div>';
       });
       html += '</fieldset>';
     });
@@ -926,10 +929,27 @@ function lancerInterface() {
     if (!ol || !r) return;
     const filtre = ui.filtreRound;
     ol.innerHTML = r.journal.map((l, i) => {
-      if (filtre !== 0 && l.round !== filtre) return '';
+      if (filtre !== 'tous' && l.round !== Number(filtre)) return '';
       return '<li class="j-' + esc(l.type || 'action') + '" data-i="' + i + '"><span class="r">R' + l.round + '</span> ' + esc(l.texte) + '</li>';
     }).join('');
     ol.scrollTop = ol.scrollHeight;
+  }
+
+  /** Recalcule `hidden` des sélecteurs conditionnels d'après l'option réellement sélectionnée. */
+  function resyncConditionnels(panneau) {
+    panneau.querySelectorAll('[data-etat-add]').forEach(sel => {
+      const def = ETATS.find(e => e.id === sel.value);
+      const niv = panneau.querySelector('#etat-niveau-' + CSS.escape(sel.dataset.etatAdd));
+      if (niv) niv.hidden = !(def && def.niveaux);
+    });
+    panneau.querySelectorAll('[data-destin-effet]').forEach(sel => {
+      const selEtat = panneau.querySelector('#destin-etat-' + CSS.escape(sel.dataset.destinEffet));
+      if (selEtat) selEtat.hidden = sel.value !== 'retirerEtat';
+    });
+    panneau.querySelectorAll('[data-destin-brule]').forEach(sel => {
+      const jet = panneau.querySelector('#destin-jet-' + CSS.escape(sel.dataset.destinBrule));
+      if (jet) jet.hidden = sel.value !== 'pourEmpereur';
+    });
   }
 
   // --- Rendu : jouer ----------------------------------------------------------------------------------------------------
@@ -948,7 +968,7 @@ function lancerInterface() {
     panneau.querySelectorAll('[data-zone-des]').forEach(zone => {
       const m = new Map();
       zone.querySelectorAll('input[data-champ-des]').forEach(el => {
-        if (el.value.trim() !== '' && !champsAVider.has(el.id)) m.set(el.dataset.cle, el.value.trim());
+        if (el.value.trim() !== '' && !champsAVider.has(el.id)) m.set(el.dataset.cle, { type: el.dataset.champDes, brut: el.value.trim() });
       });
       presets.set(cleZone(zone), m);
     });
@@ -956,8 +976,8 @@ function lancerInterface() {
     for (const id of champsAVider) gardees.delete(id);
     champsAVider.clear();
 
-    const optionsFiltre = ['<option value="0"' + (ui.filtreRound === 0 ? ' selected' : '') + '>Tous les rounds</option>',
-      '<option value="-1"' + (ui.filtreRound === -1 ? ' selected' : '') + '>Avant le combat</option>'];
+    const optionsFiltre = ['<option value="tous"' + (ui.filtreRound === 'tous' ? ' selected' : '') + '>Tous les rounds</option>',
+      '<option value="0"' + (ui.filtreRound === 0 ? ' selected' : '') + '>Avant le combat</option>'];
     for (let n = 1; n <= r.round; n++) optionsFiltre.push('<option value="' + n + '"' + (ui.filtreRound === n ? ' selected' : '') + '>Round ' + n + '</option>');
 
     panneau.innerHTML = `
@@ -990,6 +1010,7 @@ function lancerInterface() {
     majCompetences('#oppose-a', '#oppose-a-comp');
     majCompetences('#oppose-b', '#oppose-b-comp');
     rendreChamps(panneau, gardees);
+    resyncConditionnels(panneau);
     majModesTir();
     majDesZones(presets);
     ajouterBoutonsLancer(panneau);
@@ -1126,7 +1147,7 @@ function lancerInterface() {
       case 'restaurer': return seance.restaurer(id).then(() => { ui.versions = false; rendre(); message('Version précédente restaurée.'); }, e => message(e.message, 'erreur'));
       case 'effacer': return confirmer(b, 'Confirmer : repartir de la réserve de départ', async () => {
         await seance.effacer(); ui.edition = null; ui.compo = {}; ui.zones = null; ui.onglet = 'preparer';
-        ui.superiorite = 0; ui.surprise = ''; ui.filtreRound = 0;
+        ui.superiorite = 0; ui.surprise = ''; ui.filtreRound = 'tous';
         rendre();
         message('Séance effacée. L’ancienne reste dans « Versions précédentes ».'); });
       case 'importer': return $('#fichier-import').click();
@@ -1146,8 +1167,10 @@ function lancerInterface() {
         if (cible) cible.value = id;
         const mode = $('#soins-mode');
         if (mode) mode.value = 'critique';
+        const competence = $('#soins-competence');
         majDesZones();
-        return jouerSaisi('soins', (s, d) => R.traiterCritique(s, { id: R.acteurCourant(s)?.id, cibleId: id }, d), champsDeZone($('#des-soins')));
+        const zone = $('#des-soins'); // absent avant le round 1 : aucun champ de dé à lire
+        return jouerSaisi('soins', (s, d) => R.traiterCritique(s, { id: R.acteurCourant(s)?.id, cibleId: id, competence: competence ? competence.value : undefined }, d), zone ? champsDeZone(zone) : []);
       }
       case 'depenser-destin':
         return jouerSaisi('destin', (s, d) => R.depenserDestin(s, id, $('#destin-effet-' + id).value, paramsDestin(id), d), champsDeZone($('#des-destin-' + id)));
@@ -1197,7 +1220,7 @@ function lancerInterface() {
       ui.surprise = el.value;
     } else if (el.id === 'fichier-import') { importerFichier(el); return;
     } else if (el.id === 'filtre-round') {
-      ui.filtreRound = Number(el.value) || 0;
+      ui.filtreRound = el.value === 'tous' ? 'tous' : Number(el.value);
       return rendreJournal();
     } else if (el.dataset?.zoneP) {
       return jouer('deplacer-zone', s => R.deplacerZone(s, el.dataset.zoneP, el.value));
@@ -1219,7 +1242,7 @@ function lancerInterface() {
       if (niv) niv.hidden = !(def && def.niveaux);
       return;
     } else if (['libre-qui', 'oppose-a', 'oppose-b'].includes(el.id)) {
-      majCompetences('#' + el.id, '#' + el.id + '-comp');
+      majCompetences('#' + el.id, el.id === 'libre-qui' ? '#libre-competence' : '#' + el.id + '-comp');
       majDesZones(); return;
     } else if (el.closest?.('#panneau-jouer')) {
       majDesZones(); return;
@@ -1258,7 +1281,7 @@ function lancerInterface() {
       try {
         const bilan = await seance.importer(String(lecteur.result));
         ui.edition = null; ui.compo = {}; ui.zones = null;
-        ui.superiorite = 0; ui.surprise = ''; ui.filtreRound = 0;
+        ui.superiorite = 0; ui.surprise = ''; ui.filtreRound = 'tous';
         rendre();
         message(`Sauvegarde chargée : ${bilan.profils} profil(s), ${bilan.armes} arme(s)${bilan.rencontre ? ', rencontre en cours' : ''}. La séance précédente reste dans « Versions précédentes ».`);
       } catch (erreur) { message(`Sauvegarde non chargée : ${erreur.message}`, 'erreur'); }
