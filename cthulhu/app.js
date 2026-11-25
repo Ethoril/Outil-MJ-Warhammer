@@ -768,7 +768,7 @@ function lancerInterface() {
       <p>${decision.issues.map((issue, i) => `<button type="button" data-egalite="${esc(issue.id)}"${i === 0 ? ' class="principal"' : ''} title="${esc(issue.libelle)}">${esc(libelles[issue.id] ?? issue.libelle)}</button>`).join(' ')}</p>
       <p class="saisie-des"><label>d100 ${esc(nom(decision.a.id))} <input type="number" min="1" max="100" id="egalite-a-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label>
         <label>d100 ${esc(nom(decision.b.id))} <input type="number" min="1" max="100" id="egalite-b-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label></p>
-      <p><small>Relancer : les deux camps relancent les dés (saisissez-les ici si vous jouez avec vos dés). Match nul n’en demande aucun.</small></p></div>`;
+      <p><small>Relancer : les deux camps relancent les dés (saisissez-les ou cliquez sur « Lancer »). Match nul n’en demande aucun.</small></p></div>`;
   }
 
   function rendreAction(r) {
