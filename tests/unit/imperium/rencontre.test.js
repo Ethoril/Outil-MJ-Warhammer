@@ -396,6 +396,17 @@ test('serviteur sans Résolution (null, p. 323) ne devient jamais Désespéré (
   assert.ok(!participant(s, 'serviteur').etats.some(e => e.id === 'desespere'));
 });
 
+test('serviteur avec un Chef allié : toujours jamais Désespéré (p. 197, 323)', () => {
+  const reserve = reserveAvecHelza();
+  let s = composerRencontre(reserve, ['helza', 'serviteur', 'chef-de-gang'], { superioriteInitiale: 3 }); // Chef de gang : Résolution 2 (p. 342)
+  s = commencerRound(s);
+  if (s.enAttente?.type === 'egalite-init') s = resoudreEgaliteInitiative(s, 'helza'); // p. 198 : égalité Helza / Chef (Init 8), tranchée par le MJ
+  for (let i = 0; i < 3 && acteurCourant(s).id !== 'serviteur'; i++) s = pur(s, st => passerTour(st));
+  assert.equal(acteurCourant(s).id, 'serviteur');
+  // p. 197 : la Résolution du Chef vaut pour ses PNJ, mais p. 323 : un Serviteur sans Résolution ne fuit jamais
+  assert.ok(!participant(s, 'serviteur').etats.some(e => e.id === 'desespere'));
+});
+
 // ---------------------------------------------------------------------------
 // Munitions, portée, viser, recharge
 // ---------------------------------------------------------------------------

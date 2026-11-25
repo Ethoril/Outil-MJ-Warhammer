@@ -115,13 +115,14 @@ export function ajusterSuperiorite(state, delta, motif = '') {
 }
 
 /**
- * Résolution effective d'un PNJ : celle d'un Chef allié présent en jeu, sinon la sienne (p. 197, 318).
+ * Résolution effective d'un PNJ : la plus élevée entre la sienne et celle d'un Chef allié en jeu (p. 197, 318).
  * Un profil sans Résolution (Serviteur p. 323, « voir traits » lu comme null) ne devient jamais Désespéré.
  */
 function resolutionEffective(state, p) {
+  if (p.resolution === null || p.resolution === undefined) return null; // p. 323 : sans Résolution -> jamais Désespéré, même avec un Chef
   const chef = state.participants.find(q => q.camp === p.camp && q.role === 'chef' && enJeu(q) && q.resolution !== null && q.resolution !== undefined);
-  if (chef) return chef.resolution; // p. 197, 318 : la Résolution du Chef s'applique au groupe
-  return p.resolution ?? null; // p. 323 : null -> jamais Désespéré
+  if (chef) return Math.max(chef.resolution, p.resolution); // p. 197 : la Résolution du Chef, si elle est plus élevée
+  return p.resolution;
 }
 
 /** Gains de Supériorité quand un ennemi est vaincu/mis hors combat (p. 197 : un ennemi mort, incapacité, qui se rend ou fuit est vaincu). */
