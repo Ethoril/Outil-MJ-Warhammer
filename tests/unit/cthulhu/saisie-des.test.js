@@ -1,10 +1,12 @@
-// Cthulhu 7e (lot M7) : saisie des dés par le MJ. Module pur `saisie-des.js` : validation des saisies, fournisseur
-// strict (qui lève au lieu de tirer au hasard), et prédictions (planResolution, evaluerJetConBlessure, planJetSan)
-// faites en appelant les fonctions du moteur sur l'état courant. Chaque prédiction est rejouée dans l'action réelle
-// du moteur avec les mêmes dés : les champs prédits correspondent exactement aux dés consommés par le moteur.
+// Cthulhu 7e (lots M7-M8) : saisie des dés par le MJ. Module pur `saisie-des.js` : validation des saisies, tirage d'une
+// case au bouton « Lancer » (tirerCase), fournisseur strict (qui lève au lieu de tirer au hasard), et prédictions
+// (planResolution, evaluerJetConBlessure, planJetSan) faites en appelant les fonctions du moteur sur l'état courant.
+// Chaque prédiction est rejouée dans l'action réelle du moteur avec les mêmes dés : les champs prédits correspondent
+// exactement aux dés consommés par le moteur.
 import { test } from 'node:test';
 import { strict as assert } from 'node:assert';
-import { validerEntier, fournisseurStrict, planResolution, evaluerJetConBlessure, planJetSan } from '../../../cthulhu/saisie-des.js';
+import { validerEntier, tirerCase, fournisseurStrict, planResolution, evaluerJetConBlessure, planJetSan } from '../../../cthulhu/saisie-des.js';
+import { analyserExpression } from '../../../cthulhu/regles.js';
 import {
   composerRencontre, commencerRound, tirer, attaquerMelee, resoudreEnAttente, jetSan, participant
 } from '../../../cthulhu/rencontre.js';
@@ -72,6 +74,43 @@ test('validerEntier : accepte les entiers dans les bornes, rejette vide, espaces
   assert.equal(validerEntier('101', { min: 1, max: 100, libelle: 'd100' }).ok, false);
   assert.equal(validerEntier('-1', { min: 0, max: Infinity, libelle: 'Dégâts' }).ok, false);
   assert.match(validerEntier('101', { min: 1, max: 100, libelle: 'd100' }).message, /hors limites/);
+});
+
+// --- tirerCase (bouton « Lancer », lot M8) ------------------------------------------------------------------------
+
+/** [min, max] d'une expression de dés lue dans ses termes (dés positifs au minimum 1, négatifs au maximum). */
+function bornesExpression(expression) {
+  return analyserExpression(expression).reduce(([min, max], t) => t.faces
+    ? [min + (t.signe > 0 ? t.n : -t.n * t.faces), max + (t.signe > 0 ? t.n * t.faces : -t.n)]
+    : [min + t.signe * t.n, max + t.signe * t.n], [0, 0]);
+}
+
+test('tirerCase : d100 tire un entier de 1 à 100 (random injecté, bornes atteintes)', () => {
+  assert.equal(tirerCase('d100', () => 0), 1);
+  assert.equal(tirerCase('d100', () => 0.999999999), 100);
+  assert.equal(tirerCase('D100', () => 0.5), 51);
+  for (let i = 0; i < 500; i++) {
+    const v = tirerCase('d100', Math.random);
+    assert.ok(Number.isInteger(v) && v >= 1 && v <= 100, `d100 hors [1, 100] : ${v}`);
+  }
+});
+
+test('tirerCase : une expression de dés est tirée en une seule valeur, dans [min, max] (bornes atteintes)', () => {
+  for (const expression of ['1D6', '1D10', '2D6+1D4', '+2D6', '1D6+2', '-1D4+3']) {
+    const [min, max] = bornesExpression(expression);
+    for (let i = 0; i < 300; i++) {
+      const v = tirerCase(expression, Math.random);
+      assert.ok(Number.isInteger(v) && v >= min && v <= max, `${expression} hors [${min}, ${max}] : ${v}`);
+    }
+  }
+  // random à 0 → chaque dé vaut 1 ; random à ~1 → chaque dé vaut son maximum.
+  assert.equal(tirerCase('1D6+1D4', () => 0), 2, '1D6+1D4 au minimum vaut 2 (une seule valeur, pas un dé par terme)');
+  assert.equal(tirerCase('1D6+1D4', () => 0.999999999), 10, '1D6+1D4 au maximum vaut 10');
+  assert.equal(tirerCase('2D6', () => 0), 2);
+  assert.equal(tirerCase('2D6', () => 0.999999999), 12);
+  assert.equal(tirerCase('1D10+2', () => 0.999999999), 12);
+  assert.equal(tirerCase('-1D4+3', () => 0), 2, 'dé négatif à 1 : −1+3');
+  assert.equal(tirerCase('-1D4+3', () => 0.999999999), -1, 'dé négatif au maximum : −4+3');
 });
 
 // --- fournisseurStrict ----------------------------------------------------------------------------------------------

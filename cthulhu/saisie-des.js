@@ -5,6 +5,8 @@
  * demande un dé qui n'a pas été saisi (aucun repli vers le hasard).
  *
  * - `validerEntier(brut, { min, max, libelle })` : validation d'une saisie (entier dans ses bornes), message en français.
+ * - `tirerCase(expression, random)` : valeur tirée au clic sur le bouton « Lancer » d'une case (lot M8) — `d100`
+ *   rend un entier de 1 à 100, toute autre expression de dés est tirée par `lancerExpression` en une seule valeur.
  * - `fournisseurStrict({ d100, lancers })` : fournisseur de dés pour `seance.agir` ; `d100()` rend `{ jet, candidats }`
  *   à partir de la file des d100 saisis, `lancer(expression)` rend la valeur saisie suivante pour une expression à
  *   dés (les expressions constantes passent sans consommer) ; file épuisée → `RangeError`.
@@ -40,6 +42,21 @@ export function validerEntier(brut, { min, max, libelle }) {
   const valeur = Number(t);
   if (valeur < min || valeur > max) return { ok: false, message: `${libelle} : ${valeur} est hors limites (${borne} attendu).` };
   return { ok: true, valeur };
+}
+
+// ---------------------------------------------------------------------------
+// Tirage d'une case de dé (bouton « Lancer », lot M8)
+// ---------------------------------------------------------------------------
+
+/**
+ * Valeur tirée au clic sur « Lancer » à côté d'une case de dé : `'d100'` tire un entier de 1 à 100 ; toute autre
+ * expression (« 1D6+1D4 », « +2D6 »…) est tirée par `lancerExpression` du moteur et rend une seule valeur.
+ * `random` est injectable (tests) ; rend l'entier tiré.
+ */
+export function tirerCase(expression, random = Math.random) {
+  const e = String(expression ?? '').trim();
+  if (e.toLowerCase() === 'd100') return 1 + Math.floor(random() * 100);
+  return lancerExpression(e, random);
 }
 
 // ---------------------------------------------------------------------------

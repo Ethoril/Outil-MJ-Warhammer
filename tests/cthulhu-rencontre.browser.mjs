@@ -1,8 +1,9 @@
-// Parcours navigateur de la page Cthulhu (lot C3, CA12, CA15, CA22, CA24, M7) : une rencontre jouée de bout en bout avec
-// des dés saisis par le MJ dans chaque action (case « Jets saisis par le MJ » en haut d'Action, refus sur case vide, tir
-// + blessure grave + jet de CON dynamique, mêlée avec dégâts, jet de CON mourant en ligne, jets de SAN et « Elle surgit »,
-// test opposé et égalité relancée), mode hasard, annuler/rétablir, rechargement, fin de rencontre, export/import, page hors
-// ligne. À lancer sous `timeout 120`.
+// Parcours navigateur de la page Cthulhu (lot C3, CA12, CA15, CA22, CA24, M8) : une rencontre jouée de bout en bout avec
+// des dés saisis par le MJ dans chaque action — cases toujours affichées, chacune avec son bouton « Lancer » à côté
+// (aucune bascule), refus sur case vide, tir + blessure grave + jet de CON dynamique, mêlée jouée aux boutons
+// « Lancer » avec dégâts, jet de CON mourant en ligne, jets de SAN (la perte apparaît après le « Lancer » du d100) et
+// « Elle surgit », test opposé et égalité relancée, annuler/rétablir, rechargement, fin de rencontre, export/import,
+// page hors ligne. À lancer sous `timeout 120`.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -34,6 +35,31 @@ async function creerInvestigateur(page, p) {
 
 const journal = page => page.locator('#journal').innerText();
 const attendrePret = page => expect(page.locator('body[data-pret="1"]')).toHaveCount(1);
+
+/** Bouton « Lancer » d'une case de dé : le bouton placé juste après la case, sur la même ligne. */
+const boutonLancer = champ => champ.locator('xpath=./following-sibling::button[1]');
+
+/** Chaque case de dé visible sous `sel` a son bouton « Lancer » (texte « Lancer », aria-label « Lancer (<dé>) »). */
+async function verifierBoutonsLancer(page, sel = '#panneau-jouer') {
+  const cases = await page.evaluate(s => [...document.querySelectorAll(`${s} input[data-champ-des]`)].map(el => {
+    const b = el.nextElementSibling;
+    return { id: el.id || el.dataset.revelerSan || el.outerHTML.slice(0, 80), des: el.dataset.des,
+      bouton: b && b.tagName === 'BUTTON' ? b.textContent.trim() : null,
+      aria: b && b.tagName === 'BUTTON' ? b.getAttribute('aria-label') : null,
+      titre: b && b.tagName === 'BUTTON' ? b.title : '' };
+  }), sel);
+  assert.ok(cases.length > 0, `aucune case de dé sous ${sel}`);
+  for (const c of cases) {
+    assert.equal(c.bouton, 'Lancer', `la case ${c.id} n’a pas de bouton « Lancer » à côté`);
+    assert.equal(c.aria, `Lancer (${c.des})`, `aria-label du bouton de la case ${c.id}`);
+    assert.ok(c.titre.length > 0, `title du bouton de la case ${c.id}`);
+  }
+  return cases;
+}
+
+/** Amorce le prochain Math.random de la page (les sondages de prédiction consomment aussi Math.random :
+ * à poser juste avant le clic sur un bouton « Lancer » pour rendre son tirage déterministe). */
+const amorcerJet = (page, v) => page.evaluate(val => { window.__jet = val; Math.random = () => (window.__jet ?? 0.5); }, v);
 
 async function parcours(browser, origin, port) {
   const context = await browser.newContext({ serviceWorkers: 'block', acceptDownloads: true });
@@ -73,29 +99,21 @@ async function parcours(browser, origin, port) {
   await expect(page.locator('#participants')).toContainText('Goule');
   await expect(page.locator('#participants')).toContainText('(cachée)');
 
-  // M7 : l'ancien bloc « Dés » et ses files ont disparu ; la case « Jets saisis par le MJ » est en haut de la carte Action.
+  // M8 : ni case « Jets saisis par le MJ », ni paragraphe .mode-des — les anciennes files de dés ont disparu, et les
+  // cases de dés affichées (outils compris) ont chacune leur bouton « Lancer » à côté.
+  await expect(page.locator('#jets-saisis')).toHaveCount(0);
+  await expect(page.locator('.mode-des')).toHaveCount(0);
   await expect(page.locator('#file-d100')).toHaveCount(0);
   await expect(page.locator('#file-degats')).toHaveCount(0);
-  await expect(page.locator('[data-champ-des]')).toHaveCount(0);
-  const caseSaisie = page.locator('#panneau-jouer #jets-saisis');
-  await expect(caseSaisie).toBeVisible();
-  const position = await page.evaluate(() => {
-    const h2 = document.querySelector('#t-action');
-    const cb = document.querySelector('#jets-saisis');
-    const action = document.querySelector('#action');
-    return {
-      sousLeTitre: Boolean(h2.compareDocumentPosition(cb) & Node.DOCUMENT_POSITION_FOLLOWING),
-      avantAction: Boolean(cb.compareDocumentPosition(action) & Node.DOCUMENT_POSITION_FOLLOWING)
-    };
-  });
-  assert.deepEqual(position, { sousLeTitre: true, avantAction: true }, '#jets-saisis est juste sous « Action », au-dessus du contenu');
-  await caseSaisie.check();
+  await verifierBoutonsLancer(page);
 
   // Round 1 : Margaret (DEX 80) tire sur le disciple. Refus tant que la case d100 est vide (aucun tirage au hasard).
   await page.getByRole('button', { name: 'Commencer le round 1' }).click();
   await expect(page.locator('#round')).toHaveText('Round 1');
   await expect(page.locator('#action h3')).toContainText('Au tour de Margaret Hale');
   await expect(page.locator('#action fieldset legend').first()).toContainText('Mêlée (Grand couteau (poignard, machette), Corps à corps 45 %)');
+  // Chaque case de dé de l'action a son bouton « Lancer » (d100 attaque, d100 Esquive, d100 tir).
+  await verifierBoutonsLancer(page, '#action');
   await page.locator('#tir-cible').selectOption({ label: 'Disciple de Jacob Smith' });
   await page.locator('#tir-distance').fill('10');
   const j0 = await journal(page);
@@ -186,7 +204,8 @@ async function parcours(browser, origin, port) {
   await expect(page.locator('#action h3')).toContainText('Au tour de Pr Arthur Lindqvist');
   await expect(page.locator('#action fieldset legend').first()).toContainText('Mêlée (Canne-épée, Épée 40 %)');
 
-  // Mêlée complète : d100 attaquant + d100 défense, puis dégâts saisis dans la fenêtre « Résoudre ».
+  // Mêlée complète jouée avec les boutons « Lancer » : d100 attaquant + d100 défense tirés au bouton (Math.random est
+  // amorcé pour le parcours), puis dégâts tirés au bouton dans la fenêtre « Résoudre ».
   await page.locator('#melee-cible').selectOption({ label: 'Disciple de Jacob Smith' });
   const j4 = await journal(page);
   await page.locator('#attaquer').click();
@@ -201,13 +220,28 @@ async function parcours(browser, origin, port) {
   await expect(page.locator('#melee-defense-d100')).toHaveCount(0);
   await page.locator('#melee-mode').selectOption('esquiver');
   await expect(page.locator('#melee-defense-d100')).toBeVisible();
-  await page.locator('#melee-attaque-d100').fill('20'); // Épée 40 : 20 ≤ 20 → réussite majeure
-  await page.locator('#melee-defense-d100').fill('40'); // Esquive 30 : 40 > 30 → échec
+  // Les cases se remplissent au clic sur « Lancer » (bouton à côté de chaque case, aria-label « Lancer (d100) »).
+  const boutonAttaque = boutonLancer(page.locator('#melee-attaque-d100'));
+  await expect(boutonAttaque).toHaveText('Lancer');
+  await expect(boutonAttaque).toHaveAttribute('aria-label', 'Lancer (d100)');
+  await amorcerJet(page, 0.19); // d100 → 20
+  await boutonAttaque.click();
+  await expect(page.locator('#melee-attaque-d100')).toHaveValue('20'); // Épée 40 : 20 ≤ 20 → réussite majeure
+  await amorcerJet(page, 0.39); // d100 → 40
+  await boutonLancer(page.locator('#melee-defense-d100')).click();
+  await expect(page.locator('#melee-defense-d100')).toHaveValue('40'); // Esquive 30 : 40 > 30 → échec, le coup touche
   await page.locator('#attaquer').click();
   await expect(page.locator('#action')).toContainText('Résoudre');
+  // Les dégâts apparaissent après le coup porté, avec leur propre bouton « Lancer » (Arme 1D6).
   await expect(page.locator('#action .saisie-des label').first()).toContainText('Arme (1D6)');
-  await page.locator('#res-degats-arme').fill('5'); // 1 PV → 0, blessure grave déjà connue → mourant, pas de jet de CON
-  await expect(page.locator('#res-con-d100')).toHaveCount(0);
+  const boutonDegats = boutonLancer(page.locator('#res-degats-arme'));
+  await expect(boutonDegats).toHaveText('Lancer');
+  await expect(boutonDegats).toHaveAttribute('aria-label', 'Lancer (1D6)');
+  await amorcerJet(page, 0.99); // 1D6 → 6
+  await boutonDegats.click();
+  await expect(page.locator('#res-degats-arme')).toHaveValue('6'); // 1D6 au maximum
+  await verifierBoutonsLancer(page, '#action');
+  await expect(page.locator('#res-con-d100')).toHaveCount(0); // 1 PV → 0, blessure grave déjà connue → mourant, pas de jet de CON
   await page.locator('#resoudre').click();
   await expect(ligneDisciple).toContainText('0/12');
   assert.match(await journal(page), /Pr Arthur Lindqvist touche Disciple de Jacob Smith/);
@@ -224,6 +258,7 @@ async function parcours(browser, origin, port) {
   const egalite = page.locator('#action .egalite');
   await expect(egalite).toBeVisible();
   await expect(egalite).toContainText('Égalité parfaite');
+  await verifierBoutonsLancer(page, '#action'); // les cases d100 de l’égalité ont aussi leur bouton « Lancer »
   await expect(egalite.getByRole('button', { name: 'Match nul' })).toBeEnabled();
   await expect(egalite.getByRole('button', { name: 'Relancer' })).toBeEnabled();
   const autres = await page.locator('#panneau-jouer button:not(.egalite button)').all();
@@ -262,6 +297,7 @@ async function parcours(browser, origin, port) {
 
   // La goule surgit : une ligne par investigateur conscient qui ne l'a pas encore vue (d100 SAN, perte, d100 INT en place).
   await expect(page.locator('#reveler-des-zone')).toBeVisible();
+  await verifierBoutonsLancer(page, '#reveler-des-zone');
   const sanHale = page.locator('[data-reveler-san="margaret-hale"]');
   const sanLind = page.locator('[data-reveler-san="pr-arthur-lindqvist"]');
   await expect(sanHale).toBeVisible();
@@ -281,14 +317,23 @@ async function parcours(browser, origin, port) {
   assert.match(j5, /Pr Arthur Lindqvist perd 0 SAN/);
   await expect(page.locator('#participants tr', { hasText: 'Margaret Hale' })).toContainText('temporaire');
 
-  // Jet de SAN libre : la perte se saisit dans la sous-zone (0 accepté) ; d100 INT dynamique si perte ≥ 5.
+  // Jet de SAN libre joué au bouton « Lancer » : le d100 SAN est tiré par le bouton, la perte apparaît ensuite en place
+  // (et est tirée au bouton à son tour) ; d100 INT dynamique si perte ≥ 5.
   await page.locator('#san-qui').selectOption({ label: 'Pr Arthur Lindqvist' });
-  await page.locator('#san-d100').fill('95'); // 95 > 50 : échec → perte 1D6 (coût 1/1D6)
-  await expect(page.locator('#san-perte')).toBeVisible();
-  await page.locator('#san-perte').fill('0');
-  await expect(page.locator('#san-int-d100')).toHaveCount(0); // 0 < 5
+  const boutonSan = boutonLancer(page.locator('#san-d100'));
+  await expect(boutonSan).toHaveAttribute('aria-label', 'Lancer (d100)');
+  await amorcerJet(page, 0.94); // d100 → 95
+  await boutonSan.click();
+  await expect(page.locator('#san-d100')).toHaveValue('95'); // 95 > 50 : échec → perte 1D6 (coût 1/1D6)
+  await expect(page.locator('#san-perte')).toBeVisible(); // la perte apparaît après le clic sur « Lancer » du d100
+  const boutonPerte = boutonLancer(page.locator('#san-perte'));
+  await expect(boutonPerte).toHaveAttribute('aria-label', 'Lancer (1D6)');
+  await amorcerJet(page, 0.5); // 1D6 → 4
+  await boutonPerte.click();
+  await expect(page.locator('#san-perte')).toHaveValue('4');
+  await expect(page.locator('#san-int-d100')).toHaveCount(0); // 4 < 5
   await page.locator('#jet-san').click();
-  assert.match((await journal(page)).slice(j5.length), /Pr Arthur Lindqvist perd 0 SAN/);
+  assert.match((await journal(page)).slice(j5.length), /Pr Arthur Lindqvist perd 4 SAN/);
   await expect(page.locator('#san-d100')).toHaveValue(''); // case vidée après l’action
   await page.locator('#san-qui').selectOption({ label: 'Margaret Hale' });
   await page.locator('#san-d100').fill('95'); // 95 > 59 : échec → perte 1D6
@@ -325,22 +370,17 @@ async function parcours(browser, origin, port) {
   assert.match(await journal(page), /Test redoublé — Pr Arthur Lindqvist — Bibliothèque 70 % : 50 → Réussite ordinaire/);
   await expect(page.locator('#libre-resultat .test')).toContainText('Réussite ordinaire');
 
-  // Mode hasard : décocher masque toutes les cases de dés et permet de jouer un test sans saisie.
-  await page.locator('#jets-saisis').uncheck();
-  await expect(page.locator('#jets-saisis')).toBeVisible();
-  await expect(page.locator('[data-champ-des]')).toHaveCount(0);
+  // M8 : plus de mode hasard — les cases de dés restent affichées, chacune avec son bouton « Lancer », et un test hors
+  // combat se joue aussi au bouton (ici 91 > 70 : échec), sans saisie clavier.
+  await expect(page.locator('#jets-saisis')).toHaveCount(0);
+  await expect(page.locator('.mode-des')).toHaveCount(0);
+  await verifierBoutonsLancer(page);
+  await amorcerJet(page, 0.9); // d100 → 91
+  await boutonLancer(page.locator('#libre-d100')).click();
+  await expect(page.locator('#libre-d100')).toHaveValue('91');
   await page.locator('#libre-lancer').click();
-  await expect(page.locator('#libre-resultat .test')).toBeVisible(); // test joué, dés tirés au hasard
-  // Jet de SAN en mode hasard : aucun champ de saisie (#san-d100 absent), le moteur tire lui-même.
-  await expect(page.locator('#san-d100')).toHaveCount(0);
-  await page.locator('#san-qui').selectOption({ label: 'Pr Arthur Lindqvist' });
-  const jA = await journal(page);
-  await page.locator('#jet-san').click();
-  const jS = await journal(page);
-  assert.notEqual(jS, jA, 'le jet de SAN est bien joué en mode hasard');
-  assert.match(jS.slice(jA.length), /Pr Arthur Lindqvist — SAN \d+ % : \d+ → /);
-  assert.match(jS.slice(jA.length), /Pr Arthur Lindqvist perd \d+ SAN/);
-  await page.locator('#jets-saisis').check();
+  await expect(page.locator('#libre-resultat .test')).toContainText('Échec');
+  assert.match(await journal(page), /Pr Arthur Lindqvist — Bibliothèque 70 % : 91 → Échec/);
   await expect(page.locator('#melee-attaque-d100')).toBeVisible();
 
   // Rechargement : la rencontre, le journal et l'historique reviennent ; seule la base de Cthulhu existe.
@@ -351,7 +391,9 @@ async function parcours(browser, origin, port) {
   await expect(page.locator('#round')).toHaveText('Round 1');
   assert.match(await journal(page), /FOLIE TEMPORAIRE/);
   await expect(page.locator('#annuler')).toBeEnabled();
-  await expect(page.locator('#jets-saisis')).toBeChecked(); // préférence « cthulhu.jets-saisis » conservée
+  await expect(page.locator('#jets-saisis')).toHaveCount(0); // plus de bascule après rechargement
+  await expect(page.locator('.mode-des')).toHaveCount(0);
+  await verifierBoutonsLancer(page); // cases de dés toujours là, chacune avec son bouton « Lancer »
   const stockage = await page.evaluate(async () => ({
     bases: (await indexedDB.databases()).map(d => d.name).sort(),
     cles: Object.keys(localStorage)
@@ -425,7 +467,7 @@ async function main() {
   const browser = await launchBrowser();
   const resultats = [];
   try {
-    for (const [nom, fn] of [['rencontre de bout en bout avec dés saisis, rechargement, export et import', parcours], ['page hors ligne', horsLigne]]) {
+    for (const [nom, fn] of [['rencontre de bout en bout avec dés saisis au clavier et aux boutons « Lancer », rechargement, export et import', parcours], ['page hors ligne', horsLigne]]) {
       try { await fn(browser, origin, port); resultats.push(`PASS — ${nom}`); } catch (erreur) { resultats.push(`FAIL — ${nom}: ${erreur.stack ?? erreur.message}`); }
     }
   } finally {

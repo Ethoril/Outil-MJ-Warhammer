@@ -21,8 +21,8 @@ import { initSelecteurJeu } from '../js/ui/selecteur-jeu.js';
 import { initThemeManager } from '../js/ui/theme.js';
 import { renderMapLinkIndicator, renderMapLinkPending } from '../js/ui/map-link-indicator.js';
 import { creerLiaisonCarte } from './projection-carte.js';
-import { lancerD100, lancerExpression, LIBELLE_NIVEAU, LIBELLE_DIFFICULTE, seuils } from './regles.js';
-import { validerEntier, fournisseurStrict, planResolution, evaluerJetConBlessure, planJetSan } from './saisie-des.js';
+import { LIBELLE_NIVEAU, LIBELLE_DIFFICULTE, seuils } from './regles.js';
+import { validerEntier, tirerCase, fournisseurStrict, planResolution, evaluerJetConBlessure, planJetSan } from './saisie-des.js';
 import {
   creerReserve, ajouterArme, modifierArme, supprimerArme, ajouterProfil, supprimerProfil, normaliserProfil, valeursDerivees,
   nouvelleJournee, idDepuisNom, trouverProfil, CARACS
@@ -271,17 +271,36 @@ function lancerInterface() {
     delaiMessage = setTimeout(() => { el.hidden = true; }, type === 'erreur' ? 9000 : 5000);
   }
 
-  // --- Dés : saisis par le MJ dans chaque action, ou tirés au hasard ---------------------------------------------------------------------
+  // --- Dés : saisis par le MJ dans chaque action, avec un bouton « Lancer » à côté de chaque case ---------------------
 
-  /** Mode saisi : la case « Jets saisis par le MJ » en haut de la carte Action (préférence `cthulhu.jets-saisis`). */
-  const saisis = () => seance.preference('jets-saisis') === '1';
-
-  /** Mode hasard (case décochée) : le moteur tire lui-même, comme avant. */
-  function fournisseurHasard() {
-    return {
-      d100(net) { return lancerD100({ net }); },
-      lancer(expression) { return lancerExpression(expression); }
-    };
+  /**
+   * Bouton « Lancer » ajouté à côté de chaque case de dé (`input[data-champ-des]`, attribut `data-des`) : au clic,
+   * la case reçoit la valeur tirée par `tirerCase` puis les événements `input` et `change` sont déclenchés, comme
+   * une saisie clavier (les cases suivantes apparaissent alors normalement). Le bouton ne valide aucune action :
+   * le MJ clique ensuite sur le bouton de l'action. `aria-label` « Lancer (<dé>) », `title` = libellé du champ.
+   * Sans effet sur une case déjà équipée.
+   */
+  function ajouterBoutonsLancer(root) {
+    for (const input of root?.querySelectorAll?.('input[data-champ-des]') || []) {
+      if (input.dataset.boutonLancer) continue;
+      const des = input.dataset.des || (input.dataset.champDes === 'd100' ? 'd100' : '');
+      if (!des) continue;
+      input.dataset.boutonLancer = '1';
+      const libelle = (input.getAttribute('aria-label') || input.closest('label')?.textContent || input.placeholder || '').trim();
+      const bouton = document.createElement('button');
+      bouton.type = 'button';
+      bouton.className = 'bouton-lancer';
+      bouton.textContent = 'Lancer';
+      bouton.disabled = input.disabled;
+      bouton.setAttribute('aria-label', `Lancer (${des})`);
+      bouton.title = libelle;
+      bouton.addEventListener('click', () => {
+        input.value = String(tirerCase(des));
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        input.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      input.insertAdjacentElement('afterend', bouton);
+    }
   }
 
   /** Plan de la résolution en attente affiché dans la fenêtre « Résoudre » (mis à jour à chaque rendu). */
@@ -344,7 +363,7 @@ function lancerInterface() {
   const rencontre = () => seance.etat.rencontre;
 
   function agir(type, fn, { avecDes = true, des = null, avantRendre = null } = {}) {
-    const r = seance.agir(type, fn, avecDes ? (des ?? fournisseurHasard()) : null);
+    const r = seance.agir(type, fn, avecDes ? (des ?? fournisseurStrict()) : null);
     if (r.erreur) message(`Impossible : ${r.erreur.message}`, 'erreur');
     if (avantRendre) avantRendre(r);
     rendre();
@@ -364,13 +383,12 @@ function lancerInterface() {
   }
 
   /**
-   * Action du moteur avec les dés saisis. En mode saisi, `champs` est lu et validé avant tout appel à
-   * `seance.agir` (case vide ou invalide → refus, aucune action, aucun tirage) puis joué avec un
-   * `fournisseurStrict` : si le moteur demande un dé qui n'a pas été saisi, il lève et le message d'erreur
-   * français s'affiche, sans tirer au hasard. Les champs consommés sont vidés au rendu suivant si l'action réussit.
+   * Action du moteur avec les dés saisis. `champs` est lu et validé avant tout appel à `seance.agir` (case vide ou
+   * invalide → refus, aucune action, aucun tirage) puis joué avec un `fournisseurStrict` : si le moteur demande un dé
+   * qui n'a pas été saisi, il lève et le message d'erreur français s'affiche, sans tirer au hasard. Les champs
+   * consommés sont vidés au rendu suivant si l'action réussit.
    */
   function jouerSaisi(type, fn, champs, opts = {}) {
-    if (!saisis()) return jouer(type, fn, null, opts);
     const lu = lireChamps(champs);
     if (!lu.ok) { bloquerSaisie(lu.el, lu.message); return { change: false, erreur: null }; }
     const des = fournisseurStrict({ d100: lu.d100, lancers: lu.lancers });
@@ -601,7 +619,7 @@ function lancerInterface() {
     if (!plan || plan.touche !== true) return '';
     const ev = evaluerJetConBlessure(plan, valeurs);
     return ev.jetCON
-      ? `<label>d100 CON (blessure grave) <input type="number" min="1" max="100" id="res-con-d100" data-champ-des="d100" class="d100-inline" aria-label="d100 CON, blessure grave"></label>`
+      ? `<label>d100 CON (blessure grave) <input type="number" min="1" max="100" id="res-con-d100" data-champ-des="d100" data-des="d100" class="d100-inline" aria-label="d100 CON, blessure grave"></label>`
       : '';
   }
 
@@ -617,6 +635,7 @@ function lancerInterface() {
     const html = resConHtml(planRes, valeurs);
     if (zone.innerHTML !== html) zone.innerHTML = html;
     if (avant !== undefined && $('#res-con-d100')) $('#res-con-d100').value = avant;
+    ajouterBoutonsLancer(zone);
   }
 
   /** Sous-zone du jet de SAN libre : la perte (si la branche prédite contient des dés), puis le d100 INT (perte ≥ 5). */
@@ -635,17 +654,18 @@ function lancerInterface() {
         try {
           let plan = planJetSan(pj, cout, { jetSan: jet.valeur });
           if (plan.champPerte) {
-            html += `<label>Perte (${esc(plan.champPerte.expression)}) <input type="number" min="0" id="san-perte" data-champ-des="lancer" class="d100-inline" aria-label="Perte de SAN saisie"></label>`;
+            html += `<label>Perte (${esc(plan.champPerte.expression)}) <input type="number" min="0" id="san-perte" data-champ-des="lancer" data-des="${esc(plan.champPerte.expression)}" class="d100-inline" aria-label="Perte de SAN saisie"></label>`;
             const pv = validerEntier(perteAvant ?? '', { min: 0, max: Infinity, libelle: 'Perte de SAN' });
             if (pv.ok) plan = planJetSan(pj, cout, { jetSan: jet.valeur, perte: pv.valeur });
           }
-          if (plan.jetIntRequis) html += `<label>d100 INT <input type="number" min="1" max="100" id="san-int-d100" data-champ-des="d100" class="d100-inline" aria-label="d100 INT contre la folie"></label>`;
+          if (plan.jetIntRequis) html += `<label>d100 INT <input type="number" min="1" max="100" id="san-int-d100" data-champ-des="d100" data-des="d100" class="d100-inline" aria-label="d100 INT contre la folie"></label>`;
         } catch { html = ''; }
       }
     }
     zone.innerHTML = html;
     if (perteAvant !== undefined && $('#san-perte')) $('#san-perte').value = perteAvant;
     if (intAvant !== undefined && $('#san-int-d100')) $('#san-int-d100').value = intAvant;
+    ajouterBoutonsLancer(zone);
   }
 
   /** Lignes de « Elle surgit » : un d100 SAN par investigateur conscient qui n'a pas encore vu la créature choisie. */
@@ -655,13 +675,13 @@ function lancerInterface() {
     if (!monstre) return '';
     if (!monstre.coutSan) return '<p><small>Coût de SAN inconnu pour cette créature : aucun jet saisi.</small></p>';
     const lignes = r.participants.filter(p => p.kind === 'PJ' && p.etat === 'actif' && !p.aVu[monstre.id]).map(p =>
-      `<p class="ligne-saisie"><label>${esc(p.nom)} — d100 SAN <input type="number" min="1" max="100" id="reveler-san-${esc(p.id)}" data-champ-des="d100" data-reveler-san="${esc(p.id)}" class="d100-inline"></label> <span id="reveler-suite-${esc(p.id)}"></span></p>`).join('');
+      `<p class="ligne-saisie"><label>${esc(p.nom)} — d100 SAN <input type="number" min="1" max="100" id="reveler-san-${esc(p.id)}" data-champ-des="d100" data-des="d100" data-reveler-san="${esc(p.id)}" class="d100-inline"></label> <span id="reveler-suite-${esc(p.id)}"></span></p>`).join('');
     return lignes || '<p><small>Chaque investigateur conscient l’a déjà vue : aucun jet.</small></p>';
   }
 
   function majRevelerZone() {
     const zone = $('#reveler-des-zone');
-    if (zone) zone.innerHTML = lignesReveler(rencontre());
+    if (zone) { zone.innerHTML = lignesReveler(rencontre()); ajouterBoutonsLancer(zone); }
   }
 
   /** Sous-zone d'une ligne « Elle surgit » : la perte puis le d100 INT, selon le d100 SAN saisi sur la ligne. */
@@ -680,11 +700,11 @@ function lancerInterface() {
         try {
           let plan = planJetSan(pj, monstre.coutSan, { jetSan: jet.valeur });
           if (plan.champPerte) {
-            html += `<label>Perte (${esc(plan.champPerte.expression)}) <input type="number" min="0" id="reveler-perte-${esc(pid)}" data-champ-des="lancer" data-reveler-perte="${esc(pid)}" class="d100-inline" aria-label="Perte de SAN saisie pour ${esc(pj.nom)}"></label>`;
+            html += `<label>Perte (${esc(plan.champPerte.expression)}) <input type="number" min="0" id="reveler-perte-${esc(pid)}" data-champ-des="lancer" data-des="${esc(plan.champPerte.expression)}" data-reveler-perte="${esc(pid)}" class="d100-inline" aria-label="Perte de SAN saisie pour ${esc(pj.nom)}"></label>`;
             const pv = validerEntier(perteAvant ?? '', { min: 0, max: Infinity, libelle: 'Perte de SAN' });
             if (pv.ok) plan = planJetSan(pj, monstre.coutSan, { jetSan: jet.valeur, perte: pv.valeur });
           }
-          if (plan.jetIntRequis) html += `<label>d100 INT <input type="number" min="1" max="100" id="reveler-int-${esc(pid)}" data-champ-des="d100" data-reveler-int="${esc(pid)}" class="d100-inline" aria-label="d100 INT pour ${esc(pj.nom)}"></label>`;
+          if (plan.jetIntRequis) html += `<label>d100 INT <input type="number" min="1" max="100" id="reveler-int-${esc(pid)}" data-champ-des="d100" data-des="d100" data-reveler-int="${esc(pid)}" class="d100-inline" aria-label="d100 INT pour ${esc(pj.nom)}"></label>`;
         } catch { html = ''; }
       }
     }
@@ -693,6 +713,7 @@ function lancerInterface() {
     if (perteAvant !== undefined && perteEl) perteEl.value = perteAvant;
     const intEl = span.querySelector('[data-reveler-int]');
     if (intAvant !== undefined && intEl) intEl.value = intAvant;
+    ajouterBoutonsLancer(span);
   }
 
   /** Libellé de la case d100 de défense selon le mode choisi (conteneur vidé si « aucune »). */
@@ -700,7 +721,7 @@ function lancerInterface() {
     const mode = $('#melee-mode')?.value ?? 'esquiver';
     if (mode === 'aucune') return '';
     const libelle = mode === 'esquiver' ? 'd100 Esquive' : 'd100 Rendre les coups';
-    return `<label>${libelle} <input type="number" min="1" max="100" id="melee-defense-d100" data-champ-des="d100" class="d100-inline"></label>`;
+    return `<label>${libelle} <input type="number" min="1" max="100" id="melee-defense-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label>`;
   }
 
   function majMeleeDefense() {
@@ -709,6 +730,7 @@ function lancerInterface() {
     const avant = $('#melee-defense-d100')?.value;
     zone.innerHTML = defenseZoneHtml();
     if (avant !== undefined && avant !== '' && $('#melee-defense-d100')) $('#melee-defense-d100').value = avant;
+    ajouterBoutonsLancer(zone);
   }
 
   function rendreParticipants(r) {
@@ -721,8 +743,8 @@ function lancerInterface() {
         + (p.etat === 'mourant' || (p.etat !== 'mort' && p.pv < p.pvMax) ? ` <button type="button" data-action="premiers-soins" data-id="${esc(p.id)}" title="Premiers soins réussis : stabilise un mourant (1 PV, inconscient), sinon +1 PV">Premiers soins</button>` : '');
       const boutonRecharger = arme && p.etat !== 'mort' && p.munitions < arme.capacite
         ? ` <button type="button" data-action="recharger" data-id="${esc(p.id)}" title="Recharger : 1 round pour deux balles — Gardien p. 100">Recharger</button>` : '';
-      const champMourant = saisis() && p.etat === 'mourant'
-        ? ` <input type="number" min="1" max="100" id="mourant-d100-${esc(p.id)}" data-mourant-d100="${esc(p.id)}" data-champ-des="d100" placeholder="d100" class="d100-inline" aria-label="d100 CON mourant pour ${esc(p.nom)}">` : '';
+      const champMourant = p.etat === 'mourant'
+        ? ` <input type="number" min="1" max="100" id="mourant-d100-${esc(p.id)}" data-mourant-d100="${esc(p.id)}" data-champ-des="d100" data-des="d100" placeholder="d100" class="d100-inline" aria-label="d100 CON mourant pour ${esc(p.nom)}">` : '';
       return `<tr class="camp-${participantCamp({ camp: p.camp, kind: p.kind })} ${acteur?.id === p.id ? 'courant' : ''} etat-${p.etat}${p.cachee ? ' cachee' : ''}"${acteur?.id === p.id ? ' aria-current="true"' : ''}>
         <td>${o ? o.rang : '—'}</td>
         <td><strong>${esc(p.nom)}</strong>${p.cachee ? ' <em>(cachée)</em>' : ''}<br><small>DEX ${p.carac.DEX}${o ? ` → ${o.dex}` : ''} · Impact ${esc(p.impact)}</small></td>
@@ -744,8 +766,8 @@ function lancerInterface() {
       <p>${esc(nom(decision.a.id))} et ${esc(nom(decision.b.id))} font exactement le même résultat (même niveau, même valeur) : le livre laisse au Gardien le choix. La rencontre attend votre décision.</p>
       ${rendreTest(decision.a, `${nom(decision.a.id)} — ${decision.a.competence}`)}${rendreTest(decision.b, `${nom(decision.b.id)} — ${decision.b.competence}`)}
       <p>${decision.issues.map((issue, i) => `<button type="button" data-egalite="${esc(issue.id)}"${i === 0 ? ' class="principal"' : ''} title="${esc(issue.libelle)}">${esc(libelles[issue.id] ?? issue.libelle)}</button>`).join(' ')}</p>
-      ${saisis() ? `<p class="saisie-des"><label>d100 ${esc(nom(decision.a.id))} <input type="number" min="1" max="100" id="egalite-a-d100" data-champ-des="d100" class="d100-inline"></label>
-        <label>d100 ${esc(nom(decision.b.id))} <input type="number" min="1" max="100" id="egalite-b-d100" data-champ-des="d100" class="d100-inline"></label></p>` : ''}
+      <p class="saisie-des"><label>d100 ${esc(nom(decision.a.id))} <input type="number" min="1" max="100" id="egalite-a-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label>
+        <label>d100 ${esc(nom(decision.b.id))} <input type="number" min="1" max="100" id="egalite-b-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label></p>
       <p><small>Relancer : les deux camps relancent les dés (saisissez-les ici si vous jouez avec vos dés). Match nul n’en demande aucun.</small></p></div>`;
   }
 
@@ -762,11 +784,11 @@ function lancerInterface() {
     const e = r.enAttente;
     if (e) {
       const a = R.participant(r, e.attaquantId), c = R.participant(r, e.cibleId);
-      planRes = saisis() ? planResolution(r) : null;
+      planRes = planResolution(r);
       let blocDegats = '';
       if (planRes) {
         blocDegats = planRes.touche
-          ? `<div class="saisie-des">${planRes.champsDegats.map(ch => `<label>${esc(ch.libelle)} <input type="number" min="0" id="res-degats-${ch.cle}" data-champ-des="lancer" class="d100-inline" inputmode="numeric"></label>`).join('')}<span id="res-con-zone">${resConHtml(planRes)}</span></div>`
+          ? `<div class="saisie-des">${planRes.champsDegats.map(ch => `<label>${esc(ch.libelle)} <input type="number" min="0" id="res-degats-${ch.cle}" data-champ-des="lancer" data-des="${esc(ch.expression)}" class="d100-inline" inputmode="numeric"></label>`).join('')}<span id="res-con-zone">${resConHtml(planRes)}</span></div>`
           : '<p class="saisie-des"><small>Le coup ne touche pas : aucun dé de dégâts à saisir.</small></p>';
       }
       return `<h3>${e.type === 'tir' ? 'Tir' : 'Mêlée'} : ${esc(a.nom)} → ${esc(c.nom)}</h3>
@@ -788,14 +810,14 @@ function lancerInterface() {
         <label>Défense <select id="melee-mode"><option value="esquiver">Esquiver</option><option value="rendre">Rendre les coups</option><option value="aucune">Aucune (surprise)</option></select></label>
         <label>Dés bonus <input id="melee-bonus" type="number" min="0" max="2" value="0"></label>
         <label>Dés malus <input id="melee-malus" type="number" min="0" max="2" value="0"></label>
-        ${saisis() ? `<label>d100 attaque <input type="number" min="1" max="100" id="melee-attaque-d100" data-champ-des="d100" class="d100-inline"></label> <span id="melee-defense-zone">${defenseZoneHtml()}</span>` : ''}
+        <label>d100 attaque <input type="number" min="1" max="100" id="melee-attaque-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label> <span id="melee-defense-zone">${defenseZoneHtml()}</span>
         <button type="button" id="attaquer">Attaquer</button></fieldset>` : '<p><small>Pas d’arme de mêlée.</small></p>'}
       ${tir ? `<fieldset><legend>Tir (${esc(tir.nom)}, ${acteur.competences[tir.competence] ?? '?'} %, portée ${tir.portee} m, ${acteur.munitions} coups)</legend>
         <label>Cible <select id="tir-cible">${cibles}</select></label>
         <label>Distance (m) <input id="tir-distance" type="number" min="0" step="0.5" value="8"></label>
         <label><input id="tir-couvert" type="checkbox"> cible à couvert</label>
         <label><input id="tir-melee" type="checkbox"> tir dans la mêlée</label>
-        ${saisis() ? '<label>d100 tir <input type="number" min="1" max="100" id="tir-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}
+        <label>d100 tir <input type="number" min="1" max="100" id="tir-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label>
         <button type="button" id="tirer">Tirer</button></fieldset>` : ''}
       <p><button type="button" id="fin-tour" class="principal">Fin du tour</button></p>`;
   }
@@ -812,31 +834,31 @@ function lancerInterface() {
     return `<h2>Horreur</h2>
       <p><label>Créature <select id="reveler-qui">${cachees.length ? options(cachees) : '<option value="">aucune créature cachée</option>'}</select></label>
         <button type="button" id="reveler"${cachees.length ? '' : ' disabled'}>Elle surgit (jets de SAN)</button></p>
-      ${saisis() ? `<div id="reveler-des-zone" class="saisie-des">${lignesReveler(r)}</div>` : ''}
+      <div id="reveler-des-zone" class="saisie-des">${lignesReveler(r)}</div>
       <p><label>Investigateur <select id="san-qui">${jets.length ? options(jets) : '<option value="">aucun investigateur conscient</option>'}</select></label>
         <label>Perte (1/1D6) <input type="text" id="san-cout" size="7" value="1/1D6"></label>
-        ${saisis() ? '<label>d100 SAN <input type="number" min="1" max="100" id="san-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}
+        <label>d100 SAN <input type="number" min="1" max="100" id="san-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label>
         <button type="button" id="jet-san"${jets.length ? '' : ' disabled'}>Jet de SAN</button></p>
-      ${saisis() ? '<div id="san-suite-zone" class="saisie-des"></div>' : ''}
+      <div id="san-suite-zone" class="saisie-des"></div>
       <h2>Test hors combat</h2>
       <p><label>Qui <select id="libre-qui">${options(tous, qui)}</select></label>
         <label>Compétence <select id="libre-competence">${optionsComp(qui)}</select></label>
         <label>Difficulté <select id="libre-difficulte"><option value="ordinaire">ordinaire</option><option value="majeure">majeure</option><option value="extreme">extrême</option></select></label>
-        ${saisis() ? '<label>d100 <input type="number" min="1" max="100" id="libre-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}
+        <label>d100 <input type="number" min="1" max="100" id="libre-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label>
         <button type="button" id="libre-lancer">Lancer</button></p>
       <div id="libre-resultat">${d ? rendreTest(d, `${esc(R.participant(r, d.id).nom)} — ${esc(d.competence)}${d.redouble ? ' (redoublé)' : ''}`) : ''}</div>
       <p><button type="button" id="redoubler"${etats?.redoubler.autorise ? '' : ' disabled'} title="${esc(etats?.redoubler.raison ?? '')}">Redoubler le test</button>
-        ${saisis() && etats?.redoubler.autorise ? '<label>d100 <input type="number" min="1" max="100" id="redoubler-d100" data-champ-des="d100" class="d100-inline" aria-label="d100 du test redoublé"></label>' : ''}
+        ${etats?.redoubler.autorise ? '<label>d100 <input type="number" min="1" max="100" id="redoubler-d100" data-champ-des="d100" data-des="d100" class="d100-inline" aria-label="d100 du test redoublé"></label>' : ''}
         <button type="button" id="chance-libre"${etats?.chance.autorise ? '' : ' disabled'} title="${esc(etats?.chance.raison ?? '')}">${etats?.chance.autorise ? `Dépenser ${etats.chance.cout} Chance` : 'Dépenser la Chance'}</button></p>
       <h2>Test opposé</h2>
       <p><label>Camp A <select id="oppose-a">${options(tous, tous[0]?.id)}</select></label>
         <label>Compétence A <select id="oppose-a-comp">${optionsComp(tous[0]?.id)}</select></label>
         <label>Dés A (+bonus, −malus) <input type="number" id="oppose-a-des" min="-2" max="2" value="0"></label>
-        ${saisis() ? '<label>d100 A <input type="number" min="1" max="100" id="oppose-a-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}</p>
+        <label>d100 A <input type="number" min="1" max="100" id="oppose-a-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label></p>
       <p><label>Camp B <select id="oppose-b">${options(tous, (tous[1] ?? tous[0])?.id)}</select></label>
         <label>Compétence B <select id="oppose-b-comp">${optionsComp((tous[1] ?? tous[0])?.id)}</select></label>
         <label>Dés B (+bonus, −malus) <input type="number" id="oppose-b-des" min="-2" max="2" value="0"></label>
-        ${saisis() ? '<label>d100 B <input type="number" min="1" max="100" id="oppose-b-d100" data-champ-des="d100" class="d100-inline"></label>' : ''}</p>
+        <label>d100 B <input type="number" min="1" max="100" id="oppose-b-d100" data-champ-des="d100" data-des="d100" class="d100-inline"></label></p>
       <p><button type="button" id="oppose-lancer">Lancer le test opposé</button></p>`;
   }
 
@@ -876,7 +898,6 @@ function lancerInterface() {
     panneau.innerHTML = `
       <section class="carte" aria-labelledby="t-ordre"><h2 id="t-ordre">Ordre du round (DEX)</h2><div id="zone-ordre">${rendreParticipants(r)}</div></section>
       <section class="carte" aria-labelledby="t-action"><h2 id="t-action">Action</h2>
-        <p class="mode-des"><label><input type="checkbox" id="jets-saisis"${seance.preference('jets-saisis') === '1' ? ' checked' : ''}> Jets saisis par le MJ (sinon tirés au hasard)</label></p>
         <div id="action">${rendreAction(r)}</div>
         <p class="barre fin"><button type="button" data-action="terminer-rencontre" title="Reporte PV, SAN, Chance et folies sur les investigateurs de la réserve">Terminer la rencontre</button>
         <button type="button" data-action="abandonner-rencontre" title="Sans rien reporter sur les investigateurs">Abandonner la rencontre</button></p>
@@ -897,6 +918,8 @@ function lancerInterface() {
     majResCon();
     majSanSuite();
     for (const p of r.participants) if (p.kind === 'PJ') majRevelerSuite(p.id);
+    // Un bouton « Lancer » à côté de chaque case de dé affichée (les zones dynamiques viennent d'être réécrites).
+    ajouterBoutonsLancer(panneau);
     const journal = $('#journal');
     journal.scrollTop = journal.scrollHeight;
     if (attente) for (const b of panneau.querySelectorAll('button')) if (!b.closest('.egalite')) b.disabled = true;
@@ -988,7 +1011,7 @@ function lancerInterface() {
       const decision = R.decisionEgalite(rencontre());
       const nomA = decision ? R.participant(rencontre(), decision.a.id).nom : 'A';
       const nomB = decision ? R.participant(rencontre(), decision.b.id).nom : 'B';
-      const champs = saisis() && b.dataset.egalite === 'relance'
+      const champs = b.dataset.egalite === 'relance'
         ? [
             { sel: '#egalite-a-d100', id: 'egalite-a-d100', type: 'd100', libelle: `d100 relance (${nomA})` },
             { sel: '#egalite-b-d100', id: 'egalite-b-d100', type: 'd100', libelle: `d100 relance (${nomB})` }
@@ -1031,7 +1054,7 @@ function lancerInterface() {
       case 'resoudre': {
         const plan = planRes ?? planResolution(rencontre());
         const champs = plan.touche ? plan.champsDegats.map(c => ({ sel: `#res-degats-${c.cle}`, id: `res-degats-${c.cle}`, type: 'lancer', libelle: c.libelle })) : [];
-        if (saisis() && plan.touche) {
+        if (plan.touche) {
           const lu = lireChamps(champs);
           if (!lu.ok) return bloquerSaisie(lu.el, lu.message);
           const valeurs = {};
@@ -1046,7 +1069,7 @@ function lancerInterface() {
         const quiMonstre = $('#reveler-qui').value || r.participants.find(p => p.cachee)?.id;
         const monstre = R.participant(r, quiMonstre);
         const champs = [];
-        if (saisis() && monstre?.coutSan) {
+        if (monstre?.coutSan) {
           for (const p of r.participants.filter(p => p.kind === 'PJ' && p.etat === 'actif' && !p.aVu[monstre.id])) {
             const res = champsJetSan(p, monstre.coutSan, {
               san: `[data-reveler-san="${p.id}"]`, idSan: `reveler-san-${p.id}`,
@@ -1063,7 +1086,7 @@ function lancerInterface() {
         const r = rencontre();
         const pj = R.participant(r, $('#san-qui').value);
         const champs = [];
-        if (saisis() && pj) {
+        if (pj) {
           const res = champsJetSan(pj, $('#san-cout').value.trim(), { san: '#san-d100', idSan: 'san-d100', perte: '#san-perte', idPerte: 'san-perte', int: '#san-int-d100', idInt: 'san-int-d100' });
           if (!res.ok) return bloquerSaisie(res.el, res.message);
           champs.push(...res.champs);
@@ -1109,8 +1132,7 @@ function lancerInterface() {
     } else if (el.dataset?.cachee) {
       const courant = ui.compo[el.dataset.cachee] ?? { n: 0 };
       ui.compo[el.dataset.cachee] = { ...courant, cachee: el.checked };
-    } else if (el.id === 'jets-saisis') { seance.definirPreference('jets-saisis', el.checked ? '1' : '0'); rendre(); }
-    else if (el.id === 'melee-mode') majMeleeDefense();
+    } else if (el.id === 'melee-mode') majMeleeDefense();
     else if (el.id === 'reveler-qui') majRevelerZone();
     else if (el.id === 'san-qui' || el.id === 'san-cout') majSanSuite();
     else if (['libre-qui', 'oppose-a', 'oppose-b'].includes(el.id)) {
