@@ -36,22 +36,21 @@ test('CA5 — Warhammer reste à son adresse ; son entrée reprend sa base et so
   assert.equal(warhammer.publie, true);
 });
 
-test('CA13 — jeuxPublies() ne rend que les jeux publiés : Warhammer et Cthulhu, donc le sélecteur s’affiche', () => {
+test('CA13 — jeuxPublies() ne rend que les jeux publiés : Warhammer, Cthulhu et Imperium, donc le sélecteur s’affiche', () => {
   const cthulhu = JEUX.find(jeu => jeu.id === 'cthulhu');
   assert.equal(cthulhu.publie, true);
-  assert.deepEqual(jeuxPublies().map(jeu => jeu.id), ['warhammer', 'cthulhu']);
+  assert.deepEqual(jeuxPublies().map(jeu => jeu.id), ['warhammer', 'cthulhu', 'imperium']);
   assert.deepEqual(jeuxPublies(), JEUX.filter(jeu => jeu.publie));
 });
 
-test('I6 — Imperium Maledictum est dans le registre mais non publié : le sélecteur garde 2 boutons', () => {
+test('I8 — Imperium Maledictum est publié : le sélecteur a 3 boutons', () => {
   const imperium = JEUX.find(jeu => jeu.id === 'imperium');
   assert.equal(imperium.nom, 'Imperium Maledictum');
   assert.equal(imperium.page, './imperium/');
   assert.equal(imperium.base, 'outil-mj-imperium-v1');
   assert.equal(imperium.prefixe, 'imperium.');
-  assert.equal(imperium.publie, false);
-  assert.ok(!jeuxPublies().some(jeu => jeu.id === 'imperium'), 'non publié : absent du sélecteur tant que l’interface n’est pas finie');
-  assert.deepEqual(jeuxPublies().map(jeu => jeu.id), ['warhammer', 'cthulhu']);
+  assert.equal(imperium.publie, true);
+  assert.ok(jeuxPublies().some(jeu => jeu.id === 'imperium'), 'publié après la recette du MJ (26/11/2026)');
 });
 
 // La règle « sélecteur absent tant qu'un seul jeu est publié » (initSelecteurJeu : `jeux.length < 2`) n'est pas
@@ -71,7 +70,7 @@ test('CA13 — avec deux jeux publiés, le sélecteur s’affiche et marque le j
   const res = initSelecteurJeu({ doc, adresse: `${RACINE}index.html`, aller: () => {} });
   assert.deepEqual(res, { visible: true });
   assert.equal(groupe.hidden, false);
-  assert.deepEqual(liste.children.map(b => b.textContent), ['Warhammer ✓', 'L’Appel de Cthulhu']);
+  assert.deepEqual(liste.children.map(b => b.textContent), ['Warhammer ✓', 'L’Appel de Cthulhu', 'Imperium Maledictum']);
 });
 
 test('jeuDeLaPage — reconnaît le jeu d’après l’adresse de la page, null si l’adresse est inutilisable', () => {
