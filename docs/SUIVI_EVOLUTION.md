@@ -10,6 +10,22 @@
 | E09–E10 | Intégré et validé dans la vraie coquille | Navigation Préparer/Jouer/Bibliothèque, profils complets, recherche actions/tags, favoris, règles réelles, sélection et suivi du tour. |
 | E11–E17 | Intégré ; parcours navigateur bornés passants | `tests/browser-index.mjs` couvre lancement, suspension/reprise, clôture, personnage persistant, E15, E16 et E04 sur l’index réel. |
 
+## 4.2.0 — Imperium Maledictum (publiée le 26/11/2026)
+
+Module Imperium Maledictum du chantier multi-jeux, mené en lots I1-I8 (Neon architecte et vérificateur, Mistral Large exécutant, Claude passerelle). Règles tirées du livre de base, page citée dans le code et les tests. Recette du MJ le 26/11. Warhammer et Cthulhu ne changent pas : aucune donnée renommée ni migrée.
+
+- **Page `imperium/`** ouverte par le menu « Jeu », qui propose maintenant trois jeux (`js/core/jeux.js`).
+- **Moteur pur** (`imperium/regles.js`, `rencontre.js`, `tables-critiques.js`) : tests à DR avec Avantage et Désavantage, inversion, maladresses, tests opposés ; Initiative, Supériorité et Désespéré (Résolution), mêlée, tir (Rafale, Tir rapide, Couvert), Esquive, dégâts, armure par localisation, blessures et critiques, mort subite des Troupes, États, Destin, Premiers soins.
+- **Données de départ** : dix profils d’adversaires et vingt-trois armes du livre de base, page citée.
+- **Préparer** : profils de PJ et d’adversaires, armes, armure globale ou par localisation, réserve, Zones de la rencontre.
+- **Jouer** : chaque dé a sa case vide ; le MJ la remplit ou clique « Lancer », comme dans Warhammer. Les cases à demander sont prévues en sondant le moteur (`imperium/saisie-des.js`), l’interface ne recode aucune règle. Choix « Garder » ou « Inverser » quand l’Avantage le permet ; annulation et rétablissement, journal filtrable par round.
+- **Termes** : en français, terme anglais du livre en infobulle.
+- **Sauvegarde séparée** : base `outil-mj-imperium-v1`, clés `imperium.*` ; un fichier Imperium est refusé à l’import de Warhammer et de Cthulhu, et inversement.
+- **Carte** : projection par la liaison version 3 en mode Zones (pas de portée en cases), taille des pions selon la Taille, Désespéré affiché par le marqueur « Brisé » (`imperium/projection-carte.js`) ; aucun changement côté carte.
+- **Hors ligne** : le service worker met en cache la page Imperium.
+- Tests : `tests/unit/imperium/*`, parcours navigateur `tests/imperium-rencontre.browser.mjs`.
+- Suite prévue (v2, plan validé par le MJ) : pouvoirs psychiques, Corruption, Patrons, véhicules et montures, suppléments Mechanicus, options p. 314, bestiaire et armurerie complets.
+
 ## 4.1.0 — L’Appel de Cthulhu 7e (publiée le 25/11/2026)
 
 Module Cthulhu du chantier multi-jeux (`docs/specs/multi-jeux/`), repris des lots C1-C4 et mené en lots M1-M8 (Neon architecte et vérificateur, Mistral Large exécutant, Claude passerelle). Recette du MJ le 25/11, jets compris. Warhammer ne change pas : aucune donnée renommée ni migrée.

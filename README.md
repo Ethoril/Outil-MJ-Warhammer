@@ -1,4 +1,4 @@
-# Outil MJ — Warhammer (v4.1.0)
+# Outil MJ — Warhammer (v4.2.0)
 
 Application web progressive (PWA) qui assiste le Maître de Jeu de **Warhammer Fantasy 4e**, avec le combat et la magie **V5**. Un seul utilisateur (le MJ, francophone) ; HTML5 et modules ES natifs, sans bundler ; hors ligne grâce au service worker. En ligne : <https://ethoril.github.io/Outil-MJ-Warhammer/> (GitHub Pages, branche `main`).
 
@@ -14,6 +14,8 @@ Onglets de la barre du haut (raccourcis `1` à `4`).
 | **Jouer** (2) | Combat V5 : initiative, tour courant, résolution des Tests (moteur d’effets unifié, détail des modificateurs), dégâts, critiques, États, magie, prières et miracles, engagements et plateau des mêlées, montures, journal, annulation/rétablissement. Barre du haut : Temps de campagne, Événements, Rappels, « Terminer le combat », « Envoyer aux fiches ». |
 | **Campagne** (3) | Temps de campagne, synthèse des suivis des personnages (blessures, critiques, maladies, séquelles, convalescence), soins des participants de la rencontre et des personnages suivis hors rencontre. |
 | **Bibliothèque** (4) | Règles consultables, bestiaire, références (armes, armures, mots-clés, talents, sorts, prières). |
+
+**Depuis la 4.2.0 (Imperium Maledictum).** Troisième jeu de l’outil, page `imperium/`, ouverte par le menu « Jeu ». Préparer (profils de PJ et d’adversaires, armes, armure par localisation, Zones de la rencontre) et Jouer (Initiative, Supériorité et Désespéré, mêlée et tir avec Rafale, Tir rapide, Couvert et Esquive, inversion par l’Avantage, dégâts, blessures et critiques, mort subite des Troupes, États, Destin, Premiers soins, test libre), avec annulation, journal et sauvegarde séparée. Termes en français, terme anglais du livre en infobulle. Chaque jet a sa case : on la remplit ou on clique « Lancer ». Les pions se projettent sur la carte (liaison version 3, combat en Zones). Détail : [docs/SUIVI_EVOLUTION.md](docs/SUIVI_EVOLUTION.md).
 
 **Depuis la 4.1.0 (L’Appel de Cthulhu 7e).** Deuxième jeu de l’outil, page `cthulhu/`, ouverte par le menu « Jeu » (visible maintenant que deux jeux sont publiés). Préparer (profils, armes, réserve) et Jouer (rencontre ordonnée par DEX, mêlée et tests opposés, tir, dégâts, empalement, blessures graves, mourants, Premiers soins, SAN et folie, Chance, test hors combat et test redoublé), avec annulation, journal et sauvegarde séparée de Warhammer. Chaque jet a sa case : on la remplit ou on clique « Lancer », comme dans Warhammer. Les pions se projettent sur la carte (liaison version 3). Détail : [docs/SUIVI_EVOLUTION.md](docs/SUIVI_EVOLUTION.md).
 
