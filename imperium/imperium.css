@@ -1,0 +1,151 @@
+/* Page d’Imperium Maledictum (outil MJ). Jetons neutres du chapeau (chapeau-theme.css, palette 4.0.0) et identité or/laiton impérial propre au jeu : rien de Warhammer n’est chargé. */
+:root {
+  --fond: var(--bg);
+  --carte: var(--panel);
+  --texte: var(--text);
+  --doux: var(--muted);
+  --bord: var(--border);
+  --entete: var(--topbar-bg);
+  --entete-texte: var(--text);
+  --bouton: var(--panel-2);
+  --alerte: var(--danger);
+  --succes: var(--success);
+  --pj: var(--camp-pj);
+  --ennemi: var(--camp-ennemi);
+}
+
+:root,
+:root[data-theme="dark"] {
+  --accent: #c9a24b;
+  --accent-texte: #1a1408;
+  --ligne-courante: #2b2415;
+  --avis: #352c1d;
+  --destin: #e0c26a;
+  --critique: #e0735a;
+  --superiorite: #c9a24b;
+}
+
+:root[data-theme="light"] {
+  --accent: #8a6116;
+  --accent-texte: #ffffff;
+  --ligne-courante: #e6d9b8;
+  --avis: #e4d3ae;
+  --destin: #6b500c;
+  --critique: #9b2317;
+  --superiorite: #8a6116;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --accent: #8a6116;
+    --accent-texte: #ffffff;
+    --ligne-courante: #e6d9b8;
+    --avis: #e4d3ae;
+    --destin: #6b500c;
+    --critique: #9b2317;
+    --superiorite: #8a6116;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font-ui); font-size: 14px; line-height: 1.4; background: var(--fond); color: var(--texte); }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.entete { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 16px; background: var(--entete); color: var(--entete-texte); border-bottom: 1px solid var(--bord); }
+.entete h1 { font-size: 17px; margin: 0 8px 0 0; color: var(--heading-color); }
+.entete h1 small { font-weight: 400; opacity: .8; }
+.entete .statut, .entete .round { font-size: 12px; opacity: .9; }
+.entete .round { font-weight: 600; }
+.menu-jeux { display: inline-flex; gap: 6px; align-items: center; font-size: 12px; }
+.liste-jeux { display: inline-flex; gap: 4px; }
+.onglets { display: inline-flex; gap: 2px; }
+.onglets button[aria-selected="true"] { background: var(--accent); color: var(--accent-texte); border-color: var(--accent); }
+/* Indicateur de Supériorité dans l’en-tête (p. 196-197) : badge or/laiton. */
+.superiorite { font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 8px; border: 1px solid var(--superiorite); background: color-mix(in srgb, var(--superiorite) 16%, var(--bg)); color: var(--superiorite); }
+.fichiers { position: relative; margin-left: auto; }
+.fichiers summary { cursor: pointer; padding: 4px 10px; border: 1px solid var(--bord); background: var(--bouton); border-radius: 4px; list-style: none; }
+.fichiers .menu { position: absolute; right: 0; z-index: 5; display: grid; gap: 4px; min-width: 260px; padding: 8px; background: var(--carte); color: var(--texte); border: 1px solid var(--bord); border-radius: 6px; box-shadow: 0 4px 14px rgba(0,0,0,.25); }
+.fichiers .menu ul { margin: 0; padding-left: 18px; font-size: 12px; }
+.fichiers .menu .danger { background: var(--carte); color: var(--alerte); }
+
+.message { margin: 8px 16px 0; padding: 8px 12px; border-radius: 4px; background: var(--avis); border: 1px solid var(--bord); }
+.message[data-type="erreur"] { background: color-mix(in srgb, var(--alerte) 14%, var(--bg)); color: var(--alerte); border-color: var(--alerte); }
+
+main { padding: 12px 16px; }
+.jeu { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) minmax(260px, .9fr); gap: 12px; }
+#panneau-preparer { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 12px; align-items: start; }
+.carte { background: var(--carte); border: 1px solid var(--bord); border-radius: 6px; padding: 10px 12px; min-width: 0; overflow-x: auto; }
+h2 { font-size: 14px; margin: 0 0 8px; text-transform: uppercase; letter-spacing: .04em; color: var(--doux); }
+h3 { font-size: 15px; margin: 0 0 8px; color: var(--heading-color); }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 5px 4px; border-bottom: 1px solid var(--bord); vertical-align: top; }
+th { font-size: 12px; color: var(--doux); font-weight: 600; }
+tr.groupe th { background: rgba(127, 127, 127, .12); text-transform: uppercase; letter-spacing: .04em; }
+tr.courant { background: var(--ligne-courante); outline: 2px solid var(--accent); }
+tr.camp-ennemi strong { color: var(--ennemi); }
+tr.camp-pj strong { color: var(--pj); }
+tr.etat-mort { opacity: .55; text-decoration: line-through; }
+tr.cachee { opacity: .65; }
+td.actions { white-space: nowrap; }
+td.compo label { display: block; margin: 0 0 2px; }
+small { color: var(--doux); }
+
+/* Badges : états, Critiques, Destin, Désespéré, Supériorité. */
+.badge { font-size: 11px; padding: 0 5px; border-radius: 8px; background: rgba(127, 127, 127, .2); }
+.badge.etat { background: color-mix(in srgb, var(--alerte) 14%, var(--bg)); color: var(--alerte); }
+.badge.critique { background: color-mix(in srgb, var(--critique) 16%, var(--bg)); color: var(--critique); font-weight: 600; }
+.badge.destin { background: color-mix(in srgb, var(--destin) 16%, var(--bg)); color: var(--destin); font-weight: 600; }
+.badge.desespere { background: color-mix(in srgb, var(--alerte) 22%, var(--bg)); color: var(--alerte); font-weight: 700; text-transform: uppercase; }
+.badge.superiorite { background: color-mix(in srgb, var(--superiorite) 16%, var(--bg)); color: var(--superiorite); font-weight: 600; }
+
+fieldset { border: 1px solid var(--bord); border-radius: 4px; margin: 0 0 10px; padding: 6px 8px 8px; }
+legend { font-weight: 600; font-size: 13px; }
+label { display: inline-flex; gap: 4px; align-items: center; margin: 3px 10px 3px 0; }
+label.large { display: flex; flex-direction: column; align-items: stretch; }
+input[type=number] { width: 70px; }
+input[type=text], textarea, select { font: inherit; color: inherit; background: var(--bouton); border: 1px solid var(--bord); border-radius: 3px; padding: 2px 4px; max-width: 100%; }
+textarea { width: 100%; }
+button { font: inherit; padding: 4px 10px; border: 1px solid var(--bord); background: var(--bouton); color: inherit; border-radius: 4px; cursor: pointer; }
+button:disabled { opacity: .45; cursor: default; }
+button.principal { background: var(--accent); color: var(--accent-texte); border-color: var(--accent); }
+button:focus-visible, summary:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+.barre { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0 0; }
+.barre.fin { margin-top: 12px; }
+.avis { padding: 6px 8px; background: var(--avis); border-radius: 4px; }
+.formulaire { margin-top: 12px; padding-top: 8px; border-top: 2px solid var(--accent); }
+.champs { display: flex; flex-wrap: wrap; }
+.derives { margin: 0 0 8px; color: var(--doux); }
+
+/* Cases de dés saisies par le MJ, avec le bouton « Lancer » à côté (mêmes conventions que Cthulhu). */
+.test { margin: 4px 0; }
+.saisie-des { margin: 6px 0; padding: 6px 8px; background: rgba(127, 127, 127, .08); border-radius: 4px; }
+.saisie-des p { margin: 4px 0; }
+input.case-des, input.d100-inline { width: 64px; text-align: center; }
+.bouton-lancer { padding: 2px 8px; }
+input[aria-invalid="true"] { border-color: var(--alerte); outline: 2px solid var(--alerte); }
+/* Chiffres inversés du d100 (avantage / désavantage, p. 186-190). */
+.inversion { font-weight: 700; color: var(--accent); }
+/* Égalité à trancher (Initiative p. 198, test opposé p. 190) : cadre accentué. */
+.egalite { padding: 8px; border: 2px solid var(--accent); border-radius: 6px; background: var(--avis); }
+.niveau { font-weight: 600; }
+
+/* Zones du champ de bataille (p. 199-200, 204). */
+.zones { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.zone { padding: 4px 10px; border: 1px solid var(--bord); border-radius: 6px; background: var(--bouton); }
+.zone.courante { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, var(--bg)); font-weight: 600; }
+.zone .traits { display: block; font-size: 11px; color: var(--doux); }
+
+.outils h2 { margin-top: 12px; }
+#journal { list-style: none; margin: 0; padding: 0; max-height: 70vh; overflow: auto; font-size: 13px; }
+#journal li { padding: 3px 0; border-bottom: 1px dotted var(--bord); }
+#journal .r { color: var(--doux); font-size: 11px; }
+.j-round { font-weight: 600; background: rgba(127, 127, 127, .12); }
+.j-alerte { color: var(--alerte); font-weight: 600; }
+.j-superiorite { color: var(--superiorite); font-weight: 600; }
+.j-destin { color: var(--destin); }
+.j-erreur { color: var(--alerte); font-style: italic; }
+.j-action { font-weight: 600; }
+
+@media (max-width: 1000px) { .jeu, #panneau-preparer { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }

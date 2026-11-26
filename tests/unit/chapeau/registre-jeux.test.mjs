@@ -8,7 +8,7 @@ const RACINE = 'https://ethoril.github.io/WFRP-Outil-MJ/';
 
 test('CA12 — chaque jeu a un id, un nom, une page, une base et un préfixe ; le tout est figé', () => {
   assert.ok(Object.isFrozen(JEUX));
-  assert.deepEqual(JEUX.map(jeu => jeu.id), ['warhammer', 'cthulhu']);
+  assert.deepEqual(JEUX.map(jeu => jeu.id), ['warhammer', 'cthulhu', 'imperium']);
   for (const jeu of JEUX) {
     assert.ok(Object.isFrozen(jeu), `${jeu.id} figé`);
     for (const champ of ['id', 'nom', 'page', 'base', 'prefixe']) assert.equal(typeof jeu[champ], 'string', `${jeu.id}.${champ}`);
@@ -36,11 +36,21 @@ test('CA5 — Warhammer reste à son adresse ; son entrée reprend sa base et so
   assert.equal(warhammer.publie, true);
 });
 
-test('CA13 — jeuxPublies() ne rend que les jeux publiés : Warhammer et Cthulhu, donc le sélecteur s’affiche', () => {
+test('CA13 — jeuxPublies() ne rend que les jeux publiés : Warhammer, Cthulhu et Imperium, donc le sélecteur s’affiche', () => {
   const cthulhu = JEUX.find(jeu => jeu.id === 'cthulhu');
   assert.equal(cthulhu.publie, true);
-  assert.deepEqual(jeuxPublies().map(jeu => jeu.id), ['warhammer', 'cthulhu']);
+  assert.deepEqual(jeuxPublies().map(jeu => jeu.id), ['warhammer', 'cthulhu', 'imperium']);
   assert.deepEqual(jeuxPublies(), JEUX.filter(jeu => jeu.publie));
+});
+
+test('I8 — Imperium Maledictum est publié : le sélecteur a 3 boutons', () => {
+  const imperium = JEUX.find(jeu => jeu.id === 'imperium');
+  assert.equal(imperium.nom, 'Imperium Maledictum');
+  assert.equal(imperium.page, './imperium/');
+  assert.equal(imperium.base, 'outil-mj-imperium-v1');
+  assert.equal(imperium.prefixe, 'imperium.');
+  assert.equal(imperium.publie, true);
+  assert.ok(jeuxPublies().some(jeu => jeu.id === 'imperium'), 'publié après la recette du MJ (26/11/2026)');
 });
 
 // La règle « sélecteur absent tant qu'un seul jeu est publié » (initSelecteurJeu : `jeux.length < 2`) n'est pas
@@ -60,7 +70,7 @@ test('CA13 — avec deux jeux publiés, le sélecteur s’affiche et marque le j
   const res = initSelecteurJeu({ doc, adresse: `${RACINE}index.html`, aller: () => {} });
   assert.deepEqual(res, { visible: true });
   assert.equal(groupe.hidden, false);
-  assert.deepEqual(liste.children.map(b => b.textContent), ['Warhammer ✓', 'L’Appel de Cthulhu']);
+  assert.deepEqual(liste.children.map(b => b.textContent), ['Warhammer ✓', 'L’Appel de Cthulhu', 'Imperium Maledictum']);
 });
 
 test('jeuDeLaPage — reconnaît le jeu d’après l’adresse de la page, null si l’adresse est inutilisable', () => {
@@ -69,6 +79,9 @@ test('jeuDeLaPage — reconnaît le jeu d’après l’adresse de la page, null 
   }
   for (const adresse of [`${RACINE}cthulhu/`, `${RACINE}cthulhu/index.html`, 'http://localhost:8766/cthulhu/']) {
     assert.equal(jeuDeLaPage(adresse)?.id, 'cthulhu', adresse);
+  }
+  for (const adresse of [`${RACINE}imperium/`, `${RACINE}imperium/index.html`, 'http://localhost:8766/imperium/', 'http://localhost:8766/imperium/index.html']) {
+    assert.equal(jeuDeLaPage(adresse)?.id, 'imperium', adresse);
   }
   assert.equal(jeuDeLaPage('pas une adresse'), null);
   assert.equal(jeuDeLaPage(''), null);
@@ -80,5 +93,10 @@ test('adresseDuJeu — lien vers un jeu depuis la page courante, dans les deux s
   assert.equal(adresseDuJeu('cthulhu', RACINE), `${RACINE}cthulhu/`);
   assert.equal(adresseDuJeu('warhammer', `${RACINE}cthulhu/`), `${RACINE}index.html`);
   assert.equal(adresseDuJeu('warhammer', 'http://localhost:8766/cthulhu/index.html'), 'http://localhost:8766/index.html');
+  assert.equal(adresseDuJeu('imperium', `${RACINE}index.html`), `${RACINE}imperium/`);
+  assert.equal(adresseDuJeu('imperium', RACINE), `${RACINE}imperium/`);
+  assert.equal(adresseDuJeu('imperium', 'http://localhost:8766/cthulhu/index.html'), 'http://localhost:8766/imperium/');
+  assert.equal(adresseDuJeu('warhammer', `${RACINE}imperium/`), `${RACINE}index.html`);
+  assert.equal(adresseDuJeu('cthulhu', `${RACINE}imperium/index.html`), `${RACINE}cthulhu/`);
   assert.equal(adresseDuJeu('inconnu', RACINE), null);
 });
